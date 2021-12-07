@@ -1,7 +1,7 @@
 # Phobos/3arthh4ck 1.3.1 BUILDABLE-SRC
 
-Windows: gradlew build
+Windows: setupdecompworkspace,gradlew build
 
-Macos/Linux: ./gradlew build
+Macos/Linux: ./setupdecompworkspace, ./gradlew build
 
 [Clean jar](https://github.com/Gopro336/clean-3arthh4ck-1.3.1/releases/tag/clean)
