@@ -1,3 +1,7 @@
+/*
+Tuffty
+I may be paranoid, but this and UIDefaultsLoader$1 seem a little sus.
+*/
 package com.formdev.flatlaf;
 
 import com.formdev.flatlaf.FlatDefaultsAddon;
