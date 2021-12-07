@@ -49,7 +49,6 @@ repositories {
 }
 
 dependencies {
-    compile group: "com.googlecode.json-simple", name: "json-simple", version: "1.1.1"
     compile('org.spongepowered:mixin:0.7.11-SNAPSHOT') {
         exclude module: 'launchwrapper'
         exclude module: 'guava'
@@ -57,12 +56,7 @@ dependencies {
         exclude module: 'commons-io'
     }
     
-    compile 'club.minnced:java-discord-rpc:2.0.2'
-    //compile 'com.googlecode.json-simple:json-simple:1.1.1'
-    
 }
-
-
 
 task getDeps(type: Copy) {
     from sourceSets.main.runtimeClasspath
@@ -84,8 +78,6 @@ processResources {
 
 shadowJar {
     dependencies {
-		include(dependency('club.minnced:java-discord-rpc'))
-        include(dependency('com.googlecode.json-simple:json-simple:1.1.1'))
         include(dependency('org.spongepowered:mixin'))
     }
     exclude 'dummyThing'
