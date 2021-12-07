@@ -1,10 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  com.google.gson.JsonElement
- *  com.google.gson.JsonObject
- */
 package me.earth.earthhack.installer.version;
 
 import com.google.gson.JsonElement;
