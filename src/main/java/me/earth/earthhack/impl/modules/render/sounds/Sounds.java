@@ -1,7 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.audio.SoundEventAccessor
+ *  net.minecraft.util.text.ITextComponent
+ */
 package me.earth.earthhack.impl.modules.render.sounds;
 
 import java.awt.Color;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import me.earth.earthhack.api.module.util.Category;
@@ -88,10 +94,8 @@ extends RegisteringModule<Boolean, SimpleRemovingSetting> {
     }
 
     public static String getSoundStartingWith(String prefix) {
-        ISoundHandler handler = (ISoundHandler)((Object)mc.getSoundHandler());
-        Iterator iterator = handler.getRegistry().iterator();
-        while (iterator.hasNext()) {
-            SoundEventAccessor soundEventAccessor = (SoundEventAccessor)iterator.next();
+        ISoundHandler handler = (ISoundHandler)mc.getSoundHandler();
+        for (SoundEventAccessor soundEventAccessor : handler.getRegistry()) {
             if (TextUtil.startsWith(soundEventAccessor.getLocation().toString(), prefix)) {
                 return soundEventAccessor.getLocation().toString();
             }
@@ -102,3 +106,4 @@ extends RegisteringModule<Boolean, SimpleRemovingSetting> {
         return null;
     }
 }
+

@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.BufferUtils
+ *  org.lwjgl.opengl.EXTFramebufferObject
+ *  org.lwjgl.opengl.GL11
+ *  org.lwjgl.opengl.GLContext
+ */
 package org.newdawn.slick.opengl.pbuffer;
 
 import java.nio.IntBuffer;
@@ -31,7 +40,7 @@ extends Graphics {
     }
 
     private void completeCheck() throws SlickException {
-        int framebuffer = EXTFramebufferObject.glCheckFramebufferStatusEXT(36160);
+        int framebuffer = EXTFramebufferObject.glCheckFramebufferStatusEXT((int)36160);
         switch (framebuffer) {
             case 36053: {
                 break;
@@ -61,13 +70,13 @@ extends Graphics {
     }
 
     private void init() throws SlickException {
-        IntBuffer buffer = BufferUtils.createIntBuffer(1);
-        EXTFramebufferObject.glGenFramebuffersEXT(buffer);
+        IntBuffer buffer = BufferUtils.createIntBuffer((int)1);
+        EXTFramebufferObject.glGenFramebuffersEXT((IntBuffer)buffer);
         this.FBO = buffer.get();
         try {
             Texture tex = InternalTextureLoader.get().createTexture(this.image.getWidth(), this.image.getHeight(), this.image.getFilter());
-            EXTFramebufferObject.glBindFramebufferEXT(36160, this.FBO);
-            EXTFramebufferObject.glFramebufferTexture2DEXT(36160, 36064, 3553, tex.getTextureID(), 0);
+            EXTFramebufferObject.glBindFramebufferEXT((int)36160, (int)this.FBO);
+            EXTFramebufferObject.glFramebufferTexture2DEXT((int)36160, (int)36064, (int)3553, (int)tex.getTextureID(), (int)0);
             this.completeCheck();
             this.unbind();
             this.clear();
@@ -81,13 +90,13 @@ extends Graphics {
     }
 
     private void bind() {
-        EXTFramebufferObject.glBindFramebufferEXT(36160, this.FBO);
-        GL11.glReadBuffer(36064);
+        EXTFramebufferObject.glBindFramebufferEXT((int)36160, (int)this.FBO);
+        GL11.glReadBuffer((int)36064);
     }
 
     private void unbind() {
-        EXTFramebufferObject.glBindFramebufferEXT(36160, 0);
-        GL11.glReadBuffer(1029);
+        EXTFramebufferObject.glBindFramebufferEXT((int)36160, (int)0);
+        GL11.glReadBuffer((int)1029);
     }
 
     @Override
@@ -96,11 +105,11 @@ extends Graphics {
         this.unbind();
         GL11.glPopClientAttrib();
         GL11.glPopAttrib();
-        GL11.glMatrixMode(5888);
+        GL11.glMatrixMode((int)5888);
         GL11.glPopMatrix();
-        GL11.glMatrixMode(5889);
+        GL11.glMatrixMode((int)5889);
         GL11.glPopMatrix();
-        GL11.glMatrixMode(5888);
+        GL11.glMatrixMode((int)5888);
         SlickCallable.leaveSafeBlock();
     }
 
@@ -110,45 +119,45 @@ extends Graphics {
             throw new RuntimeException("Attempt to use a destroy()ed offscreen graphics context.");
         }
         SlickCallable.enterSafeBlock();
-        GL11.glPushAttrib(1048575);
-        GL11.glPushClientAttrib(-1);
-        GL11.glMatrixMode(5889);
+        GL11.glPushAttrib((int)1048575);
+        GL11.glPushClientAttrib((int)-1);
+        GL11.glMatrixMode((int)5889);
         GL11.glPushMatrix();
-        GL11.glMatrixMode(5888);
+        GL11.glMatrixMode((int)5888);
         GL11.glPushMatrix();
         this.bind();
         this.initGL();
     }
 
     protected void initGL() {
-        GL11.glEnable(3553);
-        GL11.glShadeModel(7425);
-        GL11.glDisable(2929);
-        GL11.glDisable(2896);
-        GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-        GL11.glClearDepth(1.0);
-        GL11.glEnable(3042);
-        GL11.glBlendFunc(770, 771);
-        GL11.glViewport(0, 0, this.screenWidth, this.screenHeight);
-        GL11.glMatrixMode(5888);
+        GL11.glEnable((int)3553);
+        GL11.glShadeModel((int)7425);
+        GL11.glDisable((int)2929);
+        GL11.glDisable((int)2896);
+        GL11.glClearColor((float)0.0f, (float)0.0f, (float)0.0f, (float)0.0f);
+        GL11.glClearDepth((double)1.0);
+        GL11.glEnable((int)3042);
+        GL11.glBlendFunc((int)770, (int)771);
+        GL11.glViewport((int)0, (int)0, (int)this.screenWidth, (int)this.screenHeight);
+        GL11.glMatrixMode((int)5888);
         GL11.glLoadIdentity();
         this.enterOrtho();
     }
 
     protected void enterOrtho() {
-        GL11.glMatrixMode(5889);
+        GL11.glMatrixMode((int)5889);
         GL11.glLoadIdentity();
-        GL11.glOrtho(0.0, this.screenWidth, 0.0, this.screenHeight, 1.0, -1.0);
-        GL11.glMatrixMode(5888);
+        GL11.glOrtho((double)0.0, (double)this.screenWidth, (double)0.0, (double)this.screenHeight, (double)1.0, (double)-1.0);
+        GL11.glMatrixMode((int)5888);
     }
 
     @Override
     public void destroy() {
         super.destroy();
-        IntBuffer buffer = BufferUtils.createIntBuffer(1);
+        IntBuffer buffer = BufferUtils.createIntBuffer((int)1);
         buffer.put(this.FBO);
         buffer.flip();
-        EXTFramebufferObject.glDeleteFramebuffersEXT(buffer);
+        EXTFramebufferObject.glDeleteFramebuffersEXT((IntBuffer)buffer);
         this.valid = false;
     }
 
@@ -158,3 +167,4 @@ extends Graphics {
         this.image.flushPixelData();
     }
 }
+

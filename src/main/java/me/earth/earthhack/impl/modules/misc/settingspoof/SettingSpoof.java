@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayer$EnumChatVisibility
+ *  net.minecraft.entity.player.EnumPlayerModelParts
+ *  net.minecraft.network.play.client.CPacketClientSettings
+ *  net.minecraft.util.EnumHandSide
+ */
 package me.earth.earthhack.impl.modules.misc.settingspoof;
 
 import me.earth.earthhack.api.module.Module;
@@ -81,3 +90,4 @@ extends Module {
         return this.spoofHand.getValue() != false ? this.hand.getValue().getHandSide() : enumHandSideIn;
     }
 }
+

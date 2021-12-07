@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.GuiDisconnected
+ *  net.minecraft.client.gui.GuiScreen
+ *  net.minecraft.client.multiplayer.ServerData
+ */
 package me.earth.earthhack.impl.modules.misc.autoreconnect;
 
 import me.earth.earthhack.api.module.Module;
@@ -10,6 +18,7 @@ import me.earth.earthhack.impl.modules.misc.autoreconnect.ListenerScreen;
 import me.earth.earthhack.impl.modules.misc.autoreconnect.ListenerWorldClient;
 import me.earth.earthhack.impl.modules.misc.autoreconnect.util.ReconnectScreen;
 import net.minecraft.client.gui.GuiDisconnected;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.ServerData;
 
 public class AutoReconnect
@@ -33,6 +42,7 @@ extends Module {
 
     protected void onGuiDisconnected(GuiDisconnected guiDisconnected) {
         this.setServerData();
-        mc.displayGuiScreen(new ReconnectScreen((IGuiDisconnected)((Object)guiDisconnected), this.serverData, this.delay.getValue() * 1000));
+        mc.displayGuiScreen((GuiScreen)new ReconnectScreen((IGuiDisconnected)guiDisconnected, this.serverData, this.delay.getValue() * 1000));
     }
 }
+

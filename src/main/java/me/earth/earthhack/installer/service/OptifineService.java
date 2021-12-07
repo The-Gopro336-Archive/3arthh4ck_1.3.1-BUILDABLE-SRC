@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.installer.service;
 
 import me.earth.earthhack.installer.main.LibraryClassLoader;
@@ -9,3 +12,4 @@ public class OptifineService {
     public void install(LibraryClassLoader classLoader, MinecraftFiles files) {
     }
 }
+

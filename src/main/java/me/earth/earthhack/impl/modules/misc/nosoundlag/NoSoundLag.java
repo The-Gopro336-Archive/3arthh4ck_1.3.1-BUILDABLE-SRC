@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.collect.Sets
+ *  net.minecraft.init.SoundEvents
+ *  net.minecraft.util.SoundEvent
+ */
 package me.earth.earthhack.impl.modules.misc.nosoundlag;
 
 import com.google.common.collect.Sets;
@@ -16,7 +24,7 @@ import net.minecraft.util.SoundEvent;
 
 public class NoSoundLag
 extends Module {
-    protected static final Set<SoundEvent> SOUNDS = Sets.newHashSet(SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, SoundEvents.ITEM_ARMOR_EQIIP_ELYTRA, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, SoundEvents.ITEM_ARMOR_EQUIP_IRON, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER);
+    protected static final Set<SoundEvent> SOUNDS = Sets.newHashSet((Object[])new SoundEvent[]{SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, SoundEvents.ITEM_ARMOR_EQIIP_ELYTRA, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, SoundEvents.ITEM_ARMOR_EQUIP_IRON, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER});
     protected final Setting<Boolean> sounds = this.register(new BooleanSetting("Sounds", true));
     protected final Setting<Boolean> crystals = this.register(new BooleanSetting("Crystals", false));
     protected final SoundObserver observer = new SimpleSoundObserver(this.crystals::getValue);
@@ -37,3 +45,4 @@ extends Module {
         Managers.SET_DEAD.removeObserver(this.observer);
     }
 }
+

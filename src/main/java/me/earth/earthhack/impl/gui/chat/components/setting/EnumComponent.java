@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.text.Style
+ *  net.minecraft.util.text.event.ClickEvent
+ *  net.minecraft.util.text.event.ClickEvent$Action
+ *  net.minecraft.util.text.event.HoverEvent
+ *  net.minecraft.util.text.event.HoverEvent$Action
+ */
 package me.earth.earthhack.impl.gui.chat.components.setting;
 
 import me.earth.earthhack.api.module.Module;
@@ -23,7 +33,7 @@ extends SettingComponent<A, EnumSetting<A>> {
             this.appendSibling(new ValueComponent(setting).setStyle(this.getStyle()));
             return;
         }
-        this.appendSibling(new ValueComponent(setting).setStyle(new Style().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new EnumHoverComponent<A>(setting))).setClickEvent(new SmartClickEvent(ClickEvent.Action.RUN_COMMAND){
+        this.appendSibling(new ValueComponent(setting).setStyle(new Style().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new EnumHoverComponent<A>(setting))).setClickEvent((ClickEvent)new SmartClickEvent(ClickEvent.Action.RUN_COMMAND){
 
             @Override
             public String getValue() {
@@ -49,3 +59,4 @@ extends SettingComponent<A, EnumSetting<A>> {
         }
     }
 }
+

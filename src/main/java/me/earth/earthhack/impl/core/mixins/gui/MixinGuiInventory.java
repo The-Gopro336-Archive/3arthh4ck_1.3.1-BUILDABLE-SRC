@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.inventory.GuiInventory
+ *  org.lwjgl.input.Keyboard
+ */
 package me.earth.earthhack.impl.core.mixins.gui;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -17,8 +24,9 @@ public abstract class MixinGuiInventory {
     @Inject(method={"onGuiClosed"}, at={@At(value="HEAD")}, cancellable=true)
     private void onGuiClosedHook(CallbackInfo info) {
         if (XCARRY.isEnabled()) {
-            Keyboard.enableRepeatEvents(false);
+            Keyboard.enableRepeatEvents((boolean)false);
             info.cancel();
         }
     }
 }
+

@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.player.automine.util;
 
 import java.util.concurrent.Future;
@@ -32,3 +39,4 @@ public interface IAutomine {
 
     public boolean canBigCalcsBeImproved();
 }
+

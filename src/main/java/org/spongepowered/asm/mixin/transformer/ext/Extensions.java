@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.collect.ImmutableList
+ *  com.google.common.collect.ImmutableList$Builder
+ */
 package org.spongepowered.asm.mixin.transformer.ext;
 
 import com.google.common.collect.ImmutableList;
@@ -50,7 +57,7 @@ public final class Extensions {
         ImmutableList.Builder activeExtensions = ImmutableList.builder();
         for (IExtension extension : this.extensions) {
             if (!extension.checkActive(environment)) continue;
-            activeExtensions.add(extension);
+            activeExtensions.add((Object)extension);
         }
         this.activeExtensions = activeExtensions.build();
     }
@@ -102,3 +109,4 @@ public final class Extensions {
         return extension;
     }
 }
+

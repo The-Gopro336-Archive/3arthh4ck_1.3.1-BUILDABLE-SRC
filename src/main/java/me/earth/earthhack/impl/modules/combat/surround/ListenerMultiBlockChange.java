@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.network.play.server.SPacketMultiBlockChange
+ *  net.minecraft.network.play.server.SPacketMultiBlockChange$BlockUpdateData
+ */
 package me.earth.earthhack.impl.modules.combat.surround;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -19,17 +27,18 @@ extends ModuleListener<Surround, PacketEvent.Receive<SPacketMultiBlockChange>> {
         event.addPostEvent(() -> {
             boolean instant = false;
             for (SPacketMultiBlockChange.BlockUpdateData data : packet.getChangedBlocks()) {
-                if (!((Surround)this.module).targets.contains(data.getPos())) continue;
+                if (!((Surround)this.module).targets.contains((Object)data.getPos())) continue;
                 if (data.getBlockState().getBlock() == Blocks.AIR) {
-                    ((Surround)this.module).confirmed.remove(data.getPos());
+                    ((Surround)this.module).confirmed.remove((Object)data.getPos());
                     if (!((Surround)this.module).shouldInstant(false) || instant) continue;
                     instant = true;
                     ListenerMotion.start((Surround)this.module);
                     continue;
                 }
-                if (data.getBlockState().func_185904_a().isReplaceable()) continue;
+                if (data.getBlockState().getMaterial().isReplaceable()) continue;
                 ((Surround)this.module).confirmed.add(data.getPos());
             }
         });
     }
 }
+

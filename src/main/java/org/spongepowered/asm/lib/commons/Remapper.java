@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.lib.commons;
 
 import org.spongepowered.asm.lib.Handle;
@@ -142,3 +145,4 @@ public abstract class Remapper {
         return typeName;
     }
 }
+

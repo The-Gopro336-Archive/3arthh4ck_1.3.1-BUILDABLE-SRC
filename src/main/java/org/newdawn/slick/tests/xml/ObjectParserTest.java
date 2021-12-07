@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.tests.xml;
 
 import org.newdawn.slick.tests.xml.GameData;
@@ -13,3 +16,4 @@ public class ObjectParserTest {
         parsedData.dump("");
     }
 }
+

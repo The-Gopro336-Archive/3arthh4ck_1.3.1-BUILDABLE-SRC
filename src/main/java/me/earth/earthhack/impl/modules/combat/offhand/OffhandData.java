@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.combat.offhand;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -30,3 +33,4 @@ extends DefaultData<Offhand> {
         return "AutoTotem, OffhandCrystal, OffhandGapple, all in one.";
     }
 }
+

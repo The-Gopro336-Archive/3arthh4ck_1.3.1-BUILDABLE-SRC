@@ -1,3 +1,14 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.material.Material
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.RayTraceResult$Type
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.modules.render.blockhighlight;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -12,6 +23,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.World;
 
 final class ListenerRender
 extends ModuleListener<BlockHighlight, Render3DEvent> {
@@ -26,10 +38,11 @@ extends ModuleListener<BlockHighlight, Render3DEvent> {
         if (ListenerRender.mc.objectMouseOver != null && ListenerRender.mc.objectMouseOver.typeOfHit == RayTraceResult.Type.BLOCK) {
             IBlockState state;
             BlockPos pos = ListenerRender.mc.objectMouseOver.getBlockPos();
-            if (!(!ListenerRender.mc.world.getWorldBorder().contains(pos) || SPEED_MINE.isEnabled() && pos.equals(((Speedmine)SPEED_MINE.get()).getPos()) || (state = ListenerRender.mc.world.getBlockState(pos)).func_185904_a() == Material.AIR)) {
-                AxisAlignedBB bb = Interpolation.interpolateAxis(state.func_185918_c(ListenerRender.mc.world, pos).grow(0.002f));
+            if (!(!ListenerRender.mc.world.getWorldBorder().contains(pos) || SPEED_MINE.isEnabled() && pos.equals((Object)((Speedmine)SPEED_MINE.get()).getPos()) || (state = ListenerRender.mc.world.getBlockState(pos)).getMaterial() == Material.AIR)) {
+                AxisAlignedBB bb = Interpolation.interpolateAxis(state.getSelectedBoundingBox((World)ListenerRender.mc.world, pos).grow((double)0.002f));
                 ((BlockHighlight)this.module).renderInterpAxis(bb);
             }
         }
     }
 }
+

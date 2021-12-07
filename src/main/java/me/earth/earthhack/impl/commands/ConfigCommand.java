@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.GuiScreen
+ */
 package me.earth.earthhack.impl.commands;
 
 import java.io.IOException;
@@ -76,7 +82,7 @@ implements Globals {
                     }
                     case "refresh": {
                         GuiScreen before = ConfigCommand.mc.currentScreen;
-                        Scheduler.getInstance().schedule(() -> mc.displayGuiScreen(new YesNoNonPausing((result, id) -> {
+                        Scheduler.getInstance().schedule(() -> mc.displayGuiScreen((GuiScreen)new YesNoNonPausing((result, id) -> {
                             mc.displayGuiScreen(before);
                             if (!result) {
                                 return;
@@ -180,7 +186,7 @@ implements Globals {
 
     private void displayYesNo(String action, String message2, ConfigHelper<?> helper, IORunnable runnable) {
         GuiScreen before = ConfigCommand.mc.currentScreen;
-        Scheduler.getInstance().schedule(() -> mc.displayGuiScreen(new YesNoNonPausing((result, id) -> {
+        Scheduler.getInstance().schedule(() -> mc.displayGuiScreen((GuiScreen)new YesNoNonPausing((result, id) -> {
             mc.displayGuiScreen(before);
             if (!result) {
                 return;
@@ -195,13 +201,14 @@ implements Globals {
         }, "\u00a7c" + action + "ing the " + "\u00a7f" + helper.getName() + "\u00a7c" + " config.", message2, 1337)));
     }
 
-    private static void lambda$execute$3(ConfigHelper helper, String[] configs, String cString) throws IOException {
+    private static /* synthetic */ void lambda$execute$3(ConfigHelper helper, String[] configs, String cString) throws IOException {
         Managers.CONFIG.load(helper, configs);
         ChatUtil.sendMessage("\u00a7aRefreshed the \u00a7f" + helper.getName() + "\u00a7a" + " : " + "\u00a7f" + Arrays.toString(configs) + "\u00a7a" + " " + cString + ".");
     }
 
-    private static void lambda$execute$2(ConfigHelper helper, String[] configs, String cString) throws IOException {
+    private static /* synthetic */ void lambda$execute$2(ConfigHelper helper, String[] configs, String cString) throws IOException {
         Managers.CONFIG.save(helper, configs);
         ChatUtil.sendMessage("\u00a7aSaved the \u00a7f" + helper.getName() + "\u00a7a" + " : " + "\u00a7f" + Arrays.toString(configs) + "\u00a7a" + " " + cString + ".");
     }
 }
+

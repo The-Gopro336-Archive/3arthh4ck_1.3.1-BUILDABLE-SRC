@@ -1,3 +1,14 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.item.EntityItem
+ *  net.minecraft.init.Items
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  org.lwjgl.input.Mouse
+ */
 package me.earth.earthhack.impl.modules.player.exptweaks;
 
 import java.util.List;
@@ -74,12 +85,12 @@ extends Module {
     }
 
     public boolean isMiddleClick() {
-        return this.middleClickExp.getValue() != false && (Mouse.isButtonDown(2) && this.mceBind.getValue().getKey() == -1 || KeyBoardUtil.isKeyDown(this.mceBind));
+        return this.middleClickExp.getValue() != false && (Mouse.isButtonDown((int)2) && this.mceBind.getValue().getKey() == -1 || KeyBoardUtil.isKeyDown(this.mceBind));
     }
 
     public boolean isWastingLoot(List<Entity> entities) {
         if (entities != null) {
-            AxisAlignedBB bb = RotationUtil.getRotationPlayer().getEntityBoundingBox().grow(this.grow.getValue(), this.grow.getValue(), this.grow.getValue());
+            AxisAlignedBB bb = RotationUtil.getRotationPlayer().getEntityBoundingBox().grow(this.grow.getValue().doubleValue(), this.grow.getValue().doubleValue(), this.grow.getValue().doubleValue());
             for (Entity entity : entities) {
                 if (!(entity instanceof EntityItem) || entity.isDead || ((EntityItem)entity).getItem().getItem() != Items.EXPERIENCE_BOTTLE || !entity.getEntityBoundingBox().intersects(bb)) continue;
                 return true;
@@ -116,3 +127,4 @@ extends Module {
         return this.isEnabled() && this.wasteStop.getValue() != false && just;
     }
 }
+

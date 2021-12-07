@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.launchwrapper.IClassTransformer
+ *  org.apache.logging.log4j.LogManager
+ */
 package org.spongepowered.asm.mixin.transformer;
 
 import java.util.ArrayList;
@@ -19,10 +26,9 @@ ILegacyClassTransformer {
             hook.isActive = false;
         }
         proxies.add(this);
-        LogManager.getLogger("mixin").debug("Adding new mixin transformer proxy #{}", new Object[]{proxies.size()});
+        LogManager.getLogger((String)"mixin").debug("Adding new mixin transformer proxy #{}", new Object[]{proxies.size()});
     }
 
-    @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
         if (this.isActive) {
             return transformer.transformClassBytes(name, transformedName, basicClass);
@@ -48,3 +54,4 @@ ILegacyClassTransformer {
         return basicClass;
     }
 }
+

@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.item.ItemFood
+ *  net.minecraft.network.play.server.SPacketBlockChange
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.misc.nuker;
 
 import java.util.Set;
@@ -29,7 +38,7 @@ extends ModuleListener<Nuker, PacketEvent.Receive<SPacketBlockChange>> {
             if (blocks.isEmpty()) {
                 return;
             }
-            if (blocks.contains(packet.getBlockState().getBlock()) && BlockUtil.getDistanceSqDigging(packet.getBlockPosition()) <= (double)MathUtil.square(((Nuker)this.module).range.getValue().floatValue())) {
+            if (blocks.contains((Object)packet.getBlockState().getBlock()) && BlockUtil.getDistanceSqDigging(packet.getBlockPosition()) <= (double)MathUtil.square(((Nuker)this.module).range.getValue().floatValue())) {
                 mc.addScheduledTask(() -> {
                     if (ListenerChange.mc.player.getActiveItemStack().getItem() instanceof ItemFood) {
                         return;
@@ -50,3 +59,4 @@ extends ModuleListener<Nuker, PacketEvent.Receive<SPacketBlockChange>> {
         }
     }
 }
+

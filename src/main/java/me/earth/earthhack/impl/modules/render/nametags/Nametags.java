@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayer
+ */
 package me.earth.earthhack.impl.modules.render.nametags;
 
 import java.util.ArrayList;
@@ -55,7 +61,7 @@ extends Module {
             SafeRunnable runnable = () -> {
                 ArrayList<Nametag> nametags = new ArrayList<Nametag>(players.size());
                 for (EntityPlayer player : players) {
-                    if (player == null || player.isDead || player.equals(Nametags.mc.player)) continue;
+                    if (player == null || player.isDead || player.equals((Object)Nametags.mc.player)) continue;
                     nametags.add(new Nametag(this, player));
                 }
                 this.nametags = nametags;
@@ -78,3 +84,4 @@ extends Module {
         return armorOffset;
     }
 }
+

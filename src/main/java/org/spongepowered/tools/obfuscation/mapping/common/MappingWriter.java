@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.tools.obfuscation.mapping.common;
 
 import java.io.File;
@@ -33,3 +36,4 @@ implements IMappingWriter {
         return new PrintWriter(outResource.openWriter());
     }
 }
+

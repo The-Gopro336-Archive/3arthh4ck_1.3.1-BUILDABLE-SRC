@@ -1,5 +1,24 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.client.entity.EntityPlayerSP
+ *  net.minecraft.client.multiplayer.PlayerControllerMP
+ *  net.minecraft.client.multiplayer.WorldClient
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.network.play.client.CPacketPlayerDigging
+ *  net.minecraft.network.play.client.CPacketPlayerDigging$Action
+ *  net.minecraft.util.EnumActionResult
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.core.mixins.entity.living.player;
 
+import java.lang.invoke.LambdaMetafactory;
 import me.earth.earthhack.api.cache.ModuleCache;
 import me.earth.earthhack.api.cache.SettingCache;
 import me.earth.earthhack.api.event.bus.instance.Bus;
@@ -42,12 +61,12 @@ implements IPlayerControllerMP {
     private static final ModuleCache<TpsSync> TPS_SYNC = Caches.getModule(TpsSync.class);
     private static final SettingCache<Boolean, BooleanSetting, TpsSync> MINE = Caches.getSetting(TpsSync.class, BooleanSetting.class, "Mine", false);
     @Shadow
-    private float field_78770_f;
+    private float curBlockDamageMP;
     @Shadow
-    private int field_78781_i;
+    private int blockHitDelay;
 
     @Shadow
-    protected abstract void func_78750_j();
+    protected abstract void syncCurrentPlayItem();
 
     @Override
     @Invoker(value="syncCurrentPlayItem")
@@ -119,10 +138,10 @@ implements IPlayerControllerMP {
 
     @Inject(method={"onPlayerDamageBlock"}, at={@At(value="HEAD")}, cancellable=true)
     private void onPlayerDamageBlock(BlockPos pos, EnumFacing facing, CallbackInfoReturnable<Boolean> info) {
-        DamageBlockEvent event = new DamageBlockEvent(pos, facing, this.field_78770_f, this.field_78781_i);
+        DamageBlockEvent event = new DamageBlockEvent(pos, facing, this.curBlockDamageMP, this.blockHitDelay);
         Bus.EVENT_BUS.post(event);
-        this.field_78770_f = event.getDamage();
-        this.field_78781_i = event.getDelay();
+        this.curBlockDamageMP = event.getDamage();
+        this.blockHitDelay = event.getDelay();
         if (event.isCancelled()) {
             info.cancel();
         }
@@ -132,18 +151,19 @@ implements IPlayerControllerMP {
     private CPacketPlayerDigging cPacketPlayerDiggingInitHook(CPacketPlayerDigging.Action actionIn, BlockPos posIn, EnumFacing facingIn) {
         CPacketPlayerDigging packet = new CPacketPlayerDigging(actionIn, posIn, facingIn);
         if (actionIn == CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK) {
-            ((ICPacketPlayerDigging)((Object)packet)).setClientSideBreaking(true);
+            ((ICPacketPlayerDigging)packet).setClientSideBreaking(true);
         }
         return packet;
     }
 
     @Redirect(method={"onPlayerDamageBlock"}, at=@At(value="INVOKE", target="Lnet/minecraft/block/state/IBlockState;getPlayerRelativeBlockHardness(Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;)F"))
     public float getPlayerRelativeBlockHardnessHook(IBlockState state, EntityPlayer player, World worldIn, BlockPos pos) {
-        return state.func_185903_a(player, worldIn, pos) * (TPS_SYNC.isEnabled() && MINE.getValue() != false ? 1.0f / Managers.TPS.getFactor() : 1.0f);
+        return state.getPlayerRelativeBlockHardness(player, worldIn, pos) * (TPS_SYNC.isEnabled() && MINE.getValue() != false ? 1.0f / Managers.TPS.getFactor() : 1.0f);
     }
 
     @Redirect(method={"updateController"}, at=@At(value="INVOKE", target="Lnet/minecraft/client/multiplayer/PlayerControllerMP;syncCurrentPlayItem()V"))
     private void syncCurrentPlayItemHook(PlayerControllerMP playerControllerMP) {
-        Locks.acquire(Locks.PLACE_SWITCH_LOCK, this::func_78750_j);
+        Locks.acquire(Locks.PLACE_SWITCH_LOCK, (Runnable)LambdaMetafactory.metafactory(null, null, null, ()V, func_78750_j(), ()V)((MixinPlayerControllerMP)this));
     }
 }
+

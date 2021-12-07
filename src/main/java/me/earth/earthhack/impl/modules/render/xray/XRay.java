@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ */
 package me.earth.earthhack.impl.modules.render.xray;
 
 import java.lang.reflect.Field;
@@ -134,3 +140,4 @@ extends BlockAddingModule {
         }
     }
 }
+

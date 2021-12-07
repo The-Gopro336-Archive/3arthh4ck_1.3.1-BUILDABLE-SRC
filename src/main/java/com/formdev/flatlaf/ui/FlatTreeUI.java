@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.ui;
 
 import com.formdev.flatlaf.FlatClientProperties;
@@ -245,3 +248,4 @@ extends BasicTreeUI {
         return FlatClientProperties.clientPropertyBoolean(this.tree, "JTree.paintSelection", true);
     }
 }
+

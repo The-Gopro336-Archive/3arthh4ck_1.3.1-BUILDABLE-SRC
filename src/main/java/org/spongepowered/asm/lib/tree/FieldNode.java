@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.lib.tree;
 
 import java.util.ArrayList;
@@ -126,3 +129,4 @@ extends FieldVisitor {
         fv.visitEnd();
     }
 }
+

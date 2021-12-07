@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.model.ModelBase
+ *  net.minecraft.client.renderer.GlStateManager
+ *  net.minecraft.client.renderer.entity.RenderEnderCrystal
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.util.ResourceLocation
+ *  org.lwjgl.opengl.GL11
+ */
 package me.earth.earthhack.impl.core.mixins.render.entity;
 
 import java.awt.Color;
@@ -38,15 +50,15 @@ public abstract class MixinRenderEnderCrystal {
         }
         if (CHAMS.isEnabled()) {
             if (((CrystalChams)MixinRenderEnderCrystal.CHAMS.get()).mode.getValue() == ChamsMode.Gradient) {
-                GL11.glPushAttrib(1048575);
-                GL11.glEnable(3042);
-                GL11.glDisable(2896);
-                GL11.glDisable(3553);
+                GL11.glPushAttrib((int)1048575);
+                GL11.glEnable((int)3042);
+                GL11.glDisable((int)2896);
+                GL11.glDisable((int)3553);
                 float alpha = (float)((CrystalChams)MixinRenderEnderCrystal.CHAMS.get()).color.getValue().getAlpha() / 255.0f;
-                GL11.glColor4f(1.0f, 1.0f, 1.0f, alpha);
+                GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)alpha);
                 modelBase.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-                GL11.glEnable(3553);
-                GL11.glBlendFunc(770, 771);
+                GL11.glEnable((int)3553);
+                GL11.glBlendFunc((int)770, (int)771);
                 float f = (float)entityIn.ticksExisted + Minecraft.getMinecraft().getRenderPartialTicks();
                 Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("textures/rainbow.png"));
                 Minecraft.getMinecraft().entityRenderer.setupFogColor(true);
@@ -77,35 +89,35 @@ public abstract class MixinRenderEnderCrystal {
             } else {
                 if (((CrystalChams)MixinRenderEnderCrystal.CHAMS.get()).wireframe.getValue().booleanValue()) {
                     Color wireColor = ((CrystalChams)MixinRenderEnderCrystal.CHAMS.get()).wireFrameColor.getValue();
-                    GL11.glPushAttrib(1048575);
-                    GL11.glEnable(3042);
-                    GL11.glDisable(3553);
-                    GL11.glDisable(2896);
-                    GL11.glBlendFunc(770, 771);
-                    GL11.glPolygonMode(1032, 6913);
+                    GL11.glPushAttrib((int)1048575);
+                    GL11.glEnable((int)3042);
+                    GL11.glDisable((int)3553);
+                    GL11.glDisable((int)2896);
+                    GL11.glBlendFunc((int)770, (int)771);
+                    GL11.glPolygonMode((int)1032, (int)6913);
                     if (((CrystalChams)MixinRenderEnderCrystal.CHAMS.get()).wireWalls.getValue().booleanValue()) {
-                        GL11.glDepthMask(false);
-                        GL11.glDisable(2929);
+                        GL11.glDepthMask((boolean)false);
+                        GL11.glDisable((int)2929);
                     }
-                    GL11.glColor4f((float)wireColor.getRed() / 255.0f, (float)wireColor.getGreen() / 255.0f, (float)wireColor.getBlue() / 255.0f, (float)wireColor.getAlpha() / 255.0f);
+                    GL11.glColor4f((float)((float)wireColor.getRed() / 255.0f), (float)((float)wireColor.getGreen() / 255.0f), (float)((float)wireColor.getBlue() / 255.0f), (float)((float)wireColor.getAlpha() / 255.0f));
                     modelBase.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
                     GL11.glPopAttrib();
                 }
                 if (((CrystalChams)MixinRenderEnderCrystal.CHAMS.get()).chams.getValue().booleanValue()) {
                     Color chamsColor = ((CrystalChams)MixinRenderEnderCrystal.CHAMS.get()).color.getValue();
-                    GL11.glPushAttrib(1048575);
-                    GL11.glEnable(3042);
-                    GL11.glDisable(3553);
-                    GL11.glDisable(2896);
-                    GL11.glDisable(3008);
-                    GL11.glBlendFunc(770, 771);
-                    GL11.glEnable(2960);
-                    GL11.glEnable(10754);
+                    GL11.glPushAttrib((int)1048575);
+                    GL11.glEnable((int)3042);
+                    GL11.glDisable((int)3553);
+                    GL11.glDisable((int)2896);
+                    GL11.glDisable((int)3008);
+                    GL11.glBlendFunc((int)770, (int)771);
+                    GL11.glEnable((int)2960);
+                    GL11.glEnable((int)10754);
                     if (((CrystalChams)MixinRenderEnderCrystal.CHAMS.get()).throughWalls.getValue().booleanValue()) {
-                        GL11.glDepthMask(false);
-                        GL11.glDisable(2929);
+                        GL11.glDepthMask((boolean)false);
+                        GL11.glDisable((int)2929);
                     }
-                    GL11.glColor4f((float)chamsColor.getRed() / 255.0f, (float)chamsColor.getGreen() / 255.0f, (float)chamsColor.getBlue() / 255.0f, (float)chamsColor.getAlpha() / 255.0f);
+                    GL11.glColor4f((float)((float)chamsColor.getRed() / 255.0f), (float)((float)chamsColor.getGreen() / 255.0f), (float)((float)chamsColor.getBlue() / 255.0f), (float)((float)chamsColor.getAlpha() / 255.0f));
                     modelBase.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
                     GL11.glPopAttrib();
                 }
@@ -118,3 +130,4 @@ public abstract class MixinRenderEnderCrystal {
         }
     }
 }
+

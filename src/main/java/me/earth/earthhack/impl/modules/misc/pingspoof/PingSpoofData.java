@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.misc.pingspoof;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -22,3 +25,4 @@ extends DefaultData<PingSpoof> {
         return "Allows you to spoof your ping.";
     }
 }
+

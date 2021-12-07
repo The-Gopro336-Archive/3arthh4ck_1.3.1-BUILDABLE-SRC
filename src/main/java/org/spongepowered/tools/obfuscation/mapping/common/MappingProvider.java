@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.collect.BiMap
+ *  com.google.common.collect.HashBiMap
+ */
 package org.spongepowered.tools.obfuscation.mapping.common;
 
 import com.google.common.collect.BiMap;
@@ -37,21 +44,22 @@ implements IMappingProvider {
 
     @Override
     public MappingMethod getMethodMapping(MappingMethod method) {
-        return (MappingMethod)this.methodMap.get(method);
+        return (MappingMethod)this.methodMap.get((Object)method);
     }
 
     @Override
     public MappingField getFieldMapping(MappingField field) {
-        return (MappingField)this.fieldMap.get(field);
+        return (MappingField)this.fieldMap.get((Object)field);
     }
 
     @Override
     public String getClassMapping(String className) {
-        return (String)this.classMap.get(className);
+        return (String)this.classMap.get((Object)className);
     }
 
     @Override
     public String getPackageMapping(String packageName) {
-        return (String)this.packageMap.get(packageName);
+        return (String)this.packageMap.get((Object)packageName);
     }
 }
+

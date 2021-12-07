@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.ui;
 
 import com.formdev.flatlaf.ui.FlatBorder;
@@ -127,9 +130,10 @@ extends FlatBorder {
                 return 0;
             }
             case 1: {
-                return Short.MAX_VALUE;
+                return 32767;
             }
         }
         return this.arc;
     }
 }
+

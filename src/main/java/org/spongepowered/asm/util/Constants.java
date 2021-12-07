@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.util;
 
 import java.io.File;
@@ -32,3 +35,4 @@ public abstract class Constants {
         }
     }
 }
+

@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.network.play.client.CPacketUseEntity$Action
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.core.ducks.network;
 
 import net.minecraft.entity.Entity;
@@ -24,3 +33,4 @@ public interface ICPacketUseEntity {
 
     public Entity getAttackedEntity();
 }
+

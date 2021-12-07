@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.movement.noslowdown;
 
 import me.earth.earthhack.impl.event.events.movement.SprintEvent;
@@ -17,3 +20,4 @@ extends ModuleListener<NoSlowDown, SprintEvent> {
         }
     }
 }
+

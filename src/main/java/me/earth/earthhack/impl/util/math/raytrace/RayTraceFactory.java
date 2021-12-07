@@ -1,3 +1,19 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.RayTraceResult
+ *  net.minecraft.util.math.RayTraceResult$Type
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.util.math.Vec3i
+ *  net.minecraft.world.IBlockAccess
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.util.math.raytrace;
 
 import java.util.HashSet;
@@ -34,7 +50,7 @@ implements Globals {
         for (EnumFacing facing : RayTraceFactory.getOptimalFacings(from, pos)) {
             BlockPos offset = pos.offset(facing);
             IBlockState state = world.getBlockState(offset);
-            if (state.func_185904_a().isReplaceable()) continue;
+            if (state.getMaterial().isReplaceable()) continue;
             Ray ray = RayTraceFactory.rayTrace(from, offset, facing.getOpposite(), world, state, resolution);
             if (ray.isLegit()) {
                 return ray;
@@ -50,14 +66,14 @@ implements Globals {
     public static Ray rayTrace(Entity from, BlockPos on, EnumFacing facing, IBlockAccess access, IBlockState state, double res) {
         boolean zEq;
         Vec3d start = PositionUtil.getEyePos(from);
-        AxisAlignedBB bb = state.func_185900_c(access, on);
+        AxisAlignedBB bb = state.getBoundingBox(access, on);
         if (res >= 1.0) {
             float[] r = RayTraceFactory.rots(on, facing, from, access, state);
             Vec3d look = RotationUtil.getVec3d(r[0], r[1]);
             double d = RayTraceFactory.mc.playerController.getBlockReachDistance();
-            Vec3d rotations = start.addVector(look.x * d, look.y * d, look.z * d);
+            Vec3d rotations = start.add(look.x * d, look.y * d, look.z * d);
             RayTraceResult result = RayTracer.trace((World)RayTraceFactory.mc.world, access, start, rotations, false, false, true);
-            if (result == null || result.sideHit != facing || !on.equals(result.getBlockPos())) {
+            if (result == null || result.sideHit != facing || !on.equals((Object)result.getBlockPos())) {
                 return RayTraceFactory.dumbRay(on, facing, r);
             }
             return new Ray(result, r, on, facing, null).setLegit(true);
@@ -106,7 +122,7 @@ implements Globals {
             vectors.add(new Vec3d(x, y, z));
             for (Vec3d vec : vectors) {
                 RayTraceResult ray = RayTracer.trace((World)RayTraceFactory.mc.world, access, start, vec, false, false, true);
-                if (ray == null || !on.equals(ray.getBlockPos()) || facing != ray.sideHit) continue;
+                if (ray == null || !on.equals((Object)ray.getBlockPos()) || facing != ray.sideHit) continue;
                 return new Ray(ray, RayTraceFactory.rots(from, vec), on, facing, vec).setLegit(true);
             }
             return RayTraceFactory.dumbRay(on, facing, RayTraceFactory.rots(on, facing, from, access, state));
@@ -116,7 +132,7 @@ implements Globals {
                 for (double z = Math.min(minZ, maxZ); z <= endZ; z += res) {
                     Vec3d vector = new Vec3d(x, y, z);
                     RayTraceResult ray = RayTracer.trace((World)RayTraceFactory.mc.world, access, start, vector, false, false, true);
-                    if (ray == null || facing != ray.sideHit || !on.equals(ray.getBlockPos())) continue;
+                    if (ray == null || facing != ray.sideHit || !on.equals((Object)ray.getBlockPos())) continue;
                     return new Ray(ray, RayTraceFactory.rots(from, vector), on, facing, vector).setLegit(true);
                 }
             }
@@ -150,3 +166,4 @@ implements Globals {
         return S;
     }
 }
+

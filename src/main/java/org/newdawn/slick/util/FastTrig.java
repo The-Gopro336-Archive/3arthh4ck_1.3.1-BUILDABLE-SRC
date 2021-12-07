@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.util;
 
 public class FastTrig {
@@ -23,3 +26,4 @@ public class FastTrig {
         return FastTrig.sin(radians + 1.5707963267948966);
     }
 }
+

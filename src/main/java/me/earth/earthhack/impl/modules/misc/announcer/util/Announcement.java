@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.misc.announcer.util;
 
 public class Announcement {
@@ -21,3 +24,4 @@ public class Announcement {
         return this.name;
     }
 }
+

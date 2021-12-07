@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.network.play.server.SPacketEntityStatus
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.modules.client.notifications;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -7,6 +16,7 @@ import me.earth.earthhack.impl.modules.client.notifications.Notifications;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.server.SPacketEntityStatus;
+import net.minecraft.world.World;
 
 final class ListenerTotems
 extends ModuleListener<Notifications, PacketEvent.Receive<SPacketEntityStatus>> {
@@ -21,7 +31,7 @@ extends ModuleListener<Notifications, PacketEvent.Receive<SPacketEntityStatus>> 
                 mc.addScheduledTask(() -> {
                     int pops;
                     Entity entity;
-                    if (ListenerTotems.mc.world != null && (entity = ((SPacketEntityStatus)event.getPacket()).getEntity(ListenerTotems.mc.world)) instanceof EntityPlayer && (pops = Managers.COMBAT.getPops(entity)) > 0) {
+                    if (ListenerTotems.mc.world != null && (entity = ((SPacketEntityStatus)event.getPacket()).getEntity((World)ListenerTotems.mc.world)) instanceof EntityPlayer && (pops = Managers.COMBAT.getPops(entity)) > 0) {
                         ((Notifications)this.module).onDeath(entity, Managers.COMBAT.getPops(entity));
                     }
                 });
@@ -29,7 +39,7 @@ extends ModuleListener<Notifications, PacketEvent.Receive<SPacketEntityStatus>> 
             }
             case 35: {
                 mc.addScheduledTask(() -> {
-                    Entity entity = ((SPacketEntityStatus)event.getPacket()).getEntity(ListenerTotems.mc.world);
+                    Entity entity = ((SPacketEntityStatus)event.getPacket()).getEntity((World)ListenerTotems.mc.world);
                     if (entity instanceof EntityPlayer) {
                         ((Notifications)this.module).onPop(entity, Managers.COMBAT.getPops(entity) + 1);
                     }
@@ -39,3 +49,4 @@ extends ModuleListener<Notifications, PacketEvent.Receive<SPacketEntityStatus>> 
         }
     }
 }
+

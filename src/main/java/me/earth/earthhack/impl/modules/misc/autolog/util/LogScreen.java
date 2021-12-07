@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.gui.GuiButton
+ *  net.minecraft.client.gui.GuiMainMenu
+ *  net.minecraft.client.gui.GuiMultiplayer
+ *  net.minecraft.client.gui.GuiScreen
+ *  net.minecraft.client.multiplayer.GuiConnecting
+ *  net.minecraft.client.multiplayer.ServerData
+ */
 package me.earth.earthhack.impl.modules.misc.autolog.util;
 
 import java.io.IOException;
@@ -45,21 +57,21 @@ extends GuiScreen {
     protected void actionPerformed(GuiButton button) throws IOException {
         if (button.id == 0 && this.data != null) {
             if (PINGBYPASS.isEnabled()) {
-                this.mc.displayGuiScreen(new GuiConnectingPingBypass(new GuiMainMenu(), this.mc, this.data));
+                this.mc.displayGuiScreen((GuiScreen)new GuiConnectingPingBypass((GuiScreen)new GuiMainMenu(), this.mc, this.data));
             } else {
-                this.mc.displayGuiScreen(new GuiConnecting(new GuiMainMenu(), this.mc, this.data));
+                this.mc.displayGuiScreen((GuiScreen)new GuiConnecting((GuiScreen)new GuiMainMenu(), this.mc, this.data));
             }
         } else if (button.id == 1) {
             this.autoLog.toggle();
             this.autoLogButton.displayString = this.getButtonString();
         } else if (button.id == 2) {
-            this.mc.displayGuiScreen(new GuiMultiplayer(new GuiMainMenu()));
+            this.mc.displayGuiScreen((GuiScreen)new GuiMultiplayer((GuiScreen)new GuiMainMenu()));
         }
     }
 
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
-        this.func_73732_a(this.fontRenderer, this.message, this.width / 2, this.height / 2 - this.textHeight / 2 - this.fontRenderer.FONT_HEIGHT * 2, -1);
+        this.drawCenteredString(this.fontRenderer, this.message, this.width / 2, this.height / 2 - this.textHeight / 2 - this.fontRenderer.FONT_HEIGHT * 2, -1);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
@@ -67,3 +79,4 @@ extends GuiScreen {
         return "AutoLog: " + (this.autoLog.isEnabled() ? "\u00a7aOn" : "\u00a7cOff");
     }
 }
+

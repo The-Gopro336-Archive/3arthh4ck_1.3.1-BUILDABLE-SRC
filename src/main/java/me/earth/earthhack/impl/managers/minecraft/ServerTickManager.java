@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketSpawnObject
+ *  net.minecraft.network.play.server.SPacketTimeUpdate
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.managers.minecraft;
 
 import java.util.ArrayDeque;
@@ -137,3 +145,4 @@ implements Globals {
         return this.averageSpawnObjectTime;
     }
 }
+

@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.item.ItemStack
+ */
 package me.earth.earthhack.impl.modules.player.replenish;
 
 import java.util.List;
@@ -58,3 +64,4 @@ extends RemovingItemAddingModule {
         }
     }
 }
+

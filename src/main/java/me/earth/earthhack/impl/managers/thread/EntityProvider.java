@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ */
 package me.earth.earthhack.impl.managers.thread;
 
 import java.util.ArrayList;
@@ -71,3 +78,4 @@ implements Globals {
         return null;
     }
 }
+

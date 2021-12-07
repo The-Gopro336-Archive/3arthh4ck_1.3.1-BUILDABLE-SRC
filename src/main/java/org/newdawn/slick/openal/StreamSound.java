@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.BufferUtils
+ *  org.lwjgl.openal.AL10
+ */
 package org.newdawn.slick.openal;
 
 import java.io.IOException;
@@ -38,12 +45,12 @@ extends AudioImpl {
 
     private void cleanUpSource() {
         SoundStore store = SoundStore.get();
-        AL10.alSourceStop(store.getSource(0));
-        IntBuffer buffer = BufferUtils.createIntBuffer(1);
-        for (int queued = AL10.alGetSourcei(store.getSource(0), 4117); queued > 0; --queued) {
-            AL10.alSourceUnqueueBuffers(store.getSource(0), buffer);
+        AL10.alSourceStop((int)store.getSource(0));
+        IntBuffer buffer = BufferUtils.createIntBuffer((int)1);
+        for (int queued = AL10.alGetSourcei((int)store.getSource(0), (int)4117); queued > 0; --queued) {
+            AL10.alSourceUnqueueBuffers((int)store.getSource(0), (IntBuffer)buffer);
         }
-        AL10.alSourcei(store.getSource(0), 4105, 0);
+        AL10.alSourcei((int)store.getSource(0), (int)4105, (int)0);
     }
 
     @Override
@@ -71,3 +78,4 @@ extends AudioImpl {
         return this.player.getPosition();
     }
 }
+

@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package org.spongepowered.asm.mixin.transformer;
 
 import java.io.IOException;
@@ -22,7 +29,7 @@ import org.spongepowered.asm.transformers.MixinClassWriter;
 
 final class InnerClassGenerator
 implements IClassGenerator {
-    private static final Logger logger = LogManager.getLogger("mixin");
+    private static final Logger logger = LogManager.getLogger((String)"mixin");
     private final Map<String, String> innerClassNames = new HashMap<String, String>();
     private final Map<String, InnerClassInfo> innerClasses = new HashMap<String, InnerClassInfo>();
 
@@ -63,7 +70,7 @@ implements IClassGenerator {
             throw ex;
         }
         catch (Exception ex) {
-            logger.catching(ex);
+            logger.catching((Throwable)ex);
             return null;
         }
     }
@@ -174,3 +181,4 @@ implements IClassGenerator {
         }
     }
 }
+

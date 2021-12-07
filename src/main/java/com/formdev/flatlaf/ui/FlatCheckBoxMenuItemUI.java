@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.ui;
 
 import com.formdev.flatlaf.ui.FlatMenuItemRenderer;
@@ -45,3 +48,4 @@ extends BasicCheckBoxMenuItemUI {
         this.renderer.paintMenuItem(g, this.selectionBackground, this.selectionForeground, this.disabledForeground, this.acceleratorForeground, this.acceleratorSelectionForeground);
     }
 }
+

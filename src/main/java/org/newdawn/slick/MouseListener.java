@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick;
 
 import org.newdawn.slick.ControlledInputReciever;
@@ -16,3 +19,4 @@ extends ControlledInputReciever {
 
     public void mouseDragged(int var1, int var2, int var3, int var4);
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.ui;
 
 import com.formdev.flatlaf.FlatLaf;
@@ -151,3 +154,4 @@ extends BasicLabelUI {
         return SwingUtilities.layoutCompoundLabel(label, fontMetrics, text, icon, label.getVerticalAlignment(), label.getHorizontalAlignment(), label.getVerticalTextPosition(), label.getHorizontalTextPosition(), viewR, iconR, textR, UIScale.scale(label.getIconTextGap()));
     }
 }
+

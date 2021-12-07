@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.opengl;
 
 import java.nio.ByteBuffer;
@@ -15,3 +18,4 @@ public interface ImageData {
 
     public ByteBuffer getImageBufferData();
 }
+

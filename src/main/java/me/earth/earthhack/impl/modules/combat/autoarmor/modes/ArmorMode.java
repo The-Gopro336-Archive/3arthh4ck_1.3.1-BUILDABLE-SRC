@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.enchantment.Enchantment
+ *  net.minecraft.enchantment.EnchantmentHelper
+ *  net.minecraft.init.Enchantments
+ *  net.minecraft.inventory.EntityEquipmentSlot
+ *  net.minecraft.item.ItemArmor
+ *  net.minecraft.item.ItemElytra
+ *  net.minecraft.item.ItemStack
+ */
 package me.earth.earthhack.impl.modules.combat.autoarmor.modes;
 
 import java.util.ArrayList;
@@ -56,7 +68,7 @@ public enum ArmorMode implements Globals
                 }
                 if (!(stack = 1.getStack(i)).isEmpty() && stack.getItem() instanceof ItemArmor && AutoArmor.curseCheck((ItemStack)stack, curse)) {
                     float d = DamageUtil.getDamage((ItemStack)stack);
-                    ItemArmor armor = (ItemArmor)((Object)stack.getItem());
+                    ItemArmor armor = (ItemArmor)stack.getItem();
                     EntityEquipmentSlot type = armor.getEquipmentSlot();
                     int blastLvL = EnchantmentHelper.getEnchantmentLevel((Enchantment)Enchantments.BLAST_PROTECTION, (ItemStack)stack);
                     if (blastLvL != 0) {
@@ -76,7 +88,7 @@ public enum ArmorMode implements Globals
             if (wearingBlast) {
                 for (EntityEquipmentSlot slot : empty) {
                     Object e2;
-                    if (map.get(slot) != null || (e2 = (LevelStack)blast.get(slot)) == null) continue;
+                    if (map.get((Object)slot) != null || (e2 = (LevelStack)blast.get((Object)slot)) == null) continue;
                     map.put(slot, e2);
                 }
                 map.keySet().retainAll(empty);
@@ -85,8 +97,8 @@ public enum ArmorMode implements Globals
                 boolean foundBlast = false;
                 ArrayList<EntityEquipmentSlot> both = new ArrayList<EntityEquipmentSlot>(4);
                 for (EntityEquipmentSlot slot : empty) {
-                    LevelStack b = (LevelStack)blast.get(slot);
-                    LevelStack p = (LevelStack)map.get(slot);
+                    LevelStack b = (LevelStack)blast.get((Object)slot);
+                    LevelStack p = (LevelStack)map.get((Object)slot);
                     if (b == null && p != null) {
                         result.put(slot, p.getSlot());
                         continue;
@@ -101,11 +113,11 @@ public enum ArmorMode implements Globals
                 }
                 for (EntityEquipmentSlot b : both) {
                     if (foundBlast) {
-                        result.put(b, ((LevelStack)map.get(b)).getSlot());
+                        result.put(b, ((LevelStack)map.get((Object)b)).getSlot());
                         continue;
                     }
                     foundBlast = true;
-                    result.put(b, ((LevelStack)blast.get(b)).getSlot());
+                    result.put(b, ((LevelStack)blast.get((Object)b)).getSlot());
                 }
                 if (!foundBlast && !blast.isEmpty()) {
                     Optional<Map.Entry> first = blast.entrySet().stream().filter(e -> !cursed.contains(e.getKey())).findFirst();
@@ -148,7 +160,7 @@ public enum ArmorMode implements Globals
                 }
                 if (!(stack = 2.getStack(i)).isEmpty() && stack.getItem() instanceof ItemArmor && AutoArmor.curseCheck(stack, curse)) {
                     float d = DamageUtil.getDamage(stack);
-                    ItemArmor armor = (ItemArmor)((Object)stack.getItem());
+                    ItemArmor armor = (ItemArmor)stack.getItem();
                     EntityEquipmentSlot type = armor.getEquipmentSlot();
                     int lvl = EnchantmentHelper.getEnchantmentLevel((Enchantment)Enchantments.PROTECTION, (ItemStack)stack);
                     if (lvl >= 4) {
@@ -160,7 +172,7 @@ public enum ArmorMode implements Globals
                 i = 0;
             }
             for (EntityEquipmentSlot s : semi) {
-                LevelStack entry = (LevelStack)map.get(s);
+                LevelStack entry = (LevelStack)map.get((Object)s);
                 if (entry == null || entry.getLevel() <= 0) continue;
                 empty.add(s);
             }
@@ -180,7 +192,7 @@ public enum ArmorMode implements Globals
             int bestElytra = -1;
             ItemStack elytra = InventoryUtil.get(6);
             if (!elytra.isEmpty() && (elytra.getItem() instanceof ItemElytra || EnchantmentHelper.hasBindingCurse((ItemStack)elytra))) {
-                map.remove(EntityEquipmentSlot.CHEST);
+                map.remove((Object)EntityEquipmentSlot.CHEST);
                 return map;
             }
             for (int i = 8; i < 45; ++i) {
@@ -225,3 +237,4 @@ public enum ArmorMode implements Globals
         });
     }
 }
+

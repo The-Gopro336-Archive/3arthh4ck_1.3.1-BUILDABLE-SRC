@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.server.main;
 
 import java.io.IOException;
@@ -18,3 +21,4 @@ implements IPacketHandler {
         ProtocolUtil.sendMessage(connection, 2, this.message);
     }
 }
+

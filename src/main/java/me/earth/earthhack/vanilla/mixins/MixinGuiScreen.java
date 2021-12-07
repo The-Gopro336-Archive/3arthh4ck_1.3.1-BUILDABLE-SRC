@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.gui.FontRenderer
+ *  net.minecraft.client.gui.GuiScreen
+ *  net.minecraft.inventory.Slot
+ */
 package me.earth.earthhack.vanilla.mixins;
 
 import java.util.List;
@@ -18,7 +27,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value={GuiScreen.class})
 public abstract class MixinGuiScreen {
     @Shadow
-    public Minecraft field_146297_k;
+    public Minecraft mc;
     private int toolTipX;
     private int toolTipY;
 
@@ -48,3 +57,4 @@ public abstract class MixinGuiScreen {
         }
     }
 }
+

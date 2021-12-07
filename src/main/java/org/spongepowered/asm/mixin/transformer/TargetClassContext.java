@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package org.spongepowered.asm.mixin.transformer;
 
 import java.io.OutputStream;
@@ -32,7 +39,7 @@ import org.spongepowered.asm.util.ClassSignature;
 class TargetClassContext
 extends ClassContext
 implements ITargetClassContext {
-    private static final Logger logger = LogManager.getLogger("mixin");
+    private static final Logger logger = LogManager.getLogger((String)"mixin");
     private final MixinEnvironment env;
     private final Extensions extensions;
     private final String sessionId;
@@ -241,3 +248,4 @@ implements ITargetClassContext {
         }
     }
 }
+

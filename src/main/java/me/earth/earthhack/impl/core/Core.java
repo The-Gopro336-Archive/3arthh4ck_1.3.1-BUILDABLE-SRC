@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package me.earth.earthhack.impl.core;
 
 import java.nio.file.Path;
@@ -19,7 +26,7 @@ import org.spongepowered.asm.mixin.Mixins;
 
 public class Core
 implements TweakerCore {
-    public static final Logger LOGGER = LogManager.getLogger("3arthh4ck-Core");
+    public static final Logger LOGGER = LogManager.getLogger((String)"3arthh4ck-Core");
 
     @Override
     public void init(ClassLoader pluginClassLoader) {
@@ -66,3 +73,4 @@ implements TweakerCore {
         return new String[]{EarthhackTransformer.class.getName()};
     }
 }
+

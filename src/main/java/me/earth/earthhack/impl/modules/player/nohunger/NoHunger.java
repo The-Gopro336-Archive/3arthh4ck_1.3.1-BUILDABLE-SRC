@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketEntityAction
+ *  net.minecraft.network.play.client.CPacketEntityAction$Action
+ */
 package me.earth.earthhack.impl.modules.player.nohunger;
 
 import me.earth.earthhack.api.module.Module;
@@ -8,6 +17,8 @@ import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.modules.player.nohunger.ListenerEntityAction;
 import me.earth.earthhack.impl.modules.player.nohunger.ListenerPlayerPacket;
 import me.earth.earthhack.impl.util.client.SimpleData;
+import net.minecraft.entity.Entity;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketEntityAction;
 
 public class NoHunger
@@ -29,14 +40,15 @@ extends Module {
     @Override
     protected void onEnable() {
         if (this.sprint.getValue().booleanValue() && NoHunger.mc.player != null) {
-            NoHunger.mc.player.connection.sendPacket(new CPacketEntityAction(NoHunger.mc.player, CPacketEntityAction.Action.STOP_SPRINTING));
+            NoHunger.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)NoHunger.mc.player, CPacketEntityAction.Action.STOP_SPRINTING));
         }
     }
 
     @Override
     protected void onDisable() {
         if (this.sprint.getValue().booleanValue() && NoHunger.mc.player != null && !Managers.ACTION.isSprinting() && NoHunger.mc.player.isSprinting()) {
-            NoHunger.mc.player.connection.sendPacket(new CPacketEntityAction(NoHunger.mc.player, CPacketEntityAction.Action.START_SPRINTING));
+            NoHunger.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)NoHunger.mc.player, CPacketEntityAction.Action.START_SPRINTING));
         }
     }
 }
+

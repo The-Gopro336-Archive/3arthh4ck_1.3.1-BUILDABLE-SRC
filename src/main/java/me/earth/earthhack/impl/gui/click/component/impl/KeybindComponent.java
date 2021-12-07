@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.mojang.realmsclient.gui.ChatFormatting
+ *  net.minecraft.client.Minecraft
+ */
 package me.earth.earthhack.impl.gui.click.component.impl;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
@@ -28,7 +35,7 @@ extends Component {
         super.drawScreen(mouseX, mouseY, partialTicks);
         boolean hovered = RenderUtil.mouseWithinBounds(mouseX, mouseY, this.getFinishedX() + 5.0f, this.getFinishedY() + 1.0f, this.getWidth() - 10.0f, this.getHeight() - 2.0f);
         Render2DUtil.drawBorderedRect(this.getFinishedX() + 4.5f, this.getFinishedY() + 1.0f, this.getFinishedX() + this.getWidth() - 4.5f, this.getFinishedY() + this.getHeight() - 0.5f, 0.5f, hovered ? 0x66333333 : 0, -16777216);
-        Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(this.isBinding() ? "Press a key..." : this.getBindSetting().getName() + ": " + ChatFormatting.GRAY + this.getBindSetting().getValue(), this.getFinishedX() + 6.5f, this.getFinishedY() + this.getHeight() - (float)Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT - 1.0f, -1);
+        Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(this.isBinding() ? "Press a key..." : this.getBindSetting().getName() + ": " + (Object)ChatFormatting.GRAY + this.getBindSetting().getValue(), this.getFinishedX() + 6.5f, this.getFinishedY() + this.getHeight() - (float)Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT - 1.0f, -1);
     }
 
     @Override
@@ -67,3 +74,4 @@ extends Component {
         this.binding = binding;
     }
 }
+

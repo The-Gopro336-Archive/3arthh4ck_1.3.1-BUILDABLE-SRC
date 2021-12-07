@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.gson.JsonElement
+ *  org.lwjgl.input.Keyboard
+ */
 package me.earth.earthhack.api.setting.settings;
 
 import com.google.gson.JsonElement;
@@ -40,7 +47,7 @@ extends Setting<Bind> {
             return "NONE";
         }
         for (int i = 0; i < 256; ++i) {
-            String keyName = Keyboard.getKeyName(i);
+            String keyName = Keyboard.getKeyName((int)i);
             if (keyName == null || !keyName.toLowerCase().startsWith(string.toLowerCase())) continue;
             return keyName;
         }
@@ -51,3 +58,4 @@ extends Setting<Bind> {
         this.value = Bind.fromKey(key);
     }
 }
+

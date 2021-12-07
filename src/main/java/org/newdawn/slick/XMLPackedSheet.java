@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick;
 
 import java.util.HashMap;
@@ -39,3 +42,4 @@ public class XMLPackedSheet {
         return (Image)this.sprites.get(name);
     }
 }
+

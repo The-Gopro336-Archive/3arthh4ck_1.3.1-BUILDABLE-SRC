@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketSpawnObject
+ */
 package me.earth.earthhack.impl.modules.render.crystalscale;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -20,3 +26,4 @@ extends ModuleListener<CrystalScale, PacketEvent.Receive<SPacketSpawnObject>> {
         }
     }
 }
+

@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.network.play.server.SPacketBlockChange
+ *  net.minecraft.network.play.server.SPacketExplosion
+ *  net.minecraft.network.play.server.SPacketMultiBlockChange
+ *  net.minecraft.network.play.server.SPacketMultiBlockChange$BlockUpdateData
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.managers.minecraft;
 
 import java.util.Map;
@@ -61,9 +73,10 @@ implements Globals {
     }
 
     private void process(BlockPos pos, IBlockState state) {
-        Queue<Consumer<IBlockState>> cbs = this.callbacks.remove(pos);
+        Queue<Consumer<IBlockState>> cbs = this.callbacks.remove((Object)pos);
         if (cbs != null) {
             CollectionUtil.emptyQueue(cbs, c -> c.accept(state));
         }
     }
 }
+

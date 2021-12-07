@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.GuiGameOver
+ */
 package me.earth.earthhack.impl.modules.misc.autorespawn;
 
 import me.earth.earthhack.impl.event.events.render.GuiScreenEvent;
@@ -24,3 +30,4 @@ extends ModuleListener<AutoRespawn, GuiScreenEvent<GuiGameOver>> {
         }
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.injection.callback;
 
 public enum LocalCapture {
@@ -27,3 +30,4 @@ public enum LocalCapture {
         return this.printLocals;
     }
 }
+

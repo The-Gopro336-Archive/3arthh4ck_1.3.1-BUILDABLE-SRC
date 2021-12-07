@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.text.ITextComponent
+ *  net.minecraft.util.text.Style
+ *  net.minecraft.util.text.TextComponentString
+ *  net.minecraft.util.text.event.HoverEvent
+ *  net.minecraft.util.text.event.HoverEvent$Action
+ */
 package me.earth.earthhack.impl.commands;
 
 import java.util.Iterator;
@@ -10,6 +20,7 @@ import me.earth.earthhack.impl.gui.chat.util.ChatComponentUtil;
 import me.earth.earthhack.impl.managers.client.PluginDescriptions;
 import me.earth.earthhack.impl.managers.client.PluginManager;
 import me.earth.earthhack.impl.util.text.ChatUtil;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.event.HoverEvent;
@@ -38,8 +49,9 @@ extends Command {
             if (description == null) {
                 description = "A Plugin.";
             }
-            component.appendSibling(new TextComponentString("\u00a7b" + config.getName() + (itr.hasNext() ? "\u00a7f, " : "")).setStyle(new Style().setHoverEvent(ChatComponentUtil.setOffset(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString(description))))));
+            component.appendSibling(new TextComponentString("\u00a7b" + config.getName() + (itr.hasNext() ? "\u00a7f, " : "")).setStyle(new Style().setHoverEvent(ChatComponentUtil.setOffset(new HoverEvent(HoverEvent.Action.SHOW_TEXT, (ITextComponent)new TextComponentString(description))))));
         }
-        ChatUtil.sendComponent(component);
+        ChatUtil.sendComponent((ITextComponent)component);
     }
 }
+

@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.item.ItemShulkerBox
+ *  net.minecraft.item.ItemStack
+ */
 package me.earth.earthhack.impl.commands;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -87,3 +94,4 @@ implements Globals {
         return null;
     }
 }
+

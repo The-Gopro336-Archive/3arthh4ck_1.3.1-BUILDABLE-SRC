@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.launchwrapper.LaunchClassLoader
+ */
 package org.spongepowered.asm.service.mojang;
 
 import java.lang.reflect.Field;
@@ -77,7 +83,7 @@ final class LaunchClassLoaderUtil {
         try {
             Field field = LaunchClassLoader.class.getDeclaredField(fieldName);
             field.setAccessible(true);
-            return (T)field.get(classLoader);
+            return (T)field.get((Object)classLoader);
         }
         catch (Exception ex) {
             ex.printStackTrace();
@@ -85,3 +91,4 @@ final class LaunchClassLoaderUtil {
         }
     }
 }
+

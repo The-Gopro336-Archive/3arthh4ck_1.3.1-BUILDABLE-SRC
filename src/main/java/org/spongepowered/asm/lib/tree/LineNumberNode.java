@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.lib.tree;
 
 import java.util.Map;
@@ -34,3 +37,4 @@ extends AbstractInsnNode {
         return new LineNumberNode(this.line, LineNumberNode.clone(this.start, labels));
     }
 }
+

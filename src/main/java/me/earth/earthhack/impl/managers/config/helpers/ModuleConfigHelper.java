@@ -1,9 +1,17 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.gson.JsonElement
+ *  com.google.gson.JsonObject
+ */
 package me.earth.earthhack.impl.managers.config.helpers;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Map;
 import me.earth.earthhack.api.config.Jsonable;
@@ -35,14 +43,14 @@ extends AbstractConfigHelper<ModuleConfig> {
         JsonObject object = new JsonObject();
         for (ValuePreset preset : config.getPresets()) {
             JsonObject presetObject = preset.toJson();
-            object.add(preset.getModule().getName(), presetObject);
+            object.add(preset.getModule().getName(), (JsonElement)presetObject);
         }
         return object;
     }
 
     @Override
     protected ModuleConfig readFile(InputStream stream, String name) {
-        JsonObject object = Jsonable.PARSER.parse(new InputStreamReader(stream)).getAsJsonObject();
+        JsonObject object = Jsonable.PARSER.parse((Reader)new InputStreamReader(stream)).getAsJsonObject();
         ArrayList<ValuePreset> presets = new ArrayList<ValuePreset>(object.entrySet().size());
         for (Map.Entry entry : object.entrySet()) {
             Module module = this.modules.getObject((String)entry.getKey());
@@ -70,3 +78,4 @@ extends AbstractConfigHelper<ModuleConfig> {
         return config;
     }
 }
+

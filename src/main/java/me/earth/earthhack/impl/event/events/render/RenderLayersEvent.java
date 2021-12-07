@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.renderer.entity.Render
+ *  net.minecraft.client.renderer.entity.layers.LayerRenderer
+ *  net.minecraft.entity.EntityLivingBase
+ */
 package me.earth.earthhack.impl.event.events.render;
 
 import java.util.List;
@@ -32,3 +40,4 @@ extends StageEvent {
         return this.layers;
     }
 }
+

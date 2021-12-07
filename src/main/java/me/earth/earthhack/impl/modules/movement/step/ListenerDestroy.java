@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.client.CPacketPlayerDigging
+ *  net.minecraft.network.play.client.CPacketPlayerDigging$Action
+ */
 package me.earth.earthhack.impl.modules.movement.step;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -18,3 +25,4 @@ extends ModuleListener<Step, PacketEvent.Post<CPacketPlayerDigging>> {
         }
     }
 }
+

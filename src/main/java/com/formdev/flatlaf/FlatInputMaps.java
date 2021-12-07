@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf;
 
 import com.formdev.flatlaf.util.SystemInfo;
@@ -45,115 +48,115 @@ class FlatInputMaps {
     }
 
     private static void initTextComponentInputMaps(UIDefaults defaults) {
-        Object[] objectArray;
-        Object[] objectArray2;
-        Object[] objectArray3;
+        Object[] arrobject;
+        Object[] arrobject2;
+        Object[] arrobject3;
         Object[] commonTextComponentBindings = new Object[]{"LEFT", "caret-backward", "RIGHT", "caret-forward", "KP_LEFT", "caret-backward", "KP_RIGHT", "caret-forward", "shift LEFT", "selection-backward", "shift RIGHT", "selection-forward", "shift KP_LEFT", "selection-backward", "shift KP_RIGHT", "selection-forward", FlatInputMaps.mac("ctrl LEFT", "alt LEFT"), "caret-previous-word", FlatInputMaps.mac("ctrl RIGHT", "alt RIGHT"), "caret-next-word", FlatInputMaps.mac("ctrl KP_LEFT", "alt KP_LEFT"), "caret-previous-word", FlatInputMaps.mac("ctrl KP_RIGHT", "alt KP_RIGHT"), "caret-next-word", FlatInputMaps.mac("ctrl shift LEFT", "shift alt LEFT"), "selection-previous-word", FlatInputMaps.mac("ctrl shift RIGHT", "shift alt RIGHT"), "selection-next-word", FlatInputMaps.mac("ctrl shift KP_LEFT", "shift alt KP_LEFT"), "selection-previous-word", FlatInputMaps.mac("ctrl shift KP_RIGHT", "shift alt KP_RIGHT"), "selection-next-word", FlatInputMaps.mac("HOME", "meta LEFT"), "caret-begin-line", FlatInputMaps.mac("END", "meta RIGHT"), "caret-end-line", FlatInputMaps.mac("shift HOME", "shift meta LEFT"), "selection-begin-line", FlatInputMaps.mac("shift END", "shift meta RIGHT"), "selection-end-line", FlatInputMaps.mac("ctrl A", "meta A"), "select-all", FlatInputMaps.mac("ctrl BACK_SLASH", "meta BACK_SLASH"), "unselect", "BACK_SPACE", "delete-previous", "shift BACK_SPACE", "delete-previous", "ctrl H", "delete-previous", "DELETE", "delete-next", FlatInputMaps.mac("ctrl BACK_SPACE", "alt BACK_SPACE"), "delete-previous-word", FlatInputMaps.mac("ctrl DELETE", "alt DELETE"), "delete-next-word", FlatInputMaps.mac("ctrl X", "meta X"), "cut-to-clipboard", FlatInputMaps.mac("ctrl C", "meta C"), "copy-to-clipboard", FlatInputMaps.mac("ctrl V", "meta V"), "paste-from-clipboard", "CUT", "cut-to-clipboard", "COPY", "copy-to-clipboard", "PASTE", "paste-from-clipboard", FlatInputMaps.mac("shift DELETE", null), "cut-to-clipboard", FlatInputMaps.mac("control INSERT", null), "copy-to-clipboard", FlatInputMaps.mac("shift INSERT", null), "paste-from-clipboard", "control shift O", "toggle-componentOrientation"};
         if (SystemInfo.isMacOS) {
-            Object[] objectArray4 = new Object[58];
-            objectArray4[0] = "ctrl B";
-            objectArray4[1] = "caret-backward";
-            objectArray4[2] = "ctrl F";
-            objectArray4[3] = "caret-forward";
-            objectArray4[4] = "HOME";
-            objectArray4[5] = "caret-begin";
-            objectArray4[6] = "END";
-            objectArray4[7] = "caret-end";
-            objectArray4[8] = "meta UP";
-            objectArray4[9] = "caret-begin";
-            objectArray4[10] = "meta DOWN";
-            objectArray4[11] = "caret-end";
-            objectArray4[12] = "meta KP_UP";
-            objectArray4[13] = "caret-begin";
-            objectArray4[14] = "meta KP_DOWN";
-            objectArray4[15] = "caret-end";
-            objectArray4[16] = "ctrl P";
-            objectArray4[17] = "caret-begin";
-            objectArray4[18] = "ctrl N";
-            objectArray4[19] = "caret-end";
-            objectArray4[20] = "ctrl V";
-            objectArray4[21] = "caret-end";
-            objectArray4[22] = "meta KP_LEFT";
-            objectArray4[23] = "caret-begin-line";
-            objectArray4[24] = "meta KP_RIGHT";
-            objectArray4[25] = "caret-end-line";
-            objectArray4[26] = "ctrl A";
-            objectArray4[27] = "caret-begin-line";
-            objectArray4[28] = "ctrl E";
-            objectArray4[29] = "caret-end-line";
-            objectArray4[30] = "shift meta UP";
-            objectArray4[31] = "selection-begin";
-            objectArray4[32] = "shift meta DOWN";
-            objectArray4[33] = "selection-end";
-            objectArray4[34] = "shift meta KP_UP";
-            objectArray4[35] = "selection-begin";
-            objectArray4[36] = "shift meta KP_DOWN";
-            objectArray4[37] = "selection-end";
-            objectArray4[38] = "shift HOME";
-            objectArray4[39] = "selection-begin";
-            objectArray4[40] = "shift END";
-            objectArray4[41] = "selection-end";
-            objectArray4[42] = "shift meta KP_LEFT";
-            objectArray4[43] = "selection-begin-line";
-            objectArray4[44] = "shift meta KP_RIGHT";
-            objectArray4[45] = "selection-end-line";
-            objectArray4[46] = "shift UP";
-            objectArray4[47] = "selection-begin-line";
-            objectArray4[48] = "shift DOWN";
-            objectArray4[49] = "selection-end-line";
-            objectArray4[50] = "shift KP_UP";
-            objectArray4[51] = "selection-begin-line";
-            objectArray4[52] = "shift KP_DOWN";
-            objectArray4[53] = "selection-end-line";
-            objectArray4[54] = "ctrl W";
-            objectArray4[55] = "delete-previous-word";
-            objectArray4[56] = "ctrl D";
-            objectArray3 = objectArray4;
-            objectArray4[57] = "delete-next";
+            Object[] arrobject4 = new Object[58];
+            arrobject4[0] = "ctrl B";
+            arrobject4[1] = "caret-backward";
+            arrobject4[2] = "ctrl F";
+            arrobject4[3] = "caret-forward";
+            arrobject4[4] = "HOME";
+            arrobject4[5] = "caret-begin";
+            arrobject4[6] = "END";
+            arrobject4[7] = "caret-end";
+            arrobject4[8] = "meta UP";
+            arrobject4[9] = "caret-begin";
+            arrobject4[10] = "meta DOWN";
+            arrobject4[11] = "caret-end";
+            arrobject4[12] = "meta KP_UP";
+            arrobject4[13] = "caret-begin";
+            arrobject4[14] = "meta KP_DOWN";
+            arrobject4[15] = "caret-end";
+            arrobject4[16] = "ctrl P";
+            arrobject4[17] = "caret-begin";
+            arrobject4[18] = "ctrl N";
+            arrobject4[19] = "caret-end";
+            arrobject4[20] = "ctrl V";
+            arrobject4[21] = "caret-end";
+            arrobject4[22] = "meta KP_LEFT";
+            arrobject4[23] = "caret-begin-line";
+            arrobject4[24] = "meta KP_RIGHT";
+            arrobject4[25] = "caret-end-line";
+            arrobject4[26] = "ctrl A";
+            arrobject4[27] = "caret-begin-line";
+            arrobject4[28] = "ctrl E";
+            arrobject4[29] = "caret-end-line";
+            arrobject4[30] = "shift meta UP";
+            arrobject4[31] = "selection-begin";
+            arrobject4[32] = "shift meta DOWN";
+            arrobject4[33] = "selection-end";
+            arrobject4[34] = "shift meta KP_UP";
+            arrobject4[35] = "selection-begin";
+            arrobject4[36] = "shift meta KP_DOWN";
+            arrobject4[37] = "selection-end";
+            arrobject4[38] = "shift HOME";
+            arrobject4[39] = "selection-begin";
+            arrobject4[40] = "shift END";
+            arrobject4[41] = "selection-end";
+            arrobject4[42] = "shift meta KP_LEFT";
+            arrobject4[43] = "selection-begin-line";
+            arrobject4[44] = "shift meta KP_RIGHT";
+            arrobject4[45] = "selection-end-line";
+            arrobject4[46] = "shift UP";
+            arrobject4[47] = "selection-begin-line";
+            arrobject4[48] = "shift DOWN";
+            arrobject4[49] = "selection-end-line";
+            arrobject4[50] = "shift KP_UP";
+            arrobject4[51] = "selection-begin-line";
+            arrobject4[52] = "shift KP_DOWN";
+            arrobject4[53] = "selection-end-line";
+            arrobject4[54] = "ctrl W";
+            arrobject4[55] = "delete-previous-word";
+            arrobject4[56] = "ctrl D";
+            arrobject3 = arrobject4;
+            arrobject4[57] = "delete-next";
         } else {
-            objectArray3 = null;
+            arrobject3 = null;
         }
-        Object[] macCommonTextComponentBindings = objectArray3;
+        Object[] macCommonTextComponentBindings = arrobject3;
         Object[] singleLineTextComponentBindings = new Object[]{"ENTER", "notify-field-accept"};
         if (SystemInfo.isMacOS) {
-            Object[] objectArray5 = new Object[8];
-            objectArray5[0] = "UP";
-            objectArray5[1] = "caret-begin-line";
-            objectArray5[2] = "DOWN";
-            objectArray5[3] = "caret-end-line";
-            objectArray5[4] = "KP_UP";
-            objectArray5[5] = "caret-begin-line";
-            objectArray5[6] = "KP_DOWN";
-            objectArray2 = objectArray5;
-            objectArray5[7] = "caret-end-line";
+            Object[] arrobject5 = new Object[8];
+            arrobject5[0] = "UP";
+            arrobject5[1] = "caret-begin-line";
+            arrobject5[2] = "DOWN";
+            arrobject5[3] = "caret-end-line";
+            arrobject5[4] = "KP_UP";
+            arrobject5[5] = "caret-begin-line";
+            arrobject5[6] = "KP_DOWN";
+            arrobject2 = arrobject5;
+            arrobject5[7] = "caret-end-line";
         } else {
-            objectArray2 = null;
+            arrobject2 = null;
         }
-        Object[] macSingleLineTextComponentBindings = objectArray2;
+        Object[] macSingleLineTextComponentBindings = arrobject2;
         Object[] formattedTextComponentBindings = new Object[]{"ESCAPE", "reset-field-edit", "UP", "increment", "DOWN", "decrement", "KP_UP", "increment", "KP_DOWN", "decrement"};
         Object[] passwordTextComponentBindings = new Object[]{FlatInputMaps.mac("ctrl LEFT", "alt LEFT"), "caret-begin-line", FlatInputMaps.mac("ctrl RIGHT", "alt RIGHT"), "caret-end-line", FlatInputMaps.mac("ctrl KP_LEFT", "alt KP_LEFT"), "caret-begin-line", FlatInputMaps.mac("ctrl KP_RIGHT", "alt KP_RIGHT"), "caret-end-line", FlatInputMaps.mac("ctrl shift LEFT", "shift alt LEFT"), "selection-begin-line", FlatInputMaps.mac("ctrl shift RIGHT", "shift alt RIGHT"), "selection-end-line", FlatInputMaps.mac("ctrl shift KP_LEFT", "shift alt KP_LEFT"), "selection-begin-line", FlatInputMaps.mac("ctrl shift KP_RIGHT", "shift alt KP_RIGHT"), "selection-end-line", FlatInputMaps.mac("ctrl BACK_SPACE", "alt BACK_SPACE"), null, FlatInputMaps.mac("ctrl DELETE", "alt DELETE"), null};
         Object[] multiLineTextComponentBindings = new Object[]{"UP", "caret-up", "DOWN", "caret-down", "KP_UP", "caret-up", "KP_DOWN", "caret-down", "shift UP", "selection-up", "shift DOWN", "selection-down", "shift KP_UP", "selection-up", "shift KP_DOWN", "selection-down", "PAGE_UP", "page-up", "PAGE_DOWN", "page-down", "shift PAGE_UP", "selection-page-up", "shift PAGE_DOWN", "selection-page-down", FlatInputMaps.mac("ctrl shift PAGE_UP", "shift meta PAGE_UP"), "selection-page-left", FlatInputMaps.mac("ctrl shift PAGE_DOWN", "shift meta PAGE_DOWN"), "selection-page-right", FlatInputMaps.mac("ctrl HOME", "meta UP"), "caret-begin", FlatInputMaps.mac("ctrl END", "meta DOWN"), "caret-end", FlatInputMaps.mac("ctrl shift HOME", "shift meta UP"), "selection-begin", FlatInputMaps.mac("ctrl shift END", "shift meta DOWN"), "selection-end", "ENTER", "insert-break", "TAB", "insert-tab", FlatInputMaps.mac("ctrl T", "meta T"), "next-link-action", FlatInputMaps.mac("ctrl shift T", "shift meta T"), "previous-link-action", FlatInputMaps.mac("ctrl SPACE", "meta SPACE"), "activate-link-action"};
         if (SystemInfo.isMacOS) {
-            Object[] objectArray6 = new Object[14];
-            objectArray6[0] = "ctrl N";
-            objectArray6[1] = "caret-down";
-            objectArray6[2] = "ctrl P";
-            objectArray6[3] = "caret-up";
-            objectArray6[4] = "shift alt UP";
-            objectArray6[5] = "selection-begin-paragraph";
-            objectArray6[6] = "shift alt DOWN";
-            objectArray6[7] = "selection-end-paragraph";
-            objectArray6[8] = "shift alt KP_UP";
-            objectArray6[9] = "selection-begin-paragraph";
-            objectArray6[10] = "shift alt KP_DOWN";
-            objectArray6[11] = "selection-end-paragraph";
-            objectArray6[12] = "ctrl V";
-            objectArray = objectArray6;
-            objectArray6[13] = "page-down";
+            Object[] arrobject6 = new Object[14];
+            arrobject6[0] = "ctrl N";
+            arrobject6[1] = "caret-down";
+            arrobject6[2] = "ctrl P";
+            arrobject6[3] = "caret-up";
+            arrobject6[4] = "shift alt UP";
+            arrobject6[5] = "selection-begin-paragraph";
+            arrobject6[6] = "shift alt DOWN";
+            arrobject6[7] = "selection-end-paragraph";
+            arrobject6[8] = "shift alt KP_UP";
+            arrobject6[9] = "selection-begin-paragraph";
+            arrobject6[10] = "shift alt KP_DOWN";
+            arrobject6[11] = "selection-end-paragraph";
+            arrobject6[12] = "ctrl V";
+            arrobject = arrobject6;
+            arrobject6[13] = "page-down";
         } else {
-            objectArray = null;
+            arrobject = null;
         }
-        Object[] macMultiLineTextComponentBindings = objectArray;
+        Object[] macMultiLineTextComponentBindings = arrobject;
         defaults.put("TextField.focusInputMap", new LazyInputMapEx(commonTextComponentBindings, macCommonTextComponentBindings, singleLineTextComponentBindings, macSingleLineTextComponentBindings));
         defaults.put("FormattedTextField.focusInputMap", new LazyInputMapEx(commonTextComponentBindings, macCommonTextComponentBindings, singleLineTextComponentBindings, macSingleLineTextComponentBindings, formattedTextComponentBindings));
         defaults.put("PasswordField.focusInputMap", new LazyInputMapEx(commonTextComponentBindings, macCommonTextComponentBindings, singleLineTextComponentBindings, macSingleLineTextComponentBindings, passwordTextComponentBindings));
@@ -237,3 +240,4 @@ class FlatInputMaps {
         }
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.installer.service;
 
 import java.io.File;
@@ -57,3 +60,4 @@ public class InstallerService {
         JsonPathWriter.write(version.getFile().toPath(), version.getJson());
     }
 }
+

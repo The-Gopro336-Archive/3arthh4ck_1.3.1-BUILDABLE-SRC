@@ -1,3 +1,20 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemBow
+ *  net.minecraft.item.ItemEgg
+ *  net.minecraft.item.ItemEnderPearl
+ *  net.minecraft.item.ItemExpBottle
+ *  net.minecraft.item.ItemLingeringPotion
+ *  net.minecraft.item.ItemSnowball
+ *  net.minecraft.item.ItemSplashPotion
+ *  net.minecraft.util.EntitySelectors
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.MathHelper
+ */
 package me.earth.earthhack.impl.modules.render.trajectories;
 
 import java.awt.Color;
@@ -73,9 +90,10 @@ extends Module {
         for (int x = chunkMinX; x <= chunkMaxX; ++x) {
             for (int z = chunkMinZ; z <= chunkMaxZ; ++z) {
                 if (Trajectories.mc.world.getChunkProvider().getLoadedChunk(x, z) == null) continue;
-                Trajectories.mc.world.getChunkFromChunkCoords(x, z).getEntitiesWithinAABBForEntity(Trajectories.mc.player, bb, list, EntitySelectors.NOT_SPECTATING);
+                Trajectories.mc.world.getChunk(x, z).getEntitiesWithinAABBForEntity((Entity)Trajectories.mc.player, bb, list, EntitySelectors.NOT_SPECTATING);
             }
         }
         return list;
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.movement.blocklag.mode;
 
 import me.earth.earthhack.api.event.events.Stage;
@@ -30,3 +33,4 @@ public enum BlockLagStage {
 
     public abstract boolean shouldBlockLag(Stage var1);
 }
+

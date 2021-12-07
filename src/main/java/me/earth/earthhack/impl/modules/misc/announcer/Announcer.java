@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.collect.Lists
+ *  net.minecraft.entity.player.EntityPlayer
+ */
 package me.earth.earthhack.impl.modules.misc.announcer;
 
 import com.google.common.collect.Lists;
@@ -95,7 +102,7 @@ extends Module {
         this.reset();
         this.messages.clear();
         for (AnnouncementType type : AnnouncementType.values()) {
-            List<String> list = FileUtil.readFile(type.getFile(), true, Lists.newArrayList(type.getDefaultMessage()));
+            List<String> list = FileUtil.readFile(type.getFile(), true, Lists.newArrayList((Object[])new String[]{type.getDefaultMessage()}));
             this.messages.put(type, list);
         }
     }
@@ -176,3 +183,4 @@ extends Module {
         return false;
     }
 }
+

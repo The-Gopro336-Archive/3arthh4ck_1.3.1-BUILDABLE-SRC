@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.misc.packets;
 
 import me.earth.earthhack.impl.event.events.network.WorldClientEvent;
@@ -17,3 +20,4 @@ extends ModuleListener<Packets, WorldClientEvent.Load> {
         ((Packets)this.module).offhandCrashes.setValue(0);
     }
 }
+

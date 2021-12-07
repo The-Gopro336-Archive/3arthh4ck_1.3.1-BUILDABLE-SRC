@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.opengl.GL11
+ */
 package org.newdawn.slick.opengl;
 
 import org.lwjgl.opengl.GL11;
@@ -17,13 +23,13 @@ public abstract class SlickCallable {
         Renderer.get().flush();
         lastUsed = TextureImpl.getLastBind();
         TextureImpl.bindNone();
-        GL11.glPushAttrib(1048575);
-        GL11.glPushClientAttrib(-1);
-        GL11.glMatrixMode(5888);
+        GL11.glPushAttrib((int)1048575);
+        GL11.glPushClientAttrib((int)-1);
+        GL11.glMatrixMode((int)5888);
         GL11.glPushMatrix();
-        GL11.glMatrixMode(5889);
+        GL11.glMatrixMode((int)5889);
         GL11.glPushMatrix();
-        GL11.glMatrixMode(5888);
+        GL11.glMatrixMode((int)5888);
         inSafe = true;
     }
 
@@ -31,9 +37,9 @@ public abstract class SlickCallable {
         if (!inSafe) {
             return;
         }
-        GL11.glMatrixMode(5889);
+        GL11.glMatrixMode((int)5889);
         GL11.glPopMatrix();
-        GL11.glMatrixMode(5888);
+        GL11.glMatrixMode((int)5888);
         GL11.glPopMatrix();
         GL11.glPopClientAttrib();
         GL11.glPopAttrib();
@@ -57,3 +63,4 @@ public abstract class SlickCallable {
         inSafe = false;
     }
 }
+

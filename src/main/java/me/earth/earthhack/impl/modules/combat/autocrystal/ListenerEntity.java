@@ -1,3 +1,16 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.network.play.server.SPacketEntity
+ *  net.minecraft.network.play.server.SPacketEntity$S15PacketEntityRelMove
+ *  net.minecraft.network.play.server.SPacketEntity$S16PacketEntityLook
+ *  net.minecraft.network.play.server.SPacketEntity$S17PacketEntityLookMove
+ *  net.minecraft.network.play.server.SPacketEntityTeleport
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal;
 
 import java.util.ArrayList;
@@ -62,7 +75,7 @@ extends SPacketEntityListener {
         if (!this.shouldCalc()) {
             return;
         }
-        EntityPlayer p = this.getEntity(((ISPacketEntity)((Object)packet)).getEntityId());
+        EntityPlayer p = this.getEntity(((ISPacketEntity)packet).getEntityId());
         if (p == null) {
             return;
         }
@@ -88,7 +101,7 @@ extends SPacketEntityListener {
                     enemies = Collections.emptyList();
                 }
                 EntityPlayer target = this.module.targetMode.getValue().getTarget(ListenerEntity.mc.world.playerEntities, enemies, this.module.targetRange.getValue().floatValue());
-                if (target == null || target.equals(player)) {
+                if (target == null || target.equals((Object)player)) {
                     this.module.threadHelper.startThread(new BlockPos[0]);
                 }
             });
@@ -116,3 +129,4 @@ extends SPacketEntityListener {
         return null;
     }
 }
+

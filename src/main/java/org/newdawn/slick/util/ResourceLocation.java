@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.util;
 
 import java.io.InputStream;
@@ -8,3 +11,4 @@ public interface ResourceLocation {
 
     public URL getResource(String var1);
 }
+

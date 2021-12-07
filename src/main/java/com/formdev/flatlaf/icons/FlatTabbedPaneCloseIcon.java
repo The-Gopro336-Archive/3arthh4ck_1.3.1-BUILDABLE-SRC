@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.icons;
 
 import com.formdev.flatlaf.icons.FlatAbstractIcon;
@@ -49,3 +52,4 @@ extends FlatAbstractIcon {
         g.draw(path);
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.geom;
 
 import java.util.ArrayList;
@@ -116,3 +119,4 @@ extends Shape {
         this.boundingCircleRadius = this.radius1 > this.radius2 ? this.radius1 : this.radius2;
     }
 }
+

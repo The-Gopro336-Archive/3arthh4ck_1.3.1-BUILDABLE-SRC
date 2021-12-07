@@ -1,3 +1,17 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.world.IBlockAccess
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal;
 
 import java.util.List;
@@ -35,6 +49,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.IBlockAccess;
 
 public class HelperPlace
 implements Globals {
@@ -80,7 +95,7 @@ implements Globals {
                 break;
             }
         }
-        BlockPos middle = PositionUtil.getPosition(RotationUtil.getRotationPlayer());
+        BlockPos middle = PositionUtil.getPosition((Entity)RotationUtil.getRotationPlayer());
         int maxRadius = Sphere.getRadius(this.module.placeRange.getValue().floatValue());
         for (int i = 1; i < maxRadius; ++i) {
             this.calc(middle.add(Sphere.get(i)), data, players, friends, entities, obby, blackList, maxY);
@@ -88,7 +103,7 @@ implements Globals {
     }
 
     private void preCalc(PlaceData data, EntityPlayer player, boolean obby, List<Entity> entities, List<EntityPlayer> friends, Set<BlockPos> blackList) {
-        BlockPos pos = PositionUtil.getPosition(player).down();
+        BlockPos pos = PositionUtil.getPosition((Entity)player).down();
         for (EnumFacing facing : EnumFacing.HORIZONTALS) {
             PositionData pData = this.selfCalc(data, pos.offset(facing), entities, friends, obby, blackList);
             if (pData == null) continue;
@@ -97,7 +112,7 @@ implements Globals {
     }
 
     private PositionData selfCalc(PlaceData placeData, BlockPos pos, List<Entity> entities, List<EntityPlayer> friends, boolean obby, Set<BlockPos> blackList) {
-        if (blackList.contains(pos)) {
+        if (blackList.contains((Object)pos)) {
             return null;
         }
         PositionData data = PositionData.create(pos, obby, this.module.rotate.getValue() != ACRotate.None && this.module.rotate.getValue() != ACRotate.Break ? 0 : this.module.helpingBlocks.getValue(), this.module.newVer.getValue(), this.module.newVerEntities.getValue(), this.module.deathTime.getValue(), entities, this.module.lava.getValue(), this.module.water.getValue(), this.module.ignoreLavaItems.getValue());
@@ -134,7 +149,7 @@ implements Globals {
             return null;
         }
         float selfDamage = this.module.damageHelper.getDamage(data.getPos());
-        if ((double)selfDamage > (double)EntityUtil.getHealth(HelperPlace.mc.player) - 1.0) {
+        if ((double)selfDamage > (double)EntityUtil.getHealth((EntityLivingBase)HelperPlace.mc.player) - 1.0) {
             if (!data.usesObby() && !data.isLiquid()) {
                 Managers.SAFETY.setSafe(false);
             }
@@ -158,13 +173,13 @@ implements Globals {
     private boolean noPlaceTrace(BlockPos pos) {
         if (this.module.smartTrace.getValue().booleanValue()) {
             for (EnumFacing facing : EnumFacing.values()) {
-                Ray ray = RayTraceFactory.rayTrace(HelperPlace.mc.player, pos, facing, HelperPlace.mc.world, Blocks.OBSIDIAN.getDefaultState(), this.module.traceWidth.getValue());
+                Ray ray = RayTraceFactory.rayTrace((Entity)HelperPlace.mc.player, pos, facing, (IBlockAccess)HelperPlace.mc.world, Blocks.OBSIDIAN.getDefaultState(), this.module.traceWidth.getValue());
                 if (!ray.isLegit()) continue;
                 return false;
             }
             return true;
         }
-        return !RayTraceUtil.raytracePlaceCheck(HelperPlace.mc.player, pos);
+        return !RayTraceUtil.raytracePlaceCheck((Entity)HelperPlace.mc.player, pos);
     }
 
     private void calc(BlockPos pos, PlaceData data, List<EntityPlayer> players, List<EntityPlayer> friends, List<Entity> entities, boolean obby, Set<BlockPos> blackList, double maxY) {
@@ -216,7 +231,7 @@ implements Globals {
             return false;
         }
         for (EntityPlayer friend : friends) {
-            if (friend == null || EntityUtil.isDead(friend) || !(this.module.damageHelper.getDamage(data.getPos(), (EntityLivingBase)friend) > EntityUtil.getHealth(friend) - 0.5f)) continue;
+            if (friend == null || EntityUtil.isDead((Entity)friend) || !(this.module.damageHelper.getDamage(data.getPos(), (EntityLivingBase)friend) > EntityUtil.getHealth((EntityLivingBase)friend) - 0.5f)) continue;
             return true;
         }
         return false;
@@ -228,7 +243,7 @@ implements Globals {
             return false;
         }
         boolean result = false;
-        float health = EntityUtil.getHealth(player);
+        float health = EntityUtil.getHealth((EntityLivingBase)player);
         float damage = this.module.damageHelper.getDamage(pos, (EntityLivingBase)player);
         if (this.module.antiTotem.getValue().booleanValue() && !positionData.usesObby() && !positionData.isLiquid()) {
             if (this.module.antiTotemHelper.isDoublePoppable(player)) {
@@ -238,7 +253,7 @@ implements Globals {
                     positionData.addAntiTotem(player);
                     result = true;
                 }
-            } else if (this.module.forceAntiTotem.getValue().booleanValue() && Managers.COMBAT.lastPop(player) > 500L) {
+            } else if (this.module.forceAntiTotem.getValue().booleanValue() && Managers.COMBAT.lastPop((Entity)player) > 500L) {
                 float force;
                 if (damage > this.module.popDamage.getValue().floatValue()) {
                     data.confirmHighDamageForce(player);
@@ -254,7 +269,7 @@ implements Globals {
                 }
             }
         }
-        if (damage > this.module.minFaceDmg.getValue().floatValue() && (health < this.module.facePlace.getValue().floatValue() || ((IEntityLivingBase)((Object)player)).getLowestDurability() <= this.module.armorPlace.getValue().floatValue())) {
+        if (damage > this.module.minFaceDmg.getValue().floatValue() && (health < this.module.facePlace.getValue().floatValue() || ((IEntityLivingBase)player).getLowestDurability() <= this.module.armorPlace.getValue().floatValue())) {
             positionData.setFacePlacer(player);
         }
         if (damage > positionData.getMaxDamage()) {
@@ -264,3 +279,4 @@ implements Globals {
         return result;
     }
 }
+

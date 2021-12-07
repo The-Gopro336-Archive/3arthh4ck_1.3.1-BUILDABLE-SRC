@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.lib.tree;
 
 import java.util.ArrayList;
@@ -59,3 +62,4 @@ extends AbstractInsnNode {
         return clone.cloneAnnotations(this);
     }
 }
+

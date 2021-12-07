@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.util.throwables;
 
 public class InvalidConstraintException
@@ -19,3 +22,4 @@ extends IllegalArgumentException {
         super(message, cause);
     }
 }
+

@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.collect.ImmutableList
+ *  com.google.common.collect.ImmutableList$Builder
+ */
 package org.spongepowered.tools.obfuscation.mirror;
 
 import com.google.common.collect.ImmutableList;
@@ -99,7 +106,7 @@ public class TypeHandle {
         }
         ImmutableList.Builder list = ImmutableList.builder();
         for (TypeMirror typeMirror : this.getTargetElement().getInterfaces()) {
-            list.add(new TypeHandle((DeclaredType)typeMirror));
+            list.add((Object)new TypeHandle((DeclaredType)typeMirror));
         }
         return list.build();
     }
@@ -212,7 +219,7 @@ public class TypeHandle {
         block0: for (Element element : targetElement.getEnclosedElements()) {
             for (ElementKind ek : kind) {
                 if (element.getKind() != ek) continue;
-                list.add(element);
+                list.add((Object)element);
                 continue block0;
             }
         }
@@ -223,3 +230,4 @@ public class TypeHandle {
         return targetElement != null ? targetElement.getEnclosedElements() : Collections.emptyList();
     }
 }
+

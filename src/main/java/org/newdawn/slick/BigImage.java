@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.BufferUtils
+ */
 package org.newdawn.slick;
 
 import java.io.IOException;
@@ -28,7 +34,7 @@ extends Image {
     private int realHeight;
 
     public static final int getMaxSingleImageSize() {
-        IntBuffer buffer = BufferUtils.createIntBuffer(16);
+        IntBuffer buffer = BufferUtils.createIntBuffer((int)16);
         GL.glGetInteger(3379, buffer);
         return buffer.get(0);
     }
@@ -129,7 +135,7 @@ extends Image {
                 final int imageHeight = Math.min(this.realHeight - y * tileSize, tileSize);
                 final int xSize = tileSize;
                 final int ySize = tileSize;
-                final ByteBuffer subBuffer = BufferUtils.createByteBuffer(tileSize * tileSize * components);
+                final ByteBuffer subBuffer = BufferUtils.createByteBuffer((int)(tileSize * tileSize * components));
                 int xo = x * tileSize * components;
                 byte[] byteData = new byte[xSize * components];
                 for (int i = 0; i < ySize; ++i) {
@@ -515,3 +521,4 @@ extends Image {
         throw new UnsupportedOperationException();
     }
 }
+

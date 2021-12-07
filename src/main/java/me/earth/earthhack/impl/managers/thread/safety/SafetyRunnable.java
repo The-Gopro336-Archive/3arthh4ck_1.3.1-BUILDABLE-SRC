@@ -1,3 +1,18 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.BlockPos$MutableBlockPos
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.util.math.Vec3i
+ *  net.minecraft.world.IBlockAccess
+ */
 package me.earth.earthhack.impl.managers.thread.safety;
 
 import java.util.List;
@@ -12,12 +27,14 @@ import me.earth.earthhack.impl.util.minecraft.blocks.HoleUtil;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
 import me.earth.earthhack.impl.util.thread.SafeRunnable;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.IBlockAccess;
 
 public class SafetyRunnable
 implements Globals,
@@ -50,7 +67,7 @@ SafeRunnable {
     public void runSafely() {
         for (Entity entity : this.crystals) {
             float damage;
-            if (!(entity instanceof EntityEnderCrystal) || entity.isDead || !((damage = DamageUtil.calculate(entity)) > this.maxDamage) && !((double)damage > (double)EntityUtil.getHealth(SafetyRunnable.mc.player) - 1.0)) continue;
+            if (!(entity instanceof EntityEnderCrystal) || entity.isDead || !((damage = DamageUtil.calculate(entity)) > this.maxDamage) && !((double)damage > (double)EntityUtil.getHealth((EntityLivingBase)SafetyRunnable.mc.player) - 1.0)) continue;
             this.manager.setSafe(false);
             return;
         }
@@ -84,10 +101,11 @@ SafeRunnable {
             float damage;
             Vec3i v = Sphere.get(i);
             pos.setPos(x + v.getX(), y + v.getY(), z + v.getZ());
-            if (!BlockUtil.canPlaceCrystal(pos, true, this.newerVersion, this.crystals, this.newVerEntities, 0L) && (!this.bedCheck || !BlockUtil.canPlaceBed(pos, this.newerVersion)) || !((damage = DamageUtil.calculate((float)pos.getX() + 0.5f, pos.getY() + 1, (float)pos.getZ() + 0.5f, serverBB, SafetyRunnable.mc.player, SafetyRunnable.mc.world, this.terrain, this.anvils)) > this.maxDamage) && !((double)damage > (double)EntityUtil.getHealth(SafetyRunnable.mc.player) - 1.0)) continue;
+            if (!BlockUtil.canPlaceCrystal((BlockPos)pos, true, this.newerVersion, this.crystals, this.newVerEntities, 0L) && (!this.bedCheck || !BlockUtil.canPlaceBed((BlockPos)pos, this.newerVersion)) || !((damage = DamageUtil.calculate((float)pos.getX() + 0.5f, pos.getY() + 1, (float)pos.getZ() + 0.5f, serverBB, (EntityLivingBase)SafetyRunnable.mc.player, (IBlockAccess)SafetyRunnable.mc.world, this.terrain, this.anvils)) > this.maxDamage) && !((double)damage > (double)EntityUtil.getHealth((EntityLivingBase)SafetyRunnable.mc.player) - 1.0)) continue;
             this.manager.setSafe(false);
             return;
         }
         this.manager.setSafe(true);
     }
 }
+

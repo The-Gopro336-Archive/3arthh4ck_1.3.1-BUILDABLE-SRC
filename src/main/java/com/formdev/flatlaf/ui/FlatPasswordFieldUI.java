@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.ui;
 
 import com.formdev.flatlaf.ui.FlatTextFieldUI;
@@ -139,3 +142,4 @@ extends FlatTextFieldUI {
         return FlatUIUtils.addInsets(padding, new Insets(0, ltr ? 0 : iconWidth, 0, ltr ? iconWidth : 0));
     }
 }
+

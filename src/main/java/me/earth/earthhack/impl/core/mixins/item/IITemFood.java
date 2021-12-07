@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.item.ItemFood
+ *  net.minecraft.potion.PotionEffect
+ */
 package me.earth.earthhack.impl.core.mixins.item;
 
 import net.minecraft.item.ItemFood;
@@ -10,3 +17,4 @@ public interface IITemFood {
     @Accessor(value="potionId")
     public PotionEffect getPotionId();
 }
+

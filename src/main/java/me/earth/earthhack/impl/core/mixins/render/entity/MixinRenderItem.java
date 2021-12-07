@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.renderer.RenderItem
+ *  net.minecraft.client.renderer.texture.TextureManager
+ *  net.minecraft.util.ResourceLocation
+ */
 package me.earth.earthhack.impl.core.mixins.render.entity;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -31,3 +39,4 @@ implements IRenderItem {
         }
     }
 }
+

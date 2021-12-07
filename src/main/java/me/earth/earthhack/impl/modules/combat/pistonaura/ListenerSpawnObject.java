@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketAnimation
+ *  net.minecraft.network.play.client.CPacketUseEntity
+ *  net.minecraft.network.play.client.CPacketUseEntity$Action
+ *  net.minecraft.network.play.server.SPacketSpawnObject
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.combat.pistonaura;
 
 import me.earth.earthhack.impl.core.ducks.network.ICPacketUseEntity;
@@ -27,16 +39,16 @@ extends ModuleListener<PistonAura, PacketEvent.Receive<SPacketSpawnObject>> {
         if (((PistonAura)this.module).stage == PistonStage.BREAK && ((PistonAura)this.module).current != null && ((PistonAura)this.module).breakTimer.passed(((PistonAura)this.module).breakDelay.getValue().intValue()) && Managers.SWITCH.getLastSwitch() > (long)((PistonAura)this.module).coolDown.getValue().intValue() && (packet = (SPacketSpawnObject)event.getPacket()).getType() == 51) {
             BlockPos pos = new BlockPos(packet.getX(), packet.getY(), packet.getZ());
             try {
-                if (((PistonAura)this.module).current.getCrystalPos().equals(pos.down()) || ((PistonAura)this.module).current.getStartPos().equals(pos.down()) && (((PistonAura)this.module).rotate.getValue() == Rotate.None || RotationUtil.isLegit(pos)) || RotationUtil.isLegit(pos.up())) {
+                if (((PistonAura)this.module).current.getCrystalPos().equals((Object)pos.down()) || ((PistonAura)this.module).current.getStartPos().equals((Object)pos.down()) && (((PistonAura)this.module).rotate.getValue() == Rotate.None || RotationUtil.isLegit(pos)) || RotationUtil.isLegit(pos.up())) {
                     ((PistonAura)this.module).entityId = packet.getEntityID();
                     if (!((PistonAura)this.module).instant.getValue().booleanValue() || !((PistonAura)this.module).explode.getValue().booleanValue()) {
                         return;
                     }
-                    ICPacketUseEntity useEntity = (ICPacketUseEntity)((Object)new CPacketUseEntity());
+                    ICPacketUseEntity useEntity = (ICPacketUseEntity)new CPacketUseEntity();
                     useEntity.setAction(CPacketUseEntity.Action.ATTACK);
                     useEntity.setEntityId(packet.getEntityID());
-                    ListenerSpawnObject.mc.player.connection.sendPacket((Packet)((Object)useEntity));
-                    ListenerSpawnObject.mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.MAIN_HAND));
+                    ListenerSpawnObject.mc.player.connection.sendPacket((Packet)useEntity);
+                    ListenerSpawnObject.mc.player.connection.sendPacket((Packet)new CPacketAnimation(EnumHand.MAIN_HAND));
                     ((PistonAura)this.module).breakTimer.reset();
                 }
             }
@@ -46,3 +58,4 @@ extends ModuleListener<PistonAura, PacketEvent.Receive<SPacketSpawnObject>> {
         }
     }
 }
+

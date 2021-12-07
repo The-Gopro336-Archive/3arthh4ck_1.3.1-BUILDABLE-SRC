@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ */
 package me.earth.earthhack.impl.managers.minecraft.combat;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -29,3 +36,4 @@ public class TargetManager {
         return AUTO_CRYSTAL.returnIfPresent(AutoCrystal::getCrystal, null);
     }
 }
+

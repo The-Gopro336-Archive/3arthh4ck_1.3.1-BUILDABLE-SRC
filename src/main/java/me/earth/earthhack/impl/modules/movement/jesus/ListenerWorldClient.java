@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.movement.jesus;
 
 import me.earth.earthhack.impl.event.events.network.WorldClientEvent;
@@ -15,3 +18,4 @@ extends ModuleListener<Jesus, WorldClientEvent.Load> {
         ((Jesus)this.module).timer.reset();
     }
 }
+

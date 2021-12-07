@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.ui;
 
 import com.formdev.flatlaf.icons.FlatCheckBoxIcon;
@@ -111,3 +114,4 @@ extends BasicRadioButtonUI {
         return b.getIcon() == null && this.getDefaultIcon() instanceof FlatCheckBoxIcon ? UIScale.scale(((FlatCheckBoxIcon)this.getDefaultIcon()).focusWidth) : 0;
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.exception;
 
 public class NoStackTraceException
@@ -13,3 +16,4 @@ extends Exception {
         return this;
     }
 }
+

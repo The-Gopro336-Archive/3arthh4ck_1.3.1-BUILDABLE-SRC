@@ -1,9 +1,19 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.launchwrapper.Launch
+ *  org.objectweb.asm.ClassReader
+ *  org.objectweb.asm.ClassVisitor
+ *  org.objectweb.asm.tree.ClassNode
+ */
 package me.earth.earthhack.vanilla;
 
 import java.io.IOException;
 import me.earth.earthhack.impl.core.util.AsmUtil;
 import net.minecraft.launchwrapper.Launch;
 import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.tree.ClassNode;
 
 public enum Environment {
@@ -47,7 +57,7 @@ public enum Environment {
         if (bs != null) {
             ClassNode node = new ClassNode();
             ClassReader reader = new ClassReader(bs);
-            reader.accept(node, 0);
+            reader.accept((ClassVisitor)node, 0);
             if (AsmUtil.findField(node, "loadedEntityList") != null) {
                 env = MCP;
             }
@@ -55,3 +65,4 @@ public enum Environment {
         environment = env;
     }
 }
+

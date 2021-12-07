@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayerMP
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.network.Packet
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.movement.blocklag;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -149,7 +161,7 @@ extends DisablingModule {
                     lastOff = y - off;
                 } else {
                     IBlockState state = BlockLag.mc.world.getBlockState(pos);
-                    if (!this.air.getValue().booleanValue() && !state.func_185904_a().blocksMovement() || state.getBlock() == Blocks.AIR) {
+                    if (!this.air.getValue().booleanValue() && !state.getMaterial().blocksMovement() || state.getBlock() == Blocks.AIR) {
                         if (air) {
                             if (add) {
                                 return this.discrete.getValue() != false ? (double)pos.getY() : y - off;
@@ -178,19 +190,19 @@ extends DisablingModule {
     }
 
     protected BlockPos getPlayerPos() {
-        return this.deltaY.getValue() != false && Math.abs(BlockLag.mc.player.motionY) > 0.1 ? new BlockPos(BlockLag.mc.player) : PositionUtil.getPosition(BlockLag.mc.player);
+        return this.deltaY.getValue() != false && Math.abs(BlockLag.mc.player.motionY) > 0.1 ? new BlockPos((Entity)BlockLag.mc.player) : PositionUtil.getPosition((Entity)BlockLag.mc.player);
     }
 
     protected boolean isInsideBlock() {
         double x = BlockLag.mc.player.posX;
         double y = BlockLag.mc.player.posY + 0.2;
         double z = BlockLag.mc.player.posZ;
-        return BlockLag.mc.world.getBlockState(new BlockPos(x, y, z)).func_185904_a().blocksMovement() || !BlockLag.mc.player.collidedVertically;
+        return BlockLag.mc.world.getBlockState(new BlockPos(x, y, z)).getMaterial().blocksMovement() || !BlockLag.mc.player.collidedVertically;
     }
 
     protected boolean singlePlayerCheck(BlockPos pos) {
         if (mc.isSingleplayer()) {
-            EntityPlayerMP player = mc.getIntegratedServer().func_184103_al().getPlayerByUUID(BlockLag.mc.player.getUniqueID());
+            EntityPlayerMP player = mc.getIntegratedServer().getPlayerList().getPlayerByUUID(BlockLag.mc.player.getUniqueID());
             if (player == null) {
                 this.disable();
                 return true;
@@ -202,3 +214,4 @@ extends DisablingModule {
         return false;
     }
 }
+

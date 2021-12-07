@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package ibxm;
 
 import ibxm.Channel;
@@ -9,7 +12,7 @@ public class IBXM {
     public static final String VERSION = "ibxm alpha 45 (c)2006 mumart@gmail.com";
     public static final int FP_SHIFT = 15;
     public static final int FP_ONE = 32768;
-    public static final int FP_MASK = Short.MAX_VALUE;
+    public static final int FP_MASK = 32767;
     private int sampling_rate;
     private int resampling_quality;
     private int volume_ramp_length;
@@ -110,11 +113,11 @@ public class IBXM {
             int mix_end = mix_idx + (count << 1) - 1;
             for (mix_idx = this.current_tick_samples << 1; mix_idx <= mix_end; ++mix_idx) {
                 int amplitude = this.mixing_buffer[mix_idx];
-                if (amplitude > Short.MAX_VALUE) {
-                    amplitude = Short.MAX_VALUE;
+                if (amplitude > 32767) {
+                    amplitude = 32767;
                 }
-                if (amplitude < Short.MIN_VALUE) {
-                    amplitude = Short.MIN_VALUE;
+                if (amplitude < -32768) {
+                    amplitude = -32768;
                 }
                 if (bigEndian) {
                     output_buffer[output_idx] = (byte)(amplitude >> 8);
@@ -235,7 +238,7 @@ public class IBXM {
                                 this.next_sequence_index = this.current_sequence_index;
                             }
                             --this.pattern_loop_count;
-                            break;
+                            continue block11;
                         }
                         case 224: {
                             this.tick_counter += this.ticks_per_row * (effect_param & 0xF);
@@ -300,3 +303,4 @@ public class IBXM {
         }
     }
 }
+

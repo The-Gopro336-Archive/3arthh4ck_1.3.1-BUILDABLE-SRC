@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.movement.noslowdown;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -27,3 +30,4 @@ extends DefaultData<NoSlowDown> {
         return "Allows you to move in Guis and makes you move normally while eating or in webs.";
     }
 }
+

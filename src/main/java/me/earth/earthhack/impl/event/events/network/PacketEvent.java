@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.INetHandler
+ *  net.minecraft.network.Packet
+ */
 package me.earth.earthhack.impl.event.events.network;
 
 import java.util.ArrayDeque;
@@ -19,7 +26,7 @@ extends Event {
         return this.packet;
     }
 
-    PacketEvent(Packet x0, 1 x1) {
+    /* synthetic */ PacketEvent(Packet x0, 1 x1) {
         this(x0);
     }
 
@@ -68,3 +75,4 @@ extends Event {
         }
     }
 }
+

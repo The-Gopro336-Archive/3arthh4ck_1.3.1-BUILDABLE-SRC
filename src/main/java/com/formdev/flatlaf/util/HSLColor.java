@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.util;
 
 import java.awt.Color;
@@ -171,3 +174,4 @@ public class HSLColor {
         return p;
     }
 }
+

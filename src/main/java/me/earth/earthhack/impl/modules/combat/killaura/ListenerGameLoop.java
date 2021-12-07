@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.util.EnumHand
+ */
 package me.earth.earthhack.impl.modules.combat.killaura;
 
 import me.earth.earthhack.impl.event.events.misc.GameLoopEvent;
@@ -30,8 +38,8 @@ extends ModuleListener<KillAura, GameLoopEvent> {
             if (multi) {
                 int packets = 0;
                 for (EntityPlayer player : ListenerGameLoop.mc.world.playerEntities) {
-                    if (!((KillAura)this.module).isValid(player) || !((KillAura)this.module).isInRange(from, (Entity)player)) continue;
-                    PacketUtil.attack(player);
+                    if (!((KillAura)this.module).isValid((Entity)player) || !((KillAura)this.module).isInRange((Entity)from, (Entity)player)) continue;
+                    PacketUtil.attack((Entity)player);
                     if (++packets < ((KillAura)this.module).packets.getValue()) continue;
                     break;
                 }
@@ -47,3 +55,4 @@ extends ModuleListener<KillAura, GameLoopEvent> {
         }
     }
 }
+

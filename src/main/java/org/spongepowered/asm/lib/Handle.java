@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.lib;
 
 public final class Handle {
@@ -59,3 +62,4 @@ public final class Handle {
         return this.owner + '.' + this.name + this.desc + " (" + this.tag + (this.itf ? " itf" : "") + ')';
     }
 }
+

@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ */
 package me.earth.earthhack.impl.modules.misc.tracker;
 
 import me.earth.earthhack.api.module.Module;
@@ -8,6 +15,7 @@ import me.earth.earthhack.impl.util.client.ModuleUtil;
 import me.earth.earthhack.impl.util.math.MathUtil;
 import me.earth.earthhack.impl.util.math.rotation.RotationUtil;
 import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 
 final class ListenerTick
@@ -23,7 +31,7 @@ extends ModuleListener<Tracker, TickEvent> {
                 int crystals;
                 boolean found = false;
                 for (EntityPlayer player : ListenerTick.mc.world.playerEntities) {
-                    if (player == null || player.equals(ListenerTick.mc.player) || player.equals(RotationUtil.getRotationPlayer()) || PlayerUtil.isFakePlayer(player)) continue;
+                    if (player == null || player.equals((Object)ListenerTick.mc.player) || player.equals((Object)RotationUtil.getRotationPlayer()) || PlayerUtil.isFakePlayer((Entity)player)) continue;
                     if (found && ((Tracker)this.module).only1v1.getValue().booleanValue()) {
                         ModuleUtil.disableRed((Module)this.module, "Disabled, you are not in a 1v1!");
                         return;
@@ -58,3 +66,4 @@ extends ModuleListener<Tracker, TickEvent> {
         }
     }
 }
+

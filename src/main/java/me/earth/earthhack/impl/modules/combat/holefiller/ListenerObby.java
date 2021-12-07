@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.modules.combat.holefiller;
 
 import java.util.ArrayList;
@@ -16,6 +25,7 @@ import me.earth.earthhack.impl.util.math.rotation.RotationUtil;
 import me.earth.earthhack.impl.util.minecraft.blocks.BlockUtil;
 import me.earth.earthhack.impl.util.minecraft.blocks.HoleUtil;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -43,7 +53,7 @@ extends ObbyListener<HoleFiller> {
         }
         if (((HoleFiller)this.module).requireTarget.getValue().booleanValue()) {
             ((HoleFiller)this.module).target = EntityUtil.getClosestEnemy();
-            if (((HoleFiller)this.module).target == null || ((HoleFiller)this.module).target.getDistanceSq(ListenerObby.mc.player) > MathUtil.square(((HoleFiller)this.module).targetRange.getValue()) || ((HoleFiller)this.module).waitForHoleLeave.getValue().booleanValue() && (HoleUtil.is1x1(PositionUtil.getPosition(((HoleFiller)this.module).target))[0] || HoleUtil.is2x1(PositionUtil.getPosition(((HoleFiller)this.module).target), false) || HoleUtil.is2x1(PositionUtil.getPosition(((HoleFiller)this.module).target), false))) {
+            if (((HoleFiller)this.module).target == null || ((HoleFiller)this.module).target.getDistanceSq((Entity)ListenerObby.mc.player) > MathUtil.square(((HoleFiller)this.module).targetRange.getValue()) || ((HoleFiller)this.module).waitForHoleLeave.getValue().booleanValue() && (HoleUtil.is1x1(PositionUtil.getPosition((Entity)((HoleFiller)this.module).target))[0] || HoleUtil.is2x1(PositionUtil.getPosition((Entity)((HoleFiller)this.module).target), false) || HoleUtil.is2x1(PositionUtil.getPosition((Entity)((HoleFiller)this.module).target), false))) {
                 ((HoleFiller)this.module).waiting = true;
                 return;
             }
@@ -75,16 +85,17 @@ extends ObbyListener<HoleFiller> {
         }
         if (!(HoleUtil.isHole(playerPos = PositionUtil.getPosition(), false)[0] || HoleUtil.is2x1(playerPos) || HoleUtil.is2x2(playerPos) || ((HoleFiller)this.module).safety.getValue().booleanValue() && Managers.SAFETY.isSafe())) {
             EntityPlayer p2 = RotationUtil.getRotationPlayer();
-            Vec3d v = p2.getPositionVector().addVector(p2.motionX, p2.motionY, p2.motionZ);
+            Vec3d v = p2.getPositionVector().add(p2.motionX, p2.motionY, p2.motionZ);
             targets.removeIf(pos -> pos.distanceSq(v.x, v.y, v.z) < MathUtil.square(((HoleFiller)this.module).minSelf.getValue()));
             targets.sort(Comparator.comparingDouble(pos -> -BlockUtil.getDistanceSq(pos)));
         }
         ((HoleFiller)this.module).target = EntityUtil.getClosestEnemy();
         if (((HoleFiller)this.module).target != null) {
-            targets.removeIf(p -> BlockUtil.getDistanceSq(((HoleFiller)this.module).target, p) > MathUtil.square(((HoleFiller)this.module).targetDistance.getValue()));
-            targets.sort(Comparator.comparingDouble(p -> BlockUtil.getDistanceSq(((HoleFiller)this.module).target, p)));
+            targets.removeIf(p -> BlockUtil.getDistanceSq((Entity)((HoleFiller)this.module).target, p) > MathUtil.square(((HoleFiller)this.module).targetDistance.getValue()));
+            targets.sort(Comparator.comparingDouble(p -> BlockUtil.getDistanceSq((Entity)((HoleFiller)this.module).target, p)));
         }
         result.setTargets(targets);
         return result;
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.render.viewclip;
 
 import me.earth.earthhack.api.module.Module;
@@ -15,3 +18,4 @@ extends Module {
         this.setData(new SimpleData(this, "Makes the camera clip through blocks in F5."));
     }
 }
+

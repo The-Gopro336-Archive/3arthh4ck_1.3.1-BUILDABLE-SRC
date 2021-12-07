@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.font.effects;
 
 import java.util.List;
@@ -21,3 +24,4 @@ extends Effect {
         public void showDialog();
     }
 }
+

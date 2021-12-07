@@ -1,3 +1,21 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.block.BlockContainer
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.item.ItemBlock
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketAnimation
+ *  net.minecraft.network.play.client.CPacketEntityAction$Action
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.RayTraceResult
+ */
 package me.earth.earthhack.impl.modules.player.scaffold;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -22,9 +40,11 @@ import me.earth.earthhack.impl.util.network.PacketUtil;
 import me.earth.earthhack.impl.util.thread.Locks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketAnimation;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.util.EnumFacing;
@@ -58,7 +78,7 @@ extends ModuleListener<Scaffold, MotionUpdateEvent> {
             ((Scaffold)this.module).pos = ((Scaffold)this.module).findNextPos();
             if (((Scaffold)this.module).pos != null) {
                 ((Scaffold)this.module).rot = ((Scaffold)this.module).pos;
-                if (!((Scaffold)this.module).pos.equals(prev)) {
+                if (!((Scaffold)this.module).pos.equals((Object)prev)) {
                     ((Scaffold)this.module).rotationTimer.reset();
                 }
                 this.setRotations(((Scaffold)this.module).pos, event);
@@ -76,8 +96,8 @@ extends ModuleListener<Scaffold, MotionUpdateEvent> {
             ItemStack offhand = ListenerMotion.mc.player.getHeldItemOffhand();
             if (((Scaffold)this.module).isStackValid(offhand)) {
                 if (offhand.getItem() instanceof ItemBlock) {
-                    Block block = ((ItemBlock)((Object)offhand.getItem())).getBlock();
-                    if (!((Scaffold)this.module).checkState.getValue().booleanValue() || !block.getBlockState().getBaseState().func_185904_a().isReplaceable()) {
+                    Block block = ((ItemBlock)offhand.getItem()).getBlock();
+                    if (!((Scaffold)this.module).checkState.getValue().booleanValue() || !block.getBlockState().getBaseState().getMaterial().isReplaceable()) {
                         if (block instanceof BlockContainer) {
                             optional = -2;
                         } else {
@@ -92,8 +112,8 @@ extends ModuleListener<Scaffold, MotionUpdateEvent> {
                 for (int i = 0; i < 9; ++i) {
                     ItemStack stack = ListenerMotion.mc.player.inventory.getStackInSlot(i);
                     if (!((Scaffold)this.module).isStackValid(stack) || !(stack.getItem() instanceof ItemBlock)) continue;
-                    Block block = ((ItemBlock)((Object)stack.getItem())).getBlock();
-                    if (((Scaffold)this.module).checkState.getValue().booleanValue() && block.getBlockState().getBaseState().func_185904_a().isReplaceable()) continue;
+                    Block block = ((ItemBlock)stack.getItem()).getBlock();
+                    if (((Scaffold)this.module).checkState.getValue().booleanValue() && block.getBlockState().getBaseState().getMaterial().isReplaceable()) continue;
                     if (block instanceof BlockContainer) {
                         optional = i;
                         continue;
@@ -109,7 +129,7 @@ extends ModuleListener<Scaffold, MotionUpdateEvent> {
                 boolean jump = ListenerMotion.mc.player.movementInput.jump && ((Scaffold)this.module).tower.getValue() != false;
                 boolean bl = sneak = ListenerMotion.mc.player.movementInput.sneak && ((Scaffold)this.module).down.getValue() != false;
                 if (jump && !sneak && !MovementUtil.isMoving()) {
-                    ((IMinecraft)((Object)mc)).setRightClickDelay(3);
+                    ((IMinecraft)mc).setRightClickDelay(3);
                     ListenerMotion.mc.player.jump();
                     if (((Scaffold)this.module).towerTimer.passed(1500L)) {
                         ListenerMotion.mc.player.motionY = -0.28;
@@ -124,7 +144,7 @@ extends ModuleListener<Scaffold, MotionUpdateEvent> {
                     float minDmg = Float.MAX_VALUE;
                     for (EntityEnderCrystal crystal : ListenerMotion.mc.world.getEntitiesWithinAABB(EntityEnderCrystal.class, new AxisAlignedBB(((Scaffold)this.module).pos))) {
                         float damage;
-                        if (crystal == null || crystal.isDead || !((damage = DamageUtil.calculate(crystal)) < minDmg) || !((Scaffold)this.module).pop.getValue().shouldPop(damage, ((Scaffold)this.module).popTime.getValue())) continue;
+                        if (crystal == null || crystal.isDead || !((damage = DamageUtil.calculate((Entity)crystal)) < minDmg) || !((Scaffold)this.module).pop.getValue().shouldPop(damage, ((Scaffold)this.module).popTime.getValue())) continue;
                         entity = crystal;
                         minDmg = damage;
                     }
@@ -146,7 +166,7 @@ extends ModuleListener<Scaffold, MotionUpdateEvent> {
                     }
                     RayTraceResult result = RayTraceUtil.getRayTraceResult(((Scaffold)this.module).rotations[0], ((Scaffold)this.module).rotations[1]);
                     ListenerMotion.mc.playerController.processRightClickBlock(ListenerMotion.mc.player, ListenerMotion.mc.world, ((Scaffold)this.module).pos.offset(((Scaffold)this.module).facing), ((Scaffold)this.module).facing.getOpposite(), result.hitVec, InventoryUtil.getHand(finalSlot));
-                    ListenerMotion.mc.player.connection.sendPacket(new CPacketAnimation(InventoryUtil.getHand(finalSlot)));
+                    ListenerMotion.mc.player.connection.sendPacket((Packet)new CPacketAnimation(InventoryUtil.getHand(finalSlot)));
                     if (!sneaking) {
                         PacketUtil.sendAction(CPacketEntityAction.Action.STOP_SNEAKING);
                     }
@@ -186,3 +206,4 @@ extends ModuleListener<Scaffold, MotionUpdateEvent> {
         }
     }
 }
+

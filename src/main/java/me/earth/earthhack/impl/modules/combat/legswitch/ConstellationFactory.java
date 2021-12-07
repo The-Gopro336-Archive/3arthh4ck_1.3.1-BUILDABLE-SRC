@@ -1,3 +1,16 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.world.IBlockAccess
+ */
 package me.earth.earthhack.impl.modules.combat.legswitch;
 
 import java.util.HashMap;
@@ -13,6 +26,7 @@ import me.earth.earthhack.impl.util.minecraft.blocks.BlockUtil;
 import me.earth.earthhack.impl.util.minecraft.blocks.states.BlockStateHelper;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -27,7 +41,7 @@ implements Globals {
     }
 
     public static LegConstellation create(LegSwitch module, List<EntityPlayer> players) {
-        return ConstellationFactory.create(module, players, ConstellationFactory.mc.world);
+        return ConstellationFactory.create(module, players, (IBlockAccess)ConstellationFactory.mc.world);
     }
 
     public static LegConstellation create(LegSwitch module, List<EntityPlayer> players, IBlockAccess access) {
@@ -40,8 +54,8 @@ implements Globals {
         double badDistance = Double.MAX_VALUE;
         for (EntityPlayer player : players) {
             LegConstellation c;
-            if (!EntityUtil.isValid(player, 12.0)) continue;
-            double dist = ConstellationFactory.mc.player.getDistanceSq(player);
+            if (!EntityUtil.isValid((Entity)player, 12.0)) continue;
+            double dist = ConstellationFactory.mc.player.getDistanceSq((Entity)player);
             if (closest != null && !(distance > dist) || (c = ConstellationFactory.getConstellation(module, player, access)) == null) continue;
             if (c.firstNeedsObby || c.secondNeedsObby) {
                 if (dist >= badDistance) continue;
@@ -56,12 +70,12 @@ implements Globals {
     }
 
     private static LegConstellation getConstellation(LegSwitch module, EntityPlayer player, IBlockAccess access) {
-        if (player == null || ConstellationFactory.mc.player.getDistanceSq(player) > (double)MathUtil.square(module.targetRange.getValue().floatValue())) {
+        if (player == null || ConstellationFactory.mc.player.getDistanceSq((Entity)player) > (double)MathUtil.square(module.targetRange.getValue().floatValue())) {
             return null;
         }
-        BlockPos playerPos = PositionUtil.getPosition(player);
+        BlockPos playerPos = PositionUtil.getPosition((Entity)player);
         IBlockState playerPosState = access.getBlockState(playerPos);
-        if (!playerPosState.func_185904_a().isReplaceable()) {
+        if (!playerPosState.getMaterial().isReplaceable()) {
             return null;
         }
         LegConstellation result = null;
@@ -73,7 +87,7 @@ implements Globals {
             IBlockState offsetState;
             BlockPos offset = playerPos.offset(facing);
             double dist = BlockUtil.getDistanceSq(offset);
-            if (dist >= distance || !(offsetState = access.getBlockState(offset)).func_185904_a().isReplaceable() || (constellation = ConstellationFactory.getConstellation(module, offset, facing, player, playerPos, access)) == null) continue;
+            if (dist >= distance || !(offsetState = access.getBlockState(offset)).getMaterial().isReplaceable() || (constellation = ConstellationFactory.getConstellation(module, offset, facing, player, playerPos, access)) == null) continue;
             constellation.add(playerPos, playerPosState);
             constellation.add(offset, offsetState);
             if (constellation.firstNeedsObby || constellation.secondNeedsObby) {
@@ -95,7 +109,7 @@ implements Globals {
         for (EnumFacing f : rotated) {
             BlockPos p = pos.offset(f);
             IBlockState pState = access.getBlockState(p);
-            if (!pState.func_185904_a().isReplaceable()) {
+            if (!pState.getMaterial().isReplaceable()) {
                 ++badStates;
             }
             states.put(p, pState);
@@ -104,7 +118,7 @@ implements Globals {
             return null;
         }
         BlockPos mid = pos.offset(facing);
-        if (module.requireMid.getValue().booleanValue() && !access.getBlockState(mid).func_185904_a().isReplaceable()) {
+        if (module.requireMid.getValue().booleanValue() && !access.getBlockState(mid).getMaterial().isReplaceable()) {
             return null;
         }
         BlockPos first = mid.offset(rotated[0]).down();
@@ -122,7 +136,7 @@ implements Globals {
         if (require1 == -1) {
             return null;
         }
-        IBlockAccess blockAccess = ConstellationFactory.mc.world;
+        Object blockAccess = ConstellationFactory.mc.world;
         if (require == 1 || require1 == 1) {
             BlockStateHelper helper = new BlockStateHelper();
             helper.addBlockState(first, Blocks.OBSIDIAN.getDefaultState());
@@ -130,11 +144,11 @@ implements Globals {
             blockAccess = helper;
         }
         EntityPlayer player = RotationUtil.getRotationPlayer();
-        float self = DamageUtil.calculate((float)first.getX() + 0.5f, first.getY() + 1, (float)first.getZ() + 0.5f, player.getEntityBoundingBox(), player, blockAccess, true);
+        float self = DamageUtil.calculate((float)first.getX() + 0.5f, first.getY() + 1, (float)first.getZ() + 0.5f, player.getEntityBoundingBox(), (EntityLivingBase)player, (IBlockAccess)blockAccess, true);
         if (self > module.maxSelfDamage.getValue().floatValue()) {
             return null;
         }
-        self = DamageUtil.calculate((float)second.getX() + 0.5f, second.getY() + 1, (float)second.getZ() + 0.5f, player.getEntityBoundingBox(), player, blockAccess, true);
+        self = DamageUtil.calculate((float)second.getX() + 0.5f, second.getY() + 1, (float)second.getZ() + 0.5f, player.getEntityBoundingBox(), (EntityLivingBase)player, (IBlockAccess)blockAccess, true);
         if (self > module.maxSelfDamage.getValue().floatValue()) {
             return null;
         }
@@ -147,7 +161,7 @@ implements Globals {
     private static int requiresObby(BlockPos pos, IBlockState state, boolean newVer, boolean newVerEntities) {
         int result = -1;
         if (state.getBlock() != Blocks.OBSIDIAN && state.getBlock() != Blocks.BEDROCK) {
-            if (!state.func_185904_a().isReplaceable()) {
+            if (!state.getMaterial().isReplaceable()) {
                 return result;
             }
             result = 0;
@@ -160,3 +174,4 @@ implements Globals {
         return ++result;
     }
 }
+

@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal.util;
 
 import java.util.Collection;
@@ -12,3 +19,4 @@ public interface IBreakHelper<T extends CrystalData> {
 
     public BreakData<T> getData(Collection<T> var1, List<Entity> var2, List<EntityPlayer> var3, List<EntityPlayer> var4);
 }
+

@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.openal.AL10
+ */
 package org.newdawn.slick.openal;
 
 import org.lwjgl.openal.AL10;
@@ -14,10 +20,10 @@ implements Audio {
     AudioImpl(SoundStore store, int buffer) {
         this.store = store;
         this.buffer = buffer;
-        int bytes = AL10.alGetBufferi(buffer, 8196);
-        int bits = AL10.alGetBufferi(buffer, 8194);
-        int channels = AL10.alGetBufferi(buffer, 8195);
-        int freq = AL10.alGetBufferi(buffer, 8193);
+        int bytes = AL10.alGetBufferi((int)buffer, (int)8196);
+        int bits = AL10.alGetBufferi((int)buffer, (int)8194);
+        int channels = AL10.alGetBufferi((int)buffer, (int)8195);
+        int freq = AL10.alGetBufferi((int)buffer, (int)8193);
         int samples = bytes / (bits / 8);
         this.length = (float)samples / (float)freq / (float)channels;
     }
@@ -75,12 +81,13 @@ implements Audio {
 
     @Override
     public boolean setPosition(float position) {
-        AL10.alSourcef(this.store.getSource(this.index), 4132, position %= this.length);
+        AL10.alSourcef((int)this.store.getSource(this.index), (int)4132, (float)(position %= this.length));
         return AL10.alGetError() == 0;
     }
 
     @Override
     public float getPosition() {
-        return AL10.alGetSourcef(this.store.getSource(this.index), 4132);
+        return AL10.alGetSourcef((int)this.store.getSource(this.index), (int)4132);
     }
 }
+

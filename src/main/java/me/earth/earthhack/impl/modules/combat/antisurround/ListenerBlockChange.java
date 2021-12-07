@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketBlockChange
+ */
 package me.earth.earthhack.impl.modules.combat.antisurround;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -17,8 +23,9 @@ extends ModuleListener<AntiSurround, PacketEvent.Post<SPacketBlockChange>> {
         if (!((AntiSurround)this.module).async.getValue().booleanValue() || ((AntiSurround)this.module).active.get() || ListenerBlockChange.mc.player == null || ((AntiSurround)this.module).holdingCheck()) {
             return;
         }
-        if (((SPacketBlockChange)event.getPacket()).getBlockState().func_185904_a().isReplaceable()) {
+        if (((SPacketBlockChange)event.getPacket()).getBlockState().getMaterial().isReplaceable()) {
             ((AntiSurround)this.module).onBlockBreak(((SPacketBlockChange)event.getPacket()).getBlockPosition(), Managers.ENTITIES.getPlayers(), Managers.ENTITIES.getEntities());
         }
     }
 }
+

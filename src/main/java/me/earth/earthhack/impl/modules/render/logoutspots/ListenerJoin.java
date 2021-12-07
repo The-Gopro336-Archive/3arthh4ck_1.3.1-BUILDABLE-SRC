@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.modules.render.logoutspots;
 
 import me.earth.earthhack.impl.event.events.network.ConnectionEvent;
@@ -42,3 +49,4 @@ extends ModuleListener<LogoutSpots, ConnectionEvent.Join> {
         }
     }
 }
+

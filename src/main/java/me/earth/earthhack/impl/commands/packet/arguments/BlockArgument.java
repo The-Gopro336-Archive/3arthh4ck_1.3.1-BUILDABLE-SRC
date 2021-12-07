@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemBlock
+ *  net.minecraft.util.ResourceLocation
+ */
 package me.earth.earthhack.impl.commands.packet.arguments;
 
 import me.earth.earthhack.api.command.PossibleInputs;
@@ -35,7 +44,7 @@ extends AbstractArgument<Block> {
                 }
             }
         } else if (item instanceof ItemBlock) {
-            block = ((ItemBlock)((Object)item)).getBlock();
+            block = ((ItemBlock)item).getBlock();
         } else {
             throw new IllegalStateException("Item wasn't ItemBlock!");
         }
@@ -52,10 +61,11 @@ extends AbstractArgument<Block> {
         if (s != null) {
             return inputs.setCompletion(TextUtil.substring(s, arg.length()));
         }
-        for (ResourceLocation location : Block.REGISTRY.func_148742_b()) {
+        for (ResourceLocation location : Block.REGISTRY.getKeys()) {
             if (!TextUtil.startsWith(location.toString(), arg)) continue;
             return inputs.setCompletion(TextUtil.substring(location.toString(), arg.length()));
         }
         return PossibleInputs.empty();
     }
 }
+

@@ -1,7 +1,19 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.objectweb.asm.ClassReader
+ *  org.objectweb.asm.ClassVisitor
+ *  org.objectweb.asm.ClassWriter
+ *  org.objectweb.asm.tree.ClassNode
+ *  org.objectweb.asm.tree.FieldNode
+ *  org.objectweb.asm.tree.MethodNode
+ */
 package me.earth.earthhack.impl.core.util;
 
 import me.earth.earthhack.impl.core.util.NoSuperClassWriter;
 import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldNode;
@@ -11,19 +23,19 @@ public class AsmUtil {
     public static ClassNode read(byte[] clazz, int ... flags) {
         ClassNode result = new ClassNode();
         ClassReader reader = new ClassReader(clazz);
-        reader.accept(result, AsmUtil.toFlag(flags));
+        reader.accept((ClassVisitor)result, AsmUtil.toFlag(flags));
         return result;
     }
 
     public static byte[] write(ClassNode classNode, int ... flags) {
         ClassWriter writer = new ClassWriter(AsmUtil.toFlag(flags));
-        classNode.accept(writer);
+        classNode.accept((ClassVisitor)writer);
         return writer.toByteArray();
     }
 
     public static byte[] writeNoSuperClass(ClassNode classNode, int ... flags) {
         NoSuperClassWriter writer = new NoSuperClassWriter(AsmUtil.toFlag(flags));
-        classNode.accept(writer);
+        classNode.accept((ClassVisitor)writer);
         return writer.toByteArray();
     }
 
@@ -68,3 +80,4 @@ public class AsmUtil {
         return flag;
     }
 }
+

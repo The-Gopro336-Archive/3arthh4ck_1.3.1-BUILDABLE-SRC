@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.movement.flight;
 
 import me.earth.earthhack.impl.event.events.movement.OnGroundEvent;
@@ -18,3 +21,4 @@ extends ModuleListener<Flight, OnGroundEvent> {
         }
     }
 }
+

@@ -1,9 +1,20 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.BufferUtils
+ *  org.lwjgl.Sys
+ *  org.lwjgl.openal.AL
+ *  org.lwjgl.openal.AL10
+ *  org.lwjgl.openal.OpenALException
+ */
 package org.newdawn.slick.openal;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.security.AccessController;
@@ -46,8 +57,8 @@ public class SoundStore {
     private float lastCurrentMusicVolume = 1.0f;
     private boolean paused;
     private boolean deferred;
-    private FloatBuffer sourceVel = BufferUtils.createFloatBuffer(3).put(new float[]{0.0f, 0.0f, 0.0f});
-    private FloatBuffer sourcePos = BufferUtils.createFloatBuffer(3);
+    private FloatBuffer sourceVel = BufferUtils.createFloatBuffer((int)3).put(new float[]{0.0f, 0.0f, 0.0f});
+    private FloatBuffer sourcePos = BufferUtils.createFloatBuffer((int)3);
     private int maxSources = 64;
 
     private SoundStore() {
@@ -94,7 +105,7 @@ public class SoundStore {
         }
         this.musicVolume = volume;
         if (this.soundWorks) {
-            AL10.alSourcef(this.sources.get(0), 4106, this.lastCurrentMusicVolume * this.musicVolume);
+            AL10.alSourcef((int)this.sources.get(0), (int)4106, (float)(this.lastCurrentMusicVolume * this.musicVolume));
         }
     }
 
@@ -111,7 +122,7 @@ public class SoundStore {
         }
         if (this.soundWorks) {
             this.lastCurrentMusicVolume = volume;
-            AL10.alSourcef(this.sources.get(0), 4106, this.lastCurrentMusicVolume * this.musicVolume);
+            AL10.alSourcef((int)this.sources.get(0), (int)4106, (float)(this.lastCurrentMusicVolume * this.musicVolume));
         }
     }
 
@@ -190,11 +201,11 @@ public class SoundStore {
         });
         if (this.soundWorks) {
             this.sourceCount = 0;
-            this.sources = BufferUtils.createIntBuffer(this.maxSources);
+            this.sources = BufferUtils.createIntBuffer((int)this.maxSources);
             while (AL10.alGetError() == 0) {
-                IntBuffer temp = BufferUtils.createIntBuffer(1);
+                IntBuffer temp = BufferUtils.createIntBuffer((int)1);
                 try {
-                    AL10.alGenSources(temp);
+                    AL10.alGenSources((IntBuffer)temp);
                     if (AL10.alGetError() != 0) continue;
                     ++this.sourceCount;
                     this.sources.put(temp.get(0));
@@ -210,22 +221,22 @@ public class SoundStore {
                 this.soundWorks = false;
                 Log.error("- AL init failed");
             } else {
-                FloatBuffer listenerOri = BufferUtils.createFloatBuffer(6).put(new float[]{0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f});
-                FloatBuffer listenerVel = BufferUtils.createFloatBuffer(3).put(new float[]{0.0f, 0.0f, 0.0f});
-                FloatBuffer listenerPos = BufferUtils.createFloatBuffer(3).put(new float[]{0.0f, 0.0f, 0.0f});
+                FloatBuffer listenerOri = BufferUtils.createFloatBuffer((int)6).put(new float[]{0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f});
+                FloatBuffer listenerVel = BufferUtils.createFloatBuffer((int)3).put(new float[]{0.0f, 0.0f, 0.0f});
+                FloatBuffer listenerPos = BufferUtils.createFloatBuffer((int)3).put(new float[]{0.0f, 0.0f, 0.0f});
                 listenerPos.flip();
                 listenerVel.flip();
                 listenerOri.flip();
-                AL10.alListener(4100, listenerPos);
-                AL10.alListener(4102, listenerVel);
-                AL10.alListener(4111, listenerOri);
+                AL10.alListener((int)4100, (FloatBuffer)listenerPos);
+                AL10.alListener((int)4102, (FloatBuffer)listenerVel);
+                AL10.alListener((int)4111, (FloatBuffer)listenerOri);
                 Log.info("- Sounds source generated");
             }
         }
     }
 
     void stopSource(int index) {
-        AL10.alSourceStop(this.sources.get(index));
+        AL10.alSourceStop((int)this.sources.get(index));
     }
 
     int playAsSound(int buffer, float pitch, float gain, boolean loop) {
@@ -241,33 +252,33 @@ public class SoundStore {
             if (nextSource == -1) {
                 return -1;
             }
-            AL10.alSourceStop(this.sources.get(nextSource));
-            AL10.alSourcei(this.sources.get(nextSource), 4105, buffer);
-            AL10.alSourcef(this.sources.get(nextSource), 4099, pitch);
-            AL10.alSourcef(this.sources.get(nextSource), 4106, gain);
-            AL10.alSourcei(this.sources.get(nextSource), 4103, loop ? 1 : 0);
+            AL10.alSourceStop((int)this.sources.get(nextSource));
+            AL10.alSourcei((int)this.sources.get(nextSource), (int)4105, (int)buffer);
+            AL10.alSourcef((int)this.sources.get(nextSource), (int)4099, (float)pitch);
+            AL10.alSourcef((int)this.sources.get(nextSource), (int)4106, (float)gain);
+            AL10.alSourcei((int)this.sources.get(nextSource), (int)4103, (int)(loop ? 1 : 0));
             this.sourcePos.clear();
             this.sourceVel.clear();
             this.sourceVel.put(new float[]{0.0f, 0.0f, 0.0f});
             this.sourcePos.put(new float[]{x, y, z});
             this.sourcePos.flip();
             this.sourceVel.flip();
-            AL10.alSource(this.sources.get(nextSource), 4100, this.sourcePos);
-            AL10.alSource(this.sources.get(nextSource), 4102, this.sourceVel);
-            AL10.alSourcePlay(this.sources.get(nextSource));
+            AL10.alSource((int)this.sources.get(nextSource), (int)4100, (FloatBuffer)this.sourcePos);
+            AL10.alSource((int)this.sources.get(nextSource), (int)4102, (FloatBuffer)this.sourceVel);
+            AL10.alSourcePlay((int)this.sources.get(nextSource));
             return nextSource;
         }
         return -1;
     }
 
     boolean isPlaying(int index) {
-        int state = AL10.alGetSourcei(this.sources.get(index), 4112);
+        int state = AL10.alGetSourcei((int)this.sources.get(index), (int)4112);
         return state == 4114;
     }
 
     private int findFreeSource() {
         for (int i = 1; i < this.sourceCount - 1; ++i) {
-            int state = AL10.alGetSourcei(this.sources.get(i), 4112);
+            int state = AL10.alGetSourcei((int)this.sources.get(i), (int)4112);
             if (state == 4114 || state == 4115) continue;
             return i;
         }
@@ -279,17 +290,17 @@ public class SoundStore {
         this.setMOD(null);
         if (this.soundWorks) {
             if (this.currentMusic != -1) {
-                AL10.alSourceStop(this.sources.get(0));
+                AL10.alSourceStop((int)this.sources.get(0));
             }
             this.getMusicSource();
-            AL10.alSourcei(this.sources.get(0), 4105, buffer);
-            AL10.alSourcef(this.sources.get(0), 4099, pitch);
-            AL10.alSourcei(this.sources.get(0), 4103, loop ? 1 : 0);
+            AL10.alSourcei((int)this.sources.get(0), (int)4105, (int)buffer);
+            AL10.alSourcef((int)this.sources.get(0), (int)4099, (float)pitch);
+            AL10.alSourcei((int)this.sources.get(0), (int)4103, (int)(loop ? 1 : 0));
             this.currentMusic = this.sources.get(0);
             if (!this.music) {
                 this.pauseLoop();
             } else {
-                AL10.alSourcePlay(this.sources.get(0));
+                AL10.alSourcePlay((int)this.sources.get(0));
             }
         }
     }
@@ -300,21 +311,21 @@ public class SoundStore {
 
     public void setMusicPitch(float pitch) {
         if (this.soundWorks) {
-            AL10.alSourcef(this.sources.get(0), 4099, pitch);
+            AL10.alSourcef((int)this.sources.get(0), (int)4099, (float)pitch);
         }
     }
 
     public void pauseLoop() {
         if (this.soundWorks && this.currentMusic != -1) {
             this.paused = true;
-            AL10.alSourcePause(this.currentMusic);
+            AL10.alSourcePause((int)this.currentMusic);
         }
     }
 
     public void restartLoop() {
         if (this.music && this.soundWorks && this.currentMusic != -1) {
             this.paused = false;
-            AL10.alSourcePlay(this.currentMusic);
+            AL10.alSourcePlay((int)this.currentMusic);
         }
     }
 
@@ -367,10 +378,10 @@ public class SoundStore {
             buffer = (Integer)this.loaded.get(ref);
         } else {
             try {
-                IntBuffer buf = BufferUtils.createIntBuffer(1);
+                IntBuffer buf = BufferUtils.createIntBuffer((int)1);
                 AiffData data = AiffData.create(in);
-                AL10.alGenBuffers(buf);
-                AL10.alBufferData(buf.get(0), data.format, data.data, data.samplerate);
+                AL10.alGenBuffers((IntBuffer)buf);
+                AL10.alBufferData((int)buf.get(0), (int)data.format, (ByteBuffer)data.data, (int)data.samplerate);
                 this.loaded.put(ref, new Integer(buf.get(0)));
                 buffer = buf.get(0);
             }
@@ -410,10 +421,10 @@ public class SoundStore {
             buffer = (Integer)this.loaded.get(ref);
         } else {
             try {
-                IntBuffer buf = BufferUtils.createIntBuffer(1);
+                IntBuffer buf = BufferUtils.createIntBuffer((int)1);
                 WaveData data = WaveData.create(in);
-                AL10.alGenBuffers(buf);
-                AL10.alBufferData(buf.get(0), data.format, data.data, data.samplerate);
+                AL10.alGenBuffers((IntBuffer)buf);
+                AL10.alBufferData((int)buf.get(0), (int)data.format, (ByteBuffer)data.data, (int)data.samplerate);
                 this.loaded.put(ref, new Integer(buf.get(0)));
                 buffer = buf.get(0);
             }
@@ -437,7 +448,7 @@ public class SoundStore {
         this.setMOD(null);
         this.setStream(null);
         if (this.currentMusic != -1) {
-            AL10.alSourceStop(this.sources.get(0));
+            AL10.alSourceStop((int)this.sources.get(0));
         }
         this.getMusicSource();
         this.currentMusic = this.sources.get(0);
@@ -451,7 +462,7 @@ public class SoundStore {
         this.setMOD(null);
         this.setStream(null);
         if (this.currentMusic != -1) {
-            AL10.alSourceStop(this.sources.get(0));
+            AL10.alSourceStop((int)this.sources.get(0));
         }
         this.getMusicSource();
         this.currentMusic = this.sources.get(0);
@@ -481,17 +492,17 @@ public class SoundStore {
             buffer = (Integer)this.loaded.get(ref);
         } else {
             try {
-                IntBuffer buf = BufferUtils.createIntBuffer(1);
+                IntBuffer buf = BufferUtils.createIntBuffer((int)1);
                 OggDecoder decoder = new OggDecoder();
                 OggData ogg = decoder.getData(in);
-                AL10.alGenBuffers(buf);
-                AL10.alBufferData(buf.get(0), ogg.channels > 1 ? 4355 : 4353, ogg.data, ogg.rate);
+                AL10.alGenBuffers((IntBuffer)buf);
+                AL10.alBufferData((int)buf.get(0), (int)(ogg.channels > 1 ? 4355 : 4353), (ByteBuffer)ogg.data, (int)ogg.rate);
                 this.loaded.put(ref, new Integer(buf.get(0)));
                 buffer = buf.get(0);
             }
             catch (Exception e) {
                 Log.error(e);
-                Sys.alert("Error", "Failed to load: " + ref + " - " + e.getMessage());
+                Sys.alert((String)"Error", (String)("Failed to load: " + ref + " - " + e.getMessage()));
                 throw new IOException("Unable to load: " + ref);
             }
         }
@@ -561,7 +572,7 @@ public class SoundStore {
         if (!this.soundWorks) {
             return false;
         }
-        int state = AL10.alGetSourcei(this.sources.get(0), 4112);
+        int state = AL10.alGetSourcei((int)this.sources.get(0), (int)4112);
         return state == 4114 || state == 4115;
     }
 
@@ -570,10 +581,11 @@ public class SoundStore {
     }
 
     public void stopSoundEffect(int id) {
-        AL10.alSourceStop(id);
+        AL10.alSourceStop((int)id);
     }
 
     public int getSourceCount() {
         return this.sourceCount;
     }
 }
+

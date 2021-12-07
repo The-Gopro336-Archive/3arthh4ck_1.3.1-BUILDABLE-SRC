@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.managers.minecraft.timer;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -32,9 +35,9 @@ implements Globals {
 
     private void update() {
         if (MODULE.isEnabled()) {
-            ((ITimer)((Object)((IMinecraft)((Object)mc)).getTimer())).setTickLength(50.0f / ((Timer)MODULE.get()).getSpeed());
+            ((ITimer)((IMinecraft)mc).getTimer()).setTickLength(50.0f / ((Timer)MODULE.get()).getSpeed());
         } else {
-            ((ITimer)((Object)((IMinecraft)((Object)mc)).getTimer())).setTickLength(50.0f / this.speed);
+            ((ITimer)((IMinecraft)mc).getTimer()).setTickLength(50.0f / this.speed);
         }
     }
 
@@ -50,3 +53,4 @@ implements Globals {
         this.speed = 1.0f;
     }
 }
+

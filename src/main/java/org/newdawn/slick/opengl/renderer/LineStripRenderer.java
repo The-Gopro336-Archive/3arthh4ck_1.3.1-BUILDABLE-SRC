@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.opengl.renderer;
 
 public interface LineStripRenderer {
@@ -17,3 +20,4 @@ public interface LineStripRenderer {
 
     public void setLineCaps(boolean var1);
 }
+

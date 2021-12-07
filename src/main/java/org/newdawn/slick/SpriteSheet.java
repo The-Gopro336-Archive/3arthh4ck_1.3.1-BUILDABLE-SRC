@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick;
 
 import java.io.IOException;
@@ -154,3 +157,4 @@ extends Image {
         this.target.setTexture(texture);
     }
 }
+

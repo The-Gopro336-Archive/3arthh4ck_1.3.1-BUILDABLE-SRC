@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.injection.callback;
 
 import org.spongepowered.asm.mixin.injection.callback.CancellationException;
@@ -9,3 +12,4 @@ public interface Cancellable {
 
     public void cancel() throws CancellationException;
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.player.autotool;
 
 import me.earth.earthhack.impl.event.events.misc.UpdateEvent;
@@ -20,3 +23,4 @@ extends ModuleListener<AutoTool, UpdateEvent> {
         }
     }
 }
+

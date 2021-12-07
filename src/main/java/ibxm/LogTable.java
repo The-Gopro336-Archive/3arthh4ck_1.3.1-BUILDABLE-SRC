@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package ibxm;
 
 public class LogTable {
@@ -21,7 +24,7 @@ public class LogTable {
     }
 
     public static int raise_2(int x) {
-        int y = LogTable.eval_table(exp_2_table, x & Short.MAX_VALUE) << 15;
+        int y = LogTable.eval_table(exp_2_table, x & 0x7FFF) << 15;
         return y >> 15 - (x >> 15);
     }
 
@@ -34,3 +37,4 @@ public class LogTable {
         return y >> 0;
     }
 }
+

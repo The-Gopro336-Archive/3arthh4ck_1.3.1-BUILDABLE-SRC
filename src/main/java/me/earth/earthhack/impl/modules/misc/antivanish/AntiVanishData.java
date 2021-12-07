@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.misc.antivanish;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -19,3 +22,4 @@ extends DefaultData<AntiVanish> {
         return "Detects players that go into vanish.";
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.player.fastplace;
 
 import me.earth.earthhack.api.module.util.Category;
@@ -32,8 +35,9 @@ extends RemovingItemAddingModule {
     }
 
     protected void onTick() {
-        if (FastPlace.mc.gameSettings.keyBindUseItem.isKeyDown() && this.delay.getValue() < ((IMinecraft)((Object)mc)).getRightClickDelay() && (this.all.getValue().booleanValue() || this.isStackValid(FastPlace.mc.player.getHeldItemMainhand()) || this.isStackValid(FastPlace.mc.player.getHeldItemOffhand()))) {
-            ((IMinecraft)((Object)mc)).setRightClickDelay(this.delay.getValue());
+        if (FastPlace.mc.gameSettings.keyBindUseItem.isKeyDown() && this.delay.getValue() < ((IMinecraft)mc).getRightClickDelay() && (this.all.getValue().booleanValue() || this.isStackValid(FastPlace.mc.player.getHeldItemMainhand()) || this.isStackValid(FastPlace.mc.player.getHeldItemOffhand()))) {
+            ((IMinecraft)mc).setRightClickDelay(this.delay.getValue());
         }
     }
 }
+

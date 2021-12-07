@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.state.transition;
 
 import java.util.ArrayList;
@@ -55,3 +58,4 @@ implements Transition {
         }
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.throwables;
 
 import org.spongepowered.asm.mixin.throwables.MixinException;
@@ -18,3 +21,4 @@ extends MixinException {
         super(message, cause);
     }
 }
+

@@ -1,3 +1,26 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.init.Items
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemPickaxe
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.RayTraceResult
+ *  net.minecraft.util.math.RayTraceResult$Type
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.util.math.Vec3i
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.modules.combat.anvilaura;
 
 import java.util.ArrayList;
@@ -30,6 +53,7 @@ import me.earth.earthhack.impl.util.network.PacketUtil;
 import me.earth.earthhack.impl.util.thread.Locks;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -43,6 +67,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.World;
 
 final class ListenerAnvilAura
 extends ObbyListener<AnvilAura> {
@@ -94,7 +119,7 @@ extends ObbyListener<AnvilAura> {
                         last = pos;
                     }
                     if (first == null) continue;
-                    AxisAlignedBB bb = new AxisAlignedBB(first.getX(), first.getY(), first.getZ(), last.getX() + 1, last.getY() + 1, last.getZ() + 1);
+                    AxisAlignedBB bb = new AxisAlignedBB((double)first.getX(), (double)first.getY(), (double)first.getZ(), (double)(last.getX() + 1), (double)(last.getY() + 1), (double)(last.getZ() + 1));
                     renderBBs.add(bb);
                     if (!((AnvilAura)this.module).renderBest.getValue().booleanValue()) continue;
                     break;
@@ -114,7 +139,7 @@ extends ObbyListener<AnvilAura> {
                     if (badMine) continue;
                     if (this.doTrap(r)) break block0;
                     BlockPos pressure = r.getPressurePos();
-                    if (r.hasSpecialPressure() || SpecialBlocks.PRESSURE_PLATES.contains(ObbyModule.HELPER.getBlockState(pressure).getBlock())) {
+                    if (r.hasSpecialPressure() || SpecialBlocks.PRESSURE_PLATES.contains((Object)ObbyModule.HELPER.getBlockState(pressure).getBlock())) {
                         if (!this.placeTop(r, result)) continue;
                         ((AnvilAura)this.module).setCurrentResult(r);
                         break block0;
@@ -241,8 +266,8 @@ extends ObbyListener<AnvilAura> {
         boolean didPlace = false;
         BlockPos[] ignore = this.toIgnore(anvilResult, highest);
         for (BlockPos pos : anvilResult.getTrap()) {
-            if (this.placed.containsKey(pos) || !ObbyModule.HELPER.getBlockState(pos).func_185904_a().isReplaceable()) continue;
-            BasePath path = new BasePath(RotationUtil.getRotationPlayer(), pos, ((AnvilAura)this.module).trapHelping.getValue());
+            if (this.placed.containsKey((Object)pos) || !ObbyModule.HELPER.getBlockState(pos).getMaterial().isReplaceable()) continue;
+            BasePath path = new BasePath((Entity)RotationUtil.getRotationPlayer(), pos, ((AnvilAura)this.module).trapHelping.getValue());
             PathFinder.findPath(path, ((AnvilAura)this.module).range.getValue(), ListenerAnvilAura.mc.world.loadedEntityList, (RayTraceMode)((Object)((AnvilAura)this.module).smartRay.getValue()), ObbyModule.HELPER, Blocks.OBSIDIAN.getDefaultState(), PathFinder.CHECK, ignore);
             int before = ((AnvilAura)this.module).slot;
             ((AnvilAura)this.module).slot = ((AnvilAura)this.module).obbySlot;
@@ -256,7 +281,7 @@ extends ObbyListener<AnvilAura> {
         if (((AnvilAura)this.module).crystal.getValue().booleanValue() && ((AnvilAura)this.module).crystalSlot != -1 && ((AnvilAura)this.module).crystalTimer.passed(((AnvilAura)this.module).crystalDelay.getValue().intValue())) {
             BlockPos upUp = anvilResult.getPlayerPos().up(2);
             for (EntityEnderCrystal entity : ListenerAnvilAura.mc.world.getEntitiesWithinAABB(EntityEnderCrystal.class, new AxisAlignedBB(upUp))) {
-                if (entity == null || EntityUtil.isDead(entity)) continue;
+                if (entity == null || EntityUtil.isDead((Entity)entity)) continue;
                 return false;
             }
             for (Vec3i vec3i : CRYSTAL_OFFSETS) {
@@ -266,8 +291,8 @@ extends ObbyListener<AnvilAura> {
                 int before = ((AnvilAura)this.module).slot;
                 ((AnvilAura)this.module).slot = ((AnvilAura)this.module).crystalSlot;
                 ((AnvilAura)this.module).rotations = RotationUtil.getRotations((double)pos.getX() + 0.5, (double)pos.getY() + 1.0, (double)pos.getZ() + 0.5, entity.posX, entity.posY, entity.posZ, ListenerAnvilAura.mc.player.getEyeHeight());
-                RayTraceResult result = RayTraceUtil.getRayTraceResult(((AnvilAura)this.module).rotations[0], ((AnvilAura)this.module).rotations[1], 6.0f, entity);
-                if (!result.getBlockPos().equals(pos)) {
+                RayTraceResult result = RayTraceUtil.getRayTraceResult(((AnvilAura)this.module).rotations[0], ((AnvilAura)this.module).rotations[1], 6.0f, (Entity)entity);
+                if (!result.getBlockPos().equals((Object)pos)) {
                     result = new RayTraceResult(RayTraceResult.Type.MISS, new Vec3d(0.5, 1.0, 0.5), EnumFacing.UP, BlockPos.ORIGIN);
                 }
                 ((AnvilAura)this.module).placeBlock(pos, result.sideHit, ((AnvilAura)this.module).rotations, result.hitVec);
@@ -290,11 +315,11 @@ extends ObbyListener<AnvilAura> {
             highest = pos;
         }
         if (highest != null) {
-            ((AnvilAura)this.module).mineFacing = RayTraceUtil.getFacing(ListenerAnvilAura.mc.player, highest, true);
+            ((AnvilAura)this.module).mineFacing = RayTraceUtil.getFacing((Entity)ListenerAnvilAura.mc.player, highest, true);
             ((AnvilAura)this.module).rotations = RotationUtil.getRotations(highest, ((AnvilAura)this.module).mineFacing);
             ((AnvilAura)this.module).minePos = highest;
             IBlockState mineState = ObbyModule.HELPER.getBlockState(highest);
-            ((AnvilAura)this.module).mineBB = mineState.func_185918_c(ListenerAnvilAura.mc.world, highest).grow(0.002f);
+            ((AnvilAura)this.module).mineBB = mineState.getSelectedBoundingBox((World)ListenerAnvilAura.mc.world, highest).grow((double)0.002f);
             ((AnvilAura)this.module).mineTimer.reset();
             ((AnvilAura)this.module).stage = AnvilStage.MINE;
             ((AnvilAura)this.module).action = () -> {
@@ -315,7 +340,7 @@ extends ObbyListener<AnvilAura> {
         }
         for (EnumFacing facing : EnumFacing.HORIZONTALS) {
             BlockPos pos = highest.offset(facing);
-            if (ObbyModule.HELPER.getBlockState(pos).func_185904_a().isReplaceable()) continue;
+            if (ObbyModule.HELPER.getBlockState(pos).getMaterial().isReplaceable()) continue;
             result.getTargets().add(highest);
             ((AnvilAura)this.module).stage = AnvilStage.ANVIL;
             return true;
@@ -326,7 +351,7 @@ extends ObbyListener<AnvilAura> {
         BlockPos[] ignore = this.toIgnore(anvilResult, highest);
         for (EnumFacing facing : EnumFacing.HORIZONTALS) {
             BlockPos pos = highest.offset(facing);
-            BasePath path = new BasePath(RotationUtil.getRotationPlayer(), pos, ((AnvilAura)this.module).helpingBlocks.getValue());
+            BasePath path = new BasePath((Entity)RotationUtil.getRotationPlayer(), pos, ((AnvilAura)this.module).helpingBlocks.getValue());
             PathFinder.findPath(path, ((AnvilAura)this.module).range.getValue(), ListenerAnvilAura.mc.world.loadedEntityList, (RayTraceMode)((Object)((AnvilAura)this.module).smartRay.getValue()), ObbyModule.HELPER, Blocks.OBSIDIAN.getDefaultState(), PathFinder.CHECK, ignore);
             int before = ((AnvilAura)this.module).slot;
             ((AnvilAura)this.module).slot = ((AnvilAura)this.module).obbySlot;
@@ -359,3 +384,4 @@ extends ObbyListener<AnvilAura> {
         return ignore;
     }
 }
+

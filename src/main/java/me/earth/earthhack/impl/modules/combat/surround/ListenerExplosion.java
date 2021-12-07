@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketExplosion
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.combat.surround;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -18,10 +25,11 @@ extends ModuleListener<Surround, PacketEvent.Receive<SPacketExplosion>> {
         SPacketExplosion packet = (SPacketExplosion)event.getPacket();
         event.addPostEvent(() -> {
             for (BlockPos pos : packet.getAffectedBlockPositions()) {
-                ((Surround)this.module).confirmed.remove(pos);
+                ((Surround)this.module).confirmed.remove((Object)pos);
                 if (!((Surround)this.module).shouldInstant(false)) continue;
                 ListenerMotion.start((Surround)this.module);
             }
         });
     }
 }
+

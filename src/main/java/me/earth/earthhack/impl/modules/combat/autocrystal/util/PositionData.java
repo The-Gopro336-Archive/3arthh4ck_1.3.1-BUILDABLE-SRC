@@ -1,3 +1,18 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.block.material.Material
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.entity.item.EntityItem
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal.util;
 
 import java.util.ArrayList;
@@ -45,7 +60,7 @@ Comparable<PositionData> {
     }
 
     public PositionData(BlockPos pos, int blocks, Set<EntityPlayer> antiTotems) {
-        super(RotationUtil.getRotationPlayer(), pos, blocks);
+        super((Entity)RotationUtil.getRotationPlayer(), pos, blocks);
         this.antiTotems = antiTotems;
         this.minDiff = Float.MAX_VALUE;
     }
@@ -143,7 +158,7 @@ Comparable<PositionData> {
 
     public boolean equals(Object o) {
         if (o instanceof PositionData) {
-            return ((PositionData)o).getPos().equals(this.getPos());
+            return ((PositionData)o).getPos().equals((Object)this.getPos());
         }
         return false;
     }
@@ -160,7 +175,7 @@ Comparable<PositionData> {
         PositionData data = new PositionData(pos, helpingBlocks);
         data.state = PositionData.mc.world.getBlockState(pos);
         if (data.state.getBlock() != Blocks.BEDROCK && data.state.getBlock() != Blocks.OBSIDIAN) {
-            if (!obby || !data.state.func_185904_a().isReplaceable() || PositionData.checkEntities(data, pos, entities, 0, true, true, false)) {
+            if (!obby || !data.state.getMaterial().isReplaceable() || PositionData.checkEntities(data, pos, entities, 0, true, true, false)) {
                 return data;
             }
             data.obby = true;
@@ -179,7 +194,7 @@ Comparable<PositionData> {
                 return data;
             }
         }
-        boolean bl = checkLavaItems = lavaItems && upState.func_185904_a() == Material.LAVA;
+        boolean bl = checkLavaItems = lavaItems && upState.getMaterial() == Material.LAVA;
         if (PositionData.checkEntities(data, up, entities, deathTime, false, false, checkLavaItems) || !newVerEntities && PositionData.checkEntities(data, up.up(), entities, deathTime, false, false, checkLavaItems)) {
             return data;
         }
@@ -205,7 +220,7 @@ Comparable<PositionData> {
             if (entity instanceof EntityEnderCrystal) {
                 if (!dead) {
                     if (EntityUtil.isDead(entity)) {
-                        if (Managers.SET_DEAD.passedDeathTime(entity, (long)deathTime) || ((IEntity)((Object)entity)).getPseudoTime().passed(deathTime)) continue;
+                        if (Managers.SET_DEAD.passedDeathTime(entity, (long)deathTime) || ((IEntity)entity).getPseudoTime().passed(deathTime)) continue;
                         return true;
                     }
                     data.blocked = true;
@@ -222,3 +237,4 @@ Comparable<PositionData> {
         return water && (block == Blocks.WATER || block == Blocks.FLOWING_WATER) || lava && (block == Blocks.LAVA || block == Blocks.FLOWING_LAVA);
     }
 }
+

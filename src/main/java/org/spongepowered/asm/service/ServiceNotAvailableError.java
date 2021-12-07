@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.service;
 
 public class ServiceNotAvailableError
@@ -8,3 +11,4 @@ extends Error {
         super(message);
     }
 }
+

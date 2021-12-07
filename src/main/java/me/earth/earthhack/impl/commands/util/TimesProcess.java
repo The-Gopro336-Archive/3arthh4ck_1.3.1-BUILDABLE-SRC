@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.commands.util;
 
 import java.util.ArrayList;
@@ -31,3 +34,4 @@ public class TimesProcess {
         return this.valid.get();
     }
 }
+

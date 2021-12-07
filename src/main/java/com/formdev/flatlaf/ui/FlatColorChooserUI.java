@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.ui;
 
 import javax.swing.JComponent;
@@ -10,3 +13,4 @@ extends BasicColorChooserUI {
         return new FlatColorChooserUI();
     }
 }
+

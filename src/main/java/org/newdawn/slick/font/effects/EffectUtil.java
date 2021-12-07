@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.font.effects;
 
 import java.awt.AlphaComposite;
@@ -62,7 +65,7 @@ public class EffectUtil {
 
             @Override
             public void showDialog() {
-                JSpinner spinner = new JSpinner(new SpinnerNumberModel(currentValue, Short.MIN_VALUE, Short.MAX_VALUE, 1));
+                JSpinner spinner = new JSpinner(new SpinnerNumberModel(currentValue, -32768, 32767, 1));
                 if (this.showValueDialog(spinner, description)) {
                     this.value = String.valueOf(spinner.getValue());
                 }
@@ -283,3 +286,4 @@ public class EffectUtil {
         }
     }
 }
+

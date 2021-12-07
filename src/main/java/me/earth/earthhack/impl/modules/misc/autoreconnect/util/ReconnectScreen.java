@@ -1,3 +1,17 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.gui.GuiButton
+ *  net.minecraft.client.gui.GuiDisconnected
+ *  net.minecraft.client.gui.GuiMainMenu
+ *  net.minecraft.client.gui.GuiMultiplayer
+ *  net.minecraft.client.gui.GuiScreen
+ *  net.minecraft.client.multiplayer.GuiConnecting
+ *  net.minecraft.client.multiplayer.ServerData
+ *  net.minecraft.client.resources.I18n
+ */
 package me.earth.earthhack.impl.modules.misc.autoreconnect.util;
 
 import java.io.IOException;
@@ -14,6 +28,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiDisconnected;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiMultiplayer;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.resources.I18n;
@@ -68,7 +83,7 @@ extends GuiDisconnected {
         }
         if (this.noData) {
             if (this.timer.passed(3000L)) {
-                this.mc.displayGuiScreen(new GuiMultiplayer(new GuiMainMenu()));
+                this.mc.displayGuiScreen((GuiScreen)new GuiMultiplayer((GuiScreen)new GuiMainMenu()));
             }
         } else if (this.timer.passed(this.delay) && this.reconnect) {
             this.connect();
@@ -86,9 +101,9 @@ extends GuiDisconnected {
         ServerData serverData2 = serverData = this.data == null ? this.mc.getCurrentServerData() : this.data;
         if (serverData != null) {
             if (PINGBYPASS.isEnabled()) {
-                this.mc.displayGuiScreen(new GuiConnectingPingBypass(this.parent.getParentScreen(), this.mc, serverData));
+                this.mc.displayGuiScreen((GuiScreen)new GuiConnectingPingBypass(this.parent.getParentScreen(), this.mc, serverData));
             } else {
-                this.mc.displayGuiScreen(new GuiConnecting(this.parent.getParentScreen(), this.mc, serverData));
+                this.mc.displayGuiScreen((GuiScreen)new GuiConnecting(this.parent.getParentScreen(), this.mc, serverData));
             }
         } else {
             this.noData = true;
@@ -105,3 +120,4 @@ extends GuiDisconnected {
         return this.noData ? "\u00a7cNo ServerData found!" : "Reconnecting in " + (time <= 0.0f ? "0.0" : Float.valueOf(time)) + "s.";
     }
 }
+

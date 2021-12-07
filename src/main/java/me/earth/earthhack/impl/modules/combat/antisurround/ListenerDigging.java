@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.client.CPacketPlayerDigging
+ *  net.minecraft.network.play.client.CPacketPlayerDigging$Action
+ */
 package me.earth.earthhack.impl.modules.combat.antisurround;
 
 import me.earth.earthhack.impl.core.ducks.network.ICPacketPlayerDigging;
@@ -26,3 +33,4 @@ extends ModuleListener<AntiSurround, PacketEvent.Send<CPacketPlayerDigging>> {
         ((AntiSurround)this.module).onBlockBreak(((CPacketPlayerDigging)event.getPacket()).getPosition(), Managers.ENTITIES.getPlayersAsync(), Managers.ENTITIES.getEntitiesAsync(), this.function);
     }
 }
+

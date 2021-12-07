@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.nbt.JsonToNBT
+ *  net.minecraft.nbt.NBTException
+ *  net.minecraft.nbt.NBTTagCompound
+ */
 package me.earth.earthhack.impl.commands.packet.arguments;
 
 import me.earth.earthhack.impl.commands.packet.AbstractArgument;
@@ -24,3 +32,4 @@ extends AbstractArgument<NBTTagCompound> {
         return compound;
     }
 }
+

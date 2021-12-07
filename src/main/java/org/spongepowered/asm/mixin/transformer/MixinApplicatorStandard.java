@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.collect.ImmutableList
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package org.spongepowered.asm.mixin.transformer;
 
 import com.google.common.collect.ImmutableList;
@@ -56,7 +64,7 @@ import org.spongepowered.asm.util.throwables.InvalidConstraintException;
 class MixinApplicatorStandard {
     protected static final List<Class<? extends Annotation>> CONSTRAINED_ANNOTATIONS = ImmutableList.of(Overwrite.class, Inject.class, ModifyArg.class, ModifyArgs.class, Redirect.class, ModifyVariable.class, ModifyConstant.class);
     protected static final int[] INITIALISER_OPCODE_BLACKLIST = new int[]{177, 21, 22, 23, 24, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 79, 80, 81, 82, 83, 84, 85, 86};
-    protected final Logger logger = LogManager.getLogger("mixin");
+    protected final Logger logger = LogManager.getLogger((String)"mixin");
     protected final TargetClassContext context;
     protected final String targetName;
     protected final ClassNode targetClass;
@@ -641,3 +649,4 @@ class MixinApplicatorStandard {
 
     }
 }
+

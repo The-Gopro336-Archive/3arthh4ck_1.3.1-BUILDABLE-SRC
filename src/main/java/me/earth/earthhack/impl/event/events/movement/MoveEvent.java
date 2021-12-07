@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.MoverType
+ */
 package me.earth.earthhack.impl.event.events.movement;
 
 import net.minecraft.entity.MoverType;
@@ -53,3 +59,4 @@ public class MoveEvent {
         this.sneaking = sneaking;
     }
 }
+

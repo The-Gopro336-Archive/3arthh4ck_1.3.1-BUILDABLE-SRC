@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.injection.callback;
 
 import org.spongepowered.asm.lib.Type;
@@ -72,3 +75,4 @@ implements Cancellable {
         return "()Z";
     }
 }
+

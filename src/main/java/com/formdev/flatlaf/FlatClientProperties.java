@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf;
 
 import java.awt.Color;
@@ -101,3 +104,4 @@ public interface FlatClientProperties {
         return value instanceof Color ? (Color)value : defaultValue;
     }
 }
+

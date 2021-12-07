@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.service;
 
 public interface IGlobalPropertyService {
@@ -9,3 +12,4 @@ public interface IGlobalPropertyService {
 
     public String getPropertyString(String var1, String var2);
 }
+

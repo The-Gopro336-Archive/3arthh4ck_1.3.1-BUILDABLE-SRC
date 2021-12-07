@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.commands.packet.exception;
 
 import me.earth.earthhack.impl.util.exception.NoStackTraceException;
@@ -26,3 +29,4 @@ extends NoStackTraceException {
         }
     }
 }
+

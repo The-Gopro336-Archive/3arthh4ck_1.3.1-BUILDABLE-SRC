@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.combat.antitrap;
 
 import me.earth.earthhack.impl.modules.combat.antitrap.AntiTrap;
@@ -26,3 +29,4 @@ extends ObbyData<AntiTrap> {
         return "Places a crystal next to you to block possible AutoTraps.";
     }
 }
+

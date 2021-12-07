@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.launchwrapper.IClassTransformer
+ *  net.minecraftforge.fml.relauncher.IFMLLoadingPlugin$SortingIndex
+ */
 package me.earth.earthhack.impl.core.transfomer;
 
 import me.earth.earthhack.impl.core.Core;
@@ -35,7 +42,6 @@ implements IClassTransformer {
         Core.LOGGER.info("Transformer instantiated.");
     }
 
-    @Override
     public byte[] transform(String name, String transformed, byte[] b) {
         ++this.reentrancy;
         if (this.reentrancy > 1) {
@@ -72,3 +78,4 @@ implements IClassTransformer {
         }
     }
 }
+

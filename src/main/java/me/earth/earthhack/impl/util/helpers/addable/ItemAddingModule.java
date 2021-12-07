@@ -1,6 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemStack
+ */
 package me.earth.earthhack.impl.util.helpers.addable;
 
-import java.util.Iterator;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import me.earth.earthhack.api.module.util.Category;
@@ -49,9 +55,7 @@ extends RegisteringModule<I, E> {
             return null;
         }
         name = name.toLowerCase();
-        Iterator iterator = Item.REGISTRY.iterator();
-        while (iterator.hasNext()) {
-            Item item = (Item)iterator.next();
+        for (Item item : Item.REGISTRY) {
             String itemName = item.getItemStackDisplayName(new ItemStack(item));
             if (!itemName.toLowerCase().startsWith(name) || !accept.test(item)) continue;
             return item;
@@ -59,3 +63,4 @@ extends RegisteringModule<I, E> {
         return null;
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.api.register.exception;
 
 import me.earth.earthhack.api.util.interfaces.Nameable;
@@ -19,3 +22,4 @@ extends Exception {
         return this.nameable;
     }
 }
+

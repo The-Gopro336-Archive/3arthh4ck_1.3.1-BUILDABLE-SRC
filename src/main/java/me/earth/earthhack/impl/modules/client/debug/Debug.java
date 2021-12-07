@@ -1,3 +1,21 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.init.Items
+ *  net.minecraft.init.SoundEvents
+ *  net.minecraft.network.play.client.CPacketPlayer
+ *  net.minecraft.network.play.client.CPacketPlayer$Position
+ *  net.minecraft.network.play.client.CPacketPlayer$PositionRotation
+ *  net.minecraft.network.play.client.CPacketPlayer$Rotation
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock
+ *  net.minecraft.network.play.client.CPacketUseEntity
+ *  net.minecraft.network.play.server.SPacketSoundEffect
+ *  net.minecraft.network.play.server.SPacketSpawnObject
+ *  net.minecraft.util.SoundCategory
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.client.debug;
 
 import java.util.Map;
@@ -73,7 +91,7 @@ extends Module {
             BlockPos pos;
             Long l;
             SPacketSoundEffect p = (SPacketSoundEffect)e.getPacket();
-            if (this.debugBreak.getValue().booleanValue() && p.getCategory() == SoundCategory.BLOCKS && p.getSound() == SoundEvents.ENTITY_GENERIC_EXPLODE && (l = this.attack.remove(pos = new BlockPos(p.getX(), p.getY() - 1.0, p.getZ()))) != null) {
+            if (this.debugBreak.getValue().booleanValue() && p.getCategory() == SoundCategory.BLOCKS && p.getSound() == SoundEvents.ENTITY_GENERIC_EXPLODE && (l = this.attack.remove((Object)(pos = new BlockPos(p.getX(), p.getY() - 1.0, p.getZ())))) != null) {
                 ChatUtil.sendMessageScheduled("Attack took " + (System.currentTimeMillis() - l) + "ms.");
             }
         }));
@@ -89,7 +107,7 @@ extends Module {
             }
         }));
         this.listeners.add(new PostSendListener<CPacketPlayerTryUseItemOnBlock>(CPacketPlayerTryUseItemOnBlock.class, e -> {
-            if (Debug.mc.player.getHeldItem(((CPacketPlayerTryUseItemOnBlock)e.getPacket()).getHand()).getItem() == Items.END_CRYSTAL && !this.times.containsKey(((CPacketPlayerTryUseItemOnBlock)e.getPacket()).getPos())) {
+            if (Debug.mc.player.getHeldItem(((CPacketPlayerTryUseItemOnBlock)e.getPacket()).getHand()).getItem() == Items.END_CRYSTAL && !this.times.containsKey((Object)((CPacketPlayerTryUseItemOnBlock)e.getPacket()).getPos())) {
                 this.times.put(((CPacketPlayerTryUseItemOnBlock)e.getPacket()).getPos(), System.currentTimeMillis());
             }
         }));
@@ -97,7 +115,7 @@ extends Module {
             if (((SPacketSpawnObject)e.getPacket()).getType() == 51) {
                 Long l;
                 BlockPos pos = new BlockPos(((SPacketSpawnObject)e.getPacket()).getX(), ((SPacketSpawnObject)e.getPacket()).getY() - 1.0, ((SPacketSpawnObject)e.getPacket()).getZ());
-                if (this.debugPlace.getValue().booleanValue() && (l = this.times.remove(pos)) != null) {
+                if (this.debugPlace.getValue().booleanValue() && (l = this.times.remove((Object)pos)) != null) {
                     long curr = System.currentTimeMillis();
                     mc.addScheduledTask(() -> DebugUtil.debug(pos, "Crystal took " + (curr - l) + "ms to spawn."));
                 }
@@ -142,3 +160,4 @@ extends Module {
         this.ids.clear();
     }
 }
+

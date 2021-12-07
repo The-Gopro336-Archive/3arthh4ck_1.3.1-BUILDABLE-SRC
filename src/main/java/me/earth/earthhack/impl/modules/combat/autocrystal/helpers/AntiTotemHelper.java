@@ -1,8 +1,19 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal.helpers;
 
 import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 
@@ -16,7 +27,7 @@ public class AntiTotemHelper {
     }
 
     public boolean isDoublePoppable(EntityPlayer player) {
-        return Managers.COMBAT.lastPop(player) > 500L && EntityUtil.getHealth(player) <= this.health.getValue().floatValue();
+        return Managers.COMBAT.lastPop((Entity)player) > 500L && EntityUtil.getHealth((EntityLivingBase)player) <= this.health.getValue().floatValue();
     }
 
     public BlockPos getTargetPos() {
@@ -35,3 +46,4 @@ public class AntiTotemHelper {
         this.target = target;
     }
 }
+

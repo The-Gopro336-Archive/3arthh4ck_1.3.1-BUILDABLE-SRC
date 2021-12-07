@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.GuiButton
+ *  net.minecraft.client.gui.GuiMainMenu
+ *  net.minecraft.client.gui.GuiScreen
+ */
 package me.earth.earthhack.impl.core.mixins.gui;
 
 import me.earth.earthhack.impl.commands.gui.EarthhackButton;
@@ -40,8 +48,9 @@ extends GuiScreen {
     @Inject(method={"confirmClicked"}, at={@At(value="HEAD")}, cancellable=true)
     public void confirmClickedHook(boolean result, int id, CallbackInfo info) {
         if (id == this.earthhackButton.id) {
-            this.mc.displayGuiScreen(this);
+            this.mc.displayGuiScreen((GuiScreen)this);
             info.cancel();
         }
     }
 }
+

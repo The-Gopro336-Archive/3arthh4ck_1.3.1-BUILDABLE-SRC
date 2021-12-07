@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayer
+ */
 package me.earth.earthhack.impl.modules.player.fakeplayer.util;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -43,3 +49,4 @@ public class Position {
         return this.head;
     }
 }
+

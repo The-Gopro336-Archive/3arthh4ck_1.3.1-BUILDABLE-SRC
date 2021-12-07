@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.entity.AbstractClientPlayer
+ */
 package me.earth.earthhack.impl.core.mixins.entity.living.player;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -17,7 +23,7 @@ extends MixinEntityPlayer {
     private static final ModuleCache<NoRender> NO_RENDER = Caches.getModule(NoRender.class);
 
     @Shadow
-    public abstract boolean func_175149_v();
+    public abstract boolean isSpectator();
 
     @Inject(method={"getFovModifier"}, at={@At(value="HEAD")}, cancellable=true)
     private void getFovModifierHook(CallbackInfoReturnable<Float> info) {
@@ -26,3 +32,4 @@ extends MixinEntityPlayer {
         }
     }
 }
+

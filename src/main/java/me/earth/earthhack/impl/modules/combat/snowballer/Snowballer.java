@@ -1,3 +1,16 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.init.Items
+ *  net.minecraft.item.Item
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItem
+ *  net.minecraft.util.EnumHand
+ */
 package me.earth.earthhack.impl.modules.combat.snowballer;
 
 import java.util.ArrayList;
@@ -18,9 +31,11 @@ import me.earth.earthhack.impl.util.math.StopWatch;
 import me.earth.earthhack.impl.util.math.rotation.RotationUtil;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItem;
 import net.minecraft.util.EnumHand;
 
@@ -50,7 +65,7 @@ extends Module {
             this.lastSlot = Snowballer.mc.player.inventory.currentItem;
             List<Entity> entities = this.getCrystals(this.range.getValue().floatValue());
             for (Entity entity : entities) {
-                if (!RayTraceUtil.canBeSeen(entity, Snowballer.mc.player) || this.blackList.contains(entity.getEntityId())) continue;
+                if (!RayTraceUtil.canBeSeen(entity, (EntityLivingBase)Snowballer.mc.player) || this.blackList.contains(entity.getEntityId())) continue;
                 this.target = entity;
             }
             if (this.target != null) {
@@ -74,7 +89,7 @@ extends Module {
             this.shouldThrow = false;
             boolean offhand = Snowballer.mc.player.getHeldItemOffhand().getItem() == Items.SNOWBALL;
             CPacketPlayerTryUseItem packet = new CPacketPlayerTryUseItem(offhand ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND);
-            Snowballer.mc.player.connection.sendPacket(packet);
+            Snowballer.mc.player.connection.sendPacket((Packet)packet);
             if (this.swap.getValue().booleanValue() && this.back.getValue().booleanValue()) {
                 InventoryUtil.switchTo(this.lastSlot);
             }
@@ -84,6 +99,7 @@ extends Module {
 
     protected List<Entity> getCrystals(float range) {
         ArrayList loadedEntities = new ArrayList(Snowballer.mc.world.loadedEntityList);
-        return loadedEntities.stream().filter(entity -> Snowballer.mc.player.getDistanceSq((Entity)entity) <= (double)(range * range)).filter(entity -> entity instanceof EntityEnderCrystal).sorted(Comparator.comparingDouble(entity -> Snowballer.mc.player.getDistanceSq((Entity)entity))).collect(Collectors.toList());
+        return loadedEntities.stream().filter(entity -> Snowballer.mc.player.getDistanceSq(entity) <= (double)(range * range)).filter(entity -> entity instanceof EntityEnderCrystal).sorted(Comparator.comparingDouble(entity -> Snowballer.mc.player.getDistanceSq(entity))).collect(Collectors.toList());
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.commands;
 
 import me.earth.earthhack.api.command.Command;
@@ -15,3 +18,4 @@ implements Globals {
         mc.shutdown();
     }
 }
+

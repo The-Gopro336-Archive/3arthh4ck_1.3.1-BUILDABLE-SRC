@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.tweaker.launch;
 
 import me.earth.earthhack.tweaker.launch.Argument;
@@ -9,3 +12,4 @@ public interface ArgumentManager {
 
     public <T> Argument<T> getArgument(String var1);
 }
+

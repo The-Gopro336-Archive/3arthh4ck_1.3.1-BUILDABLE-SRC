@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItem
+ *  net.minecraft.network.play.client.CPacketUseEntity
+ *  net.minecraft.network.play.client.CPacketVehicleMove
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.modules.movement.boatfly;
 
 import java.util.HashSet;
@@ -100,21 +112,22 @@ extends Module {
     }
 
     protected void sendPackets(Entity riding) {
-        BoatFly.mc.player.connection.sendPacket(new CPacketUseEntity(riding, EnumHand.MAIN_HAND));
-        BoatFly.mc.player.connection.sendPacket(new CPacketPlayerTryUseItem(EnumHand.MAIN_HAND));
+        BoatFly.mc.player.connection.sendPacket((Packet)new CPacketUseEntity(riding, EnumHand.MAIN_HAND));
+        BoatFly.mc.player.connection.sendPacket((Packet)new CPacketPlayerTryUseItem(EnumHand.MAIN_HAND));
         if (this.invalid.getValue().booleanValue() && this.invalidTickCount++ >= this.invalidTicks.getValue()) {
             Vec3d playerVec = this.invalidMode.getValue().createOutOfBounds(BoatFly.mc.player.getPositionVector(), 1337);
             PacketUtil.doPosition(playerVec.x, playerVec.y, playerVec.z, false);
             if (this.boatInvalid.getValue().booleanValue() && BoatFly.mc.player.getRidingEntity() != null) {
                 CPacketVehicleMove packet = new CPacketVehicleMove();
                 Vec3d vec = this.invalidMode.getValue().createOutOfBounds(BoatFly.mc.player.getRidingEntity().getPositionVector(), 1337);
-                ((ICPacketVehicleMove)((Object)packet)).setY(vec.y);
-                ((ICPacketVehicleMove)((Object)packet)).setX(vec.x);
-                ((ICPacketVehicleMove)((Object)packet)).setZ(vec.z);
-                this.packetSet.add(packet);
+                ((ICPacketVehicleMove)packet).setY(vec.y);
+                ((ICPacketVehicleMove)packet).setX(vec.x);
+                ((ICPacketVehicleMove)packet).setZ(vec.z);
+                this.packetSet.add((Packet<?>)packet);
                 NetworkUtil.sendPacketNoEvent(packet);
             }
             this.invalidTickCount = 0;
         }
     }
 }
+

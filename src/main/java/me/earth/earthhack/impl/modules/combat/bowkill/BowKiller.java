@@ -1,3 +1,19 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.entity.item.EntityExpBottle
+ *  net.minecraft.entity.item.EntityItem
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.entity.projectile.EntityArrow
+ *  net.minecraft.item.ItemElytra
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.network.play.client.CPacketPlayer
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.modules.combat.bowkill;
 
 import java.util.ArrayList;
@@ -123,7 +139,7 @@ extends EntityTypeModule {
                 bestEnemy = entity;
                 closestEnemy = dist;
             }
-            if (this.isInRange(RotationUtil.getRotationPlayer(), entity)) {
+            if (this.isInRange((Entity)RotationUtil.getRotationPlayer(), entity)) {
                 float h;
                 if (entity instanceof EntityLivingBase && (h = EntityUtil.getHealth((EntityLivingBase)entity)) < lowest) {
                     closest = entity;
@@ -168,7 +184,7 @@ extends EntityTypeModule {
 
     @Override
     public boolean isValid(Entity entity) {
-        if (entity == null || EntityUtil.isDead(entity) || entity.equals(BowKiller.mc.player) || entity.equals(BowKiller.mc.player.getRidingEntity()) || entity instanceof EntityPlayer && Managers.FRIENDS.contains((EntityPlayer)entity) || entity instanceof EntityExpBottle || entity instanceof EntityItem || entity instanceof EntityArrow || entity instanceof EntityEnderCrystal) {
+        if (entity == null || EntityUtil.isDead(entity) || entity.equals((Object)BowKiller.mc.player) || entity.equals((Object)BowKiller.mc.player.getRidingEntity()) || entity instanceof EntityPlayer && Managers.FRIENDS.contains((EntityPlayer)entity) || entity instanceof EntityExpBottle || entity instanceof EntityItem || entity instanceof EntityArrow || entity instanceof EntityEnderCrystal) {
             return false;
         }
         return super.isValid(entity);
@@ -196,3 +212,4 @@ extends EntityTypeModule {
         }
     }
 }
+

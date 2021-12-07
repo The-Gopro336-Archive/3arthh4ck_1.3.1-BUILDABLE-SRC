@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.mojang.authlib.GameProfile
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.util.math.RayTraceResult$Type
+ */
 package me.earth.earthhack.impl.modules.misc.mcf;
 
 import com.mojang.authlib.GameProfile;
@@ -32,3 +41,4 @@ extends Module {
         }
     }
 }
+

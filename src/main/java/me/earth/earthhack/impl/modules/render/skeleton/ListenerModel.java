@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.model.ModelBiped
+ *  net.minecraft.client.model.ModelRenderer
+ *  net.minecraft.entity.player.EntityPlayer
+ */
 package me.earth.earthhack.impl.modules.render.skeleton;
 
 import me.earth.earthhack.impl.event.events.render.ModelRenderEvent;
@@ -18,7 +26,7 @@ extends ModuleListener<Skeleton, ModelRenderEvent.Post> {
         if (event.getEntity() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer)event.getEntity();
             if (event.getModel() instanceof ModelBiped) {
-                ModelBiped model = (ModelBiped)((Object)event.getModel());
+                ModelBiped model = (ModelBiped)event.getModel();
                 float[][] rotations = new float[5][3];
                 rotations[0] = this.getRotations(model.bipedHead);
                 rotations[1] = this.getRotations(model.bipedRightArm);
@@ -34,3 +42,4 @@ extends ModuleListener<Skeleton, ModelRenderEvent.Post> {
         return new float[]{model.rotateAngleX, model.rotateAngleY, model.rotateAngleZ};
     }
 }
+

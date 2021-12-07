@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.inventory.Container
+ */
 package me.earth.earthhack.impl.core.mixins.gui.util;
 
 import me.earth.earthhack.impl.core.ducks.util.IContainer;
@@ -16,3 +22,4 @@ implements IContainer {
     @Accessor(value="transactionID")
     public abstract short getTransactionID();
 }
+

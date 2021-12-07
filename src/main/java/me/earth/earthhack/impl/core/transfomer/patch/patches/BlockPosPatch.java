@@ -1,3 +1,17 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.math.Vec3i
+ *  org.objectweb.asm.Label
+ *  org.objectweb.asm.tree.AbstractInsnNode
+ *  org.objectweb.asm.tree.ClassNode
+ *  org.objectweb.asm.tree.FrameNode
+ *  org.objectweb.asm.tree.LabelNode
+ *  org.objectweb.asm.tree.MethodNode
+ *  org.objectweb.asm.tree.TypeInsnNode
+ *  org.objectweb.asm.tree.VarInsnNode
+ */
 package me.earth.earthhack.impl.core.transfomer.patch.patches;
 
 import java.lang.reflect.Method;
@@ -35,7 +49,7 @@ extends ArgumentPatch {
         MethodNode offset = AsmUtil.findMappedMethod(node, "a", "(Lfa;)Let;", "func_177972_a", "offset", "(Lnet/minecraft/util/EnumFacing;)Lnet/minecraft/util/math/BlockPos;");
         MethodNode offsetI = AsmUtil.findMappedMethod(node, "a", "(Lfa;I)Let;", "func_177967_a", "offset", "(Lnet/minecraft/util/EnumFacing;I)Lnet/minecraft/util/math/BlockPos;");
         if (offset == null || offsetI == null) {
-            Core.LOGGER.error("Couldn't find " + offset + " or " + offsetI + "!");
+            Core.LOGGER.error("Couldn't find " + (Object)offset + " or " + (Object)offsetI + "!");
             return;
         }
         offset.instructions.clear();
@@ -152,3 +166,4 @@ extends ArgumentPatch {
         }
     }
 }
+

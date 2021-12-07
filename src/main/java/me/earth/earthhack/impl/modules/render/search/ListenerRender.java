@@ -1,3 +1,14 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.renderer.culling.Frustum
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Vec3d
+ *  org.lwjgl.opengl.GL11
+ */
 package me.earth.earthhack.impl.modules.render.search;
 
 import java.awt.Color;
@@ -65,25 +76,26 @@ extends ModuleListener<Search, Render3DEvent> {
             double y = (double)pos.getY() - Interpolation.getRenderPosY();
             double z = (double)pos.getZ() - Interpolation.getRenderPosZ();
             if (colored) {
-                GL11.glColor4f(red, green, blue, alpha);
+                GL11.glColor4f((float)red, (float)green, (float)blue, (float)alpha);
             } else {
-                GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+                GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
             }
             RenderUtil.startRender();
             GL11.glLoadIdentity();
-            GL11.glLineWidth(1.5f);
+            GL11.glLineWidth((float)1.5f);
             boolean viewBobbing = ListenerRender.mc.gameSettings.viewBobbing;
             ListenerRender.mc.gameSettings.viewBobbing = false;
-            ((IEntityRenderer)((Object)ListenerRender.mc.entityRenderer)).invokeOrientCamera(event.getPartialTicks());
+            ((IEntityRenderer)ListenerRender.mc.entityRenderer).invokeOrientCamera(event.getPartialTicks());
             ListenerRender.mc.gameSettings.viewBobbing = viewBobbing;
             Vec3d vec3d = new Vec3d(0.0, 0.0, 1.0).rotatePitch(-((float)Math.toRadians(renderEntity.rotationPitch))).rotateYaw(-((float)Math.toRadians(renderEntity.rotationYaw)));
-            GL11.glBegin(1);
-            GL11.glVertex3d(vec3d.x, (double)renderEntity.getEyeHeight() + vec3d.y, vec3d.z);
-            GL11.glVertex3d(x + 0.5, y + 0.5, z + 0.5);
-            GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+            GL11.glBegin((int)1);
+            GL11.glVertex3d((double)vec3d.x, (double)((double)renderEntity.getEyeHeight() + vec3d.y), (double)vec3d.z);
+            GL11.glVertex3d((double)(x + 0.5), (double)(y + 0.5), (double)(z + 0.5));
+            GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
             GL11.glEnd();
             RenderUtil.endRender();
         }
-        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
     }
 }
+

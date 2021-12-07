@@ -1,3 +1,14 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.renderer.culling.Frustum
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.item.EntityItem
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.Vec3d
+ *  org.lwjgl.opengl.GL11
+ */
 package me.earth.earthhack.impl.modules.render.esp;
 
 import me.earth.earthhack.impl.event.events.render.Render3DEvent;
@@ -47,3 +58,4 @@ extends ModuleListener<ESP, Render3DEvent> {
         }
     }
 }
+

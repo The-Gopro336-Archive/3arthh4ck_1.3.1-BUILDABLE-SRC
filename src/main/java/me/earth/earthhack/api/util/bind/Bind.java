@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.input.Keyboard
+ */
 package me.earth.earthhack.api.util.bind;
 
 import org.lwjgl.input.Keyboard;
@@ -25,7 +31,7 @@ public class Bind {
     }
 
     public String toString() {
-        return this.key < 0 ? "NONE" : Keyboard.getKeyName(this.key);
+        return this.key < 0 ? "NONE" : Keyboard.getKeyName((int)this.key);
     }
 
     public static Bind none() {
@@ -40,6 +46,7 @@ public class Bind {
         if ((string = string.toUpperCase()).equals("NONE")) {
             return Bind.none();
         }
-        return new Bind(Keyboard.getKeyIndex(string));
+        return new Bind(Keyboard.getKeyIndex((String)string));
     }
 }
+

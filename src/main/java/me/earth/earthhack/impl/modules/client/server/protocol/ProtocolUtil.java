@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Charsets
+ */
 package me.earth.earthhack.impl.modules.client.server.protocol;
 
 import com.google.common.base.Charsets;
@@ -94,3 +100,4 @@ public class ProtocolUtil {
         return entries;
     }
 }
+

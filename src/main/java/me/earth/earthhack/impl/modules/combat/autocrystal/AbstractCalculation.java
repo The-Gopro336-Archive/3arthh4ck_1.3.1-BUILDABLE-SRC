@@ -1,3 +1,25 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.init.Items
+ *  net.minecraft.item.ItemPickaxe
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketUseEntity
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.RayTraceResult
+ *  net.minecraft.world.IBlockAccess
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal;
 
 import java.util.ArrayList;
@@ -58,17 +80,21 @@ import me.earth.earthhack.impl.util.misc.MutableWrapper;
 import me.earth.earthhack.impl.util.misc.collections.CollectionUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemPickaxe;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 public abstract class AbstractCalculation<T extends CrystalData>
 extends Finishable
@@ -278,11 +304,11 @@ implements Globals {
     }
 
     protected void setFriendsAndEnemies() {
-        Predicate[] predicateArray = new Predicate[3];
-        predicateArray[0] = p -> p == null || EntityUtil.isDead(p) || p.equals(AbstractCalculation.mc.player) || p.getDistanceSq(AbstractCalculation.mc.player) > (double)MathUtil.square(this.module.targetRange.getValue().floatValue()) || DamageUtil.cacheLowestDura(p) && this.module.antiNaked.getValue() != false;
-        predicateArray[1] = Managers.FRIENDS::contains;
-        predicateArray[2] = Managers.ENEMIES::contains;
-        List<List<EntityPlayer>> split = CollectionUtil.split(this.raw, predicateArray);
+        Predicate[] arrpredicate = new Predicate[3];
+        arrpredicate[0] = p -> p == null || EntityUtil.isDead((Entity)p) || p.equals((Object)AbstractCalculation.mc.player) || p.getDistanceSq((Entity)AbstractCalculation.mc.player) > (double)MathUtil.square(this.module.targetRange.getValue().floatValue()) || DamageUtil.cacheLowestDura((EntityLivingBase)p) && this.module.antiNaked.getValue() != false;
+        arrpredicate[1] = Managers.FRIENDS::contains;
+        arrpredicate[2] = Managers.ENEMIES::contains;
+        List<List<EntityPlayer>> split = CollectionUtil.split(this.raw, arrpredicate);
         this.friends = split.get(1);
         this.enemies = split.get(2);
         this.players = split.get(3);
@@ -317,9 +343,9 @@ implements Globals {
                 if (this.module.breakSwing.getValue() == SwingTime.Pre) {
                     Swing.Packet.swing(EnumHand.MAIN_HAND);
                 }
-                AbstractCalculation.mc.player.connection.sendPacket(new CPacketUseEntity(entity));
+                AbstractCalculation.mc.player.connection.sendPacket((Packet)new CPacketUseEntity(entity));
                 if (this.module.pseudoSetDead.getValue().booleanValue()) {
-                    ((IEntity)((Object)entity)).setPseudoDead(true);
+                    ((IEntity)entity).setPseudoDead(true);
                 } else if (this.module.setDead.getValue().booleanValue()) {
                     Managers.SET_DEAD.setDead(entity);
                 }
@@ -371,14 +397,14 @@ implements Globals {
         for (AntiTotemData antiTotemData : data.getAntiTotem()) {
             if (antiTotemData.getCorresponding().isEmpty() || antiTotemData.isBlocked()) continue;
             BlockPos pos = antiTotemData.getPos();
-            EntityEnderCrystal entity = new EntityEnderCrystal(AbstractCalculation.mc.world, (float)pos.getX() + 0.5f, pos.getY() + 1, (float)pos.getZ() + 0.5f);
+            EntityEnderCrystal entity = new EntityEnderCrystal((World)AbstractCalculation.mc.world, (double)((float)pos.getX() + 0.5f), (double)(pos.getY() + 1), (double)((float)pos.getZ() + 0.5f));
             if (god) {
                 for (PositionData positionData : antiTotemData.getCorresponding()) {
                     double y;
                     if (positionData.isBlocked()) continue;
                     BlockPos up = positionData.getPos().up();
                     double d = y = this.module.newVerEntities.getValue() != false ? 1.0 : 2.0;
-                    if (entity.getEntityBoundingBox().intersects(new AxisAlignedBB(up.getX(), up.getY(), up.getZ(), (double)up.getX() + 1.0, (double)up.getY() + y, (double)up.getZ() + 1.0))) continue;
+                    if (entity.getEntityBoundingBox().intersects(new AxisAlignedBB((double)up.getX(), (double)up.getY(), (double)up.getZ(), (double)up.getX() + 1.0, (double)up.getY() + y, (double)up.getZ() + 1.0))) continue;
                     if (this.module.totemSync.getValue().booleanValue() && this.module.damageSyncHelper.isSyncing(0.0f, true)) {
                         return false;
                     }
@@ -476,7 +502,7 @@ implements Globals {
         }
         this.module.placeTimer.reset(resetSlow ? (long)this.module.slowPlaceDelay.getValue().intValue() : (long)this.module.placeDelay.getValue().intValue());
         BlockPos pos = data.getPos();
-        BlockPos crystalPos = new BlockPos((float)pos.getX() + 0.5f, (double)(pos.getY() + 1), (float)pos.getZ() + 0.5f);
+        BlockPos crystalPos = new BlockPos((double)((float)pos.getX() + 0.5f), (double)(pos.getY() + 1), (double)((float)pos.getZ() + 0.5f));
         this.module.placed.put(crystalPos, new CrystalTimeStamp(damage));
         this.module.damageSyncHelper.setSync(pos, data.getMaxDamage(), this.module.newVerEntities.getValue());
         this.module.setTarget(target);
@@ -561,12 +587,12 @@ implements Globals {
         if (pos.distanceSqToCenter(x, y = Managers.POSITION.getY(), z = Managers.POSITION.getZ()) >= (double)MathUtil.square(this.module.placeRange.getValue().floatValue())) {
             return false;
         }
-        if (!(this.module.rotate.getValue().noRotate(ACRotate.Place) || (result = RotationUtil.rayTraceTo(pos, AbstractCalculation.mc.world)) != null && result.getBlockPos().equals(pos))) {
+        if (!(this.module.rotate.getValue().noRotate(ACRotate.Place) || (result = RotationUtil.rayTraceTo(pos, (IBlockAccess)AbstractCalculation.mc.world)) != null && result.getBlockPos().equals((Object)pos))) {
             return false;
         }
         if (pos.distanceSqToCenter(x, y, z) >= (double)MathUtil.square(this.module.placeTrace.getValue().floatValue())) {
-            result = RotationUtil.rayTraceTo(pos, AbstractCalculation.mc.world, (b, p) -> true);
-            return result != null && result.getBlockPos().equals(pos);
+            result = RotationUtil.rayTraceTo(pos, (IBlockAccess)AbstractCalculation.mc.world, (b, p) -> true);
+            return result != null && result.getBlockPos().equals((Object)pos);
         }
         return true;
     }
@@ -584,7 +610,7 @@ implements Globals {
         BlockPos up = data.getPos().up();
         access.addBlockState(up, Blocks.NETHERRACK.getDefaultState());
         IBlockState upState = AbstractCalculation.mc.world.getBlockState(up);
-        if (!newVer && upState.func_185904_a().isLiquid()) {
+        if (!newVer && upState.getMaterial().isLiquid()) {
             path.add(RayTraceFactory.rayTrace(data.getFrom(), up, EnumFacing.UP, access, Blocks.NETHERRACK.getDefaultState(), this.module.liquidRayTrace.getValue() != false ? -1.0 : 2.0));
             access.addBlockState(up.up(), Blocks.NETHERRACK.getDefaultState());
             order = new int[]{0, 1};
@@ -599,21 +625,21 @@ implements Globals {
                 absorbFacing = this.module.liquidHelper.getAbsorbFacing(absorpPos, this.entities, access, this.module.placeRange.getValue().floatValue());
             }
             if (absorbFacing != null) {
-                int[] nArray;
+                int[] arrn;
                 path.add(RayTraceFactory.rayTrace(data.getFrom(), absorpPos, absorbFacing, access, Blocks.NETHERRACK.getDefaultState(), this.module.liquidRayTrace.getValue() != false ? -1.0 : 2.0));
                 if (order.length == 2) {
-                    int[] nArray2 = new int[3];
-                    nArray2[0] = 2;
-                    nArray2[1] = 1;
-                    nArray = nArray2;
-                    nArray2[2] = 0;
+                    int[] arrn2 = new int[3];
+                    arrn2[0] = 2;
+                    arrn2[1] = 1;
+                    arrn = arrn2;
+                    arrn2[2] = 0;
                 } else {
-                    int[] nArray3 = new int[2];
-                    nArray3[0] = 1;
-                    nArray = nArray3;
-                    nArray3[1] = 0;
+                    int[] arrn3 = new int[2];
+                    arrn3[0] = 1;
+                    arrn = arrn3;
+                    arrn3[1] = 0;
                 }
-                order = nArray;
+                order = arrn;
             }
         }
         Ray[] pathArray = path.toArray(new Ray[0]);
@@ -668,7 +694,7 @@ implements Globals {
                     minAngle = data.getAngle();
                     minData = data;
                 }
-                if (!data.getCrystal().equals(focus)) continue;
+                if (!data.getCrystal().equals((Object)focus)) continue;
                 if (data.getSelfDmg() > this.module.maxSelfBreak.getValue().floatValue() || data.getDamage() < this.module.minBreakDamage.getValue().floatValue()) {
                     return false;
                 }
@@ -696,3 +722,4 @@ implements Globals {
         return RotationComparator.asSet(exponent, this.module.minRotDiff.getValue());
     }
 }
+

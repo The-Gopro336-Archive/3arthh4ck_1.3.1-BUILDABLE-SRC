@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.network.NetworkPlayerInfo
+ *  net.minecraft.scoreboard.ScorePlayerTeam
+ *  net.minecraft.scoreboard.Team
+ */
 package me.earth.earthhack.impl.modules.misc.extratab;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -42,3 +50,4 @@ extends Module {
         return name;
     }
 }
+

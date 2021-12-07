@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketSoundEffect
+ */
 package me.earth.earthhack.impl.managers.minecraft.combat.util;
 
 import java.util.function.BooleanSupplier;
@@ -18,3 +24,4 @@ extends SoundObserver {
     public void onChange(SPacketSoundEffect value) {
     }
 }
+

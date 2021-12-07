@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.movement.speed;
 
 import me.earth.earthhack.api.util.interfaces.Globals;
@@ -380,3 +383,4 @@ public enum SpeedMode implements Globals
 
     public abstract void move(MoveEvent var1, Speed var2);
 }
+

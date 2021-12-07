@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.util.math.RayTraceResult$Type
+ */
 package me.earth.earthhack.impl.modules.player.mcp;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -40,3 +47,4 @@ extends Module {
         return this.preferMCF.getValue() != false && MCFRIENDS.isEnabled() && MiddleClickPearl.mc.objectMouseOver != null && MiddleClickPearl.mc.objectMouseOver.typeOfHit == RayTraceResult.Type.ENTITY && MiddleClickPearl.mc.objectMouseOver.entityHit instanceof EntityPlayer;
     }
 }
+

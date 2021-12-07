@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityFlying
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.util.math.MathHelper
+ */
 package me.earth.earthhack.impl.modules.misc.nointerp;
 
 import me.earth.earthhack.api.module.Module;
@@ -33,7 +42,7 @@ extends Module {
     }
 
     public static void handleNoInterp(NoInterp noInterp, Entity entity, int posIncrements, double x, double y, double z, float yaw, float pitch) {
-        IEntityNoInterp entityNoInterp = (IEntityNoInterp)((Object)entity);
+        IEntityNoInterp entityNoInterp = (IEntityNoInterp)entity;
         if (!entityNoInterp.isNoInterping()) {
             return;
         }
@@ -48,22 +57,22 @@ extends Module {
     }
 
     public static double noInterpX(NoInterp noInterp, Entity entity) {
-        if (noInterp != null && noInterp.isEnabled() && noInterp.isSilent() && entity instanceof IEntityNoInterp && ((IEntityNoInterp)((Object)entity)).isNoInterping()) {
-            return ((IEntityNoInterp)((Object)entity)).getNoInterpX();
+        if (noInterp != null && noInterp.isEnabled() && noInterp.isSilent() && entity instanceof IEntityNoInterp && ((IEntityNoInterp)entity).isNoInterping()) {
+            return ((IEntityNoInterp)entity).getNoInterpX();
         }
         return entity.posX;
     }
 
     public static double noInterpY(NoInterp noInterp, Entity entity) {
-        if (noInterp != null && noInterp.isEnabled() && noInterp.isSilent() && entity instanceof IEntityNoInterp && ((IEntityNoInterp)((Object)entity)).isNoInterping()) {
-            return ((IEntityNoInterp)((Object)entity)).getNoInterpY();
+        if (noInterp != null && noInterp.isEnabled() && noInterp.isSilent() && entity instanceof IEntityNoInterp && ((IEntityNoInterp)entity).isNoInterping()) {
+            return ((IEntityNoInterp)entity).getNoInterpY();
         }
         return entity.posY;
     }
 
     public static double noInterpZ(NoInterp noInterp, Entity entity) {
-        if (noInterp != null && noInterp.isEnabled() && noInterp.isSilent() && entity instanceof IEntityNoInterp && ((IEntityNoInterp)((Object)entity)).isNoInterping()) {
-            return ((IEntityNoInterp)((Object)entity)).getNoInterpZ();
+        if (noInterp != null && noInterp.isEnabled() && noInterp.isSilent() && entity instanceof IEntityNoInterp && ((IEntityNoInterp)entity).isNoInterping()) {
+            return ((IEntityNoInterp)entity).getNoInterpZ();
         }
         return entity.posZ;
     }
@@ -73,7 +82,7 @@ extends Module {
         if (module == null || !module.isEnabled() || !module.silent.getValue().booleanValue() || EntityUtil.isDead(entity)) {
             return false;
         }
-        if (!(entity instanceof IEntityNoInterp) || !(noInterp = (IEntityNoInterp)((Object)entity)).isNoInterping()) {
+        if (!(entity instanceof IEntityNoInterp) || !(noInterp = (IEntityNoInterp)entity).isNoInterping()) {
             return false;
         }
         if (noInterp.getPosIncrements() > 0) {
@@ -112,3 +121,4 @@ extends Module {
         return true;
     }
 }
+

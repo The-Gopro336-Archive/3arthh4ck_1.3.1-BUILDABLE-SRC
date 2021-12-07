@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketClickWindow
+ *  net.minecraft.network.play.client.CPacketEntityAction
+ *  net.minecraft.network.play.client.CPacketEntityAction$Action
+ *  net.minecraft.network.play.server.SPacketPlayerPosLook
+ */
 package me.earth.earthhack.impl.managers.minecraft.movement;
 
 import java.util.concurrent.atomic.AtomicLong;
@@ -9,6 +21,9 @@ import me.earth.earthhack.impl.event.events.network.WorldClientEvent;
 import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.util.math.StopWatch;
 import me.earth.earthhack.impl.util.thread.Locks;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketClickWindow;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.server.SPacketPlayerPosLook;
@@ -48,15 +63,15 @@ implements Globals {
                     return;
                 }
                 if (Globals.mc.player.isActiveItemStackBlocking()) {
-                    Locks.acquire(Locks.PLACE_SWITCH_LOCK, () -> Globals.mc.playerController.onStoppedUsingItem(Globals.mc.player));
+                    Locks.acquire(Locks.PLACE_SWITCH_LOCK, () -> Globals.mc.playerController.onStoppedUsingItem((EntityPlayer)Globals.mc.player));
                 }
                 if (Managers.ACTION.isSneaking()) {
                     NCPManager.this.endedSneak = true;
-                    Globals.mc.player.connection.sendPacket(new CPacketEntityAction(Globals.mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
+                    Globals.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)Globals.mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
                 }
                 if (Managers.ACTION.isSprinting()) {
                     NCPManager.this.endedSprint = true;
-                    Globals.mc.player.connection.sendPacket(new CPacketEntityAction(Globals.mc.player, CPacketEntityAction.Action.STOP_SPRINTING));
+                    Globals.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)Globals.mc.player, CPacketEntityAction.Action.STOP_SPRINTING));
                 }
             }
         });
@@ -111,11 +126,12 @@ implements Globals {
     private void release() {
         if (this.endedSneak) {
             this.endedSneak = false;
-            NCPManager.mc.player.connection.sendPacket(new CPacketEntityAction(NCPManager.mc.player, CPacketEntityAction.Action.START_SNEAKING));
+            NCPManager.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)NCPManager.mc.player, CPacketEntityAction.Action.START_SNEAKING));
         }
         if (this.endedSprint) {
             this.endedSprint = false;
-            NCPManager.mc.player.connection.sendPacket(new CPacketEntityAction(NCPManager.mc.player, CPacketEntityAction.Action.START_SPRINTING));
+            NCPManager.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)NCPManager.mc.player, CPacketEntityAction.Action.START_SPRINTING));
         }
     }
 }
+

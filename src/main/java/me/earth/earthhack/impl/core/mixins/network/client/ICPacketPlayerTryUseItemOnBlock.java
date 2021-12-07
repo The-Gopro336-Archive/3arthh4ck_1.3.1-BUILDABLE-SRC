@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.EnumHand
+ */
 package me.earth.earthhack.impl.core.mixins.network.client;
 
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
@@ -14,3 +22,4 @@ public interface ICPacketPlayerTryUseItemOnBlock {
     @Accessor(value="hand")
     public void setHand(EnumHand var1);
 }
+

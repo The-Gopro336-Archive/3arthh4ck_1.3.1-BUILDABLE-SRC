@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.Packet
+ */
 package me.earth.earthhack.impl.commands.packet.factory;
 
 import java.lang.reflect.Constructor;
@@ -166,3 +172,4 @@ implements PacketFactory {
         return this.command.getArguments().get(type);
     }
 }
+

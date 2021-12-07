@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.misc.antivanish;
 
 import java.util.Map;
@@ -34,3 +37,4 @@ extends Module {
         this.futures.clear();
     }
 }
+

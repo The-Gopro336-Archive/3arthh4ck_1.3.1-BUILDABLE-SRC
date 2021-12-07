@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.tools.obfuscation.interfaces;
 
 import org.spongepowered.asm.mixin.injection.struct.MemberInfo;
@@ -34,3 +37,4 @@ public interface IObfuscationDataProvider {
 
     public ObfuscationData<String> getObfClass(String var1);
 }
+

@@ -1,3 +1,16 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.renderer.texture.DynamicTexture
+ *  net.minecraft.client.renderer.texture.ITextureObject
+ *  net.minecraft.client.renderer.texture.SimpleTexture
+ *  net.minecraft.client.shader.Framebuffer
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.util.ResourceLocation
+ *  org.lwjgl.opengl.EXTFramebufferObject
+ */
 package me.earth.earthhack.impl.modules.render.chams;
 
 import java.awt.Color;
@@ -30,6 +43,7 @@ import me.earth.earthhack.impl.util.render.image.GifConverter;
 import me.earth.earthhack.impl.util.render.image.GifImage;
 import me.earth.earthhack.impl.util.render.image.ImageUtil;
 import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.entity.Entity;
@@ -90,7 +104,7 @@ extends Module {
         this.listeners.add(new ListenerRenderLayers(this));
         this.image.addObserver(e -> this.loadImage((String)e.getValue()));
         this.setData(new ChamsData(this));
-        mc.getTextureManager().loadTexture(GALAXY_LOCATION, new SimpleTexture(GALAXY_LOCATION));
+        mc.getTextureManager().loadTexture(GALAXY_LOCATION, (ITextureObject)new SimpleTexture(GALAXY_LOCATION));
     }
 
     public void loadImage(String value) {
@@ -126,7 +140,7 @@ extends Module {
         if (entity == null) {
             return false;
         }
-        if (!this.self.getValue().booleanValue() && entity.equals(renderEntity)) {
+        if (!this.self.getValue().booleanValue() && entity.equals((Object)renderEntity)) {
             return false;
         }
         if (this.players.getValue().booleanValue() && entity instanceof EntityPlayer) {
@@ -177,12 +191,12 @@ extends Module {
     }
 
     protected void setupFBO(Framebuffer fbo) {
-        EXTFramebufferObject.glDeleteRenderbuffersEXT(fbo.depthBuffer);
+        EXTFramebufferObject.glDeleteRenderbuffersEXT((int)fbo.depthBuffer);
         int stencilDepthBufferID = EXTFramebufferObject.glGenRenderbuffersEXT();
-        EXTFramebufferObject.glBindRenderbufferEXT(36161, stencilDepthBufferID);
-        EXTFramebufferObject.glRenderbufferStorageEXT(36161, 34041, Chams.mc.displayWidth, Chams.mc.displayHeight);
-        EXTFramebufferObject.glFramebufferRenderbufferEXT(36160, 36128, 36161, stencilDepthBufferID);
-        EXTFramebufferObject.glFramebufferRenderbufferEXT(36160, 36096, 36161, stencilDepthBufferID);
+        EXTFramebufferObject.glBindRenderbufferEXT((int)36161, (int)stencilDepthBufferID);
+        EXTFramebufferObject.glRenderbufferStorageEXT((int)36161, (int)34041, (int)Chams.mc.displayWidth, (int)Chams.mc.displayHeight);
+        EXTFramebufferObject.glFramebufferRenderbufferEXT((int)36160, (int)36128, (int)36161, (int)stencilDepthBufferID);
+        EXTFramebufferObject.glFramebufferRenderbufferEXT((int)36160, (int)36096, (int)36161, (int)stencilDepthBufferID);
     }
 
     public boolean shouldArmorChams() {
@@ -197,3 +211,4 @@ extends Module {
         return (float)this.color.getValue().getAlpha() / 255.0f;
     }
 }
+

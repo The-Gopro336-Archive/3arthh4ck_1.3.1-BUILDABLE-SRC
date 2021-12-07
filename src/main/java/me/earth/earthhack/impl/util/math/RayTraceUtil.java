@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.RayTraceResult
+ *  net.minecraft.util.math.RayTraceResult$Type
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.util.math;
 
 import java.util.Optional;
@@ -29,13 +41,13 @@ implements Globals {
     }
 
     public static RayTraceResult getRayTraceResult(float yaw, float pitch, float distance) {
-        return RayTraceUtil.getRayTraceResult(yaw, pitch, distance, RayTraceUtil.mc.player);
+        return RayTraceUtil.getRayTraceResult(yaw, pitch, distance, (Entity)RayTraceUtil.mc.player);
     }
 
     public static RayTraceResult getRayTraceResult(float yaw, float pitch, float d, Entity from) {
         Vec3d vec3d = PositionUtil.getEyePos(from);
         Vec3d lookVec = RotationUtil.getVec3d(yaw, pitch);
-        Vec3d rotations = vec3d.addVector(lookVec.x * (double)d, lookVec.y * (double)d, lookVec.z * (double)d);
+        Vec3d rotations = vec3d.add(lookVec.x * (double)d, lookVec.y * (double)d, lookVec.z * (double)d);
         return Optional.ofNullable(RayTraceUtil.mc.world.rayTraceBlocks(vec3d, rotations, false, false, false)).orElseGet(() -> new RayTraceResult(RayTraceResult.Type.MISS, new Vec3d(0.5, 1.0, 0.5), EnumFacing.UP, BlockPos.ORIGIN));
     }
 
@@ -63,7 +75,7 @@ implements Globals {
     public static EnumFacing getFacing(Entity entity, BlockPos pos, boolean verticals) {
         for (EnumFacing facing : EnumFacing.values()) {
             RayTraceResult result = RayTraceUtil.mc.world.rayTraceBlocks(PositionUtil.getEyePos(entity), new Vec3d((double)pos.getX() + 0.5 + (double)facing.getDirectionVec().getX() * 1.0 / 2.0, (double)pos.getY() + 0.5 + (double)facing.getDirectionVec().getY() * 1.0 / 2.0, (double)pos.getZ() + 0.5 + (double)facing.getDirectionVec().getZ() * 1.0 / 2.0), false, true, false);
-            if (result == null || result.typeOfHit != RayTraceResult.Type.BLOCK || !result.getBlockPos().equals(pos)) continue;
+            if (result == null || result.typeOfHit != RayTraceResult.Type.BLOCK || !result.getBlockPos().equals((Object)pos)) continue;
             return facing;
         }
         if (verticals) {
@@ -75,3 +87,4 @@ implements Globals {
         return null;
     }
 }
+

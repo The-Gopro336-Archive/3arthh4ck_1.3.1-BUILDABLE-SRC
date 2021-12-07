@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.api.register;
 
 import java.util.ArrayList;
@@ -57,3 +60,4 @@ implements Register<T> {
         return this.registered;
     }
 }
+

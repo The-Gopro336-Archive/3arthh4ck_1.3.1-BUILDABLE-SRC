@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.managers.client;
 
 import java.util.Map;
@@ -15,3 +18,4 @@ public class PluginDescriptions {
         return DESCRIPTIONS.get(plugin);
     }
 }
+

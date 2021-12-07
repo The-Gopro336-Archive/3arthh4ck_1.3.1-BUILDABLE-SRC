@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.text;
 
 public enum TextColor {
@@ -239,3 +242,4 @@ public enum TextColor {
 
     public abstract String getColor();
 }
+

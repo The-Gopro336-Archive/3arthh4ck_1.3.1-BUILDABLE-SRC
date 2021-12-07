@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.server.SPacketPlayerListHeaderFooter
+ *  net.minecraft.util.text.ITextComponent
+ */
 package me.earth.earthhack.impl.commands.packet.factory.playerlistheaderfooter;
 
 import java.lang.reflect.Field;
@@ -38,9 +46,9 @@ implements PacketFactory {
             Field headerField = ReflectionUtil.getField(SPacketPlayerListHeaderFooter.class, "header", "field_179703_a", "a");
             Field footerField = ReflectionUtil.getField(SPacketPlayerListHeaderFooter.class, "footer", "field_179702_b", "b");
             headerField.setAccessible(true);
-            headerField.set(p, header);
+            headerField.set((Object)p, (Object)header);
             footerField.setAccessible(true);
-            footerField.set(p, footer);
+            footerField.set((Object)p, (Object)footer);
         }
         catch (IllegalAccessException | NoSuchFieldException e) {
             throw new ArgParseException("Couldn't set header/footer: " + e.getMessage());
@@ -80,3 +88,4 @@ implements PacketFactory {
         return CustomCompleterResult.PASS;
     }
 }
+

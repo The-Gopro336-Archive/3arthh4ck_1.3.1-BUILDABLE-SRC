@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.gui.module.impl;
 
 import me.earth.earthhack.api.module.Module;
@@ -19,3 +22,4 @@ implements SubModule<T> {
         return this.parent;
     }
 }
+

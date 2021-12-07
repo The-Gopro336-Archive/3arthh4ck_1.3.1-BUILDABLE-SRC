@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.commands.abstracts;
 
 import me.earth.earthhack.api.command.Command;
@@ -52,3 +55,4 @@ extends Command {
         return concat;
     }
 }
+

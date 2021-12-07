@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.GuiButton
+ *  net.minecraft.client.gui.GuiMultiplayer
+ *  net.minecraft.client.gui.GuiScreen
+ *  net.minecraft.client.multiplayer.ServerData
+ */
 package me.earth.earthhack.impl.core.mixins.gui;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -37,7 +46,7 @@ extends GuiScreen {
                 this.pingBypassButton.displayString = this.getDisplayString();
                 info.cancel();
             } else if (button.id == 1339) {
-                this.mc.displayGuiScreen(new GuiAddPingBypass(this));
+                this.mc.displayGuiScreen((GuiScreen)new GuiAddPingBypass(this));
                 info.cancel();
             }
         }
@@ -46,7 +55,7 @@ extends GuiScreen {
     @Inject(method={"confirmClicked"}, at={@At(value="HEAD")}, cancellable=true)
     public void confirmClickedHook(boolean result, int id, CallbackInfo info) {
         if (id == this.pingBypassButton.id) {
-            this.mc.displayGuiScreen(this);
+            this.mc.displayGuiScreen((GuiScreen)this);
             info.cancel();
         }
     }
@@ -57,7 +66,7 @@ extends GuiScreen {
             ((AutoConfig)CONFIG.get()).onConnect(data.serverIP);
         }
         if (PINGBYPASS.isEnabled()) {
-            this.mc.displayGuiScreen(new GuiConnectingPingBypass(this, this.mc, data));
+            this.mc.displayGuiScreen((GuiScreen)new GuiConnectingPingBypass(this, this.mc, data));
             info.cancel();
         }
     }
@@ -66,3 +75,4 @@ extends GuiScreen {
         return "PingBypass: " + (PINGBYPASS.isEnabled() ? "\u00a7aOn" : "\u00a7cOff");
     }
 }
+

@@ -1,3 +1,29 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.init.Items
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemBlock
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketAnimation
+ *  net.minecraft.network.play.client.CPacketEntityAction
+ *  net.minecraft.network.play.client.CPacketEntityAction$Action
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock
+ *  net.minecraft.network.play.client.CPacketUseEntity
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.RayTraceResult
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.util.math.Vec3i
+ */
 package me.earth.earthhack.impl.modules.combat.bomber;
 
 import java.util.List;
@@ -35,6 +61,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketAnimation;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
@@ -45,6 +72,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 
 public class CrystalBomber
 extends Module {
@@ -95,156 +123,140 @@ extends Module {
 
     /*
      * Unable to fully structure code
+     * Enabled aggressive block sorting
+     * Lifted jumps to return sites
      */
     protected void doCrystalBomber(MotionUpdateEvent event) {
-        block54: {
-            block53: {
-                if (event.getStage() != Stage.PRE) break block53;
-                this.updateTarget();
-                if (CrystalBomber.target == null) break block54;
-                if (this.targetPos != null) {
-                    this.lastTargetPos = new Vec3d(this.targetPos);
-                }
-                this.targetPos = PositionUtil.getPosition(CrystalBomber.target).up().up();
-                if (this.lastTargetPos != null && !this.lastTargetPos.equals(new Vec3d(this.targetPos))) {
-                    this.stage = CrystalBomberStage.FirstHit;
-                    this.firstHit = true;
-                }
-                if (!this.delayTimer.passed(this.delay.getValue().intValue())) break block54;
-                if (this.reCheckCrystal.getValue().booleanValue()) {
-                    this.recheckCrystal();
-                }
-                switch (1.$SwitchMap$me$earth$earthhack$impl$modules$combat$bomber$enums$CrystalBomberStage[this.stage.ordinal()]) {
-                    case 1: {
-                        if (CrystalBomber.mc.world.getBlockState(this.targetPos).getBlock() != Blocks.AIR && MineUtil.canBreak(this.targetPos)) {
-                            this.rotateToPos(this.targetPos, event);
-                            break;
-                        }
-                    }
-                    case 2: {
-                        if (CrystalBomber.mc.world.getBlockState(this.targetPos).getBlock() == Blocks.OBSIDIAN) {
-                            if (!BlockUtil.canPlaceCrystal(this.targetPos, false, false)) break;
-                            this.rotateToPos(this.targetPos, event);
-                            break;
-                        }
-                        this.stage = CrystalBomberStage.PlaceObsidian;
-                        this.delayTimer.reset();
-                        break;
-                    }
-                    case 3: {
-                        if (this.firstHit) {
-                            if (!this.isValidForMining()) break;
-                            this.rotateToPos(this.targetPos, event);
-                            break;
-                        }
-                        this.rotateToPos(this.targetPos, event);
-                        break;
-                    }
-                    case 4: {
-                        crystals = CrystalBomber.mc.world.getEntitiesWithinAABB(EntityEnderCrystal.class, new AxisAlignedBB(this.targetPos.up()));
-                        if (crystals.isEmpty()) ** GOTO lbl41
-                        if ((CrystalBomber.mc.world.getBlockState(this.targetPos).getBlock() == Blocks.AIR || !this.airCheck.getValue().booleanValue()) && this.cooldownTimer.passed(this.cooldown.getValue().intValue()) && (crystal = (EntityEnderCrystal)crystals.get(0)) != null) {
-                            this.rotateTo(crystal, event);
-                            break;
-                        }
-                        ** GOTO lbl46
-lbl41:
-                        // 1 sources
-
-                        if (this.reCheckCrystal.getValue().booleanValue()) {
-                            this.stage = CrystalBomberStage.Crystal;
-                            this.delayTimer.reset();
-                            break;
-                        }
-                    }
-lbl46:
-                    // 4 sources
-
-                    case 5: {
-                        obbySlot = InventoryUtil.findHotbarBlock(Blocks.OBSIDIAN, new Block[0]);
-                        v0 = offhand = CrystalBomber.mc.player.getHeldItemOffhand().getItem() instanceof ItemBlock != false && ((ItemBlock)CrystalBomber.mc.player.getHeldItemOffhand().getItem()).getBlock() == Blocks.OBSIDIAN;
-                        if (obbySlot == -1 && !offhand) break;
-                        if (BlockUtil.isReplaceable(this.targetPos)) {
-                            if (!(CrystalBomber.mc.player.getDistanceSq(this.targetPos) <= (double)MathUtil.square(this.range.getValue().floatValue()))) break;
-                            this.rotateToPos(this.targetPos, event);
-                            break;
-                        }
-                        if (CrystalBomber.mc.world.getBlockState(this.targetPos).getBlock() != Blocks.OBSIDIAN) break;
-                        this.stage = this.mode.getValue() == CrystalBomberMode.Instant ? CrystalBomberStage.Crystal : CrystalBomberStage.FirstHit;
-                    }
-                }
-                break block54;
-            }
-            if (event.getStage() != Stage.POST) break block54;
+        block53: {
+            if (event.getStage() != Stage.PRE) break block53;
             this.updateTarget();
-            if (CrystalBomber.target == null || !this.delayTimer.passed(this.delay.getValue().intValue())) break block54;
+            if (CrystalBomber.target == null) return;
+            if (this.targetPos != null) {
+                this.lastTargetPos = new Vec3d((Vec3i)this.targetPos);
+            }
+            this.targetPos = PositionUtil.getPosition((Entity)CrystalBomber.target).up().up();
+            if (this.lastTargetPos != null && !this.lastTargetPos.equals((Object)new Vec3d((Vec3i)this.targetPos))) {
+                this.stage = CrystalBomberStage.FirstHit;
+                this.firstHit = true;
+            }
+            if (this.delayTimer.passed(this.delay.getValue().intValue()) == false) return;
+            if (this.reCheckCrystal.getValue().booleanValue()) {
+                this.recheckCrystal();
+            }
             switch (1.$SwitchMap$me$earth$earthhack$impl$modules$combat$bomber$enums$CrystalBomberStage[this.stage.ordinal()]) {
                 case 1: {
-                    if (CrystalBomber.mc.world.getBlockState(this.targetPos).getBlock() != Blocks.AIR) {
-                        if (((Speedmine)CrystalBomber.SPEEDMINE.get()).getPos() == null || !new Vec3d(((Speedmine)CrystalBomber.SPEEDMINE.get()).getPos()).equals(new Vec3d(this.targetPos))) {
-                            CrystalBomber.mc.playerController.onPlayerDamageBlock(this.targetPos, CrystalBomber.mc.player.getHorizontalFacing().getOpposite());
-                        } else if (new Vec3d(((Speedmine)CrystalBomber.SPEEDMINE.get()).getPos()).equals(new Vec3d(this.targetPos)) && (((Speedmine)CrystalBomber.SPEEDMINE.get()).getMode() == MineMode.Instant || ((Speedmine)CrystalBomber.SPEEDMINE.get()).getMode() == MineMode.Civ)) {
-                            this.stage = CrystalBomberStage.Crystal;
-                            this.delayTimer.reset();
-                            this.timer.reset();
-                            this.firstHit = false;
-                            break;
-                        }
-                        this.stage = CrystalBomberStage.Crystal;
-                        this.delayTimer.reset();
-                        this.timer.reset();
-                        this.firstHit = true;
-                        break;
+                    if (CrystalBomber.mc.world.getBlockState(this.targetPos).getBlock() != Blocks.AIR && MineUtil.canBreak(this.targetPos)) {
+                        this.rotateToPos(this.targetPos, event);
+                        return;
                     }
                 }
                 case 2: {
-                    crystalSlot = this.getCrsytalSlot();
-                    v1 = this.offhand = CrystalBomber.mc.player.getHeldItemOffhand().getItem() == Items.END_CRYSTAL;
-                    if (!this.offhand) {
-                        this.lastSlot = CrystalBomber.mc.player.inventory.currentItem;
-                        if (crystalSlot != -1) {
-                            if (this.bypass.getValue().booleanValue()) {
-                                InventoryUtil.switchToBypass(crystalSlot);
-                            } else {
-                                InventoryUtil.switchTo(crystalSlot);
-                            }
-                        }
+                    if (CrystalBomber.mc.world.getBlockState(this.targetPos).getBlock() == Blocks.OBSIDIAN) {
+                        if (BlockUtil.canPlaceCrystal(this.targetPos, false, false) == false) return;
+                        this.rotateToPos(this.targetPos, event);
+                        return;
                     }
-                    if ((this.offhand || CrystalBomber.mc.player.getHeldItemMainhand().getItem() == Items.END_CRYSTAL) && CrystalBomber.mc.player.getDistanceSq(this.targetPos) <= (double)MathUtil.square(this.range.getValue().floatValue())) {
-                        CrystalBomber.placeCrystalOnBlock(this.targetPos, this.offhand != false ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, true, false);
-                    }
-                    this.stage = CrystalBomberStage.Pickaxe;
+                    this.stage = CrystalBomberStage.PlaceObsidian;
                     this.delayTimer.reset();
-                    break;
+                    return;
                 }
                 case 3: {
-                    if (!this.firstHit) ** GOTO lbl122
-                    if (this.isValidForMining()) {
-                        pickSlot = this.getPickSlot();
-                        lastSlot = CrystalBomber.mc.player.inventory.currentItem;
-                        if (pickSlot != -1) {
-                            if (this.bypass.getValue().booleanValue()) {
-                                InventoryUtil.switchToBypass(pickSlot);
-                            } else {
-                                InventoryUtil.switchTo(pickSlot);
-                            }
-                            ((Speedmine)CrystalBomber.SPEEDMINE.get()).forceSend();
-                            this.stage = CrystalBomberStage.Explode;
-                            if (this.bypass.getValue().booleanValue()) {
-                                InventoryUtil.switchToBypass(pickSlot);
-                            } else {
-                                InventoryUtil.switchTo(lastSlot);
-                            }
-                            this.delayTimer.reset();
-                            this.cooldownTimer.reset();
-                            this.firstHit = false;
-                            break;
-                        }
+                    if (this.firstHit) {
+                        if (this.isValidForMining() == false) return;
+                        this.rotateToPos(this.targetPos, event);
+                        return;
                     }
-                    ** GOTO lbl140
-lbl122:
+                    this.rotateToPos(this.targetPos, event);
+                    return;
+                }
+                case 4: {
+                    crystals = CrystalBomber.mc.world.getEntitiesWithinAABB(EntityEnderCrystal.class, new AxisAlignedBB(this.targetPos.up()));
+                    if (crystals.isEmpty()) ** GOTO lbl41
+                    if ((CrystalBomber.mc.world.getBlockState(this.targetPos).getBlock() == Blocks.AIR || !this.airCheck.getValue().booleanValue()) && this.cooldownTimer.passed(this.cooldown.getValue().intValue()) && (crystal = (EntityEnderCrystal)crystals.get(0)) != null) {
+                        this.rotateTo((Entity)crystal, event);
+                        return;
+                    }
+                    ** GOTO lbl46
+lbl41:
                     // 1 sources
 
+                    if (this.reCheckCrystal.getValue().booleanValue()) {
+                        this.stage = CrystalBomberStage.Crystal;
+                        this.delayTimer.reset();
+                        return;
+                    }
+                }
+lbl46:
+                // 4 sources
+
+                case 5: {
+                    obbySlot = InventoryUtil.findHotbarBlock(Blocks.OBSIDIAN, new Block[0]);
+                    v0 = offhand = CrystalBomber.mc.player.getHeldItemOffhand().getItem() instanceof ItemBlock != false && ((ItemBlock)CrystalBomber.mc.player.getHeldItemOffhand().getItem()).getBlock() == Blocks.OBSIDIAN;
+                    if (obbySlot == -1) {
+                        if (offhand == false) return;
+                    }
+                    if (BlockUtil.isReplaceable(this.targetPos)) {
+                        if (!(CrystalBomber.mc.player.getDistanceSq(this.targetPos) <= (double)MathUtil.square(this.range.getValue().floatValue()))) return;
+                        this.rotateToPos(this.targetPos, event);
+                        return;
+                    }
+                    if (CrystalBomber.mc.world.getBlockState(this.targetPos).getBlock() != Blocks.OBSIDIAN) return;
+                    if (this.mode.getValue() == CrystalBomberMode.Instant) {
+                        this.stage = CrystalBomberStage.Crystal;
+                        return;
+                    }
+                    this.stage = CrystalBomberStage.FirstHit;
+                    return;
+                }
+            }
+            return;
+        }
+        if (event.getStage() != Stage.POST) return;
+        this.updateTarget();
+        if (CrystalBomber.target == null) return;
+        if (this.delayTimer.passed(this.delay.getValue().intValue()) == false) return;
+        switch (1.$SwitchMap$me$earth$earthhack$impl$modules$combat$bomber$enums$CrystalBomberStage[this.stage.ordinal()]) {
+            case 1: {
+                if (CrystalBomber.mc.world.getBlockState(this.targetPos).getBlock() != Blocks.AIR) {
+                    if (((Speedmine)CrystalBomber.SPEEDMINE.get()).getPos() == null || !new Vec3d((Vec3i)((Speedmine)CrystalBomber.SPEEDMINE.get()).getPos()).equals((Object)new Vec3d((Vec3i)this.targetPos))) {
+                        CrystalBomber.mc.playerController.onPlayerDamageBlock(this.targetPos, CrystalBomber.mc.player.getHorizontalFacing().getOpposite());
+                    } else if (new Vec3d((Vec3i)((Speedmine)CrystalBomber.SPEEDMINE.get()).getPos()).equals((Object)new Vec3d((Vec3i)this.targetPos)) && (((Speedmine)CrystalBomber.SPEEDMINE.get()).getMode() == MineMode.Instant || ((Speedmine)CrystalBomber.SPEEDMINE.get()).getMode() == MineMode.Civ)) {
+                        this.stage = CrystalBomberStage.Crystal;
+                        this.delayTimer.reset();
+                        this.timer.reset();
+                        this.firstHit = false;
+                        return;
+                    }
+                    this.stage = CrystalBomberStage.Crystal;
+                    this.delayTimer.reset();
+                    this.timer.reset();
+                    this.firstHit = true;
+                    return;
+                }
+            }
+            case 2: {
+                crystalSlot = this.getCrsytalSlot();
+                v1 = this.offhand = CrystalBomber.mc.player.getHeldItemOffhand().getItem() == Items.END_CRYSTAL;
+                if (!this.offhand) {
+                    this.lastSlot = CrystalBomber.mc.player.inventory.currentItem;
+                    if (crystalSlot != -1) {
+                        if (this.bypass.getValue().booleanValue()) {
+                            InventoryUtil.switchToBypass(crystalSlot);
+                        } else {
+                            InventoryUtil.switchTo(crystalSlot);
+                        }
+                    }
+                }
+                if ((this.offhand || CrystalBomber.mc.player.getHeldItemMainhand().getItem() == Items.END_CRYSTAL) && CrystalBomber.mc.player.getDistanceSq(this.targetPos) <= (double)MathUtil.square(this.range.getValue().floatValue())) {
+                    CrystalBomber.placeCrystalOnBlock(this.targetPos, this.offhand != false ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, true, false);
+                }
+                this.stage = CrystalBomberStage.Pickaxe;
+                this.delayTimer.reset();
+                return;
+            }
+            case 3: {
+                if (!this.firstHit) ** GOTO lbl128
+                if (this.isValidForMining()) {
                     pickSlot = this.getPickSlot();
                     lastSlot = CrystalBomber.mc.player.inventory.currentItem;
                     if (pickSlot != -1) {
@@ -255,64 +267,97 @@ lbl122:
                         }
                         ((Speedmine)CrystalBomber.SPEEDMINE.get()).forceSend();
                         this.stage = CrystalBomberStage.Explode;
+                        if (this.bypass.getValue().booleanValue()) {
+                            InventoryUtil.switchToBypass(pickSlot);
+                        } else {
+                            InventoryUtil.switchTo(lastSlot);
+                        }
                         this.delayTimer.reset();
                         this.cooldownTimer.reset();
-                        if (this.bypass.getValue().booleanValue()) {
-                            InventoryUtil.switchToBypass(lastSlot);
-                            break;
-                        }
-                        InventoryUtil.switchTo(lastSlot);
-                        break;
+                        this.firstHit = false;
+                        return;
                     }
                 }
-lbl140:
-                // 4 sources
+                ** GOTO lbl146
+lbl128:
+                // 1 sources
 
-                case 4: {
-                    crystals = CrystalBomber.mc.world.getEntitiesWithinAABB(EntityEnderCrystal.class, new AxisAlignedBB(this.targetPos.up()));
-                    if (this.cooldownTimer.passed(this.cooldown.getValue().intValue())) {
-                        if (!(crystals.isEmpty() || CrystalBomber.mc.world.getBlockState(this.targetPos).getBlock() != Blocks.AIR && this.airCheck.getValue().booleanValue())) {
-                            crystal = (EntityEnderCrystal)crystals.get(0);
-                            if (crystal != null) {
-                                this.rotating = false;
-                                if (CrystalBomber.mc.player.getDistanceSq(crystal) <= (double)MathUtil.square(this.range.getValue().floatValue())) {
-                                    CrystalBomber.attackEntity(crystal, true, true);
-                                    this.stage = CrystalBomberStage.PlaceObsidian;
-                                    this.delayTimer.reset();
-                                    break;
-                                }
-                            } else if (this.reCheckCrystal.getValue().booleanValue()) {
-                                this.stage = CrystalBomberStage.Crystal;
-                                this.delayTimer.reset();
-                                break;
-                            }
-                        } else if (this.reCheckCrystal.getValue().booleanValue()) {
-                            this.stage = CrystalBomberStage.Crystal;
-                            this.delayTimer.reset();
-                            break;
-                        }
+                pickSlot = this.getPickSlot();
+                lastSlot = CrystalBomber.mc.player.inventory.currentItem;
+                if (pickSlot != -1) {
+                    if (this.bypass.getValue().booleanValue()) {
+                        InventoryUtil.switchToBypass(pickSlot);
                     } else {
-                        this.stage = CrystalBomberStage.Explode;
-                        break;
+                        InventoryUtil.switchTo(pickSlot);
                     }
+                    ((Speedmine)CrystalBomber.SPEEDMINE.get()).forceSend();
+                    this.stage = CrystalBomberStage.Explode;
+                    this.delayTimer.reset();
+                    this.cooldownTimer.reset();
+                    if (this.bypass.getValue().booleanValue()) {
+                        InventoryUtil.switchToBypass(lastSlot);
+                        return;
+                    }
+                    InventoryUtil.switchTo(lastSlot);
+                    return;
                 }
-                case 5: {
-                    obbySlot = InventoryUtil.findHotbarBlock(Blocks.OBSIDIAN, new Block[0]);
-                    v2 = offhand = CrystalBomber.mc.player.getHeldItemOffhand().getItem() instanceof ItemBlock != false && ((ItemBlock)CrystalBomber.mc.player.getHeldItemOffhand().getItem()).getBlock() == Blocks.OBSIDIAN;
-                    if (obbySlot == -1 && !offhand) break;
-                    if (BlockUtil.isReplaceable(this.targetPos) || BlockUtil.isAir(this.targetPos)) {
-                        if (CrystalBomber.mc.player.getDistanceSq(this.targetPos) <= (double)MathUtil.square(this.range.getValue().floatValue()) && (facing = BlockUtil.getFacing(this.targetPos)) != null) {
-                            rotations = RotationUtil.getRotations(this.targetPos.offset(facing), facing.getOpposite());
-                            this.placeBlock(this.targetPos.offset(facing), facing.getOpposite(), rotations, obbySlot);
-                        }
-                        this.stage = this.mode.getValue() == CrystalBomberMode.Instant ? CrystalBomberStage.Crystal : CrystalBomberStage.FirstHit;
+            }
+lbl146:
+            // 4 sources
+
+            case 4: {
+                crystals = CrystalBomber.mc.world.getEntitiesWithinAABB(EntityEnderCrystal.class, new AxisAlignedBB(this.targetPos.up()));
+                if (!this.cooldownTimer.passed(this.cooldown.getValue().intValue())) {
+                    this.stage = CrystalBomberStage.Explode;
+                    return;
+                }
+                if (crystals.isEmpty() || CrystalBomber.mc.world.getBlockState(this.targetPos).getBlock() != Blocks.AIR && this.airCheck.getValue().booleanValue()) ** GOTO lbl168
+                crystal = (EntityEnderCrystal)crystals.get(0);
+                if (crystal != null) {
+                    this.rotating = false;
+                    if (CrystalBomber.mc.player.getDistanceSq((Entity)crystal) <= (double)MathUtil.square(this.range.getValue().floatValue())) {
+                        CrystalBomber.attackEntity((Entity)crystal, true, true);
+                        this.stage = CrystalBomberStage.PlaceObsidian;
                         this.delayTimer.reset();
-                        break;
+                        return;
                     }
-                    if (CrystalBomber.mc.world.getBlockState(this.targetPos).getBlock() != Blocks.OBSIDIAN) break;
+                } else if (this.reCheckCrystal.getValue().booleanValue()) {
+                    this.stage = CrystalBomberStage.Crystal;
+                    this.delayTimer.reset();
+                    return;
+                }
+                ** GOTO lbl173
+lbl168:
+                // 1 sources
+
+                if (this.reCheckCrystal.getValue().booleanValue()) {
+                    this.stage = CrystalBomberStage.Crystal;
+                    this.delayTimer.reset();
+                    return;
+                }
+            }
+lbl173:
+            // 5 sources
+
+            case 5: {
+                obbySlot = InventoryUtil.findHotbarBlock(Blocks.OBSIDIAN, new Block[0]);
+                v2 = offhand = CrystalBomber.mc.player.getHeldItemOffhand().getItem() instanceof ItemBlock != false && ((ItemBlock)CrystalBomber.mc.player.getHeldItemOffhand().getItem()).getBlock() == Blocks.OBSIDIAN;
+                if (obbySlot == -1) {
+                    if (offhand == false) return;
+                }
+                if (BlockUtil.isReplaceable(this.targetPos) || BlockUtil.isAir(this.targetPos)) {
+                    if (CrystalBomber.mc.player.getDistanceSq(this.targetPos) <= (double)MathUtil.square(this.range.getValue().floatValue()) && (facing = BlockUtil.getFacing(this.targetPos)) != null) {
+                        rotations = RotationUtil.getRotations(this.targetPos.offset(facing), facing.getOpposite());
+                        this.placeBlock(this.targetPos.offset(facing), facing.getOpposite(), rotations, obbySlot);
+                    }
                     this.stage = this.mode.getValue() == CrystalBomberMode.Instant ? CrystalBomberStage.Crystal : CrystalBomberStage.FirstHit;
                     this.delayTimer.reset();
+                    return;
                 }
+                if (CrystalBomber.mc.world.getBlockState(this.targetPos).getBlock() != Blocks.OBSIDIAN) return;
+                this.stage = this.mode.getValue() == CrystalBomberMode.Instant ? CrystalBomberStage.Crystal : CrystalBomberStage.FirstHit;
+                this.delayTimer.reset();
+                return;
             }
         }
     }
@@ -325,7 +370,7 @@ lbl140:
             if (currentPlayer == null) {
                 currentPlayer = player;
             }
-            if (!(CrystalBomber.mc.player.getDistanceSq(player) < CrystalBomber.mc.player.getDistanceSq(currentPlayer))) continue;
+            if (!(CrystalBomber.mc.player.getDistanceSq((Entity)player) < CrystalBomber.mc.player.getDistanceSq((Entity)currentPlayer))) continue;
             currentPlayer = player;
         }
         target = currentPlayer;
@@ -372,17 +417,17 @@ lbl140:
     public static void placeCrystalOnBlock(BlockPos pos, EnumHand hand, boolean swing, boolean exactHand) {
         RayTraceResult result = CrystalBomber.mc.world.rayTraceBlocks(new Vec3d(CrystalBomber.mc.player.posX, CrystalBomber.mc.player.posY + (double)CrystalBomber.mc.player.getEyeHeight(), CrystalBomber.mc.player.posZ), new Vec3d((double)pos.getX() + 0.5, (double)pos.getY() - 0.5, (double)pos.getZ() + 0.5));
         EnumFacing facing = result == null || result.sideHit == null ? EnumFacing.UP : result.sideHit;
-        CrystalBomber.mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(pos, facing, hand, 0.0f, 0.0f, 0.0f));
+        CrystalBomber.mc.player.connection.sendPacket((Packet)new CPacketPlayerTryUseItemOnBlock(pos, facing, hand, 0.0f, 0.0f, 0.0f));
         if (swing) {
-            CrystalBomber.mc.player.connection.sendPacket(new CPacketAnimation(exactHand ? hand : EnumHand.MAIN_HAND));
+            CrystalBomber.mc.player.connection.sendPacket((Packet)new CPacketAnimation(exactHand ? hand : EnumHand.MAIN_HAND));
         }
     }
 
     public static void attackEntity(Entity entity, boolean packet, boolean swingArm) {
         if (packet) {
-            CrystalBomber.mc.player.connection.sendPacket(new CPacketUseEntity(entity));
+            CrystalBomber.mc.player.connection.sendPacket((Packet)new CPacketUseEntity(entity));
         } else {
-            CrystalBomber.mc.playerController.attackEntity(CrystalBomber.mc.player, entity);
+            CrystalBomber.mc.playerController.attackEntity((EntityPlayer)CrystalBomber.mc.player, entity);
         }
         if (swingArm) {
             CrystalBomber.mc.player.swingArm(EnumHand.MAIN_HAND);
@@ -410,12 +455,12 @@ lbl140:
                 InventoryUtil.switchTo(slot);
             }
             if (!sneaking) {
-                CrystalBomber.mc.player.connection.sendPacket(new CPacketEntityAction(CrystalBomber.mc.player, CPacketEntityAction.Action.START_SNEAKING));
+                CrystalBomber.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)CrystalBomber.mc.player, CPacketEntityAction.Action.START_SNEAKING));
             }
-            CrystalBomber.mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(on, facing, InventoryUtil.getHand(slot), f[0], f[1], f[2]));
-            CrystalBomber.mc.player.connection.sendPacket(new CPacketAnimation(InventoryUtil.getHand(slot)));
+            CrystalBomber.mc.player.connection.sendPacket((Packet)new CPacketPlayerTryUseItemOnBlock(on, facing, InventoryUtil.getHand(slot), f[0], f[1], f[2]));
+            CrystalBomber.mc.player.connection.sendPacket((Packet)new CPacketAnimation(InventoryUtil.getHand(slot)));
             if (!sneaking) {
-                CrystalBomber.mc.player.connection.sendPacket(new CPacketEntityAction(CrystalBomber.mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
+                CrystalBomber.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)CrystalBomber.mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
             }
             if (CrystalBomber.mc.player.inventory.getStackInSlot(InventoryUtil.hotbarToInventory(lastSlot)).getItem() != Items.DIAMOND_PICKAXE) {
                 if (this.bypass.getValue().booleanValue()) {
@@ -427,3 +472,4 @@ lbl140:
         }
     }
 }
+

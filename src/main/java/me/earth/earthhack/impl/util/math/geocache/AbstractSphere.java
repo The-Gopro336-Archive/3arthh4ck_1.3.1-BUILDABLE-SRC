@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Vec3i
+ */
 package me.earth.earthhack.impl.util.math.geocache;
 
 import java.util.Collection;
@@ -43,7 +50,7 @@ extends AbstractGeoCache {
         int i = 0;
         int currentDistance = 0;
         for (BlockPos off : positions) {
-            if (Math.sqrt(pos.distanceSq(off)) > (double)currentDistance) {
+            if (Math.sqrt(pos.distanceSq((Vec3i)off)) > (double)currentDistance) {
                 indices[currentDistance++] = i;
             }
             cache[i++] = off;
@@ -54,3 +61,4 @@ extends AbstractGeoCache {
         indices[indices.length - 1] = cache.length;
     }
 }
+

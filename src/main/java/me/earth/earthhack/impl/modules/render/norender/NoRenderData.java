@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.render.norender;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -33,3 +36,4 @@ extends DefaultData<NoRender> {
         return "Don't render annoying overlays.";
     }
 }
+

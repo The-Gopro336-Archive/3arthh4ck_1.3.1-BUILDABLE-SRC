@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.gui.font;
 
 public class CharData {
@@ -6,3 +9,4 @@ public class CharData {
     public int storedX;
     public int storedY;
 }
+

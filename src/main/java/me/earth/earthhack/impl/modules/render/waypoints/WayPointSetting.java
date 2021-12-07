@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.gson.JsonElement
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.render.waypoints;
 
 import com.google.gson.JsonElement;
@@ -75,3 +82,4 @@ extends RemovingSetting<BlockPos> {
         ComponentFactory.register(WayPointSetting.class, WayPointComponent::new);
     }
 }
+

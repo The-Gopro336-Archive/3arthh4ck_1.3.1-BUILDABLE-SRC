@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.ResourceLocation
+ */
 package me.earth.earthhack.impl.commands.packet.arguments;
 
 import me.earth.earthhack.impl.commands.packet.AbstractArgument;
@@ -15,3 +21,4 @@ extends AbstractArgument<ResourceLocation> {
         return new ResourceLocation(argument);
     }
 }
+

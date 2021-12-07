@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.mojang.realmsclient.gui.ChatFormatting
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.util.math.MathHelper
+ */
 package me.earth.earthhack.impl.gui.click.component.impl;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
@@ -29,7 +37,7 @@ extends Component {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
         boolean hovered = RenderUtil.mouseWithinBounds(mouseX, mouseY, this.getFinishedX(), this.getFinishedY(), this.getWidth(), this.getHeight());
-        Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(this.getLabel() + ": " + ChatFormatting.GRAY + this.getNumberSetting().getValue(), this.getFinishedX() + 5.0f, this.getFinishedY() + this.getHeight() / 2.0f - (float)(Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT >> 1), -1);
+        Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(this.getLabel() + ": " + (Object)ChatFormatting.GRAY + this.getNumberSetting().getValue(), this.getFinishedX() + 5.0f, this.getFinishedY() + this.getHeight() / 2.0f - (float)(Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT >> 1), -1);
         float length = MathHelper.floor((float)((((Number)this.getNumberSetting().getValue()).floatValue() - this.getNumberSetting().getMin().floatValue()) / (this.getNumberSetting().getMax().floatValue() - this.getNumberSetting().getMin().floatValue()) * (this.getWidth() - 10.0f)));
         Render2DUtil.drawBorderedRect(this.getFinishedX() + 5.0f, this.getFinishedY() + this.getHeight() - 2.5f, this.getFinishedX() + 5.0f + length, this.getFinishedY() + this.getHeight() - 0.5f, 0.5f, hovered ? ((ClickGui)NumberComponent.getClickGui().get()).color.getValue().brighter().getRGB() : ((ClickGui)NumberComponent.getClickGui().get()).color.getValue().getRGB(), -16777216);
         if (this.sliding) {
@@ -72,3 +80,4 @@ extends Component {
         this.sliding = sliding;
     }
 }
+

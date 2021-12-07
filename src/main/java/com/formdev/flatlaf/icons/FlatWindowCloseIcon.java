@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.icons;
 
 import com.formdev.flatlaf.icons.FlatWindowAbstractIcon;
@@ -39,3 +42,4 @@ extends FlatWindowAbstractIcon {
         return FlatButtonUI.buttonStateColor(c, c.getForeground(), null, null, this.hoverForeground, this.pressedForeground);
     }
 }
+

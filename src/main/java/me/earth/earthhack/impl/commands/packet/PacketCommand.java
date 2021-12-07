@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.Packet
+ */
 package me.earth.earthhack.impl.commands.packet;
 
 import java.util.List;
@@ -21,3 +27,4 @@ public interface PacketCommand {
 
     public String getName(Class<? extends Packet<?>> var1);
 }
+

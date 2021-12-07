@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.customfont;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -26,3 +29,4 @@ extends DefaultData<FontMod> {
         return "Handles the CustomFont. If enabled, HUD, Nametags and Gui will be rendered in the custom font.";
     }
 }
+

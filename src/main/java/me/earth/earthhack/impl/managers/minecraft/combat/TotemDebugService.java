@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.entity.EntityPlayerSP
+ *  net.minecraft.network.play.server.SPacketEntityStatus
+ *  net.minecraft.network.play.server.SPacketUpdateHealth
+ */
 package me.earth.earthhack.impl.managers.minecraft.combat;
 
 import me.earth.earthhack.api.event.bus.SubscriberImpl;
@@ -44,3 +52,4 @@ implements Globals {
         }
     }
 }
+

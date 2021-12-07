@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.event.events.keyboard;
 
 import me.earth.earthhack.api.event.events.Event;
@@ -18,3 +21,4 @@ extends Event {
         this.leftClickCounter = leftClickCounter;
     }
 }
+

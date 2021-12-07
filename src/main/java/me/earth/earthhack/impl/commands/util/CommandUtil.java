@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.text.ITextComponent
+ *  net.minecraft.util.text.TextComponentString
+ */
 package me.earth.earthhack.impl.commands.util;
 
 import java.util.ArrayList;
@@ -64,7 +71,7 @@ implements Globals {
             T t = it.next();
             base.appendSibling(f.apply(t));
             if (!it.hasNext()) continue;
-            base.appendSibling(new TextComponentString(", "));
+            base.appendSibling((ITextComponent)new TextComponentString(", "));
         }
         return base;
     }
@@ -84,7 +91,15 @@ implements Globals {
         int[][] dp = new int[x.length() + 1][y.length() + 1];
         for (int i = 0; i <= x.length(); ++i) {
             for (int j = 0; j <= y.length(); ++j) {
-                dp[i][j] = i == 0 ? j : (j == 0 ? i : CommandUtil.min(dp[i - 1][j - 1] + CommandUtil.costOfSubstitution(x.charAt(i - 1), y.charAt(j - 1)), dp[i - 1][j] + 1, dp[i][j - 1] + 1));
+                if (i == 0) {
+                    dp[i][j] = j;
+                    continue;
+                }
+                if (j == 0) {
+                    dp[i][j] = i;
+                    continue;
+                }
+                dp[i][j] = CommandUtil.min(dp[i - 1][j - 1] + CommandUtil.costOfSubstitution(x.charAt(i - 1), y.charAt(j - 1)), dp[i - 1][j] + 1, dp[i][j - 1] + 1);
             }
         }
         return dp[x.length()][y.length()];
@@ -127,3 +142,4 @@ implements Globals {
         return strings.toArray(new String[0]);
     }
 }
+

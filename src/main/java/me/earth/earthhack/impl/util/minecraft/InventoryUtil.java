@@ -1,3 +1,21 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.client.gui.inventory.GuiContainer
+ *  net.minecraft.client.gui.inventory.GuiInventory
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.init.Items
+ *  net.minecraft.inventory.ClickType
+ *  net.minecraft.inventory.Container
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.NonNullList
+ */
 package me.earth.earthhack.impl.util.minecraft;
 
 import java.util.Collections;
@@ -15,6 +33,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
@@ -41,16 +60,16 @@ implements Globals {
                 int lastSlot = InventoryUtil.mc.player.inventory.currentItem;
                 int targetSlot = InventoryUtil.hotbarToInventory(slot);
                 int currentSlot = InventoryUtil.hotbarToInventory(lastSlot);
-                InventoryUtil.mc.playerController.windowClick(0, targetSlot, 0, ClickType.PICKUP, InventoryUtil.mc.player);
-                InventoryUtil.mc.playerController.windowClick(0, currentSlot, 0, ClickType.PICKUP, InventoryUtil.mc.player);
-                InventoryUtil.mc.playerController.windowClick(0, targetSlot, 0, ClickType.PICKUP, InventoryUtil.mc.player);
+                InventoryUtil.mc.playerController.windowClick(0, targetSlot, 0, ClickType.PICKUP, (EntityPlayer)InventoryUtil.mc.player);
+                InventoryUtil.mc.playerController.windowClick(0, currentSlot, 0, ClickType.PICKUP, (EntityPlayer)InventoryUtil.mc.player);
+                InventoryUtil.mc.playerController.windowClick(0, targetSlot, 0, ClickType.PICKUP, (EntityPlayer)InventoryUtil.mc.player);
             });
         }
     }
 
     public static void switchToBypassAlt(int slot) {
         if (slot != -1) {
-            Locks.acquire(Locks.WINDOW_CLICK_LOCK, () -> InventoryUtil.mc.playerController.windowClick(0, slot, InventoryUtil.mc.player.inventory.currentItem, ClickType.SWAP, InventoryUtil.mc.player));
+            Locks.acquire(Locks.WINDOW_CLICK_LOCK, () -> InventoryUtil.mc.playerController.windowClick(0, slot, InventoryUtil.mc.player.inventory.currentItem, ClickType.SWAP, (EntityPlayer)InventoryUtil.mc.player));
         }
     }
 
@@ -247,15 +266,15 @@ implements Globals {
     }
 
     public static int getServerItem() {
-        return ((IPlayerControllerMP)((Object)InventoryUtil.mc.playerController)).getItem();
+        return ((IPlayerControllerMP)InventoryUtil.mc.playerController).getItem();
     }
 
     public static void syncItem() {
-        ((IPlayerControllerMP)((Object)InventoryUtil.mc.playerController)).syncItem();
+        ((IPlayerControllerMP)InventoryUtil.mc.playerController).syncItem();
     }
 
     public static void click(int slot) {
-        InventoryUtil.mc.playerController.windowClick(0, slot, 0, ClickType.PICKUP, InventoryUtil.mc.player);
+        InventoryUtil.mc.playerController.windowClick(0, slot, 0, ClickType.PICKUP, (EntityPlayer)InventoryUtil.mc.player);
     }
 
     public static ItemStack get(int slot) {
@@ -329,3 +348,4 @@ implements Globals {
         });
     }
 }
+

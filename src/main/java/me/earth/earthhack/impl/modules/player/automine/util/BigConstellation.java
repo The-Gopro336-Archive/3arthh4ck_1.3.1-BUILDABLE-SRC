@@ -1,3 +1,18 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.item.EntityItem
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.world.IBlockAccess
+ */
 package me.earth.earthhack.impl.modules.player.automine.util;
 
 import me.earth.earthhack.api.util.interfaces.Globals;
@@ -13,6 +28,7 @@ import me.earth.earthhack.impl.util.minecraft.blocks.states.IBlockStateHelper;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -52,8 +68,8 @@ Globals {
         BlockPos attackPos = null;
         for (i = 0; i < this.states.length; ++i) {
             this.states[i] = BigConstellation.mc.world.getBlockState(this.positions[i]);
-            if (i == 0 && (this.states[0].getBlock() == Blocks.OBSIDIAN || this.states[0].getBlock() == Blocks.BEDROCK || this.states[0].func_185904_a().isReplaceable())) {
-                if (!this.positions[0].equals(automine.getCurrent())) continue;
+            if (i == 0 && (this.states[0].getBlock() == Blocks.OBSIDIAN || this.states[0].getBlock() == Blocks.BEDROCK || this.states[0].getMaterial().isReplaceable())) {
+                if (!this.positions[0].equals((Object)automine.getCurrent())) continue;
                 automine.setCurrent(null);
                 continue;
             }
@@ -68,7 +84,7 @@ Globals {
                 this.valid = true;
                 continue;
             }
-            if (!this.positions[i].equals(automine.getCurrent())) continue;
+            if (!this.positions[i].equals((Object)automine.getCurrent())) continue;
             automine.setCurrent(null);
         }
         if (!this.valid) {
@@ -90,11 +106,11 @@ Globals {
                 return;
             }
         }
-        if (RotationUtil.getRotationPlayer().getDistanceSq((float)pos.getX() + 0.5f, pos.getY() + 1, (float)pos.getZ() + 0.5f) >= automine.getBreakTrace() && !RayTraceUtil.canBeSeen(new Vec3d((float)pos.getX() + 0.5f, pos.getY() + 1, (float)pos.getZ() + 0.5f), (Entity)RotationUtil.getRotationPlayer())) {
+        if (RotationUtil.getRotationPlayer().getDistanceSq((double)((float)pos.getX() + 0.5f), (double)(pos.getY() + 1), (double)((float)pos.getZ() + 0.5f)) >= automine.getBreakTrace() && !RayTraceUtil.canBeSeen(new Vec3d((double)((float)pos.getX() + 0.5f), (double)(pos.getY() + 1), (double)((float)pos.getZ() + 0.5f)), (Entity)RotationUtil.getRotationPlayer())) {
             this.valid = false;
             return;
         }
-        float self = DamageUtil.calculate((float)pos.getX() + 0.5f, pos.getY() + 1, (float)pos.getZ() + 0.5f, RotationUtil.getRotationPlayer().getEntityBoundingBox(), RotationUtil.getRotationPlayer(), this.helper, true);
+        float self = DamageUtil.calculate((float)pos.getX() + 0.5f, pos.getY() + 1, (float)pos.getZ() + 0.5f, RotationUtil.getRotationPlayer().getEntityBoundingBox(), (EntityLivingBase)RotationUtil.getRotationPlayer(), this.helper, true);
         if (!automine.isSuicide() && self > automine.getMaxSelfDmg()) {
             this.valid = false;
             return;
@@ -102,13 +118,13 @@ Globals {
         if (this.target == null) {
             for (EntityPlayer player : BigConstellation.mc.world.playerEntities) {
                 float d;
-                if (player == null || EntityUtil.isDead(player) || Managers.FRIENDS.contains(player) || player.getDistanceSq(pos) > 144.0 || !((d = DamageUtil.calculate((float)pos.getX() + 0.5f, pos.getY() + 1, (float)pos.getZ() + 0.5f, player.getEntityBoundingBox(), player, this.helper, true)) >= automine.getMinDmg())) continue;
+                if (player == null || EntityUtil.isDead((Entity)player) || Managers.FRIENDS.contains(player) || player.getDistanceSq(pos) > 144.0 || !((d = DamageUtil.calculate((float)pos.getX() + 0.5f, pos.getY() + 1, (float)pos.getZ() + 0.5f, player.getEntityBoundingBox(), (EntityLivingBase)player, this.helper, true)) >= automine.getMinDmg())) continue;
                 if (automine.getCurrent() == null) {
                     automine.attackPos(attackPos);
                 }
                 return;
             }
-        } else if (!EntityUtil.isDead(this.target) && DamageUtil.calculate((float)pos.getX() + 0.5f, pos.getY() + 1, (float)pos.getZ() + 0.5f, this.target.getEntityBoundingBox(), this.target, this.helper, true) >= automine.getMinDmg()) {
+        } else if (!EntityUtil.isDead((Entity)this.target) && DamageUtil.calculate((float)pos.getX() + 0.5f, pos.getY() + 1, (float)pos.getZ() + 0.5f, this.target.getEntityBoundingBox(), (EntityLivingBase)this.target, this.helper, true) >= automine.getMinDmg()) {
             if (automine.getCurrent() == null) {
                 automine.attackPos(attackPos);
             }
@@ -120,8 +136,8 @@ Globals {
     @Override
     public boolean isAffected(BlockPos pos, IBlockState state) {
         for (BlockPos position : this.positions) {
-            if (!position.equals(pos)) continue;
-            if (position.equals(this.automine.getCurrent())) {
+            if (!position.equals((Object)pos)) continue;
+            if (position.equals((Object)this.automine.getCurrent())) {
                 this.automine.setCurrent(null);
             }
             ++this.blockStateChanges;
@@ -140,3 +156,4 @@ Globals {
         return !this.automine.canBigCalcsBeImproved();
     }
 }
+

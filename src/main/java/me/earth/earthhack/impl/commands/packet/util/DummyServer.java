@@ -1,3 +1,16 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.mojang.authlib.GameProfileRepository
+ *  com.mojang.authlib.minecraft.MinecraftSessionService
+ *  com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
+ *  net.minecraft.server.MinecraftServer
+ *  net.minecraft.server.management.PlayerProfileCache
+ *  net.minecraft.util.datafix.DataFixer
+ *  net.minecraft.world.EnumDifficulty
+ *  net.minecraft.world.GameType
+ */
 package me.earth.earthhack.impl.commands.packet.util;
 
 import com.mojang.authlib.GameProfileRepository;
@@ -66,3 +79,4 @@ extends MinecraftServer {
         return "Dummy-Value";
     }
 }
+

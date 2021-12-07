@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.init.Items
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.ResourceLocation
+ */
 package me.earth.earthhack.impl.commands;
 
 import me.earth.earthhack.api.command.PossibleInputs;
@@ -102,7 +111,7 @@ extends AbstractStackCommand {
                     // empty catch block
                 }
             }
-            for (ResourceLocation location : Item.REGISTRY.func_148742_b()) {
+            for (ResourceLocation location : Item.REGISTRY.getKeys()) {
                 if (!TextUtil.startsWith(location.toString(), conc)) continue;
                 return inputs.setCompletion(TextUtil.substring(location.toString(), conc.length()));
             }
@@ -122,3 +131,4 @@ extends AbstractStackCommand {
         return stack;
     }
 }
+

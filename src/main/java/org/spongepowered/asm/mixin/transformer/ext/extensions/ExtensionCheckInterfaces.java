@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Charsets
+ *  com.google.common.collect.HashMultimap
+ *  com.google.common.collect.Multimap
+ *  com.google.common.io.Files
+ *  org.apache.commons.io.IOUtils
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package org.spongepowered.asm.mixin.transformer.ext.extensions;
 
 import com.google.common.base.Charsets;
@@ -7,7 +19,9 @@ import com.google.common.io.Files;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintStream;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
@@ -29,7 +43,7 @@ implements IExtension {
     private static final String IMPL_REPORT_FILENAME = "mixin_implementation_report";
     private static final String IMPL_REPORT_CSV_FILENAME = "mixin_implementation_report.csv";
     private static final String IMPL_REPORT_TXT_FILENAME = "mixin_implementation_report.txt";
-    private static final Logger logger = LogManager.getLogger("mixin");
+    private static final Logger logger = LogManager.getLogger((String)"mixin");
     private final File csv;
     private final File report;
     private final Multimap<ClassInfo, ClassInfo.Method> interfaceMethods = HashMultimap.create();
@@ -41,14 +55,14 @@ implements IExtension {
         this.csv = new File(debugOutputFolder, IMPL_REPORT_CSV_FILENAME);
         this.report = new File(debugOutputFolder, IMPL_REPORT_TXT_FILENAME);
         try {
-            Files.write("Class,Method,Signature,Interface\n", this.csv, Charsets.ISO_8859_1);
+            Files.write((CharSequence)"Class,Method,Signature,Interface\n", (File)this.csv, (Charset)Charsets.ISO_8859_1);
         }
         catch (IOException iOException) {
             // empty catch block
         }
         try {
             String dateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-            Files.write("Mixin Implementation Report generated on " + dateTime + "\n", this.report, Charsets.ISO_8859_1);
+            Files.write((CharSequence)("Mixin Implementation Report generated on " + dateTime + "\n"), (File)this.report, (Charset)Charsets.ISO_8859_1);
         }
         catch (IOException iOException) {
             // empty catch block
@@ -65,7 +79,7 @@ implements IExtension {
     public void preApply(ITargetClassContext context) {
         ClassInfo targetClassInfo = context.getClassInfo();
         for (ClassInfo.Method m : targetClassInfo.getInterfaceMethods(false)) {
-            this.interfaceMethods.put(targetClassInfo, m);
+            this.interfaceMethods.put((Object)targetClassInfo, (Object)m);
         }
     }
 
@@ -83,7 +97,7 @@ implements IExtension {
         printer.add("%-32s %-47s  %s", "Return Type", "Missing Method", "From Interface").hr();
         Set<ClassInfo.Method> interfaceMethods = targetClassInfo.getInterfaceMethods(true);
         HashSet<ClassInfo.Method> implementedMethods = new HashSet<ClassInfo.Method>(targetClassInfo.getSuperClass().getInterfaceMethods(true));
-        implementedMethods.addAll(this.interfaceMethods.removeAll(targetClassInfo));
+        implementedMethods.addAll(this.interfaceMethods.removeAll((Object)targetClassInfo));
         for (ClassInfo.Method method : interfaceMethods) {
             ClassInfo.Method found = targetClassInfo.findMethodInHierarchy(method.getName(), method.getDesc(), ClassInfo.SearchType.ALL_CLASSES, ClassInfo.Traversal.ALL);
             if (found != null && !found.isAbstract() || implementedMethods.contains(method)) continue;
@@ -110,7 +124,7 @@ implements IExtension {
 
     private void appendToCSVReport(String className, ClassInfo.Method method, String iface) {
         try {
-            Files.append(String.format("%s,%s,%s,%s\n", className, method.getName(), method.getDesc(), iface), this.csv, Charsets.ISO_8859_1);
+            Files.append((CharSequence)String.format("%s,%s,%s,%s\n", className, method.getName(), method.getDesc(), iface), (File)this.csv, (Charset)Charsets.ISO_8859_1);
         }
         catch (IOException iOException) {
             // empty catch block
@@ -135,6 +149,7 @@ implements IExtension {
             IOUtils.closeQuietly(fos);
             throw throwable;
         }
-        IOUtils.closeQuietly(fos);
+        IOUtils.closeQuietly((OutputStream)fos);
     }
 }
+

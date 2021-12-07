@@ -1,3 +1,22 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.renderer.GlStateManager
+ *  net.minecraft.client.renderer.GlStateManager$DestFactor
+ *  net.minecraft.client.renderer.GlStateManager$SourceFactor
+ *  net.minecraft.client.renderer.RenderHelper
+ *  net.minecraft.inventory.IInventory
+ *  net.minecraft.inventory.ItemStackHelper
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemShulkerBox
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.nbt.NBTTagCompound
+ *  net.minecraft.tileentity.TileEntityShulkerBox
+ *  net.minecraft.util.NonNullList
+ *  net.minecraft.util.ResourceLocation
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.modules.misc.tooltips;
 
 import java.util.Map;
@@ -23,6 +42,7 @@ import me.earth.earthhack.impl.modules.misc.tooltips.util.TimeStack;
 import me.earth.earthhack.impl.util.render.Render2DUtil;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemShulkerBox;
@@ -31,6 +51,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityShulkerBox;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
 public class ToolTips
 extends Module {
@@ -99,13 +120,13 @@ extends Module {
         try {
             Item item = stack.getItem();
             TileEntityShulkerBox entityBox = new TileEntityShulkerBox();
-            ItemShulkerBox shulker = (ItemShulkerBox)((Object)item);
-            ((ITileEntity)((Object)entityBox)).setBlockType(shulker.func_179223_d());
-            entityBox.func_145834_a(ToolTips.mc.world);
-            ItemStackHelper.loadAllItems((NBTTagCompound)stack.getTagCompound().getCompoundTag("BlockEntityTag"), ((ITileEntityShulkerBox)((Object)entityBox)).getItems());
+            ItemShulkerBox shulker = (ItemShulkerBox)item;
+            ((ITileEntity)entityBox).setBlockType(shulker.getBlock());
+            entityBox.setWorld((World)ToolTips.mc.world);
+            ItemStackHelper.loadAllItems((NBTTagCompound)stack.getTagCompound().getCompoundTag("BlockEntityTag"), ((ITileEntityShulkerBox)entityBox).getItems());
             entityBox.readFromNBT(stack.getTagCompound().getCompoundTag("BlockEntityTag"));
-            entityBox.func_190575_a(name == null ? stack.getDisplayName() : name);
-            ToolTips.mc.player.displayGUIChest(entityBox);
+            entityBox.setCustomName(name == null ? stack.getDisplayName() : name);
+            ToolTips.mc.player.displayGUIChest((IInventory)entityBox);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -124,3 +145,4 @@ extends Module {
         return this.spiedPlayers.keySet();
     }
 }
+

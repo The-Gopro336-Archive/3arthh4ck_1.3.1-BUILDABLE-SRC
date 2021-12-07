@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.BufferUtils
+ *  org.lwjgl.LWJGLException
+ *  org.lwjgl.input.Cursor
+ *  org.lwjgl.input.Mouse
+ *  org.lwjgl.opengl.Display
+ *  org.lwjgl.opengl.GL11
+ *  org.lwjgl.opengl.PixelFormat
+ */
 package org.newdawn.slick;
 
 import java.applet.Applet;
@@ -223,7 +235,7 @@ extends Applet {
 
         @Override
         public void setMouseGrabbed(boolean grabbed) {
-            Mouse.setGrabbed(grabbed);
+            Mouse.setGrabbed((boolean)grabbed);
         }
 
         @Override
@@ -235,7 +247,7 @@ extends Applet {
         public void setMouseCursor(String ref, int hotSpotX, int hotSpotY) throws SlickException {
             try {
                 Cursor cursor = CursorLoader.get().getCursor(ref, hotSpotX, hotSpotY);
-                Mouse.setNativeCursor(cursor);
+                Mouse.setNativeCursor((Cursor)cursor);
             }
             catch (Throwable e) {
                 Log.error("Failed to load and apply cursor.", e);
@@ -255,12 +267,12 @@ extends Applet {
             try {
                 Image temp = new Image(this.get2Fold(image.getWidth()), this.get2Fold(image.getHeight()));
                 Graphics g = temp.getGraphics();
-                ByteBuffer buffer = BufferUtils.createByteBuffer(temp.getWidth() * temp.getHeight() * 4);
+                ByteBuffer buffer = BufferUtils.createByteBuffer((int)(temp.getWidth() * temp.getHeight() * 4));
                 g.drawImage(image.getFlippedCopy(false, true), 0.0f, 0.0f);
                 g.flush();
                 g.getArea(0, 0, temp.getWidth(), temp.getHeight(), buffer);
                 Cursor cursor = CursorLoader.get().getCursor(buffer, hotSpotX, hotSpotY, temp.getWidth(), temp.getHeight());
-                Mouse.setNativeCursor(cursor);
+                Mouse.setNativeCursor((Cursor)cursor);
             }
             catch (Throwable e) {
                 Log.error("Failed to load and apply cursor.", e);
@@ -276,7 +288,7 @@ extends Applet {
         public void setMouseCursor(ImageData data, int hotSpotX, int hotSpotY) throws SlickException {
             try {
                 Cursor cursor = CursorLoader.get().getCursor(data, hotSpotX, hotSpotY);
-                Mouse.setNativeCursor(cursor);
+                Mouse.setNativeCursor((Cursor)cursor);
             }
             catch (Throwable e) {
                 Log.error("Failed to load and apply cursor.", e);
@@ -287,7 +299,7 @@ extends Applet {
         @Override
         public void setMouseCursor(Cursor cursor, int hotSpotX, int hotSpotY) throws SlickException {
             try {
-                Mouse.setNativeCursor(cursor);
+                Mouse.setNativeCursor((Cursor)cursor);
             }
             catch (Throwable e) {
                 Log.error("Failed to load and apply cursor.", e);
@@ -326,21 +338,21 @@ extends Applet {
                     }
                     int xoffset = (screenWidth - newWidth) / 2;
                     int yoffset = (screenHeight - newHeight) / 2;
-                    GL11.glViewport(xoffset, yoffset, newWidth, newHeight);
+                    GL11.glViewport((int)xoffset, (int)yoffset, (int)newWidth, (int)newHeight);
                     this.enterOrtho();
                     this.getInput().setOffset((float)(-xoffset) * (float)this.width / (float)newWidth, (float)(-yoffset) * (float)this.height / (float)newHeight);
                     this.getInput().setScale((float)this.width / (float)newWidth, (float)this.height / (float)newHeight);
                     this.width = screenWidth;
                     this.height = screenHeight;
-                    Display.setFullscreen(true);
+                    Display.setFullscreen((boolean)true);
                 } else {
                     this.getInput().setOffset(0.0f, 0.0f);
                     this.getInput().setScale(1.0f, 1.0f);
                     this.width = AppletGameContainer.this.getWidth();
                     this.height = AppletGameContainer.this.getHeight();
-                    GL11.glViewport(0, 0, this.width, this.height);
+                    GL11.glViewport((int)0, (int)0, (int)this.width, (int)this.height);
                     this.enterOrtho();
-                    Display.setFullscreen(false);
+                    Display.setFullscreen((boolean)false);
                 }
             }
             catch (LWJGLException e) {
@@ -368,7 +380,7 @@ extends Applet {
 
         private void createDisplay() throws Exception {
             try {
-                Display.create(new PixelFormat(8, 8, GameContainer.stencil ? 8 : 0));
+                Display.create((PixelFormat)new PixelFormat(8, 8, GameContainer.stencil ? 8 : 0));
                 AppletGameContainer.this.alphaSupport = true;
             }
             catch (Exception e) {
@@ -380,7 +392,7 @@ extends Applet {
 
         public void start() throws Exception {
             Display.setParent((Canvas)AppletGameContainer.this.displayParent);
-            Display.setVSyncEnabled(true);
+            Display.setVSyncEnabled((boolean)true);
             try {
                 this.createDisplay();
             }
@@ -407,3 +419,4 @@ extends Applet {
         }
     }
 }
+

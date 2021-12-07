@@ -1,6 +1,20 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.settings.KeyBinding
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.item.ItemFishFood
+ *  net.minecraft.item.ItemFishFood$FishType
+ *  net.minecraft.item.ItemFood
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.potion.Potion
+ *  net.minecraft.potion.PotionEffect
+ */
 package me.earth.earthhack.impl.modules.misc.autoeat;
 
-import java.util.Iterator;
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.impl.core.mixins.item.IITemFood;
 import me.earth.earthhack.impl.event.events.misc.TickEvent;
@@ -14,6 +28,8 @@ import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
 import me.earth.earthhack.impl.util.thread.Locks;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemFishFood;
 import net.minecraft.item.ItemFood;
@@ -37,14 +53,14 @@ extends ModuleListener<AutoEat, TickEvent> {
             return;
         }
         boolean bl = ((AutoEat)this.module).force = ((AutoEat)this.module).always.getValue() != false || ((AutoEat)this.module).server;
-        if ((float)ListenerTick.mc.player.getFoodStats().getFoodLevel() > ((AutoEat)this.module).hunger.getValue().floatValue() && (((AutoEat)this.module).health.getValue() == false || !this.enemyCheck() || Managers.SAFETY.isSafe() && EntityUtil.getHealth(ListenerTick.mc.player, ((AutoEat)this.module).calcWithAbsorption.getValue()) > ((AutoEat)this.module).safeHealth.getValue().floatValue() || !Managers.SAFETY.isSafe() && EntityUtil.getHealth(ListenerTick.mc.player, ((AutoEat)this.module).calcWithAbsorption.getValue()) > ((AutoEat)this.module).unsafeHealth.getValue().floatValue()) && (!((AutoEat)this.module).absorption.getValue().booleanValue() || ListenerTick.mc.player.getAbsorptionAmount() > ((AutoEat)this.module).absorptionAmount.getValue().floatValue()) && !((AutoEat)this.module).force) {
+        if ((float)ListenerTick.mc.player.getFoodStats().getFoodLevel() > ((AutoEat)this.module).hunger.getValue().floatValue() && (((AutoEat)this.module).health.getValue() == false || !this.enemyCheck() || Managers.SAFETY.isSafe() && EntityUtil.getHealth((EntityLivingBase)ListenerTick.mc.player, ((AutoEat)this.module).calcWithAbsorption.getValue()) > ((AutoEat)this.module).safeHealth.getValue().floatValue() || !Managers.SAFETY.isSafe() && EntityUtil.getHealth((EntityLivingBase)ListenerTick.mc.player, ((AutoEat)this.module).calcWithAbsorption.getValue()) > ((AutoEat)this.module).unsafeHealth.getValue().floatValue()) && (!((AutoEat)this.module).absorption.getValue().booleanValue() || ListenerTick.mc.player.getAbsorptionAmount() > ((AutoEat)this.module).absorptionAmount.getValue().floatValue()) && !((AutoEat)this.module).force) {
             if (((AutoEat)this.module).isEating) {
                 Locks.acquire(Locks.PLACE_SWITCH_LOCK, () -> InventoryUtil.switchTo(((AutoEat)this.module).lastSlot));
                 ((AutoEat)this.module).reset();
             }
             return;
         }
-        int slot = InventoryUtil.findInHotbar(s -> s.getItem() instanceof ItemFood && !this.hasBadEffect((IITemFood)((Object)s.getItem())) && (!(s.getItem() instanceof ItemFishFood) || ItemFishFood.FishType.byItemStack((ItemStack)s) != ItemFishFood.FishType.PUFFERFISH));
+        int slot = InventoryUtil.findInHotbar(s -> s.getItem() instanceof ItemFood && !this.hasBadEffect((IITemFood)s.getItem()) && (!(s.getItem() instanceof ItemFishFood) || ItemFishFood.FishType.byItemStack((ItemStack)s) != ItemFishFood.FishType.PUFFERFISH));
         if (slot == -1) {
             ModuleUtil.sendMessage((Module)this.module, "\u00a7cNo food found in your hotbar!");
             return;
@@ -60,7 +76,7 @@ extends ModuleListener<AutoEat, TickEvent> {
     private boolean enemyCheck() {
         if (((AutoEat)this.module).enemyRange.getValue().floatValue() != 0.0f) {
             EntityPlayer entity = EntityUtil.getClosestEnemy();
-            return entity != null && entity.getDistanceSq(RotationUtil.getRotationPlayer()) < (double)MathUtil.square(((AutoEat)this.module).enemyRange.getValue().floatValue());
+            return entity != null && entity.getDistanceSq((Entity)RotationUtil.getRotationPlayer()) < (double)MathUtil.square(((AutoEat)this.module).enemyRange.getValue().floatValue());
         }
         return false;
     }
@@ -68,13 +84,12 @@ extends ModuleListener<AutoEat, TickEvent> {
     private boolean hasBadEffect(IITemFood itemFood) {
         PotionEffect effect = itemFood.getPotionId();
         if (effect != null) {
-            Iterator iterator = Potion.REGISTRY.iterator();
-            while (iterator.hasNext()) {
-                Potion p = (Potion)iterator.next();
-                if (!p.isBadEffect() || !p.equals(effect.getPotion())) continue;
+            for (Potion p : Potion.REGISTRY) {
+                if (!p.isBadEffect() || !p.equals((Object)effect.getPotion())) continue;
                 return true;
             }
         }
         return false;
     }
 }
+

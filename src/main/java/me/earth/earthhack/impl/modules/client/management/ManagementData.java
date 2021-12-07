@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.management;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -26,3 +29,4 @@ extends DefaultData<Management> {
         return "Manages internal settings for 3arthh4ck, it doesn't matter if this module is enabled or not.";
     }
 }
+

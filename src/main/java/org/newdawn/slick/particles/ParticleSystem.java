@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.particles;
 
 import java.io.ByteArrayInputStream;
@@ -341,3 +344,4 @@ public class ParticleSystem {
         }
     }
 }
+

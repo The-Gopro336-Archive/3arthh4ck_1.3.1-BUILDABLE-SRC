@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.math;
 
 public class Timer {
@@ -15,3 +18,4 @@ public class Timer {
         this.startTime += (long)by;
     }
 }
+

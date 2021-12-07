@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.render.blockhighlight;
 
 import java.awt.Color;
@@ -31,3 +34,4 @@ extends BlockESPModule {
         return this.current;
     }
 }
+

@@ -1,3 +1,14 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.item.ItemFood
+ *  net.minecraft.network.play.server.SPacketMultiBlockChange
+ *  net.minecraft.network.play.server.SPacketMultiBlockChange$BlockUpdateData
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.misc.nuker;
 
 import java.util.HashSet;
@@ -12,6 +23,7 @@ import me.earth.earthhack.impl.util.minecraft.blocks.BlockUtil;
 import me.earth.earthhack.impl.util.minecraft.blocks.mine.MineUtil;
 import me.earth.earthhack.impl.util.thread.Locks;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemFood;
 import net.minecraft.network.play.server.SPacketMultiBlockChange;
 import net.minecraft.util.math.BlockPos;
@@ -32,7 +44,7 @@ extends ModuleListener<Nuker, PacketEvent.Receive<SPacketMultiBlockChange>> {
                 return;
             }
             for (SPacketMultiBlockChange.BlockUpdateData data : packet.getChangedBlocks()) {
-                if (!blocks.contains(data.getBlockState().getBlock()) || !(BlockUtil.getDistanceSqDigging(ListenerMultiChange.mc.player, data.getPos()) <= (double)MathUtil.square(((Nuker)this.module).range.getValue().floatValue()))) continue;
+                if (!blocks.contains((Object)data.getBlockState().getBlock()) || !(BlockUtil.getDistanceSqDigging((Entity)ListenerMultiChange.mc.player, data.getPos()) <= (double)MathUtil.square(((Nuker)this.module).range.getValue().floatValue()))) continue;
                 toAttack.add(data.getPos());
             }
             if (!toAttack.isEmpty()) {
@@ -57,3 +69,4 @@ extends ModuleListener<Nuker, PacketEvent.Receive<SPacketMultiBlockChange>> {
         }
     }
 }
+

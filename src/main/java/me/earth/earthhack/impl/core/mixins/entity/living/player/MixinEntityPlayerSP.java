@@ -1,3 +1,17 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.entity.EntityPlayerSP
+ *  net.minecraft.client.gui.GuiScreen
+ *  net.minecraft.client.gui.inventory.GuiInventory
+ *  net.minecraft.client.network.NetHandlerPlayClient
+ *  net.minecraft.entity.player.InventoryPlayer
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.MovementInput
+ *  net.minecraft.util.math.AxisAlignedBB
+ */
 package me.earth.earthhack.impl.core.mixins.entity.living.player;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -50,10 +64,10 @@ implements IEntityPlayerSP {
     private static final ModuleCache<Portals> PORTALS = Caches.getModule(Portals.class);
     private static final SettingCache<Boolean, BooleanSetting, Portals> CHAT = Caches.getSetting(Portals.class, BooleanSetting.class, "Chat", true);
     @Shadow
-    public MovementInput field_71158_b;
+    public MovementInput movementInput;
     @Shadow
     @Final
-    public NetHandlerPlayClient field_71174_a;
+    public NetHandlerPlayClient connection;
     private final Minecraft mc = Minecraft.getMinecraft();
     private MotionUpdateEvent.Riding riding;
     private MotionUpdateEvent motionEvent;
@@ -100,12 +114,12 @@ implements IEntityPlayerSP {
 
     @Override
     public void superUpdate() {
-        super.func_70071_h_();
+        super.onUpdate();
     }
 
     @Override
     public void invokeUpdateWalkingPlayer() {
-        this.func_175161_p();
+        this.onUpdateWalkingPlayer();
     }
 
     @Override
@@ -114,7 +128,7 @@ implements IEntityPlayerSP {
     }
 
     @Shadow
-    protected abstract void func_175161_p();
+    protected abstract void onUpdateWalkingPlayer();
 
     @Redirect(method={"closeScreenAndDropStack"}, at=@At(value="INVOKE", target="Lnet/minecraft/entity/player/InventoryPlayer;setItemStack(Lnet/minecraft/item/ItemStack;)V"))
     private void setItemStackHook(InventoryPlayer inventory, ItemStack stack) {
@@ -138,7 +152,7 @@ implements IEntityPlayerSP {
 
     @Inject(method={"onUpdate"}, at={@At(value="NEW", target="net/minecraft/network/play/client/CPacketPlayer$Rotation", shift=At.Shift.BEFORE)}, cancellable=true)
     private void ridingHook_1(CallbackInfo info) {
-        this.riding = new MotionUpdateEvent.Riding(Stage.PRE, this.field_70165_t, this.func_174813_aQ().minY, this.field_70161_v, this.field_70177_z, this.field_70125_A, this.field_70122_E, this.field_70702_br, this.field_191988_bg, this.field_71158_b.jump, this.field_71158_b.sneak);
+        this.riding = new MotionUpdateEvent.Riding(Stage.PRE, this.posX, this.getEntityBoundingBox().minY, this.posZ, this.rotationYaw, this.rotationPitch, this.onGround, this.moveStrafing, this.moveForward, this.movementInput.jump, this.movementInput.sneak);
         Bus.EVENT_BUS.post(this.riding);
         if (this.riding.isCancelled()) {
             info.cancel();
@@ -192,7 +206,7 @@ implements IEntityPlayerSP {
 
     @Inject(method={"onUpdateWalkingPlayer"}, at={@At(value="HEAD")}, cancellable=true)
     private void onUpdateWalkingPlayer_Head(CallbackInfo callbackInfo) {
-        this.motionEvent = new MotionUpdateEvent(Stage.PRE, this.field_70165_t, this.func_174813_aQ().minY, this.field_70161_v, this.field_70177_z, this.field_70125_A, this.field_70122_E);
+        this.motionEvent = new MotionUpdateEvent(Stage.PRE, this.posX, this.getEntityBoundingBox().minY, this.posZ, this.rotationYaw, this.rotationPitch, this.onGround);
         Bus.EVENT_BUS.post(this.motionEvent);
         if (this.motionEvent.isCancelled()) {
             callbackInfo.cancel();
@@ -255,8 +269,9 @@ implements IEntityPlayerSP {
 
     @Inject(method={"isCurrentViewEntity"}, at={@At(value="HEAD")}, cancellable=true)
     private void isCurrentViewEntityHook(CallbackInfoReturnable<Boolean> cir) {
-        if (!this.func_175149_v() && SPECTATE.isEnabled()) {
+        if (!this.isSpectator() && SPECTATE.isEnabled()) {
             cir.setReturnValue(true);
         }
     }
 }
+

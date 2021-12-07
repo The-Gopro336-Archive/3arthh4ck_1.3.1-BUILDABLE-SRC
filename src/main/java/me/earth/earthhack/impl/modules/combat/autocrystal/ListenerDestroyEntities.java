@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketDestroyEntities
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -18,3 +24,4 @@ extends ModuleListener<AutoCrystal, PacketEvent.Receive<SPacketDestroyEntities>>
         }
     }
 }
+

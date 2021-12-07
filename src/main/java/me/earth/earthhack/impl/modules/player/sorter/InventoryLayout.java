@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.gson.JsonElement
+ *  com.google.gson.JsonObject
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.NonNullList
+ */
 package me.earth.earthhack.impl.modules.player.sorter;
 
 import com.google.gson.JsonElement;
@@ -52,3 +62,4 @@ Globals {
         return layout;
     }
 }
+

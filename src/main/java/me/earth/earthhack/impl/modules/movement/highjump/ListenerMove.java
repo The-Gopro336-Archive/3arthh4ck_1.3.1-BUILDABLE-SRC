@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.movement.highjump;
 
 import me.earth.earthhack.impl.event.events.movement.MoveEvent;
@@ -36,3 +39,4 @@ extends ModuleListener<HighJump, MoveEvent> {
         event.setY(ListenerMove.mc.player.motionY);
     }
 }
+

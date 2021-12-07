@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.objectweb.asm.tree.ClassNode
+ *  org.objectweb.asm.tree.LocalVariableNode
+ *  org.objectweb.asm.tree.MethodNode
+ *  org.objectweb.asm.tree.TryCatchBlockNode
+ */
 package me.earth.earthhack.installer.srg2notch.remappers;
 
 import java.util.ArrayList;
@@ -20,8 +29,8 @@ implements Remapper {
                 mn.signature = MappingUtil.mapSignature(mn.signature, mapping);
             }
             if (mn.tryCatchBlocks != null) {
-                for (TryCatchBlockNode tryCatchBlockNode : mn.tryCatchBlocks) {
-                    tryCatchBlockNode.type = mapping.getClasses().getOrDefault(tryCatchBlockNode.type, tryCatchBlockNode.type);
+                for (Object t : mn.tryCatchBlocks) {
+                    ((TryCatchBlockNode)t).type = mapping.getClasses().getOrDefault(((TryCatchBlockNode)t).type, ((TryCatchBlockNode)t).type);
                 }
             }
             if (mn.exceptions != null && !mn.exceptions.isEmpty()) {
@@ -32,11 +41,12 @@ implements Remapper {
                 mn.exceptions = exceptions;
             }
             if (mn.localVariables == null) continue;
-            for (LocalVariableNode localVariableNode : mn.localVariables) {
-                localVariableNode.desc = MappingUtil.mapDescription(localVariableNode.desc, mapping);
-                if (localVariableNode.signature == null) continue;
-                localVariableNode.signature = MappingUtil.mapSignature(localVariableNode.signature, mapping);
+            for (LocalVariableNode l : mn.localVariables) {
+                l.desc = MappingUtil.mapDescription(l.desc, mapping);
+                if (l.signature == null) continue;
+                l.signature = MappingUtil.mapSignature(l.signature, mapping);
             }
         }
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.util;
 
 import java.awt.Graphics2D;
@@ -57,3 +60,4 @@ public class BufferedImageUtil {
         g.drawImage((Image)image.getSubimage(x, y, width, height), x + dx, y + dy, null);
     }
 }
+

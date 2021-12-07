@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.client.CPacketPlayer
+ *  net.minecraft.network.play.client.CPacketPlayer$Position
+ *  net.minecraft.network.play.client.CPacketPlayer$PositionRotation
+ *  net.minecraft.network.play.client.CPacketPlayer$Rotation
+ */
 package me.earth.earthhack.impl.modules.movement.packetfly;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -33,3 +42,4 @@ extends CPacketPlayerListener {
         this.packetFly.onPacketSend(event);
     }
 }
+

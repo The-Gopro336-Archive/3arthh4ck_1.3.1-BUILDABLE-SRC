@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.transformer;
 
 import java.util.HashSet;
@@ -127,3 +130,4 @@ public final class InterfaceInfo {
         return result;
     }
 }
+

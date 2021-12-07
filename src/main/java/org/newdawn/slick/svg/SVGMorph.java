@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.svg;
 
 import java.util.ArrayList;
@@ -74,3 +77,4 @@ extends Diagram {
         return (Figure)this.figures.get(index);
     }
 }
+

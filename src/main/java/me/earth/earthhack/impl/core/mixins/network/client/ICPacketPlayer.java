@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.client.CPacketPlayer
+ */
 package me.earth.earthhack.impl.core.mixins.network.client;
 
 import net.minecraft.network.play.client.CPacketPlayer;
@@ -30,3 +36,4 @@ public interface ICPacketPlayer {
     @Accessor(value="rotating")
     public boolean isRotating();
 }
+

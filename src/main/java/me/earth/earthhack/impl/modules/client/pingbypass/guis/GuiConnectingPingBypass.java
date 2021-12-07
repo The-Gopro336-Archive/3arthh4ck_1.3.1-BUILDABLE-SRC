@@ -1,3 +1,27 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.gui.GuiButton
+ *  net.minecraft.client.gui.GuiDisconnected
+ *  net.minecraft.client.gui.GuiScreen
+ *  net.minecraft.client.multiplayer.ServerAddress
+ *  net.minecraft.client.multiplayer.ServerData
+ *  net.minecraft.client.network.NetHandlerLoginClient
+ *  net.minecraft.client.resources.I18n
+ *  net.minecraft.network.EnumConnectionState
+ *  net.minecraft.network.INetHandler
+ *  net.minecraft.network.NetworkManager
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.handshake.client.C00Handshake
+ *  net.minecraft.network.login.client.CPacketLoginStart
+ *  net.minecraft.util.text.ITextComponent
+ *  net.minecraft.util.text.TextComponentString
+ *  net.minecraft.util.text.TextComponentTranslation
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package me.earth.earthhack.impl.modules.client.pingbypass.guis;
 
 import java.net.InetAddress;
@@ -18,9 +42,12 @@ import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.network.NetHandlerLoginClient;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.network.EnumConnectionState;
+import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
 import net.minecraft.network.handshake.client.C00Handshake;
 import net.minecraft.network.login.client.CPacketLoginStart;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import org.apache.logging.log4j.LogManager;
@@ -46,7 +73,7 @@ extends GuiScreen {
     }
 
     private void connect(final String proxyIP, final int proxyPort, final String actualIP, final int actualPort) {
-        LOGGER.info("Connecting to PingBypass: {}, {}", proxyIP, proxyPort);
+        LOGGER.info("Connecting to PingBypass: {}, {}", (Object)proxyIP, (Object)proxyPort);
         new Thread("Server Connector #" + CONNECTION_ID.incrementAndGet()){
 
             @Override
@@ -58,29 +85,29 @@ extends GuiScreen {
                     }
                     inetaddress = InetAddress.getByName(proxyIP);
                     GuiConnectingPingBypass.this.networkManager = NetworkManager.createNetworkManagerAndConnect((InetAddress)inetaddress, (int)proxyPort, (boolean)GuiConnectingPingBypass.this.mc.gameSettings.isUsingNativeTransport());
-                    GuiConnectingPingBypass.this.networkManager.setNetHandler(new NetHandlerLoginClient(GuiConnectingPingBypass.this.networkManager, GuiConnectingPingBypass.this.mc, GuiConnectingPingBypass.this.previousGuiScreen));
-                    GuiConnectingPingBypass.this.networkManager.sendPacket(new C00Handshake(actualIP, actualPort, EnumConnectionState.LOGIN, true));
-                    GuiConnectingPingBypass.this.networkManager.sendPacket(new CPacketLoginStart(GuiConnectingPingBypass.this.mc.getSession().getProfile()));
+                    GuiConnectingPingBypass.this.networkManager.setNetHandler((INetHandler)new NetHandlerLoginClient(GuiConnectingPingBypass.this.networkManager, GuiConnectingPingBypass.this.mc, GuiConnectingPingBypass.this.previousGuiScreen));
+                    GuiConnectingPingBypass.this.networkManager.sendPacket((Packet)new C00Handshake(actualIP, actualPort, EnumConnectionState.LOGIN, true));
+                    GuiConnectingPingBypass.this.networkManager.sendPacket((Packet)new CPacketLoginStart(GuiConnectingPingBypass.this.mc.getSession().getProfile()));
                 }
                 catch (UnknownHostException e) {
                     if (GuiConnectingPingBypass.this.cancel) {
                         return;
                     }
-                    LOGGER.error("Couldn't connect to PingBypass", e);
-                    GuiConnectingPingBypass.this.mc.addScheduledTask(() -> GuiConnectingPingBypass.this.mc.displayGuiScreen(new GuiDisconnected(GuiConnectingPingBypass.this.previousGuiScreen, "connect.failed", new TextComponentTranslation("disconnect.genericReason", new Object[]{"Unknown host"}))));
+                    LOGGER.error("Couldn't connect to PingBypass", (Throwable)e);
+                    GuiConnectingPingBypass.this.mc.addScheduledTask(() -> GuiConnectingPingBypass.this.mc.displayGuiScreen((GuiScreen)new GuiDisconnected(GuiConnectingPingBypass.this.previousGuiScreen, "connect.failed", (ITextComponent)new TextComponentTranslation("disconnect.genericReason", new Object[]{"Unknown host"}))));
                 }
                 catch (Exception exception) {
                     if (GuiConnectingPingBypass.this.cancel) {
                         return;
                     }
-                    LOGGER.error("Couldn't connect to PingBypass", exception);
+                    LOGGER.error("Couldn't connect to PingBypass", (Throwable)exception);
                     String s = exception.toString();
                     if (inetaddress != null) {
                         String s1 = inetaddress + ":" + proxyPort;
                         s = s.replace(s1, "");
                     }
                     String finalS = s;
-                    GuiConnectingPingBypass.this.mc.addScheduledTask(() -> GuiConnectingPingBypass.this.mc.displayGuiScreen(new GuiDisconnected(GuiConnectingPingBypass.this.previousGuiScreen, "connect.failed", new TextComponentTranslation("disconnect.genericReason", new Object[]{finalS}))));
+                    GuiConnectingPingBypass.this.mc.addScheduledTask(() -> GuiConnectingPingBypass.this.mc.displayGuiScreen((GuiScreen)new GuiDisconnected(GuiConnectingPingBypass.this.previousGuiScreen, "connect.failed", (ITextComponent)new TextComponentTranslation("disconnect.genericReason", new Object[]{finalS}))));
                 }
             }
         }.start();
@@ -91,7 +118,7 @@ extends GuiScreen {
             if (this.networkManager.isChannelOpen()) {
                 this.networkManager.processReceivedPackets();
             } else {
-                this.networkManager.checkDisconnected();
+                this.networkManager.handleDisconnection();
             }
         }
     }
@@ -105,7 +132,7 @@ extends GuiScreen {
         if (button.id == 0) {
             this.cancel = true;
             if (this.networkManager != null) {
-                this.networkManager.closeChannel(new TextComponentString("Aborted"));
+                this.networkManager.closeChannel((ITextComponent)new TextComponentString("Aborted"));
             }
             this.mc.displayGuiScreen(this.previousGuiScreen);
         }
@@ -114,10 +141,11 @@ extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
         if (this.networkManager == null) {
-            this.func_73732_a(this.fontRenderer, "Authentication" + IdleUtil.getDots(), this.width / 2 + IdleUtil.getDots().length(), this.height / 2 - 50, 0xFFFFFF);
+            this.drawCenteredString(this.fontRenderer, "Authentication" + IdleUtil.getDots(), this.width / 2 + IdleUtil.getDots().length(), this.height / 2 - 50, 0xFFFFFF);
         } else {
-            this.func_73732_a(this.fontRenderer, "Loading PingBypass" + IdleUtil.getDots(), this.width / 2 + IdleUtil.getDots().length(), this.height / 2 - 50, 0xFFFFFF);
+            this.drawCenteredString(this.fontRenderer, "Loading PingBypass" + IdleUtil.getDots(), this.width / 2 + IdleUtil.getDots().length(), this.height / 2 - 50, 0xFFFFFF);
         }
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 }
+

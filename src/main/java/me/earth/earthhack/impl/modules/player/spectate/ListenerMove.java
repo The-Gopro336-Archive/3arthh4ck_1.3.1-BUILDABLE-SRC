@@ -1,8 +1,16 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.util.math.AxisAlignedBB
+ */
 package me.earth.earthhack.impl.modules.player.spectate;
 
 import me.earth.earthhack.impl.event.events.movement.MoveEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import me.earth.earthhack.impl.modules.player.spectate.Spectate;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;
 
 final class ListenerMove
@@ -18,7 +26,7 @@ extends ModuleListener<Spectate, MoveEvent> {
             double y = event.getY();
             double z = event.getZ();
             if (y != 0.0) {
-                for (AxisAlignedBB a : ListenerMove.mc.world.getCollisionBoxes(ListenerMove.mc.player, ListenerMove.mc.player.getEntityBoundingBox().expand(x, y, z))) {
+                for (AxisAlignedBB a : ListenerMove.mc.world.getCollisionBoxes((Entity)ListenerMove.mc.player, ListenerMove.mc.player.getEntityBoundingBox().expand(x, y, z))) {
                     y = a.calculateYOffset(ListenerMove.mc.player.getEntityBoundingBox(), y);
                 }
             }
@@ -28,3 +36,4 @@ extends ModuleListener<Spectate, MoveEvent> {
         }
     }
 }
+

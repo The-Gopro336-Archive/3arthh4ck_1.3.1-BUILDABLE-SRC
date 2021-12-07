@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.item.EntityPainting
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.commands.packet.arguments;
 
 import me.earth.earthhack.api.command.PossibleInputs;
@@ -9,6 +18,7 @@ import me.earth.earthhack.impl.commands.packet.exception.ArgParseException;
 import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class EntityPaintingArgument
 extends AbstractArgument<EntityPainting>
@@ -34,8 +44,8 @@ implements Globals {
         double z = split.length > 3 ? ArgParseException.tryDouble(split[3], "z") : EntityPaintingArgument.mc.player.posZ;
         EnumFacing facing = split.length > 4 ? FACING_ARGUMENT.fromString(split[4]) : EnumFacing.UP;
         BlockPos pos = new BlockPos(x, y, z);
-        EntityPainting painting = new EntityPainting(EntityPaintingArgument.mc.world, pos, facing);
-        painting.func_145769_d(id);
+        EntityPainting painting = new EntityPainting((World)EntityPaintingArgument.mc.world, pos, facing);
+        painting.setEntityId(id);
         return painting;
     }
 
@@ -69,3 +79,4 @@ implements Globals {
         return inputs;
     }
 }
+

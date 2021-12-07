@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.svg;
 
 import java.io.ByteArrayInputStream;
@@ -122,3 +125,4 @@ implements Loader {
         InkscapeLoader.addElementProcessor(new UseProcessor());
     }
 }
+

@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.init.Items
+ *  net.minecraft.inventory.EntityEquipmentSlot
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemArmor
+ *  net.minecraft.item.ItemStack
+ */
 package me.earth.earthhack.impl.modules.combat.autoarmor;
 
 import java.util.ArrayList;
@@ -85,7 +95,7 @@ extends ModuleListener<AutoArmor, TickEvent> {
                         drag = inSlot;
                         last = slot;
                     }
-                    map.remove(entry.getKey());
+                    map.remove((Object)entry.getKey());
                     break;
                 }
                 for (Map.Entry<EntityEquipmentSlot, Integer> entry : map.entrySet()) {
@@ -143,7 +153,7 @@ extends ModuleListener<AutoArmor, TickEvent> {
                     continue;
                 }
                 if (!(stack.getItem() instanceof ItemArmor)) continue;
-                ItemArmor itemArmor = (ItemArmor)((Object)stack.getItem());
+                ItemArmor itemArmor = (ItemArmor)stack.getItem();
                 clientValue += itemArmor.damageReduceAmount;
             }
             if (clientValue != armorValue && ((AutoArmor)this.module).timer.passed(((AutoArmor)this.module).delay.getValue().intValue())) {
@@ -167,3 +177,4 @@ extends ModuleListener<AutoArmor, TickEvent> {
         return false;
     }
 }
+

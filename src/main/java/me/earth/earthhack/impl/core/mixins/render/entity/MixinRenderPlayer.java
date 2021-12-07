@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.entity.AbstractClientPlayer
+ *  net.minecraft.client.renderer.GlStateManager
+ *  net.minecraft.client.renderer.entity.RenderPlayer
+ */
 package me.earth.earthhack.impl.core.mixins.render.entity;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -40,3 +48,4 @@ public abstract class MixinRenderPlayer {
         }
     }
 }
+

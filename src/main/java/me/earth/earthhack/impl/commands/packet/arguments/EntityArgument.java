@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.commands.packet.arguments;
 
 import me.earth.earthhack.api.command.PossibleInputs;
@@ -9,6 +16,7 @@ import me.earth.earthhack.impl.commands.packet.exception.ArgParseException;
 import me.earth.earthhack.impl.commands.packet.util.DummyEntity;
 import me.earth.earthhack.impl.util.thread.LookUpUtil;
 import net.minecraft.entity.Entity;
+import net.minecraft.world.World;
 
 public class EntityArgument
 extends AbstractArgument<Entity>
@@ -31,7 +39,7 @@ implements Globals {
             catch (Exception exception) {
                 // empty catch block
             }
-            entity = new DummyEntity(EntityArgument.mc.world);
+            entity = new DummyEntity((World)EntityArgument.mc.world);
             entity.setEntityId(id);
         }
         return entity;
@@ -53,3 +61,4 @@ implements Globals {
         return inputs.setCompletion(TextUtil.substring(name, argument.length()));
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.core.transfomer;
 
 import me.earth.earthhack.impl.core.transfomer.Patch;
@@ -7,3 +10,4 @@ public interface PatchManager {
 
     public byte[] transform(String var1, String var2, byte[] var3);
 }
+

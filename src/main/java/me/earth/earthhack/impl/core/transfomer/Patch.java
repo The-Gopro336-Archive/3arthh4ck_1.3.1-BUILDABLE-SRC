@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.objectweb.asm.tree.ClassNode
+ */
 package me.earth.earthhack.impl.core.transfomer;
 
 import org.objectweb.asm.tree.ClassNode;
@@ -11,3 +17,4 @@ public interface Patch {
 
     public boolean isFinished();
 }
+

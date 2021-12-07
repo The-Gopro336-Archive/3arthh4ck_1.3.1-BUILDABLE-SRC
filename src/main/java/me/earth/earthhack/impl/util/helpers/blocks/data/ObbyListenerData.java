@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.helpers.blocks.data;
 
 import me.earth.earthhack.impl.util.helpers.blocks.ObbyListenerModule;
@@ -10,3 +13,4 @@ extends ObbyData<T> {
         this.register(((ObbyListenerModule)module).confirm, "Time from placing a block until it's confirmed by the server.");
     }
 }
+

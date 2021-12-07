@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.installer.srg2notch;
 
 import java.io.BufferedReader;
@@ -78,3 +81,4 @@ public class Mapping {
         return new Mapping(classes, fields, methods, constants);
     }
 }
+

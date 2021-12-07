@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.RayTraceResult
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.util.math.raytrace;
 
 import me.earth.earthhack.impl.util.math.raytrace.RayTraceFactory;
@@ -58,3 +68,4 @@ public class Ray {
         return this;
     }
 }
+

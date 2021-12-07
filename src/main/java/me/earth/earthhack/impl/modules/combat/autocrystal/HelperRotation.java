@@ -1,3 +1,25 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.init.Items
+ *  net.minecraft.item.Item
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock
+ *  net.minecraft.network.play.client.CPacketUseEntity
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.RayTraceResult
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.world.IBlockAccess
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -34,9 +56,11 @@ import me.earth.earthhack.impl.util.thread.Locks;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.util.EnumFacing;
@@ -44,6 +68,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 public class HelperRotation
 implements Globals {
@@ -81,7 +107,7 @@ implements Globals {
                 double height = this.module.placeHeight.getValue();
                 if (this.module.smartTrace.getValue().booleanValue()) {
                     for (EnumFacing facing : EnumFacing.values()) {
-                        Ray ray = RayTraceFactory.rayTrace(HelperRotation.mc.player, pos, facing, HelperRotation.mc.world, Blocks.OBSIDIAN.getDefaultState(), this.module.traceWidth.getValue());
+                        Ray ray = RayTraceFactory.rayTrace((Entity)HelperRotation.mc.player, pos, facing, (IBlockAccess)HelperRotation.mc.world, Blocks.OBSIDIAN.getDefaultState(), this.module.traceWidth.getValue());
                         if (!ray.isLegit()) continue;
                         rotations = ray.getRotations();
                         break;
@@ -125,7 +151,7 @@ implements Globals {
                 return new float[]{yaw, pitch};
             }
             Ray ray = data.getPath()[0];
-            ray.updateRotations(RotationUtil.getRotationPlayer());
+            ray.updateRotations((Entity)RotationUtil.getRotationPlayer());
             return ray.getRotations();
         };
     }
@@ -163,19 +189,19 @@ implements Globals {
                 }
                 hand = slot == -2 ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
             }
-            if ((ray = RotationUtil.rayTraceTo(pos, HelperRotation.mc.world)) == null || !pos.equals(ray.getBlockPos())) {
+            if ((ray = RotationUtil.rayTraceTo(pos, (IBlockAccess)HelperRotation.mc.world)) == null || !pos.equals((Object)ray.getBlockPos())) {
                 if (!module.rotate.getValue().noRotate(ACRotate.Place)) {
                     return;
                 }
                 ray = new RayTraceResult(new Vec3d(0.5, 1.0, 0.5), EnumFacing.UP);
-            } else if (module.fallbackTrace.getValue().booleanValue() && HelperRotation.mc.world.getBlockState(ray.getBlockPos().offset(ray.sideHit)).func_185904_a().isSolid()) {
+            } else if (module.fallbackTrace.getValue().booleanValue() && HelperRotation.mc.world.getBlockState(ray.getBlockPos().offset(ray.sideHit)).getMaterial().isSolid()) {
                 ray = new RayTraceResult(new Vec3d(0.5, 1.0, 0.5), EnumFacing.UP);
             }
             module.switching = false;
             SwingTime swingTime = module.placeSwing.getValue();
             float[] f = RayTraceUtil.hitVecToPlaceVec(pos, ray.hitVec);
             boolean noGodded = false;
-            if (module.idHelper.isDangerous(HelperRotation.mc.player, module.holdingCheck.getValue(), module.toolCheck.getValue())) {
+            if (module.idHelper.isDangerous((EntityPlayer)HelperRotation.mc.player, module.holdingCheck.getValue(), module.toolCheck.getValue())) {
                 module.noGod = true;
                 noGodded = true;
             }
@@ -204,7 +230,7 @@ implements Globals {
                 if (swingTime == SwingTime.Pre) {
                     this.swing(finalHand, false);
                 }
-                HelperRotation.mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(pos, finalRay.sideHit, finalHand, f[0], f[1], f[2]));
+                HelperRotation.mc.player.connection.sendPacket((Packet)new CPacketPlayerTryUseItemOnBlock(pos, finalRay.sideHit, finalHand, f[0], f[1], f[2]));
                 if (finalNoGodded) {
                     module.noGod = false;
                 }
@@ -232,7 +258,7 @@ implements Globals {
                 module.setRenderPos(pos, damage);
             }
             if (module.simulatePlace.getValue() == 0) return;
-            module.crystalRender.addFakeCrystal(new EntityEnderCrystal(HelperRotation.mc.world, (float)pos.getX() + 0.5f, pos.getY() + 1, (float)pos.getZ() + 0.5f));
+            module.crystalRender.addFakeCrystal(new EntityEnderCrystal((World)HelperRotation.mc.world, (double)((float)pos.getX() + 0.5f), (double)(pos.getY() + 1), (double)((float)pos.getZ() + 0.5f)));
         };
     }
 
@@ -264,7 +290,7 @@ implements Globals {
                 if (swingTime == SwingTime.Pre) {
                     this.swing(EnumHand.MAIN_HAND, true);
                 }
-                HelperRotation.mc.player.connection.sendPacket(packet);
+                HelperRotation.mc.player.connection.sendPacket((Packet)packet);
                 attacked.set(true);
                 if (swingTime == SwingTime.Post) {
                     this.swing(EnumHand.MAIN_HAND, true);
@@ -291,7 +317,7 @@ implements Globals {
                 runnable.run();
             }
             if (this.module.pseudoSetDead.getValue().booleanValue()) {
-                ((IEntity)((Object)entity)).setPseudoDead(true);
+                ((IEntity)entity).setPseudoDead(true);
             }
             if (this.module.setDead.getValue().booleanValue()) {
                 Managers.SET_DEAD.setDead(entity);
@@ -337,11 +363,11 @@ implements Globals {
                     if (rotate == Rotate.Packet && !RotationUtil.isLegit(ray.getPos(), ray.getFacing())) {
                         Managers.ROTATION.setBlocking(true);
                         float[] r = ray.getRotations();
-                        HelperRotation.mc.player.connection.sendPacket(PacketUtil.rotation(r[0], r[1], HelperRotation.mc.player.onGround));
+                        HelperRotation.mc.player.connection.sendPacket((Packet)PacketUtil.rotation(r[0], r[1], HelperRotation.mc.player.onGround));
                         Managers.ROTATION.setBlocking(false);
                     }
                     float[] f = RayTraceUtil.hitVecToPlaceVec(ray.getPos(), ray.getResult().hitVec);
-                    HelperRotation.mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(ray.getPos(), ray.getFacing(), hand, f[0], f[1], f[2]));
+                    HelperRotation.mc.player.connection.sendPacket((Packet)new CPacketPlayerTryUseItemOnBlock(ray.getPos(), ray.getFacing(), hand, f[0], f[1], f[2]));
                     if (this.module.setState.getValue().booleanValue() && preSlot == -1) {
                         mc.addScheduledTask(() -> {
                             if (HelperRotation.mc.world != null) {
@@ -444,3 +470,4 @@ implements Globals {
         return new WeaknessSwitch(DamageUtil.findAntiWeakness(), true);
     }
 }
+

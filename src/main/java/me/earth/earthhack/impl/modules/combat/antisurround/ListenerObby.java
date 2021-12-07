@@ -1,3 +1,26 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.entity.item.EntityItem
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.init.Items
+ *  net.minecraft.item.Item
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.RayTraceResult
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.modules.combat.antisurround;
 
 import java.util.List;
@@ -28,12 +51,14 @@ import me.earth.earthhack.impl.util.network.PacketUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -73,12 +98,12 @@ extends ObbyListener<AntiSurround> {
         synchronized (antiSurround) {
             if (((AntiSurround)this.module).active.get()) {
                 EntityPlayer target = ((AntiSurround)this.module).target;
-                if (target == null || EntityUtil.isDead(target)) {
+                if (target == null || EntityUtil.isDead((Entity)target)) {
                     ((AntiSurround)this.module).reset();
                     return;
                 }
-                IBlockState state = ListenerObby.mc.world.getBlockState(PositionUtil.getPosition(target));
-                if (!state.func_185904_a().isReplaceable() && state.getBlock().getExplosionResistance(ListenerObby.mc.player) > 100.0f) {
+                IBlockState state = ListenerObby.mc.world.getBlockState(PositionUtil.getPosition((Entity)target));
+                if (!state.getMaterial().isReplaceable() && state.getBlock().getExplosionResistance((Entity)ListenerObby.mc.player) > 100.0f) {
                     ((AntiSurround)this.module).reset();
                     return;
                 }
@@ -88,7 +113,7 @@ extends ObbyListener<AntiSurround> {
                 }
                 BlockStateHelper helper = new BlockStateHelper();
                 helper.addAir(((AntiSurround)this.module).pos);
-                float damage = DamageUtil.calculate(((AntiSurround)this.module).pos, target, helper);
+                float damage = DamageUtil.calculate(((AntiSurround)this.module).pos, (EntityLivingBase)target, helper);
                 if (damage < ((AntiSurround)this.module).minDmg.getValue().floatValue()) {
                     ((AntiSurround)this.module).reset();
                     return;
@@ -108,8 +133,8 @@ extends ObbyListener<AntiSurround> {
             }
             int obbySlot = InventoryUtil.findHotbarBlock(Blocks.OBSIDIAN, new Block[0]);
             for (EntityPlayer player : ListenerObby.mc.world.playerEntities) {
-                if (player == null || EntityUtil.isDead(player) || player.equals(ListenerObby.mc.player) || player.equals(RotationUtil.getRotationPlayer()) || Managers.FRIENDS.contains(player) || player.getDistanceSq(RotationUtil.getRotationPlayer()) > MathUtil.square(((AntiSurround)this.module).range.getValue() + 2.0)) continue;
-                BlockPos playerPos = PositionUtil.getPosition(player);
+                if (player == null || EntityUtil.isDead((Entity)player) || player.equals((Object)ListenerObby.mc.player) || player.equals((Object)RotationUtil.getRotationPlayer()) || Managers.FRIENDS.contains(player) || player.getDistanceSq((Entity)RotationUtil.getRotationPlayer()) > MathUtil.square(((AntiSurround)this.module).range.getValue() + 2.0)) continue;
+                BlockPos playerPos = PositionUtil.getPosition((Entity)player);
                 for (EnumFacing facing : EnumFacing.HORIZONTALS) {
                     int slot;
                     double damage;
@@ -117,14 +142,14 @@ extends ObbyListener<AntiSurround> {
                     Entity blocking;
                     BlockPos down;
                     BlockPos pos = playerPos.offset(facing);
-                    if (BlockUtil.getDistanceSq(pos) > MathUtil.square(((AntiSurround)this.module).range.getValue()) || BlockUtil.getDistanceSq(down = pos.offset(facing).down()) > MathUtil.square(((AntiSurround)this.module).range.getValue()) || (blocking = ((AntiSurround)this.module).getBlockingEntity(pos, ListenerObby.mc.world.loadedEntityList)) != null && !(blocking instanceof EntityEnderCrystal) || (state = ListenerObby.mc.world.getBlockState(pos)).func_185904_a().isReplaceable() || state.getBlock() == Blocks.BEDROCK || state.getBlock() == Blocks.OBSIDIAN || state.getBlock() == Blocks.ENDER_CHEST || (damage = (double)MineUtil.getDamage(state, ListenerObby.mc.player.inventory.getStackInSlot(slot = MineUtil.findBestTool(playerPos, state)), playerPos, RotationUtil.getRotationPlayer().onGround)) < (double)((AntiSurround)this.module).minMine.getValue().floatValue() || !BlockUtil.canPlaceCrystalReplaceable(down, true, ((AntiSurround)this.module).newVer.getValue(), ListenerObby.mc.world.loadedEntityList, ((AntiSurround)this.module).newVerEntities.getValue(), 0L)) continue;
+                    if (BlockUtil.getDistanceSq(pos) > MathUtil.square(((AntiSurround)this.module).range.getValue()) || BlockUtil.getDistanceSq(down = pos.offset(facing).down()) > MathUtil.square(((AntiSurround)this.module).range.getValue()) || (blocking = ((AntiSurround)this.module).getBlockingEntity(pos, ListenerObby.mc.world.loadedEntityList)) != null && !(blocking instanceof EntityEnderCrystal) || (state = ListenerObby.mc.world.getBlockState(pos)).getMaterial().isReplaceable() || state.getBlock() == Blocks.BEDROCK || state.getBlock() == Blocks.OBSIDIAN || state.getBlock() == Blocks.ENDER_CHEST || (damage = (double)MineUtil.getDamage(state, ListenerObby.mc.player.inventory.getStackInSlot(slot = MineUtil.findBestTool(playerPos, state)), playerPos, RotationUtil.getRotationPlayer().onGround)) < (double)((AntiSurround)this.module).minMine.getValue().floatValue() || !BlockUtil.canPlaceCrystalReplaceable(down, true, ((AntiSurround)this.module).newVer.getValue(), ListenerObby.mc.world.loadedEntityList, ((AntiSurround)this.module).newVerEntities.getValue(), 0L)) continue;
                     IBlockState dState = ListenerObby.mc.world.getBlockState(down);
                     if ((!((AntiSurround)this.module).obby.getValue().booleanValue() || obbySlot == -1) && dState.getBlock() != Blocks.OBSIDIAN && dState.getBlock() != Blocks.BEDROCK) continue;
                     BlockPos on = null;
                     EnumFacing onFacing = null;
                     for (EnumFacing off : EnumFacing.values()) {
                         on = pos.offset(off);
-                        if (!(BlockUtil.getDistanceSq(on) <= MathUtil.square(((AntiSurround)this.module).range.getValue())) || ListenerObby.mc.world.getBlockState(on).func_185904_a().isReplaceable()) continue;
+                        if (!(BlockUtil.getDistanceSq(on) <= MathUtil.square(((AntiSurround)this.module).range.getValue())) || ListenerObby.mc.world.getBlockState(on).getMaterial().isReplaceable()) continue;
                         onFacing = off.getOpposite();
                         break;
                     }
@@ -192,7 +217,7 @@ extends ObbyListener<AntiSurround> {
     }
 
     private void mine(BlockPos pos) {
-        EnumFacing facing = RayTraceUtil.getFacing(RotationUtil.getRotationPlayer(), pos, true);
+        EnumFacing facing = RayTraceUtil.getFacing((Entity)RotationUtil.getRotationPlayer(), pos, true);
         PacketUtil.startDigging(pos, facing);
         if (((AntiSurround)this.module).digSwing.getValue().booleanValue()) {
             Swing.Packet.swing(EnumHand.MAIN_HAND);
@@ -226,7 +251,7 @@ extends ObbyListener<AntiSurround> {
             result.setValid(false);
             return result;
         }
-        if (ListenerObby.mc.world.getBlockState(pos).func_185904_a().isReplaceable()) {
+        if (ListenerObby.mc.world.getBlockState(pos).getMaterial().isReplaceable()) {
             AntiSurround.HELPER.addBlockState(pos, Blocks.AIR.getDefaultState());
             result.getTargets().add(pos);
         } else if (this.entityCheck(pos)) {
@@ -251,14 +276,14 @@ extends ObbyListener<AntiSurround> {
             helper.addBlockState(this.crystalPos, Blocks.OBSIDIAN.getDefaultState());
             RayTraceResult ray = null;
             if (((AntiSurround)this.module).rotations != null) {
-                ray = RotationUtil.rayTraceWithYP(this.crystalPos, helper, ((AntiSurround)this.module).rotations[0], ((AntiSurround)this.module).rotations[1], (b, p) -> p.equals(this.crystalPos));
+                ray = RotationUtil.rayTraceWithYP(this.crystalPos, helper, ((AntiSurround)this.module).rotations[0], ((AntiSurround)this.module).rotations[1], (b, p) -> p.equals((Object)this.crystalPos));
             }
             if (ray == null) {
                 double x = RotationUtil.getRotationPlayer().posX;
                 double y = RotationUtil.getRotationPlayer().posY;
                 double z = RotationUtil.getRotationPlayer().posZ;
                 ((AntiSurround)this.module).rotations = RotationUtil.getRotations((float)this.crystalPos.getX() + 0.5f, this.crystalPos.getY() + 1, (float)this.crystalPos.getZ() + 0.5f, x, y, z, ListenerObby.mc.player.getEyeHeight());
-                ray = RotationUtil.rayTraceWithYP(this.crystalPos, helper, ((AntiSurround)this.module).rotations[0], ((AntiSurround)this.module).rotations[1], (b, p) -> p.equals(this.crystalPos));
+                ray = RotationUtil.rayTraceWithYP(this.crystalPos, helper, ((AntiSurround)this.module).rotations[0], ((AntiSurround)this.module).rotations[1], (b, p) -> p.equals((Object)this.crystalPos));
                 if (ray == null) {
                     ray = new RayTraceResult(new Vec3d(0.5, 1.0, 0.5), EnumFacing.UP, this.crystalPos);
                 }
@@ -270,7 +295,7 @@ extends ObbyListener<AntiSurround> {
             BlockPos finalPos = this.crystalPos;
             ((AntiSurround)this.module).post.add(() -> {
                 InventoryUtil.switchTo(crystalSlot);
-                ListenerObby.mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(finalPos, finalResult.sideHit, h, f[0], f[1], f[2]));
+                ListenerObby.mc.player.connection.sendPacket((Packet)new CPacketPlayerTryUseItemOnBlock(finalPos, finalResult.sideHit, h, f[0], f[1], f[2]));
             });
         }
         return super.rotateCheck();
@@ -293,7 +318,7 @@ extends ObbyListener<AntiSurround> {
         }
         IBlockState state = ListenerObby.mc.world.getBlockState(crystalPos);
         if (state.getBlock() != Blocks.OBSIDIAN && state.getBlock() != Blocks.BEDROCK) {
-            if (!state.func_185904_a().isReplaceable() || !((AntiSurround)this.module).obby.getValue().booleanValue() || ((AntiSurround)this.module).obbySlot == -1) {
+            if (!state.getMaterial().isReplaceable() || !((AntiSurround)this.module).obby.getValue().booleanValue() || ((AntiSurround)this.module).obbySlot == -1) {
                 ((AntiSurround)this.module).reset();
                 result.setValid(false);
                 return;
@@ -313,3 +338,4 @@ extends ObbyListener<AntiSurround> {
         return false;
     }
 }
+

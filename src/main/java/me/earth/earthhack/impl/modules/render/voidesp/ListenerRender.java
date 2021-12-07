@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.world.DimensionType
+ */
 package me.earth.earthhack.impl.modules.render.voidesp;
 
 import me.earth.earthhack.impl.event.events.render.Render3DEvent;
@@ -23,3 +29,4 @@ extends ModuleListener<VoidESP, Render3DEvent> {
         }
     }
 }
+

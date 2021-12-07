@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.hud.util;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -19,3 +22,4 @@ extends DefaultData<HUD> {
         return "Displays info like ping, tps or toggled modules on your screen.";
     }
 }
+

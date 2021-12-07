@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.injection.throwables;
 
 import org.spongepowered.asm.mixin.injection.struct.InjectorGroupInfo;
@@ -16,3 +19,4 @@ extends Exception {
         return this.group;
     }
 }
+

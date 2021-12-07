@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.MovementInput
+ */
 package me.earth.earthhack.impl.modules.movement.noslowdown;
 
 import me.earth.earthhack.impl.event.events.movement.MovementInputEvent;
@@ -20,3 +26,4 @@ extends ModuleListener<NoSlowDown, MovementInputEvent> {
         }
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.lib.tree;
 
 import java.util.Map;
@@ -40,3 +43,4 @@ extends AbstractInsnNode {
         return new InvokeDynamicInsnNode(this.name, this.desc, this.bsm, this.bsmArgs).cloneAnnotations(this);
     }
 }
+

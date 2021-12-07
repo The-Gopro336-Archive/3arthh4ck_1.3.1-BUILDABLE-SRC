@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.opengl;
 
 import java.awt.Color;
@@ -157,3 +160,4 @@ implements LoadableImageData {
         this.edging = edging;
     }
 }
+

@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketSetSlot
+ */
 package me.earth.earthhack.impl.modules.combat.offhand;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -21,3 +27,4 @@ extends ModuleListener<Offhand, PacketEvent.Receive<SPacketSetSlot>> {
         ((Offhand)this.module).asyncSlot = -1;
     }
 }
+

@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.NonNullList
+ */
 package me.earth.earthhack.impl.commands.packet.generic;
 
 import java.lang.reflect.Constructor;
@@ -21,3 +27,4 @@ extends AbstractIterableArgument<T, NonNullList<T>> {
         return list;
     }
 }
+

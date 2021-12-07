@@ -1,9 +1,19 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.multiplayer.PlayerControllerMP
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.inventory.ClickType
+ *  net.minecraft.item.ItemStack
+ */
 package me.earth.earthhack.impl.modules.combat.autoarmor.util;
 
 import java.util.function.Consumer;
 import me.earth.earthhack.api.util.interfaces.Globals;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.item.ItemStack;
 
@@ -24,7 +34,7 @@ implements Globals {
     }
 
     public WindowClick(int slot, ItemStack inSlot, ItemStack inDrag, int target) {
-        this(slot, inSlot, inDrag, target, p -> p.windowClick(0, slot, 0, ClickType.PICKUP, WindowClick.mc.player));
+        this(slot, inSlot, inDrag, target, p -> p.windowClick(0, slot, 0, ClickType.PICKUP, (EntityPlayer)WindowClick.mc.player));
     }
 
     public WindowClick(int slot, ItemStack inSlot, ItemStack inDrag, int target, Consumer<PlayerControllerMP> action) {
@@ -93,3 +103,4 @@ implements Globals {
         this.fast = fast;
     }
 }
+

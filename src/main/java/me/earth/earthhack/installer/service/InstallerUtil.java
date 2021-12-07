@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.gson.JsonArray
+ *  com.google.gson.JsonElement
+ *  com.google.gson.JsonObject
+ */
 package me.earth.earthhack.installer.service;
 
 import com.google.gson.JsonArray;
@@ -22,7 +30,7 @@ public class InstallerUtil {
         JsonArray array = libs.getAsJsonArray();
         JsonObject object = new JsonObject();
         object.add("name", Jsonable.parse(forge ? NAME : VNAME));
-        array.add(object);
+        array.add((JsonElement)object);
         o.add("libraries", libs);
     }
 
@@ -31,9 +39,7 @@ public class InstallerUtil {
         JsonArray array = libs.getAsJsonArray();
         boolean hasAsm = false;
         boolean hasLaunch = false;
-        Iterator iterator = array.iterator();
-        while (iterator.hasNext()) {
-            JsonElement element = (JsonElement)iterator.next();
+        for (JsonElement element : array) {
             JsonElement name = element.getAsJsonObject().get("name");
             if (name == null) continue;
             if (name.getAsString().equals(ASM)) {
@@ -52,17 +58,17 @@ public class InstallerUtil {
             artifact.add("url", Jsonable.parse("https://files.minecraftforge.net/maven/org/ow2/asm/asm-debug-all/5.2/asm-debug-all-5.2.jar"));
             artifact.add("sha1", Jsonable.parse("3354e11e2b34215f06dab629ab88e06aca477c19"));
             artifact.add("size", Jsonable.parse("387903", false));
-            downloads.add("artifact", artifact);
-            asmLib.add("downloads", downloads);
+            downloads.add("artifact", (JsonElement)artifact);
+            asmLib.add("downloads", (JsonElement)downloads);
             asmLib.add("earthhlib", Jsonable.parse("true", false));
-            array.add(asmLib);
+            array.add((JsonElement)asmLib);
         }
         if (!hasLaunch) {
             JsonObject launchLib = new JsonObject();
             launchLib.add("name", Jsonable.parse(LAUNCH));
             launchLib.add("serverreq", Jsonable.parse("true", false));
             launchLib.add("earthhlib", Jsonable.parse("true", false));
-            array.add(launchLib);
+            array.add((JsonElement)launchLib);
         }
     }
 
@@ -100,3 +106,4 @@ public class InstallerUtil {
         }
     }
 }
+

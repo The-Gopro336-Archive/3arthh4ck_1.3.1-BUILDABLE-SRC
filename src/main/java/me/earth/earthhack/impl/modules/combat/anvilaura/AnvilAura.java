@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.combat.anvilaura;
 
 import java.awt.Color;
@@ -182,3 +192,4 @@ extends ObbyListenerModule<ListenerAnvilAura> {
         return this.mode.getValue() == AnvilMode.Mine && (this.holdingAnvil.getValue() == false || InventoryUtil.isHolding(Blocks.ANVIL));
     }
 }
+

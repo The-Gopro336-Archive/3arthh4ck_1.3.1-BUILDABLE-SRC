@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.commands.packet.array;
 
 import java.util.function.Function;
@@ -18,3 +21,4 @@ extends AbstractArrayArgument<T> {
         return this.function.apply(size);
     }
 }
+

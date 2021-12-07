@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.server;
 
 import me.earth.earthhack.impl.event.events.network.NoMotionUpdateEvent;
@@ -21,3 +24,4 @@ extends ModuleListener<ServerModule, NoMotionUpdateEvent> {
         ProtocolPlayUtil.sendVelocityAndPosition(((ServerModule)this.module).connectionManager, RotationUtil.getRotationPlayer());
     }
 }
+

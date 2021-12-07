@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.item.ItemFood
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItem
+ */
 package me.earth.earthhack.impl.modules.client.server;
 
 import java.io.IOException;
@@ -33,3 +40,4 @@ extends ModuleListener<ServerModule, PacketEvent.Send<CPacketPlayerTryUseItem>> 
         }
     }
 }
+

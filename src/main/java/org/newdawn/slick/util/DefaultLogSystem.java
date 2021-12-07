@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.util;
 
 import java.io.PrintStream;
@@ -46,3 +49,4 @@ implements LogSystem {
         e.printStackTrace(out);
     }
 }
+

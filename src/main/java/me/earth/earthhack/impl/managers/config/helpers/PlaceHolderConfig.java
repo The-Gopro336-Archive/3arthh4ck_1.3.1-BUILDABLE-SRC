@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.managers.config.helpers;
 
 import java.io.IOException;
@@ -62,3 +65,4 @@ Registrable {
         return this.name;
     }
 }
+

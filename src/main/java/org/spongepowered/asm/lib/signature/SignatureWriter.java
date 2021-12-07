@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.lib.signature;
 
 import org.spongepowered.asm.lib.signature.SignatureVisitor;
@@ -133,3 +136,4 @@ extends SignatureVisitor {
         this.argumentStack /= 2;
     }
 }
+

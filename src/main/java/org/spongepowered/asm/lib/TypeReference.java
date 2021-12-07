@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.lib;
 
 public class TypeReference {
@@ -97,3 +100,4 @@ public class TypeReference {
         return this.value;
     }
 }
+

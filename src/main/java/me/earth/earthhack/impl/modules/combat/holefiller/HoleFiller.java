@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.combat.holefiller;
 
 import java.util.Collections;
@@ -117,3 +124,4 @@ IHoleManager {
         return new ListenerObby(this);
     }
 }
+

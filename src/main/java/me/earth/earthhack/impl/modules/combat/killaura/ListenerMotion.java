@@ -1,3 +1,27 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.collect.Multimap
+ *  net.minecraft.enchantment.Enchantment
+ *  net.minecraft.enchantment.EnchantmentHelper
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.SharedMonsterAttributes
+ *  net.minecraft.entity.ai.attributes.AttributeModifier
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Enchantments
+ *  net.minecraft.inventory.EntityEquipmentSlot
+ *  net.minecraft.item.ItemAxe
+ *  net.minecraft.item.ItemFood
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.item.ItemSword
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketEntityAction
+ *  net.minecraft.network.play.client.CPacketEntityAction$Action
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.math.MathHelper
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.modules.combat.killaura;
 
 import com.google.common.collect.Multimap;
@@ -20,12 +44,14 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.MathHelper;
@@ -66,7 +92,7 @@ extends ModuleListener<KillAura, MotionUpdateEvent> {
         float[] rotations = null;
         module.isTeleporting = false;
         if (module.rotate.getValue().booleanValue()) {
-            rotations = module.rotationSmoother.getRotations(RotationUtil.getRotationPlayer(), module.target, module.height.getValue(), module.soft.getValue().floatValue());
+            rotations = module.rotationSmoother.getRotations((Entity)RotationUtil.getRotationPlayer(), module.target, module.height.getValue(), module.soft.getValue().floatValue());
         }
         if (!(!passed || module.isTeleporting || !module.isInRange(Managers.POSITION.getVec(), module.target) || !module.efficient.getValue().booleanValue() && module.isInRange(ListenerMotion.mc.player.getPositionVector(), module.target) || module.rotate.getValue().booleanValue() && (!RotationUtil.isLegit(module.target, new Entity[0]) || module.rotationTicks.getValue() > 1 && module.rotationSmoother.getRotationTicks() < module.rotationTicks.getValue()))) {
             module.eff = Managers.POSITION.getVec();
@@ -158,10 +184,10 @@ extends ModuleListener<KillAura, MotionUpdateEvent> {
         boolean stopSprint = module.stopSprint.getValue() != false && ListenerMotion.mc.player.isSprinting();
         boolean bl = stopShield = module.stopShield.getValue() != false && ListenerMotion.mc.player.isActiveItemStackBlocking();
         if (stopSneak) {
-            ListenerMotion.mc.player.connection.sendPacket(new CPacketEntityAction(ListenerMotion.mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
+            ListenerMotion.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)ListenerMotion.mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
         }
         if (stopSprint) {
-            ListenerMotion.mc.player.connection.sendPacket(new CPacketEntityAction(ListenerMotion.mc.player, CPacketEntityAction.Action.STOP_SPRINTING));
+            ListenerMotion.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)ListenerMotion.mc.player, CPacketEntityAction.Action.STOP_SPRINTING));
         }
         if (stopShield) {
             module.releaseShield();
@@ -172,7 +198,7 @@ extends ModuleListener<KillAura, MotionUpdateEvent> {
                 InventoryUtil.switchTo(slot);
             }
             module.ourCrit = true;
-            ListenerMotion.mc.playerController.attackEntity(ListenerMotion.mc.player, entity);
+            ListenerMotion.mc.playerController.attackEntity((EntityPlayer)ListenerMotion.mc.player, entity);
             module.ourCrit = false;
             module.swing.getValue().swing(EnumHand.MAIN_HAND);
             if (module.autoSwitch.getValue() != AuraSwitch.Keep && slot != -1) {
@@ -180,10 +206,10 @@ extends ModuleListener<KillAura, MotionUpdateEvent> {
             }
         });
         if (stopSneak) {
-            ListenerMotion.mc.player.connection.sendPacket(new CPacketEntityAction(ListenerMotion.mc.player, CPacketEntityAction.Action.START_SNEAKING));
+            ListenerMotion.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)ListenerMotion.mc.player, CPacketEntityAction.Action.START_SNEAKING));
         }
         if (stopSprint) {
-            ListenerMotion.mc.player.connection.sendPacket(new CPacketEntityAction(ListenerMotion.mc.player, CPacketEntityAction.Action.START_SPRINTING));
+            ListenerMotion.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)ListenerMotion.mc.player, CPacketEntityAction.Action.START_SPRINTING));
         }
         if (stopShield) {
             module.useShield();
@@ -202,13 +228,13 @@ extends ModuleListener<KillAura, MotionUpdateEvent> {
             ItemStack stack = ListenerMotion.mc.player.inventory.getStackInSlot(slot);
             double value = ListenerMotion.mc.player.getEntityAttribute(SharedMonsterAttributes.ATTACK_SPEED).getBaseValue();
             Multimap map = stack.getAttributeModifiers(EntityEquipmentSlot.MAINHAND);
-            Collection modifiers = map.get(SharedMonsterAttributes.ATTACK_SPEED.getName());
+            Collection modifiers = map.get((Object)SharedMonsterAttributes.ATTACK_SPEED.getName());
             if (modifiers != null) {
                 for (AttributeModifier modifier : modifiers) {
                     value += modifier.getAmount();
                 }
             }
-            return MathHelper.clamp((float)((swing = (float)((IEntityLivingBase)((Object)ListenerMotion.mc.player)).getTicksSinceLastSwing() + 0.5f - tps) / (cooldown = (float)(1.0 / value * 20.0))), (float)0.0f, (float)1.0f) >= 1.0f;
+            return MathHelper.clamp((float)((swing = (float)((IEntityLivingBase)ListenerMotion.mc.player).getTicksSinceLastSwing() + 0.5f - tps) / (cooldown = (float)(1.0 / value * 20.0))), (float)0.0f, (float)1.0f) >= 1.0f;
         }
         return module.cps.getValue().floatValue() >= 20.0f || module.timer.passed((long)(1000.0 / (double)module.cps.getValue().floatValue()));
     }
@@ -226,3 +252,4 @@ extends ModuleListener<KillAura, MotionUpdateEvent> {
         return slot;
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.json;
 
 import com.formdev.flatlaf.json.JsonHandler;
@@ -79,3 +82,4 @@ public class Json {
         }
     }
 }
+

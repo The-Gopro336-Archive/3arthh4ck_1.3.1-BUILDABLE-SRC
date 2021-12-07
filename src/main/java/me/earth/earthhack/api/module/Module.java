@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.api.module;
 
 import java.util.ArrayList;
@@ -180,3 +183,4 @@ Nameable {
         return false;
     }
 }
+

@@ -1,3 +1,25 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Items
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemPickaxe
+ *  net.minecraft.item.ItemSpade
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketUseEntity
+ *  net.minecraft.network.play.server.SPacketSpawnExperienceOrb
+ *  net.minecraft.network.play.server.SPacketSpawnGlobalEntity
+ *  net.minecraft.network.play.server.SPacketSpawnMob
+ *  net.minecraft.network.play.server.SPacketSpawnObject
+ *  net.minecraft.network.play.server.SPacketSpawnPainting
+ *  net.minecraft.network.play.server.SPacketSpawnPlayer
+ *  net.minecraft.util.EnumHand
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal.helpers;
 
 import java.util.List;
@@ -17,8 +39,10 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemSpade;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.network.play.server.SPacketSpawnExperienceOrb;
 import net.minecraft.network.play.server.SPacketSpawnGlobalEntity;
@@ -86,7 +110,7 @@ implements Globals {
         if (!holdingCheck) {
             return false;
         }
-        return InventoryUtil.isHolding((EntityLivingBase)player, Items.BOW) || InventoryUtil.isHolding((EntityLivingBase)player, Items.EXPERIENCE_BOTTLE) || toolCheck && (player.getHeldItemMainhand().getItem() instanceof ItemPickaxe || player.getHeldItemMainhand().getItem() instanceof ItemSpade);
+        return InventoryUtil.isHolding((EntityLivingBase)player, (Item)Items.BOW) || InventoryUtil.isHolding((EntityLivingBase)player, Items.EXPERIENCE_BOTTLE) || toolCheck && (player.getHeldItemMainhand().getItem() instanceof ItemPickaxe || player.getHeldItemMainhand().getItem() instanceof ItemSpade);
     }
 
     public void attack(SwingTime breakSwing, PlaceSwing godSwing, int idOffset, int packets, int sleep) {
@@ -109,7 +133,7 @@ implements Globals {
                 Swing.Packet.swing(EnumHand.MAIN_HAND);
             }
             CPacketUseEntity packet = PacketUtil.attackPacket(id);
-            IDHelper.mc.player.connection.sendPacket(packet);
+            IDHelper.mc.player.connection.sendPacket((Packet)packet);
             if (godSwing != PlaceSwing.Always || breakSwing != SwingTime.Post) continue;
             Swing.Packet.swing(EnumHand.MAIN_HAND);
         }
@@ -124,3 +148,4 @@ implements Globals {
         }
     }
 }
+

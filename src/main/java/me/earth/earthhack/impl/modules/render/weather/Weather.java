@@ -1,3 +1,22 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.multiplayer.WorldClient
+ *  net.minecraft.client.renderer.BufferBuilder
+ *  net.minecraft.client.renderer.EntityRenderer
+ *  net.minecraft.client.renderer.GlStateManager
+ *  net.minecraft.client.renderer.GlStateManager$DestFactor
+ *  net.minecraft.client.renderer.GlStateManager$SourceFactor
+ *  net.minecraft.client.renderer.Tessellator
+ *  net.minecraft.client.renderer.vertex.DefaultVertexFormats
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.util.ResourceLocation
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.BlockPos$MutableBlockPos
+ *  net.minecraft.util.math.MathHelper
+ *  net.minecraft.world.biome.Biome
+ */
 package me.earth.earthhack.impl.modules.render.weather;
 
 import java.util.Random;
@@ -60,17 +79,17 @@ extends Module {
             i1 = 10;
         }
         int j1 = -1;
-        float f1 = (float)((IEntityRenderer)((Object)renderer)).getRendererUpdateCount() + partialTicks;
+        float f1 = (float)((IEntityRenderer)renderer).getRendererUpdateCount() + partialTicks;
         bufferbuilder.setTranslation(-d0, -d1, -d2);
         GlStateManager.color((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
         BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
         for (int k1 = k - i1; k1 <= k + i1; ++k1) {
             for (int l1 = i - i1; l1 <= i + i1; ++l1) {
                 int i2 = (k1 - k + 16) * 32 + l1 - i + 16;
-                double d3 = (double)((IEntityRenderer)((Object)renderer)).getRainXCoords()[i2] * 0.5;
-                double d4 = (double)((IEntityRenderer)((Object)renderer)).getRainYCoords()[i2] * 0.5;
+                double d3 = (double)((IEntityRenderer)renderer).getRainXCoords()[i2] * 0.5;
+                double d4 = (double)((IEntityRenderer)renderer).getRainYCoords()[i2] * 0.5;
                 blockpos$mutableblockpos.setPos(l1, 0, k1);
-                Biome biome = world.getBiome(blockpos$mutableblockpos);
+                Biome biome = world.getBiome((BlockPos)blockpos$mutableblockpos);
                 int j2 = this.height.getValue();
                 int k2 = j - i1;
                 int l2 = j + i1;
@@ -87,7 +106,7 @@ extends Module {
                 if (k2 == l2) continue;
                 RANDOM.setSeed(l1 * l1 * 3121 + l1 * 45238971 ^ k1 * k1 * 418711 + k1 * 13761);
                 blockpos$mutableblockpos.setPos(l1, k2, k1);
-                float f2 = biome.getTemperature(blockpos$mutableblockpos);
+                float f2 = biome.getTemperature((BlockPos)blockpos$mutableblockpos);
                 if (!this.snow.getValue().booleanValue()) {
                     if (j1 != 0) {
                         if (j1 >= 0) {
@@ -97,19 +116,19 @@ extends Module {
                         mc.getTextureManager().bindTexture(RAIN_TEXTURES);
                         bufferbuilder.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
                     }
-                    double d5 = -((double)(((IEntityRenderer)((Object)renderer)).getRendererUpdateCount() + l1 * l1 * 3121 + l1 * 45238971 + k1 * k1 * 418711 + k1 * 13761 & 0x1F) + (double)partialTicks) / 32.0 * (3.0 + RANDOM.nextDouble());
+                    double d5 = -((double)(((IEntityRenderer)renderer).getRendererUpdateCount() + l1 * l1 * 3121 + l1 * 45238971 + k1 * k1 * 418711 + k1 * 13761 & 0x1F) + (double)partialTicks) / 32.0 * (3.0 + RANDOM.nextDouble());
                     double d6 = (double)((float)l1 + 0.5f) - entity.posX;
                     double d7 = (double)((float)k1 + 0.5f) - entity.posZ;
                     float f3 = MathHelper.sqrt((double)(d6 * d6 + d7 * d7)) / (float)i1;
                     float f4 = ((1.0f - f3 * f3) * 0.5f + 0.5f) * f;
                     blockpos$mutableblockpos.setPos(l1, i3, k1);
-                    int j3 = world.getCombinedLight(blockpos$mutableblockpos, 0);
+                    int j3 = world.getCombinedLight((BlockPos)blockpos$mutableblockpos, 0);
                     int k3 = j3 >> 16 & 0xFFFF;
                     int l3 = j3 & 0xFFFF;
-                    bufferbuilder.pos((double)l1 - d3 + 0.5, l2, (double)k1 - d4 + 0.5).tex(0.0, (double)k2 * 0.25 + d5).color(1.0f, 1.0f, 1.0f, f4).lightmap(k3, l3).endVertex();
-                    bufferbuilder.pos((double)l1 + d3 + 0.5, l2, (double)k1 + d4 + 0.5).tex(1.0, (double)k2 * 0.25 + d5).color(1.0f, 1.0f, 1.0f, f4).lightmap(k3, l3).endVertex();
-                    bufferbuilder.pos((double)l1 + d3 + 0.5, k2, (double)k1 + d4 + 0.5).tex(1.0, (double)l2 * 0.25 + d5).color(1.0f, 1.0f, 1.0f, f4).lightmap(k3, l3).endVertex();
-                    bufferbuilder.pos((double)l1 - d3 + 0.5, k2, (double)k1 - d4 + 0.5).tex(0.0, (double)l2 * 0.25 + d5).color(1.0f, 1.0f, 1.0f, f4).lightmap(k3, l3).endVertex();
+                    bufferbuilder.pos((double)l1 - d3 + 0.5, (double)l2, (double)k1 - d4 + 0.5).tex(0.0, (double)k2 * 0.25 + d5).color(1.0f, 1.0f, 1.0f, f4).lightmap(k3, l3).endVertex();
+                    bufferbuilder.pos((double)l1 + d3 + 0.5, (double)l2, (double)k1 + d4 + 0.5).tex(1.0, (double)k2 * 0.25 + d5).color(1.0f, 1.0f, 1.0f, f4).lightmap(k3, l3).endVertex();
+                    bufferbuilder.pos((double)l1 + d3 + 0.5, (double)k2, (double)k1 + d4 + 0.5).tex(1.0, (double)l2 * 0.25 + d5).color(1.0f, 1.0f, 1.0f, f4).lightmap(k3, l3).endVertex();
+                    bufferbuilder.pos((double)l1 - d3 + 0.5, (double)k2, (double)k1 - d4 + 0.5).tex(0.0, (double)l2 * 0.25 + d5).color(1.0f, 1.0f, 1.0f, f4).lightmap(k3, l3).endVertex();
                     continue;
                 }
                 if (j1 != 1) {
@@ -120,7 +139,7 @@ extends Module {
                     mc.getTextureManager().bindTexture(SNOW_TEXTURES);
                     bufferbuilder.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
                 }
-                double d8 = -((float)(((IEntityRenderer)((Object)renderer)).getRendererUpdateCount() & 0x1FF) + partialTicks) / 512.0f;
+                double d8 = -((float)(((IEntityRenderer)renderer).getRendererUpdateCount() & 0x1FF) + partialTicks) / 512.0f;
                 double d9 = RANDOM.nextDouble() + (double)f1 * 0.01 * (double)((float)RANDOM.nextGaussian());
                 double d10 = RANDOM.nextDouble() + (double)(f1 * (float)RANDOM.nextGaussian()) * 0.001;
                 double d11 = (double)((float)l1 + 0.5f) - entity.posX;
@@ -128,13 +147,13 @@ extends Module {
                 float f6 = MathHelper.sqrt((double)(d11 * d11 + d12 * d12)) / (float)i1;
                 float f5 = ((1.0f - f6 * f6) * 0.3f + 0.5f) * f;
                 blockpos$mutableblockpos.setPos(l1, i3, k1);
-                int i4 = (world.getCombinedLight(blockpos$mutableblockpos, 0) * 3 + 0xF000F0) / 4;
+                int i4 = (world.getCombinedLight((BlockPos)blockpos$mutableblockpos, 0) * 3 + 0xF000F0) / 4;
                 int j4 = i4 >> 16 & 0xFFFF;
                 int k4 = i4 & 0xFFFF;
-                bufferbuilder.pos((double)l1 - d3 + 0.5, l2, (double)k1 - d4 + 0.5).tex(0.0 + d9, (double)k2 * 0.25 + d8 + d10).color(1.0f, 1.0f, 1.0f, f5).lightmap(j4, k4).endVertex();
-                bufferbuilder.pos((double)l1 + d3 + 0.5, l2, (double)k1 + d4 + 0.5).tex(1.0 + d9, (double)k2 * 0.25 + d8 + d10).color(1.0f, 1.0f, 1.0f, f5).lightmap(j4, k4).endVertex();
-                bufferbuilder.pos((double)l1 + d3 + 0.5, k2, (double)k1 + d4 + 0.5).tex(1.0 + d9, (double)l2 * 0.25 + d8 + d10).color(1.0f, 1.0f, 1.0f, f5).lightmap(j4, k4).endVertex();
-                bufferbuilder.pos((double)l1 - d3 + 0.5, k2, (double)k1 - d4 + 0.5).tex(0.0 + d9, (double)l2 * 0.25 + d8 + d10).color(1.0f, 1.0f, 1.0f, f5).lightmap(j4, k4).endVertex();
+                bufferbuilder.pos((double)l1 - d3 + 0.5, (double)l2, (double)k1 - d4 + 0.5).tex(0.0 + d9, (double)k2 * 0.25 + d8 + d10).color(1.0f, 1.0f, 1.0f, f5).lightmap(j4, k4).endVertex();
+                bufferbuilder.pos((double)l1 + d3 + 0.5, (double)l2, (double)k1 + d4 + 0.5).tex(1.0 + d9, (double)k2 * 0.25 + d8 + d10).color(1.0f, 1.0f, 1.0f, f5).lightmap(j4, k4).endVertex();
+                bufferbuilder.pos((double)l1 + d3 + 0.5, (double)k2, (double)k1 + d4 + 0.5).tex(1.0 + d9, (double)l2 * 0.25 + d8 + d10).color(1.0f, 1.0f, 1.0f, f5).lightmap(j4, k4).endVertex();
+                bufferbuilder.pos((double)l1 - d3 + 0.5, (double)k2, (double)k1 - d4 + 0.5).tex(0.0 + d9, (double)l2 * 0.25 + d8 + d10).color(1.0f, 1.0f, 1.0f, f5).lightmap(j4, k4).endVertex();
             }
         }
         if (j1 >= 0) {
@@ -147,3 +166,4 @@ extends Module {
         renderer.disableLightmap();
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.injection.throwables;
 
 public class InjectionError
@@ -19,3 +22,4 @@ extends Error {
         super(message, cause);
     }
 }
+

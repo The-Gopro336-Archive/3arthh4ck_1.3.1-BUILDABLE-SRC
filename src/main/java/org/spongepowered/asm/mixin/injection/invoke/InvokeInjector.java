@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.injection.invoke;
 
 import java.util.List;
@@ -96,3 +99,4 @@ extends Injector {
         }
     }
 }
+

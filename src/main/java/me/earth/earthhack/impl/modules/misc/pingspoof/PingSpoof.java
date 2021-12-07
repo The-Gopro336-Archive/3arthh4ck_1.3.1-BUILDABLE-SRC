@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.Packet
+ */
 package me.earth.earthhack.impl.modules.misc.pingspoof;
 
 import java.util.HashSet;
@@ -81,3 +87,4 @@ extends Module {
         }, (long)this.delay.getValue().intValue(), TimeUnit.MILLISECONDS);
     }
 }
+

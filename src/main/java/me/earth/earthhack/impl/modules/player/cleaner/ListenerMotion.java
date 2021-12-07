@@ -1,3 +1,17 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.inventory.GuiInventory
+ *  net.minecraft.entity.item.EntityItem
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Items
+ *  net.minecraft.inventory.ClickType
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.player.cleaner;
 
 import java.util.AbstractMap;
@@ -29,6 +43,7 @@ import me.earth.earthhack.impl.util.misc.collections.CollectionUtil;
 import me.earth.earthhack.impl.util.thread.Locks;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.item.Item;
@@ -77,7 +92,7 @@ extends ModuleListener<Cleaner, MotionUpdateEvent> {
                         }
                         action = null;
                         if (drag == null) break block13;
-                        ItemToDrop dragged = (ItemToDrop)items.get(drag);
+                        ItemToDrop dragged = (ItemToDrop)items.get((Object)drag);
                         if (dragged == null || !dragged.shouldDrop()) break block14;
                         action = new WindowClick(-999, ItemStack.EMPTY, ListenerMotion.mc.player.inventory.getItemStack());
                         break block14;
@@ -85,7 +100,7 @@ extends ModuleListener<Cleaner, MotionUpdateEvent> {
                     for (ItemToDrop toDrop : items.values()) {
                         if (!toDrop.shouldDrop()) continue;
                         int s = toDrop.getSlot();
-                        action = new WindowClick(-1, ItemStack.EMPTY, s, InventoryUtil.get(s), -1, p -> p.windowClick(0, s, 1, ClickType.THROW, ListenerMotion.mc.player));
+                        action = new WindowClick(-1, ItemStack.EMPTY, s, InventoryUtil.get(s), -1, p -> p.windowClick(0, s, 1, ClickType.THROW, (EntityPlayer)ListenerMotion.mc.player));
                         break;
                     }
                 }
@@ -119,13 +134,13 @@ extends ModuleListener<Cleaner, MotionUpdateEvent> {
                 ItemStack stack = InventoryUtil.get(i);
                 if (stack.isEmpty()) continue;
                 Item item = stack.getItem();
-                Map map2 = (Map)corresponding.get(item);
+                Map map2 = (Map)corresponding.get((Object)item);
                 if (map2 != null) {
                     if (stack.getCount() >= stack.getMaxStackSize() || map2.containsKey(stack.getCount())) continue;
                     map2.put(i, stack.getCount());
                     continue;
                 }
-                map = (SettingMap)pref.get(item);
+                map = (SettingMap)pref.get((Object)item);
                 if (map == null) {
                     Setting<Integer> setting = this.getSetting(stack);
                     if (setting == null) {
@@ -238,7 +253,7 @@ extends ModuleListener<Cleaner, MotionUpdateEvent> {
             ItemStack stack = InventoryUtil.get(i);
             if (stack.isEmpty()) continue;
             ++stacks;
-            if (invalid.contains(stack.getItem())) continue;
+            if (invalid.contains((Object)stack.getItem())) continue;
             Setting<Integer> setting = this.getSetting(stack);
             if (setting == null) {
                 slots.computeIfAbsent(stack.getItem(), v -> new ArrayList()).add(new SlotCount(stack.getCount(), i));
@@ -267,7 +282,7 @@ extends ModuleListener<Cleaner, MotionUpdateEvent> {
                 return true;
             }
         } else {
-            List counts = (List)slots.get(drag.getItem());
+            List counts = (List)slots.get((Object)drag.getItem());
             if (counts == null && ((Cleaner)this.module).minXcarry.getValue() == 0 || counts != null && counts.size() >= ((Cleaner)this.module).minXcarry.getValue()) {
                 Item item = InventoryUtil.get(xCarry).getItem();
                 Locks.acquire(Locks.WINDOW_CLICK_LOCK, () -> {
@@ -333,7 +348,7 @@ extends ModuleListener<Cleaner, MotionUpdateEvent> {
             BlockPos offset;
             int count = 0;
             BlockPos current = pos;
-            for (int i = 0; i < 5 && !ListenerMotion.mc.world.getBlockState(offset = current.offset(facing)).func_185904_a().blocksMovement(); ++i) {
+            for (int i = 0; i < 5 && !ListenerMotion.mc.world.getBlockState(offset = current.offset(facing)).getMaterial().blocksMovement(); ++i) {
                 ++count;
                 current = offset;
             }
@@ -365,3 +380,4 @@ extends ModuleListener<Cleaner, MotionUpdateEvent> {
         return true;
     }
 }
+

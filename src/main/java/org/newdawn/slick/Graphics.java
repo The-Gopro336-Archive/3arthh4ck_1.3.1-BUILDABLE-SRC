@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.BufferUtils
+ */
 package org.newdawn.slick;
 
 import java.nio.ByteBuffer;
@@ -44,8 +50,8 @@ public class Graphics {
     protected int screenHeight;
     private boolean pushed;
     private Rectangle clip;
-    private DoubleBuffer worldClip = BufferUtils.createDoubleBuffer(4);
-    private ByteBuffer readBuffer = BufferUtils.createByteBuffer(4);
+    private DoubleBuffer worldClip = BufferUtils.createDoubleBuffer((int)4);
+    private ByteBuffer readBuffer = BufferUtils.createByteBuffer((int)4);
     private boolean antialias;
     private Rectangle worldClipRecord;
     private int currentDrawingMode = MODE_NORMAL;
@@ -170,7 +176,7 @@ public class Graphics {
 
     public Color getBackground() {
         this.predraw();
-        FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
+        FloatBuffer buffer = BufferUtils.createFloatBuffer((int)16);
         GL.glGetFloat(3106, buffer);
         this.postdraw();
         return new Color(buffer);
@@ -755,7 +761,7 @@ public class Graphics {
         FloatBuffer buffer;
         this.predraw();
         if (this.stackIndex >= this.stack.size()) {
-            buffer = BufferUtils.createFloatBuffer(18);
+            buffer = BufferUtils.createFloatBuffer((int)18);
             this.stack.add(buffer);
         } else {
             buffer = (FloatBuffer)this.stack.get(this.stackIndex);
@@ -783,3 +789,4 @@ public class Graphics {
     public void destroy() {
     }
 }
+

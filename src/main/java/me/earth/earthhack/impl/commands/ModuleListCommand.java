@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.text.ITextComponent
+ *  net.minecraft.util.text.Style
+ *  net.minecraft.util.text.TextComponentString
+ *  net.minecraft.util.text.event.ClickEvent
+ *  net.minecraft.util.text.event.ClickEvent$Action
+ *  net.minecraft.util.text.event.HoverEvent
+ *  net.minecraft.util.text.event.HoverEvent$Action
+ */
 package me.earth.earthhack.impl.commands;
 
 import java.util.Comparator;
@@ -42,15 +54,15 @@ extends Command {
             if (module == null) continue;
             int finalI = i;
             AbstractTextComponent sibling = new SuppliedComponent(() -> (module.isEnabled() ? "\u00a7a" : "\u00a7c") + module.getName() + (finalI == moduleList.size() - 1 ? "" : ", ")).setWrap(true);
-            Style style = new Style().setHoverEvent(ChatComponentUtil.setOffset(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString(module.getData().getDescription())))).setClickEvent(new SmartClickEvent(ClickEvent.Action.RUN_COMMAND){
+            Style style = new Style().setHoverEvent(ChatComponentUtil.setOffset(new HoverEvent(HoverEvent.Action.SHOW_TEXT, (ITextComponent)new TextComponentString(module.getData().getDescription())))).setClickEvent((ClickEvent)new SmartClickEvent(ClickEvent.Action.RUN_COMMAND){
 
                 @Override
                 public String getValue() {
                     return Commands.getPrefix() + "toggle " + module.getName();
                 }
             });
-            ((IStyle)((Object)style)).setSuppliedInsertion(() -> Commands.getPrefix() + module.getName());
-            ((IStyle)((Object)style)).setMiddleClickEvent(new SmartClickEvent(ClickEvent.Action.RUN_COMMAND){
+            ((IStyle)style).setSuppliedInsertion(() -> Commands.getPrefix() + module.getName());
+            ((IStyle)style).setMiddleClickEvent(new SmartClickEvent(ClickEvent.Action.RUN_COMMAND){
 
                 @Override
                 public String getValue() {
@@ -58,8 +70,9 @@ extends Command {
                 }
             });
             sibling.setStyle(style);
-            component.appendSibling(sibling);
+            component.appendSibling((ITextComponent)sibling);
         }
         return component;
     }
 }
+

@@ -1,3 +1,21 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.material.Material
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.init.Items
+ *  net.minecraft.item.ItemFood
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketPlayer$Position
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.RayTraceResult
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.modules.movement.phase;
 
 import me.earth.earthhack.api.event.events.Stage;
@@ -12,6 +30,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemFood;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.util.EnumFacing;
@@ -67,9 +86,9 @@ extends ModuleListener<Phase, MotionUpdateEvent> {
             }
             case Packet: {
                 if (!ListenerMotion.mc.player.collidedHorizontally || !((Phase)this.module).timer.passed(200L)) break;
-                ListenerMotion.mc.player.connection.sendPacket(new CPacketPlayer.Position(ListenerMotion.mc.player.posX, ListenerMotion.mc.player.posY + 0.05, ListenerMotion.mc.player.posZ, true));
-                ListenerMotion.mc.player.connection.sendPacket(new CPacketPlayer.Position(ListenerMotion.mc.player.posX + xSpeed * ((Phase)this.module).speed.getValue(), ListenerMotion.mc.player.posY, ListenerMotion.mc.player.posZ + zSpeed * ((Phase)this.module).speed.getValue(), true));
-                ListenerMotion.mc.player.connection.sendPacket(new CPacketPlayer.Position(ListenerMotion.mc.player.posX, ListenerMotion.mc.player.posY, ListenerMotion.mc.player.posZ, true));
+                ListenerMotion.mc.player.connection.sendPacket((Packet)new CPacketPlayer.Position(ListenerMotion.mc.player.posX, ListenerMotion.mc.player.posY + 0.05, ListenerMotion.mc.player.posZ, true));
+                ListenerMotion.mc.player.connection.sendPacket((Packet)new CPacketPlayer.Position(ListenerMotion.mc.player.posX + xSpeed * ((Phase)this.module).speed.getValue(), ListenerMotion.mc.player.posY, ListenerMotion.mc.player.posZ + zSpeed * ((Phase)this.module).speed.getValue(), true));
+                ListenerMotion.mc.player.connection.sendPacket((Packet)new CPacketPlayer.Position(ListenerMotion.mc.player.posX, ListenerMotion.mc.player.posY, ListenerMotion.mc.player.posZ, true));
                 ((Phase)this.module).timer.reset();
                 break;
             }
@@ -94,17 +113,17 @@ extends ModuleListener<Phase, MotionUpdateEvent> {
                 double x = Math.cos(Math.toRadians(direction + 90.0f)) * 0.2;
                 double z = Math.sin(Math.toRadians(direction + 90.0f)) * 0.2;
                 if (((Phase)this.module).limit.getValue().booleanValue()) {
-                    ListenerMotion.mc.player.connection.sendPacket(new CPacketPlayer.Position(ListenerMotion.mc.player.posX, ListenerMotion.mc.player.posY, ListenerMotion.mc.player.posZ, ListenerMotion.mc.player.onGround));
-                    ListenerMotion.mc.player.connection.sendPacket(new CPacketPlayer.Position(ListenerMotion.mc.player.posX + x * (double)0.001f, ListenerMotion.mc.player.posY + (double)0.1f, ListenerMotion.mc.player.posZ + z * (double)0.001f, ListenerMotion.mc.player.onGround));
-                    ListenerMotion.mc.player.connection.sendPacket(new CPacketPlayer.Position(ListenerMotion.mc.player.posX + x * (double)0.03f, 0.0, ListenerMotion.mc.player.posZ + z * (double)0.03f, ListenerMotion.mc.player.onGround));
-                    ListenerMotion.mc.player.connection.sendPacket(new CPacketPlayer.Position(ListenerMotion.mc.player.posX + x * (double)0.06f, ListenerMotion.mc.player.posY, ListenerMotion.mc.player.posZ + z * (double)0.06f, ListenerMotion.mc.player.onGround));
+                    ListenerMotion.mc.player.connection.sendPacket((Packet)new CPacketPlayer.Position(ListenerMotion.mc.player.posX, ListenerMotion.mc.player.posY, ListenerMotion.mc.player.posZ, ListenerMotion.mc.player.onGround));
+                    ListenerMotion.mc.player.connection.sendPacket((Packet)new CPacketPlayer.Position(ListenerMotion.mc.player.posX + x * (double)0.001f, ListenerMotion.mc.player.posY + (double)0.1f, ListenerMotion.mc.player.posZ + z * (double)0.001f, ListenerMotion.mc.player.onGround));
+                    ListenerMotion.mc.player.connection.sendPacket((Packet)new CPacketPlayer.Position(ListenerMotion.mc.player.posX + x * (double)0.03f, 0.0, ListenerMotion.mc.player.posZ + z * (double)0.03f, ListenerMotion.mc.player.onGround));
+                    ListenerMotion.mc.player.connection.sendPacket((Packet)new CPacketPlayer.Position(ListenerMotion.mc.player.posX + x * (double)0.06f, ListenerMotion.mc.player.posY, ListenerMotion.mc.player.posZ + z * (double)0.06f, ListenerMotion.mc.player.onGround));
                     event.setCancelled(true);
                     this.timer.reset();
                     return;
                 }
                 for (int index = 0; index < off.length; ++index) {
-                    ListenerMotion.mc.player.connection.sendPacket(new CPacketPlayer.Position(ListenerMotion.mc.player.posX, ListenerMotion.mc.player.posY + off[index], ListenerMotion.mc.player.posZ, ListenerMotion.mc.player.onGround));
-                    ListenerMotion.mc.player.connection.sendPacket(new CPacketPlayer.Position(ListenerMotion.mc.player.posX + x * (double)index, ListenerMotion.mc.player.posY, ListenerMotion.mc.player.posZ + z * (double)index, ListenerMotion.mc.player.onGround));
+                    ListenerMotion.mc.player.connection.sendPacket((Packet)new CPacketPlayer.Position(ListenerMotion.mc.player.posX, ListenerMotion.mc.player.posY + off[index], ListenerMotion.mc.player.posZ, ListenerMotion.mc.player.onGround));
+                    ListenerMotion.mc.player.connection.sendPacket((Packet)new CPacketPlayer.Position(ListenerMotion.mc.player.posX + x * (double)index, ListenerMotion.mc.player.posY, ListenerMotion.mc.player.posZ + z * (double)index, ListenerMotion.mc.player.onGround));
                 }
                 event.setCancelled(true);
                 this.timer.reset();
@@ -126,11 +145,11 @@ extends ModuleListener<Phase, MotionUpdateEvent> {
                 if (!ListenerMotion.mc.player.getEntityBoundingBox().intersects(new AxisAlignedBB(pos))) {
                     pos = PositionUtil.getPosition();
                 }
-                if (ListenerMotion.mc.objectMouseOver != null && pos.equals(ListenerMotion.mc.objectMouseOver.getBlockPos()) || pos.up().equals(ListenerMotion.mc.objectMouseOver.getBlockPos())) {
+                if (ListenerMotion.mc.objectMouseOver != null && pos.equals((Object)ListenerMotion.mc.objectMouseOver.getBlockPos()) || pos.up().equals((Object)ListenerMotion.mc.objectMouseOver.getBlockPos())) {
                     result = ListenerMotion.mc.objectMouseOver;
                 } else {
                     BlockPos target = pos.up();
-                    if (ListenerMotion.mc.world.getBlockState(target).func_185904_a() == Material.AIR) {
+                    if (ListenerMotion.mc.world.getBlockState(target).getMaterial() == Material.AIR) {
                         target = pos;
                     }
                     result = new RayTraceResult(new Vec3d(0.0, 0.5, 0.0), facing.getOpposite(), target);
@@ -151,3 +170,4 @@ extends ModuleListener<Phase, MotionUpdateEvent> {
         return false;
     }
 }
+

@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.EnumHandSide
+ */
 package me.earth.earthhack.impl.modules.misc.settingspoof;
 
 import net.minecraft.util.EnumHandSide;
@@ -16,3 +22,4 @@ public enum HandTranslator {
         return this.handSide;
     }
 }
+

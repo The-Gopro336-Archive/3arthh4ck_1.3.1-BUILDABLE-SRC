@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.renderer.GlStateManager
+ *  net.minecraft.client.renderer.texture.DynamicTexture
+ *  org.lwjgl.opengl.GL11
+ */
 package me.earth.earthhack.impl.gui.font;
 
 import java.awt.Color;
@@ -85,7 +93,7 @@ extends CustomFont {
         GlStateManager.color((float)((float)(color >> 16 & 0xFF) / 255.0f), (float)((float)(color >> 8 & 0xFF) / 255.0f), (float)((float)(color & 0xFF) / 255.0f), (float)alpha);
         GlStateManager.enableTexture2D();
         GlStateManager.bindTexture((int)this.tex.getGlTextureId());
-        GL11.glBindTexture(3553, this.tex.getGlTextureId());
+        GL11.glBindTexture((int)3553, (int)this.tex.getGlTextureId());
         for (int i = 0; i < text.length(); ++i) {
             char character = text.charAt(i);
             if (character == '\u00a7' && i + 1 < text.length()) {
@@ -229,7 +237,7 @@ extends CustomFont {
                 int rainbow = Color.HSBtoRGB(Managers.COLOR.getHueByPosition(rainbowM ? y : x), 1.0f, 1.0f);
                 GlStateManager.color((float)((float)(rainbow >> 16 & 0xFF) / 255.0f / (float)(shadow ? 4 : 1)), (float)((float)(rainbow >> 8 & 0xFF) / 255.0f / (float)(shadow ? 4 : 1)), (float)((float)(rainbow & 0xFF) / 255.0f / (float)(shadow ? 4 : 1)), (float)alpha);
             }
-            GL11.glBegin(4);
+            GL11.glBegin((int)4);
             this.drawChar(currentData, character, (float)x, (float)y);
             GL11.glEnd();
             if (strike) {
@@ -240,7 +248,7 @@ extends CustomFont {
             }
             x += (double)(currentData[character].width - 8 + this.charOffset);
         }
-        GL11.glHint(3155, 4352);
+        GL11.glHint((int)3155, (int)4352);
         GL11.glPopMatrix();
         return (float)(x / 2.0);
     }
@@ -324,13 +332,13 @@ extends CustomFont {
     }
 
     private void drawLine(double x, double y, double x1, double y1) {
-        GL11.glDisable(3553);
-        GL11.glLineWidth(1.0f);
-        GL11.glBegin(1);
-        GL11.glVertex2d(x, y);
-        GL11.glVertex2d(x1, y1);
+        GL11.glDisable((int)3553);
+        GL11.glLineWidth((float)1.0f);
+        GL11.glBegin((int)1);
+        GL11.glVertex2d((double)x, (double)y);
+        GL11.glVertex2d((double)x1, (double)y1);
         GL11.glEnd();
-        GL11.glEnable(3553);
+        GL11.glEnable((int)3553);
     }
 
     public List<String> wrapWords(String text, double width) {
@@ -409,3 +417,4 @@ extends CustomFont {
         }
     }
 }
+

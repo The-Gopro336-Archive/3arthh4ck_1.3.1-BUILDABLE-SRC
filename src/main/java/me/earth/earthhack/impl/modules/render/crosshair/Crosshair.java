@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.render.crosshair;
 
 import java.awt.Color;
@@ -39,3 +42,4 @@ extends Module {
         this.setData(data);
     }
 }
+

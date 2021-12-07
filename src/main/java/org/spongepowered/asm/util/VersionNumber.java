@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.util;
 
 import java.io.Serializable;
@@ -38,7 +41,13 @@ Serializable {
 
     public String toString() {
         short[] parts = VersionNumber.unpack(this.value);
-        return String.format("%d.%d%3$s%4$s%5$s", parts[0], parts[1], (this.value & Integer.MAX_VALUE) > 0L ? String.format(".%d", parts[2]) : "", (this.value & 0x7FFFL) > 0L ? String.format(".%d", parts[3]) : "", this.suffix);
+        Object[] arrobject = new Object[5];
+        arrobject[0] = parts[0];
+        arrobject[1] = parts[1];
+        Object object = (this.value & Integer.MAX_VALUE) > 0L ? String.format(".%d", parts[2]) : (arrobject[2] = "");
+        arrobject[3] = (this.value & 0x7FFFL) > 0L ? String.format(".%d", parts[3]) : "";
+        arrobject[4] = this.suffix;
+        return String.format("%d.%d%3$s%4$s%5$s", arrobject);
     }
 
     @Override
@@ -90,7 +99,7 @@ Serializable {
             String part = versionNumberPatternMatcher.group(pos + 1);
             if (part == null) continue;
             int value = Integer.parseInt(part);
-            if (value > Short.MAX_VALUE) {
+            if (value > 32767) {
                 throw new IllegalArgumentException("Version parts cannot exceed 32767, found " + value);
             }
             parts[pos] = (short)value;
@@ -98,3 +107,4 @@ Serializable {
         return new VersionNumber(parts, versionNumberPatternMatcher.group(5));
     }
 }
+

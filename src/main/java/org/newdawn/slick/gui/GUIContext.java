@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.input.Cursor
+ */
 package org.newdawn.slick.gui;
 
 import org.lwjgl.input.Cursor;
@@ -29,3 +35,4 @@ public interface GUIContext {
 
     public void setDefaultMouseCursor();
 }
+

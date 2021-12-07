@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.renderer.ActiveRenderInfo
+ *  net.minecraft.entity.player.EntityPlayer
+ */
 package me.earth.earthhack.vanilla.mixins;
 
 import me.earth.earthhack.impl.util.render.RenderUtil;
@@ -15,3 +22,4 @@ public abstract class MixinActiveRenderInfo {
         RenderUtil.updateMatrices();
     }
 }
+

@@ -1,3 +1,17 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  javax.annotation.Nullable
+ *  net.minecraft.client.renderer.GlStateManager
+ *  net.minecraft.client.renderer.OpenGlHelper
+ *  net.minecraft.client.shader.Framebuffer
+ *  net.minecraft.util.ScreenShotHelper
+ *  net.minecraft.util.text.ITextComponent
+ *  net.minecraft.util.text.TextComponentTranslation
+ *  net.minecraft.util.text.event.ClickEvent
+ *  org.lwjgl.BufferUtils
+ */
 package me.earth.earthhack.impl.core.mixins.util;
 
 import java.io.File;
@@ -23,6 +37,7 @@ import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ScreenShotHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.event.ClickEvent;
 import org.lwjgl.BufferUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -33,9 +48,9 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class MixinScreenShotHelper {
     private static final SettingCache<Boolean, BooleanSetting, Management> POOL = Caches.getSetting(Management.class, BooleanSetting.class, "Pooled-ScreenShots", false);
     @Shadow
-    private static IntBuffer field_74293_b;
+    private static IntBuffer pixelBuffer;
     @Shadow
-    private static int[] field_74294_c;
+    private static int[] pixelValues;
 
     @Redirect(method={"saveScreenshot(Ljava/io/File;IILnet/minecraft/client/shader/Framebuffer;)Lnet/minecraft/util/text/ITextComponent;"}, at=@At(value="INVOKE", target="Lnet/minecraft/util/ScreenShotHelper;saveScreenshot(Ljava/io/File;Ljava/lang/String;IILnet/minecraft/client/shader/Framebuffer;)Lnet/minecraft/util/text/ITextComponent;"))
     private static ITextComponent saveScreenshot(File gameDirectory, @Nullable String name, int width, int height, Framebuffer buffer) {
@@ -57,26 +72,26 @@ public abstract class MixinScreenShotHelper {
             height = buffer.framebufferTextureHeight;
         }
         int i = width * height;
-        if (field_74293_b == null || field_74293_b.capacity() < i) {
-            field_74293_b = BufferUtils.createIntBuffer(i);
-            field_74294_c = new int[i];
+        if (pixelBuffer == null || pixelBuffer.capacity() < i) {
+            pixelBuffer = BufferUtils.createIntBuffer((int)i);
+            pixelValues = new int[i];
         }
         GlStateManager.glPixelStorei((int)3333, (int)1);
         GlStateManager.glPixelStorei((int)3317, (int)1);
-        field_74293_b.clear();
+        pixelBuffer.clear();
         if (OpenGlHelper.isFramebufferEnabled()) {
             GlStateManager.bindTexture((int)buffer.framebufferTexture);
-            GlStateManager.glGetTexImage((int)3553, (int)0, (int)32993, (int)33639, (IntBuffer)field_74293_b);
+            GlStateManager.glGetTexImage((int)3553, (int)0, (int)32993, (int)33639, (IntBuffer)pixelBuffer);
         } else {
-            GlStateManager.glReadPixels((int)0, (int)0, (int)width, (int)height, (int)32993, (int)33639, (IntBuffer)field_74293_b);
+            GlStateManager.glReadPixels((int)0, (int)0, (int)width, (int)height, (int)32993, (int)33639, (IntBuffer)pixelBuffer);
         }
-        field_74293_b.get(field_74294_c);
+        pixelBuffer.get(pixelValues);
         AtomicBoolean finished = new AtomicBoolean();
         AtomicReference<String> supplier = new AtomicReference<String>("Creating Screenshot...");
         AtomicReference<File> file = new AtomicReference<File>();
-        Managers.THREAD.submit(new ScreenShotRunnable(supplier, file, finished, width, height, field_74294_c, gameDirectory, name));
+        Managers.THREAD.submit(new ScreenShotRunnable(supplier, file, finished, width, height, pixelValues, gameDirectory, name));
         SuppliedComponent component = new SuppliedComponent(supplier::get);
-        component.getStyle().setClickEvent(new RunnableClickEvent(() -> {
+        component.getStyle().setClickEvent((ClickEvent)new RunnableClickEvent(() -> {
             File f = (File)file.get();
             if (f != null) {
                 URI uri = new File(f.getAbsolutePath()).toURI();
@@ -85,11 +100,12 @@ public abstract class MixinScreenShotHelper {
                 }
                 catch (Throwable t) {
                     Throwable cause = t.getCause();
-                    Earthhack.getLogger().error("Couldn't open link: {}", cause == null ? "<UNKNOWN>" : cause.getMessage());
+                    Earthhack.getLogger().error("Couldn't open link: {}", (Object)(cause == null ? "<UNKNOWN>" : cause.getMessage()));
                 }
             }
         }));
-        component.getStyle().setUnderlined(true);
+        component.getStyle().setUnderlined(Boolean.valueOf(true));
         return component;
     }
 }
+

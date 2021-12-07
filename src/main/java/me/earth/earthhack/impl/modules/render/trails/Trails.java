@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.render.trails;
 
 import java.awt.Color;
@@ -44,3 +47,4 @@ extends Module {
         this.traceLists = new ConcurrentHashMap<Integer, List<Trace>>();
     }
 }
+

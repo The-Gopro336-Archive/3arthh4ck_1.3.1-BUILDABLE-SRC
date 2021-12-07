@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.injection;
 
 import java.lang.annotation.ElementType;
@@ -33,3 +36,4 @@ public @interface Inject {
 
     public String constraints() default "";
 }
+

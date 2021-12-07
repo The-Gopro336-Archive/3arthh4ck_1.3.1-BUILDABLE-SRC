@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.network.play.server.SPacketEntityHeadLook
+ */
 package me.earth.earthhack.impl.modules.misc.packets;
 
 import me.earth.earthhack.impl.core.mixins.network.server.ISPacketEntityHeadLook;
@@ -23,3 +30,4 @@ extends ModuleListener<Packets, PacketEvent.Receive<SPacketEntityHeadLook>> {
         }
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.server.api;
 
 import me.earth.earthhack.impl.modules.client.server.api.IConnectionEntry;
@@ -7,3 +10,4 @@ public interface IServerList {
 
     public void set(IConnectionEntry[] var1);
 }
+

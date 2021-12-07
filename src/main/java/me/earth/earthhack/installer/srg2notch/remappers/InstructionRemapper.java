@@ -1,3 +1,20 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.objectweb.asm.Handle
+ *  org.objectweb.asm.Type
+ *  org.objectweb.asm.tree.AbstractInsnNode
+ *  org.objectweb.asm.tree.ClassNode
+ *  org.objectweb.asm.tree.FieldInsnNode
+ *  org.objectweb.asm.tree.FrameNode
+ *  org.objectweb.asm.tree.InvokeDynamicInsnNode
+ *  org.objectweb.asm.tree.LdcInsnNode
+ *  org.objectweb.asm.tree.MethodInsnNode
+ *  org.objectweb.asm.tree.MethodNode
+ *  org.objectweb.asm.tree.MultiANewArrayInsnNode
+ *  org.objectweb.asm.tree.TypeInsnNode
+ */
 package me.earth.earthhack.installer.srg2notch.remappers;
 
 import me.earth.earthhack.installer.srg2notch.Mapping;
@@ -86,3 +103,4 @@ implements Remapper {
         }
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.server.host;
 
 import java.io.DataInputStream;
@@ -48,3 +51,4 @@ implements SafeRunnable {
         return this.id;
     }
 }
+

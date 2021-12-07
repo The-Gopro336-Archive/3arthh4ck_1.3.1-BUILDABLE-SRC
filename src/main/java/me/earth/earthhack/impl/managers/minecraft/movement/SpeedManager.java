@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.managers.minecraft.movement;
 
 import me.earth.earthhack.api.event.bus.EventListener;
@@ -37,3 +43,4 @@ implements Globals {
         return this.speed * 20.0;
     }
 }
+

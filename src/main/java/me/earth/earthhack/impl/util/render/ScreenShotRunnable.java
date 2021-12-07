@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  javax.annotation.Nullable
+ *  net.minecraft.client.renderer.texture.TextureUtil
+ */
 package me.earth.earthhack.impl.util.render;
 
 import java.awt.image.BufferedImage;
@@ -71,3 +78,4 @@ extends SafeFinishable {
         return file;
     }
 }
+

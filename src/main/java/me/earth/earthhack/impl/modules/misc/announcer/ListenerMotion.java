@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ */
 package me.earth.earthhack.impl.modules.misc.announcer;
 
 import me.earth.earthhack.api.event.events.Stage;
@@ -46,3 +53,4 @@ extends ModuleListener<Announcer, MotionUpdateEvent> {
         }
     }
 }
+

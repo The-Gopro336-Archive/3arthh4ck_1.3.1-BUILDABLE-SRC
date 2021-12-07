@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.combat.autothirtytwok;
 
 import me.earth.earthhack.impl.event.events.keyboard.KeyboardEvent;
@@ -15,3 +18,4 @@ extends ModuleListener<Auto32k, KeyboardEvent> {
         ((Auto32k)this.module).onKeyInput(event);
     }
 }
+

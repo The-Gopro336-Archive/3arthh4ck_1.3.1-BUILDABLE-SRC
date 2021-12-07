@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.misc.skinblink;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -21,3 +24,4 @@ extends DefaultData<SkinBlink> {
         return "Toggles the layers of your skin.";
     }
 }
+

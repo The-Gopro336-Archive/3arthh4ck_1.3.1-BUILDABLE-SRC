@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.render.search;
 
 import java.awt.Color;
@@ -51,3 +58,4 @@ public class SearchResult {
         return this.color;
     }
 }
+

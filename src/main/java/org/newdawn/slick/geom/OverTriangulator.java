@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.geom;
 
 import org.newdawn.slick.geom.Triangulator;
@@ -83,3 +86,4 @@ implements Triangulator {
         return true;
     }
 }
+

@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.world.IBlockAccess
+ */
 package me.earth.earthhack.impl.util.minecraft.blocks.states;
 
 import net.minecraft.block.state.IBlockState;
@@ -17,3 +26,4 @@ extends IBlockAccess {
 
     public void clearAllStates();
 }
+

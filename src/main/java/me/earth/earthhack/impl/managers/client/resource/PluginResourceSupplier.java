@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.resources.IResource
+ *  net.minecraft.client.resources.data.MetadataSerializer
+ */
 package me.earth.earthhack.impl.managers.client.resource;
 
 import java.io.InputStream;
@@ -22,11 +29,11 @@ implements ResourceSupplier {
 
     @Override
     public IResource get() throws ResourceException {
-        String target = String.format("%s/%s/%s", "assets", this.location.getResourceDomain(), this.location.getResourcePath());
+        String target = String.format("%s/%s/%s", "assets", this.location.getNamespace(), this.location.getPath());
         try {
             InputStream stream = this.classLoader.getResourceAsStream(target);
             if (stream == null) {
-                throw new ResourceException("PluginResource: " + this.location + " had no InputStream!");
+                throw new ResourceException("PluginResource: " + (Object)((Object)this.location) + " had no InputStream!");
             }
             return this.location.toResource(this.location.getResourcePack(), this.location, stream, stream, this.metadataSerializer);
         }
@@ -35,3 +42,4 @@ implements ResourceSupplier {
         }
     }
 }
+

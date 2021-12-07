@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.model.ModelBase
+ *  net.minecraft.client.renderer.entity.RenderLivingBase
+ *  net.minecraft.entity.EntityLivingBase
+ */
 package me.earth.earthhack.impl.event.events.render;
 
 import me.earth.earthhack.api.event.events.Event;
@@ -117,3 +125,4 @@ extends Event {
         }
     }
 }
+

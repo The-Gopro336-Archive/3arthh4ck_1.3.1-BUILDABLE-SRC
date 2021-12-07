@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.movement.phase;
 
 import me.earth.earthhack.impl.event.events.render.Render3DEvent;
@@ -17,3 +20,4 @@ extends ModuleListener<Phase, Render3DEvent> {
         }
     }
 }
+

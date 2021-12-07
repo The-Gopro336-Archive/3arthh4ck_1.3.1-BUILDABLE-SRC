@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.client.multiplayer.PlayerControllerMP
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.vanilla.mixins;
 
 import me.earth.earthhack.api.event.bus.instance.Bus;
@@ -27,3 +36,4 @@ public abstract class MixinPlayerControllerMP {
         return result;
     }
 }
+

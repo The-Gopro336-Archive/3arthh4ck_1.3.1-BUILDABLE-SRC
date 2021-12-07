@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.combat.legswitch;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -37,3 +40,4 @@ extends DefaultData<LegSwitch> {
         return "Attempts to bypass Minecraft mechanics that stop Crystals from blocking Surround. Will deal less damage.";
     }
 }
+

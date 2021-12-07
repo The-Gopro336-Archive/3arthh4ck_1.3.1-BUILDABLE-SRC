@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.service;
 
 import org.spongepowered.asm.service.ITransformer;
@@ -10,3 +13,4 @@ extends ITransformer {
 
     public byte[] transformClassBytes(String var1, String var2, byte[] var3);
 }
+

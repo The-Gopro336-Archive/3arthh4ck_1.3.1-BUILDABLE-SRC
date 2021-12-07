@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal.modes;
 
 public enum AntiFriendPop {
@@ -36,3 +39,4 @@ public enum AntiFriendPop {
 
     public abstract boolean shouldCalc(AntiFriendPop var1);
 }
+

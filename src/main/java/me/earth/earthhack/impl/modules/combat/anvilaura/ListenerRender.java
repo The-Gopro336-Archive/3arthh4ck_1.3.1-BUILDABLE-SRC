@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.util.math.AxisAlignedBB
+ */
 package me.earth.earthhack.impl.modules.combat.anvilaura;
 
 import java.awt.Color;
@@ -39,3 +46,4 @@ extends ModuleListener<AnvilAura, Render3DEvent> {
         }
     }
 }
+

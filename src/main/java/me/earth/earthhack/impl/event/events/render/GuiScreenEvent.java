@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.GuiScreen
+ */
 package me.earth.earthhack.impl.event.events.render;
 
 import me.earth.earthhack.api.event.events.Event;
@@ -15,3 +21,4 @@ extends Event {
         return this.screen;
     }
 }
+

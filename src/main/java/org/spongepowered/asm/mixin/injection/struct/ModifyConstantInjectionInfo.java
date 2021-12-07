@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Strings
+ *  com.google.common.collect.ImmutableList
+ */
 package org.spongepowered.asm.mixin.injection.struct;
 
 import com.google.common.base.Strings;
@@ -23,11 +30,11 @@ extends InjectionInfo {
 
     @Override
     protected List<AnnotationNode> readInjectionPoints(String type) {
-        List<AnnotationNode> ats = super.readInjectionPoints(type);
+        ImmutableList ats = super.readInjectionPoints(type);
         if (ats.isEmpty()) {
             AnnotationNode c = new AnnotationNode(CONSTANT_ANNOTATION_CLASS);
             c.visit("log", Boolean.TRUE);
-            ats = ImmutableList.of(c);
+            ats = ImmutableList.of((Object)c);
         }
         return ats;
     }
@@ -52,6 +59,7 @@ extends InjectionInfo {
 
     @Override
     public String getSliceId(String id) {
-        return Strings.nullToEmpty(id);
+        return Strings.nullToEmpty((String)id);
     }
 }
+

@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.network.play.server.SPacketSpawnObject
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.util.helpers.blocks.attack;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -7,9 +17,11 @@ import me.earth.earthhack.impl.util.helpers.blocks.attack.InstantAttackingModule
 import me.earth.earthhack.impl.util.math.rotation.RotationUtil;
 import me.earth.earthhack.impl.util.minecraft.DamageUtil;
 import me.earth.earthhack.impl.util.network.PacketUtil;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.network.play.server.SPacketSpawnObject;
+import net.minecraft.world.World;
 
 public class InstantAttackListener<M extends InstantAttackingModule>
 extends ModuleListener<M, PacketEvent.Receive<SPacketSpawnObject>> {
@@ -23,7 +35,7 @@ extends ModuleListener<M, PacketEvent.Receive<SPacketSpawnObject>> {
         if (InstantAttackListener.mc.player == null || packet.getType() != 51 || !((InstantAttackingModule)this.module).getTimer().passed(((InstantAttackingModule)this.module).getBreakDelay()) || Managers.SWITCH.getLastSwitch() < (long)((InstantAttackingModule)this.module).getCooldown() || DamageUtil.isWeaknessed()) {
             return;
         }
-        EntityEnderCrystal crystal = new EntityEnderCrystal(InstantAttackListener.mc.world, packet.getX(), packet.getY(), packet.getZ());
+        EntityEnderCrystal crystal = new EntityEnderCrystal((World)InstantAttackListener.mc.world, packet.getX(), packet.getY(), packet.getZ());
         try {
             this.attack(crystal);
         }
@@ -36,11 +48,12 @@ extends ModuleListener<M, PacketEvent.Receive<SPacketSpawnObject>> {
         if (!((InstantAttackingModule)this.module).shouldAttack(crystal)) {
             return;
         }
-        float damage = DamageUtil.calculate(crystal, (EntityLivingBase)RotationUtil.getRotationPlayer());
+        float damage = DamageUtil.calculate((Entity)crystal, (EntityLivingBase)RotationUtil.getRotationPlayer());
         if (!((InstantAttackingModule)this.module).getPop().shouldPop(damage, ((InstantAttackingModule)this.module).getPopTime())) {
             return;
         }
-        PacketUtil.attack(crystal);
+        PacketUtil.attack((Entity)crystal);
         ((InstantAttackingModule)this.module).postAttack(crystal);
     }
 }
+

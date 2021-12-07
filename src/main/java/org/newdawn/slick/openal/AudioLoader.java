@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.openal;
 
 import java.io.IOException;
@@ -54,3 +57,4 @@ public class AudioLoader {
         SoundStore.get().poll(0);
     }
 }
+

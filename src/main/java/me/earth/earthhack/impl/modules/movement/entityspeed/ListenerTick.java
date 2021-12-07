@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.movement.entityspeed;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -31,19 +38,19 @@ extends ModuleListener<EntitySpeed, TickEvent> {
         double sinYaw = Math.sin(Math.toRadians(ListenerTick.mc.player.rotationYaw + 90.0f));
         BlockPos pos = new BlockPos(ListenerTick.mc.player.posX + 2.0 * cosYaw + 0.0 * sinYaw, ListenerTick.mc.player.posY, ListenerTick.mc.player.posZ + (2.0 * sinYaw - 0.0 * cosYaw));
         BlockPos down = new BlockPos(ListenerTick.mc.player.posX + 2.0 * cosYaw + 0.0 * sinYaw, ListenerTick.mc.player.posY - 1.0, ListenerTick.mc.player.posZ + (2.0 * sinYaw - 0.0 * cosYaw));
-        if (!riding.onGround && !ListenerTick.mc.world.getBlockState(pos).func_185904_a().blocksMovement() && !ListenerTick.mc.world.getBlockState(down).func_185904_a().blocksMovement() && ((EntitySpeed)this.module).noStuck.getValue().booleanValue()) {
+        if (!riding.onGround && !ListenerTick.mc.world.getBlockState(pos).getMaterial().blocksMovement() && !ListenerTick.mc.world.getBlockState(down).getMaterial().blocksMovement() && ((EntitySpeed)this.module).noStuck.getValue().booleanValue()) {
             EntitySpeed.strafe(0.0);
             ((EntitySpeed)this.module).stuckTimer.reset();
             return;
         }
         pos = new BlockPos(ListenerTick.mc.player.posX + 2.0 * cosYaw + 0.0 * sinYaw, ListenerTick.mc.player.posY, ListenerTick.mc.player.posZ + (2.0 * sinYaw - 0.0 * cosYaw));
-        if (ListenerTick.mc.world.getBlockState(pos).func_185904_a().blocksMovement() && ((EntitySpeed)this.module).noStuck.getValue().booleanValue()) {
+        if (ListenerTick.mc.world.getBlockState(pos).getMaterial().blocksMovement() && ((EntitySpeed)this.module).noStuck.getValue().booleanValue()) {
             EntitySpeed.strafe(0.0);
             ((EntitySpeed)this.module).stuckTimer.reset();
             return;
         }
         pos = new BlockPos(ListenerTick.mc.player.posX + cosYaw + 0.0 * sinYaw, ListenerTick.mc.player.posY + 1.0, ListenerTick.mc.player.posZ + (sinYaw - 0.0 * cosYaw));
-        if (ListenerTick.mc.world.getBlockState(pos).func_185904_a().blocksMovement() && ((EntitySpeed)this.module).noStuck.getValue().booleanValue()) {
+        if (ListenerTick.mc.world.getBlockState(pos).getMaterial().blocksMovement() && ((EntitySpeed)this.module).noStuck.getValue().booleanValue()) {
             EntitySpeed.strafe(0.0);
             ((EntitySpeed)this.module).stuckTimer.reset();
             return;
@@ -65,3 +72,4 @@ extends ModuleListener<EntitySpeed, TickEvent> {
         }
     }
 }
+

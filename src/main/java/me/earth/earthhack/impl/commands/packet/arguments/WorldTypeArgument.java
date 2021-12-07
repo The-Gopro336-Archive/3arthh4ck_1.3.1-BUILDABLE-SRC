@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.world.WorldType
+ */
 package me.earth.earthhack.impl.commands.packet.arguments;
 
 import java.lang.reflect.Constructor;
@@ -55,3 +61,4 @@ extends AbstractArgument<WorldType> {
         return inputs;
     }
 }
+

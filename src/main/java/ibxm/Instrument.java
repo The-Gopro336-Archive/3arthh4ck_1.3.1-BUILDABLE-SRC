@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package ibxm;
 
 import ibxm.Envelope;
@@ -90,3 +93,4 @@ public class Instrument {
         }
     }
 }
+

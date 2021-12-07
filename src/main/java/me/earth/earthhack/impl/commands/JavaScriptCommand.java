@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.commands;
 
 import java.util.ArrayList;
@@ -294,3 +297,4 @@ CommandScheduler {
         this.arguments.put("Math.", mathArgs.toArray(new String[0]));
     }
 }
+

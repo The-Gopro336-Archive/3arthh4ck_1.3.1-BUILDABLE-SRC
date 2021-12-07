@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.item.ItemBlock
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.forge.mixins.item;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -30,3 +42,4 @@ public abstract class MixinItemBlock {
         return world.isRemote && NO_GLITCH_BLOCKS.isPresent() && ((NoGlitchBlocks)NO_GLITCH_BLOCKS.get()).noPlace() || this.placeBlockAt(stack, player, world, pos, facing, hitX, hitY, hitZ, state);
     }
 }
+

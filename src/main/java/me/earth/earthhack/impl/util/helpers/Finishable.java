@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.helpers;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -34,3 +37,4 @@ implements Runnable {
         return this.finished.get();
     }
 }
+

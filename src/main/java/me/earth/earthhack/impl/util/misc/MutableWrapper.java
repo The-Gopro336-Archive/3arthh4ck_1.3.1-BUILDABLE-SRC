@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.misc;
 
 public class MutableWrapper<T> {
@@ -19,3 +22,4 @@ public class MutableWrapper<T> {
         this.value = value;
     }
 }
+

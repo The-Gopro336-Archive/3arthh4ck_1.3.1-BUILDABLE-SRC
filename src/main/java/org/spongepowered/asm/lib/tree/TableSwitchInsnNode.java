@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.lib.tree;
 
 import java.util.ArrayList;
@@ -50,3 +53,4 @@ extends AbstractInsnNode {
         return new TableSwitchInsnNode(this.min, this.max, TableSwitchInsnNode.clone(this.dflt, labels), TableSwitchInsnNode.clone(this.labels, labels)).cloneAnnotations(this);
     }
 }
+

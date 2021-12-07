@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ */
 package me.earth.earthhack.impl.util.helpers.blocks.attack;
 
 import me.earth.earthhack.impl.util.helpers.blocks.attack.AttackingModule;
@@ -17,3 +23,4 @@ extends AttackingModule {
 
     public int getCooldown();
 }
+

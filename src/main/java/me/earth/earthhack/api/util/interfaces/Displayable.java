@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.api.util.interfaces;
 
 public interface Displayable {
@@ -5,3 +8,4 @@ public interface Displayable {
 
     public void setDisplayName(String var1);
 }
+

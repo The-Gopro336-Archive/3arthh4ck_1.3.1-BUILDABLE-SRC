@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.entity.EntityPlayerSP
+ */
 package me.earth.earthhack.impl.commands;
 
 import me.earth.earthhack.api.command.Command;
@@ -6,7 +12,7 @@ import me.earth.earthhack.api.util.interfaces.Globals;
 import me.earth.earthhack.impl.commands.util.CommandDescriptions;
 import me.earth.earthhack.impl.util.network.PacketUtil;
 import me.earth.earthhack.impl.util.text.ChatUtil;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.entity.EntityPlayerSP;
 
 public class VClipCommand
 extends Command
@@ -28,7 +34,7 @@ implements Globals {
         }
         try {
             double amount = Double.parseDouble(args[1]);
-            Entity entity = VClipCommand.mc.player.getRidingEntity() != null ? VClipCommand.mc.player.getRidingEntity() : VClipCommand.mc.player;
+            EntityPlayerSP entity = VClipCommand.mc.player.getRidingEntity() != null ? VClipCommand.mc.player.getRidingEntity() : VClipCommand.mc.player;
             entity.setPosition(entity.posX, entity.posY + amount, entity.posZ);
             PacketUtil.doY(entity.posY + amount, VClipCommand.mc.player.onGround);
             ChatUtil.sendMessage("\u00a7aVClipped you \u00a7f" + args[1] + "\u00a7a" + " blocks.");
@@ -46,3 +52,4 @@ implements Globals {
         return super.getPossibleInputs(args);
     }
 }
+

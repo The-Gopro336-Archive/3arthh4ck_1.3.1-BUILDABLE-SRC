@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.inventory.GuiContainer
+ *  net.minecraft.client.gui.inventory.GuiCrafting
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.inventory.ClickType
+ */
 package me.earth.earthhack.impl.modules.misc.autocraft;
 
 import me.earth.earthhack.impl.event.events.misc.TickEvent;
@@ -6,6 +16,7 @@ import me.earth.earthhack.impl.modules.misc.autocraft.AutoCraft;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiCrafting;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.ClickType;
 
@@ -18,10 +29,10 @@ extends ModuleListener<AutoCraft, TickEvent> {
     @Override
     public void invoke(TickEvent event) {
         if (((AutoCraft)this.module).currentTask != null) {
-            System.out.println("current task:" + ((AutoCraft)this.module).currentTask.getRecipe().getRecipeOutput().getItem().getRegistryName());
+            System.out.println("current task:" + (Object)((AutoCraft)this.module).currentTask.getRecipe().getRecipeOutput().getItem().getRegistryName());
         }
         if (((AutoCraft)this.module).lastTask != null) {
-            System.out.println("last task:" + ((AutoCraft)this.module).lastTask.getRecipe().getRecipeOutput().getItem().getRegistryName());
+            System.out.println("last task:" + (Object)((AutoCraft)this.module).lastTask.getRecipe().getRecipeOutput().getItem().getRegistryName());
         }
         if (((AutoCraft)this.module).delayTimer.passed(((AutoCraft)this.module).delay.getValue().intValue()) && ((AutoCraft)this.module).currentTask == null) {
             ((AutoCraft)this.module).currentTask = ((AutoCraft)this.module).dequeue();
@@ -49,14 +60,14 @@ extends ModuleListener<AutoCraft, TickEvent> {
                 AutoCraft.SlotEntry entry = ((AutoCraft)this.module).currentTask.getSlotToSlotMap().get(((AutoCraft)this.module).currentTask.getStep());
                 System.out.println("inventory slot:" + entry.getInventorySlot());
                 System.out.println("gui slot:" + entry.getGuiSlot());
-                ListenerTick.mc.playerController.windowClick(windowId, entry.getInventorySlot(), 0, ClickType.PICKUP, ListenerTick.mc.player);
+                ListenerTick.mc.playerController.windowClick(windowId, entry.getInventorySlot(), 0, ClickType.PICKUP, (EntityPlayer)ListenerTick.mc.player);
                 for (int i = 0; i < ((AutoCraft)this.module).currentTask.runs; ++i) {
-                    ListenerTick.mc.playerController.windowClick(windowId, entry.getGuiSlot(), 1, ClickType.PICKUP, ListenerTick.mc.player);
+                    ListenerTick.mc.playerController.windowClick(windowId, entry.getGuiSlot(), 1, ClickType.PICKUP, (EntityPlayer)ListenerTick.mc.player);
                 }
-                ListenerTick.mc.playerController.windowClick(windowId, entry.getInventorySlot(), 0, ClickType.PICKUP, ListenerTick.mc.player);
+                ListenerTick.mc.playerController.windowClick(windowId, entry.getInventorySlot(), 0, ClickType.PICKUP, (EntityPlayer)ListenerTick.mc.player);
                 ++((AutoCraft)this.module).currentTask.step;
             } else if (((AutoCraft)this.module).currentTask.step == ((AutoCraft)this.module).currentTask.getSlotToSlotMap().size()) {
-                ListenerTick.mc.playerController.windowClick(windowId, 0, 0, ClickType.QUICK_MOVE, ListenerTick.mc.player);
+                ListenerTick.mc.playerController.windowClick(windowId, 0, 0, ClickType.QUICK_MOVE, (EntityPlayer)ListenerTick.mc.player);
                 ((AutoCraft)this.module).currentTask = null;
                 ((AutoCraft)this.module).delayTimer.reset();
                 if (ListenerTick.mc.currentScreen instanceof GuiCrafting) {
@@ -66,3 +77,4 @@ extends ModuleListener<AutoCraft, TickEvent> {
         }
     }
 }
+

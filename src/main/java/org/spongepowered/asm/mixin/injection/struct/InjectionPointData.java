@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Joiner
+ *  com.google.common.base.Strings
+ */
 package org.spongepowered.asm.mixin.injection.struct;
 
 import com.google.common.base.Joiner;
@@ -39,7 +46,7 @@ public class InjectionPointData {
         this.parent = parent;
         this.at = at;
         this.target = target;
-        this.slice = Strings.nullToEmpty(slice);
+        this.slice = Strings.nullToEmpty((String)slice);
         this.ordinal = Math.max(-1, ordinal);
         this.opcode = opcode;
         this.id = id;
@@ -163,7 +170,7 @@ public class InjectionPointData {
     }
 
     private static Pattern createPattern() {
-        return Pattern.compile(String.format("^([^:]+):?(%s)?$", Joiner.on('|').join((Object[])InjectionPoint.Selector.values())));
+        return Pattern.compile(String.format("^([^:]+):?(%s)?$", Joiner.on((char)'|').join((Object[])InjectionPoint.Selector.values())));
     }
 
     public static String parseType(String at) {
@@ -197,3 +204,4 @@ public class InjectionPointData {
         }
     }
 }
+

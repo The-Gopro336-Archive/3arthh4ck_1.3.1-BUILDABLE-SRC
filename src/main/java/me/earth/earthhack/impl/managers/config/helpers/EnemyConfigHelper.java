@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.managers.config.helpers;
 
 import me.earth.earthhack.impl.managers.Managers;
@@ -9,3 +12,4 @@ extends PlayerManagerConfigHelper {
         super("enemy", "enemies", Managers.ENEMIES);
     }
 }
+

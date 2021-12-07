@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf;
 
 import com.formdev.flatlaf.FlatLaf;
@@ -34,3 +37,4 @@ extends FlatLaf {
         return true;
     }
 }
+

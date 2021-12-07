@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.item.EntityBoat
+ */
 package me.earth.earthhack.impl.core.mixins.entity;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -16,6 +22,7 @@ extends MixinEntity {
 
     @Redirect(method={"updateMotion"}, at=@At(value="INVOKE", target="net/minecraft/entity/item/EntityBoat.hasNoGravity()Z"))
     private boolean updateMotionHook(EntityBoat boat) {
-        return this.func_189652_ae() || BOAT_FLY.isEnabled() && ((Number)BOAT_FLY.returnIfPresent(BoatFly::getGlideSpeed, Float.valueOf(1.0E-4f))).floatValue() == 0.0f;
+        return this.hasNoGravity() || BOAT_FLY.isEnabled() && ((Number)BOAT_FLY.returnIfPresent(BoatFly::getGlideSpeed, Float.valueOf(1.0E-4f))).floatValue() == 0.0f;
     }
 }
+

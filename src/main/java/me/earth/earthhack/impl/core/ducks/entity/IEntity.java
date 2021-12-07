@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.core.ducks.entity;
 
 import me.earth.earthhack.impl.commands.packet.util.Dummy;
@@ -27,3 +30,4 @@ extends Dummy {
 
     public void setDummy(boolean var1);
 }
+

@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.network.play.server.SPacketPlayerListItem
+ *  net.minecraft.network.play.server.SPacketPlayerListItem$Action
+ *  net.minecraft.network.play.server.SPacketPlayerListItem$AddPlayerData
+ */
 package me.earth.earthhack.impl.managers.thread.connection;
 
 import java.util.Objects;
@@ -91,3 +100,4 @@ implements Globals {
         }
     }
 }
+

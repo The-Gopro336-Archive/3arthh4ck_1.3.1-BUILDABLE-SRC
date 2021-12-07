@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick;
 
 import org.newdawn.slick.Color;
@@ -11,3 +14,4 @@ public interface Renderable {
 
     public void draw(float var1, float var2, float var3, float var4, Color var5);
 }
+

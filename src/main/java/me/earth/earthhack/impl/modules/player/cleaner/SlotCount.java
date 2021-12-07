@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.player.cleaner;
 
 public class SlotCount {
@@ -25,3 +28,4 @@ public class SlotCount {
         this.slot = slot;
     }
 }
+

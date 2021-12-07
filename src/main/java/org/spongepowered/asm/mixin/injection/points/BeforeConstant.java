@@ -1,3 +1,14 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.primitives.Doubles
+ *  com.google.common.primitives.Floats
+ *  com.google.common.primitives.Ints
+ *  com.google.common.primitives.Longs
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package org.spongepowered.asm.mixin.injection.points;
 
 import com.google.common.primitives.Doubles;
@@ -28,7 +39,7 @@ import org.spongepowered.asm.util.Bytecode;
 @InjectionPoint.AtCode(value="CONSTANT")
 public class BeforeConstant
 extends InjectionPoint {
-    private static final Logger logger = LogManager.getLogger("mixin");
+    private static final Logger logger = LogManager.getLogger((String)"mixin");
     private final int ordinal;
     private final boolean nullValue;
     private final Integer intValue;
@@ -65,10 +76,10 @@ extends InjectionPoint {
         Boolean empty = strNullValue != null ? Boolean.valueOf(Boolean.parseBoolean(strNullValue)) : null;
         this.ordinal = data.getOrdinal();
         this.nullValue = empty != null && empty != false;
-        this.intValue = Ints.tryParse(data.get("intValue", ""));
-        this.floatValue = Floats.tryParse(data.get("floatValue", ""));
-        this.longValue = Longs.tryParse(data.get("longValue", ""));
-        this.doubleValue = Doubles.tryParse(data.get("doubleValue", ""));
+        this.intValue = Ints.tryParse((String)data.get("intValue", ""));
+        this.floatValue = Floats.tryParse((String)data.get("floatValue", ""));
+        this.longValue = Longs.tryParse((String)data.get("longValue", ""));
+        this.doubleValue = Doubles.tryParse((String)data.get("doubleValue", ""));
         this.stringValue = data.get("stringValue", null);
         String strClassValue = data.get("classValue", null);
         this.typeValue = strClassValue != null ? Type.getObjectType(strClassValue.replace('.', '/')) : null;
@@ -204,3 +215,4 @@ extends InjectionPoint {
         return counter;
     }
 }
+

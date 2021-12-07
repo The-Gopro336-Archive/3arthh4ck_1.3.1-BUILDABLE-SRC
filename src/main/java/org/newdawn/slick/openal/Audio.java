@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.openal;
 
 public interface Audio {
@@ -17,3 +20,4 @@ public interface Audio {
 
     public float getPosition();
 }
+

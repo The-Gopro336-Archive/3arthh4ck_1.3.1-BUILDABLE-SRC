@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.GuiBossOverlay
+ */
 package me.earth.earthhack.impl.core.mixins.gui;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -20,3 +26,4 @@ public abstract class MixinGuiBossOverlay {
         }
     }
 }
+

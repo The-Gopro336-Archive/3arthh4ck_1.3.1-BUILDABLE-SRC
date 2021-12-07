@@ -1,3 +1,21 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketPlayer$Rotation
+ *  net.minecraft.network.play.client.CPacketPlayerDigging
+ *  net.minecraft.network.play.client.CPacketPlayerDigging$Action
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.RayTraceResult
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.modules.misc.nuker;
 
 import java.awt.Color;
@@ -31,6 +49,7 @@ import me.earth.earthhack.impl.util.minecraft.blocks.SpecialBlocks;
 import me.earth.earthhack.impl.util.minecraft.blocks.mine.MineUtil;
 import me.earth.earthhack.impl.util.thread.Locks;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.network.Packet;
@@ -88,7 +107,7 @@ extends Module {
     protected Set<Block> getBlocks() {
         HashSet<Block> result = new HashSet<Block>();
         if (this.hoppers.getValue().booleanValue()) {
-            result.add(Blocks.HOPPER);
+            result.add((Block)Blocks.HOPPER);
         }
         if (this.shulkers.getValue().booleanValue()) {
             result.addAll(SpecialBlocks.SHULKERS);
@@ -118,7 +137,7 @@ extends Module {
                 if (this.rotations == null) {
                     this.rotations = rotations;
                 } else {
-                    this.actions.add(() -> Nuker.mc.player.connection.sendPacket(new CPacketPlayer.Rotation(rotations[0], rotations[1], Nuker.mc.player.onGround)));
+                    this.actions.add(() -> Nuker.mc.player.connection.sendPacket((Packet)new CPacketPlayer.Rotation(rotations[0], rotations[1], Nuker.mc.player.onGround)));
                 }
             }
             if (this.rotate.getValue() == Rotate.None) {
@@ -173,7 +192,7 @@ extends Module {
         float[] rotations = RotationUtil.getRotationsToTopMiddle(pos.up());
         RayTraceResult result = RayTraceUtil.getRayTraceResult(rotations[0], rotations[1], this.range.getValue().floatValue());
         if (this.rotate.getValue() == Rotate.Packet) {
-            Nuker.mc.player.connection.sendPacket(new CPacketPlayer.Rotation(rotations[0], rotations[1], Nuker.mc.player.onGround));
+            Nuker.mc.player.connection.sendPacket((Packet)new CPacketPlayer.Rotation(rotations[0], rotations[1], Nuker.mc.player.onGround));
         }
         Nuker.mc.player.connection.sendPacket(this.getPacket(pos, result.sideHit, true));
         Nuker.mc.player.connection.sendPacket(this.getPacket(pos, result.sideHit, false));
@@ -194,10 +213,10 @@ extends Module {
         for (int i = 1; i < this.width.getValue(); ++i) {
             EnumFacing facing = this.getFacing(i, entityF, false, horizontal);
             BlockPos w = pos.offset(facing);
-            while (result.contains(w)) {
+            while (result.contains((Object)w)) {
                 w = w.offset(facing);
             }
-            if (!MineUtil.canBreak(w) || !(BlockUtil.getDistanceSqDigging(Nuker.mc.player, w) <= (double)MathUtil.square(this.range.getValue().floatValue()))) continue;
+            if (!MineUtil.canBreak(w) || !(BlockUtil.getDistanceSqDigging((Entity)Nuker.mc.player, w) <= (double)MathUtil.square(this.range.getValue().floatValue()))) continue;
             result.add(w);
         }
         LinkedHashSet<BlockPos> added = new LinkedHashSet<BlockPos>(result);
@@ -205,10 +224,10 @@ extends Module {
             EnumFacing facing = this.getFacing(i, entityF, true, horizontal);
             for (BlockPos p : result) {
                 BlockPos h = p.offset(facing);
-                while (added.contains(h)) {
+                while (added.contains((Object)h)) {
                     h = h.offset(facing);
                 }
-                if (!MineUtil.canBreak(h) || !(BlockUtil.getDistanceSqDigging(Nuker.mc.player, h) <= (double)MathUtil.square(this.range.getValue().floatValue())) || entityF != EnumFacing.DOWN && !(Nuker.mc.player.posY < (double)pos.getY())) continue;
+                if (!MineUtil.canBreak(h) || !(BlockUtil.getDistanceSqDigging((Entity)Nuker.mc.player, h) <= (double)MathUtil.square(this.range.getValue().floatValue())) || entityF != EnumFacing.DOWN && !(Nuker.mc.player.posY < (double)pos.getY())) continue;
                 added.add(h);
             }
         }
@@ -238,3 +257,4 @@ extends Module {
         return EnumFacing.UP;
     }
 }
+

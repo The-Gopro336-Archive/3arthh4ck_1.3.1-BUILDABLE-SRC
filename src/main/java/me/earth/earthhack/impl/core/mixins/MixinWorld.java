@@ -1,3 +1,18 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  javax.annotation.Nullable
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.item.EntityFallingBlock
+ *  net.minecraft.util.EnumParticleTypes
+ *  net.minecraft.util.IntHashMap
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.world.EnumSkyBlock
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.core.mixins;
 
 import java.util.List;
@@ -38,10 +53,10 @@ implements IWorld {
     private static final ModuleCache<BlockTweaks> BLOCK_TWEAKS = Caches.getModule(BlockTweaks.class);
 
     @Shadow
-    public abstract List<Entity> func_72839_b(@Nullable Entity var1, AxisAlignedBB var2);
+    public abstract List<Entity> getEntitiesWithinAABBExcludingEntity(@Nullable Entity var1, AxisAlignedBB var2);
 
     @Shadow
-    public abstract World func_175643_b();
+    public abstract World init();
 
     @Override
     @Invoker(value="isChunkLoaded")
@@ -105,7 +120,7 @@ implements IWorld {
     @Inject(method={"getBlockState"}, at={@At(value="HEAD")}, cancellable=true)
     private void getBlockStateHook(BlockPos pos, CallbackInfoReturnable<IBlockState> cir) {
         IBlockState state;
-        if (PACKETS.isEnabled() && (state = ((Packets)PACKETS.get()).getStateMap().get(pos)) != null) {
+        if (PACKETS.isEnabled() && (state = ((Packets)PACKETS.get()).getStateMap().get((Object)pos)) != null) {
             cir.setReturnValue(state);
         }
     }
@@ -122,3 +137,4 @@ implements IWorld {
         return world.checkNoEntityCollision(bb, entityIn);
     }
 }
+

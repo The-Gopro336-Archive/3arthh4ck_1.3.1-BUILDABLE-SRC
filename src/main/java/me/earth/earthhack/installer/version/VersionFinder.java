@@ -1,9 +1,16 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.gson.JsonObject
+ */
 package me.earth.earthhack.installer.version;
 
 import com.google.gson.JsonObject;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import me.earth.earthhack.api.config.Jsonable;
@@ -30,7 +37,8 @@ public class VersionFinder {
     }
 
     private Version readJson(String name, File jsonFile) throws IOException {
-        JsonObject object = Jsonable.PARSER.parse(new InputStreamReader(jsonFile.toURI().toURL().openStream())).getAsJsonObject();
+        JsonObject object = Jsonable.PARSER.parse((Reader)new InputStreamReader(jsonFile.toURI().toURL().openStream())).getAsJsonObject();
         return new Version(name, jsonFile, object);
     }
 }
+

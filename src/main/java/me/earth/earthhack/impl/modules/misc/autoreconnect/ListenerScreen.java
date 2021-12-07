@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.GuiDisconnected
+ */
 package me.earth.earthhack.impl.modules.misc.autoreconnect;
 
 import me.earth.earthhack.impl.event.events.render.GuiScreenEvent;
@@ -19,3 +25,4 @@ extends ModuleListener<AutoReconnect, GuiScreenEvent<GuiDisconnected>> {
         }
     }
 }
+

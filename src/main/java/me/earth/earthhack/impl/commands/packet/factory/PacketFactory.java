@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.Packet
+ */
 package me.earth.earthhack.impl.commands.packet.factory;
 
 import me.earth.earthhack.api.command.Completer;
@@ -13,3 +19,4 @@ public interface PacketFactory {
 
     public CustomCompleterResult onTabComplete(Completer var1);
 }
+

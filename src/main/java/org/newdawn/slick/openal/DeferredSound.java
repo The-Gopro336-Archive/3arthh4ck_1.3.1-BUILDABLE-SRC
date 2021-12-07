@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.openal;
 
 import java.io.IOException;
@@ -124,3 +127,4 @@ implements DeferredResource {
         return this.ref;
     }
 }
+

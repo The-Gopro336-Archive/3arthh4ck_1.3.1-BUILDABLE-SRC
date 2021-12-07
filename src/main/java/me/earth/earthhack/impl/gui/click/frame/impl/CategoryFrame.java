@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.gui.Gui
+ *  net.minecraft.client.gui.ScaledResolution
+ *  net.minecraft.client.renderer.GlStateManager
+ *  net.minecraft.util.ResourceLocation
+ *  org.lwjgl.input.Mouse
+ *  org.lwjgl.opengl.GL11
+ */
 package me.earth.earthhack.impl.gui.click.frame.impl;
 
 import java.awt.Color;
@@ -103,10 +115,10 @@ extends Frame {
             }
             Render2DUtil.drawRect(this.getPosX(), this.getPosY() + this.getHeight(), this.getPosX() + this.getWidth(), this.getPosY() + this.getHeight() + 1.0f + this.getCurrentHeight(), -1845493760);
             GL11.glPushMatrix();
-            GL11.glEnable(3089);
+            GL11.glEnable((int)3089);
             RenderUtil.scissor(this.getPosX(), this.getPosY() + this.getHeight() + 1.0f, this.getPosX() + this.getWidth(), this.getPosY() + this.getHeight() + scrollMaxHeight + 1.0f);
             this.getComponents().forEach(component -> component.drawScreen(mouseX, mouseY, partialTicks));
-            GL11.glDisable(3089);
+            GL11.glDisable((int)3089);
             GL11.glPopMatrix();
         }
         this.updatePositions();
@@ -200,3 +212,4 @@ extends Frame {
         return this.moduleCategory;
     }
 }
+

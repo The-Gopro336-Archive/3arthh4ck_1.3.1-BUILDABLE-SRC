@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.render.breadcrumbs;
 
 import me.earth.earthhack.impl.event.events.network.DisconnectEvent;
@@ -17,3 +20,4 @@ extends ModuleListener<BreadCrumbs, DisconnectEvent> {
         }
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick;
 
 import org.newdawn.slick.Game;
@@ -137,3 +140,4 @@ InputListener {
     public void inputStarted() {
     }
 }
+

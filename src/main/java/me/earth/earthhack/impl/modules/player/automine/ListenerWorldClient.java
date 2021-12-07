@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.player.automine;
 
 import me.earth.earthhack.impl.event.events.network.WorldClientEvent;
@@ -16,3 +19,4 @@ extends ModuleListener<AutoMine, WorldClientEvent.Load> {
         ((AutoMine)this.module).blackList.clear();
     }
 }
+

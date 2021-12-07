@@ -1,3 +1,14 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Function
+ *  com.google.common.base.Functions
+ *  com.google.common.collect.Lists
+ *  org.apache.logging.log4j.Level
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package org.spongepowered.asm.mixin.transformer;
 
 import com.google.common.base.Function;
@@ -56,7 +67,7 @@ implements Comparable<MixinInfo>,
 IMixinInfo {
     private static final IMixinService classLoaderUtil = MixinService.getService();
     static int mixinOrder = 0;
-    private final transient Logger logger = LogManager.getLogger("mixin");
+    private final transient Logger logger = LogManager.getLogger((String)"mixin");
     private final transient Profiler profiler = MixinEnvironment.getProfiler();
     private final transient MixinConfig parent;
     private final String name;
@@ -102,7 +113,7 @@ IMixinInfo {
             this.priority = this.readPriority(this.pendingState.getClassNode());
             this.virtual = this.readPseudo(this.pendingState.getClassNode());
             this.targetClasses = this.readTargetClasses(this.pendingState.getClassNode(), suppressPlugin);
-            this.targetClassNames = Collections.unmodifiableList(Lists.transform(this.targetClasses, Functions.toStringFunction()));
+            this.targetClassNames = Collections.unmodifiableList(Lists.transform(this.targetClasses, (Function)Functions.toStringFunction()));
         }
         catch (InvalidMixinException ex) {
             throw ex;
@@ -137,18 +148,16 @@ IMixinInfo {
         List publicTargets = (List)Annotations.getValue(mixin, "value");
         List privateTargets = (List)Annotations.getValue(mixin, "targets");
         if (publicTargets != null) {
-            this.readTargets(targets, Lists.transform(publicTargets, new Function<Type, String>(){
+            this.readTargets(targets, Lists.transform((List)publicTargets, (Function)new Function<Type, String>(){
 
-                @Override
                 public String apply(Type input) {
                     return input.getClassName();
                 }
             }), suppressPlugin, false);
         }
         if (privateTargets != null) {
-            this.readTargets(targets, Lists.transform(privateTargets, new Function<String, String>(){
+            this.readTargets(targets, Lists.transform((List)privateTargets, (Function)new Function<String, String>(){
 
-                @Override
                 public String apply(String input) {
                     return MixinInfo.this.getParent().remapClassName(MixinInfo.this.getClassRef(), input);
                 }
@@ -802,3 +811,4 @@ IMixinInfo {
         }
     }
 }
+

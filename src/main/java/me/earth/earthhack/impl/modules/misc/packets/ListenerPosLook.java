@@ -1,3 +1,14 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketConfirmTeleport
+ *  net.minecraft.network.play.client.CPacketPlayer$PositionRotation
+ *  net.minecraft.network.play.server.SPacketPlayerPosLook
+ *  net.minecraft.network.play.server.SPacketPlayerPosLook$EnumFlags
+ *  net.minecraft.util.math.MathHelper
+ */
 package me.earth.earthhack.impl.modules.misc.packets;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -9,6 +20,7 @@ import me.earth.earthhack.impl.modules.misc.packets.Packets;
 import me.earth.earthhack.impl.modules.movement.packetfly.PacketFly;
 import me.earth.earthhack.impl.modules.player.freecam.Freecam;
 import me.earth.earthhack.impl.util.network.PacketUtil;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketConfirmTeleport;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.server.SPacketPlayerPosLook;
@@ -30,19 +42,19 @@ extends ModuleListener<Packets, PacketEvent.Receive<SPacketPlayerPosLook>> {
         }
         event.setCancelled(true);
         SPacketPlayerPosLook packet = (SPacketPlayerPosLook)event.getPacket();
-        boolean xFlag = packet.getFlags().contains(SPacketPlayerPosLook.EnumFlags.X);
-        boolean yFlag = packet.getFlags().contains(SPacketPlayerPosLook.EnumFlags.Y);
-        boolean zFlag = packet.getFlags().contains(SPacketPlayerPosLook.EnumFlags.Z);
-        boolean yawFlag = packet.getFlags().contains(SPacketPlayerPosLook.EnumFlags.Y_ROT);
-        boolean pitFlag = packet.getFlags().contains(SPacketPlayerPosLook.EnumFlags.X_ROT);
+        boolean xFlag = packet.getFlags().contains((Object)SPacketPlayerPosLook.EnumFlags.X);
+        boolean yFlag = packet.getFlags().contains((Object)SPacketPlayerPosLook.EnumFlags.Y);
+        boolean zFlag = packet.getFlags().contains((Object)SPacketPlayerPosLook.EnumFlags.Z);
+        boolean yawFlag = packet.getFlags().contains((Object)SPacketPlayerPosLook.EnumFlags.Y_ROT);
+        boolean pitFlag = packet.getFlags().contains((Object)SPacketPlayerPosLook.EnumFlags.X_ROT);
         double x = packet.getX() + (xFlag ? ListenerPosLook.mc.player.posX : 0.0);
         double y = packet.getY() + (yFlag ? ListenerPosLook.mc.player.posY : 0.0);
         double z = packet.getZ() + (zFlag ? ListenerPosLook.mc.player.posZ : 0.0);
         float yaw = packet.getYaw() + (yawFlag ? ListenerPosLook.mc.player.rotationYaw : 0.0f);
         float pit = packet.getPitch() + (pitFlag ? ListenerPosLook.mc.player.rotationPitch : 0.0f);
-        ListenerPosLook.mc.player.connection.sendPacket(new CPacketConfirmTeleport(packet.getTeleportId()));
+        ListenerPosLook.mc.player.connection.sendPacket((Packet)new CPacketConfirmTeleport(packet.getTeleportId()));
         Managers.ROTATION.setBlocking(true);
-        ListenerPosLook.mc.player.connection.sendPacket(new CPacketPlayer.PositionRotation(MathHelper.clamp((double)x, (double)-3.0E7, (double)3.0E7), y, MathHelper.clamp((double)z, (double)-3.0E7, (double)3.0E7), yaw, pit, false));
+        ListenerPosLook.mc.player.connection.sendPacket((Packet)new CPacketPlayer.PositionRotation(MathHelper.clamp((double)x, (double)-3.0E7, (double)3.0E7), y, MathHelper.clamp((double)z, (double)-3.0E7, (double)3.0E7), yaw, pit, false));
         Managers.ROTATION.setBlocking(false);
         if (((Packets)this.module).asyncTeleports.getValue().booleanValue()) {
             this.execute(x, y, z, yaw, pit, xFlag, yFlag, zFlag);
@@ -64,3 +76,4 @@ extends ModuleListener<Packets, PacketEvent.Receive<SPacketPlayerPosLook>> {
         ListenerPosLook.mc.player.setPositionAndRotation(x, y, z, yaw, pitch);
     }
 }
+

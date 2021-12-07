@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.combat.antisurround;
 
 import me.earth.earthhack.impl.modules.combat.antisurround.AntiSurround;
@@ -20,3 +23,4 @@ extends ObbyListenerData<AntiSurround> {
         return "Breaks enemies Surrounds.";
     }
 }
+

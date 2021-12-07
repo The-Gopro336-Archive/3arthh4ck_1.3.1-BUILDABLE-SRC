@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.movement.velocity;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -28,3 +31,4 @@ extends DefaultData<Velocity> {
         return "Stops knockback from various sources.";
     }
 }
+

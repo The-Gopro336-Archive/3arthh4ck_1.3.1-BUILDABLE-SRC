@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.item.ItemBlock
+ */
 package me.earth.earthhack.impl.util.helpers.addable;
 
 import java.util.function.Function;
@@ -18,3 +24,4 @@ extends RemovingItemAddingModule {
         return ItemAddingModule.getItemStartingWithDefault(name, i -> i instanceof ItemBlock);
     }
 }
+

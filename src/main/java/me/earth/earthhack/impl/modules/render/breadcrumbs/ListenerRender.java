@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.math.MathHelper
+ *  org.lwjgl.opengl.GL11
+ */
 package me.earth.earthhack.impl.modules.render.breadcrumbs;
 
 import me.earth.earthhack.impl.event.events.render.Render3DEvent;
@@ -19,16 +26,16 @@ extends ModuleListener<BreadCrumbs, Render3DEvent> {
     public void invoke(Render3DEvent event) {
         if (((BreadCrumbs)this.module).render.getValue().booleanValue() && ((BreadCrumbs)this.module).trace != null) {
             RenderUtil.startRender();
-            GL11.glLineWidth(((BreadCrumbs)this.module).width.getValue().floatValue());
+            GL11.glLineWidth((float)((BreadCrumbs)this.module).width.getValue().floatValue());
             ((BreadCrumbs)this.module).positions.forEach(trace -> {
-                GL11.glBegin(3);
+                GL11.glBegin((int)3);
                 trace.getTrace().forEach(this::renderVec);
                 GL11.glEnd();
                 if (((BreadCrumbs)this.module).fade.getValue().booleanValue()) {
                     trace.getTrace().removeIf(Trace.TracePos::shouldRemoveTrace);
                 }
             });
-            GL11.glBegin(3);
+            GL11.glBegin((int)3);
             ((BreadCrumbs)this.module).trace.getTrace().forEach(this::renderVec);
             if (((BreadCrumbs)this.module).fade.getValue().booleanValue()) {
                 ((BreadCrumbs)this.module).trace.getTrace().removeIf(Trace.TracePos::shouldRemoveTrace);
@@ -43,7 +50,8 @@ extends ModuleListener<BreadCrumbs, Render3DEvent> {
         double y = tracePos.getPos().y - Interpolation.getRenderPosY();
         double z = tracePos.getPos().z - Interpolation.getRenderPosZ();
         float percentage = ((BreadCrumbs)this.module).fade.getValue() != false ? MathHelper.clamp((float)(((BreadCrumbs)this.module).color.getA() / (float)((BreadCrumbs)this.module).fadeDelay.getValue().intValue() * (float)(tracePos.getTime() - System.currentTimeMillis())), (float)0.0f, (float)((BreadCrumbs)this.module).color.getB()) / ((BreadCrumbs)this.module).color.getB() : ((BreadCrumbs)this.module).color.getA();
-        GL11.glColor4f(((BreadCrumbs)this.module).color.getR(), ((BreadCrumbs)this.module).color.getG(), ((BreadCrumbs)this.module).color.getB(), percentage);
-        GL11.glVertex3d(x, y, z);
+        GL11.glColor4f((float)((BreadCrumbs)this.module).color.getR(), (float)((BreadCrumbs)this.module).color.getG(), (float)((BreadCrumbs)this.module).color.getB(), (float)percentage);
+        GL11.glVertex3d((double)x, (double)y, (double)z);
     }
 }
+

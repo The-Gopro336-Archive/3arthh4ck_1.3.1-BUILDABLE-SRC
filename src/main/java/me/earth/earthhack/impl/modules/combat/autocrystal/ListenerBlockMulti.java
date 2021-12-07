@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.material.Material
+ *  net.minecraft.network.play.server.SPacketMultiBlockChange
+ *  net.minecraft.network.play.server.SPacketMultiBlockChange$BlockUpdateData
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -20,7 +29,7 @@ extends ModuleListener<AutoCrystal, PacketEvent.Receive<SPacketMultiBlockChange>
             SPacketMultiBlockChange packet = (SPacketMultiBlockChange)event.getPacket();
             event.addPostEvent(() -> {
                 for (SPacketMultiBlockChange.BlockUpdateData data : packet.getChangedBlocks()) {
-                    if (data.getBlockState().func_185904_a() != Material.AIR || !HelperUtil.validChange(data.getPos(), ListenerBlockMulti.mc.world.playerEntities)) continue;
+                    if (data.getBlockState().getMaterial() != Material.AIR || !HelperUtil.validChange(data.getPos(), ListenerBlockMulti.mc.world.playerEntities)) continue;
                     ((AutoCrystal)this.module).threadHelper.startThread(new BlockPos[0]);
                     break;
                 }
@@ -28,3 +37,4 @@ extends ModuleListener<AutoCrystal, PacketEvent.Receive<SPacketMultiBlockChange>
         }
     }
 }
+

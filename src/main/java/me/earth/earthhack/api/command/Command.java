@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.api.command;
 
 import me.earth.earthhack.api.command.Completer;
@@ -119,3 +122,4 @@ implements Nameable {
         return builder.toString();
     }
 }
+

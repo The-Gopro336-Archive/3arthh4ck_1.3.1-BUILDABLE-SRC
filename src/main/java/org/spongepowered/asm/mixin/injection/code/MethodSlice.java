@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Strings
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package org.spongepowered.asm.mixin.injection.code;
 
 import com.google.common.base.Strings;
@@ -23,7 +31,7 @@ import org.spongepowered.asm.util.Annotations;
 import org.spongepowered.asm.util.Bytecode;
 
 public final class MethodSlice {
-    private static final Logger logger = LogManager.getLogger("mixin");
+    private static final Logger logger = LogManager.getLogger((String)"mixin");
     private final ISliceContext owner;
     private final String id;
     private final InjectionPoint from;
@@ -35,7 +43,7 @@ public final class MethodSlice {
             throw new InvalidSliceException(owner, String.format("%s is redundant. No 'from' or 'to' value specified", this));
         }
         this.owner = owner;
-        this.id = Strings.nullToEmpty(id);
+        this.id = Strings.nullToEmpty((String)id);
         this.from = from;
         this.to = to;
         this.name = MethodSlice.getSliceName(id);
@@ -100,7 +108,7 @@ public final class MethodSlice {
     }
 
     private static String getSliceName(String id) {
-        return String.format("@Slice[%s]", Strings.nullToEmpty(id));
+        return String.format("@Slice[%s]", Strings.nullToEmpty((String)id));
     }
 
     public static MethodSlice parse(ISliceContext owner, Slice slice) {
@@ -258,3 +266,4 @@ public final class MethodSlice {
         }
     }
 }
+

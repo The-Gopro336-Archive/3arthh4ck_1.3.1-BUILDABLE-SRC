@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.player.automine;
 
 import java.util.HashMap;
@@ -28,6 +37,7 @@ import me.earth.earthhack.impl.util.math.StopWatch;
 import me.earth.earthhack.impl.util.math.rotation.RotationUtil;
 import me.earth.earthhack.impl.util.minecraft.blocks.BlockUtil;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
@@ -188,7 +198,7 @@ implements IAutomine {
 
     @Override
     public void attackPos(BlockPos pos) {
-        EnumFacing facing = RayTraceUtil.getFacing(RotationUtil.getRotationPlayer(), pos, true);
+        EnumFacing facing = RayTraceUtil.getFacing((Entity)RotationUtil.getRotationPlayer(), pos, true);
         ((Speedmine)SPEED_MINE.get()).getTimer().setTime(0L);
         this.current = pos;
         this.attacking = true;
@@ -248,3 +258,4 @@ implements IAutomine {
         return this.improveCalcs.getValue();
     }
 }
+

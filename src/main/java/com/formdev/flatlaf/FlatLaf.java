@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf;
 
 import com.formdev.flatlaf.FlatDefaultsAddon;
@@ -513,7 +516,7 @@ extends BasicLookAndFeel {
      * WARNING - Removed try catching itself - possible behaviour change.
      */
     public static void updateUILater() {
-        Class<FlatLaf> clazz = FlatLaf.class;
+        Class<FlatLaf> class_ = FlatLaf.class;
         synchronized (FlatLaf.class) {
             if (updateUIPending) {
                 // ** MonitorExit[var0] (shouldn't be in output)
@@ -523,7 +526,7 @@ extends BasicLookAndFeel {
             // ** MonitorExit[var0] (shouldn't be in output)
             EventQueue.invokeLater(() -> {
                 FlatLaf.updateUI();
-                Class<FlatLaf> clazz = FlatLaf.class;
+                Class<FlatLaf> class_ = FlatLaf.class;
                 synchronized (FlatLaf.class) {
                     updateUIPending = false;
                     // ** MonitorExit[var0] (shouldn't be in output)
@@ -633,3 +636,4 @@ extends BasicLookAndFeel {
         }
     }
 }
+

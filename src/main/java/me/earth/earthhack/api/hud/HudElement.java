@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.math.MathHelper
+ */
 package me.earth.earthhack.api.hud;
 
 import java.awt.Color;
@@ -218,3 +224,4 @@ extends Module {
         this.dragging = dragging;
     }
 }
+

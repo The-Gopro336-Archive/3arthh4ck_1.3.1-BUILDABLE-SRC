@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketPlayerDigging
+ *  net.minecraft.network.play.client.CPacketPlayerDigging$Action
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.player.blocktweaks;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -10,6 +20,8 @@ import me.earth.earthhack.impl.modules.misc.nuker.Nuker;
 import me.earth.earthhack.impl.modules.player.blocktweaks.BlockTweaks;
 import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
 import me.earth.earthhack.impl.util.minecraft.blocks.mine.MineUtil;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.util.math.BlockPos;
 
@@ -26,8 +38,9 @@ extends ModuleListener<BlockTweaks, PacketEvent.Post<CPacketPlayerDigging>> {
     public void invoke(PacketEvent.Post<CPacketPlayerDigging> event) {
         BlockPos pos;
         CPacketPlayerDigging packet;
-        if (!(!((BlockTweaks)this.module).noBreakAnim.getValue().booleanValue() || PlayerUtil.isCreative(ListenerPacket.mc.player) || NUKER.isEnabled() && NUKE.getValue().booleanValue() || (packet = (CPacketPlayerDigging)event.getPacket()).getAction() != CPacketPlayerDigging.Action.START_DESTROY_BLOCK || !MineUtil.canBreak(pos = packet.getPosition()))) {
-            ListenerPacket.mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.ABORT_DESTROY_BLOCK, packet.getPosition(), packet.getFacing()));
+        if (!(!((BlockTweaks)this.module).noBreakAnim.getValue().booleanValue() || PlayerUtil.isCreative((EntityPlayer)ListenerPacket.mc.player) || NUKER.isEnabled() && NUKE.getValue().booleanValue() || (packet = (CPacketPlayerDigging)event.getPacket()).getAction() != CPacketPlayerDigging.Action.START_DESTROY_BLOCK || !MineUtil.canBreak(pos = packet.getPosition()))) {
+            ListenerPacket.mc.player.connection.sendPacket((Packet)new CPacketPlayerDigging(CPacketPlayerDigging.Action.ABORT_DESTROY_BLOCK, packet.getPosition(), packet.getFacing()));
         }
     }
 }
+

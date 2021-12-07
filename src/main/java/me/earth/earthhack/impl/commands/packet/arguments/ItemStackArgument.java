@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.nbt.JsonToNBT
+ *  net.minecraft.nbt.NBTException
+ */
 package me.earth.earthhack.impl.commands.packet.arguments;
 
 import me.earth.earthhack.api.command.PossibleInputs;
@@ -80,3 +89,4 @@ extends AbstractArgument<ItemStack> {
         return inputs;
     }
 }
+

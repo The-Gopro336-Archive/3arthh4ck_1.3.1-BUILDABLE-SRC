@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.render.chams;
 
 import me.earth.earthhack.impl.event.events.render.RenderEntityEvent;
@@ -14,3 +17,4 @@ extends ModuleListener<Chams, RenderEntityEvent> {
     public void invoke(RenderEntityEvent event) {
     }
 }
+

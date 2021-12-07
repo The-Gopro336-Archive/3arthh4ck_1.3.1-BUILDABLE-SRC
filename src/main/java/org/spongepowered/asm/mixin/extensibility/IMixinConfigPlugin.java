@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.extensibility;
 
 import java.util.List;
@@ -20,3 +23,4 @@ public interface IMixinConfigPlugin {
 
     public void postApply(String var1, ClassNode var2, String var3, IMixinInfo var4);
 }
+

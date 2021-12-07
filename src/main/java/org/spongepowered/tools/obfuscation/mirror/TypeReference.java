@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.tools.obfuscation.mirror;
 
 import java.io.Serializable;
@@ -59,3 +62,4 @@ Comparable<TypeReference> {
         return this.name.hashCode();
     }
 }
+

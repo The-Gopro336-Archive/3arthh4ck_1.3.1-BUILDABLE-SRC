@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.text.ITextComponent
+ *  net.minecraft.util.text.TextComponentBase
+ */
 package me.earth.earthhack.impl.core.mixins.util;
 
 import java.util.function.Supplier;
@@ -47,3 +54,4 @@ ITextComponent {
         }
     }
 }
+

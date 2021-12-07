@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.geom;
 
 import org.newdawn.slick.geom.Circle;
@@ -147,3 +150,4 @@ extends Shape {
         return resultPolygon;
     }
 }
+

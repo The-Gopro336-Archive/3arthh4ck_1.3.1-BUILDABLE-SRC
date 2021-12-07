@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package ibxm;
 
 public class Pattern {
@@ -53,3 +56,4 @@ public class Pattern {
         return data_offset;
     }
 }
+

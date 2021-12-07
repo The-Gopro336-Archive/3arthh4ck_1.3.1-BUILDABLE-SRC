@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.misc;
 
 public class Wrapper<T> {
@@ -11,3 +14,4 @@ public class Wrapper<T> {
         return this.value;
     }
 }
+

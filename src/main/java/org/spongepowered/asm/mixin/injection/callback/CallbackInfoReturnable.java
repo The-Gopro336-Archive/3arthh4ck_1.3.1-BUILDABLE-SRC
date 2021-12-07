@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.injection.callback;
 
 import org.spongepowered.asm.lib.Type;
@@ -137,3 +140,4 @@ extends CallbackInfo {
         return String.format("()%s", returnType.getDescriptor());
     }
 }
+

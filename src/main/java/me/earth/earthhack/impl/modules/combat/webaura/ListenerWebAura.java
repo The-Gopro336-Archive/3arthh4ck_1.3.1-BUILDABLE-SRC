@@ -1,3 +1,14 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.combat.webaura;
 
 import java.util.ArrayList;
@@ -27,22 +38,22 @@ extends NoAttackObbyListener<WebAura> {
         switch (((WebAura)this.module).target.getValue()) {
             case Closest: {
                 ((WebAura)this.module).currentTarget = EntityUtil.getClosestEnemy();
-                if (((WebAura)this.module).currentTarget == null || ((WebAura)this.module).currentTarget.getDistanceSq(ListenerWebAura.mc.player) > MathUtil.square(((WebAura)this.module).targetRange.getValue())) {
+                if (((WebAura)this.module).currentTarget == null || ((WebAura)this.module).currentTarget.getDistanceSq((Entity)ListenerWebAura.mc.player) > MathUtil.square(((WebAura)this.module).targetRange.getValue())) {
                     return result.setValid(false);
                 }
-                return this.trap(((WebAura)this.module).currentTarget, result);
+                return this.trap((Entity)((WebAura)this.module).currentTarget, result);
             }
             case Untrapped: {
                 ((WebAura)this.module).currentTarget = null;
                 ArrayList<EntityPlayer> players = new ArrayList<EntityPlayer>();
                 for (EntityPlayer player : ListenerWebAura.mc.world.playerEntities) {
                     BlockPos pos;
-                    if (player == null || EntityUtil.isDead(player) || Managers.FRIENDS.contains(player) || player.equals(ListenerWebAura.mc.player) || ListenerWebAura.mc.world.getBlockState(pos = new BlockPos(player)).getBlock() == Blocks.WEB || ListenerWebAura.mc.world.getBlockState(pos.up()).getBlock() == Blocks.WEB || !(ListenerWebAura.mc.player.getDistanceSq(player) < MathUtil.square(((WebAura)this.module).targetRange.getValue()))) continue;
+                    if (player == null || EntityUtil.isDead((Entity)player) || Managers.FRIENDS.contains(player) || player.equals((Object)ListenerWebAura.mc.player) || ListenerWebAura.mc.world.getBlockState(pos = new BlockPos((Entity)player)).getBlock() == Blocks.WEB || ListenerWebAura.mc.world.getBlockState(pos.up()).getBlock() == Blocks.WEB || !(ListenerWebAura.mc.player.getDistanceSq((Entity)player) < MathUtil.square(((WebAura)this.module).targetRange.getValue()))) continue;
                     players.add(player);
                 }
-                players.sort(Comparator.comparingDouble(p -> p.getDistanceSq(ListenerWebAura.mc.player)));
+                players.sort(Comparator.comparingDouble(p -> p.getDistanceSq((Entity)ListenerWebAura.mc.player)));
                 for (EntityPlayer player : players) {
-                    this.trap(player, result);
+                    this.trap((Entity)player, result);
                 }
                 return result;
             }
@@ -68,11 +79,12 @@ extends NoAttackObbyListener<WebAura> {
         if (state.getBlock() == Blocks.WEB || upState.getBlock() == Blocks.WEB) {
             return result;
         }
-        if (state.func_185904_a().isReplaceable()) {
+        if (state.getMaterial().isReplaceable()) {
             result.getTargets().add(pos);
-        } else if (upState.func_185904_a().isReplaceable()) {
+        } else if (upState.getMaterial().isReplaceable()) {
             result.getTargets().add(up);
         }
         return result;
     }
 }
+

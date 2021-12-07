@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.BufferUtils
+ */
 package org.newdawn.slick.opengl;
 
 import java.io.BufferedInputStream;
@@ -190,7 +196,7 @@ implements LoadableImageData {
                 rawData[i + 3] = 0;
             }
         }
-        ByteBuffer scratch = BufferUtils.createByteBuffer(rawData.length);
+        ByteBuffer scratch = BufferUtils.createByteBuffer((int)rawData.length);
         scratch.put(rawData);
         int perPixel = this.pixelDepth / 8;
         if (this.height < this.texHeight - 1) {
@@ -229,3 +235,4 @@ implements LoadableImageData {
     public void configureEdging(boolean edging) {
     }
 }
+

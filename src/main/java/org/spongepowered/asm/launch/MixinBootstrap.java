@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package org.spongepowered.asm.launch;
 
 import java.util.List;
@@ -11,7 +18,7 @@ import org.spongepowered.asm.service.MixinService;
 
 public abstract class MixinBootstrap {
     public static final String VERSION = "0.7.11";
-    private static final Logger logger = LogManager.getLogger("mixin");
+    private static final Logger logger = LogManager.getLogger((String)"mixin");
     private static boolean initialised = false;
     private static boolean initState = true;
     private static MixinPlatformManager platform;
@@ -115,3 +122,4 @@ public abstract class MixinBootstrap {
         MixinService.getService().prepare();
     }
 }
+

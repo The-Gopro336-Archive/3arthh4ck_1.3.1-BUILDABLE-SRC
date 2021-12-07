@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.gui.ChatLine
+ *  net.minecraft.util.text.ITextComponent
+ */
 package me.earth.earthhack.impl.core.mixins.gui;
 
 import java.text.DateFormat;
@@ -48,3 +56,4 @@ implements IChatLine {
         ((Chat)MixinChatLine.CHAT.get()).animationMap.put((ChatLine)ChatLine.class.cast(this), new TimeAnimation(((Chat)MixinChatLine.CHAT.get()).time.getValue().intValue(), -MixinChatLine.MC.fontRenderer.getStringWidth(t), 0.0, false, AnimationMode.LINEAR));
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal.util;
 
 import java.util.Collection;
@@ -71,3 +74,4 @@ implements Set<T> {
     public void clear() {
     }
 }
+

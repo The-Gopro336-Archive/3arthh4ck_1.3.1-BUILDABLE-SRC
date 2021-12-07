@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.svg;
 
 import java.util.Properties;
@@ -115,3 +118,4 @@ public class NonGeometricData {
         return this.isColor(STROKE) && this.getAsFloat(STROKE_WIDTH) > 0.0f;
     }
 }
+

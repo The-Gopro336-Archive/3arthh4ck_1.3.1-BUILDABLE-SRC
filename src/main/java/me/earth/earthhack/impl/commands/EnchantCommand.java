@@ -1,6 +1,16 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.enchantment.Enchantment
+ *  net.minecraft.entity.player.EntityPlayerMP
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketCreativeInventoryAction
+ *  net.minecraft.util.text.translation.I18n
+ */
 package me.earth.earthhack.impl.commands;
 
-import java.util.Iterator;
 import java.util.Objects;
 import me.earth.earthhack.api.command.Command;
 import me.earth.earthhack.api.command.PossibleInputs;
@@ -11,6 +21,7 @@ import me.earth.earthhack.impl.util.text.ChatUtil;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketCreativeInventoryAction;
 import net.minecraft.util.text.translation.I18n;
 
@@ -51,15 +62,13 @@ implements Globals {
                 ChatUtil.sendMessage("\u00a7cCould find Enchantment \u00a7f" + conc + "\u00a7c" + "!");
                 return;
             }
-            stack.addEnchantment(enchantment, level);
+            stack.addEnchantment(enchantment, (int)level);
             this.setStack(stack);
             return;
         }
-        Iterator iterator = Enchantment.REGISTRY.iterator();
-        while (iterator.hasNext()) {
-            Enchantment enchantment = (Enchantment)iterator.next();
+        for (Enchantment enchantment : Enchantment.REGISTRY) {
             if (enchantment.isCurse()) continue;
-            stack.addEnchantment(enchantment, level);
+            stack.addEnchantment(enchantment, (int)level);
         }
         this.setStack(stack);
     }
@@ -67,9 +76,9 @@ implements Globals {
     private void setStack(ItemStack stack) {
         int slot = EnchantCommand.mc.player.inventory.currentItem + 36;
         if (EnchantCommand.mc.player.isCreative()) {
-            EnchantCommand.mc.player.connection.sendPacket(new CPacketCreativeInventoryAction(slot, stack));
+            EnchantCommand.mc.player.connection.sendPacket((Packet)new CPacketCreativeInventoryAction(slot, stack));
         } else if (mc.isSingleplayer()) {
-            EntityPlayerMP player = Objects.requireNonNull(mc.getIntegratedServer()).func_184103_al().getPlayerByUUID(EnchantCommand.mc.player.getUniqueID());
+            EntityPlayerMP player = Objects.requireNonNull(mc.getIntegratedServer()).getPlayerList().getPlayerByUUID(EnchantCommand.mc.player.getUniqueID());
             if (player != null) {
                 player.inventoryContainer.putStackInSlot(slot, stack);
             }
@@ -112,9 +121,7 @@ implements Globals {
 
     public static Enchantment getEnchantment(String prefix) {
         prefix = prefix.toLowerCase();
-        Iterator iterator = Enchantment.REGISTRY.iterator();
-        while (iterator.hasNext()) {
-            Enchantment enchantment = (Enchantment)iterator.next();
+        for (Enchantment enchantment : Enchantment.REGISTRY) {
             String s = I18n.translateToLocal((String)enchantment.getName());
             if (!s.toLowerCase().startsWith(prefix)) continue;
             return enchantment;
@@ -122,3 +129,4 @@ implements Globals {
         return null;
     }
 }
+

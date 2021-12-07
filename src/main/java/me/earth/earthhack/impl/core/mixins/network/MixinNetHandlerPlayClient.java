@@ -1,3 +1,19 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.network.NetHandlerPlayClient
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.InventoryPlayer
+ *  net.minecraft.network.NetworkManager
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketResourcePackStatus
+ *  net.minecraft.network.play.client.CPacketResourcePackStatus$Action
+ *  net.minecraft.network.play.server.SPacketPlayerPosLook
+ *  net.minecraft.network.play.server.SPacketResourcePackSend
+ *  net.minecraft.scoreboard.ScorePlayerTeam
+ *  net.minecraft.scoreboard.Scoreboard
+ */
 package me.earth.earthhack.impl.core.mixins.network;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -10,6 +26,7 @@ import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketResourcePackStatus;
 import net.minecraft.network.play.server.SPacketPlayerPosLook;
 import net.minecraft.network.play.server.SPacketResourcePackSend;
@@ -30,7 +47,7 @@ implements INetHandlerPlayClient {
     private static final ModuleCache<Packets> PACKETS = Caches.getModule(Packets.class);
     @Shadow
     @Final
-    private NetworkManager field_147302_e;
+    private NetworkManager netManager;
 
     @Override
     @Accessor(value="doneLoadingTerrain")
@@ -59,7 +76,7 @@ implements INetHandlerPlayClient {
     @Inject(method={"handleResourcePack"}, at={@At(value="HEAD")}, cancellable=true)
     private void validateResourcePackHook(SPacketResourcePackSend packetIn, CallbackInfo ci) {
         if (packetIn.getURL() == null || packetIn.getHash() == null) {
-            this.field_147302_e.sendPacket(new CPacketResourcePackStatus(CPacketResourcePackStatus.Action.FAILED_DOWNLOAD));
+            this.netManager.sendPacket((Packet)new CPacketResourcePackStatus(CPacketResourcePackStatus.Action.FAILED_DOWNLOAD));
             ci.cancel();
         }
     }
@@ -81,3 +98,4 @@ implements INetHandlerPlayClient {
         });
     }
 }
+

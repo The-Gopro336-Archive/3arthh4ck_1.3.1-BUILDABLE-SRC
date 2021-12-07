@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ *  org.lwjgl.opengl.Display
+ */
 package me.earth.earthhack.impl;
 
 import me.earth.earthhack.api.util.interfaces.Globals;
@@ -12,7 +20,7 @@ import org.lwjgl.opengl.Display;
 
 public class Earthhack
 implements Globals {
-    private static final Logger LOGGER = LogManager.getLogger("3arthh4ck");
+    private static final Logger LOGGER = LogManager.getLogger((String)"3arthh4ck");
     public static final String NAME = "3arthh4ck";
     public static final String VERSION = "1.3.1";
 
@@ -22,7 +30,7 @@ implements Globals {
 
     public static void init() {
         LOGGER.info("\n\nInitializing 3arthh4ck.");
-        Display.setTitle("3arthh4ck - 1.3.1");
+        Display.setTitle((String)"3arthh4ck - 1.3.1");
         DiscordPresence.start();
         Managers.load();
         LOGGER.info("\n3arthh4ck initialized.\n");
@@ -36,6 +44,7 @@ implements Globals {
     }
 
     public static boolean isRunning() {
-        return ((IMinecraft)((Object)mc)).isEarthhackRunning();
+        return ((IMinecraft)mc).isEarthhackRunning();
     }
 }
+

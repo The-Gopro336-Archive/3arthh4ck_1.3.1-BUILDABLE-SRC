@@ -1,3 +1,16 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.world.IBlockAccess
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal;
 
 import java.util.HashMap;
@@ -26,10 +39,12 @@ import me.earth.earthhack.impl.util.minecraft.blocks.states.BlockStateHelper;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 
 public class HelperObby
 implements Globals {
@@ -45,7 +60,7 @@ implements Globals {
         double maxY = 0.0;
         LinkedList<EntityPlayer> filteredPlayers = new LinkedList<EntityPlayer>();
         for (EntityPlayer player : players) {
-            if (player == null || EntityUtil.isDead(player) || player.posY > HelperObby.mc.player.posY + 18.0 || player.getDistanceSq(HelperObby.mc.player) > (double)MathUtil.square(this.module.targetRange.getValue().floatValue())) continue;
+            if (player == null || EntityUtil.isDead((Entity)player) || player.posY > HelperObby.mc.player.posY + 18.0 || player.getDistanceSq((Entity)HelperObby.mc.player) > (double)MathUtil.square(this.module.targetRange.getValue().floatValue())) continue;
             filteredPlayers.add(player);
             if (!(player.posY > maxY)) continue;
             maxY = player.posY;
@@ -88,16 +103,16 @@ implements Globals {
             }
             if (this.module.interact.getValue().booleanValue()) {
                 Ray[] mode = this.module.obbyTrace.getValue();
-                EnumFacing[] enumFacingArray = EnumFacing.values();
-                int n = enumFacingArray.length;
+                EnumFacing[] arrenumFacing = EnumFacing.values();
+                int n = arrenumFacing.length;
                 for (int i = 0; i < n; ++i) {
                     IBlockState state;
-                    EnumFacing facing = enumFacingArray[i];
+                    EnumFacing facing = arrenumFacing[i];
                     BlockPos offset = pos.offset(facing);
-                    if (BlockUtil.getDistanceSq(offset) >= (double)MathUtil.square(this.module.placeRange.getValue().floatValue()) || (state = HelperObby.mc.world.getBlockState(offset)).func_185904_a().isReplaceable() && !state.func_185904_a().isLiquid()) continue;
-                    Ray ray = RayTraceFactory.rayTrace(positionData.getFrom(), offset, facing.getOpposite(), HelperObby.mc.world, Blocks.OBSIDIAN.getDefaultState(), mode == RayTraceMode.Smart ? -1.0 : 2.0);
+                    if (BlockUtil.getDistanceSq(offset) >= (double)MathUtil.square(this.module.placeRange.getValue().floatValue()) || (state = HelperObby.mc.world.getBlockState(offset)).getMaterial().isReplaceable() && !state.getMaterial().isLiquid()) continue;
+                    Ray ray = RayTraceFactory.rayTrace(positionData.getFrom(), offset, facing.getOpposite(), (IBlockAccess)HelperObby.mc.world, Blocks.OBSIDIAN.getDefaultState(), mode == RayTraceMode.Smart ? -1.0 : 2.0);
                     if (!ray.isLegit() && mode == RayTraceMode.Smart) continue;
-                    if (this.module.inside.getValue().booleanValue() && state.func_185904_a().isLiquid()) {
+                    if (this.module.inside.getValue().booleanValue() && state.getMaterial().isLiquid()) {
                         ray.getResult().sideHit = ray.getResult().sideHit.getOpposite();
                         ray = new Ray(ray.getResult(), ray.getRotations(), ray.getPos().offset(ray.getFacing()), ray.getFacing().getOpposite(), ray.getVector());
                     }
@@ -121,8 +136,8 @@ implements Globals {
             if (this.module.antiFriendPop.getValue().shouldCalc(AntiFriendPop.Place)) {
                 boolean poppingFriend = false;
                 for (EntityPlayer friend : friends) {
-                    float damage = this.module.damageHelper.getObbyDamage(pos, friend, helper);
-                    if (!(damage > EntityUtil.getHealth(friend))) continue;
+                    float damage = this.module.damageHelper.getObbyDamage(pos, (EntityLivingBase)friend, helper);
+                    if (!(damage > EntityUtil.getHealth((EntityLivingBase)friend))) continue;
                     poppingFriend = true;
                     break;
                 }
@@ -131,13 +146,13 @@ implements Globals {
             float damage = 0.0f;
             if (target != null) {
                 positionData.setTarget(target);
-                damage = this.module.damageHelper.getObbyDamage(pos, target, helper);
+                damage = this.module.damageHelper.getObbyDamage(pos, (EntityLivingBase)target, helper);
                 if (damage < this.module.minDamage.getValue().floatValue()) {
                     continue;
                 }
             } else {
                 for (EntityPlayer p : filteredPlayers) {
-                    float d = this.module.damageHelper.getObbyDamage(pos, p, helper);
+                    float d = this.module.damageHelper.getObbyDamage(pos, (EntityLivingBase)p, helper);
                     if (d < this.module.minDamage.getValue().floatValue() || d < damage) continue;
                     damage = d;
                     positionData.setTarget(p);
@@ -170,7 +185,7 @@ implements Globals {
     }
 
     private void addPositions(Set<BlockPos> positions, EntityPlayer player, int fastObby) {
-        BlockPos down = PositionUtil.getPosition(player).down();
+        BlockPos down = PositionUtil.getPosition((Entity)player).down();
         for (EnumFacing facing : EnumFacing.HORIZONTALS) {
             BlockPos offset = down;
             for (int i = 0; i < fastObby; ++i) {
@@ -184,7 +199,7 @@ implements Globals {
         if (self > MD.getValue().floatValue() && this.module.obbySafety.getValue().booleanValue()) {
             Managers.SAFETY.setSafe(false);
         }
-        if ((double)self > (double)EntityUtil.getHealth(HelperObby.mc.player) - 1.0) {
+        if ((double)self > (double)EntityUtil.getHealth((EntityLivingBase)HelperObby.mc.player) - 1.0) {
             if (this.module.obbySafety.getValue().booleanValue()) {
                 Managers.SAFETY.setSafe(false);
             }
@@ -193,3 +208,4 @@ implements Globals {
         return self > this.module.maxSelfPlace.getValue().floatValue();
     }
 }
+

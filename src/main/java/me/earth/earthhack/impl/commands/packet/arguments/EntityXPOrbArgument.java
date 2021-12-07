@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.item.EntityXPOrb
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.commands.packet.arguments;
 
 import me.earth.earthhack.api.command.PossibleInputs;
@@ -5,6 +12,7 @@ import me.earth.earthhack.api.util.interfaces.Globals;
 import me.earth.earthhack.impl.commands.packet.AbstractArgument;
 import me.earth.earthhack.impl.commands.packet.exception.ArgParseException;
 import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.world.World;
 
 public class EntityXPOrbArgument
 extends AbstractArgument<EntityXPOrb>
@@ -41,8 +49,8 @@ implements Globals {
         double x = split.length > 2 ? this.tryParse(split[2], "x") : EntityXPOrbArgument.mc.player.posX;
         double y = split.length > 3 ? this.tryParse(split[3], "y") : EntityXPOrbArgument.mc.player.posY;
         double z = split.length > 4 ? this.tryParse(split[4], "z") : EntityXPOrbArgument.mc.player.posZ;
-        EntityXPOrb entity = new EntityXPOrb(EntityXPOrbArgument.mc.world, x, y, z, amount);
-        entity.func_145769_d(id);
+        EntityXPOrb entity = new EntityXPOrb((World)EntityXPOrbArgument.mc.world, x, y, z, amount);
+        entity.setEntityId(id);
         return entity;
     }
 
@@ -82,3 +90,4 @@ implements Globals {
         }
     }
 }
+

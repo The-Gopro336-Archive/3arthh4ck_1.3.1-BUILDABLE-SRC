@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.multiplayer.ServerData
+ *  net.minecraft.client.multiplayer.ServerList
+ *  org.apache.commons.io.IOUtils
+ */
 package me.earth.earthhack.impl.modules.client.autoconfig;
 
 import java.io.IOException;
@@ -65,7 +73,7 @@ extends RegisteringModule<String, RemovingString> {
                 if (in == null) {
                     throw new IOException("InputStream was null!");
                 }
-                IOUtils.copy(in, out);
+                IOUtils.copy((InputStream)in, (OutputStream)out);
             }
             catch (IOException e) {
                 ChatUtil.sendMessage("\u00a7cAn error occurred: " + e.getMessage());
@@ -187,3 +195,4 @@ extends RegisteringModule<String, RemovingString> {
         }
     }
 }
+

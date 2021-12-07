@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.util;
 
 public class ReEntranceLock {
@@ -53,3 +56,4 @@ public class ReEntranceLock {
         return this;
     }
 }
+

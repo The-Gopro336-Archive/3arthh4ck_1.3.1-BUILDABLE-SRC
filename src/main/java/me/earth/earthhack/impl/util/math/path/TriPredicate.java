@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.math.path;
 
 import java.util.Objects;
@@ -20,3 +23,4 @@ public interface TriPredicate<T, U, V> {
         return (t, u, v) -> this.test(t, u, v) || other.test(t, u, v);
     }
 }
+

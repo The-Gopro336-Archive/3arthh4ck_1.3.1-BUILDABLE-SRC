@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.lib.util;
 
 import java.io.PrintWriter;
@@ -90,3 +93,4 @@ extends ClassVisitor {
         super.visitEnd();
     }
 }
+

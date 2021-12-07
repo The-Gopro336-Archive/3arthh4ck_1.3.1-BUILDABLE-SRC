@@ -1,7 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.managers.client;
 
 import java.io.File;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.lang.reflect.Constructor;
 import java.net.URLClassLoader;
 import java.util.HashMap;
@@ -117,7 +121,7 @@ public class PluginManager {
             }
         }
         ReflectionUtil.addToClassPath((URLClassLoader)pluginClassLoader, file);
-        PluginConfig config = (PluginConfig)Jsonable.GSON.fromJson(new InputStreamReader(Objects.requireNonNull(pluginClassLoader.getResourceAsStream(configName))), PluginConfig.class);
+        PluginConfig config = (PluginConfig)Jsonable.GSON.fromJson((Reader)new InputStreamReader(Objects.requireNonNull(pluginClassLoader.getResourceAsStream(configName))), PluginConfig.class);
         if (config == null) {
             throw new BadPluginException(jarFile.getName() + ": Found a PluginConfig, but couldn't instantiate it.");
         }
@@ -137,3 +141,4 @@ public class PluginManager {
         return this.classLoader;
     }
 }
+

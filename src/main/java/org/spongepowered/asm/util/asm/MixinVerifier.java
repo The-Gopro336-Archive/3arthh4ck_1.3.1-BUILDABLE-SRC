@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.util.asm;
 
 import java.util.List;
@@ -74,3 +77,4 @@ extends SimpleVerifier {
         return ClassInfo.forType(other).hasSuperClass(typeInfo);
     }
 }
+

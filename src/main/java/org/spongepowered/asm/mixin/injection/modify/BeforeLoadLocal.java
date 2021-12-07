@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.injection.modify;
 
 import java.util.Collection;
@@ -100,3 +103,4 @@ extends ModifyVariableInjector.ContextualInjectionPoint {
         }
     }
 }
+

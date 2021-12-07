@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.injection.invoke.arg;
 
 public abstract class Args {
@@ -19,3 +22,4 @@ public abstract class Args {
 
     public abstract void setAll(Object ... var1);
 }
+

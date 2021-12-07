@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.ui;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
@@ -75,3 +78,4 @@ extends BasicSeparatorUI {
         return new Dimension(0, UIScale.scale(this.height));
     }
 }
+

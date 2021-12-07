@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.struct;
 
 import org.spongepowered.asm.lib.tree.FieldInsnNode;
@@ -256,3 +259,4 @@ public abstract class MemberRef {
         }
     }
 }
+

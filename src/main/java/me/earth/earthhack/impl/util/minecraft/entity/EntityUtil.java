@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.util.minecraft.entity;
 
 import java.util.List;
@@ -16,7 +26,7 @@ import net.minecraft.util.math.Vec3d;
 public class EntityUtil
 implements Globals {
     public static boolean isDead(Entity entity) {
-        return entity.isDead || ((IEntity)((Object)entity)).isPseudoDead() || entity instanceof EntityLivingBase && ((EntityLivingBase)entity).getHealth() <= 0.0f;
+        return entity.isDead || ((IEntity)entity).isPseudoDead() || entity instanceof EntityLivingBase && ((EntityLivingBase)entity).getHealth() <= 0.0f;
     }
 
     public static float getHealth(EntityLivingBase base) {
@@ -51,7 +61,7 @@ implements Globals {
         double distance = 3.4028234663852886E38;
         for (EntityPlayer player : players) {
             double dist;
-            if (player == null || EntityUtil.isDead(player) || player.equals(EntityUtil.mc.player) || Managers.FRIENDS.contains(player) || !((dist = player.getDistanceSq(x, y, z)) < distance)) continue;
+            if (player == null || EntityUtil.isDead((Entity)player) || player.equals((Object)EntityUtil.mc.player) || Managers.FRIENDS.contains(player) || !((dist = player.getDistanceSq(x, y, z)) < distance)) continue;
             closest = player;
             distance = dist;
         }
@@ -59,9 +69,9 @@ implements Globals {
     }
 
     public static EntityPlayer getClosestEnemy(double x, double y, double z, double maxRange, List<EntityPlayer> players) {
-        Predicate[] predicateArray = new Predicate[1];
-        predicateArray[0] = Managers.ENEMIES::contains;
-        List<List<EntityPlayer>> split = CollectionUtil.split(players, predicateArray);
+        Predicate[] arrpredicate = new Predicate[1];
+        arrpredicate[0] = Managers.ENEMIES::contains;
+        List<List<EntityPlayer>> split = CollectionUtil.split(players, arrpredicate);
         return EntityUtil.getClosestEnemy(x, y, z, maxRange, split.get(0), split.get(1));
     }
 
@@ -77,3 +87,4 @@ implements Globals {
         return player != null && !EntityUtil.isDead(player) && EntityUtil.mc.player.getDistanceSq(player) <= MathUtil.square(range) && !Managers.FRIENDS.contains(player);
     }
 }
+

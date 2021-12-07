@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.tests.xml;
 
 public class Stats {
@@ -10,3 +13,4 @@ public class Stats {
         System.out.println(prefix + "Stats " + this.hp + "," + this.mp + "," + this.age + "," + this.exp);
     }
 }
+

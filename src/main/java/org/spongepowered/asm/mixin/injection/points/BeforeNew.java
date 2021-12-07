@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Strings
+ */
 package org.spongepowered.asm.mixin.injection.points;
 
 import com.google.common.base.Strings;
@@ -22,7 +28,7 @@ extends InjectionPoint {
     public BeforeNew(InjectionPointData data) {
         super(data);
         this.ordinal = data.getOrdinal();
-        String target = Strings.emptyToNull(data.get("class", data.get("target", "")).replace('.', '/'));
+        String target = Strings.emptyToNull((String)data.get("class", data.get("target", "")).replace('.', '/'));
         MemberInfo member = MemberInfo.parseAndValidate(target, data.getContext());
         this.target = member.toCtorType();
         this.desc = member.toCtorDesc();
@@ -75,3 +81,4 @@ extends InjectionPoint {
         return this.target == null || this.target.equals(insn.desc);
     }
 }
+

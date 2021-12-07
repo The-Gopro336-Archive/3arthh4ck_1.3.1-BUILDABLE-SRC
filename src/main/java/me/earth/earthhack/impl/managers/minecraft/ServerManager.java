@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.managers.minecraft;
 
 import me.earth.earthhack.api.event.bus.EventListener;
@@ -23,3 +26,4 @@ extends SubscriberImpl {
         return this.timer.getTime();
     }
 }
+

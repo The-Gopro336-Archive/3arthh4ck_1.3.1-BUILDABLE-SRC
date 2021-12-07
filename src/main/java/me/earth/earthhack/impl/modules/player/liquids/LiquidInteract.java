@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.player.liquids;
 
 import me.earth.earthhack.api.module.Module;
@@ -11,3 +14,4 @@ extends Module {
         this.setData(new SimpleData(this, "Allows you to place on liquids"));
     }
 }
+

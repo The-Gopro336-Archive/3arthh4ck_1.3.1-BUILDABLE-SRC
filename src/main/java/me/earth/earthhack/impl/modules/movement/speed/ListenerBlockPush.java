@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.movement.speed;
 
 import me.earth.earthhack.impl.event.events.movement.BlockPushEvent;
@@ -17,3 +20,4 @@ extends ModuleListener<Speed, BlockPushEvent> {
         }
     }
 }
+

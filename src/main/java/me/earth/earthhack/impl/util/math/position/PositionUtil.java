@@ -1,3 +1,16 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.block.BlockLiquid
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.MathHelper
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.util.math.position;
 
 import java.util.HashSet;
@@ -16,7 +29,7 @@ import net.minecraft.util.math.Vec3d;
 public class PositionUtil
 implements Globals {
     public static BlockPos getPosition() {
-        return PositionUtil.getPosition(RotationUtil.getRotationPlayer());
+        return PositionUtil.getPosition((Entity)RotationUtil.getRotationPlayer());
     }
 
     public static BlockPos getPosition(Entity entity) {
@@ -32,7 +45,7 @@ implements Globals {
     }
 
     public static Vec3d getEyePos() {
-        return PositionUtil.getEyePos(PositionUtil.mc.player);
+        return PositionUtil.getEyePos((Entity)PositionUtil.mc.player);
     }
 
     public static Vec3d getEyePos(Entity entity) {
@@ -40,7 +53,7 @@ implements Globals {
     }
 
     public static double getEyeHeight() {
-        return PositionUtil.getEyeHeight(PositionUtil.mc.player);
+        return PositionUtil.getEyeHeight((Entity)PositionUtil.mc.player);
     }
 
     public static double getEyeHeight(Entity entity) {
@@ -69,7 +82,7 @@ implements Globals {
     }
 
     public static boolean isBoxColliding() {
-        return PositionUtil.mc.world.getCollisionBoxes(PositionUtil.mc.player, PositionUtil.mc.player.getEntityBoundingBox().offset(0.0, 0.21, 0.0)).size() > 0;
+        return PositionUtil.mc.world.getCollisionBoxes((Entity)PositionUtil.mc.player, PositionUtil.mc.player.getEntityBoundingBox().offset(0.0, 0.21, 0.0)).size() > 0;
     }
 
     public static boolean inLiquid() {
@@ -92,7 +105,7 @@ implements Globals {
         for (int x = startX; x < endX; ++x) {
             for (int z = startZ; z < endZ; ++z) {
                 IBlockState s = PositionUtil.mc.world.getBlockState(new BlockPos(x, y, z));
-                if (!block.isInstance(s.getBlock())) continue;
+                if (!block.isInstance((Object)s.getBlock())) continue;
                 return s;
             }
         }
@@ -101,7 +114,7 @@ implements Globals {
 
     public static boolean isMovementBlocked() {
         IBlockState state = PositionUtil.findState(Block.class, MathHelper.floor((double)(PositionUtil.mc.player.getEntityBoundingBox().minY - 0.01)));
-        return state != null && state.func_185904_a().blocksMovement();
+        return state != null && state.getMaterial().blocksMovement();
     }
 
     public static boolean isAbove(BlockPos pos) {
@@ -121,6 +134,7 @@ implements Globals {
     }
 
     public static boolean intersects(AxisAlignedBB bb, BlockPos pos) {
-        return bb.intersects(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1);
+        return bb.intersects((double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), (double)(pos.getX() + 1), (double)(pos.getY() + 1), (double)(pos.getZ() + 1));
     }
 }
+

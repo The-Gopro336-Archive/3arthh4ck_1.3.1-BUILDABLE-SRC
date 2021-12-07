@@ -1,3 +1,23 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.init.Items
+ *  net.minecraft.item.Item
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketAnimation
+ *  net.minecraft.network.play.client.CPacketPlayer$Rotation
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Vec3i
+ */
 package me.earth.earthhack.impl.modules.combat.antitrap;
 
 import java.util.Comparator;
@@ -26,11 +46,13 @@ import me.earth.earthhack.impl.util.minecraft.blocks.BlockUtil;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
 import me.earth.earthhack.impl.util.thread.Locks;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketAnimation;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
@@ -49,7 +71,7 @@ extends ModuleListener<AntiTrap, MotionUpdateEvent> {
 
     @Override
     public void invoke(MotionUpdateEvent event) {
-        if (((AntiTrap)this.module).autoOff.getValue().booleanValue() && !PositionUtil.getPosition().equals(((AntiTrap)this.module).startPos)) {
+        if (((AntiTrap)this.module).autoOff.getValue().booleanValue() && !PositionUtil.getPosition().equals((Object)((AntiTrap)this.module).startPos)) {
             ((AntiTrap)this.module).disable();
             return;
         }
@@ -71,7 +93,7 @@ extends ModuleListener<AntiTrap, MotionUpdateEvent> {
             ((AntiTrap)this.module).rotations = null;
             ((AntiTrap)this.module).blocksPlaced = 0;
             for (BlockPos confirmed : ((AntiTrap)this.module).confirmed) {
-                ((AntiTrap)this.module).placed.remove(confirmed);
+                ((AntiTrap)this.module).placed.remove((Object)confirmed);
             }
             ((AntiTrap)this.module).placed.entrySet().removeIf(entry -> System.currentTimeMillis() - (Long)entry.getValue() >= (long)((AntiTrap)this.module).confirm.getValue().intValue());
             BlockPos playerPos = PositionUtil.getPosition();
@@ -97,7 +119,7 @@ extends ModuleListener<AntiTrap, MotionUpdateEvent> {
             boolean done = true;
             LinkedList<BlockPos> toPlace = new LinkedList<BlockPos>();
             for (BlockPos pos2 : positions) {
-                if (pos2 == null || ((AntiTrap)this.module).mode.getValue() == AntiTrapMode.Fill && !((AntiTrap)this.module).highFill.getValue().booleanValue() && pos2.getY() > playerPos.getY() || !ListenerMotion.mc.world.getBlockState(pos2).func_185904_a().isReplaceable()) continue;
+                if (pos2 == null || ((AntiTrap)this.module).mode.getValue() == AntiTrapMode.Fill && !((AntiTrap)this.module).highFill.getValue().booleanValue() && pos2.getY() > playerPos.getY() || !ListenerMotion.mc.world.getBlockState(pos2).getMaterial().isReplaceable()) continue;
                 toPlace.add(pos2);
                 done = false;
             }
@@ -106,15 +128,15 @@ extends ModuleListener<AntiTrap, MotionUpdateEvent> {
                 return;
             }
             boolean hasPlaced = false;
-            Optional<BlockPos> crystalPos = toPlace.stream().filter(pos -> !ListenerMotion.mc.world.getEntitiesWithinAABB(EntityEnderCrystal.class, new AxisAlignedBB((BlockPos)pos)).isEmpty() && ListenerMotion.mc.world.getBlockState((BlockPos)pos).func_185904_a().isReplaceable()).findFirst();
+            Optional<BlockPos> crystalPos = toPlace.stream().filter(pos -> !ListenerMotion.mc.world.getEntitiesWithinAABB(EntityEnderCrystal.class, new AxisAlignedBB(pos)).isEmpty() && ListenerMotion.mc.world.getBlockState(pos).getMaterial().isReplaceable()).findFirst();
             if (crystalPos.isPresent()) {
                 BlockPos pos3 = crystalPos.get();
                 hasPlaced = ((AntiTrap)this.module).placeBlock(pos3);
             }
             if (!hasPlaced) {
                 for (BlockPos pos2 : toPlace) {
-                    if (((AntiTrap)this.module).placed.containsKey(pos2) || !ObbyModule.HELPER.getBlockState(pos2).func_185904_a().isReplaceable()) continue;
-                    ((AntiTrap)this.module).confirmed.remove(pos2);
+                    if (((AntiTrap)this.module).placed.containsKey((Object)pos2) || !ObbyModule.HELPER.getBlockState(pos2).getMaterial().isReplaceable()) continue;
+                    ((AntiTrap)this.module).confirmed.remove((Object)pos2);
                     if (!((AntiTrap)this.module).placeBlock(pos2)) continue;
                     break;
                 }
@@ -156,7 +178,7 @@ extends ModuleListener<AntiTrap, MotionUpdateEvent> {
                 }
             }
             if ((closest = EntityUtil.getClosestEnemy()) != null) {
-                positions.sort(Comparator.comparingDouble(pos -> BlockUtil.getDistanceSq(closest, pos)));
+                positions.sort(Comparator.comparingDouble(pos -> BlockUtil.getDistanceSq((Entity)closest, pos)));
             }
             ((AntiTrap)this.module).pos = positions.get(positions.size() - 1);
             ((AntiTrap)this.module).rotations = RotationUtil.getRotationsToTopMiddle(((AntiTrap)this.module).pos.up());
@@ -190,10 +212,10 @@ extends ModuleListener<AntiTrap, MotionUpdateEvent> {
         CPacketPlayerTryUseItemOnBlock place = new CPacketPlayerTryUseItemOnBlock(((AntiTrap)this.module).pos, ((AntiTrap)this.module).result.sideHit, hand, (float)((AntiTrap)this.module).result.hitVec.x, (float)((AntiTrap)this.module).result.hitVec.y, (float)((AntiTrap)this.module).result.hitVec.z);
         CPacketAnimation swing = new CPacketAnimation(hand);
         if (((AntiTrap)this.module).rotate.getValue() == Rotate.Packet && ((AntiTrap)this.module).rotations != null) {
-            ListenerMotion.mc.player.connection.sendPacket(new CPacketPlayer.Rotation(((AntiTrap)this.module).rotations[0], ((AntiTrap)this.module).rotations[1], ListenerMotion.mc.player.onGround));
+            ListenerMotion.mc.player.connection.sendPacket((Packet)new CPacketPlayer.Rotation(((AntiTrap)this.module).rotations[0], ((AntiTrap)this.module).rotations[1], ListenerMotion.mc.player.onGround));
         }
-        ListenerMotion.mc.player.connection.sendPacket(place);
-        ListenerMotion.mc.player.connection.sendPacket(swing);
+        ListenerMotion.mc.player.connection.sendPacket((Packet)place);
+        ListenerMotion.mc.player.connection.sendPacket((Packet)swing);
         InventoryUtil.switchTo(lastSlot);
         if (((AntiTrap)this.module).swing.getValue().booleanValue()) {
             Swing.Client.swing(hand);
@@ -201,3 +223,4 @@ extends ModuleListener<AntiTrap, MotionUpdateEvent> {
         ((AntiTrap)this.module).disable();
     }
 }
+

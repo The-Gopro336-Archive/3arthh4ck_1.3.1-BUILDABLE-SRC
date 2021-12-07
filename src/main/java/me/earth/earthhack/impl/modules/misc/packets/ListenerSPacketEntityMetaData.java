@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketEntityMetadata
+ */
 package me.earth.earthhack.impl.modules.misc.packets;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -15,3 +21,4 @@ extends ModuleListener<Packets, PacketEvent.Receive<SPacketEntityMetadata>> {
     public void invoke(PacketEvent.Receive<SPacketEntityMetadata> event) {
     }
 }
+

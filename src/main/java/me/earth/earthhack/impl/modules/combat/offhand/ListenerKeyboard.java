@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.init.Items
+ */
 package me.earth.earthhack.impl.modules.combat.offhand;
 
 import me.earth.earthhack.impl.event.events.keyboard.KeyboardEvent;
@@ -28,3 +34,4 @@ extends ModuleListener<Offhand, KeyboardEvent> {
         }
     }
 }
+

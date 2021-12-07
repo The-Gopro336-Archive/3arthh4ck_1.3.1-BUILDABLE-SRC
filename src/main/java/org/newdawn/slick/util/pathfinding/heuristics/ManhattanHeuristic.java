@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.util.pathfinding.heuristics;
 
 import org.newdawn.slick.util.pathfinding.AStarHeuristic;
@@ -17,3 +20,4 @@ implements AStarHeuristic {
         return this.minimumCost * (Math.abs(x - tx) + Math.abs(y - ty));
     }
 }
+

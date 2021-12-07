@@ -1,9 +1,19 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.combat.pistonaura.util;
 
 import me.earth.earthhack.api.util.interfaces.Globals;
 import me.earth.earthhack.impl.modules.combat.pistonaura.util.PistonStage;
 import me.earth.earthhack.impl.util.math.position.PositionUtil;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -23,12 +33,12 @@ implements Globals {
     public PistonData(EntityPlayer target, BlockPos crystalPos, EnumFacing facing) {
         this.crystalPos = crystalPos;
         this.target = target;
-        this.startPos = PositionUtil.getPosition(target);
+        this.startPos = PositionUtil.getPosition((Entity)target);
         this.facing = facing;
     }
 
     public boolean isValid() {
-        return this.valid && this.order != null && EntityUtil.isValid(this.target, 9.0) && this.startPos.equals(PositionUtil.getPosition(this.target));
+        return this.valid && this.order != null && EntityUtil.isValid((Entity)this.target, 9.0) && this.startPos.equals((Object)PositionUtil.getPosition((Entity)this.target));
     }
 
     public BlockPos getStartPos() {
@@ -83,3 +93,4 @@ implements Globals {
         this.multi = multi;
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.helpers.render.data;
 
 import me.earth.earthhack.impl.util.helpers.render.BlockESPModule;
@@ -12,3 +15,4 @@ extends ColorModuleData<T> {
         this.register(((BlockESPModule)module).outline, "The Color to draw the outline with. An alpha value of 0 means no outline at all.");
     }
 }
+

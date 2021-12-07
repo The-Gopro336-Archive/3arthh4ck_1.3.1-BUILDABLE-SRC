@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.entity.player.EntityPlayer
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal;
 
 import java.util.Collection;
@@ -45,9 +54,10 @@ Globals {
     protected boolean checkFriendPop(Entity entity, List<EntityPlayer> friends) {
         for (EntityPlayer friend : friends) {
             float fDamage = this.module.damageHelper.getDamage(entity, (EntityLivingBase)friend);
-            if (!(fDamage > EntityUtil.getHealth(friend) - 1.0f)) continue;
+            if (!(fDamage > EntityUtil.getHealth((EntityLivingBase)friend) - 1.0f)) continue;
             return true;
         }
         return false;
     }
 }
+

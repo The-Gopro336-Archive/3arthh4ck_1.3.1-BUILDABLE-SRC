@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.misc.announcer;
 
 import me.earth.earthhack.impl.event.events.network.DisconnectEvent;
@@ -15,3 +18,4 @@ extends ModuleListener<Announcer, DisconnectEvent> {
         mc.addScheduledTask(((Announcer)this.module)::reset);
     }
 }
+

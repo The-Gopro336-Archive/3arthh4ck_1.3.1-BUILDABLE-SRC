@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.util;
 
 import java.util.Locale;
@@ -70,3 +73,4 @@ public class SystemInfo {
         isWinPE = isWindows && "X:\\Windows\\System32".equalsIgnoreCase(System.getProperty("user.dir"));
     }
 }
+

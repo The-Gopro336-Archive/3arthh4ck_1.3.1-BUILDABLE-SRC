@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.installer.srg2notch;
 
 public class MethodMapping {
@@ -23,3 +26,4 @@ public class MethodMapping {
         return this.desc;
     }
 }
+

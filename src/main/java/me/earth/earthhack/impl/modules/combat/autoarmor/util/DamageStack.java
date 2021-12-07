@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.item.ItemStack
+ */
 package me.earth.earthhack.impl.modules.combat.autoarmor.util;
 
 import net.minecraft.item.ItemStack;
@@ -31,3 +37,4 @@ implements Comparable<DamageStack> {
         return Float.compare(o.damage, this.damage);
     }
 }
+

@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.objectweb.asm.Handle
+ *  org.objectweb.asm.Type
+ */
 package me.earth.earthhack.installer.srg2notch;
 
 import java.util.ArrayList;
@@ -73,7 +80,7 @@ public class MappingUtil {
     }
 
     public static Type map(Type type, Mapping mapping) {
-        return Type.getType(MappingUtil.mapDescription(type.getDescriptor(), mapping));
+        return Type.getType((String)MappingUtil.mapDescription(type.getDescriptor(), mapping));
     }
 
     public static String[] splitField(String field) {
@@ -135,3 +142,4 @@ public class MappingUtil {
         return result;
     }
 }
+

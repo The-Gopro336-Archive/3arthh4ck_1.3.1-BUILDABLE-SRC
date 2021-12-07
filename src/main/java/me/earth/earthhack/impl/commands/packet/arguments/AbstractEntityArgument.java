@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.commands.packet.arguments;
 
 import me.earth.earthhack.api.util.interfaces.Globals;
@@ -8,6 +16,7 @@ import me.earth.earthhack.impl.core.ducks.entity.IEntity;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 
 public abstract class AbstractEntityArgument<T extends Entity>
 extends AbstractArgument<T>
@@ -24,7 +33,7 @@ implements Globals {
         if (AbstractEntityArgument.mc.world == null) {
             throw new ArgParseException("Minecraft.world was null!");
         }
-        Entity entity = null;
+        Object entity = null;
         if (EntityPlayer.class.isAssignableFrom(this.type)) {
             entity = "$closest".equalsIgnoreCase(argument) ? EntityUtil.getClosestEnemy() : AbstractEntityArgument.mc.world.getPlayerEntityByName(argument);
         }
@@ -33,9 +42,9 @@ implements Globals {
                 int id = (int)Long.parseLong(argument);
                 entity = AbstractEntityArgument.mc.world.getEntityByID(id);
                 if (entity == null) {
-                    entity = new DummyEntity(AbstractEntityArgument.mc.world);
+                    entity = new DummyEntity((World)AbstractEntityArgument.mc.world);
                     entity.setEntityId(id);
-                    ((IEntity)((Object)entity)).setDummy(true);
+                    ((IEntity)entity).setDummy(true);
                 }
             }
             catch (Exception e) {
@@ -46,7 +55,7 @@ implements Globals {
     }
 
     public static <E extends Entity> E getEntity(String argument, Class<E> type) {
-        Entity entity = null;
+        EntityPlayer entity = null;
         if (type.isAssignableFrom(EntityPlayer.class)) {
             entity = argument.equalsIgnoreCase("$closest") ? EntityUtil.getClosestEnemy() : AbstractEntityArgument.mc.world.getPlayerEntityByName(argument);
         }
@@ -54,7 +63,7 @@ implements Globals {
             try {
                 int id = (int)Long.parseLong(argument);
                 entity = AbstractEntityArgument.mc.world.getEntityByID(id);
-                if (!type.isInstance(entity)) {
+                if (!type.isInstance((Object)entity)) {
                     return null;
                 }
             }
@@ -65,3 +74,4 @@ implements Globals {
         return (E)entity;
     }
 }
+

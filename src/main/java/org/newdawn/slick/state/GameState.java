@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.state;
 
 import org.newdawn.slick.GameContainer;
@@ -20,3 +23,4 @@ extends InputListener {
 
     public void leave(GameContainer var1, StateBasedGame var2) throws SlickException;
 }
+

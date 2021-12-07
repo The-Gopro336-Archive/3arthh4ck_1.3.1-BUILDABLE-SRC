@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.input.Keyboard
+ */
 package me.earth.earthhack.impl.modules.player.arrows;
 
 import me.earth.earthhack.impl.event.events.keyboard.KeyboardEvent;
@@ -18,3 +24,4 @@ extends ModuleListener<Arrows, KeyboardEvent> {
         }
     }
 }
+

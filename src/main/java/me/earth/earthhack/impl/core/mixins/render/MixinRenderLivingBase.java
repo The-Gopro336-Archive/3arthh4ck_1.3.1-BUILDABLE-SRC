@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.renderer.entity.Render
+ *  net.minecraft.client.renderer.entity.RenderLivingBase
+ *  net.minecraft.client.renderer.entity.layers.LayerRenderer
+ *  net.minecraft.entity.EntityLivingBase
+ */
 package me.earth.earthhack.impl.core.mixins.render;
 
 import java.util.List;
@@ -17,11 +26,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value={RenderLivingBase.class})
 public abstract class MixinRenderLivingBase {
     @Shadow
-    protected List<LayerRenderer<?>> field_177097_h;
+    protected List<LayerRenderer<?>> layerRenderers;
 
     @Inject(method={"renderLayers"}, at={@At(value="HEAD")}, cancellable=true)
     public void renderLayersPreHook(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scaleIn, CallbackInfo ci) {
-        RenderLayersEvent pre = new RenderLayersEvent((Render)Render.class.cast(this), entitylivingbaseIn, this.field_177097_h, Stage.PRE);
+        RenderLayersEvent pre = new RenderLayersEvent((Render<EntityLivingBase>)((Render)Render.class.cast(this)), entitylivingbaseIn, this.layerRenderers, Stage.PRE);
         Bus.EVENT_BUS.post(pre);
         if (pre.isCancelled()) {
             ci.cancel();
@@ -30,7 +39,8 @@ public abstract class MixinRenderLivingBase {
 
     @Inject(method={"renderLayers"}, at={@At(value="RETURN")})
     public void renderLayersPostHook(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scaleIn, CallbackInfo ci) {
-        RenderLayersEvent post = new RenderLayersEvent((Render)Render.class.cast(this), entitylivingbaseIn, this.field_177097_h, Stage.POST);
+        RenderLayersEvent post = new RenderLayersEvent((Render<EntityLivingBase>)((Render)Render.class.cast(this)), entitylivingbaseIn, this.layerRenderers, Stage.POST);
         Bus.EVENT_BUS.post(post);
     }
 }
+

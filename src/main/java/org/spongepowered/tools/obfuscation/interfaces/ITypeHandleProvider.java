@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.tools.obfuscation.interfaces;
 
 import javax.lang.model.type.TypeMirror;
@@ -8,3 +11,4 @@ public interface ITypeHandleProvider {
 
     public TypeHandle getSimulatedHandle(String var1, TypeMirror var2);
 }
+

@@ -1,3 +1,16 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  io.netty.util.internal.ConcurrentSet
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.init.SoundEvents
+ *  net.minecraft.network.play.server.SPacketDestroyEntities
+ *  net.minecraft.network.play.server.SPacketSoundEffect
+ *  net.minecraft.util.SoundCategory
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.managers.minecraft.combat;
 
 import io.netty.util.internal.ConcurrentSet;
@@ -129,8 +142,8 @@ implements Globals {
             if (!entry.getValue().passed(DEATH_TIME.getValue().intValue())) continue;
             Entity entity = entry.getValue().getEntity();
             entity.isDead = false;
-            if (SetDeadManager.mc.world.loadedEntityList.contains(entity)) continue;
-            SetDeadManager.mc.world.addEntityToWorld(entry.getKey(), entity);
+            if (SetDeadManager.mc.world.loadedEntityList.contains((Object)entity)) continue;
+            SetDeadManager.mc.world.addEntityToWorld(entry.getKey().intValue(), entity);
             entity.isDead = false;
             this.killed.remove(entry.getKey());
         }
@@ -200,3 +213,4 @@ implements Globals {
         return false;
     }
 }
+

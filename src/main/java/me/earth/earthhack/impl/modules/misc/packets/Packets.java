@@ -1,3 +1,20 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.init.Items
+ *  net.minecraft.inventory.ClickType
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.nbt.NBTBase
+ *  net.minecraft.nbt.NBTTagCompound
+ *  net.minecraft.nbt.NBTTagList
+ *  net.minecraft.nbt.NBTTagString
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketClickWindow
+ *  net.minecraft.network.play.client.CPacketCreativeInventoryAction
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.misc.packets;
 
 import java.util.Collections;
@@ -40,6 +57,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
@@ -181,7 +199,7 @@ extends Module {
             try {
                 ItemStack stack = this.createStack();
                 while (this.isEnabled() && this.bookCrash.getValue() != BookCrashMode.None && Packets.mc.player != null) {
-                    Packet packet = null;
+                    CPacketCreativeInventoryAction packet = null;
                     switch (this.bookCrash.getValue()) {
                         case None: {
                             this.crashing.set(false);
@@ -198,7 +216,7 @@ extends Module {
                         }
                     }
                     if (packet != null) {
-                        Packets.mc.player.connection.sendPacket(packet);
+                        Packets.mc.player.connection.sendPacket((Packet)packet);
                     }
                     Thread.sleep(this.bookDelay.getValue().intValue());
                 }
@@ -226,12 +244,12 @@ extends Module {
             this.pages = this.genRandomString(this.bookLength.getValue());
         }
         for (int i = 0; i < 50; ++i) {
-            list.appendTag(new NBTTagString(this.pages));
+            list.appendTag((NBTBase)new NBTTagString(this.pages));
         }
         tag.setString("author", mc.getSession().getUsername());
         tag.setString("title", "\n CrashBook \n");
-        tag.setTag("pages", list);
-        stack.setTagInfo("pages", list);
+        tag.setTag("pages", (NBTBase)list);
+        stack.setTagInfo("pages", (NBTBase)list);
         stack.setTagCompound(tag);
         return stack;
     }
@@ -252,3 +270,4 @@ extends Module {
         return Collections.emptyMap();
     }
 }
+

@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.client.pingbypass.submodules.sautocrystal;
 
 import java.awt.Color;
@@ -27,3 +33,4 @@ extends ModuleListener<ServerAutoCrystal, Render3DEvent> {
         }
     }
 }
+

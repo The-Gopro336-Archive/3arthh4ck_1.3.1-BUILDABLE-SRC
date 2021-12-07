@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.particles;
 
 import org.newdawn.slick.Image;
@@ -27,3 +30,4 @@ public interface ParticleEmitter {
 
     public void resetState();
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.util.pathfinding;
 
 import java.io.Serializable;
@@ -67,3 +70,4 @@ implements Serializable {
         }
     }
 }
+

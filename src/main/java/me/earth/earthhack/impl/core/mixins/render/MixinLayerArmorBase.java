@@ -1,3 +1,14 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.model.ModelBase
+ *  net.minecraft.client.renderer.entity.layers.LayerArmorBase
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.inventory.EntityEquipmentSlot
+ *  org.lwjgl.opengl.GL11
+ */
 package me.earth.earthhack.impl.core.mixins.render;
 
 import java.awt.Color;
@@ -28,14 +39,14 @@ public abstract class MixinLayerArmorBase {
             Color color = ((Chams)CHAMS.get()).getArmorVisibleColor(entityIn);
             if (((Chams)CHAMS.get()).shouldArmorChams() && CHAMS.isEnabled()) {
                 GL11.glPushMatrix();
-                GL11.glEnable(32823);
-                GL11.glPolygonOffset(1.0f, -2000000.0f);
-                GL11.glColor4f((float)color.getRed() / 255.0f, (float)color.getGreen() / 255.0f, (float)color.getBlue() / 255.0f, (float)color.getAlpha() / 255.0f);
+                GL11.glEnable((int)32823);
+                GL11.glPolygonOffset((float)1.0f, (float)-2000000.0f);
+                GL11.glColor4f((float)((float)color.getRed() / 255.0f), (float)((float)color.getGreen() / 255.0f), (float)((float)color.getBlue() / 255.0f), (float)((float)color.getAlpha() / 255.0f));
             }
             modelBase.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
             if (((Chams)CHAMS.get()).shouldArmorChams() && CHAMS.isEnabled()) {
-                GL11.glPolygonOffset(1.0f, 2000000.0f);
-                GL11.glDisable(32823);
+                GL11.glPolygonOffset((float)1.0f, (float)2000000.0f);
+                GL11.glDisable((int)32823);
                 GL11.glPopMatrix();
             }
         }
@@ -48,3 +59,4 @@ public abstract class MixinLayerArmorBase {
         }
     }
 }
+

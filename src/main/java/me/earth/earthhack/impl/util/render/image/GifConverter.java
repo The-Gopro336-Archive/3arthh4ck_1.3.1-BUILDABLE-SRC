@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.render.image;
 
 import java.awt.Color;
@@ -267,3 +270,4 @@ public class GifConverter {
         return new GifImage(images, delay /= framez.length);
     }
 }
+

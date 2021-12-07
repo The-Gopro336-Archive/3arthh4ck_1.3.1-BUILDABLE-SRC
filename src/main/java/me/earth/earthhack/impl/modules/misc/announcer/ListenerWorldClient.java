@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.misc.announcer;
 
 import me.earth.earthhack.impl.event.events.network.WorldClientEvent;
@@ -15,3 +18,4 @@ extends ModuleListener<Announcer, WorldClientEvent> {
         ((Announcer)this.module).reset();
     }
 }
+

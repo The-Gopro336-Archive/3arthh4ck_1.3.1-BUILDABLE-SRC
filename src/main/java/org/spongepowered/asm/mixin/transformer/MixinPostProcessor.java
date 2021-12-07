@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.transformer;
 
 import java.util.HashMap;
@@ -162,3 +165,4 @@ implements MixinConfig.IListener {
         methodNode.maxLocals = 0;
     }
 }
+

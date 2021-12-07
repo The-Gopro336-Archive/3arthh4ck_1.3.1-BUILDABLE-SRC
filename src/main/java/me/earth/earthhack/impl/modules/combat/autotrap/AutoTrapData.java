@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.combat.autotrap;
 
 import me.earth.earthhack.impl.modules.combat.autotrap.AutoTrap;
@@ -36,3 +39,4 @@ extends ObbyListenerData<AutoTrap> {
         return "Traps enemy players with Obsidian.";
     }
 }
+

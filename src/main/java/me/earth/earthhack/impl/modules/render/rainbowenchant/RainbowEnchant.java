@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.render.rainbowenchant;
 
 import me.earth.earthhack.api.module.Module;
@@ -9,3 +12,4 @@ extends Module {
         super("RainbowEnchant", Category.Render);
     }
 }
+

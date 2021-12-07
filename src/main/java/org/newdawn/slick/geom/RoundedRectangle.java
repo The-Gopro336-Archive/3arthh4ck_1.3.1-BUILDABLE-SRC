@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.geom;
 
 import java.util.ArrayList;
@@ -169,3 +172,4 @@ extends Rectangle {
         return resultPolygon;
     }
 }
+

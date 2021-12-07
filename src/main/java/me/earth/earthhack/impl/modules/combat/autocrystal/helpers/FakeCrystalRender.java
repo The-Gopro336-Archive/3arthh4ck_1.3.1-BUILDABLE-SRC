@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.renderer.entity.RenderManager
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal.helpers;
 
 import java.util.ArrayList;
@@ -6,6 +14,7 @@ import java.util.List;
 import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.util.interfaces.Globals;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
 
 public class FakeCrystalRender
@@ -57,7 +66,7 @@ implements Globals {
     public void render(float partialTicks) {
         RenderManager manager = mc.getRenderManager();
         for (EntityEnderCrystal crystal : this.crystals) {
-            manager.renderEntityStatic(crystal, partialTicks, false);
+            manager.renderEntityStatic((Entity)crystal, partialTicks, false);
         }
     }
 
@@ -65,3 +74,4 @@ implements Globals {
         this.crystals.clear();
     }
 }
+

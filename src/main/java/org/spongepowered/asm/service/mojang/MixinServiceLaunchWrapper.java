@@ -1,3 +1,16 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.collect.ImmutableList
+ *  net.minecraft.launchwrapper.IClassNameTransformer
+ *  net.minecraft.launchwrapper.IClassTransformer
+ *  net.minecraft.launchwrapper.ITweaker
+ *  net.minecraft.launchwrapper.Launch
+ *  org.apache.commons.io.IOUtils
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package org.spongepowered.asm.service.mojang;
 
 import com.google.common.collect.ImmutableList;
@@ -41,7 +54,7 @@ IClassBytecodeProvider {
     private static final String MIXIN_PACKAGE = "org.spongepowered.asm.mixin.";
     private static final String STATE_TWEAKER = "org.spongepowered.asm.mixin.EnvironmentStateTweaker";
     private static final String TRANSFORMER_PROXY_CLASS = "org.spongepowered.asm.mixin.transformer.Proxy";
-    private static final Logger logger = LogManager.getLogger("mixin");
+    private static final Logger logger = LogManager.getLogger((String)"mixin");
     private final LaunchClassLoaderUtil classLoaderUtil = new LaunchClassLoaderUtil(Launch.classLoader);
     private final ReEntranceLock lock = new ReEntranceLock(1);
     private IClassNameTransformer nameTransformer;
@@ -93,7 +106,7 @@ IClassBytecodeProvider {
 
     @Override
     public Collection<String> getPlatformAgents() {
-        return ImmutableList.of("org.spongepowered.asm.launch.platform.MixinPlatformAgentFML");
+        return ImmutableList.of((Object)"org.spongepowered.asm.launch.platform.MixinPlatformAgentFML");
     }
 
     @Override
@@ -113,7 +126,7 @@ IClassBytecodeProvider {
 
     @Override
     public Class<?> findClass(String name, boolean initialize) throws ClassNotFoundException {
-        return Class.forName(name, initialize, Launch.classLoader);
+        return Class.forName(name, initialize, (ClassLoader)Launch.classLoader);
     }
 
     @Override
@@ -171,13 +184,13 @@ IClassBytecodeProvider {
         ArrayList<ITransformer> wrapped = new ArrayList<ITransformer>(transformers.size());
         for (IClassTransformer transformer : transformers) {
             if (transformer instanceof ITransformer) {
-                wrapped.add((ITransformer)((Object)transformer));
+                wrapped.add((ITransformer)transformer);
             } else {
                 wrapped.add(new LegacyTransformerHandle(transformer));
             }
             if (!(transformer instanceof IClassNameTransformer)) continue;
             logger.debug("Found name transformer: {}", new Object[]{transformer.getClass().getName()});
-            this.nameTransformer = (IClassNameTransformer)((Object)transformer);
+            this.nameTransformer = (IClassNameTransformer)transformer;
         }
         return wrapped;
     }
@@ -196,13 +209,13 @@ IClassBytecodeProvider {
         try {
             String resourcePath = transformedName.replace('.', '/').concat(".class");
             classStream = appClassLoader.getResourceAsStream(resourcePath);
-            byte[] byArray = IOUtils.toByteArray(classStream);
-            IOUtils.closeQuietly(classStream);
-            return byArray;
+            byte[] arrby = IOUtils.toByteArray((InputStream)classStream);
+            IOUtils.closeQuietly((InputStream)classStream);
+            return arrby;
         }
         catch (Exception ex) {
-            byte[] byArray = null;
-            return byArray;
+            byte[] arrby = null;
+            return arrby;
         }
         finally {
             IOUtils.closeQuietly(classStream);
@@ -264,7 +277,7 @@ IClassBytecodeProvider {
         for (IClassTransformer transformer : transformers) {
             if (!(transformer instanceof IClassNameTransformer)) continue;
             logger.debug("Found name transformer: {}", new Object[]{transformer.getClass().getName()});
-            this.nameTransformer = (IClassNameTransformer)((Object)transformer);
+            this.nameTransformer = (IClassNameTransformer)transformer;
         }
     }
 
@@ -306,7 +319,7 @@ IClassBytecodeProvider {
 
     private String getSideName(String className, String methodName) {
         try {
-            Class<?> clazz = Class.forName(className, false, Launch.classLoader);
+            Class<?> clazz = Class.forName(className, false, (ClassLoader)Launch.classLoader);
             Method method = clazz.getDeclaredMethod(methodName, new Class[0]);
             return ((Enum)method.invoke(null, new Object[0])).name();
         }
@@ -328,3 +341,4 @@ IClassBytecodeProvider {
         return 0;
     }
 }
+

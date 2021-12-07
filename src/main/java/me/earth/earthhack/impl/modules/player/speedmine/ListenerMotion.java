@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Items
+ *  net.minecraft.network.Packet
+ */
 package me.earth.earthhack.impl.modules.player.speedmine;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -14,6 +22,7 @@ import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
 import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
 import me.earth.earthhack.impl.util.network.NetworkUtil;
 import me.earth.earthhack.impl.util.thread.Locks;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.network.Packet;
 
@@ -32,7 +41,7 @@ extends ModuleListener<Speedmine, MotionUpdateEvent> {
             return;
         }
         Packet<?> packet = ((Speedmine)this.module).limitRotationPacket;
-        if (!(event.getStage() != Stage.PRE || ((Speedmine)this.module).pos == null || PlayerUtil.isCreative(ListenerMotion.mc.player) || NUKER.isEnabled() && NUKE.getValue().booleanValue() || InventoryUtil.isHolding(Items.EXPERIENCE_BOTTLE) && !ListenerMotion.mc.gameSettings.keyBindUseItem.isKeyDown() || ((Speedmine)this.module).limitRotations.getValue().booleanValue() && packet == null)) {
+        if (!(event.getStage() != Stage.PRE || ((Speedmine)this.module).pos == null || PlayerUtil.isCreative((EntityPlayer)ListenerMotion.mc.player) || NUKER.isEnabled() && NUKE.getValue().booleanValue() || InventoryUtil.isHolding(Items.EXPERIENCE_BOTTLE) && !ListenerMotion.mc.gameSettings.keyBindUseItem.isKeyDown() || ((Speedmine)this.module).limitRotations.getValue().booleanValue() && packet == null)) {
             ((Speedmine)this.module).rotations = RotationUtil.getRotations(((Speedmine)this.module).pos, ((Speedmine)this.module).facing);
             event.setYaw(((Speedmine)this.module).rotations[0]);
             event.setPitch(((Speedmine)this.module).rotations[1]);
@@ -55,3 +64,4 @@ extends ModuleListener<Speedmine, MotionUpdateEvent> {
         }
     }
 }
+

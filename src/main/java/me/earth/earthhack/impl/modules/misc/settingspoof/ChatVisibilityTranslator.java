@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayer$EnumChatVisibility
+ */
 package me.earth.earthhack.impl.modules.misc.settingspoof;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,3 +23,4 @@ public enum ChatVisibilityTranslator {
         return this.visibility;
     }
 }
+

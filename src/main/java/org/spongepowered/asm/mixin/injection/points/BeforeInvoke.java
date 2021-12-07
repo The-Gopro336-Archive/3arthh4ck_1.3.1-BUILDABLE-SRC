@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package org.spongepowered.asm.mixin.injection.points;
 
 import java.util.Collection;
@@ -21,7 +28,7 @@ extends InjectionPoint {
     protected final int ordinal;
     protected final String className;
     protected final IMixinContext context;
-    protected final Logger logger = LogManager.getLogger("mixin");
+    protected final Logger logger = LogManager.getLogger((String)"mixin");
     private boolean log = false;
 
     public BeforeInvoke(InjectionPointData data) {
@@ -116,3 +123,4 @@ extends InjectionPoint {
 
     }
 }
+

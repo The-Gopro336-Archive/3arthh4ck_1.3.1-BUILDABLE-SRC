@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketPlayerPosLook
+ */
 package me.earth.earthhack.impl.core.mixins.network.server;
 
 import net.minecraft.network.play.server.SPacketPlayerPosLook;
@@ -24,3 +30,4 @@ public interface ISPacketPlayerPosLook {
     @Accessor(value="pitch")
     public void setPitch(float var1);
 }
+

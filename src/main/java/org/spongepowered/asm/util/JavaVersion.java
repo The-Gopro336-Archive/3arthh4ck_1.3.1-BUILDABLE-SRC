@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.util;
 
 import java.util.regex.Matcher;
@@ -25,3 +28,4 @@ public abstract class JavaVersion {
         return 1.6;
     }
 }
+

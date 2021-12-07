@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.text.ITextComponent
+ *  net.minecraft.util.text.Style
+ *  net.minecraft.util.text.TextComponentString
+ *  net.minecraft.util.text.event.ClickEvent
+ *  net.minecraft.util.text.event.ClickEvent$Action
+ *  net.minecraft.util.text.event.HoverEvent
+ *  net.minecraft.util.text.event.HoverEvent$Action
+ */
 package me.earth.earthhack.impl.gui.chat.components.setting;
 
 import me.earth.earthhack.api.module.Module;
@@ -11,6 +23,7 @@ import me.earth.earthhack.impl.gui.chat.factory.IComponentFactory;
 import me.earth.earthhack.impl.gui.chat.util.ChatComponentUtil;
 import me.earth.earthhack.impl.gui.chat.util.IncrementationUtil;
 import me.earth.earthhack.impl.modules.client.commands.Commands;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.event.ClickEvent;
@@ -25,20 +38,20 @@ extends SettingComponent<N, NumberSetting<N>> {
         HoverEvent minus;
         HoverEvent plus;
         if (!(((Setting)setting).getContainer() instanceof Module)) {
-            this.appendSibling(new ValueComponent((Setting<?>)setting));
+            this.appendSibling((ITextComponent)new ValueComponent((Setting<?>)setting));
             return;
         }
         final Module module = (Module)((Setting)setting).getContainer();
-        HoverEvent numberHover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new SuppliedComponent(() -> setting.getName() + " <" + ((Number)setting.getValue()).toString() + "> " + setting.getInputs(null)));
+        HoverEvent numberHover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, (ITextComponent)new SuppliedComponent(() -> setting.getName() + " <" + ((Number)setting.getValue()).toString() + "> " + setting.getInputs(null)));
         if (((NumberSetting)setting).isFloating()) {
-            plus = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new SuppliedComponent(() -> "Increment " + setting.getName() + " to " + "\u00a7b" + this.getNewValue(true) + "\u00a7f" + " by 0.1. Hold: " + "\u00a7c" + "ALT " + "\u00a7f" + ": 1.0, " + "\u00a7c" + "RCTRL " + "\u00a7f" + ": Max, " + "\u00a7c" + "LCTRL " + "\u00a7f" + ": 5%, " + "\u00a7c" + "LCTRL + ALT " + "\u00a7f" + ": 10%"));
-            minus = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new SuppliedComponent(() -> "Decrement " + setting.getName() + " to " + "\u00a7b" + this.getNewValue(false) + "\u00a7f" + " by 0.1. Hold: " + "\u00a7c" + "ALT " + "\u00a7f" + ": 1.0, " + "\u00a7c" + "RCTRL " + "\u00a7f" + ": Min, " + "\u00a7c" + "LCTRL " + "\u00a7f" + ": 5%, " + "\u00a7c" + "LCTRL + ALT " + "\u00a7f" + ": 10%"));
+            plus = new HoverEvent(HoverEvent.Action.SHOW_TEXT, (ITextComponent)new SuppliedComponent(() -> "Increment " + setting.getName() + " to " + "\u00a7b" + this.getNewValue(true) + "\u00a7f" + " by 0.1. Hold: " + "\u00a7c" + "ALT " + "\u00a7f" + ": 1.0, " + "\u00a7c" + "RCTRL " + "\u00a7f" + ": Max, " + "\u00a7c" + "LCTRL " + "\u00a7f" + ": 5%, " + "\u00a7c" + "LCTRL + ALT " + "\u00a7f" + ": 10%"));
+            minus = new HoverEvent(HoverEvent.Action.SHOW_TEXT, (ITextComponent)new SuppliedComponent(() -> "Decrement " + setting.getName() + " to " + "\u00a7b" + this.getNewValue(false) + "\u00a7f" + " by 0.1. Hold: " + "\u00a7c" + "ALT " + "\u00a7f" + ": 1.0, " + "\u00a7c" + "RCTRL " + "\u00a7f" + ": Min, " + "\u00a7c" + "LCTRL " + "\u00a7f" + ": 5%, " + "\u00a7c" + "LCTRL + ALT " + "\u00a7f" + ": 10%"));
         } else {
-            plus = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new SuppliedComponent(() -> "Increment " + setting.getName() + " to " + "\u00a7b" + this.getNewValue(true) + "\u00a7f" + " by 1. Hold: " + "\u00a7c" + "ALT " + "\u00a7f" + ": 10, " + "\u00a7c" + "RCTRL " + "\u00a7f" + ": Max, " + "\u00a7c" + "LCTRL " + "\u00a7f" + ": 5%, " + "\u00a7c" + "LCTRL + ALT " + "\u00a7f" + ": 10%"));
-            minus = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new SuppliedComponent(() -> "Decrement " + setting.getName() + " to " + "\u00a7b" + this.getNewValue(false) + "\u00a7f" + " by 1. Hold: " + "\u00a7c" + "ALT " + "\u00a7f" + ": 10, " + "\u00a7c" + "RCTRL " + "\u00a7f" + ": Min, " + "\u00a7c" + "LCTRL " + "\u00a7f" + ": 5%, " + "\u00a7c" + "LCTRL + ALT " + "\u00a7f" + ": 10%"));
+            plus = new HoverEvent(HoverEvent.Action.SHOW_TEXT, (ITextComponent)new SuppliedComponent(() -> "Increment " + setting.getName() + " to " + "\u00a7b" + this.getNewValue(true) + "\u00a7f" + " by 1. Hold: " + "\u00a7c" + "ALT " + "\u00a7f" + ": 10, " + "\u00a7c" + "RCTRL " + "\u00a7f" + ": Max, " + "\u00a7c" + "LCTRL " + "\u00a7f" + ": 5%, " + "\u00a7c" + "LCTRL + ALT " + "\u00a7f" + ": 10%"));
+            minus = new HoverEvent(HoverEvent.Action.SHOW_TEXT, (ITextComponent)new SuppliedComponent(() -> "Decrement " + setting.getName() + " to " + "\u00a7b" + this.getNewValue(false) + "\u00a7f" + " by 1. Hold: " + "\u00a7c" + "ALT " + "\u00a7f" + ": 10, " + "\u00a7c" + "RCTRL " + "\u00a7f" + ": Min, " + "\u00a7c" + "LCTRL " + "\u00a7f" + ": 5%, " + "\u00a7c" + "LCTRL + ALT " + "\u00a7f" + ": 10%"));
         }
-        this.appendSibling(new TextComponentString("\u00a77 + \u00a7f").setStyle(new Style().setHoverEvent(ChatComponentUtil.setOffset(plus)).setClickEvent(new SmartClickEvent(ClickEvent.Action.RUN_COMMAND, (NumberSetting)setting){
-            final NumberSetting val$setting;
+        this.appendSibling(new TextComponentString("\u00a77 + \u00a7f").setStyle(new Style().setHoverEvent(ChatComponentUtil.setOffset(plus)).setClickEvent((ClickEvent)new SmartClickEvent(ClickEvent.Action.RUN_COMMAND, (NumberSetting)setting){
+            final /* synthetic */ NumberSetting val$setting;
             {
                 this.val$setting = numberSetting;
                 super(theAction);
@@ -50,8 +63,8 @@ extends SettingComponent<N, NumberSetting<N>> {
             }
         })));
         this.appendSibling(new ValueComponent((Setting<?>)setting).setStyle(new Style().setHoverEvent(ChatComponentUtil.setOffset(numberHover)).setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, Commands.getPrefix() + "hiddensetting " + module.getName() + " \"" + ((Setting)setting).getName() + "\""))));
-        this.appendSibling(new TextComponentString("\u00a77 - \u00a7r").setStyle(new Style().setHoverEvent(ChatComponentUtil.setOffset(minus)).setClickEvent(new SmartClickEvent(ClickEvent.Action.RUN_COMMAND, (NumberSetting)setting){
-            final NumberSetting val$setting;
+        this.appendSibling(new TextComponentString("\u00a77 - \u00a7r").setStyle(new Style().setHoverEvent(ChatComponentUtil.setOffset(minus)).setClickEvent((ClickEvent)new SmartClickEvent(ClickEvent.Action.RUN_COMMAND, (NumberSetting)setting){
+            final /* synthetic */ NumberSetting val$setting;
             {
                 this.val$setting = numberSetting;
                 super(theAction);
@@ -80,3 +93,4 @@ extends SettingComponent<N, NumberSetting<N>> {
         }
     }
 }
+

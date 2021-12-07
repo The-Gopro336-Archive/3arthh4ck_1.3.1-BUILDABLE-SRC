@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.advancements.AdvancementManager
+ *  net.minecraft.init.Bootstrap
+ */
 package me.earth.earthhack.impl.core.mixins.init;
 
 import java.io.File;
@@ -15,3 +22,4 @@ public abstract class MixinBootstrap {
         return AdvancementArgument.MANAGER;
     }
 }
+

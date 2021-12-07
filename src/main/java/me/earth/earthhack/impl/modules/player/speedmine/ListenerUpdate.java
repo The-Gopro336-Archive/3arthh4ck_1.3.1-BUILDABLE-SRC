@@ -1,3 +1,23 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Items
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketAnimation
+ *  net.minecraft.network.play.client.CPacketPlayerDigging
+ *  net.minecraft.network.play.client.CPacketPlayerDigging$Action
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.RayTraceResult
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.modules.player.speedmine;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -22,10 +42,12 @@ import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
 import me.earth.earthhack.impl.util.minecraft.blocks.BlockUtil;
 import me.earth.earthhack.impl.util.minecraft.blocks.mine.MineUtil;
 import me.earth.earthhack.impl.util.network.NetworkUtil;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketAnimation;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
@@ -49,12 +71,12 @@ extends ModuleListener<Speedmine, UpdateEvent> {
     private EntityPlayer getPlacePlayer(BlockPos pos) {
         for (EntityPlayer player : ListenerUpdate.mc.world.playerEntities) {
             if (Managers.FRIENDS.contains(player) || player == ListenerUpdate.mc.player) continue;
-            BlockPos playerPos = PositionUtil.getPosition(player);
+            BlockPos playerPos = PositionUtil.getPosition((Entity)player);
             for (EnumFacing facing : EnumFacing.HORIZONTALS) {
-                if (!playerPos.offset(facing).equals(pos)) continue;
+                if (!playerPos.offset(facing).equals((Object)pos)) continue;
                 return player;
             }
-            if (!playerPos.offset(EnumFacing.UP).offset(EnumFacing.UP).equals(pos)) continue;
+            if (!playerPos.offset(EnumFacing.UP).offset(EnumFacing.UP).equals((Object)pos)) continue;
             return player;
         }
         return null;
@@ -63,12 +85,12 @@ extends ModuleListener<Speedmine, UpdateEvent> {
     @Override
     public void invoke(UpdateEvent event) {
         ((Speedmine)this.module).checkReset();
-        if (PlayerUtil.isCreative(ListenerUpdate.mc.player) || NUKER.isEnabled() && NUKE.getValue().booleanValue() || ANVIL_AURA.isEnabled() && ((AnvilAura)ANVIL_AURA.get()).isMining()) {
+        if (PlayerUtil.isCreative((EntityPlayer)ListenerUpdate.mc.player) || NUKER.isEnabled() && NUKE.getValue().booleanValue() || ANVIL_AURA.isEnabled() && ((AnvilAura)ANVIL_AURA.get()).isMining()) {
             return;
         }
-        ((IPlayerControllerMP)((Object)ListenerUpdate.mc.playerController)).setBlockHitDelay(0);
+        ((IPlayerControllerMP)ListenerUpdate.mc.playerController).setBlockHitDelay(0);
         if (!((Speedmine)this.module).multiTask.getValue().booleanValue() && (((Speedmine)this.module).noReset.getValue().booleanValue() || ((Speedmine)this.module).mode.getValue() == MineMode.Reset) && ListenerUpdate.mc.gameSettings.keyBindUseItem.isKeyDown()) {
-            ((IPlayerControllerMP)((Object)ListenerUpdate.mc.playerController)).setIsHittingBlock(false);
+            ((IPlayerControllerMP)ListenerUpdate.mc.playerController).setIsHittingBlock(false);
         }
         if (((Speedmine)this.module).pos != null) {
             if ((((Speedmine)this.module).mode.getValue() == MineMode.Smart || ((Speedmine)this.module).mode.getValue() == MineMode.Instant || ((Speedmine)this.module).mode.getValue() == MineMode.Civ) && ListenerUpdate.mc.player.getDistanceSq(((Speedmine)this.module).pos) > (double)MathUtil.square(((Speedmine)this.module).range.getValue().floatValue())) {
@@ -122,16 +144,16 @@ extends ModuleListener<Speedmine, UpdateEvent> {
                             CPacketPlayerTryUseItemOnBlock place = new CPacketPlayerTryUseItemOnBlock(p, result.sideHit, EnumHand.OFF_HAND, (float)result.hitVec.x, (float)result.hitVec.y, (float)result.hitVec.z);
                             CPacketAnimation animation = new CPacketAnimation(EnumHand.OFF_HAND);
                             InventoryUtil.syncItem();
-                            ListenerUpdate.mc.player.connection.sendPacket(place);
-                            ListenerUpdate.mc.player.connection.sendPacket(animation);
+                            ListenerUpdate.mc.player.connection.sendPacket((Packet)place);
+                            ListenerUpdate.mc.player.connection.sendPacket((Packet)animation);
                         } else {
                             int crystalSlot = InventoryUtil.findHotbarItem(Items.END_CRYSTAL, new Item[0]);
                             if (crystalSlot != -1) {
                                 InventoryUtil.switchTo(crystalSlot);
                                 CPacketPlayerTryUseItemOnBlock place = new CPacketPlayerTryUseItemOnBlock(p, result.sideHit, EnumHand.MAIN_HAND, (float)result.hitVec.x, (float)result.hitVec.y, (float)result.hitVec.z);
                                 CPacketAnimation animation = new CPacketAnimation(EnumHand.MAIN_HAND);
-                                ListenerUpdate.mc.player.connection.sendPacket(place);
-                                ListenerUpdate.mc.player.connection.sendPacket(animation);
+                                ListenerUpdate.mc.player.connection.sendPacket((Packet)place);
+                                ListenerUpdate.mc.player.connection.sendPacket((Packet)animation);
                                 InventoryUtil.switchTo(lastSlot);
                             }
                         }
@@ -152,3 +174,4 @@ extends ModuleListener<Speedmine, UpdateEvent> {
         }
     }
 }
+

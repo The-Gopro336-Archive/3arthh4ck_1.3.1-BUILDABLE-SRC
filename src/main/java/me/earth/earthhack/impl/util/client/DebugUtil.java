@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.util.client;
 
 import me.earth.earthhack.impl.util.math.MathUtil;
@@ -14,3 +21,4 @@ public class DebugUtil {
         ChatUtil.sendMessage(MathUtil.round(vec3d.x, 2) + "x, " + MathUtil.round(vec3d.y, 2) + "y, " + MathUtil.round(vec3d.z, 2) + "z : " + message);
     }
 }
+

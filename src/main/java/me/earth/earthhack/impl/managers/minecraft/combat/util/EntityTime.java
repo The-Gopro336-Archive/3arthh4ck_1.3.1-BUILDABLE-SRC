@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ */
 package me.earth.earthhack.impl.managers.minecraft.combat.util;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -33,3 +39,4 @@ public class EntityTime {
         this.time = System.currentTimeMillis();
     }
 }
+

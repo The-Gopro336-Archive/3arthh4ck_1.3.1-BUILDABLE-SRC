@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.tweaker.launch.arguments;
 
 import me.earth.earthhack.tweaker.launch.Argument;
@@ -15,3 +18,4 @@ implements Argument<T> {
         return this.value;
     }
 }
+

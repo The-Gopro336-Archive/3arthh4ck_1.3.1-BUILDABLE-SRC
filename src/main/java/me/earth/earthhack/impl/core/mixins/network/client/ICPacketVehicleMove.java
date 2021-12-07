@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.client.CPacketVehicleMove
+ */
 package me.earth.earthhack.impl.core.mixins.network.client;
 
 import net.minecraft.network.play.client.CPacketVehicleMove;
@@ -15,3 +21,4 @@ public interface ICPacketVehicleMove {
     @Accessor(value="z")
     public void setZ(double var1);
 }
+

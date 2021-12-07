@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.item.ItemStack
+ */
 package me.earth.earthhack.impl.event.events.misc;
 
 import net.minecraft.entity.EntityLivingBase;
@@ -20,3 +27,4 @@ public class EatEvent {
         return this.entity;
     }
 }
+

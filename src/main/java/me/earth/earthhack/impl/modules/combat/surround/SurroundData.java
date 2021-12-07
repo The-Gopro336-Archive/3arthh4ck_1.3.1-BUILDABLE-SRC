@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.combat.surround;
 
 import me.earth.earthhack.impl.modules.combat.surround.Surround;
@@ -35,3 +38,4 @@ extends ObbyData<Surround> {
         return "Surrounds you legs with Obsidian.";
     }
 }
+

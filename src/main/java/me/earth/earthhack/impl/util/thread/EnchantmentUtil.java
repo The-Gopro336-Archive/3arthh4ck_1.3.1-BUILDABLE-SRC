@@ -1,7 +1,19 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.enchantment.Enchantment
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.nbt.NBTBase
+ *  net.minecraft.nbt.NBTTagCompound
+ *  net.minecraft.nbt.NBTTagList
+ *  net.minecraft.util.DamageSource
+ */
 package me.earth.earthhack.impl.util.thread;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
@@ -17,7 +29,7 @@ public class EnchantmentUtil {
                 short lvl = nbttaglist.getCompoundTagAt(i).getShort("lvl");
                 Enchantment ench = Enchantment.getEnchantmentByID((int)id);
                 if (ench == null) continue;
-                modifier += ench.calcModifierDamage(lvl, source);
+                modifier += ench.calcModifierDamage((int)lvl, source);
             }
         }
         return modifier;
@@ -28,12 +40,13 @@ public class EnchantmentUtil {
             stack.setTagCompound(new NBTTagCompound());
         }
         if (!stack.getTagCompound().hasKey("ench", 9)) {
-            stack.getTagCompound().setTag("ench", new NBTTagList());
+            stack.getTagCompound().setTag("ench", (NBTBase)new NBTTagList());
         }
         NBTTagList nbttaglist = stack.getTagCompound().getTagList("ench", 10);
         NBTTagCompound nbttagcompound = new NBTTagCompound();
         nbttagcompound.setShort("id", (short)id);
         nbttagcompound.setShort("lvl", (short)level);
-        nbttaglist.appendTag(nbttagcompound);
+        nbttaglist.appendTag((NBTBase)nbttagcompound);
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.installer.service;
 
 import java.io.FileOutputStream;
@@ -42,3 +45,4 @@ public class Srg2NotchService {
         }
     }
 }
+

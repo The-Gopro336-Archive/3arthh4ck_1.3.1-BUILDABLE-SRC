@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal.helpers;
 
 import me.earth.earthhack.api.setting.Setting;
@@ -26,3 +29,4 @@ public class WeaknessHelper {
         return this.antiWeakness.getValue() == AntiWeakness.Switch && this.cooldown.getValue() == 0 && this.weaknessed;
     }
 }
+

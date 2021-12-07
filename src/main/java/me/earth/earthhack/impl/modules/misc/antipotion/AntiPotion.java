@@ -1,6 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.resources.I18n
+ *  net.minecraft.init.MobEffects
+ *  net.minecraft.potion.Potion
+ */
 package me.earth.earthhack.impl.modules.misc.antipotion;
 
-import java.util.Iterator;
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
@@ -16,9 +23,7 @@ extends Module {
         super("AntiPotion", Category.Misc);
         AntiPotionData data = new AntiPotionData(this);
         this.setData(data);
-        Iterator iterator = Potion.REGISTRY.iterator();
-        while (iterator.hasNext()) {
-            Potion potion = (Potion)iterator.next();
+        for (Potion potion : Potion.REGISTRY) {
             boolean value = potion == MobEffects.LEVITATION;
             String name = AntiPotion.getPotionString(potion);
             BooleanSetting s = this.register(new BooleanSetting(name, value));
@@ -31,3 +36,4 @@ extends Module {
         return I18n.format((String)potion.getName(), (Object[])new Object[0]);
     }
 }
+

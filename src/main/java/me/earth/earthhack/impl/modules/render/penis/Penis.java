@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.renderer.RenderHelper
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.util.math.Vec3d
+ *  org.lwjgl.opengl.GL11
+ *  org.lwjgl.util.glu.Cylinder
+ *  org.lwjgl.util.glu.Sphere
+ */
 package me.earth.earthhack.impl.modules.render.penis;
 
 import java.awt.Color;
@@ -12,6 +24,7 @@ import me.earth.earthhack.impl.modules.render.penis.ListenerRender;
 import me.earth.earthhack.impl.modules.render.penis.PenisData;
 import me.earth.earthhack.impl.util.render.Interpolation;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
@@ -45,7 +58,7 @@ extends Module {
 
     protected void onRender3D() {
         for (EntityPlayer player : Penis.mc.world.playerEntities) {
-            Vec3d interpolateEntity = Interpolation.interpolateEntity(player);
+            Vec3d interpolateEntity = Interpolation.interpolateEntity((Entity)player);
             this.drawPenis(player, interpolateEntity.x, interpolateEntity.y, interpolateEntity.z);
         }
     }
@@ -58,37 +71,38 @@ extends Module {
         Color tipColor = player == Penis.mc.player ? this.selfTipColor.getValue() : (Managers.FRIENDS.contains(player) ? this.friendTipColor.getValue() : this.enemyTipColor.getValue());
         GL11.glPushMatrix();
         RenderHelper.disableStandardItemLighting();
-        GL11.glDisable(2896);
-        GL11.glDisable(3553);
-        GL11.glEnable(3042);
-        GL11.glBlendFunc(770, 771);
-        GL11.glDisable(2929);
-        GL11.glEnable(2848);
-        GL11.glDepthMask(false);
-        GL11.glTranslated(x, y, z);
-        GL11.glRotatef(-player.rotationYaw, 0.0f, player.height, 0.0f);
-        GL11.glTranslated(-x, -y, -z);
-        GL11.glTranslated(x, y + (double)(player.height / 2.0f) - (double)0.225f, z);
-        GL11.glColor4f((float)shaftColor.getRed() / 255.0f, (float)shaftColor.getGreen() / 255.0f, (float)shaftColor.getBlue() / 255.0f, 1.0f);
-        GL11.glTranslated(0.0, 0.0, 0.075f);
+        GL11.glDisable((int)2896);
+        GL11.glDisable((int)3553);
+        GL11.glEnable((int)3042);
+        GL11.glBlendFunc((int)770, (int)771);
+        GL11.glDisable((int)2929);
+        GL11.glEnable((int)2848);
+        GL11.glDepthMask((boolean)false);
+        GL11.glTranslated((double)x, (double)y, (double)z);
+        GL11.glRotatef((float)(-player.rotationYaw), (float)0.0f, (float)player.height, (float)0.0f);
+        GL11.glTranslated((double)(-x), (double)(-y), (double)(-z));
+        GL11.glTranslated((double)x, (double)(y + (double)(player.height / 2.0f) - (double)0.225f), (double)z);
+        GL11.glColor4f((float)((float)shaftColor.getRed() / 255.0f), (float)((float)shaftColor.getGreen() / 255.0f), (float)((float)shaftColor.getBlue() / 255.0f), (float)1.0f);
+        GL11.glTranslated((double)0.0, (double)0.0, (double)0.075f);
         this.shaft.draw(0.1f, 0.11f, length, 25, 20);
-        GL11.glColor4f((float)shaftColor.getRed() / 255.0f, (float)shaftColor.getGreen() / 255.0f, (float)shaftColor.getBlue() / 255.0f, 1.0f);
-        GL11.glTranslated(0.0, 0.0, 0.02500000298023223);
-        GL11.glTranslated(-0.09000000074505805, 0.0, 0.0);
+        GL11.glColor4f((float)((float)shaftColor.getRed() / 255.0f), (float)((float)shaftColor.getGreen() / 255.0f), (float)((float)shaftColor.getBlue() / 255.0f), (float)1.0f);
+        GL11.glTranslated((double)0.0, (double)0.0, (double)0.02500000298023223);
+        GL11.glTranslated((double)-0.09000000074505805, (double)0.0, (double)0.0);
         this.ball.draw(0.14f, 10, 20);
-        GL11.glTranslated(0.16000000149011612, 0.0, 0.0);
+        GL11.glTranslated((double)0.16000000149011612, (double)0.0, (double)0.0);
         this.ball.draw(0.14f, 10, 20);
-        GL11.glTranslated(-0.07000000074505806, 0.0, (double)length - (this.uncircumcised.getValue() != false ? 0.15 : 0.0));
-        GL11.glColor4f((float)tipColor.getRed() / 255.0f, (float)tipColor.getGreen() / 255.0f, (float)tipColor.getBlue() / 255.0f, 1.0f);
+        GL11.glTranslated((double)-0.07000000074505806, (double)0.0, (double)((double)length - (this.uncircumcised.getValue() != false ? 0.15 : 0.0)));
+        GL11.glColor4f((float)((float)tipColor.getRed() / 255.0f), (float)((float)tipColor.getGreen() / 255.0f), (float)((float)tipColor.getBlue() / 255.0f), (float)1.0f);
         this.tip.draw(0.13f, 15, 20);
-        GL11.glDepthMask(true);
-        GL11.glDisable(2848);
-        GL11.glEnable(2929);
-        GL11.glDisable(3042);
-        GL11.glEnable(2896);
-        GL11.glEnable(3553);
+        GL11.glDepthMask((boolean)true);
+        GL11.glDisable((int)2848);
+        GL11.glEnable((int)2929);
+        GL11.glDisable((int)3042);
+        GL11.glEnable((int)2896);
+        GL11.glEnable((int)3553);
         RenderHelper.enableStandardItemLighting();
         GL11.glPopMatrix();
-        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
     }
 }
+

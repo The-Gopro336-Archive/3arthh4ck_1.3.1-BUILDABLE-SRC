@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.apache.logging.log4j.Level
+ */
 package org.spongepowered.asm.mixin.injection.invoke;
 
 import org.apache.logging.log4j.Level;
@@ -121,3 +127,4 @@ extends RedirectInjector {
         }
     }
 }
+

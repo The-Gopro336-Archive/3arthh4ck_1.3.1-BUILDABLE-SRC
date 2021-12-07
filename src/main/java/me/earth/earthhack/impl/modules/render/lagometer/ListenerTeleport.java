@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.client.CPacketConfirmTeleport
+ */
 package me.earth.earthhack.impl.modules.render.lagometer;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -16,3 +22,4 @@ extends ModuleListener<LagOMeter, PacketEvent.Post<CPacketConfirmTeleport>> {
         ((LagOMeter)this.module).teleported.set(true);
     }
 }
+

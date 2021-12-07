@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.font.effects;
 
 import java.awt.AlphaComposite;
@@ -209,3 +212,4 @@ implements ConfigurableEffect {
         return triangle;
     }
 }
+

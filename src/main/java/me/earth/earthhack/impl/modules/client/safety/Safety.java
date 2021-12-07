@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.safety;
 
 import me.earth.earthhack.api.module.Module;
@@ -34,3 +37,4 @@ extends Module {
         return Managers.SAFETY.isSafe() ? "\u00a7aSafe" : "\u00a7cUnsafe";
     }
 }
+

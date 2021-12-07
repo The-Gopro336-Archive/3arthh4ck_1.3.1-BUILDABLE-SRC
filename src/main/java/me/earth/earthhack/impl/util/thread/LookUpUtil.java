@@ -1,3 +1,18 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.collect.BiMap
+ *  com.google.common.collect.HashBiMap
+ *  com.google.gson.JsonArray
+ *  com.google.gson.JsonElement
+ *  com.google.gson.JsonObject
+ *  com.google.gson.JsonParser
+ *  com.mojang.authlib.GameProfile
+ *  com.mojang.util.UUIDTypeAdapter
+ *  net.minecraft.client.network.NetworkPlayerInfo
+ *  org.apache.commons.io.IOUtils
+ */
 package me.earth.earthhack.impl.util.thread;
 
 import com.google.common.collect.BiMap;
@@ -14,11 +29,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
@@ -37,13 +52,13 @@ implements Globals {
     public static UUID getUUIDSimple(String name) {
         ArrayList infoMap;
         NetworkPlayerInfo profile;
-        UUID cached = (UUID)CACHE.get(name);
+        UUID cached = (UUID)CACHE.get((Object)name);
         if (cached != null) {
             return cached;
         }
         if (mc.getConnection() != null && (profile = (NetworkPlayerInfo)(infoMap = new ArrayList(mc.getConnection().getPlayerInfoMap())).stream().filter(info -> info.getGameProfile().getName().equalsIgnoreCase(name)).findFirst().orElse(null)) != null) {
             UUID result = profile.getGameProfile().getId();
-            CACHE.forcePut(name, result);
+            CACHE.forcePut((Object)name, (Object)result);
             return result;
         }
         return null;
@@ -60,8 +75,8 @@ implements Globals {
         }
         try {
             String id = element.getAsJsonArray().get(0).getAsJsonObject().get("id").getAsString();
-            UUID result = UUIDTypeAdapter.fromString(id);
-            CACHE.forcePut(name, result);
+            UUID result = UUIDTypeAdapter.fromString((String)id);
+            CACHE.forcePut((Object)name, (Object)result);
             return result;
         }
         catch (Exception e) {
@@ -71,7 +86,7 @@ implements Globals {
     }
 
     public static String getNameSimple(UUID uuid) {
-        String cached = (String)CACHE.inverse().get(uuid);
+        String cached = (String)CACHE.inverse().get((Object)uuid);
         if (cached != null) {
             return cached;
         }
@@ -81,7 +96,7 @@ implements Globals {
                 GameProfile gameProfile = info.getGameProfile();
                 if (!gameProfile.getId().equals(uuid)) continue;
                 String name = gameProfile.getName();
-                CACHE.forcePut(name, uuid);
+                CACHE.forcePut((Object)name, (Object)uuid);
                 return name;
             }
         }
@@ -91,12 +106,12 @@ implements Globals {
     public static String getName(UUID uuid) {
         String url = "https://api.mojang.com/user/profiles/" + LookUpUtil.uuidToString(uuid) + "/names";
         try {
-            String name = IOUtils.toString(new URL(url), StandardCharsets.UTF_8);
-            JsonArray array = (JsonArray)((Object)PARSER.parse(name));
+            String name = IOUtils.toString((URL)new URL(url), (Charset)StandardCharsets.UTF_8);
+            JsonArray array = (JsonArray)PARSER.parse(name);
             String player = array.get(array.size() - 1).toString();
             JsonObject object = (JsonObject)PARSER.parse(player);
             String result = object.get("name").toString();
-            CACHE.inverse().put(uuid, result);
+            CACHE.inverse().put((Object)uuid, (Object)result);
             return result;
         }
         catch (IOException e) {
@@ -133,9 +148,7 @@ implements Globals {
         TreeMap<Date, String> result = new TreeMap<Date, String>(Collections.reverseOrder());
         try {
             JsonArray array = LookUpUtil.getResources(new URL("https://api.mojang.com/user/profiles/" + LookUpUtil.uuidToString(id) + "/names")).getAsJsonArray();
-            Iterator iterator = array.iterator();
-            while (iterator.hasNext()) {
-                JsonElement element = (JsonElement)iterator.next();
+            for (JsonElement element : array) {
                 JsonObject node = element.getAsJsonObject();
                 String name = node.get("name").getAsString();
                 long changedAt = node.has("changedToAt") ? node.get("changedToAt").getAsLong() : 0L;
@@ -198,3 +211,4 @@ implements Globals {
         return s.hasNext() ? s.next() : "/";
     }
 }
+

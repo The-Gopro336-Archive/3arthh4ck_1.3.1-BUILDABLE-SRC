@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.init.Items
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.misc.tracker;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -18,7 +26,8 @@ extends ModuleListener<Tracker, PacketEvent.Post<CPacketPlayerTryUseItemOnBlock>
         CPacketPlayerTryUseItemOnBlock packet = (CPacketPlayerTryUseItemOnBlock)event.getPacket();
         if (ListenerUseItemOnBlock.mc.player.getHeldItem(packet.getHand()).getItem() == Items.END_CRYSTAL) {
             BlockPos pos = packet.getPos();
-            ((Tracker)this.module).placed.add(new BlockPos((float)pos.getX() + 0.5f, (double)(pos.getY() + 1), (float)pos.getZ() + 0.5f));
+            ((Tracker)this.module).placed.add(new BlockPos((double)((float)pos.getX() + 0.5f), (double)(pos.getY() + 1), (double)((float)pos.getZ() + 0.5f)));
         }
     }
 }
+

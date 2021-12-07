@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.gui.GuiMainMenu
+ */
 package me.earth.earthhack.impl.util.discord;
 
 import club.minnced.discord.rpc.DiscordEventHandlers;
@@ -60,3 +67,4 @@ public class DiscordPresence {
         index = 1;
     }
 }
+

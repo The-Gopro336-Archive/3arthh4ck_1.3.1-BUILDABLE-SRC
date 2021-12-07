@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayer$EnumChatVisibility
+ *  net.minecraft.network.play.client.CPacketClientSettings
+ *  net.minecraft.util.EnumHandSide
+ */
 package me.earth.earthhack.impl.core.mixins.network.client;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -44,3 +52,4 @@ public interface ICPacketClientSettings {
     @Accessor(value="mainHand")
     public EnumHandSide getMainHand();
 }
+

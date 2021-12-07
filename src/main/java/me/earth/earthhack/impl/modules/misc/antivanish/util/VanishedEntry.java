@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.misc.antivanish.util;
 
 public class VanishedEntry {
@@ -17,3 +20,4 @@ public class VanishedEntry {
         return this.time;
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.particles;
 
 import org.newdawn.slick.Color;
@@ -239,3 +242,4 @@ public class Particle {
         this.scaleY = scaleY;
     }
 }
+

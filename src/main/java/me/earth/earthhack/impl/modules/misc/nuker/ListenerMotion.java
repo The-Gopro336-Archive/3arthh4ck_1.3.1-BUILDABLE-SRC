@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.item.ItemFood
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.misc.nuker;
 
 import java.util.HashSet;
@@ -43,7 +51,7 @@ extends ModuleListener<Nuker, MotionUpdateEvent> {
                 int maxRadius = Sphere.getRadius(((Nuker)this.module).range.getValue().floatValue());
                 for (int i = 1; i < maxRadius; ++i) {
                     BlockPos pos2 = middle.add(Sphere.get(i));
-                    if (BlockUtil.getDistanceSq(pos2) > (double)MathUtil.square(((Nuker)this.module).range.getValue().floatValue()) || !blocks.contains(ListenerMotion.mc.world.getBlockState(pos2).getBlock())) continue;
+                    if (BlockUtil.getDistanceSq(pos2) > (double)MathUtil.square(((Nuker)this.module).range.getValue().floatValue()) || !blocks.contains((Object)ListenerMotion.mc.world.getBlockState(pos2).getBlock())) continue;
                     toAttack.add(pos2);
                     if (((Nuker)this.module).rotate.getValue() == Rotate.Normal) break;
                 }
@@ -61,3 +69,4 @@ extends ModuleListener<Nuker, MotionUpdateEvent> {
         }
     }
 }
+

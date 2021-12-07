@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.obfuscation.mapping.mcp;
 
 import org.spongepowered.asm.obfuscation.mapping.common.MappingField;
@@ -37,3 +40,4 @@ extends MappingField {
         return pos > -1 ? srg.substring(0, pos) : null;
     }
 }
+

@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.entity.EntityPlayerSP
+ *  net.minecraft.network.play.server.SPacketEntityVelocity
+ */
 package me.earth.earthhack.impl.modules.movement.speed;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -32,3 +39,4 @@ extends ModuleListener<Speed, PacketEvent.Receive<SPacketEntityVelocity>> {
         }
     }
 }
+

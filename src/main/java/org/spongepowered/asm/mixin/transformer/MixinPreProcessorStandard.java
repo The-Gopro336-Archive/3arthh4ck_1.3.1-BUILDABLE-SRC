@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Strings
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package org.spongepowered.asm.mixin.transformer;
 
 import com.google.common.base.Strings;
@@ -37,7 +45,7 @@ import org.spongepowered.asm.util.perf.Profiler;
 import org.spongepowered.asm.util.throwables.SyntheticBridgeException;
 
 class MixinPreProcessorStandard {
-    private static final Logger logger = LogManager.getLogger("mixin");
+    private static final Logger logger = LogManager.getLogger((String)"mixin");
     protected final MixinInfo mixin;
     protected final MixinInfo.MixinClassNode classNode;
     protected final MixinEnvironment env;
@@ -494,7 +502,7 @@ class MixinPreProcessorStandard {
     }
 
     private static String getDynamicInfo(String targetType, AnnotationNode annotation) {
-        String description = Strings.nullToEmpty((String)Annotations.getValue(annotation));
+        String description = Strings.nullToEmpty((String)((String)Annotations.getValue(annotation)));
         Type upstream = (Type)Annotations.getValue(annotation, "mixin");
         if (upstream != null) {
             description = String.format("{%s} %s", upstream.getClassName(), description).trim();
@@ -530,3 +538,4 @@ class MixinPreProcessorStandard {
         }
     }
 }
+

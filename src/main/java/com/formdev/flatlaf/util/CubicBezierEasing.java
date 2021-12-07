@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.util;
 
 import com.formdev.flatlaf.util.Animator;
@@ -51,3 +54,4 @@ implements Animator.Interpolator {
         return b1 * xy1 + b2 * xy2 + b3;
     }
 }
+

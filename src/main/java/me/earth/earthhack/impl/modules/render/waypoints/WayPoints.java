@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.render.waypoints;
 
 import java.awt.Color;
@@ -134,3 +140,4 @@ extends RegisteringModule<BlockPos, WayPointSetting> {
         return this.added;
     }
 }
+

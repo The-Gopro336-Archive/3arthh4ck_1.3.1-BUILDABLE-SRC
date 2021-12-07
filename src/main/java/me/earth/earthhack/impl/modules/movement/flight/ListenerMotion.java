@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.init.MobEffects
+ */
 package me.earth.earthhack.impl.modules.movement.flight;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -11,6 +18,7 @@ import me.earth.earthhack.impl.modules.movement.flight.Flight;
 import me.earth.earthhack.impl.modules.movement.flight.mode.FlightMode;
 import me.earth.earthhack.impl.modules.movement.noslowdown.NoSlowDown;
 import me.earth.earthhack.impl.util.minecraft.MovementUtil;
+import net.minecraft.entity.Entity;
 import net.minecraft.init.MobEffects;
 
 final class ListenerMotion
@@ -128,7 +136,7 @@ extends ModuleListener<Flight, MotionUpdateEvent> {
         }
         if (((Flight)this.module).antiKick.getValue().booleanValue() && ((Flight)this.module).mode.getValue() != FlightMode.Constantiam) {
             ++((Flight)this.module).antiCounter;
-            if (((Flight)this.module).antiCounter >= 12 && !ListenerMotion.mc.player.isPotionActive(MobEffects.LEVITATION) && !ListenerMotion.mc.player.isElytraFlying() && ListenerMotion.mc.world.getCollisionBoxes(ListenerMotion.mc.player, ListenerMotion.mc.player.getEntityBoundingBox().grow(0.0625).expand(0.0, -0.55, 0.0)).isEmpty()) {
+            if (((Flight)this.module).antiCounter >= 12 && !ListenerMotion.mc.player.isPotionActive(MobEffects.LEVITATION) && !ListenerMotion.mc.player.isElytraFlying() && ListenerMotion.mc.world.getCollisionBoxes((Entity)ListenerMotion.mc.player, ListenerMotion.mc.player.getEntityBoundingBox().grow(0.0625).expand(0.0, -0.55, 0.0)).isEmpty()) {
                 event.setY(event.getY() - 0.03126);
                 if (((Flight)this.module).antiCounter >= 22) {
                     ((Flight)this.module).antiCounter = 0;
@@ -137,3 +145,4 @@ extends ModuleListener<Flight, MotionUpdateEvent> {
         }
     }
 }
+

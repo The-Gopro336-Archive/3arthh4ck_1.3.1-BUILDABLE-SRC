@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.launchwrapper.ITweaker
+ *  net.minecraft.launchwrapper.Launch
+ *  net.minecraft.launchwrapper.LaunchClassLoader
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package me.earth.earthhack.tweaker;
 
 import java.io.File;
@@ -26,7 +36,7 @@ implements ITweaker {
     public void acceptOptions(List<String> args, File gameDir, File assetsDir, String profile) {
         try {
             String className = "me.earth.earthhack.vanilla.Environment";
-            Class<?> env = Class.forName(className, true, Launch.classLoader);
+            Class<?> env = Class.forName(className, true, (ClassLoader)Launch.classLoader);
             Method load = env.getDeclaredMethod("loadEnvironment", new Class[0]);
             load.setAccessible(true);
             load.invoke(null, new Object[0]);
@@ -67,18 +77,17 @@ implements ITweaker {
         this.wrapped.acceptOptions(args, gameDir, assetsDir, profile);
     }
 
-    @Override
     public void injectIntoClassLoader(LaunchClassLoader classLoader) {
         this.wrapped.injectIntoClassLoader(classLoader);
         try {
             String className = "me.earth.earthhack.impl.core.Core";
             classLoader.addTransformerExclusion(className);
-            Class<?> coreClass = Class.forName(className, true, classLoader);
+            Class<?> coreClass = Class.forName(className, true, (ClassLoader)classLoader);
             TweakerCore core = (TweakerCore)coreClass.newInstance();
-            Logger logger = LogManager.getLogger("3arthh4ck-Core");
+            Logger logger = LogManager.getLogger((String)"3arthh4ck-Core");
             logger.info("\n\n");
             this.loadDevArguments();
-            core.init(classLoader);
+            core.init((ClassLoader)classLoader);
             for (String transformer : core.getTransformers()) {
                 classLoader.registerTransformer(transformer);
             }
@@ -119,3 +128,4 @@ implements ITweaker {
         dev.loadArguments();
     }
 }
+

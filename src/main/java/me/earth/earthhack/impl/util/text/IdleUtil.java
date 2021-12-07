@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.text;
 
 import me.earth.earthhack.impl.util.math.StopWatch;
@@ -28,3 +31,4 @@ public class IdleUtil {
         return "";
     }
 }
+

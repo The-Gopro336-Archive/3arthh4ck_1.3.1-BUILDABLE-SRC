@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.network.datasync.DataParameter
+ */
 package me.earth.earthhack.impl.core.mixins.entity.living.player;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,3 +19,4 @@ public interface IEntityPlayer {
         throw new IllegalStateException("ABSORPTION accessor wasn't shadowed.");
     }
 }
+

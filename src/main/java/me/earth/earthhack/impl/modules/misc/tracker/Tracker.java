@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  io.netty.util.internal.ConcurrentSet
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.misc.tracker;
 
 import io.netty.util.internal.ConcurrentSet;
@@ -92,3 +100,4 @@ implements CustomCommandModule {
         return false;
     }
 }
+

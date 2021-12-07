@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.gui;
 
 import java.util.HashSet;
@@ -79,3 +82,4 @@ extends InputAdapter {
         this.setFocus(Rectangle.contains(x, y, this.getX(), this.getY(), this.getWidth(), this.getHeight()));
     }
 }
+

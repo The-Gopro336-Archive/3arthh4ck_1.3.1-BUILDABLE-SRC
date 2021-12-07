@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.combat.killaura;
 
 import me.earth.earthhack.impl.modules.combat.killaura.KillAura;
@@ -42,3 +45,4 @@ extends EntityTypeData<KillAura> {
         this.register(module.tpInfo, "Displays ArrayList info even when not attacking.");
     }
 }
+

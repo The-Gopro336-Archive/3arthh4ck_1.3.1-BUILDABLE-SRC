@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.tools.obfuscation.mirror;
 
 import javax.annotation.processing.ProcessingEnvironment;
@@ -298,3 +301,4 @@ public abstract class TypeUtils {
         return Visibility.PACKAGE;
     }
 }
+

@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.multiplayer.ServerData
+ *  net.minecraft.client.network.NetHandlerPlayClient
+ *  net.minecraft.entity.player.EntityPlayer
+ */
 package me.earth.earthhack.impl.modules.misc.autolog;
 
 import me.earth.earthhack.api.module.Module;
@@ -48,3 +56,4 @@ extends Module {
         }
     }
 }
+

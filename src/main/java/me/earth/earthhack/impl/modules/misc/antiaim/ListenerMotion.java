@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.misc.antiaim;
 
 import java.util.Random;
@@ -69,3 +72,4 @@ extends ModuleListener<AntiAim, MotionUpdateEvent> {
         event.setPitch(((AntiAim)this.module).lastPitch);
     }
 }
+

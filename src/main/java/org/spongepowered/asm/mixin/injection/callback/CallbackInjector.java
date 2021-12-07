@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Strings
+ */
 package org.spongepowered.asm.mixin.injection.callback;
 
 import com.google.common.base.Strings;
@@ -76,7 +82,7 @@ extends Injector {
         InjectionNodes.InjectionNode injectionNode = target.addInjectionNode(node);
         for (InjectionPoint ip : nominators) {
             String id = ip.getId();
-            if (Strings.isNullOrEmpty(id)) continue;
+            if (Strings.isNullOrEmpty((String)id)) continue;
             String existingId = this.ids.get(injectionNode.getId());
             if (existingId != null && !existingId.equals(id)) {
                 Injector.logger.warn("Conflicting id for {} insn in {}, found id {} on {}, previously defined as {}", new Object[]{Bytecode.getOpcodeName(node), target.toString(), id, this.info, existingId});
@@ -272,9 +278,9 @@ extends Injector {
     }
 
     private String getIdentifier(Callback callback) {
-        String baseId = Strings.isNullOrEmpty(this.identifier) ? callback.target.method.name : this.identifier;
+        String baseId = Strings.isNullOrEmpty((String)this.identifier) ? callback.target.method.name : this.identifier;
         String locationId = this.ids.get(callback.node.getId());
-        return baseId + (Strings.isNullOrEmpty(locationId) ? "" : ":" + locationId);
+        return baseId + (Strings.isNullOrEmpty((String)locationId) ? "" : ":" + locationId);
     }
 
     protected void injectCancellationCode(Callback callback) {
@@ -389,7 +395,7 @@ extends Injector {
         }
 
         String getDescriptorWithAllLocals() {
-            return this.target.getCallbackDescriptor(true, this.localTypes, this.target.arguments, this.frameSize, Short.MAX_VALUE);
+            return this.target.getCallbackDescriptor(true, this.localTypes, this.target.arguments, this.frameSize, 32767);
         }
 
         String getCallbackInfoConstructorDescriptor() {
@@ -455,3 +461,4 @@ extends Injector {
         }
     }
 }
+

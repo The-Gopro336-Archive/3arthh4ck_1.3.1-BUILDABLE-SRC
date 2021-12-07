@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.mojang.authlib.GameProfile
+ */
 package me.earth.earthhack.impl.commands.packet.arguments;
 
 import com.mojang.authlib.GameProfile;
@@ -48,3 +54,4 @@ extends AbstractArgument<GameProfile> {
         return CustomCompleterResult.PASS;
     }
 }
+

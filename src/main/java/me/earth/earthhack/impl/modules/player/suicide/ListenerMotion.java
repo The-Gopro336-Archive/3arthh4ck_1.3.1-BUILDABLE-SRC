@@ -1,3 +1,24 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Items
+ *  net.minecraft.inventory.ClickType
+ *  net.minecraft.item.Item
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketAnimation
+ *  net.minecraft.network.play.client.CPacketChatMessage
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock
+ *  net.minecraft.network.play.client.CPacketUseEntity
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.BlockPos$MutableBlockPos
+ *  net.minecraft.util.math.Vec3i
+ *  net.minecraft.world.IBlockAccess
+ */
 package me.earth.earthhack.impl.modules.player.suicide;
 
 import me.earth.earthhack.api.event.events.Stage;
@@ -21,9 +42,11 @@ import me.earth.earthhack.impl.util.network.NetworkUtil;
 import me.earth.earthhack.impl.util.thread.Locks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.item.Item;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketAnimation;
 import net.minecraft.network.play.client.CPacketChatMessage;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
@@ -31,6 +54,7 @@ import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.IBlockAccess;
 
 final class ListenerMotion
 extends ModuleListener<Suicide, MotionUpdateEvent> {
@@ -54,7 +78,7 @@ extends ModuleListener<Suicide, MotionUpdateEvent> {
             return;
         }
         if (((Suicide)this.module).throwAwayTotem.getValue().booleanValue() && InventoryUtil.validScreen() && ((Suicide)this.module).timer.passed(((Suicide)this.module).throwDelay.getValue().intValue()) && ListenerMotion.mc.player.getHeldItemOffhand().getItem() == Items.TOTEM_OF_UNDYING) {
-            Locks.acquire(Locks.WINDOW_CLICK_LOCK, () -> ListenerMotion.mc.playerController.windowClick(0, 45, 1, ClickType.THROW, ListenerMotion.mc.player));
+            Locks.acquire(Locks.WINDOW_CLICK_LOCK, () -> ListenerMotion.mc.playerController.windowClick(0, 45, 1, ClickType.THROW, (EntityPlayer)ListenerMotion.mc.player));
             ((Suicide)this.module).timer.reset();
         }
         if ((slot = InventoryUtil.findHotbarItem(Items.END_CRYSTAL, new Item[0])) == -1) {
@@ -99,12 +123,12 @@ extends ModuleListener<Suicide, MotionUpdateEvent> {
                 float damage;
                 Vec3i v = Sphere.get(i);
                 pos.setPos(x + v.getX(), y + v.getY(), z + v.getZ());
-                if (!BlockUtil.canPlaceCrystal(pos, false, ((Suicide)this.module).newVer.getValue(), ListenerMotion.mc.world.loadedEntityList, ((Suicide)this.module).newVerEntities.getValue(), 0L) || !BlockUtil.isCrystalPosInRange(pos, ((Suicide)this.module).placeRange.getValue().floatValue(), ((Suicide)this.module).placeRange.getValue().floatValue(), ((Suicide)this.module).trace.getValue().floatValue()) || !((damage = DamageUtil.calculate(pos)) > maxDamage)) continue;
+                if (!BlockUtil.canPlaceCrystal((BlockPos)pos, false, ((Suicide)this.module).newVer.getValue(), ListenerMotion.mc.world.loadedEntityList, ((Suicide)this.module).newVerEntities.getValue(), 0L) || !BlockUtil.isCrystalPosInRange((BlockPos)pos, ((Suicide)this.module).placeRange.getValue().floatValue(), ((Suicide)this.module).placeRange.getValue().floatValue(), ((Suicide)this.module).trace.getValue().floatValue()) || !((damage = DamageUtil.calculate((BlockPos)pos)) > maxDamage)) continue;
                 maxDamage = damage;
                 bestPos = pos.toImmutable();
             }
             if (bestPos != null) {
-                Ray result = RayTraceFactory.fullTrace(RotationUtil.getRotationPlayer(), ListenerMotion.mc.world, bestPos, -1.0);
+                Ray result = RayTraceFactory.fullTrace((Entity)RotationUtil.getRotationPlayer(), (IBlockAccess)ListenerMotion.mc.world, bestPos, -1.0);
                 if (result == null) {
                     return;
                 }
@@ -117,8 +141,8 @@ extends ModuleListener<Suicide, MotionUpdateEvent> {
             }
         } else if (event.getStage() == Stage.POST) {
             if (((Suicide)this.module).crystal != null) {
-                ListenerMotion.mc.player.connection.sendPacket(new CPacketUseEntity(((Suicide)this.module).crystal));
-                ListenerMotion.mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.MAIN_HAND));
+                ListenerMotion.mc.player.connection.sendPacket((Packet)new CPacketUseEntity(((Suicide)this.module).crystal));
+                ListenerMotion.mc.player.connection.sendPacket((Packet)new CPacketAnimation(EnumHand.MAIN_HAND));
                 ((Suicide)this.module).breakTimer.reset();
                 return;
             }
@@ -127,8 +151,8 @@ extends ModuleListener<Suicide, MotionUpdateEvent> {
                 Locks.acquire(Locks.PLACE_SWITCH_LOCK, () -> {
                     int last = ListenerMotion.mc.player.inventory.currentItem;
                     InventoryUtil.switchTo(slot);
-                    ListenerMotion.mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(((Suicide)this.module).pos, ((Suicide)this.module).result.sideHit, InventoryUtil.getHand(slot), r[0], r[1], r[2]));
-                    ListenerMotion.mc.player.connection.sendPacket(new CPacketAnimation(InventoryUtil.getHand(slot)));
+                    ListenerMotion.mc.player.connection.sendPacket((Packet)new CPacketPlayerTryUseItemOnBlock(((Suicide)this.module).pos, ((Suicide)this.module).result.sideHit, InventoryUtil.getHand(slot), r[0], r[1], r[2]));
+                    ListenerMotion.mc.player.connection.sendPacket((Packet)new CPacketAnimation(InventoryUtil.getHand(slot)));
                     if (((Suicide)this.module).silent.getValue().booleanValue()) {
                         InventoryUtil.switchTo(last);
                     }
@@ -139,3 +163,4 @@ extends ModuleListener<Suicide, MotionUpdateEvent> {
         }
     }
 }
+

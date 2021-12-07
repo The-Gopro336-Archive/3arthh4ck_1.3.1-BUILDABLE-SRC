@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf;
 
 import com.formdev.flatlaf.FlatDefaultsAddon;
@@ -63,9 +66,9 @@ class UIDefaultsLoader {
     static void loadDefaultsFromProperties(List<Class<?>> lafClasses, List<FlatDefaultsAddon> addons, Properties additionalDefaults, boolean dark, UIDefaults defaults) {
         try {
             Properties properties = new Properties();
-            for (Class<?> clazz : lafClasses) {
-                String propertiesName = '/' + clazz.getName().replace('.', '/') + ".properties";
-                InputStream in = clazz.getResourceAsStream(propertiesName);
+            for (Class<?> class_ : lafClasses) {
+                String propertiesName = '/' + class_.getName().replace('.', '/') + ".properties";
+                InputStream in = class_.getResourceAsStream(propertiesName);
                 try {
                     if (in == null) continue;
                     properties.load(in);
@@ -825,3 +828,4 @@ class UIDefaultsLoader {
 
     }
 }
+

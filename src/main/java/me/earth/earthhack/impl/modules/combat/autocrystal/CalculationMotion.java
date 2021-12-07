@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal;
 
 import java.util.ArrayList;
@@ -90,17 +98,22 @@ extends AbstractCalculation<CrystalDataMotion> {
     }
 
     private BreakValidity isValid(AutoCrystal module, CrystalDataMotion dataMotion) {
-        Entity crystal = dataMotion.getCrystal();
-        if (module.existed.getValue() != 0) {
-            double d = System.currentTimeMillis() - ((IEntity)((Object)crystal)).getTimeStamp();
-            double d2 = module.pingExisted.getValue() != false ? (double)ServerUtil.getPingNoPingSpoof() / 2.0 : 0.0;
-            if (d + d2 < (double)module.existed.getValue().intValue()) {
-                return BreakValidity.INVALID;
+        block6: {
+            block5: {
+                Entity crystal = dataMotion.getCrystal();
+                if (module.existed.getValue() != 0) {
+                    double d = System.currentTimeMillis() - ((IEntity)crystal).getTimeStamp();
+                    double d2 = module.pingExisted.getValue() != false ? (double)ServerUtil.getPingNoPingSpoof() / 2.0 : 0.0;
+                    if (d + d2 < (double)module.existed.getValue().intValue()) {
+                        return BreakValidity.INVALID;
+                    }
+                }
+                if (module.rotate.getValue().noRotate(ACRotate.Break)) break block5;
+                if (!RotationUtil.isLegit(crystal, crystal) || !module.positionHistoryHelper.arePreviousRotationsLegit(crystal, module.rotationTicks.getValue(), true)) break block6;
             }
-        }
-        if (module.rotate.getValue().noRotate(ACRotate.Break) || RotationUtil.isLegit(crystal, crystal) && module.positionHistoryHelper.arePreviousRotationsLegit(crystal, module.rotationTicks.getValue(), true)) {
             return BreakValidity.VALID;
         }
         return BreakValidity.ROTATIONS;
     }
 }
+

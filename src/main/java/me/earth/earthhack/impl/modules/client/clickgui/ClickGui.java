@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.GuiScreen
+ */
 package me.earth.earthhack.impl.modules.client.clickgui;
 
 import java.awt.Color;
@@ -40,7 +46,7 @@ extends Module {
         Click gui = new Click();
         gui.init();
         gui.onGuiOpened();
-        mc.displayGuiScreen(gui);
+        mc.displayGuiScreen((GuiScreen)gui);
     }
 
     @Override
@@ -51,3 +57,4 @@ extends Module {
         this.fromEvent = false;
     }
 }
+

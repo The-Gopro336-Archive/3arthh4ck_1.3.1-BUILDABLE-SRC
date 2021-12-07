@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.server.main.command;
 
 import me.earth.earthhack.impl.modules.client.server.main.command.CommandException;
@@ -5,3 +8,4 @@ import me.earth.earthhack.impl.modules.client.server.main.command.CommandExcepti
 public interface ICommandHandler {
     public void handle(String var1) throws CommandException;
 }
+

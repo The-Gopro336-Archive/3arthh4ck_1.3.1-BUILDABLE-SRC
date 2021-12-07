@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.tools.obfuscation.struct;
 
 import javax.annotation.processing.Messager;
@@ -38,3 +41,4 @@ public class InjectorRemap {
         }
     }
 }
+

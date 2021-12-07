@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.network.play.client.CPacketVehicleMove
+ */
 package me.earth.earthhack.impl.modules.movement.boatfly;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -23,3 +30,4 @@ extends ModuleListener<BoatFly, PacketEvent.Post<CPacketVehicleMove>> {
         }
     }
 }
+

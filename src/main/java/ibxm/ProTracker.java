@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package ibxm;
 
 import ibxm.Instrument;
@@ -207,3 +210,4 @@ public class ProTracker {
         return string;
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.commands.packet.generic;
 
 import java.lang.reflect.Constructor;
@@ -22,3 +25,4 @@ extends AbstractArgument<T> {
         return this.argIndex;
     }
 }
+

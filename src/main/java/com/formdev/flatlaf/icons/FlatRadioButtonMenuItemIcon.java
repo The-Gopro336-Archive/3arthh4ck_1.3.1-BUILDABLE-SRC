@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.icons;
 
 import com.formdev.flatlaf.icons.FlatCheckBoxMenuItemIcon;
@@ -10,3 +13,4 @@ extends FlatCheckBoxMenuItemIcon {
         g2.fillOval(4, 4, 7, 7);
     }
 }
+

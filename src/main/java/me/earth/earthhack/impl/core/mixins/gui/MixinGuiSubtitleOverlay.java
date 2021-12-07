@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.GuiSubtitleOverlay
+ *  net.minecraft.client.renderer.GlStateManager
+ */
 package me.earth.earthhack.impl.core.mixins.gui;
 
 import me.earth.earthhack.api.event.bus.instance.Bus;
@@ -17,3 +24,4 @@ public abstract class MixinGuiSubtitleOverlay {
         GlStateManager.color((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
     }
 }
+

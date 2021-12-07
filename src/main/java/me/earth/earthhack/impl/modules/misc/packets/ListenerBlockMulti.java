@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketMultiBlockChange
+ *  net.minecraft.network.play.server.SPacketMultiBlockChange$BlockUpdateData
+ */
 package me.earth.earthhack.impl.modules.misc.packets;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -20,9 +27,10 @@ extends ModuleListener<Packets, PacketEvent.Receive<SPacketMultiBlockChange>> {
             }
             mc.addScheduledTask(() -> {
                 for (SPacketMultiBlockChange.BlockUpdateData d : p.getChangedBlocks()) {
-                    ((Packets)this.module).stateMap.remove(d.getPos());
+                    ((Packets)this.module).stateMap.remove((Object)d.getPos());
                 }
             });
         }
     }
 }
+

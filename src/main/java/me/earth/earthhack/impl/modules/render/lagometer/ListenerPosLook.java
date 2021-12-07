@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.network.play.server.SPacketPlayerPosLook
+ *  net.minecraft.network.play.server.SPacketPlayerPosLook$EnumFlags
+ */
 package me.earth.earthhack.impl.modules.render.lagometer;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -26,19 +34,19 @@ extends ModuleListener<LagOMeter, PacketEvent.Receive<SPacketPlayerPosLook>> {
         double z = packet.getZ();
         float yaw = packet.getYaw();
         float pitch = packet.getPitch();
-        if (packet.getFlags().contains(SPacketPlayerPosLook.EnumFlags.X)) {
+        if (packet.getFlags().contains((Object)SPacketPlayerPosLook.EnumFlags.X)) {
             x += player.posX;
         }
-        if (packet.getFlags().contains(SPacketPlayerPosLook.EnumFlags.Y)) {
+        if (packet.getFlags().contains((Object)SPacketPlayerPosLook.EnumFlags.Y)) {
             y += player.posY;
         }
-        if (packet.getFlags().contains(SPacketPlayerPosLook.EnumFlags.Z)) {
+        if (packet.getFlags().contains((Object)SPacketPlayerPosLook.EnumFlags.Z)) {
             z += player.posZ;
         }
-        if (packet.getFlags().contains(SPacketPlayerPosLook.EnumFlags.X_ROT)) {
+        if (packet.getFlags().contains((Object)SPacketPlayerPosLook.EnumFlags.X_ROT)) {
             pitch += player.rotationPitch;
         }
-        if (packet.getFlags().contains(SPacketPlayerPosLook.EnumFlags.Y_ROT)) {
+        if (packet.getFlags().contains((Object)SPacketPlayerPosLook.EnumFlags.Y_ROT)) {
             yaw += player.rotationYaw;
         }
         ((LagOMeter)this.module).x = x;
@@ -48,3 +56,4 @@ extends ModuleListener<LagOMeter, PacketEvent.Receive<SPacketPlayerPosLook>> {
         ((LagOMeter)this.module).pitch = pitch;
     }
 }
+

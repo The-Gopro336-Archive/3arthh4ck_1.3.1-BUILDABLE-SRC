@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.ui;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
@@ -155,3 +158,4 @@ implements UIResource {
         FlatUIUtils.paintArrow(g, x, 0, this.getWidth(), this.getHeight(), this.getDirection(), this.chevron, this.arrowWidth, this.xOffset, this.yOffset);
     }
 }
+

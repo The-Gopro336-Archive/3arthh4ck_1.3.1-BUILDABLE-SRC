@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.tests.xml;
 
 import org.newdawn.slick.tests.xml.Inventory;
@@ -23,3 +26,4 @@ public class Entity {
         this.stats.dump(prefix + "\t");
     }
 }
+

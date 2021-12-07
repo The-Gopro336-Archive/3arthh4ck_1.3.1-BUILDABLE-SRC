@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.mojang.realmsclient.gui.ChatFormatting
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.util.math.MathHelper
+ */
 package me.earth.earthhack.impl.gui.click.component.impl;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
@@ -179,9 +187,9 @@ extends Component {
                 boolean hoveredSpeed = RenderUtil.mouseWithinBounds(mouseX, mouseY, colorPickerLeft, offset + 28.0f, smallWidth, 12.0);
                 boolean hoveredSaturation = RenderUtil.mouseWithinBounds(mouseX, mouseY, colorPickerLeft, offset + 42.0f, smallWidth, 12.0);
                 boolean hoveredBrightness = RenderUtil.mouseWithinBounds(mouseX, mouseY, colorPickerLeft, offset + 56.0f, smallWidth, 12.0);
-                Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("Speed: " + ChatFormatting.GRAY + this.getColorSetting().getRainbowSpeed(), colorPickerLeft, offset + 28.0f, -1);
-                Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("Saturation: " + ChatFormatting.GRAY + this.getColorSetting().getRainbowSaturation(), colorPickerLeft, offset + 42.0f, -1);
-                Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("Brightness: " + ChatFormatting.GRAY + this.getColorSetting().getRainbowBrightness(), colorPickerLeft, offset + 56.0f, -1);
+                Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("Speed: " + (Object)ChatFormatting.GRAY + this.getColorSetting().getRainbowSpeed(), colorPickerLeft, offset + 28.0f, -1);
+                Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("Saturation: " + (Object)ChatFormatting.GRAY + this.getColorSetting().getRainbowSaturation(), colorPickerLeft, offset + 42.0f, -1);
+                Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("Brightness: " + (Object)ChatFormatting.GRAY + this.getColorSetting().getRainbowBrightness(), colorPickerLeft, offset + 56.0f, -1);
                 Render2DUtil.drawBorderedRect(colorPickerLeft, offset + 36.5f, colorPickerLeft + lengthSpeed, offset + 38.5f, 0.5f, hoveredSpeed ? ((ClickGui)ColorComponent.getClickGui().get()).color.getValue().brighter().getRGB() : ((ClickGui)ColorComponent.getClickGui().get()).color.getValue().getRGB(), -16777216);
                 if (this.slidingSpeed) {
                     float speedValue = ((float)mouseX - colorPickerLeft) * 200.0f / smallWidth;
@@ -377,3 +385,4 @@ extends Component {
         this.slidingBrightness = slidingBrightness;
     }
 }
+

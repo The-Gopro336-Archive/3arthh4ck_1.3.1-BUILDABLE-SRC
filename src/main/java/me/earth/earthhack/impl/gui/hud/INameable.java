@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.gui.hud;
 
 public interface INameable {
@@ -9,3 +12,4 @@ public interface INameable {
 
     public void setDisplayName(String var1);
 }
+

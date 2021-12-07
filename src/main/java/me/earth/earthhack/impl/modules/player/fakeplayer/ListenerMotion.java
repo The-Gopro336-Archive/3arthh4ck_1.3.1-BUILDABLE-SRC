@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.MobEffects
+ *  net.minecraft.potion.PotionEffect
+ */
 package me.earth.earthhack.impl.modules.player.fakeplayer;
 
 import me.earth.earthhack.api.event.events.Stage;
@@ -7,6 +15,7 @@ import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import me.earth.earthhack.impl.modules.player.fakeplayer.FakePlayer;
 import me.earth.earthhack.impl.modules.player.fakeplayer.util.Position;
 import me.earth.earthhack.impl.util.client.ModuleUtil;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 
@@ -64,8 +73,9 @@ extends ModuleListener<FakePlayer, MotionUpdateEvent> {
                 this.wasRecording = true;
             }
             if (this.ticks++ % 2 == 0) {
-                ((FakePlayer)this.module).positions.add(new Position(ListenerMotion.mc.player));
+                ((FakePlayer)this.module).positions.add(new Position((EntityPlayer)ListenerMotion.mc.player));
             }
         }
     }
 }
+

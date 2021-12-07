@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.world.World
+ *  net.minecraft.world.chunk.Chunk
+ */
 package me.earth.earthhack.impl.commands.packet.arguments;
 
 import me.earth.earthhack.api.command.Completer;
@@ -7,6 +14,7 @@ import me.earth.earthhack.api.util.interfaces.Globals;
 import me.earth.earthhack.impl.commands.packet.AbstractArgument;
 import me.earth.earthhack.impl.commands.packet.exception.ArgParseException;
 import me.earth.earthhack.impl.util.helpers.command.CustomCompleterResult;
+import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
 public class ChunkArgument
@@ -24,7 +32,7 @@ implements Globals {
             throw new ArgParseException("Minecraft.world is null!");
         }
         if (argument.equalsIgnoreCase("ORIGIN")) {
-            return new Chunk(ChunkArgument.mc.world, 0, 0);
+            return new Chunk((World)ChunkArgument.mc.world, 0, 0);
         }
         String[] split = argument.split(",");
         if (split.length != 2) {
@@ -33,7 +41,7 @@ implements Globals {
         try {
             int x = (int)Long.parseLong(split[0]);
             int z = (int)Long.parseLong(split[1]);
-            return new Chunk(ChunkArgument.mc.world, x, z);
+            return new Chunk((World)ChunkArgument.mc.world, x, z);
         }
         catch (Exception e) {
             throw new ArgParseException("Could not parse " + argument + " to Chunk!");
@@ -64,3 +72,4 @@ implements Globals {
         return CustomCompleterResult.PASS;
     }
 }
+

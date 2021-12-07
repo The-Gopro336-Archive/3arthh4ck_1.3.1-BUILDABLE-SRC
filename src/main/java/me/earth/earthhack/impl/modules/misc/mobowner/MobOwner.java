@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.passive.AbstractHorse
+ *  net.minecraft.entity.passive.EntityTameable
+ */
 package me.earth.earthhack.impl.modules.misc.mobowner;
 
 import java.util.HashMap;
@@ -36,3 +44,4 @@ extends Module {
         }
     }
 }
+

@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.Packet
+ */
 package me.earth.earthhack.impl.modules.player.blink;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -19,3 +25,4 @@ extends ModuleListener<Blink, PacketEvent.Send<?>> {
         }
     }
 }
+

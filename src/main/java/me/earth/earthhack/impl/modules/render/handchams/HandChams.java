@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.render.handchams;
 
 import java.awt.Color;
@@ -21,3 +24,4 @@ extends Module {
         super("HandChams", Category.Render);
     }
 }
+

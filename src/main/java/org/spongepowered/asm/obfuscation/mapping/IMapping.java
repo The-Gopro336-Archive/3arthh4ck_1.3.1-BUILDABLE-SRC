@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.obfuscation.mapping;
 
 public interface IMapping<TMapping> {
@@ -31,3 +34,4 @@ public interface IMapping<TMapping> {
 
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.player.scaffold;
 
 import me.earth.earthhack.impl.event.events.movement.MovementInputEvent;
@@ -18,3 +21,4 @@ extends ModuleListener<Scaffold, MovementInputEvent> {
         }
     }
 }
+

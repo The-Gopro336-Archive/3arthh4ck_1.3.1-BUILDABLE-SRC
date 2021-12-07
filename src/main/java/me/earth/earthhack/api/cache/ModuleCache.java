@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.api.cache;
 
 import java.util.function.Supplier;
@@ -127,3 +130,4 @@ extends Cache<T> {
         }
     }
 }
+

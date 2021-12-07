@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.init.Items
+ *  net.minecraft.inventory.EntityEquipmentSlot
+ *  net.minecraft.item.ItemElytra
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.math.MathHelper
+ */
 package me.earth.earthhack.impl.modules.movement.elytraflight;
 
 import me.earth.earthhack.impl.event.events.movement.MoveEvent;
@@ -130,3 +140,4 @@ extends ModuleListener<ElytraFlight, MoveEvent> {
         }
     }
 }
+

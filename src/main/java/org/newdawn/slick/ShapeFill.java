@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick;
 
 import org.newdawn.slick.Color;
@@ -9,3 +12,4 @@ public interface ShapeFill {
 
     public Vector2f getOffsetAt(Shape var1, float var2, float var3);
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.api.cache;
 
 import me.earth.earthhack.api.cache.Cache;
@@ -38,3 +41,4 @@ extends Cache<S> {
         return result;
     }
 }
+

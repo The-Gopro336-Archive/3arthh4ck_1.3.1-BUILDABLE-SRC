@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.core.transfomer.patch;
 
 import me.earth.earthhack.impl.core.transfomer.Patch;
@@ -22,3 +25,4 @@ implements Patch {
         return this.transformed;
     }
 }
+

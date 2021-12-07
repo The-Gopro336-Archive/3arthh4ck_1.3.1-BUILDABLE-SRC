@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.misc.io;
 
 import java.io.IOException;
@@ -6,3 +9,4 @@ import java.io.IOException;
 public interface IORunnable {
     public void run() throws IOException;
 }
+

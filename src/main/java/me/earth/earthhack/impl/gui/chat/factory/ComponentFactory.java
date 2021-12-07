@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.text.ITextComponent
+ *  net.minecraft.util.text.TextComponentString
+ *  net.minecraft.util.text.event.HoverEvent
+ *  net.minecraft.util.text.event.HoverEvent$Action
+ */
 package me.earth.earthhack.impl.gui.chat.factory;
 
 import java.util.HashMap;
@@ -21,6 +30,7 @@ import me.earth.earthhack.impl.gui.chat.components.setting.NumberComponent;
 import me.earth.earthhack.impl.gui.chat.components.setting.StringComponent;
 import me.earth.earthhack.impl.gui.chat.factory.IComponentFactory;
 import me.earth.earthhack.impl.gui.chat.util.ChatComponentUtil;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.event.HoverEvent;
 
@@ -42,7 +52,7 @@ public class ComponentFactory {
     public static HoverEvent getHoverEvent(Setting<?> setting) {
         String dataDescription;
         if (setting == null) {
-            return new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("null"));
+            return new HoverEvent(HoverEvent.Action.SHOW_TEXT, (ITextComponent)new TextComponentString("null"));
         }
         ModuleData data = null;
         if (setting.getContainer() instanceof Module) {
@@ -52,7 +62,7 @@ public class ComponentFactory {
         if (data != null && (dataDescription = data.settingDescriptions().get(setting)) != null) {
             description = dataDescription;
         }
-        return ChatComponentUtil.setOffset(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString(description)));
+        return ChatComponentUtil.setOffset(new HoverEvent(HoverEvent.Action.SHOW_TEXT, (ITextComponent)new TextComponentString(description)));
     }
 
     static {
@@ -64,3 +74,4 @@ public class ComponentFactory {
         FACTORIES.put(NumberSetting.class, NumberComponent.FACTORY);
     }
 }
+

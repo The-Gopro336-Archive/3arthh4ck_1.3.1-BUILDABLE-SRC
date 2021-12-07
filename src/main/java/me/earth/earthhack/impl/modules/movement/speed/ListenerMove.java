@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.movement.speed;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -36,3 +39,4 @@ extends ModuleListener<Speed, MoveEvent> {
         ((Speed)this.module).mode.getValue().move(event, (Speed)this.module);
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.state.transition;
 
 import org.newdawn.slick.GameContainer;
@@ -17,3 +20,4 @@ public interface Transition {
 
     public void init(GameState var1, GameState var2);
 }
+

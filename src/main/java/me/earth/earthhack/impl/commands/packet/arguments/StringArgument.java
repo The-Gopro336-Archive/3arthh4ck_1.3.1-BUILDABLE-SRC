@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.commands.packet.arguments;
 
 import me.earth.earthhack.impl.commands.packet.AbstractArgument;
@@ -14,3 +17,4 @@ extends AbstractArgument<String> {
         return argument;
     }
 }
+

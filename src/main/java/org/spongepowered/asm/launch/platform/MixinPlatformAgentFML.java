@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.launchwrapper.ITweaker
+ *  net.minecraft.launchwrapper.Launch
+ *  net.minecraft.launchwrapper.LaunchClassLoader
+ *  org.apache.logging.log4j.Level
+ */
 package org.spongepowered.asm.launch.platform;
 
 import java.io.File;
@@ -65,7 +74,7 @@ extends MixinPlatformAgentAbstract {
             return this.injectCorePlugin();
         }
         catch (Exception ex) {
-            MixinPlatformAgentAbstract.logger.catching(ex);
+            MixinPlatformAgentAbstract.logger.catching((Throwable)ex);
             return null;
         }
     }
@@ -75,7 +84,7 @@ extends MixinPlatformAgentAbstract {
             MixinPlatformAgentFML.getIgnoredMods(this.clCoreModManager).remove(this.fileName);
         }
         catch (Exception ex) {
-            MixinPlatformAgentAbstract.logger.catching(ex);
+            MixinPlatformAgentAbstract.logger.catching((Throwable)ex);
         }
         if (this.attributes.get(MFATT_COREMODCONTAINSMOD) != null) {
             if (this.isIgnoredReparseable()) {
@@ -100,7 +109,7 @@ extends MixinPlatformAgentAbstract {
             }
         }
         catch (Exception ex) {
-            MixinPlatformAgentAbstract.logger.catching(ex);
+            MixinPlatformAgentAbstract.logger.catching((Throwable)ex);
         }
     }
 
@@ -116,7 +125,7 @@ extends MixinPlatformAgentAbstract {
         MixinPlatformAgentAbstract.logger.debug("{} has core plugin {}. Injecting it into FML for co-initialisation:", new Object[]{this.fileName, coreModName});
         Method mdLoadCoreMod = this.clCoreModManager.getDeclaredMethod(GlobalProperties.getString("mixin.launch.fml.loadcoremodmethod", LOAD_CORE_MOD_METHOD), LaunchClassLoader.class, String.class, File.class);
         mdLoadCoreMod.setAccessible(true);
-        ITweaker wrapper = (ITweaker)mdLoadCoreMod.invoke(null, Launch.classLoader, coreModName, this.container);
+        ITweaker wrapper = (ITweaker)mdLoadCoreMod.invoke(null, new Object[]{Launch.classLoader, coreModName, this.container});
         if (wrapper == null) {
             MixinPlatformAgentAbstract.logger.debug("Core plugin {} could not be loaded.", new Object[]{coreModName});
             return null;
@@ -140,7 +149,7 @@ extends MixinPlatformAgentAbstract {
                 if (!FML_PLUGIN_WRAPPER_CLASS.equals(tweakClass.getSimpleName())) continue;
                 Field fdCoreModInstance = tweakClass.getField(FML_CORE_MOD_INSTANCE_FIELD);
                 fdCoreModInstance.setAccessible(true);
-                Object coreMod = fdCoreModInstance.get(tweaker);
+                Object coreMod = fdCoreModInstance.get((Object)tweaker);
                 if (!coreModName.equals(coreMod.getClass().getName())) continue;
                 return true;
             }
@@ -171,7 +180,7 @@ extends MixinPlatformAgentAbstract {
     private void injectRemapper() {
         try {
             MixinPlatformAgentAbstract.logger.debug("Creating FML remapper adapter: {}", new Object[]{FML_REMAPPER_ADAPTER_CLASS});
-            Class<?> clFmlRemapperAdapter = Class.forName(FML_REMAPPER_ADAPTER_CLASS, true, Launch.classLoader);
+            Class<?> clFmlRemapperAdapter = Class.forName(FML_REMAPPER_ADAPTER_CLASS, true, (ClassLoader)Launch.classLoader);
             Method mdCreate = clFmlRemapperAdapter.getDeclaredMethod("create", new Class[0]);
             IRemapper remapper = (IRemapper)mdCreate.invoke(null, new Object[0]);
             MixinEnvironment.getDefaultEnvironment().getRemappers().add(remapper);
@@ -231,7 +240,7 @@ extends MixinPlatformAgentAbstract {
                 mdGetIgnoredMods = clCoreModManager.getDeclaredMethod(GET_IGNORED_MODS_METHOD_LEGACY, new Class[0]);
             }
             catch (NoSuchMethodException ex2) {
-                MixinPlatformAgentAbstract.logger.catching(Level.DEBUG, ex2);
+                MixinPlatformAgentAbstract.logger.catching(Level.DEBUG, (Throwable)ex2);
                 return Collections.emptyList();
             }
         }
@@ -246,3 +255,4 @@ extends MixinPlatformAgentAbstract {
         }
     }
 }
+

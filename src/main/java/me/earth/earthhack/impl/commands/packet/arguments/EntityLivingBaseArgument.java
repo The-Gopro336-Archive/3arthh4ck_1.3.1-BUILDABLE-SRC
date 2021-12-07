@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.EntityLivingBase
+ */
 package me.earth.earthhack.impl.commands.packet.arguments;
 
 import me.earth.earthhack.impl.commands.packet.arguments.AbstractEntityArgument;
@@ -9,3 +15,4 @@ extends AbstractEntityArgument<EntityLivingBase> {
         super(EntityLivingBase.class);
     }
 }
+

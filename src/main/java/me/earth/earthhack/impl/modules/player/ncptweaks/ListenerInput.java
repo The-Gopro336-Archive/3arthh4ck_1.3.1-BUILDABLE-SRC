@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.item.ItemFood
+ */
 package me.earth.earthhack.impl.modules.player.ncptweaks;
 
 import me.earth.earthhack.impl.event.events.movement.MovementInputEvent;
@@ -23,3 +29,4 @@ extends ModuleListener<NCPTweaks, MovementInputEvent> {
         ((NCPTweaks)this.module).speedStopped = false;
     }
 }
+

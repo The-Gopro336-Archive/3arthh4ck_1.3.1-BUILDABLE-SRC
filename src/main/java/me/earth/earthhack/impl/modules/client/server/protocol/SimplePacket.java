@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.server.protocol;
 
 import me.earth.earthhack.impl.modules.client.server.api.IPacket;
@@ -22,3 +25,4 @@ implements IPacket {
         return this.buffer;
     }
 }
+

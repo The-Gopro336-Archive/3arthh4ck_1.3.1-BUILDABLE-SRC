@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.managers.client.event;
 
 import java.util.UUID;
@@ -28,3 +31,4 @@ extends Event {
         return this.uuid;
     }
 }
+

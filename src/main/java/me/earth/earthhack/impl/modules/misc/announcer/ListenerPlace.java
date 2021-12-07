@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.item.ItemBlock
+ *  net.minecraft.item.ItemEndCrystal
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock
+ */
 package me.earth.earthhack.impl.modules.misc.announcer;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -24,3 +33,4 @@ extends ModuleListener<Announcer, PacketEvent.Post<CPacketPlayerTryUseItemOnBloc
         }
     }
 }
+

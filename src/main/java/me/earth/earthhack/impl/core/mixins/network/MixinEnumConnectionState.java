@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.EnumConnectionState
+ *  net.minecraft.network.EnumPacketDirection
+ *  net.minecraft.network.Packet
+ */
 package me.earth.earthhack.impl.core.mixins.network;
 
 import me.earth.earthhack.impl.util.network.CustomPacket;
@@ -14,14 +22,15 @@ public abstract class MixinEnumConnectionState {
     @Inject(method={"getFromPacket"}, at={@At(value="HEAD")}, cancellable=true)
     private static void getFromPacketHook(Packet<?> packet, CallbackInfoReturnable<EnumConnectionState> cir) {
         if (packet instanceof CustomPacket) {
-            cir.setReturnValue(((CustomPacket)((Object)packet)).getState());
+            cir.setReturnValue(((CustomPacket)packet).getState());
         }
     }
 
     @Inject(method={"getPacketId"}, at={@At(value="HEAD")}, cancellable=true)
     private void getPacketIdHook(EnumPacketDirection dir, Packet<?> packet, CallbackInfoReturnable<Integer> cir) throws Exception {
         if (dir == EnumPacketDirection.SERVERBOUND && packet instanceof CustomPacket) {
-            cir.setReturnValue(((CustomPacket)((Object)packet)).getId());
+            cir.setReturnValue(((CustomPacket)packet).getId());
         }
     }
 }
+

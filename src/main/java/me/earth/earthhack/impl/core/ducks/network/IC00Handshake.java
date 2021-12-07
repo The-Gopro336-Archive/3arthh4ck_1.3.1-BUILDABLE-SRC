@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.core.ducks.network;
 
 public interface IC00Handshake {
@@ -7,3 +10,4 @@ public interface IC00Handshake {
 
     public void setPort(int var1);
 }
+

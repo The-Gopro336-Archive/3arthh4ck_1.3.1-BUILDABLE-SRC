@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.LWJGLUtil
+ */
 package org.newdawn.slick.openal;
 
 import java.io.BufferedInputStream;
@@ -33,7 +39,7 @@ public class WaveData {
             return WaveData.create(AudioSystem.getAudioInputStream(new BufferedInputStream(path.openStream())));
         }
         catch (Exception e) {
-            LWJGLUtil.log("Unable to create from: " + path);
+            LWJGLUtil.log((CharSequence)("Unable to create from: " + path));
             e.printStackTrace();
             return null;
         }
@@ -48,7 +54,7 @@ public class WaveData {
             return WaveData.create(AudioSystem.getAudioInputStream(is));
         }
         catch (Exception e) {
-            LWJGLUtil.log("Unable to create from inputstream");
+            LWJGLUtil.log((CharSequence)"Unable to create from inputstream");
             e.printStackTrace();
             return null;
         }
@@ -145,3 +151,4 @@ public class WaveData {
         return dest;
     }
 }
+

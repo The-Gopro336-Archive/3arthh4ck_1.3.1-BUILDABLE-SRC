@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.multiplayer.WorldClient
+ */
 package me.earth.earthhack.impl.event.events.network;
 
 import net.minecraft.client.multiplayer.WorldClient;
@@ -27,3 +33,4 @@ public class WorldClientEvent {
         }
     }
 }
+

@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.init.Items
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -21,3 +28,4 @@ extends ModuleListener<AutoCrystal, PacketEvent.Post<CPacketPlayerTryUseItemOnBl
         }
     }
 }
+

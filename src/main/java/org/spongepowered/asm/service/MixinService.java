@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package org.spongepowered.asm.service;
 
 import java.util.HashSet;
@@ -12,7 +19,7 @@ import org.spongepowered.asm.service.IMixinServiceBootstrap;
 import org.spongepowered.asm.service.ServiceNotAvailableError;
 
 public final class MixinService {
-    private static final Logger logger = LogManager.getLogger("mixin");
+    private static final Logger logger = LogManager.getLogger((String)"mixin");
     private static MixinService instance;
     private ServiceLoader<IMixinServiceBootstrap> bootstrapServiceLoader;
     private final Set<String> bootedServices = new HashSet<String>();
@@ -83,3 +90,4 @@ public final class MixinService {
         return null;
     }
 }
+

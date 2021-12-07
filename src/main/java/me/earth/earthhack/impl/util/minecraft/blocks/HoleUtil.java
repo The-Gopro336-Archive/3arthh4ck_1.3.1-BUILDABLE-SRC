@@ -1,3 +1,14 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Vec3i
+ */
 package me.earth.earthhack.impl.util.minecraft.blocks;
 
 import java.util.Arrays;
@@ -92,7 +103,7 @@ implements Globals {
                 }
                 for (EnumFacing facing : EnumFacing.HORIZONTALS) {
                     BlockPos offset = holePos.offset(facing);
-                    if (positions.contains(offset)) continue;
+                    if (positions.contains((Object)offset)) continue;
                     IBlockState state = HoleUtil.mc.world.getBlockState(offset);
                     if (!Arrays.stream(NO_BLAST).noneMatch(b -> b == state.getBlock())) continue;
                     return false;
@@ -128,3 +139,4 @@ implements Globals {
         return (airL || airR) && HoleUtil.is2x2Partial(pos.add(-1, 0, -1));
     }
 }
+

@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.audio.SoundEventAccessor
+ *  net.minecraft.init.SoundEvents
+ *  net.minecraft.network.play.server.SPacketSoundEffect
+ *  net.minecraft.util.ResourceLocation
+ *  net.minecraft.util.SoundCategory
+ *  net.minecraft.util.math.MathHelper
+ *  net.minecraft.util.text.ITextComponent
+ */
 package me.earth.earthhack.impl.modules.render.sounds;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -41,3 +53,4 @@ extends ModuleListener<Sounds, PacketEvent.Receive<SPacketSoundEffect>> {
         }
     }
 }
+

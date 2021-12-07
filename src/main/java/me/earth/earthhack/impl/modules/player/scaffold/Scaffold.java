@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.player.scaffold;
 
 import me.earth.earthhack.api.module.util.Category;
@@ -80,13 +90,13 @@ implements InstantAttackingModule {
     protected BlockPos findNextPos() {
         BlockPos leftPos;
         BlockPos backPos;
-        BlockPos underPos = new BlockPos(Scaffold.mc.player).down();
+        BlockPos underPos = new BlockPos((Entity)Scaffold.mc.player).down();
         boolean under = false;
         if (this.down.getValue().booleanValue() && !Scaffold.mc.gameSettings.keyBindJump.isKeyDown() && Scaffold.mc.gameSettings.keyBindSneak.isKeyDown()) {
             under = true;
             underPos = underPos.down();
         }
-        if (Scaffold.mc.world.getBlockState(underPos).func_185904_a().isReplaceable() && (!under || Scaffold.mc.world.getBlockState(underPos.up()).func_185904_a().isReplaceable())) {
+        if (Scaffold.mc.world.getBlockState(underPos).getMaterial().isReplaceable() && (!under || Scaffold.mc.world.getBlockState(underPos.up()).getMaterial().isReplaceable())) {
             return underPos;
         }
         if (!this.offset.getValue().booleanValue()) {
@@ -94,18 +104,18 @@ implements InstantAttackingModule {
         }
         if (Scaffold.mc.gameSettings.keyBindForward.isKeyDown() && !Scaffold.mc.gameSettings.keyBindBack.isKeyDown()) {
             BlockPos forwardPos = underPos.offset(Scaffold.mc.player.getHorizontalFacing());
-            if (Scaffold.mc.world.getBlockState(forwardPos).func_185904_a().isReplaceable()) {
+            if (Scaffold.mc.world.getBlockState(forwardPos).getMaterial().isReplaceable()) {
                 return forwardPos;
             }
-        } else if (Scaffold.mc.gameSettings.keyBindBack.isKeyDown() && !Scaffold.mc.gameSettings.keyBindForward.isKeyDown() && Scaffold.mc.world.getBlockState(backPos = underPos.offset(Scaffold.mc.player.getHorizontalFacing().getOpposite())).func_185904_a().isReplaceable()) {
+        } else if (Scaffold.mc.gameSettings.keyBindBack.isKeyDown() && !Scaffold.mc.gameSettings.keyBindForward.isKeyDown() && Scaffold.mc.world.getBlockState(backPos = underPos.offset(Scaffold.mc.player.getHorizontalFacing().getOpposite())).getMaterial().isReplaceable()) {
             return backPos;
         }
         if (Scaffold.mc.gameSettings.keyBindRight.isKeyDown() && !Scaffold.mc.gameSettings.keyBindLeft.isKeyDown()) {
             BlockPos rightPos = underPos.offset(Scaffold.mc.player.getHorizontalFacing().rotateY());
-            if (Scaffold.mc.world.getBlockState(rightPos).func_185904_a().isReplaceable()) {
+            if (Scaffold.mc.world.getBlockState(rightPos).getMaterial().isReplaceable()) {
                 return rightPos;
             }
-        } else if (Scaffold.mc.gameSettings.keyBindLeft.isKeyDown() && !Scaffold.mc.gameSettings.keyBindRight.isKeyDown() && Scaffold.mc.world.getBlockState(leftPos = underPos.offset(Scaffold.mc.player.getHorizontalFacing().rotateYCCW())).func_185904_a().isReplaceable()) {
+        } else if (Scaffold.mc.gameSettings.keyBindLeft.isKeyDown() && !Scaffold.mc.gameSettings.keyBindRight.isKeyDown() && Scaffold.mc.world.getBlockState(leftPos = underPos.offset(Scaffold.mc.player.getHorizontalFacing().rotateYCCW())).getMaterial().isReplaceable()) {
             return leftPos;
         }
         return null;
@@ -158,3 +168,4 @@ implements InstantAttackingModule {
         return this.cooldown.getValue();
     }
 }
+

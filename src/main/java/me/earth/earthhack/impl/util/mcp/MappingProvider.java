@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.mcp;
 
 import java.io.BufferedReader;
@@ -68,3 +71,4 @@ public class MappingProvider {
         }
     }
 }
+

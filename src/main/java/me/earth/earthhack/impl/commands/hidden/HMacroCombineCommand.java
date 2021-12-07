@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.commands.hidden;
 
 import me.earth.earthhack.api.util.bind.Bind;
@@ -16,3 +19,4 @@ extends AbstractMultiMacroCommand<CombinedMacro> {
         return new CombinedMacro(name, bind, macros);
     }
 }
+

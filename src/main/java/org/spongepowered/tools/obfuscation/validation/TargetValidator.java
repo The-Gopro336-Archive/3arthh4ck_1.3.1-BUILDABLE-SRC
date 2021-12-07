@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.tools.obfuscation.validation;
 
 import java.util.Collection;
@@ -95,3 +98,4 @@ extends MixinValidator {
         return false;
     }
 }
+

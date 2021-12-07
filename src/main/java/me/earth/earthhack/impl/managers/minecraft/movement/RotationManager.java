@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.client.CPacketPlayer
+ *  net.minecraft.network.play.client.CPacketPlayer$Position
+ *  net.minecraft.network.play.client.CPacketPlayer$PositionRotation
+ *  net.minecraft.network.play.client.CPacketPlayer$Rotation
+ *  net.minecraft.network.play.server.SPacketPlayerPosLook
+ *  net.minecraft.network.play.server.SPacketPlayerPosLook$EnumFlags
+ *  net.minecraft.util.math.MathHelper
+ */
 package me.earth.earthhack.impl.managers.minecraft.movement;
 
 import me.earth.earthhack.api.event.bus.EventListener;
@@ -43,10 +55,10 @@ implements Globals {
                 SPacketPlayerPosLook packet = (SPacketPlayerPosLook)event.getPacket();
                 float yaw = packet.getYaw();
                 float pitch = packet.getPitch();
-                if (packet.getFlags().contains(SPacketPlayerPosLook.EnumFlags.X_ROT)) {
+                if (packet.getFlags().contains((Object)SPacketPlayerPosLook.EnumFlags.X_ROT)) {
                     yaw += Globals.mc.player.rotationYaw;
                 }
-                if (packet.getFlags().contains(SPacketPlayerPosLook.EnumFlags.Y_ROT)) {
+                if (packet.getFlags().contains((Object)SPacketPlayerPosLook.EnumFlags.Y_ROT)) {
                     pitch += Globals.mc.player.rotationPitch;
                 }
                 if (Globals.mc.player != null) {
@@ -115,8 +127,8 @@ implements Globals {
     }
 
     public void readCPacket(CPacketPlayer packetIn) {
-        ((IEntityPlayerSP)((Object)RotationManager.mc.player)).setLastReportedYaw(packetIn.getYaw(((IEntityPlayerSP)((Object)RotationManager.mc.player)).getLastReportedYaw()));
-        ((IEntityPlayerSP)((Object)RotationManager.mc.player)).setLastReportedPitch(packetIn.getPitch(((IEntityPlayerSP)((Object)RotationManager.mc.player)).getLastReportedPitch()));
+        ((IEntityPlayerSP)RotationManager.mc.player).setLastReportedYaw(packetIn.getYaw(((IEntityPlayerSP)RotationManager.mc.player).getLastReportedYaw()));
+        ((IEntityPlayerSP)RotationManager.mc.player).setLastReportedPitch(packetIn.getPitch(((IEntityPlayerSP)RotationManager.mc.player).getLastReportedPitch()));
         this.setServerRotations(packetIn.getYaw(this.last_yaw), packetIn.getPitch(this.last_pitch));
         this.positionManager.setOnGround(packetIn.isOnGround());
     }
@@ -193,3 +205,4 @@ implements Globals {
         return result;
     }
 }
+

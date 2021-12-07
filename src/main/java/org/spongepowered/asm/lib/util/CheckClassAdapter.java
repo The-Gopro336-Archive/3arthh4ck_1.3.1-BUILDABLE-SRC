@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.lib.util;
 
 import java.io.FileInputStream;
@@ -535,3 +538,4 @@ extends ClassVisitor {
         return pos < signature.length() ? signature.charAt(pos) : (char)'\u0000';
     }
 }
+

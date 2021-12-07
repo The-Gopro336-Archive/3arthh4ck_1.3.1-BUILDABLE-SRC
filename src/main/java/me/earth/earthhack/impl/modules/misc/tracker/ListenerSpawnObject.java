@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketSpawnObject
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.misc.tracker;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -20,7 +27,7 @@ extends ModuleListener<Tracker, PacketEvent.Receive<SPacketSpawnObject>> {
         }
         if (p.getType() == 51) {
             BlockPos pos = new BlockPos(p.getX(), p.getY(), p.getZ());
-            if (!((Tracker)this.module).placed.remove(pos)) {
+            if (!((Tracker)this.module).placed.remove((Object)pos)) {
                 ((Tracker)this.module).crystals.incrementAndGet();
             }
         } else if (p.getType() == 75) {
@@ -36,3 +43,4 @@ extends ModuleListener<Tracker, PacketEvent.Receive<SPacketSpawnObject>> {
         }
     }
 }
+

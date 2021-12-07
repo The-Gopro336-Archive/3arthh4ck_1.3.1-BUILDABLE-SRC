@@ -1,3 +1,18 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.item.EntityItem
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.tileentity.TileEntity
+ *  net.minecraft.tileentity.TileEntityEnderChest
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.world.IBlockAccess
+ */
 package me.earth.earthhack.impl.modules.player.automine;
 
 import java.util.ArrayList;
@@ -38,6 +53,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityEnderChest;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 
 final class ListenerUpdate
 extends ModuleListener<AutoMine, UpdateEvent> {
@@ -63,7 +79,7 @@ extends ModuleListener<AutoMine, UpdateEvent> {
             ModuleUtil.disable((Module)this.module, "\u00a7cDisabled, enable Speedmine - Smart for AutoMine - Combat!");
             return;
         }
-        if (ListenerUpdate.mc.player.isCreative() || ListenerUpdate.mc.player.isSpectator() || !((AutoMine)this.module).timer.passed(((AutoMine)this.module).delay.getValue().intValue()) || ((AutoMine)this.module).mode.getValue() == AutoMineMode.Combat && ((Speedmine)SPEED_MINE.get()).getPos() != null && (((AutoMine)this.module).current == null || !((AutoMine)this.module).current.equals(((Speedmine)SPEED_MINE.get()).getPos()))) {
+        if (ListenerUpdate.mc.player.isCreative() || ListenerUpdate.mc.player.isSpectator() || !((AutoMine)this.module).timer.passed(((AutoMine)this.module).delay.getValue().intValue()) || ((AutoMine)this.module).mode.getValue() == AutoMineMode.Combat && ((Speedmine)SPEED_MINE.get()).getPos() != null && (((AutoMine)this.module).current == null || !((AutoMine)this.module).current.equals((Object)((Speedmine)SPEED_MINE.get()).getPos()))) {
             return;
         }
         BlockPos invalid = null;
@@ -71,7 +87,7 @@ extends ModuleListener<AutoMine, UpdateEvent> {
             ((AutoMine)this.module).constellation.update((IAutomine)this.module);
         }
         if (((AutoMine)this.module).constellationCheck.getValue().booleanValue() && ((AutoMine)this.module).constellation != null) {
-            if (((AutoMine)this.module).constellation.isValid(ListenerUpdate.mc.world, ((AutoMine)this.module).checkPlayerState.getValue()) && !((AutoMine)this.module).constellationTimer.passed(((AutoMine)this.module).maxTime.getValue().intValue()) && ((AutoMine)this.module).constellation.cantBeImproved()) {
+            if (((AutoMine)this.module).constellation.isValid((IBlockAccess)ListenerUpdate.mc.world, ((AutoMine)this.module).checkPlayerState.getValue()) && !((AutoMine)this.module).constellationTimer.passed(((AutoMine)this.module).maxTime.getValue().intValue()) && ((AutoMine)this.module).constellation.cantBeImproved()) {
                 return;
             }
             if (((AutoMine)this.module).constellation.cantBeImproved()) {
@@ -90,17 +106,17 @@ extends ModuleListener<AutoMine, UpdateEvent> {
                 return;
             }
             BlockPos position = PositionUtil.getPosition();
-            if (((AutoMine)this.module).self.getValue().booleanValue() && (!((AutoMine)this.module).prioSelf.getValue().booleanValue() && this.checkSelfTrap() || this.checkPos(ListenerUpdate.mc.player, position))) {
+            if (((AutoMine)this.module).self.getValue().booleanValue() && (!((AutoMine)this.module).prioSelf.getValue().booleanValue() && this.checkSelfTrap() || this.checkPos((EntityPlayer)ListenerUpdate.mc.player, position))) {
                 return;
             }
             if (((AutoMine)this.module).mineBurrow.getValue().booleanValue() && this.checkEnemies(true)) {
                 return;
             }
             if (((AutoMine)this.module).selfEchestMine.getValue().booleanValue() && ((AutoMine)this.module).isValid(Blocks.ENDER_CHEST.getDefaultState()) && (state = ListenerUpdate.mc.world.getBlockState(position)).getBlock() == Blocks.ENDER_CHEST) {
-                this.attackPos(position, new Constellation(ListenerUpdate.mc.world, ListenerUpdate.mc.player, position, position, state));
+                this.attackPos(position, new Constellation((IBlockAccess)ListenerUpdate.mc.world, (EntityPlayer)ListenerUpdate.mc.player, position, position, state));
                 return;
             }
-            if (invalid != null && invalid.equals(((Speedmine)SPEED_MINE.get()).getPos()) && ((AutoMine)this.module).resetIfNotValid.getValue().booleanValue()) {
+            if (invalid != null && invalid.equals((Object)((Speedmine)SPEED_MINE.get()).getPos()) && ((AutoMine)this.module).resetIfNotValid.getValue().booleanValue()) {
                 ((Speedmine)SPEED_MINE.get()).reset();
             }
             if (((AutoMine)this.module).constellation == null && ((AutoMine)this.module).echest.getValue().booleanValue()) {
@@ -124,9 +140,9 @@ extends ModuleListener<AutoMine, UpdateEvent> {
                 EntityPlayer best = null;
                 ArrayList<EntityPlayer> players = new ArrayList<EntityPlayer>(c ? 0 : 10);
                 for (EntityPlayer p : ListenerUpdate.mc.world.playerEntities) {
-                    if (p == null || EntityUtil.isDead(p) || p.getDistanceSq(RotationUtil.getRotationPlayer()) > 400.0 || Managers.FRIENDS.contains(p)) continue;
+                    if (p == null || EntityUtil.isDead((Entity)p) || p.getDistanceSq((Entity)RotationUtil.getRotationPlayer()) > 400.0 || Managers.FRIENDS.contains(p)) continue;
                     if (c) {
-                        double dist = p.getDistanceSq(RotationUtil.getRotationPlayer());
+                        double dist = p.getDistanceSq((Entity)RotationUtil.getRotationPlayer());
                         if (!(dist < closest)) continue;
                         closest = dist;
                         best = p;
@@ -137,12 +153,12 @@ extends ModuleListener<AutoMine, UpdateEvent> {
                 if (c && best == null || !c && players.isEmpty()) {
                     return;
                 }
-                List<Entity> entities = ListenerUpdate.mc.world.loadedEntityList.stream().filter(Objects::nonNull).filter(e -> !(e instanceof EntityItem)).filter(e -> !EntityUtil.isDead(e)).filter(e -> e.getDistanceSq(RotationUtil.getRotationPlayer()) < (double)MathUtil.square(((AutoMine)this.module).range.getValue().floatValue())).collect(Collectors.toList());
+                List<Entity> entities = ListenerUpdate.mc.world.loadedEntityList.stream().filter(Objects::nonNull).filter(e -> !(e instanceof EntityItem)).filter(e -> !EntityUtil.isDead(e)).filter(e -> e.getDistanceSq((Entity)RotationUtil.getRotationPlayer()) < (double)MathUtil.square(((AutoMine)this.module).range.getValue().floatValue())).collect(Collectors.toList());
                 AutoMineCalc calc = new AutoMineCalc((IAutomine)this.module, players, entities, best, ((AutoMine)this.module).minDmg.getValue().floatValue(), ((AutoMine)this.module).maxSelfDmg.getValue().floatValue(), ((AutoMine)this.module).range.getValue().floatValue(), ((AutoMine)this.module).obbyPositions.getValue(), ((AutoMine)this.module).newV.getValue(), ((AutoMine)this.module).newVEntities.getValue(), ((AutoMine)this.module).mineObby.getValue(), ((AutoMine)this.module).breakTrace.getValue().floatValue(), ((AutoMine)this.module).suicide.getValue());
                 ((AutoMine)this.module).future = Managers.THREAD.submit(calc);
                 ((AutoMine)this.module).terrainTimer.reset();
             }
-        } else if (((AutoMine)this.module).mode.getValue() == AutoMineMode.AntiTrap && !(boost = PositionUtil.getPosition().up(2)).equals(((AutoMine)this.module).last) && !MovementUtil.isMoving()) {
+        } else if (((AutoMine)this.module).mode.getValue() == AutoMineMode.AntiTrap && !(boost = PositionUtil.getPosition().up(2)).equals((Object)((AutoMine)this.module).last) && !MovementUtil.isMoving()) {
             ((Speedmine)SPEED_MINE.get()).getTimer().setTime(0L);
             ((AutoMine)this.module).current = boost;
             ListenerUpdate.mc.playerController.onPlayerDamageBlock(boost, EnumFacing.DOWN);
@@ -158,20 +174,20 @@ extends ModuleListener<AutoMine, UpdateEvent> {
         for (EntityPlayer player : ListenerUpdate.mc.world.playerEntities) {
             BlockPos upUp;
             IBlockState state;
-            if (!EntityUtil.isValid(player, ((AutoMine)this.module).range.getValue().floatValue() + 1.0f) || player.equals(ListenerUpdate.mc.player)) continue;
-            BlockPos playerPos = PositionUtil.getPosition(player);
+            if (!EntityUtil.isValid((Entity)player, ((AutoMine)this.module).range.getValue().floatValue() + 1.0f) || player.equals((Object)ListenerUpdate.mc.player)) continue;
+            BlockPos playerPos = PositionUtil.getPosition((Entity)player);
             if (burrow) {
                 double dist = ListenerUpdate.mc.player.getDistanceSq(playerPos);
                 if (dist >= distance || !this.isValid(playerPos, state = ListenerUpdate.mc.world.getBlockState(playerPos))) continue;
                 closestPos = playerPos;
-                closest = new Constellation(ListenerUpdate.mc.world, player, playerPos, playerPos, state);
+                closest = new Constellation((IBlockAccess)ListenerUpdate.mc.world, player, playerPos, playerPos, state);
                 distance = dist;
                 continue;
             }
             IBlockState playerPosState = ListenerUpdate.mc.world.getBlockState(playerPos);
-            if (!playerPosState.func_185904_a().isReplaceable() && !(playerPosState.getBlock().getExplosionResistance(ListenerUpdate.mc.player) < 100.0f)) continue;
+            if (!playerPosState.getMaterial().isReplaceable() && !(playerPosState.getBlock().getExplosionResistance((Entity)ListenerUpdate.mc.player) < 100.0f)) continue;
             if (((AutoMine)this.module).head.getValue().booleanValue() && this.isValid(upUp = playerPos.up(2), state = ListenerUpdate.mc.world.getBlockState(upUp))) {
-                this.attackPos(upUp, new Constellation(ListenerUpdate.mc.world, player, upUp, playerPos, state));
+                this.attackPos(upUp, new Constellation((IBlockAccess)ListenerUpdate.mc.world, player, upUp, playerPos, state));
                 return true;
             }
             for (EnumFacing facing : EnumFacing.HORIZONTALS) {
@@ -179,12 +195,12 @@ extends ModuleListener<AutoMine, UpdateEvent> {
                 BlockPos offset = playerPos.offset(facing);
                 double dist = ListenerUpdate.mc.player.getDistanceSq(offset);
                 if (dist >= distance || !this.isValid(offset, state2 = ListenerUpdate.mc.world.getBlockState(offset))) continue;
-                if (((AutoMine)this.module).mineL.getValue().booleanValue() && ListenerUpdate.mc.world.getBlockState(offset.up()).func_185904_a().isReplaceable()) {
+                if (((AutoMine)this.module).mineL.getValue().booleanValue() && ListenerUpdate.mc.world.getBlockState(offset.up()).getMaterial().isReplaceable()) {
                     boolean found = false;
                     for (EnumFacing l : EnumFacing.HORIZONTALS) {
                         if (l == facing || l == facing.getOpposite() || !((AutoMine)this.module).checkCrystalPos(offset.offset(l).down())) continue;
                         closestPos = offset;
-                        closest = new Constellation(ListenerUpdate.mc.world, player, offset, playerPos, state2);
+                        closest = new Constellation((IBlockAccess)ListenerUpdate.mc.world, player, offset, playerPos, state2);
                         distance = dist;
                         found = true;
                         break;
@@ -193,7 +209,7 @@ extends ModuleListener<AutoMine, UpdateEvent> {
                 }
                 if (!((AutoMine)this.module).checkCrystalPos(offset.offset(facing).down())) continue;
                 closestPos = offset;
-                closest = new Constellation(ListenerUpdate.mc.world, player, offset, playerPos, state2);
+                closest = new Constellation((IBlockAccess)ListenerUpdate.mc.world, player, offset, playerPos, state2);
                 distance = dist;
             }
         }
@@ -209,7 +225,7 @@ extends ModuleListener<AutoMine, UpdateEvent> {
         BlockPos playerPos = PositionUtil.getPosition();
         BlockPos upUp = playerPos.up(2);
         if (this.isValid(upUp, state = ListenerUpdate.mc.world.getBlockState(upUp))) {
-            this.attackPos(upUp, new Constellation(ListenerUpdate.mc.world, ListenerUpdate.mc.player, upUp, playerPos, state));
+            this.attackPos(upUp, new Constellation((IBlockAccess)ListenerUpdate.mc.world, (EntityPlayer)ListenerUpdate.mc.player, upUp, playerPos, state));
             return true;
         }
         return false;
@@ -220,21 +236,22 @@ extends ModuleListener<AutoMine, UpdateEvent> {
             IBlockState state;
             BlockPos offset = playerPos.offset(facing);
             if (!this.isValid(offset, state = ListenerUpdate.mc.world.getBlockState(offset)) || !((AutoMine)this.module).checkCrystalPos(offset.offset(facing).down())) continue;
-            this.attackPos(offset, new Constellation(ListenerUpdate.mc.world, player, offset, playerPos, state));
+            this.attackPos(offset, new Constellation((IBlockAccess)ListenerUpdate.mc.world, player, offset, playerPos, state));
             return true;
         }
         return false;
     }
 
     private boolean isValid(BlockPos pos, IBlockState state) {
-        return !((AutoMine)this.module).blackList.containsKey(pos) && MineUtil.canBreak(state, pos) && ((AutoMine)this.module).isValid(state) && ListenerUpdate.mc.player.getDistanceSq(pos) <= (double)MathUtil.square(((Speedmine)SPEED_MINE.get()).getRange()) && !state.func_185904_a().isReplaceable();
+        return !((AutoMine)this.module).blackList.containsKey((Object)pos) && MineUtil.canBreak(state, pos) && ((AutoMine)this.module).isValid(state) && ListenerUpdate.mc.player.getDistanceSq(pos) <= (double)MathUtil.square(((Speedmine)SPEED_MINE.get()).getRange()) && !state.getMaterial().isReplaceable();
     }
 
     public void attackPos(BlockPos pos, Constellation c) {
-        if (((AutoMine)this.module).checkCurrent.getValue().booleanValue() && pos.equals(((AutoMine)this.module).current)) {
+        if (((AutoMine)this.module).checkCurrent.getValue().booleanValue() && pos.equals((Object)((AutoMine)this.module).current)) {
             return;
         }
         ((AutoMine)this.module).offer(c);
         ((AutoMine)this.module).attackPos(pos);
     }
 }
+

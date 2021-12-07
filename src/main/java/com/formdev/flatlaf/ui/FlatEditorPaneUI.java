@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.ui;
 
 import com.formdev.flatlaf.ui.FlatTextFieldUI;
@@ -111,3 +114,4 @@ extends BasicEditorPaneUI {
         g.fillRect(0, 0, c.getWidth(), c.getHeight());
     }
 }
+

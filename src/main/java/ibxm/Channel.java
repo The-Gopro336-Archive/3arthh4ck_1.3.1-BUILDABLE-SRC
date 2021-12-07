@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package ibxm;
 
 import ibxm.Envelope;
@@ -98,7 +101,7 @@ public class Channel {
     public void update_sample_idx(int samples) {
         this.sample_frac += this.step * samples;
         this.sample_idx += this.sample_frac >> 15;
-        this.sample_frac &= Short.MAX_VALUE;
+        this.sample_frac &= 0x7FFF;
     }
 
     public void set_volume(int vol) {
@@ -924,3 +927,4 @@ public class Channel {
         this.step = LogTable.raise_2((log_2_freq += ((this.key_add << 7) + this.sample.fine_tune << 15) / 1536) - this.log_2_sampling_rate);
     }
 }
+

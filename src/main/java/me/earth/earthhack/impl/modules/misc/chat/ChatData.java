@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.misc.chat;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -23,3 +26,4 @@ extends DefaultData<Chat> {
         return "Tweaks for the chat.";
     }
 }
+

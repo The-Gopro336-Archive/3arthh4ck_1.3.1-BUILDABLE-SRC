@@ -1,3 +1,18 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.client.network.NetHandlerPlayClient
+ *  net.minecraft.client.network.NetworkPlayerInfo
+ *  net.minecraft.enchantment.EnchantmentHelper
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.world.IBlockAccess
+ */
 package me.earth.earthhack.impl.modules.render.nametags;
 
 import java.util.ArrayList;
@@ -15,6 +30,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -104,11 +121,11 @@ implements Globals {
             }
         }
         if (this.module.health.getValue().booleanValue()) {
-            double health = Math.ceil(EntityUtil.getHealth(player));
+            double health = Math.ceil(EntityUtil.getHealth((EntityLivingBase)player));
             String healthColor = health > 18.0 ? "\u00a7a" : (health > 16.0 ? "\u00a72" : (health > 12.0 ? "\u00a7e" : (health > 8.0 ? "\u00a76" : (health > 5.0 ? "\u00a7c" : "\u00a74"))));
             builder.append(offset ? " " : "").append(healthColor).append(health > 0.0 ? Integer.valueOf((int)health) : "0");
         }
-        if (this.module.pops.getValue().booleanValue() && (pops = Managers.COMBAT.getPops(player)) != 0) {
+        if (this.module.pops.getValue().booleanValue() && (pops = Managers.COMBAT.getPops((Entity)player)) != 0) {
             builder.append("\u00a7f").append(" -").append(pops);
         }
         return builder.toString();
@@ -120,7 +137,7 @@ implements Globals {
         if (Managers.FRIENDS.contains(player)) {
             return -10027009;
         }
-        if (this.module.burrow.getValue().booleanValue() && !(state = Nametag.mc.world.getBlockState(pos = PositionUtil.getPosition(player))).func_185904_a().isReplaceable() && state.func_185900_c((IBlockAccess)Nametag.mc.world, (BlockPos)pos).offset((BlockPos)pos).maxY > player.posY) {
+        if (this.module.burrow.getValue().booleanValue() && !(state = Nametag.mc.world.getBlockState(pos = PositionUtil.getPosition((Entity)player))).getMaterial().isReplaceable() && state.getBoundingBox((IBlockAccess)Nametag.mc.world, (BlockPos)pos).offset((BlockPos)pos).maxY > player.posY) {
             return -10026905;
         }
         if (Managers.ENEMIES.contains(player)) {
@@ -138,3 +155,4 @@ implements Globals {
         return -1;
     }
 }
+

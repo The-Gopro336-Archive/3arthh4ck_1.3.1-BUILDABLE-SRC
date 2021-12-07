@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.gson.JsonElement
+ */
 package me.earth.earthhack.api.setting.settings;
 
 import com.google.gson.JsonElement;
@@ -129,8 +135,8 @@ extends Setting<N> {
             result[0] = Double.MIN_VALUE;
             result[1] = Double.MAX_VALUE;
         } else if (type == Short.class) {
-            result[0] = (short)Short.MIN_VALUE;
-            result[1] = (short)Short.MAX_VALUE;
+            result[0] = (short)-32768;
+            result[1] = (short)32767;
         } else if (type == Byte.class) {
             result[0] = (byte)-128;
             result[1] = (byte)127;
@@ -153,3 +159,4 @@ extends Setting<N> {
         return clazz == Double.class || clazz == Float.class;
     }
 }
+

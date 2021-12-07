@@ -1,3 +1,26 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemBlock
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketAnimation
+ *  net.minecraft.network.play.client.CPacketPlayer$Rotation
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock
+ *  net.minecraft.network.play.client.CPacketUseEntity
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.util.helpers.blocks;
 
 import java.util.ArrayList;
@@ -137,7 +160,7 @@ implements AttackingModule {
                         }
                     }
                 }
-                ObbyModule.mc.player.connection.sendPacket(this.attacking);
+                ObbyModule.mc.player.connection.sendPacket((Packet)this.attacking);
                 Swing.Packet.swing(EnumHand.MAIN_HAND);
                 if (switched) {
                     if (this.cooldownBypass.getValue() == CooldownBypass.Pick) {
@@ -157,17 +180,17 @@ implements AttackingModule {
     protected void filterPackets() {
         boolean awaitingSwing = false;
         CPacketPlayer.Rotation rotation = null;
-        ArrayList<Packet> toRemove = new ArrayList<Packet>();
+        ArrayList<Object> toRemove = new ArrayList<Object>();
         for (Packet p : this.packets) {
             if (p instanceof CPacketPlayerTryUseItemOnBlock) {
                 CPacketPlayerTryUseItemOnBlock c = (CPacketPlayerTryUseItemOnBlock)p;
                 BlockPos pos = c.getPos().offset(c.getDirection());
                 for (Entity entity : ObbyModule.mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos))) {
-                    if (EntityUtil.isDead(entity) || !entity.preventEntitySpawning || !RotationUtil.getRotationPlayer().equals(ObbyModule.mc.player) && ObbyModule.mc.player.equals(entity)) continue;
+                    if (EntityUtil.isDead(entity) || !entity.preventEntitySpawning || !RotationUtil.getRotationPlayer().equals((Object)ObbyModule.mc.player) && ObbyModule.mc.player.equals((Object)entity)) continue;
                     if (rotation != null) {
-                        toRemove.add(rotation);
+                        toRemove.add((Object)rotation);
                     }
-                    toRemove.add(p);
+                    toRemove.add((Object)p);
                     awaitingSwing = true;
                 }
                 continue;
@@ -178,7 +201,7 @@ implements AttackingModule {
             }
             if (!awaitingSwing || !(p instanceof CPacketAnimation)) continue;
             awaitingSwing = false;
-            toRemove.add(p);
+            toRemove.add((Object)p);
         }
         this.packets.removeAll(toRemove);
     }
@@ -226,23 +249,23 @@ implements AttackingModule {
             Ray forceHelpingRay = null;
             Ray dumbRay = null;
             Ray dumbHelpingRay = null;
-            Ray ray = RayTraceFactory.fullTrace(entity, HELPER, pos, -1.0);
-            if (ray == null || this.shouldHelp(ray.getFacing(), pos) || !ray.getPos().offset(ray.getFacing()).equals(pos) || !ray.isLegit() && (this.smartRay.getValue() == RayTraceMode.Smart || this.smartRay.getValue() == RayTraceMode.Force)) {
-                if (ray != null && ray.getPos().offset(ray.getFacing()).equals(pos)) {
+            Ray ray = RayTraceFactory.fullTrace((Entity)entity, HELPER, pos, -1.0);
+            if (ray == null || this.shouldHelp(ray.getFacing(), pos) || !ray.getPos().offset(ray.getFacing()).equals((Object)pos) || !ray.isLegit() && (this.smartRay.getValue() == RayTraceMode.Smart || this.smartRay.getValue() == RayTraceMode.Force)) {
+                if (ray != null && ray.getPos().offset(ray.getFacing()).equals((Object)pos)) {
                     dumbRay = ray;
                     forceRay = ray;
                 }
                 for (EnumFacing facing : EnumFacing.values()) {
                     BlockPos helpingPos = pos.offset(facing);
                     IBlockState state = HELPER.getBlockState(helpingPos);
-                    if (!state.func_185904_a().isReplaceable() || this.quickEntityCheck(helpingPos)) continue;
-                    Ray helpingRay = RayTraceFactory.fullTrace(entity, HELPER, helpingPos, -1.0);
-                    if (helpingRay == null || !helpingRay.getPos().offset(helpingRay.getFacing()).equals(helpingPos) || !helpingRay.isLegit() && (this.smartRay.getValue() == RayTraceMode.Smart || this.smartRay.getValue() == RayTraceMode.Force)) {
-                        if (dumbRay != null || helpingRay == null || !helpingRay.getPos().offset(helpingRay.getFacing()).equals(helpingPos)) continue;
+                    if (!state.getMaterial().isReplaceable() || this.quickEntityCheck(helpingPos)) continue;
+                    Ray helpingRay = RayTraceFactory.fullTrace((Entity)entity, HELPER, helpingPos, -1.0);
+                    if (helpingRay == null || !helpingRay.getPos().offset(helpingRay.getFacing()).equals((Object)helpingPos) || !helpingRay.isLegit() && (this.smartRay.getValue() == RayTraceMode.Smart || this.smartRay.getValue() == RayTraceMode.Force)) {
+                        if (dumbRay != null || helpingRay == null || !helpingRay.getPos().offset(helpingRay.getFacing()).equals((Object)helpingPos)) continue;
                         dumbHelpingRay = helpingRay;
                         this.setState(helpingPos);
-                        dumbRay = RayTraceFactory.rayTrace(entity, helpingPos, facing.getOpposite(), HELPER, state, -1.0);
-                        if (!dumbRay.getPos().offset(dumbRay.getFacing()).equals(pos)) {
+                        dumbRay = RayTraceFactory.rayTrace((Entity)entity, helpingPos, facing.getOpposite(), HELPER, state, -1.0);
+                        if (!dumbRay.getPos().offset(dumbRay.getFacing()).equals((Object)pos)) {
                             dumbRay = null;
                             dumbHelpingRay = null;
                         }
@@ -250,8 +273,8 @@ implements AttackingModule {
                         continue;
                     }
                     this.setState(helpingPos);
-                    ray = RayTraceFactory.rayTrace(entity, helpingPos, facing.getOpposite(), HELPER, state, -1.0);
-                    if (ray == null || !ray.getPos().offset(ray.getFacing()).equals(pos)) continue;
+                    ray = RayTraceFactory.rayTrace((Entity)entity, helpingPos, facing.getOpposite(), HELPER, state, -1.0);
+                    if (ray == null || !ray.getPos().offset(ray.getFacing()).equals((Object)pos)) continue;
                     if (forceRay == null) {
                         forceRay = ray;
                         forceHelpingRay = helpingRay;
@@ -275,11 +298,11 @@ implements AttackingModule {
                 this.placeBlock(ray.getPos(), ray.getFacing(), ray.getRotations(), ray.getResult().hitVec);
                 return this.blocksPlaced >= (Integer)this.blocks.getValue() || this.rotate.getValue() == Rotate.Normal;
             }
-            if (forceRay == null || !forceRay.getPos().offset(forceRay.getFacing()).equals(pos)) {
+            if (forceRay == null || !forceRay.getPos().offset(forceRay.getFacing()).equals((Object)pos)) {
                 forceRay = dumbRay;
                 forceHelpingRay = dumbHelpingRay;
             }
-            if (this.smartRay.getValue() == RayTraceMode.Force && forceRay != null && forceRay.getPos().offset(forceRay.getFacing()).equals(pos)) {
+            if (this.smartRay.getValue() == RayTraceMode.Force && forceRay != null && forceRay.getPos().offset(forceRay.getFacing()).equals((Object)pos)) {
                 BlockPos forcePos;
                 if (forceHelpingRay != null) {
                     BlockPos helping = forceHelpingRay.getPos().offset(forceHelpingRay.getFacing());
@@ -332,12 +355,12 @@ implements AttackingModule {
 
     public void setState(BlockPos pos) {
         Block block;
-        Block block2 = block = this.slot <= 0 || this.slot > 8 ? Blocks.ENDER_CHEST : null;
+        Object object = block = this.slot <= 0 || this.slot > 8 ? Blocks.ENDER_CHEST : null;
         if (block == null) {
             Item item;
             Item item2 = item = this.slot == -2 ? ObbyModule.mc.player.getHeldItemOffhand().getItem() : ObbyModule.mc.player.inventory.getStackInSlot(this.slot).getItem();
             if (item instanceof ItemBlock) {
-                block = ((ItemBlock)((Object)item)).getBlock();
+                block = ((ItemBlock)item).getBlock();
             }
         }
         if (block != null) {
@@ -355,7 +378,7 @@ implements AttackingModule {
                 return this.rotate.getValue() == Rotate.Normal;
             }
             case Down: {
-                return this.rotate.getValue() == Rotate.Normal && !pos.down().equals(helpingPos);
+                return this.rotate.getValue() == Rotate.Normal && !pos.down().equals((Object)helpingPos);
             }
         }
         return false;
@@ -373,3 +396,4 @@ implements AttackingModule {
         });
     }
 }
+

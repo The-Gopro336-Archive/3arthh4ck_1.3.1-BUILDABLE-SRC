@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.util.math.path;
 
 import java.util.ArrayList;
@@ -63,3 +70,4 @@ implements Pathable {
         return this.blocking;
     }
 }
+

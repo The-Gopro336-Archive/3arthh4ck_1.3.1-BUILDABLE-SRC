@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  javax.annotation.Resource
+ *  net.minecraft.launchwrapper.IClassTransformer
+ */
 package org.spongepowered.asm.service.mojang;
 
 import javax.annotation.Resource;
@@ -27,3 +34,4 @@ implements ILegacyClassTransformer {
         return this.transformer.transform(name, transformedName, basicClass);
     }
 }
+

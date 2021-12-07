@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.NetworkManager
+ *  net.minecraft.network.play.server.SPacketJoinGame
+ *  net.minecraftforge.fml.common.network.handshake.NetworkDispatcher
+ */
 package me.earth.earthhack.forge.util;
 
 import net.minecraft.network.NetworkManager;
@@ -14,3 +22,4 @@ extends NetworkDispatcher {
         return packetIn.getDimension();
     }
 }
+

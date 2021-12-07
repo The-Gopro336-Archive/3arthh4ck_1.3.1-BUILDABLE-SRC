@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.client.CPacketCloseWindow
+ */
 package me.earth.earthhack.impl.modules.player.xcarry;
 
 import me.earth.earthhack.impl.core.mixins.network.client.ICPacketCloseWindow;
@@ -20,3 +26,4 @@ extends ModuleListener<XCarry, PacketEvent.Send<CPacketCloseWindow>> {
         }
     }
 }
+

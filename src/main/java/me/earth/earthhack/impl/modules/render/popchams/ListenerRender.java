@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.renderer.GlStateManager
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.MathHelper
+ */
 package me.earth.earthhack.impl.modules.render.popchams;
 
 import java.awt.Color;
@@ -100,3 +108,4 @@ extends ModuleListener<PopChams, Render3DEvent> {
         RenderUtil.renderBox(bb, color, outline, ((Float)((PopChams)this.module).lineWidth.getValue()).floatValue());
     }
 }
+

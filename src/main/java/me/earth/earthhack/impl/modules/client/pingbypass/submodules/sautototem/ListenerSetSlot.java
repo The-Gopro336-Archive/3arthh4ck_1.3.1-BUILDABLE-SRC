@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.inventory.Slot
+ *  net.minecraft.network.play.server.SPacketSetSlot
+ */
 package me.earth.earthhack.impl.modules.client.pingbypass.submodules.sautototem;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -26,8 +33,8 @@ extends ModuleListener<ServerAutoTotem, PacketEvent.Receive<SPacketSetSlot>> {
         if (((PingBypass)((ServerAutoTotem)this.module).getParent()).isEnabled() && ListenerSetSlot.mc.player != null) {
             SPacketSetSlot packet = (SPacketSetSlot)event.getPacket();
             if (packet.getSlot() == -1337) {
-                ((IContainer)((Object)ListenerSetSlot.mc.player.openContainer)).setTransactionID((short)packet.getWindowId());
-                ((ISPacketSetSlot)((Object)packet)).setWindowId(-1);
+                ((IContainer)ListenerSetSlot.mc.player.openContainer).setTransactionID((short)packet.getWindowId());
+                ((ISPacketSetSlot)packet).setWindowId(-1);
             } else if (packet.getWindowId() == -128) {
                 event.setCancelled(true);
                 mc.addScheduledTask(() -> {
@@ -44,3 +51,4 @@ extends ModuleListener<ServerAutoTotem, PacketEvent.Receive<SPacketSetSlot>> {
         }
     }
 }
+

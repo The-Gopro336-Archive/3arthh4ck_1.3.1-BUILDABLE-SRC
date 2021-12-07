@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.launch.platform;
 
 import java.io.File;
@@ -70,3 +73,4 @@ final class MainAttributes {
         return attributes;
     }
 }
+

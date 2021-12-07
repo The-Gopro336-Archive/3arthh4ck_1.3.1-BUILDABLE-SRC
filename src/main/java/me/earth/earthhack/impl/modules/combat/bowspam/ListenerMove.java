@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.item.ItemBow
+ *  net.minecraft.item.ItemStack
+ */
 package me.earth.earthhack.impl.modules.combat.bowspam;
 
 import me.earth.earthhack.impl.event.events.movement.MoveEvent;
@@ -37,3 +44,4 @@ extends ModuleListener<BowSpam, MoveEvent> {
         return null;
     }
 }
+

@@ -1,3 +1,14 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.entity.EntityOtherPlayerMP
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.combat.surround;
 
 import java.util.ArrayList;
@@ -38,6 +49,7 @@ import me.earth.earthhack.impl.util.minecraft.blocks.BlockingType;
 import me.earth.earthhack.impl.util.minecraft.blocks.HoleUtil;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -154,7 +166,7 @@ extends ObbyModule {
             }
             case Static: {
                 BlockPos currentPos = this.getPlayerPos();
-                if (currentPos.equals(this.startPos)) break;
+                if (currentPos.equals((Object)this.startPos)) break;
                 this.disable();
                 return false;
             }
@@ -186,8 +198,8 @@ extends ObbyModule {
         if (HoleUtil.isHole(playerPos, false)[0] || this.center.getValue().booleanValue() || this.extend.getValue() == 1 || !this.extendingWatch.passed(this.eDelay.getValue().intValue())) {
             blocked.add(playerPos);
         } else {
-            List unfiltered = new ArrayList<BlockPos>(PositionUtil.getBlockedPositions(this.getPlayer())).stream().sorted(Comparator.comparingDouble(pos -> BlockUtil.getDistanceSq(this.getPlayer(), pos))).collect(Collectors.toList());
-            List filtered = new ArrayList(unfiltered).stream().filter(pos -> Surround.mc.world.getBlockState((BlockPos)pos).func_185904_a().isReplaceable() && Surround.mc.world.getBlockState(pos.up()).func_185904_a().isReplaceable()).collect(Collectors.toList());
+            List unfiltered = new ArrayList<BlockPos>(PositionUtil.getBlockedPositions((Entity)this.getPlayer())).stream().sorted(Comparator.comparingDouble(pos -> BlockUtil.getDistanceSq((Entity)this.getPlayer(), pos))).collect(Collectors.toList());
+            List filtered = new ArrayList(unfiltered).stream().filter(pos -> Surround.mc.world.getBlockState(pos).getMaterial().isReplaceable() && Surround.mc.world.getBlockState(pos.up()).getMaterial().isReplaceable()).collect(Collectors.toList());
             if (this.extend.getValue() == 3 && filtered.size() == 2 && unfiltered.size() == 4 && ((BlockPos)unfiltered.get(0)).equals(filtered.get(0)) && ((BlockPos)unfiltered.get(3)).equals(filtered.get(1))) {
                 filtered.clear();
                 filtered.add(playerPos);
@@ -210,7 +222,7 @@ extends ObbyModule {
     }
 
     protected boolean isBlockingTrap(BlockPos pos, List<EntityPlayer> players) {
-        if (Surround.mc.world.getBlockState(pos.up()).func_185904_a().isReplaceable()) {
+        if (Surround.mc.world.getBlockState(pos.up()).getMaterial().isReplaceable()) {
             return false;
         }
         EnumFacing relative = this.getFacingRelativeToPlayer(pos, this.getPlayer());
@@ -218,10 +230,10 @@ extends ObbyModule {
             return false;
         }
         for (EntityPlayer player : players) {
-            if (player == null || this.getPlayer().equals(player) || EntityUtil.isDead(player) || Managers.FRIENDS.contains(player) || player.getDistanceSq(pos) > 9.0) continue;
-            BlockPos playerPos = PositionUtil.getPosition(player);
+            if (player == null || this.getPlayer().equals((Object)player) || EntityUtil.isDead((Entity)player) || Managers.FRIENDS.contains(player) || player.getDistanceSq(pos) > 9.0) continue;
+            BlockPos playerPos = PositionUtil.getPosition((Entity)player);
             for (EnumFacing facing : EnumFacing.HORIZONTALS) {
-                if (facing == relative || facing.getOpposite() == relative || !pos.offset(facing).equals(playerPos) || !BlockUtil.canPlaceCrystal(pos.offset(facing.getOpposite()).down(), true, this.newVer.getValue())) continue;
+                if (facing == relative || facing.getOpposite() == relative || !pos.offset(facing).equals((Object)playerPos) || !BlockUtil.canPlaceCrystal(pos.offset(facing.getOpposite()).down(), true, this.newVer.getValue())) continue;
                 return true;
             }
         }
@@ -243,7 +255,7 @@ extends ObbyModule {
         for (BlockPos pos2 : blocked) {
             for (EnumFacing facing : EnumFacing.HORIZONTALS) {
                 BlockPos offset = pos2.offset(facing);
-                if (blocked.contains(offset)) continue;
+                if (blocked.contains((Object)offset)) continue;
                 surrounding.add(offset);
                 if (!this.noTrap.getValue().booleanValue()) continue;
                 surrounding.add(offset.down());
@@ -258,10 +270,10 @@ extends ObbyModule {
                 BlockPos pos3 = (BlockPos)itr.next();
                 boolean remove = false;
                 for (EntityPlayer player : players) {
-                    if (player == null || this.noSelfExtend.getValue().booleanValue() && player == Surround.mc.player || PlayerUtil.isFakePlayer(player) || EntityUtil.isDead(player) || !BlockUtil.isBlocking(pos3, player, (BlockingType)((Object)this.blockingType.getValue()))) continue;
+                    if (player == null || this.noSelfExtend.getValue().booleanValue() && player == Surround.mc.player || PlayerUtil.isFakePlayer((Entity)player) || EntityUtil.isDead((Entity)player) || !BlockUtil.isBlocking(pos3, player, (BlockingType)((Object)this.blockingType.getValue()))) continue;
                     for (EnumFacing facing : EnumFacing.HORIZONTALS) {
                         BlockPos offset = pos3.offset(facing);
-                        if (blocked.contains(offset)) continue;
+                        if (blocked.contains((Object)offset)) continue;
                         remove = true;
                         extendedPositions.add(offset);
                         if (!this.peNoTrap.getValue().booleanValue()) continue;
@@ -283,14 +295,14 @@ extends ObbyModule {
                 if (this.trapExtend.getValue().booleanValue() && (r = this.getFacingRelativeToPlayer(trap, this.getPlayer())) != null) {
                     surrounding.add(this.getPlayerPos().offset(r, 2));
                 }
-                surrounding.remove(trap);
+                surrounding.remove((Object)trap);
             }
         }
         return surrounding;
     }
 
     protected BlockPos getPlayerPos() {
-        return this.deltaY.getValue() != false && Math.abs(this.getPlayer().motionY) > 0.1 ? new BlockPos(this.getPlayer()) : PositionUtil.getPosition(this.getPlayer());
+        return this.deltaY.getValue() != false && Math.abs(this.getPlayer().motionY) > 0.1 ? new BlockPos((Entity)this.getPlayer()) : PositionUtil.getPosition((Entity)this.getPlayer());
     }
 
     @Override
@@ -311,3 +323,4 @@ extends ObbyModule {
         return Surround.mc.player;
     }
 }
+

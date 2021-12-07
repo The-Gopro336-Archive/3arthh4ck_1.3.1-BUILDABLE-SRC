@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick;
 
 import java.io.Serializable;
@@ -198,3 +201,4 @@ implements Serializable {
         return copy;
     }
 }
+

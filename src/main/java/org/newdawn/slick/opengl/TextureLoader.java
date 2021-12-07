@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.opengl;
 
 import java.io.IOException;
@@ -22,3 +25,4 @@ public class TextureLoader {
         return InternalTextureLoader.get().getTexture(in, in.toString() + "." + format, flipped, filter);
     }
 }
+

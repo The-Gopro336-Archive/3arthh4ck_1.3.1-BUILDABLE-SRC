@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.api.event.bus;
 
 import java.util.ArrayList;
@@ -15,3 +18,4 @@ implements Subscriber {
         return this.listeners;
     }
 }
+

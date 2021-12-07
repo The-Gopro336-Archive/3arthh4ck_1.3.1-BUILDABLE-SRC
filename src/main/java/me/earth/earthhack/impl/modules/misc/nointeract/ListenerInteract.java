@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.state.IBlockState
+ */
 package me.earth.earthhack.impl.modules.misc.nointeract;
 
 import me.earth.earthhack.impl.event.events.misc.ClickBlockEvent;
@@ -23,3 +29,4 @@ extends ModuleListener<NoInteract, ClickBlockEvent.Right> {
         }
     }
 }
+

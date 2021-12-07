@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package org.spongepowered.asm.mixin.injection.invoke.util;
 
 import org.apache.logging.log4j.LogManager;
@@ -12,7 +19,7 @@ import org.spongepowered.asm.lib.tree.analysis.Interpreter;
 import org.spongepowered.asm.mixin.injection.struct.Target;
 
 public class InsnFinder {
-    private static final Logger logger = LogManager.getLogger("mixin");
+    private static final Logger logger = LogManager.getLogger((String)"mixin");
 
     public AbstractInsnNode findPopInsn(Target target, AbstractInsnNode node) {
         try {
@@ -22,7 +29,7 @@ public class InsnFinder {
             if (ex.getCause() instanceof AnalysisResultException) {
                 return ((AnalysisResultException)ex.getCause()).getResult();
             }
-            logger.catching(ex);
+            logger.catching((Throwable)ex);
         }
         return null;
     }
@@ -102,3 +109,4 @@ public class InsnFinder {
         }
     }
 }
+

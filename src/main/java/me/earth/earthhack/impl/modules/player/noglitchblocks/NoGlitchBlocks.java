@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.player.noglitchblocks;
 
 import me.earth.earthhack.api.module.Module;
@@ -31,3 +34,4 @@ extends Module {
         return this.isEnabled() && this.crack.getValue() != false;
     }
 }
+

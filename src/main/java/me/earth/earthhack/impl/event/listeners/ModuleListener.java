@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.event.listeners;
 
 import me.earth.earthhack.api.event.bus.EventListener;
@@ -25,3 +28,4 @@ implements Globals {
         this.module = module;
     }
 }
+

@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.renderer.GlStateManager
+ *  net.minecraft.util.math.AxisAlignedBB
+ */
 package me.earth.earthhack.impl.modules.render.lagometer;
 
 import java.awt.Color;
@@ -118,3 +125,4 @@ extends ModuleListener<LagOMeter, Render3DEvent> {
         return new Color(c.getRed(), c.getGreen(), c.getBlue(), (int)MathUtil.clamp((double)c.getAlpha() * factor, 0.0, 255.0));
     }
 }
+

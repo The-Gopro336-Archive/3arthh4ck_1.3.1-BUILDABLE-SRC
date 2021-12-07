@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.render.logoutspots;
 
 import java.util.Map;
@@ -37,3 +40,4 @@ extends Module {
         this.spots.clear();
     }
 }
+

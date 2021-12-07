@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketKeepAlive
+ */
 package me.earth.earthhack.impl.modules.misc.pingspoof;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -25,3 +32,4 @@ extends ModuleListener<PingSpoof, PacketEvent.Send<CPacketKeepAlive>> {
         }
     }
 }
+

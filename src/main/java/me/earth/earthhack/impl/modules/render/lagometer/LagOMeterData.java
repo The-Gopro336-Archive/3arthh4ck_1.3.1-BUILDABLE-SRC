@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.render.lagometer;
 
 import me.earth.earthhack.impl.modules.render.lagometer.LagOMeter;
@@ -30,3 +33,4 @@ extends BlockESPModuleData<LagOMeter> {
         return "Shows lag and the server position.";
     }
 }
+

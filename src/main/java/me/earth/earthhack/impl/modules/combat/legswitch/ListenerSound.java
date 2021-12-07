@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.init.Items
+ *  net.minecraft.network.play.server.SPacketSoundEffect
+ */
 package me.earth.earthhack.impl.modules.combat.legswitch;
 
 import me.earth.earthhack.api.util.interfaces.Globals;
@@ -31,3 +38,4 @@ implements Globals {
         return this.module.soundStart.getValue();
     }
 }
+

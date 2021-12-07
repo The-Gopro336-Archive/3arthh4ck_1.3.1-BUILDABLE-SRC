@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.apache.commons.io.FileUtils
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package org.spongepowered.asm.mixin.transformer.ext.extensions;
 
 import java.io.File;
@@ -19,14 +27,14 @@ implements IExtension {
     private static final String DECOMPILER_CLASS = "org.spongepowered.asm.mixin.transformer.debug.RuntimeDecompiler";
     private static final String EXPORT_CLASS_DIR = "class";
     private static final String EXPORT_JAVA_DIR = "java";
-    private static final Logger logger = LogManager.getLogger("mixin");
+    private static final Logger logger = LogManager.getLogger((String)"mixin");
     private final File classExportDir = new File(Constants.DEBUG_OUTPUT_DIR, "class");
     private final IDecompiler decompiler;
 
     public ExtensionClassExporter(MixinEnvironment env) {
         this.decompiler = this.initDecompiler(env, new File(Constants.DEBUG_OUTPUT_DIR, EXPORT_JAVA_DIR));
         try {
-            FileUtils.deleteDirectory(this.classExportDir);
+            FileUtils.deleteDirectory((File)this.classExportDir);
         }
         catch (IOException ex) {
             logger.warn("Error cleaning class output directory: {}", new Object[]{ex.getMessage()});
@@ -97,7 +105,7 @@ implements IExtension {
     public File dumpClass(String fileName, byte[] bytes) {
         File outputFile = new File(this.classExportDir, fileName + ".class");
         try {
-            FileUtils.writeByteArrayToFile(outputFile, bytes);
+            FileUtils.writeByteArrayToFile((File)outputFile, (byte[])bytes);
         }
         catch (IOException iOException) {
             // empty catch block
@@ -105,3 +113,4 @@ implements IExtension {
         return outputFile;
     }
 }
+

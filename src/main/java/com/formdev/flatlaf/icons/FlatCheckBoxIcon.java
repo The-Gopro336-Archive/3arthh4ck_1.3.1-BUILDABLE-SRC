@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.icons;
 
 import com.formdev.flatlaf.FlatClientProperties;
@@ -145,3 +148,4 @@ extends FlatAbstractIcon {
         return c.isEnabled() ? (selected && isFocused && this.selectedFocusedCheckmarkColor != null ? this.selectedFocusedCheckmarkColor : this.checkmarkColor) : this.disabledCheckmarkColor;
     }
 }
+

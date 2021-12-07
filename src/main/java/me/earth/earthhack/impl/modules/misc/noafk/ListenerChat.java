@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketChat
+ */
 package me.earth.earthhack.impl.modules.misc.noafk;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -20,3 +26,4 @@ extends ModuleListener<NoAFK, PacketEvent.Receive<SPacketChat>> {
         }
     }
 }
+

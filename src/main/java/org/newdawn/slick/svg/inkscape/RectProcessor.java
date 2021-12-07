@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.svg.inkscape;
 
 import org.newdawn.slick.geom.Rectangle;
@@ -37,3 +40,4 @@ implements ElementProcessor {
         return element.getNodeName().equals("rect");
     }
 }
+

@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.GuiScreen
+ */
 package me.earth.earthhack.impl.commands;
 
 import me.earth.earthhack.api.command.PossibleInputs;
@@ -68,7 +74,7 @@ implements Globals {
             }
             ModulePreset finalResult = result;
             GuiScreen before = PresetCommand.mc.currentScreen;
-            Scheduler.getInstance().schedule(() -> mc.displayGuiScreen(new YesNoNonPausing((r, id) -> {
+            Scheduler.getInstance().schedule(() -> mc.displayGuiScreen((GuiScreen)new YesNoNonPausing((r, id) -> {
                 mc.displayGuiScreen(before);
                 if (!r) {
                     return;
@@ -101,3 +107,4 @@ implements Globals {
         return super.getPossibleInputs(args);
     }
 }
+

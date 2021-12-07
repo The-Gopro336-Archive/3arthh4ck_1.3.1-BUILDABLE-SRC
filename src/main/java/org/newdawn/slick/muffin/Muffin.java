@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.muffin;
 
 import java.io.IOException;
@@ -8,3 +11,4 @@ public interface Muffin {
 
     public HashMap loadFile(String var1) throws IOException;
 }
+

@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketExplosion
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.movement.speed;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -34,3 +41,4 @@ extends ModuleListener<Speed, PacketEvent.Receive<SPacketExplosion>> {
         }
     }
 }
+

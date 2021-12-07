@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.inventory.GuiInventory
+ *  net.minecraft.entity.item.EntityItem
+ *  net.minecraft.init.Items
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemStack
+ */
 package me.earth.earthhack.impl.modules.player.sorter;
 
 import java.util.HashSet;
@@ -48,7 +58,7 @@ extends ModuleListener<Sorter, MotionUpdateEvent> {
         for (int i = 44; i > 8; --i) {
             ItemStack s = InventoryUtil.get(i);
             Item shouldBeHere = layout.getItem(i);
-            if (shouldBeHere == s.getItem() || shouldBeHere == Items.AIR || missing.contains(shouldBeHere)) continue;
+            if (shouldBeHere == s.getItem() || shouldBeHere == Items.AIR || missing.contains((Object)shouldBeHere)) continue;
             int slot = this.getSlot(shouldBeHere, s.getItem(), i, missing, layout);
             if (slot == -2) {
                 return;
@@ -97,3 +107,4 @@ extends ModuleListener<Sorter, MotionUpdateEvent> {
         });
     }
 }
+

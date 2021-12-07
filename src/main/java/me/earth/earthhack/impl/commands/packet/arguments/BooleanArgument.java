@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.commands.packet.arguments;
 
 import me.earth.earthhack.api.command.Completer;
@@ -37,3 +40,4 @@ extends AbstractArgument<Boolean> {
         return CustomCompleterResult.PASS;
     }
 }
+

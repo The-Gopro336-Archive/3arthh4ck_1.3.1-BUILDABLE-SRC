@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.render.viewmodel;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -26,3 +29,4 @@ extends DefaultData<ViewModel> {
         return "Allows you to change your Viewmodel.";
     }
 }
+

@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Joiner
+ *  com.google.common.collect.ImmutableList
+ *  com.google.common.collect.ImmutableList$Builder
+ *  org.apache.logging.log4j.LogManager
+ */
 package org.spongepowered.asm.mixin.injection;
 
 import com.google.common.base.Joiner;
@@ -123,7 +132,7 @@ public abstract class InjectionPoint {
         for (AnnotationNode at : ats) {
             InjectionPoint injectionPoint = InjectionPoint.parse(context, method, parent, at);
             if (injectionPoint == null) continue;
-            injectionPoints.add(injectionPoint);
+            injectionPoints.add((Object)injectionPoint);
         }
         return injectionPoints.build();
     }
@@ -142,7 +151,7 @@ public abstract class InjectionPoint {
 
     public static InjectionPoint parse(IMixinContext context, MethodNode method, AnnotationNode parent, AnnotationNode node) {
         String at = (String)Annotations.getValue(node, "value");
-        ImmutableList<String> args = (ImmutableList<String>)Annotations.getValue(node, "args");
+        List args = (List)Annotations.getValue(node, "args");
         String target = Annotations.getValue(node, "target", "");
         String slice = Annotations.getValue(node, "slice", "");
         At.Shift shift = Annotations.getValue(node, "shift", At.Shift.class, At.Shift.NONE);
@@ -239,7 +248,7 @@ public abstract class InjectionPoint {
         }
         String message = String.format("@%s(%s) Shift.BY=%d on %s::%s exceeds %s%d. %s", Bytecode.getSimpleName(parent), point, by, context, method.name, limitBreached, allowed, advice);
         if (err == ShiftByViolationBehaviour.WARN && allowed < 5) {
-            LogManager.getLogger("mixin").warn(message);
+            LogManager.getLogger((String)"mixin").warn(message);
             return;
         }
         throw new InvalidInjectionException(context, message);
@@ -257,7 +266,7 @@ public abstract class InjectionPoint {
         }
         Class<? extends InjectionPoint> existing = types.get(code.value());
         if (existing != null && !existing.equals(type)) {
-            LogManager.getLogger("mixin").debug("Overriding InjectionPoint {} with {} (previously {})", new Object[]{code.value(), type.getName(), existing.getName()});
+            LogManager.getLogger((String)"mixin").debug("Overriding InjectionPoint {} with {} (previously {})", new Object[]{code.value(), type.getName(), existing.getName()});
         }
         types.put(code.value(), type);
     }
@@ -368,7 +377,7 @@ public abstract class InjectionPoint {
 
         @Override
         public String toString() {
-            return "CompositeInjectionPoint(" + this.getClass().getSimpleName() + ")[" + Joiner.on(',').join(this.components) + "]";
+            return "CompositeInjectionPoint(" + this.getClass().getSimpleName() + ")[" + Joiner.on((char)',').join((Object[])this.components) + "]";
         }
     }
 
@@ -397,3 +406,4 @@ public abstract class InjectionPoint {
         public String value();
     }
 }
+

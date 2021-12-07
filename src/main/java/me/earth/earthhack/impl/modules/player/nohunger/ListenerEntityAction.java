@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.client.CPacketEntityAction
+ *  net.minecraft.network.play.client.CPacketEntityAction$Action
+ */
 package me.earth.earthhack.impl.modules.player.nohunger;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -19,3 +26,4 @@ extends ModuleListener<NoHunger, PacketEvent.Send<CPacketEntityAction>> {
         }
     }
 }
+

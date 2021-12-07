@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.util.asm;
 
 import org.spongepowered.asm.lib.MethodVisitor;
@@ -17,3 +20,4 @@ extends MethodVisitor {
         this.visitIntInsn(16, constant);
     }
 }
+

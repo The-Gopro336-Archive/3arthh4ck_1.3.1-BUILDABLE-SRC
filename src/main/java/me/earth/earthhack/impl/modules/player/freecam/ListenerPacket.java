@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.client.CPacketChatMessage
+ *  net.minecraft.network.play.client.CPacketKeepAlive
+ *  net.minecraft.network.play.client.CPacketPlayer
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItem
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock
+ *  net.minecraft.network.play.client.CPacketUseEntity
+ *  net.minecraft.network.play.client.CPacketVehicleMove
+ */
 package me.earth.earthhack.impl.modules.player.freecam;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -34,3 +46,4 @@ extends ModuleListener<Freecam, PacketEvent.Send<?>> {
         }
     }
 }
+

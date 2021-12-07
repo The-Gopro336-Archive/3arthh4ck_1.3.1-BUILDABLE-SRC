@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.item.ItemFood
+ *  org.lwjgl.input.Mouse
+ */
 package me.earth.earthhack.impl.modules.misc.antiaim;
 
 import me.earth.earthhack.api.module.Module;
@@ -43,6 +50,7 @@ extends Module {
     }
 
     public boolean dontRotate() {
-        return !(this.strict.getValue() == false || (AntiAim.mc.player.getActiveItemStack().getItem() instanceof ItemFood && !AntiAim.mc.gameSettings.keyBindAttack.isKeyDown() || !AntiAim.mc.gameSettings.keyBindAttack.isKeyDown() && !AntiAim.mc.gameSettings.keyBindUseItem.isKeyDown()) && !Mouse.isButtonDown(2));
+        return !(this.strict.getValue() == false || (AntiAim.mc.player.getActiveItemStack().getItem() instanceof ItemFood && !AntiAim.mc.gameSettings.keyBindAttack.isKeyDown() || !AntiAim.mc.gameSettings.keyBindAttack.isKeyDown() && !AntiAim.mc.gameSettings.keyBindUseItem.isKeyDown()) && !Mouse.isButtonDown((int)2));
     }
 }
+

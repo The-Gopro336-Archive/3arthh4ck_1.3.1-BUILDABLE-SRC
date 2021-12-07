@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.combat.holefiller;
 
 import me.earth.earthhack.impl.modules.combat.holefiller.HoleFiller;
@@ -30,3 +33,4 @@ extends BlockPlacingData<HoleFiller> {
         return "Fills holes around you.";
     }
 }
+

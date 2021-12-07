@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.GuiButton
+ *  net.minecraft.client.gui.GuiScreen
+ *  net.minecraft.client.gui.GuiTextField
+ *  org.lwjgl.input.Keyboard
+ */
 package me.earth.earthhack.impl.modules.client.pingbypass.guis;
 
 import java.io.IOException;
@@ -28,7 +37,7 @@ extends GuiScreen {
     }
 
     public void initGui() {
-        Keyboard.enableRepeatEvents(true);
+        Keyboard.enableRepeatEvents((boolean)true);
         this.buttonList.clear();
         this.buttonList.add(new GuiButton(0, this.width / 2 - 100, this.height / 4 + 96 + 18, "Done"));
         this.buttonList.add(new GuiButton(1, this.width / 2 - 100, this.height / 4 + 120 + 18, "Cancel"));
@@ -42,7 +51,7 @@ extends GuiScreen {
     }
 
     public void onGuiClosed() {
-        Keyboard.enableRepeatEvents(false);
+        Keyboard.enableRepeatEvents((boolean)false);
     }
 
     protected void actionPerformed(GuiButton button) {
@@ -81,11 +90,12 @@ extends GuiScreen {
 
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
-        this.func_73732_a(this.fontRenderer, "Edit PingBypass", this.width / 2, 17, 0xFFFFFF);
-        this.func_73731_b(this.fontRenderer, "Proxy-IP", this.width / 2 - 100, 53, 0xA0A0A0);
-        this.func_73731_b(this.fontRenderer, "Proxy-Port", this.width / 2 - 100, 94, 0xA0A0A0);
+        this.drawCenteredString(this.fontRenderer, "Edit PingBypass", this.width / 2, 17, 0xFFFFFF);
+        this.drawString(this.fontRenderer, "Proxy-IP", this.width / 2 - 100, 53, 0xA0A0A0);
+        this.drawString(this.fontRenderer, "Proxy-Port", this.width / 2 - 100, 94, 0xA0A0A0);
         this.serverIPField.drawTextBox();
         this.serverPortField.drawTextBox();
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 }
+

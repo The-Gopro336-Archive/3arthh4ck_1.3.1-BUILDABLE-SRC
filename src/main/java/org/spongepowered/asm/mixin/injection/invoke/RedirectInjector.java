@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Joiner
+ *  com.google.common.collect.ObjectArrays
+ *  com.google.common.primitives.Ints
+ */
 package org.spongepowered.asm.mixin.injection.invoke;
 
 import com.google.common.base.Joiner;
@@ -164,7 +172,7 @@ extends InvokeInjector {
             int argSize = Bytecode.getArgsSize(target.arguments);
             extraLocals += argSize;
             extraStack += argSize;
-            argMap = Ints.concat(argMap, target.getArgIndices());
+            argMap = Ints.concat((int[][])new int[][]{argMap, target.getArgIndices()});
         }
         AbstractInsnNode insn = this.invokeHandlerWithArgs(this.methodArgs, insns, argMap);
         target.replaceNode(invoke.node, insn, insns);
@@ -334,7 +342,7 @@ extends InvokeInjector {
             return false;
         }
         int pos = desc.indexOf(41);
-        String alternateDesc = String.format("%s%s%s", desc.substring(0, pos), Joiner.on("").join(target.arguments), desc.substring(pos));
+        String alternateDesc = String.format("%s%s%s", desc.substring(0, pos), Joiner.on((String)"").join((Object[])target.arguments), desc.substring(pos));
         if (this.methodNode.desc.equals(alternateDesc)) {
             return true;
         }
@@ -424,7 +432,7 @@ extends InvokeInjector {
             this.node = node;
             this.returnType = Type.getReturnType(node.desc);
             this.args = Type.getArgumentTypes(node.desc);
-            this.locals = node.getOpcode() == 184 ? this.args : ObjectArrays.concat(Type.getType("L" + node.owner + ";"), this.args);
+            this.locals = node.getOpcode() == 184 ? this.args : (Type[])ObjectArrays.concat((Object)Type.getType("L" + node.owner + ";"), (Object[])this.args);
         }
     }
 
@@ -456,3 +464,4 @@ extends InvokeInjector {
         }
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.launch.platform;
 
 public interface IMixinPlatformAgent {
@@ -11,3 +14,4 @@ public interface IMixinPlatformAgent {
 
     public String getLaunchTarget();
 }
+

@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.PacketBuffer
+ *  net.minecraft.network.play.server.SPacketCustomPayload
+ */
 package me.earth.earthhack.impl.modules.client.pingbypass.packets;
 
 import java.util.Map;
@@ -37,3 +44,4 @@ public class PayloadManager {
         this.readers.compute(id, (i, v) -> v == null ? reader : v.compose(reader));
     }
 }
+

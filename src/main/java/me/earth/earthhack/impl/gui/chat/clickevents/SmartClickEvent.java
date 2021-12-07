@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.text.event.ClickEvent
+ *  net.minecraft.util.text.event.ClickEvent$Action
+ */
 package me.earth.earthhack.impl.gui.chat.clickevents;
 
 import net.minecraft.util.text.event.ClickEvent;
@@ -10,7 +17,6 @@ extends ClickEvent {
 
     public abstract String getValue();
 
-    @Override
     public boolean equals(Object o) {
         if (o instanceof SmartClickEvent) {
             return super.equals(o);
@@ -18,8 +24,8 @@ extends ClickEvent {
         return false;
     }
 
-    @Override
     public int hashCode() {
         return super.hashCode() + 1;
     }
 }
+

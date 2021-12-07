@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.item.ItemExpBottle
+ *  net.minecraft.item.ItemStack
+ */
 package me.earth.earthhack.impl.core.mixins.item;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -20,3 +27,4 @@ public abstract class MixinItemExpBottle {
         }
     }
 }
+

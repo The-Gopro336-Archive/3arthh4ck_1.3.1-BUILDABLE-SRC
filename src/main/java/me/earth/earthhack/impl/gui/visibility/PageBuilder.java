@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.gui.visibility;
 
 import java.util.AbstractMap;
@@ -143,3 +146,4 @@ public class PageBuilder<T> {
         return this.conversion.apply(() -> predicate.test(this.pageSetting.getValue()));
     }
 }
+

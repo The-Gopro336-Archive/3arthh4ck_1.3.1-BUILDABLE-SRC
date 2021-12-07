@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  org.lwjgl.opengl.GL11
+ */
 package me.earth.earthhack.impl.modules.render.chams;
 
 import me.earth.earthhack.impl.event.events.render.Render3DEvent;
@@ -33,16 +40,17 @@ extends ModuleListener<Chams, Render3DEvent> {
     }
 
     public static void drawCompleteImage(float posX, float posY, float width, float height) {
-        GL11.glTranslatef(posX, posY, 0.0f);
-        GL11.glBegin(7);
-        GL11.glTexCoord2f(0.0f, 0.0f);
-        GL11.glVertex3f(0.0f, 0.0f, 0.0f);
-        GL11.glTexCoord2f(0.0f, 1.0f);
-        GL11.glVertex3f(0.0f, height, 0.0f);
-        GL11.glTexCoord2f(1.0f, 1.0f);
-        GL11.glVertex3f(width, height, 0.0f);
-        GL11.glTexCoord2f(1.0f, 0.0f);
-        GL11.glVertex3f(width, 0.0f, 0.0f);
+        GL11.glTranslatef((float)posX, (float)posY, (float)0.0f);
+        GL11.glBegin((int)7);
+        GL11.glTexCoord2f((float)0.0f, (float)0.0f);
+        GL11.glVertex3f((float)0.0f, (float)0.0f, (float)0.0f);
+        GL11.glTexCoord2f((float)0.0f, (float)1.0f);
+        GL11.glVertex3f((float)0.0f, (float)height, (float)0.0f);
+        GL11.glTexCoord2f((float)1.0f, (float)1.0f);
+        GL11.glVertex3f((float)width, (float)height, (float)0.0f);
+        GL11.glTexCoord2f((float)1.0f, (float)0.0f);
+        GL11.glVertex3f((float)width, (float)0.0f, (float)0.0f);
         GL11.glEnd();
     }
 }
+

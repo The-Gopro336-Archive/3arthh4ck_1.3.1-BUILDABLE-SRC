@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package org.spongepowered.tools.agent;
 
 import java.util.HashMap;
@@ -11,7 +18,7 @@ import org.spongepowered.asm.mixin.MixinEnvironment;
 
 class MixinAgentClassLoader
 extends ClassLoader {
-    private static final Logger logger = LogManager.getLogger("mixin.agent");
+    private static final Logger logger = LogManager.getLogger((String)"mixin.agent");
     private Map<Class<?>, byte[]> mixins = new HashMap();
     private Map<String, byte[]> targets = new HashMap<String, byte[]>();
 
@@ -57,3 +64,4 @@ extends ClassLoader {
         return cw.toByteArray();
     }
 }
+

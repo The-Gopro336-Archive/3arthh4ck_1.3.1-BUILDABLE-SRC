@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.Timer
+ */
 package me.earth.earthhack.impl.core.mixins.util;
 
 import net.minecraft.util.Timer;
@@ -9,3 +15,4 @@ public interface ITimer {
     @Accessor(value="tickLength")
     public void setTickLength(float var1);
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.api.observable;
 
 import java.util.LinkedList;
@@ -24,3 +27,4 @@ public class Observable<T> {
         this.observers.remove(observer);
     }
 }
+

@@ -1,3 +1,18 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.world.IBlockAccess
+ */
 package me.earth.earthhack.impl.util.minecraft.blocks;
 
 import java.util.List;
@@ -28,7 +43,7 @@ implements Globals {
         if (distance > MathUtil.square(placeRange)) {
             return false;
         }
-        if (distance > MathUtil.square(placeTrace) && !RayTraceUtil.raytracePlaceCheck(BlockUtil.mc.player, pos)) {
+        if (distance > MathUtil.square(placeTrace) && !RayTraceUtil.raytracePlaceCheck((Entity)BlockUtil.mc.player, pos)) {
             return false;
         }
         if (distance <= MathUtil.square(combinedTrace)) {
@@ -42,7 +57,7 @@ implements Globals {
     }
 
     public static double getDistanceSq(BlockPos pos) {
-        return BlockUtil.getDistanceSq(RotationUtil.getRotationPlayer(), pos);
+        return BlockUtil.getDistanceSq((Entity)RotationUtil.getRotationPlayer(), pos);
     }
 
     public static double getDistanceSq(Entity from, BlockPos to) {
@@ -50,7 +65,7 @@ implements Globals {
     }
 
     public static double getDistanceSqDigging(BlockPos to) {
-        return BlockUtil.getDistanceSqDigging(RotationUtil.getRotationPlayer(), to);
+        return BlockUtil.getDistanceSqDigging((Entity)RotationUtil.getRotationPlayer(), to);
     }
 
     public static boolean sphere(double radius, Predicate<BlockPos> predicate) {
@@ -100,7 +115,7 @@ implements Globals {
 
     public static boolean canPlaceCrystalReplaceable(BlockPos pos, boolean ignoreCrystals, boolean noBoost2, List<Entity> entities, boolean ignoreBoost2Entities, long deathTime) {
         IBlockState state = BlockUtil.mc.world.getBlockState(pos);
-        if (state.getBlock() != Blocks.OBSIDIAN && state.getBlock() != Blocks.BEDROCK && !state.func_185904_a().isReplaceable()) {
+        if (state.getBlock() != Blocks.OBSIDIAN && state.getBlock() != Blocks.BEDROCK && !state.getMaterial().isReplaceable()) {
             return false;
         }
         return BlockUtil.checkBoost(pos, ignoreCrystals, noBoost2, entities, ignoreBoost2Entities, deathTime);
@@ -122,7 +137,7 @@ implements Globals {
     }
 
     public static boolean isSemiSafe(EntityPlayer player, boolean ignoreCrystals, boolean noBoost2) {
-        BlockPos origin = PositionUtil.getPosition(player);
+        BlockPos origin = PositionUtil.getPosition((Entity)player);
         int i = 0;
         for (EnumFacing face : EnumFacing.HORIZONTALS) {
             BlockPos off = origin.offset(face);
@@ -133,7 +148,7 @@ implements Globals {
     }
 
     public static boolean canBeFeetPlaced(EntityPlayer player, boolean ignoreCrystals, boolean noBoost2) {
-        BlockPos origin = PositionUtil.getPosition(player).down();
+        BlockPos origin = PositionUtil.getPosition((Entity)player).down();
         for (EnumFacing face : EnumFacing.HORIZONTALS) {
             BlockPos off = origin.offset(face);
             IBlockState state = BlockUtil.mc.world.getBlockState(off);
@@ -185,12 +200,12 @@ implements Globals {
         for (EnumFacing face : EnumFacing.HORIZONTALS) {
             BlockPos off = up.offset(face);
             IBlockState state = BlockUtil.mc.world.getBlockState(off);
-            if (BlockUtil.mc.world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(off)).contains(player)) {
+            if (BlockUtil.mc.world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(off)).contains((Object)player)) {
                 return true;
             }
             BlockPos off2 = off.offset(face);
             IBlockState offState = BlockUtil.mc.world.getBlockState(off2);
-            if (!BlockUtil.mc.world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(off2)).contains(player)) continue;
+            if (!BlockUtil.mc.world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(off2)).contains((Object)player)) continue;
             return true;
         }
         return false;
@@ -250,19 +265,19 @@ implements Globals {
     }
 
     public static EnumFacing getFacing(BlockPos pos) {
-        return BlockUtil.getFacing(pos, BlockUtil.mc.world);
+        return BlockUtil.getFacing(pos, (IBlockAccess)BlockUtil.mc.world);
     }
 
     public static EnumFacing getFacing(BlockPos pos, IBlockAccess provider) {
         for (EnumFacing facing : EnumFacing.values()) {
-            if (provider.getBlockState(pos.offset(facing)).func_185904_a().isReplaceable()) continue;
+            if (provider.getBlockState(pos.offset(facing)).getMaterial().isReplaceable()) continue;
             return facing;
         }
         return null;
     }
 
     public static boolean isReplaceable(BlockPos pos) {
-        return BlockUtil.mc.world.getBlockState(pos).func_185904_a().isReplaceable();
+        return BlockUtil.mc.world.getBlockState(pos).getMaterial().isReplaceable();
     }
 
     public static boolean isBlocking(BlockPos pos, EntityPlayer player, BlockingType type) {
@@ -281,12 +296,12 @@ implements Globals {
             bb = bb.expand(-0.0625, -0.0625, -0.0625);
         }
         if (type == BlockingType.NoPacketFly && bb.intersects(posBB)) {
-            BlockPos playerPos = new BlockPos(player);
+            BlockPos playerPos = new BlockPos((Entity)player);
             if (playerPos.getX() != pos.getX() || playerPos.getZ() != pos.getZ()) {
                 if (playerPos.getY() < pos.getY()) {
-                    return BlockUtil.mc.world.getBlockState(pos.down()).func_185904_a().isReplaceable();
+                    return BlockUtil.mc.world.getBlockState(pos.down()).getMaterial().isReplaceable();
                 }
-                return BlockUtil.mc.world.getBlockState(pos.up()).func_185904_a().isReplaceable();
+                return BlockUtil.mc.world.getBlockState(pos.up()).getMaterial().isReplaceable();
             }
             return true;
         }
@@ -294,6 +309,7 @@ implements Globals {
     }
 
     private static boolean bedBlockCheck(BlockPos pos, boolean newerVer) {
-        return BlockUtil.mc.world.getBlockState(pos).func_185904_a().isReplaceable() && (newerVer || !BlockUtil.mc.world.getBlockState(pos.down()).func_185904_a().isReplaceable());
+        return BlockUtil.mc.world.getBlockState(pos).getMaterial().isReplaceable() && (newerVer || !BlockUtil.mc.world.getBlockState(pos.down()).getMaterial().isReplaceable());
     }
 }
+

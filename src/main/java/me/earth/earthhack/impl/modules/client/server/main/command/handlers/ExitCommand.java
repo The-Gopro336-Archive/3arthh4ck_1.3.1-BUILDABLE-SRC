@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.server.main.command.handlers;
 
 import me.earth.earthhack.impl.modules.client.server.api.ICloseable;
@@ -19,3 +22,4 @@ implements ICommandHandler {
         System.exit(0);
     }
 }
+

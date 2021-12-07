@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.misc;
 
 import me.earth.earthhack.api.hud.HudElement;
@@ -115,3 +118,4 @@ public class GuiUtil {
 
     }
 }
+

@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Joiner
+ */
 package org.spongepowered.asm.util.perf;
 
 import com.google.common.base.Joiner;
@@ -70,7 +76,7 @@ public final class Profiler {
     }
 
     public Section begin(int flags, String ... path) {
-        return this.begin(flags, Joiner.on('.').join(path));
+        return this.begin(flags, Joiner.on((char)'.').join((Object[])path));
     }
 
     public Section begin(String name) {
@@ -472,3 +478,4 @@ public final class Profiler {
         }
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.combat.autoarmor.util;
 
 import me.earth.earthhack.impl.modules.combat.autoarmor.util.WindowClick;
@@ -15,3 +18,4 @@ extends TimeStamp {
         return this.click;
     }
 }
+

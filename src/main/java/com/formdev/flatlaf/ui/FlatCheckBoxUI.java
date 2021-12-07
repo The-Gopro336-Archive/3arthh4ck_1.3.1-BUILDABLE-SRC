@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.ui;
 
 import com.formdev.flatlaf.ui.FlatRadioButtonUI;
@@ -16,3 +19,4 @@ extends FlatRadioButtonUI {
         return "CheckBox.";
     }
 }
+

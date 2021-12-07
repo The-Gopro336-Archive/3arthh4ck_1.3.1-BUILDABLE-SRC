@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.gui.chat.util;
 
 import me.earth.earthhack.api.module.Module;
@@ -78,3 +81,4 @@ public enum RainbowEnum implements IColorIncrementor
         return this.color;
     }
 }
+

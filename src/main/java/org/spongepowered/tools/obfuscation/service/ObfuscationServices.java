@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.tools.obfuscation.service;
 
 import java.util.Collection;
@@ -70,3 +73,4 @@ public final class ObfuscationServices {
         return null;
     }
 }
+

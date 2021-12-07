@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Strings
+ */
 package org.spongepowered.tools.obfuscation.mirror;
 
 import com.google.common.base.Strings;
@@ -63,8 +69,9 @@ extends MemberHandle<MappingField> {
 
     public String toString() {
         String owner = this.getOwner() != null ? "L" + this.getOwner() + ";" : "";
-        String name = Strings.nullToEmpty(this.getName());
-        String desc = Strings.nullToEmpty(this.getDesc());
+        String name = Strings.nullToEmpty((String)this.getName());
+        String desc = Strings.nullToEmpty((String)this.getDesc());
         return String.format("%s%s:%s", owner, name, desc);
     }
 }
+

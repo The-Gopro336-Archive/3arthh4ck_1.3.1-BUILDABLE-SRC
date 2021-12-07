@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketSoundEffect
+ */
 package me.earth.earthhack.impl.modules.misc.nosoundlag;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -13,8 +19,9 @@ extends ModuleListener<NoSoundLag, PacketEvent.Receive<SPacketSoundEffect>> {
 
     @Override
     public void invoke(PacketEvent.Receive<SPacketSoundEffect> event) {
-        if (((NoSoundLag)this.module).sounds.getValue().booleanValue() && NoSoundLag.SOUNDS.contains(((SPacketSoundEffect)event.getPacket()).getSound())) {
+        if (((NoSoundLag)this.module).sounds.getValue().booleanValue() && NoSoundLag.SOUNDS.contains((Object)((SPacketSoundEffect)event.getPacket()).getSound())) {
             event.setCancelled(true);
         }
     }
 }
+

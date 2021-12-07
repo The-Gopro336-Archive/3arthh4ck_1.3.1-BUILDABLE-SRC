@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.util;
 
 import java.awt.Color;
@@ -448,3 +451,4 @@ extends Graphics2D {
         return this.delegate.getFontRenderContext();
     }
 }
+

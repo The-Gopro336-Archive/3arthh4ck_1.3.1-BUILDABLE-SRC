@@ -1,3 +1,20 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.inventory.GuiChest
+ *  net.minecraft.client.gui.inventory.GuiContainer
+ *  net.minecraft.client.gui.inventory.GuiShulkerBox
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Items
+ *  net.minecraft.inventory.ClickType
+ *  net.minecraft.inventory.ItemStackHelper
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemShulkerBox
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.nbt.NBTTagCompound
+ *  net.minecraft.util.NonNullList
+ */
 package me.earth.earthhack.impl.modules.misc.autoregear;
 
 import me.earth.earthhack.api.setting.Setting;
@@ -8,6 +25,7 @@ import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiShulkerBox;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.ItemStackHelper;
@@ -31,12 +49,12 @@ extends ModuleListener<AutoRegear, TickEvent> {
                 Setting<?> setting;
                 if (!((AutoRegear)this.module).delayTimer.passed(((AutoRegear)this.module).delay.getValue().intValue()) || (setting = ((AutoRegear)this.module).getSettingFromSlot(i)) == null || (itemId = Integer.parseInt(setting.getName().split(":")[1])) == 0) continue;
                 Item item = Item.getItemById((int)itemId);
-                int shulkerSlot = InventoryUtil.findItem(item, ((GuiShulkerBox)ListenerTick.mc.currentScreen).field_147002_h);
+                int shulkerSlot = InventoryUtil.findItem(item, ((GuiShulkerBox)ListenerTick.mc.currentScreen).inventorySlots);
                 ItemStack stackInSlot = (ItemStack)((GuiContainer)ListenerTick.mc.currentScreen).inventorySlots.getInventory().get(i + 27);
                 if (stackInSlot.getMaxStackSize() == 1 || stackInSlot.getMaxStackSize() == stackInSlot.getCount() || stackInSlot.getItem() != item && stackInSlot.getItem() != Items.AIR || shulkerSlot == -1 || shulkerSlot > 26) continue;
-                ListenerTick.mc.playerController.windowClick(((GuiContainer)ListenerTick.mc.currentScreen).inventorySlots.windowId, shulkerSlot, 0, ClickType.PICKUP, ListenerTick.mc.player);
-                ListenerTick.mc.playerController.windowClick(((GuiContainer)ListenerTick.mc.currentScreen).inventorySlots.windowId, i + 27, 0, ClickType.PICKUP, ListenerTick.mc.player);
-                ListenerTick.mc.playerController.windowClick(((GuiContainer)ListenerTick.mc.currentScreen).inventorySlots.windowId, shulkerSlot, 0, ClickType.PICKUP, ListenerTick.mc.player);
+                ListenerTick.mc.playerController.windowClick(((GuiContainer)ListenerTick.mc.currentScreen).inventorySlots.windowId, shulkerSlot, 0, ClickType.PICKUP, (EntityPlayer)ListenerTick.mc.player);
+                ListenerTick.mc.playerController.windowClick(((GuiContainer)ListenerTick.mc.currentScreen).inventorySlots.windowId, i + 27, 0, ClickType.PICKUP, (EntityPlayer)ListenerTick.mc.player);
+                ListenerTick.mc.playerController.windowClick(((GuiContainer)ListenerTick.mc.currentScreen).inventorySlots.windowId, shulkerSlot, 0, ClickType.PICKUP, (EntityPlayer)ListenerTick.mc.player);
                 ((AutoRegear)this.module).delayTimer.reset();
             }
         } else if (ListenerTick.mc.currentScreen instanceof GuiChest && ((AutoRegear)this.module).shouldRegear && ((AutoRegear)this.module).grabShulker.getValue().booleanValue() && !((AutoRegear)this.module).hasKit()) {
@@ -74,9 +92,10 @@ extends ModuleListener<AutoRegear, TickEvent> {
                 return;
             }
             if (slot != -1 && (emptySlot = InventoryUtil.findInInventory(stack -> stack.isEmpty() || stack.getItem() == Items.AIR, false)) != -1) {
-                ListenerTick.mc.playerController.windowClick(((GuiContainer)ListenerTick.mc.currentScreen).inventorySlots.windowId, slot, 0, ClickType.QUICK_MOVE, ListenerTick.mc.player);
+                ListenerTick.mc.playerController.windowClick(((GuiContainer)ListenerTick.mc.currentScreen).inventorySlots.windowId, slot, 0, ClickType.QUICK_MOVE, (EntityPlayer)ListenerTick.mc.player);
             }
             ListenerTick.mc.player.closeScreen();
         }
     }
 }
+

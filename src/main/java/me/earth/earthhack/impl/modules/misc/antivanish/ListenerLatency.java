@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketPlayerListItem
+ *  net.minecraft.network.play.server.SPacketPlayerListItem$Action
+ *  net.minecraft.network.play.server.SPacketPlayerListItem$AddPlayerData
+ */
 package me.earth.earthhack.impl.modules.misc.antivanish;
 
 import java.util.UUID;
@@ -80,3 +88,4 @@ extends ModuleListener<AntiVanish, PacketEvent.Receive<SPacketPlayerListItem>> {
         mc.addScheduledTask(() -> Managers.CHAT.sendDeleteMessage("<" + ((AntiVanish)this.module).getDisplayName() + "> " + "\u00a7c" + name + " vanished.", name, 7000));
     }
 }
+

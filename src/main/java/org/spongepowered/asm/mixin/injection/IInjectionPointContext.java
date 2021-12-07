@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.injection;
 
 import org.spongepowered.asm.lib.tree.AnnotationNode;
@@ -11,3 +14,4 @@ public interface IInjectionPointContext {
 
     public AnnotationNode getAnnotation();
 }
+

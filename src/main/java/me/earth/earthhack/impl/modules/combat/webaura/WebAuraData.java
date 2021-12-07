@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.combat.webaura;
 
 import me.earth.earthhack.impl.modules.combat.webaura.WebAura;
@@ -17,3 +20,4 @@ extends ObbyData<WebAura> {
         return "Traps your Enemies with Webs.";
     }
 }
+

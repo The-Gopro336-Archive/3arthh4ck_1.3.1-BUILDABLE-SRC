@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.modules.combat.aimbot;
 
 import java.util.LinkedList;
@@ -47,7 +55,7 @@ extends EntityTypeModule {
         double z = RotationUtil.getRotationPlayer().posZ;
         float h = AimBot.mc.player.getEyeHeight();
         for (Entity entity : AimBot.mc.world.loadedEntityList) {
-            if (!(entity instanceof EntityLivingBase) || entity.equals(AimBot.mc.player) || entity.equals(RotationUtil.getRotationPlayer()) || !EntityUtil.isValid(entity, this.maxRange.getValue()) || !this.isValid(entity) || !RayTraceUtil.canBeSeen(new Vec3d(entity.posX, entity.posY + (double)entity.getEyeHeight(), entity.posZ), x, y, z, h) && !RayTraceUtil.canBeSeen(new Vec3d(entity.posX, entity.posY + (double)entity.getEyeHeight() / 2.0, entity.posZ), x, y, z, h) && !RayTraceUtil.canBeSeen(new Vec3d(entity.posX, entity.posY, entity.posZ), x, y, z, h)) continue;
+            if (!(entity instanceof EntityLivingBase) || entity.equals((Object)AimBot.mc.player) || entity.equals((Object)RotationUtil.getRotationPlayer()) || !EntityUtil.isValid(entity, this.maxRange.getValue()) || !this.isValid(entity) || !RayTraceUtil.canBeSeen(new Vec3d(entity.posX, entity.posY + (double)entity.getEyeHeight(), entity.posZ), x, y, z, h) && !RayTraceUtil.canBeSeen(new Vec3d(entity.posX, entity.posY + (double)entity.getEyeHeight() / 2.0, entity.posZ), x, y, z, h) && !RayTraceUtil.canBeSeen(new Vec3d(entity.posX, entity.posY, entity.posZ), x, y, z, h)) continue;
             double angle = RotationUtil.getAngle(entity, 1.4);
             if (this.fov.getValue().booleanValue() && angle > (double)(AimBot.mc.gameSettings.fovSetting / 2.0f) || !(angle < closestAngle) || this.fov.getValue().booleanValue() && !(angle < (double)(AimBot.mc.gameSettings.fovSetting / 2.0f))) continue;
             closest = entity;
@@ -56,3 +64,4 @@ extends EntityTypeModule {
         return closest;
     }
 }
+

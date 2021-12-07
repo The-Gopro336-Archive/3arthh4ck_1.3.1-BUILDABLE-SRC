@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.collect.ImmutableList
+ *  com.google.common.collect.ImmutableList$Builder
+ */
 package org.spongepowered.tools.obfuscation;
 
 import com.google.common.collect.ImmutableList;
@@ -66,11 +73,11 @@ public final class ObfuscationType {
         ImmutableList.Builder builder = ImmutableList.builder();
         String inputFile = this.options.getOption(this.descriptor.getInputFileOption());
         if (inputFile != null) {
-            builder.add(inputFile);
+            builder.add((Object)inputFile);
         }
         if ((extraInputFiles = this.options.getOption(this.descriptor.getExtraInputFilesOption())) != null) {
             for (String extraInputFile : extraInputFiles.split(";")) {
-                builder.add(extraInputFile.trim());
+                builder.add((Object)extraInputFile.trim());
             }
         }
         return builder.build();
@@ -102,3 +109,4 @@ public final class ObfuscationType {
         return type;
     }
 }
+

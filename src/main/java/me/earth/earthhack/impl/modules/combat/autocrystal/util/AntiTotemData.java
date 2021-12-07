@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayer
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal.util;
 
 import java.util.Set;
@@ -44,3 +50,4 @@ extends PositionData {
         return this.getAntiTotems().stream().findFirst().orElse(null);
     }
 }
+

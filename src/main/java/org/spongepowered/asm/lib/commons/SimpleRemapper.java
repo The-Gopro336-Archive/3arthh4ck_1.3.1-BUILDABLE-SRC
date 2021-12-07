@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.lib.commons;
 
 import java.util.Collections;
@@ -42,3 +45,4 @@ extends Remapper {
         return this.mapping.get(key);
     }
 }
+

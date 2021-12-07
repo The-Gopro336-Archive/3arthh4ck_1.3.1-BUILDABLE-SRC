@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.player.raytrace;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -34,3 +37,4 @@ extends Module {
         return LIQUID_INTERACT.isEnabled() && this.liquidCrystalPlace.getValue() != false && this.isEnabled();
     }
 }
+

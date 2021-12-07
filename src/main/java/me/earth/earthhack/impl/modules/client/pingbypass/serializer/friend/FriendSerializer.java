@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketChatMessage
+ */
 package me.earth.earthhack.impl.modules.client.pingbypass.serializer.friend;
 
 import java.util.LinkedHashSet;
@@ -15,6 +22,7 @@ import me.earth.earthhack.impl.modules.client.pingbypass.serializer.Serializer;
 import me.earth.earthhack.impl.modules.client.pingbypass.serializer.friend.ListenerDisconnect;
 import me.earth.earthhack.impl.modules.client.pingbypass.serializer.friend.ListenerFriends;
 import me.earth.earthhack.impl.modules.client.pingbypass.serializer.friend.ListenerTick;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketChatMessage;
 
 public class FriendSerializer
@@ -61,7 +69,7 @@ Globals {
         if (FriendSerializer.mc.player != null && mc.getConnection() != null && !this.changed.isEmpty()) {
             PlayerEvent friend;
             if (this.cleared) {
-                mc.getConnection().sendPacket(new CPacketChatMessage("@ServerFriend clear"));
+                mc.getConnection().sendPacket((Packet)new CPacketChatMessage("@ServerFriend clear"));
                 this.cleared = false;
             }
             if ((friend = this.pollFriend()) != null) {
@@ -76,7 +84,7 @@ Globals {
         command = event.getType() == PlayerEventType.ADD ? command + " add " + event.getName() + " " + event.getUuid() : command + " del " + event.getName();
         Earthhack.getLogger().info(command);
         CPacketChatMessage packet = new CPacketChatMessage(command);
-        Objects.requireNonNull(mc.getConnection()).sendPacket(packet);
+        Objects.requireNonNull(mc.getConnection()).sendPacket((Packet)packet);
     }
 
     private PlayerEvent pollFriend() {
@@ -92,3 +100,4 @@ Globals {
         return this.observer;
     }
 }
+

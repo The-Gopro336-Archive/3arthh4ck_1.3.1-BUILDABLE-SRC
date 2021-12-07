@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.MobEffects
+ *  net.minecraft.init.SoundEvents
+ *  net.minecraft.network.play.client.CPacketUseEntity
+ */
 package me.earth.earthhack.impl.modules.player.fakeplayer;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -8,6 +18,7 @@ import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.combat.criticals.Criticals;
 import me.earth.earthhack.impl.modules.player.fakeplayer.FakePlayer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.network.play.client.CPacketUseEntity;
@@ -26,15 +37,16 @@ extends ModuleListener<FakePlayer, PacketEvent.Send<CPacketUseEntity>> {
             return;
         }
         Entity entity = ((ICPacketUseEntity)event.getPacket()).getAttackedEntity();
-        if (((FakePlayer)this.module).fakePlayer.equals(entity)) {
+        if (((FakePlayer)this.module).fakePlayer.equals((Object)entity)) {
             event.setCancelled(true);
             if (CRITICALS.isEnabled() || !ListenerAttack.mc.player.isSprinting() && ListenerAttack.mc.player.fallDistance > 0.0f && !ListenerAttack.mc.player.onGround && !ListenerAttack.mc.player.isOnLadder() && !ListenerAttack.mc.player.isInWater() && !ListenerAttack.mc.player.isPotionActive(MobEffects.BLINDNESS) && !ListenerAttack.mc.player.isRiding()) {
-                ListenerAttack.mc.world.playSound(ListenerAttack.mc.player, ListenerAttack.mc.player.posX, ListenerAttack.mc.player.posY, ListenerAttack.mc.player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, ListenerAttack.mc.player.getSoundCategory(), 1.0f, 1.0f);
+                ListenerAttack.mc.world.playSound((EntityPlayer)ListenerAttack.mc.player, ListenerAttack.mc.player.posX, ListenerAttack.mc.player.posY, ListenerAttack.mc.player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, ListenerAttack.mc.player.getSoundCategory(), 1.0f, 1.0f);
             } else if ((double)ListenerAttack.mc.player.getCooledAttackStrength(0.5f) > 0.9) {
-                ListenerAttack.mc.world.playSound(ListenerAttack.mc.player, ListenerAttack.mc.player.posX, ListenerAttack.mc.player.posY, ListenerAttack.mc.player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, ListenerAttack.mc.player.getSoundCategory(), 1.0f, 1.0f);
+                ListenerAttack.mc.world.playSound((EntityPlayer)ListenerAttack.mc.player, ListenerAttack.mc.player.posX, ListenerAttack.mc.player.posY, ListenerAttack.mc.player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, ListenerAttack.mc.player.getSoundCategory(), 1.0f, 1.0f);
             } else {
-                ListenerAttack.mc.world.playSound(ListenerAttack.mc.player, ListenerAttack.mc.player.posX, ListenerAttack.mc.player.posY, ListenerAttack.mc.player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_WEAK, ListenerAttack.mc.player.getSoundCategory(), 1.0f, 1.0f);
+                ListenerAttack.mc.world.playSound((EntityPlayer)ListenerAttack.mc.player, ListenerAttack.mc.player.posX, ListenerAttack.mc.player.posY, ListenerAttack.mc.player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_WEAK, ListenerAttack.mc.player.getSoundCategory(), 1.0f, 1.0f);
             }
         }
     }
 }
+

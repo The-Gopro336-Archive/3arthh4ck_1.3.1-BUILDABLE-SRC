@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.EnumConnectionState
+ *  net.minecraft.network.Packet
+ */
 package me.earth.earthhack.impl.core.mixins.network;
 
 import java.util.Map;
@@ -11,3 +18,4 @@ public interface IEnumConnectionState {
     @Accessor(value="STATES_BY_CLASS")
     public Map<Class<? extends Packet<?>>, EnumConnectionState> getStatesByClass();
 }
+

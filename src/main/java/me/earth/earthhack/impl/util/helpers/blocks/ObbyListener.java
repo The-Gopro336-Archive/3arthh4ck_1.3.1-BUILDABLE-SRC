@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.util.helpers.blocks;
 
 import java.util.HashMap;
@@ -69,13 +79,13 @@ extends ModuleListener<T, MotionUpdateEvent> {
 
     protected void placeTargets() {
         for (BlockPos pos : this.targets) {
-            if (!this.placed.containsKey(pos) && ObbyModule.HELPER.getBlockState(pos).func_185904_a().isReplaceable() && ((ObbyListenerModule)this.module).placeBlock(pos)) break;
+            if (!this.placed.containsKey((Object)pos) && ObbyModule.HELPER.getBlockState(pos).getMaterial().isReplaceable() && ((ObbyListenerModule)this.module).placeBlock(pos)) break;
         }
     }
 
     protected boolean attackCrystalFirst() {
         boolean hasPlaced = false;
-        Optional<BlockPos> crystalPos = this.targets.stream().filter(pos -> !ObbyListener.mc.world.getEntitiesWithinAABB(EntityEnderCrystal.class, new AxisAlignedBB((BlockPos)pos)).isEmpty() && ObbyListener.mc.world.getBlockState((BlockPos)pos).func_185904_a().isReplaceable()).findFirst();
+        Optional<BlockPos> crystalPos = this.targets.stream().filter(pos -> !ObbyListener.mc.world.getEntitiesWithinAABB(EntityEnderCrystal.class, new AxisAlignedBB(pos)).isEmpty() && ObbyListener.mc.world.getBlockState(pos).getMaterial().isReplaceable()).findFirst();
         if (crystalPos.isPresent()) {
             hasPlaced = ((ObbyListenerModule)this.module).placeBlock(crystalPos.get());
         }
@@ -104,7 +114,7 @@ extends ModuleListener<T, MotionUpdateEvent> {
     }
 
     public void addCallback(BlockPos pos) {
-        Managers.BLOCKS.addCallback(pos, s -> mc.addScheduledTask(() -> this.placed.remove(pos)));
+        Managers.BLOCKS.addCallback(pos, s -> mc.addScheduledTask(() -> this.placed.remove((Object)pos)));
         this.placed.put(pos, System.currentTimeMillis());
     }
 
@@ -138,3 +148,4 @@ extends ModuleListener<T, MotionUpdateEvent> {
         Locks.acquire(Locks.PLACE_SWITCH_LOCK, ((ObbyListenerModule)this.module)::execute);
     }
 }
+

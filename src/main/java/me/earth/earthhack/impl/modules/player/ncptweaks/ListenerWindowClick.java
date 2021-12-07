@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.item.EnumAction
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.network.play.client.CPacketClickWindow
+ */
 package me.earth.earthhack.impl.modules.player.ncptweaks;
 
 import me.earth.earthhack.impl.core.ducks.entity.IEntityPlayerSP;
@@ -8,6 +18,7 @@ import me.earth.earthhack.impl.modules.player.ncptweaks.NCPTweaks;
 import me.earth.earthhack.impl.util.math.StopWatch;
 import me.earth.earthhack.impl.util.network.PacketUtil;
 import me.earth.earthhack.impl.util.thread.Locks;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -24,12 +35,12 @@ extends ModuleListener<NCPTweaks, PacketEvent.Send<CPacketClickWindow>> {
     @Override
     public void invoke(PacketEvent.Send<CPacketClickWindow> event) {
         if (((NCPTweaks)this.module).eating.getValue().booleanValue() && this.isEating()) {
-            Locks.acquire(Locks.PLACE_SWITCH_LOCK, () -> ListenerWindowClick.mc.playerController.onStoppedUsingItem(ListenerWindowClick.mc.player));
+            Locks.acquire(Locks.PLACE_SWITCH_LOCK, () -> ListenerWindowClick.mc.playerController.onStoppedUsingItem((EntityPlayer)ListenerWindowClick.mc.player));
         }
         if (((NCPTweaks)this.module).moving.getValue().booleanValue()) {
             if (((NCPTweaks)this.module).packet.getValue().booleanValue() && this.timer.passed(((NCPTweaks)this.module).delay.getValue().intValue())) {
-                float yaw = ((IEntityPlayerSP)((Object)ListenerWindowClick.mc.player)).getLastReportedYaw();
-                PacketUtil.doRotation((float)((double)yaw + 4.0E-4), ((IEntityPlayerSP)((Object)ListenerWindowClick.mc.player)).getLastReportedPitch(), ListenerWindowClick.mc.player.onGround);
+                float yaw = ((IEntityPlayerSP)ListenerWindowClick.mc.player).getLastReportedYaw();
+                PacketUtil.doRotation((float)((double)yaw + 4.0E-4), ((IEntityPlayerSP)ListenerWindowClick.mc.player).getLastReportedPitch(), ListenerWindowClick.mc.player.onGround);
                 this.timer.reset();
             }
             ListenerWindowClick.mc.player.setVelocity(0.0, 0.0, 0.0);
@@ -51,3 +62,4 @@ extends ModuleListener<NCPTweaks, PacketEvent.Send<CPacketClickWindow>> {
         return false;
     }
 }
+

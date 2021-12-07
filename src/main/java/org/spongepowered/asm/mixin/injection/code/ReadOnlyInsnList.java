@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.injection.code;
 
 import java.util.ListIterator;
@@ -116,3 +119,4 @@ extends InsnList {
         this.insnList.resetLabels();
     }
 }
+

@@ -1,6 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.util.MovementInput
+ */
 package me.earth.earthhack.impl.util.minecraft;
 
 import me.earth.earthhack.impl.util.minecraft.MovementUtil;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MovementInput;
 
@@ -13,7 +22,7 @@ extends MovementInput {
     }
 
     public void updatePlayerMoveState() {
-        MovementInput input = MovementUtil.inverse(this.player, 0.2783);
+        MovementInput input = MovementUtil.inverse((Entity)this.player, 0.2783);
         this.moveForward = input.moveForward;
         this.moveStrafe = input.moveStrafe;
         if (this.moveForward == 0.0f && this.moveStrafe == 0.0f) {
@@ -40,3 +49,4 @@ extends MovementInput {
         }
     }
 }
+

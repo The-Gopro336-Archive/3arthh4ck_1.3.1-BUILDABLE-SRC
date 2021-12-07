@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.Packet
+ */
 package me.earth.earthhack.impl.modules.misc.packetdelay;
 
 import java.util.Collections;
@@ -67,3 +73,4 @@ extends RegisteringModule<Boolean, SimpleRemovingSetting> {
         return this.isValid(packet);
     }
 }
+

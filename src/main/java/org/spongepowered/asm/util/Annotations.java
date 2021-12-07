@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Function
+ *  com.google.common.base.Preconditions
+ *  com.google.common.collect.Lists
+ */
 package org.spongepowered.asm.util;
 
 import com.google.common.base.Function;
@@ -126,9 +134,8 @@ public final class Annotations {
         }
         int foundNodes = nodes.size();
         if (foundNodes > 1) {
-            throw new IllegalArgumentException("Conflicting annotations found: " + Lists.transform(nodes, new Function<AnnotationNode, String>(){
+            throw new IllegalArgumentException("Conflicting annotations found: " + Lists.transform(nodes, (Function)new Function<AnnotationNode, String>(){
 
-                @Override
                 public String apply(AnnotationNode input) {
                     return input.desc;
                 }
@@ -147,7 +154,7 @@ public final class Annotations {
     }
 
     public static <T> T getValue(AnnotationNode annotation, String key, Class<?> annotationClass) {
-        Preconditions.checkNotNull(annotationClass, "annotationClass cannot be null");
+        Preconditions.checkNotNull(annotationClass, (Object)"annotationClass cannot be null");
         Object value = Annotations.getValue(annotation, key);
         if (value == null) {
             try {
@@ -220,3 +227,4 @@ public final class Annotations {
         return Enum.valueOf(enumClass, value[1]);
     }
 }
+

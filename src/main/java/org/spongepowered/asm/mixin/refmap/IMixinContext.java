@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.refmap;
 
 import org.spongepowered.asm.lib.tree.MethodNode;
@@ -26,3 +29,4 @@ public interface IMixinContext {
 
     public Target getTargetMethod(MethodNode var1);
 }
+

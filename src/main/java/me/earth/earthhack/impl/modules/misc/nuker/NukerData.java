@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.misc.nuker;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -35,3 +38,4 @@ extends DefaultData<Nuker> {
         return "Mines blocks around you.";
     }
 }
+

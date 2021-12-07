@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.injection.struct;
 
 import java.util.ArrayList;
@@ -118,3 +121,4 @@ extends ArrayList<InjectionNode> {
         }
     }
 }
+

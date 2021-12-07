@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package org.spongepowered.asm.launch.platform;
 
 import java.io.File;
@@ -10,7 +17,7 @@ import org.spongepowered.asm.launch.platform.MixinPlatformManager;
 
 public abstract class MixinPlatformAgentAbstract
 implements IMixinPlatformAgent {
-    protected static final Logger logger = LogManager.getLogger("mixin");
+    protected static final Logger logger = LogManager.getLogger((String)"mixin");
     protected final MixinPlatformManager manager;
     protected final URI uri;
     protected final File container;
@@ -32,3 +39,4 @@ implements IMixinPlatformAgent {
         return null;
     }
 }
+

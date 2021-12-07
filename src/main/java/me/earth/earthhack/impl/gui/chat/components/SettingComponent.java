@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.text.Style
+ *  net.minecraft.util.text.TextComponentBase
+ *  net.minecraft.util.text.TextComponentString
+ *  net.minecraft.util.text.event.ClickEvent
+ *  net.minecraft.util.text.event.ClickEvent$Action
+ */
 package me.earth.earthhack.impl.gui.chat.components;
 
 import me.earth.earthhack.api.module.Module;
@@ -8,6 +18,7 @@ import me.earth.earthhack.impl.gui.chat.AbstractTextComponent;
 import me.earth.earthhack.impl.gui.chat.factory.ComponentFactory;
 import me.earth.earthhack.impl.modules.client.commands.Commands;
 import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentBase;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.event.ClickEvent;
 
@@ -19,8 +30,8 @@ extends AbstractTextComponent {
         super(((Setting)setting).getName());
         this.setting = setting;
         this.setStyle(new Style().setHoverEvent(ComponentFactory.getHoverEvent(setting)));
-        ((ITextComponentBase)((Object)this)).setFormattingHook(new SimpleTextFormatHook(this));
-        ((ITextComponentBase)((Object)this)).setUnFormattedHook(new SimpleTextFormatHook(this));
+        ((ITextComponentBase)((Object)this)).setFormattingHook(new SimpleTextFormatHook((TextComponentBase)this));
+        ((ITextComponentBase)((Object)this)).setUnFormattedHook(new SimpleTextFormatHook((TextComponentBase)this));
         if (((Setting)setting).getContainer() instanceof Module) {
             this.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, Commands.getPrefix() + "hiddensetting " + ((Module)((Setting)setting).getContainer()).getName() + " \"" + ((Setting)setting).getName() + "\""));
         }
@@ -41,3 +52,4 @@ extends AbstractTextComponent {
         return ComponentFactory.create(this.setting);
     }
 }
+

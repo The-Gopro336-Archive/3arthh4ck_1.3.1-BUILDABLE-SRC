@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.resources.IResource
+ *  net.minecraft.client.resources.IResourceManager
+ *  net.minecraft.client.resources.SimpleReloadableResourceManager
+ *  net.minecraft.client.resources.data.MetadataSerializer
+ *  net.minecraft.util.ResourceLocation
+ */
 package me.earth.earthhack.impl.core.mixins.resources;
 
 import java.io.IOException;
@@ -27,10 +37,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class MixinSimpleReloadableResourceManager {
     @Shadow
     @Final
-    private MetadataSerializer field_110547_c;
+    private MetadataSerializer rmMetadataSerializer;
     @Shadow
     @Final
-    private Set<String> field_135057_d;
+    private Set<String> setResourceDomains;
 
     @Redirect(method={"getAllResources"}, at=@At(value="INVOKE", target="Lnet/minecraft/client/resources/IResourceManager;getAllResources(Lnet/minecraft/util/ResourceLocation;)Ljava/util/List;"))
     private List<IResource> getAllResourcesHook(IResourceManager iResourceManager, ResourceLocation location) throws IOException {
@@ -42,8 +52,8 @@ public abstract class MixinSimpleReloadableResourceManager {
     @Inject(method={"getResource"}, at={@At(value="HEAD")}, cancellable=true)
     private void getResourceHook(ResourceLocation location, CallbackInfoReturnable<IResource> cir) {
         ResourceSupplier supplier;
-        if (!(location instanceof PluginResourceLocation) && location.getResourceDomain().equals("earthhack")) {
-            location = new PluginResourceLocation(location.getResourceDomain() + ":" + location.getResourcePath(), "earthhack");
+        if (!(location instanceof PluginResourceLocation) && location.getNamespace().equals("earthhack")) {
+            location = new PluginResourceLocation(location.getNamespace() + ":" + location.getPath(), "earthhack");
         }
         if (location instanceof PluginResourceLocation) {
             PluginResourceLocation loc = (PluginResourceLocation)location;
@@ -51,12 +61,12 @@ public abstract class MixinSimpleReloadableResourceManager {
             if (classLoader == null) {
                 throw new IllegalStateException("PluginClassLoader was null!");
             }
-            supplier = new PluginResourceSupplier(loc, this.field_110547_c, classLoader);
+            supplier = new PluginResourceSupplier(loc, this.rmMetadataSerializer, classLoader);
         } else {
             supplier = PluginResourceManager.getInstance().getSingleResource(location);
         }
         if (supplier != null) {
-            Earthhack.getLogger().info("Custom Resource detected: " + location);
+            Earthhack.getLogger().info("Custom Resource detected: " + (Object)location);
             try {
                 IResource resource = supplier.get();
                 cir.setReturnValue(resource);
@@ -69,7 +79,8 @@ public abstract class MixinSimpleReloadableResourceManager {
 
     @Inject(method={"getResourceDomains"}, at={@At(value="HEAD")}, cancellable=true)
     private void getResourceDomainsHook(CallbackInfoReturnable<Set<String>> cir) {
-        Set<String> domains = this.field_135057_d;
+        Set<String> domains = this.setResourceDomains;
         domains.add("earthhack");
     }
 }
+

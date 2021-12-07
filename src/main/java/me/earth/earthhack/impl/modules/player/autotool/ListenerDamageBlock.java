@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.player.autotool;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -36,3 +39,4 @@ extends ModuleListener<AutoTool, DamageBlockEvent> {
         }
     }
 }
+

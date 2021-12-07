@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.tools.obfuscation.interfaces;
 
 import org.spongepowered.asm.mixin.injection.struct.MemberInfo;
@@ -23,3 +26,4 @@ public interface IReferenceManager {
 
     public void addClassMapping(String var1, String var2, ObfuscationData<String> var3);
 }
+

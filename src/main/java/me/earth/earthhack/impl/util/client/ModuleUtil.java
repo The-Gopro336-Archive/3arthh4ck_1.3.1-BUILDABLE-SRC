@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.client;
 
 import me.earth.earthhack.api.module.Module;
@@ -26,3 +29,4 @@ public class ModuleUtil {
         Managers.CHAT.sendDeleteMessage("<" + module.getDisplayName() + "> " + message, module.getName() + append, 2000);
     }
 }
+

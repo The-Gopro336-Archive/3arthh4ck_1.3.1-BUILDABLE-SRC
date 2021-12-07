@@ -1,12 +1,31 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.mojang.authlib.GameProfile
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.init.Items
+ *  net.minecraft.init.MobEffects
+ *  net.minecraft.inventory.EntityEquipmentSlot
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.INetHandlerPlayClient
+ *  net.minecraft.network.play.server.SPacketEntityStatus
+ *  net.minecraft.potion.PotionEffect
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.modules.player.fakeplayer.util;
 
 import com.mojang.authlib.GameProfile;
 import me.earth.earthhack.impl.modules.player.fakeplayer.util.EntityPlayerAttack;
 import me.earth.earthhack.impl.util.network.NetworkUtil;
+import net.minecraft.entity.Entity;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.INetHandlerPlayClient;
 import net.minecraft.network.play.server.SPacketEntityStatus;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
@@ -42,7 +61,7 @@ extends EntityPlayerAttack {
     }
 
     public void pop() {
-        NetworkUtil.receive(new SPacketEntityStatus(this, 35));
+        NetworkUtil.receive((Packet<INetHandlerPlayClient>)new SPacketEntityStatus((Entity)this, 35));
         super.setHealth(1.0f);
         this.setAbsorptionAmount(8.0f);
         this.clearActivePotions();
@@ -50,3 +69,4 @@ extends EntityPlayerAttack {
         this.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 100, 1));
     }
 }
+

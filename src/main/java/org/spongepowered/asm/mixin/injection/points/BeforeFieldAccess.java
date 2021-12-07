@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.injection.points;
 
 import java.util.Collection;
@@ -97,3 +100,4 @@ extends BeforeInvoke {
         return null;
     }
 }
+

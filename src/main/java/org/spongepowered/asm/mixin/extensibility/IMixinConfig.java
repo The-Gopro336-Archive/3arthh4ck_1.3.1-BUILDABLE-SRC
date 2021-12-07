@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.extensibility;
 
 import java.util.Set;
@@ -21,3 +24,4 @@ public interface IMixinConfig {
 
     public Set<String> getTargets();
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.particles.effects;
 
 import org.newdawn.slick.Image;
@@ -95,3 +98,4 @@ implements ParticleEmitter {
     public void resetState() {
     }
 }
+

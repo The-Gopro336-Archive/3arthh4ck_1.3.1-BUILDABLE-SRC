@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.init.Items
+ *  net.minecraft.inventory.EntityEquipmentSlot
+ *  net.minecraft.item.ItemElytra
+ *  net.minecraft.item.ItemStack
+ */
 package me.earth.earthhack.impl.modules.movement.elytraflight;
 
 import java.util.Random;
@@ -60,11 +69,11 @@ extends ModuleListener<ElytraFlight, MotionUpdateEvent> {
             }
             Managers.TIMER.setTimer(0.17f);
             if (((ElytraFlight)this.module).timer.passed(10L)) {
-                ((IKeyBinding)((Object)ListenerMotion.mc.gameSettings.keyBindJump)).setPressed(true);
+                ((IKeyBinding)ListenerMotion.mc.gameSettings.keyBindJump).setPressed(true);
                 ((ElytraFlight)this.module).sendFallPacket();
                 ((ElytraFlight)this.module).timer.reset();
             } else {
-                ((IKeyBinding)((Object)ListenerMotion.mc.gameSettings.keyBindJump)).setPressed(false);
+                ((IKeyBinding)ListenerMotion.mc.gameSettings.keyBindJump).setPressed(false);
             }
             return;
         }
@@ -77,3 +86,4 @@ extends ModuleListener<ElytraFlight, MotionUpdateEvent> {
         }
     }
 }
+

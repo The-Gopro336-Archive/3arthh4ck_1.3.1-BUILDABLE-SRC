@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.movement.longjump;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -22,3 +25,4 @@ extends DefaultData<LongJump> {
         return "Makes you jump far.";
     }
 }
+

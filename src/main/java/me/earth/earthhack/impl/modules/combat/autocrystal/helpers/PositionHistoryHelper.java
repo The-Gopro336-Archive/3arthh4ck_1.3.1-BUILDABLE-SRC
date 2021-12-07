@@ -1,5 +1,20 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Predicate
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.network.play.client.CPacketPlayer
+ *  net.minecraft.network.play.client.CPacketPlayer$Position
+ *  net.minecraft.network.play.client.CPacketPlayer$PositionRotation
+ *  net.minecraft.network.play.client.CPacketPlayer$Rotation
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.RayTraceResult
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal.helpers;
 
+import com.google.common.base.Predicate;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -81,8 +96,8 @@ implements Globals {
     }
 
     private boolean isLegit(RotationHistory history, Entity entity) {
-        RayTraceResult result = RayTracer.rayTraceEntities((World)PositionHistoryHelper.mc.world, (Entity)RotationUtil.getRotationPlayer(), 7.0, history.x, history.y, history.z, history.yaw, history.pitch, history.bb, e -> e != null && e.equals(entity), entity, entity);
-        return result != null && entity.equals(result.entityHit);
+        RayTraceResult result = RayTracer.rayTraceEntities((World)PositionHistoryHelper.mc.world, (Entity)RotationUtil.getRotationPlayer(), 7.0, history.x, history.y, history.z, history.yaw, history.pitch, history.bb, (Predicate<Entity>)((Predicate)e -> e != null && e.equals((Object)entity)), entity, entity);
+        return result != null && entity.equals((Object)result.entityHit);
     }
 
     private static final class RotationHistory {
@@ -111,3 +126,4 @@ implements Globals {
         }
     }
 }
+

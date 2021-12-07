@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.gen;
 
 import java.lang.annotation.ElementType;
@@ -12,3 +15,4 @@ public @interface Invoker {
 
     public boolean remap() default true;
 }
+

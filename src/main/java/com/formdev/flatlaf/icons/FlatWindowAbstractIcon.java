@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.icons;
 
 import com.formdev.flatlaf.icons.FlatAbstractIcon;
@@ -29,7 +32,7 @@ extends FlatAbstractIcon {
     protected void paintIcon(Component c, Graphics2D g) {
         this.paintBackground(c, g);
         g.setColor(this.getForeground(c));
-        HiDPIUtils.paintAtScale1x(g, 0, 0, this.width, this.height, this::paintIconAt1x);
+        HiDPIUtils.paintAtScale1x(g, 0, 0, this.width, this.height, (arg_0, arg_1, arg_2, arg_3, arg_4, arg_5) -> this.paintIconAt1x(arg_0, arg_1, arg_2, arg_3, arg_4, arg_5));
     }
 
     protected abstract void paintIconAt1x(Graphics2D var1, int var2, int var3, int var4, int var5, double var6);
@@ -46,3 +49,4 @@ extends FlatAbstractIcon {
         return c.getForeground();
     }
 }
+

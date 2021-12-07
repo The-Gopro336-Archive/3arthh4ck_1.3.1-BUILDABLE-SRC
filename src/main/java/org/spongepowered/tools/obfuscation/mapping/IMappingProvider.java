@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.tools.obfuscation.mapping;
 
 import java.io.File;
@@ -20,3 +23,4 @@ public interface IMappingProvider {
 
     public String getPackageMapping(String var1);
 }
+

@@ -1,3 +1,20 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.renderer.GlStateManager
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemBow
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.MathHelper
+ *  net.minecraft.util.math.RayTraceResult
+ *  net.minecraft.util.math.RayTraceResult$Type
+ *  net.minecraft.util.math.Vec3d
+ *  org.lwjgl.opengl.GL11
+ *  org.lwjgl.util.glu.Cylinder
+ */
 package me.earth.earthhack.impl.modules.render.trajectories;
 
 import java.util.List;
@@ -70,12 +87,12 @@ extends ModuleListener<Trajectories, Render3DEvent> {
             motionY += ListenerRender.mc.player.motionY;
         }
         GlStateManager.color((float)((float)((Trajectories)this.module).color.getValue().getRed() / 255.0f), (float)((float)((Trajectories)this.module).color.getValue().getGreen() / 255.0f), (float)((float)((Trajectories)this.module).color.getValue().getBlue() / 255.0f), (float)((float)((Trajectories)this.module).color.getValue().getAlpha() / 255.0f));
-        GL11.glEnable(2848);
+        GL11.glEnable((int)2848);
         float size = (float)(item instanceof ItemBow ? 0.3 : 0.25);
         boolean hasLanded = false;
         Entity landingOnEntity = null;
         RayTraceResult landingPosition = null;
-        GL11.glBegin(3);
+        GL11.glBegin((int)3);
         while (!hasLanded && posY > 0.0) {
             Vec3d present = new Vec3d(posX, posY, posZ);
             Vec3d future = new Vec3d(posX + motionX, posY + motionY, posZ + motionZ);
@@ -90,7 +107,7 @@ extends ModuleListener<Trajectories, Render3DEvent> {
                 Entity boundingBox = entity;
                 if (!boundingBox.canBeCollidedWith() || boundingBox == ListenerRender.mc.player) continue;
                 float var7 = 0.3f;
-                AxisAlignedBB var8 = boundingBox.getEntityBoundingBox().expand(var7, var7, var7);
+                AxisAlignedBB var8 = boundingBox.getEntityBoundingBox().expand((double)var7, (double)var7, (double)var7);
                 RayTraceResult possibleEntityLanding = var8.calculateIntercept(present, future);
                 if (possibleEntityLanding == null) continue;
                 hasLanded = true;
@@ -122,9 +139,9 @@ extends ModuleListener<Trajectories, Render3DEvent> {
             c.setDrawStyle(100013);
             if (landingOnEntity != null) {
                 GlStateManager.color((float)0.0f, (float)0.0f, (float)0.0f, (float)1.0f);
-                GL11.glLineWidth(2.5f);
+                GL11.glLineWidth((float)2.5f);
                 c.draw(0.5f, 0.15f, 0.0f, 8, 1);
-                GL11.glLineWidth(0.1f);
+                GL11.glLineWidth((float)0.1f);
                 GlStateManager.color((float)1.0f, (float)0.0f, (float)0.0f, (float)1.0f);
             }
             c.draw(0.5f, 0.15f, 0.0f, 8, 1);
@@ -133,6 +150,7 @@ extends ModuleListener<Trajectories, Render3DEvent> {
     }
 
     public void drawLine3D(double var1, double var2, double var3) {
-        GL11.glVertex3d(var1, var2, var3);
+        GL11.glVertex3d((double)var1, (double)var2, (double)var3);
     }
 }
+

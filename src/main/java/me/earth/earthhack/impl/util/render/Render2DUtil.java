@@ -1,3 +1,26 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.gui.ScaledResolution
+ *  net.minecraft.client.renderer.BufferBuilder
+ *  net.minecraft.client.renderer.GlStateManager
+ *  net.minecraft.client.renderer.GlStateManager$DestFactor
+ *  net.minecraft.client.renderer.GlStateManager$SourceFactor
+ *  net.minecraft.client.renderer.OpenGlHelper
+ *  net.minecraft.client.renderer.Tessellator
+ *  net.minecraft.client.renderer.vertex.DefaultVertexFormats
+ *  net.minecraft.client.shader.Framebuffer
+ *  net.minecraft.client.shader.ShaderGroup
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.entity.item.EntityItem
+ *  net.minecraft.util.ResourceLocation
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.Vec3d
+ *  org.lwjgl.opengl.GL11
+ */
 package me.earth.earthhack.impl.util.render;
 
 import java.awt.Color;
@@ -38,7 +61,7 @@ implements Globals {
         try {
             blurShader = new ShaderGroup(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shader);
             blurShader.createBindFramebuffers(Render2DUtil.mc.displayWidth, Render2DUtil.mc.displayHeight);
-            buffer = ((IShaderGroup)((Object)blurShader)).getListFramebuffers().get(0);
+            buffer = ((IShaderGroup)blurShader).getListFramebuffers().get(0);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -46,10 +69,10 @@ implements Globals {
     }
 
     public static void setShaderConfigs(float intensity, float blurWidth, float blurHeight) {
-        ((IShaderGroup)((Object)blurShader)).getListShaders().get(0).getShaderManager().getShaderUniform("Radius").set(intensity);
-        ((IShaderGroup)((Object)blurShader)).getListShaders().get(1).getShaderManager().getShaderUniform("Radius").set(intensity);
-        ((IShaderGroup)((Object)blurShader)).getListShaders().get(0).getShaderManager().getShaderUniform("BlurDir").set(blurWidth, blurHeight);
-        ((IShaderGroup)((Object)blurShader)).getListShaders().get(1).getShaderManager().getShaderUniform("BlurDir").set(blurHeight, blurWidth);
+        ((IShaderGroup)blurShader).getListShaders().get(0).getShaderManager().getShaderUniform("Radius").set(intensity);
+        ((IShaderGroup)blurShader).getListShaders().get(1).getShaderManager().getShaderUniform("Radius").set(intensity);
+        ((IShaderGroup)blurShader).getListShaders().get(0).getShaderManager().getShaderUniform("BlurDir").set(blurWidth, blurHeight);
+        ((IShaderGroup)blurShader).getListShaders().get(1).getShaderManager().getShaderUniform("BlurDir").set(blurHeight, blurWidth);
     }
 
     public static void drawBlurryRect(float x, float y, float x1, float y1, int intensity, int size) {
@@ -68,10 +91,10 @@ implements Globals {
         GlStateManager.disableTexture2D();
         GlStateManager.tryBlendFuncSeparate((int)770, (int)771, (int)1, (int)0);
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
-        bufferbuilder.pos(startX, endY, 0.0).color(red, green, blue, alpha).endVertex();
-        bufferbuilder.pos(endX, endY, 0.0).color(red, green, blue, alpha).endVertex();
-        bufferbuilder.pos(endX, startY, 0.0).color(red, green, blue, alpha).endVertex();
-        bufferbuilder.pos(startX, startY, 0.0).color(red, green, blue, alpha).endVertex();
+        bufferbuilder.pos((double)startX, (double)endY, 0.0).color(red, green, blue, alpha).endVertex();
+        bufferbuilder.pos((double)endX, (double)endY, 0.0).color(red, green, blue, alpha).endVertex();
+        bufferbuilder.pos((double)endX, (double)startY, 0.0).color(red, green, blue, alpha).endVertex();
+        bufferbuilder.pos((double)startX, (double)startY, 0.0).color(red, green, blue, alpha).endVertex();
         tessellator.draw();
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
@@ -86,11 +109,11 @@ implements Globals {
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
         GlStateManager.tryBlendFuncSeparate((GlStateManager.SourceFactor)GlStateManager.SourceFactor.SRC_ALPHA, (GlStateManager.DestFactor)GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, (GlStateManager.SourceFactor)GlStateManager.SourceFactor.ONE, (GlStateManager.DestFactor)GlStateManager.DestFactor.ZERO);
-        GL11.glColor4f(red, green, blue, alpha);
-        GL11.glLineWidth(width);
-        GL11.glBegin(2);
+        GL11.glColor4f((float)red, (float)green, (float)blue, (float)alpha);
+        GL11.glLineWidth((float)width);
+        GL11.glBegin((int)2);
         for (int i = 0; i <= 360; ++i) {
-            GL11.glVertex2d((double)x + Math.sin((double)i * 3.141526 / 180.0) * (double)radius, (double)y + Math.cos((double)i * 3.141526 / 180.0) * (double)radius);
+            GL11.glVertex2d((double)((double)x + Math.sin((double)i * 3.141526 / 180.0) * (double)radius), (double)((double)y + Math.cos((double)i * 3.141526 / 180.0) * (double)radius));
         }
         GL11.glEnd();
         GlStateManager.resetColor();
@@ -108,10 +131,10 @@ implements Globals {
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
         GlStateManager.tryBlendFuncSeparate((GlStateManager.SourceFactor)GlStateManager.SourceFactor.SRC_ALPHA, (GlStateManager.DestFactor)GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, (GlStateManager.SourceFactor)GlStateManager.SourceFactor.ONE, (GlStateManager.DestFactor)GlStateManager.DestFactor.ZERO);
-        GL11.glColor4f(red, green, blue, alpha);
-        GL11.glBegin(9);
+        GL11.glColor4f((float)red, (float)green, (float)blue, (float)alpha);
+        GL11.glBegin((int)9);
         for (int i = 0; i <= 360; ++i) {
-            GL11.glVertex2d((double)x + Math.sin((double)i * 3.141526 / 180.0) * (double)radius, (double)y + Math.cos((double)i * 3.141526 / 180.0) * (double)radius);
+            GL11.glVertex2d((double)((double)x + Math.sin((double)i * 3.141526 / 180.0) * (double)radius), (double)((double)y + Math.cos((double)i * 3.141526 / 180.0) * (double)radius));
         }
         GL11.glEnd();
         GlStateManager.resetColor();
@@ -132,25 +155,25 @@ implements Globals {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder BufferBuilder2 = tessellator.getBuffer();
         BufferBuilder2.begin(7, DefaultVertexFormats.POSITION_TEX);
-        BufferBuilder2.pos(x, y + height, zLevel).tex((float)textureX * 0.00390625f, (float)(textureY + height) * 0.00390625f).endVertex();
-        BufferBuilder2.pos(x + width, y + height, zLevel).tex((float)(textureX + width) * 0.00390625f, (float)(textureY + height) * 0.00390625f).endVertex();
-        BufferBuilder2.pos(x + width, y, zLevel).tex((float)(textureX + width) * 0.00390625f, (float)textureY * 0.00390625f).endVertex();
-        BufferBuilder2.pos(x, y, zLevel).tex((float)textureX * 0.00390625f, (float)textureY * 0.00390625f).endVertex();
+        BufferBuilder2.pos((double)x, (double)(y + height), (double)zLevel).tex((double)((float)textureX * 0.00390625f), (double)((float)(textureY + height) * 0.00390625f)).endVertex();
+        BufferBuilder2.pos((double)(x + width), (double)(y + height), (double)zLevel).tex((double)((float)(textureX + width) * 0.00390625f), (double)((float)(textureY + height) * 0.00390625f)).endVertex();
+        BufferBuilder2.pos((double)(x + width), (double)y, (double)zLevel).tex((double)((float)(textureX + width) * 0.00390625f), (double)((float)textureY * 0.00390625f)).endVertex();
+        BufferBuilder2.pos((double)x, (double)y, (double)zLevel).tex((double)((float)textureX * 0.00390625f), (double)((float)textureY * 0.00390625f)).endVertex();
         tessellator.draw();
     }
 
     public static void drawCompleteImage(float posX, float posY, float width, float height) {
         GL11.glPushMatrix();
-        GL11.glTranslatef(posX, posY, 0.0f);
-        GL11.glBegin(7);
-        GL11.glTexCoord2f(0.0f, 0.0f);
-        GL11.glVertex3f(0.0f, 0.0f, 0.0f);
-        GL11.glTexCoord2f(0.0f, 1.0f);
-        GL11.glVertex3f(0.0f, height, 0.0f);
-        GL11.glTexCoord2f(1.0f, 1.0f);
-        GL11.glVertex3f(width, height, 0.0f);
-        GL11.glTexCoord2f(1.0f, 0.0f);
-        GL11.glVertex3f(width, 0.0f, 0.0f);
+        GL11.glTranslatef((float)posX, (float)posY, (float)0.0f);
+        GL11.glBegin((int)7);
+        GL11.glTexCoord2f((float)0.0f, (float)0.0f);
+        GL11.glVertex3f((float)0.0f, (float)0.0f, (float)0.0f);
+        GL11.glTexCoord2f((float)0.0f, (float)1.0f);
+        GL11.glVertex3f((float)0.0f, (float)height, (float)0.0f);
+        GL11.glTexCoord2f((float)1.0f, (float)1.0f);
+        GL11.glVertex3f((float)width, (float)height, (float)0.0f);
+        GL11.glTexCoord2f((float)1.0f, (float)0.0f);
+        GL11.glVertex3f((float)width, (float)0.0f, (float)0.0f);
         GL11.glEnd();
         GL11.glPopMatrix();
     }
@@ -161,29 +184,29 @@ implements Globals {
         float f2 = (float)(color >> 8 & 0xFF) / 255.0f;
         float f3 = (float)(color & 0xFF) / 255.0f;
         GL11.glPushMatrix();
-        GL11.glEnable(3042);
-        GL11.glBlendFunc(770, 771);
-        GL11.glDisable(3553);
-        GL11.glEnable(2848);
-        GL11.glBlendFunc(770, 771);
-        GL11.glLineWidth(3.0f);
-        GL11.glBegin(3);
-        GL11.glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
-        GL11.glVertex2d((double)(x + (float)width) - 6.25, y + 2.75f);
-        GL11.glVertex2d((double)(x + (float)width) - 11.5, y + 10.25f);
-        GL11.glVertex2d(x + (float)width - 13.75f, y + 7.75f);
+        GL11.glEnable((int)3042);
+        GL11.glBlendFunc((int)770, (int)771);
+        GL11.glDisable((int)3553);
+        GL11.glEnable((int)2848);
+        GL11.glBlendFunc((int)770, (int)771);
+        GL11.glLineWidth((float)3.0f);
+        GL11.glBegin((int)3);
+        GL11.glColor4f((float)0.0f, (float)0.0f, (float)0.0f, (float)1.0f);
+        GL11.glVertex2d((double)((double)(x + (float)width) - 6.25), (double)(y + 2.75f));
+        GL11.glVertex2d((double)((double)(x + (float)width) - 11.5), (double)(y + 10.25f));
+        GL11.glVertex2d((double)(x + (float)width - 13.75f), (double)(y + 7.75f));
         GL11.glEnd();
-        GL11.glLineWidth(1.5f);
-        GL11.glBegin(3);
-        GL11.glColor4f(f1, f2, f3, f);
-        GL11.glVertex2d((double)(x + (float)width) - 6.5, y + 3.0f);
-        GL11.glVertex2d((double)(x + (float)width) - 11.5, y + 10.0f);
-        GL11.glVertex2d((double)(x + (float)width) - 13.5, y + 8.0f);
+        GL11.glLineWidth((float)1.5f);
+        GL11.glBegin((int)3);
+        GL11.glColor4f((float)f1, (float)f2, (float)f3, (float)f);
+        GL11.glVertex2d((double)((double)(x + (float)width) - 6.5), (double)(y + 3.0f));
+        GL11.glVertex2d((double)((double)(x + (float)width) - 11.5), (double)(y + 10.0f));
+        GL11.glVertex2d((double)((double)(x + (float)width) - 13.5), (double)(y + 8.0f));
         GL11.glEnd();
-        GL11.glEnable(3553);
-        GL11.glDisable(3042);
+        GL11.glEnable((int)3553);
+        GL11.glDisable((int)3042);
         GL11.glPopMatrix();
-        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
     }
 
     public static void drawLine(float x, float y, float x1, float y1, float lineWidth, int color) {
@@ -196,10 +219,10 @@ implements Globals {
         GlStateManager.disableTexture2D();
         GlStateManager.tryBlendFuncSeparate((GlStateManager.SourceFactor)GlStateManager.SourceFactor.SRC_ALPHA, (GlStateManager.DestFactor)GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, (GlStateManager.SourceFactor)GlStateManager.SourceFactor.ONE, (GlStateManager.DestFactor)GlStateManager.DestFactor.ZERO);
         GlStateManager.glLineWidth((float)lineWidth);
-        GL11.glColor4f(red, green, blue, alpha);
-        GL11.glBegin(1);
-        GL11.glVertex2f(x, y);
-        GL11.glVertex2f(x1, y1);
+        GL11.glColor4f((float)red, (float)green, (float)blue, (float)alpha);
+        GL11.glBegin((int)1);
+        GL11.glVertex2f((float)x, (float)y);
+        GL11.glVertex2f((float)x1, (float)y1);
         GL11.glEnd();
         GlStateManager.resetColor();
         GlStateManager.enableTexture2D();
@@ -238,15 +261,15 @@ implements Globals {
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
         if (sideways) {
-            bufferbuilder.pos(left, top, zLevel).color(f1, f2, f3, f).endVertex();
-            bufferbuilder.pos(left, bottom, zLevel).color(f1, f2, f3, f).endVertex();
-            bufferbuilder.pos(right, bottom, zLevel).color(f5, f6, f7, f4).endVertex();
-            bufferbuilder.pos(right, top, zLevel).color(f5, f6, f7, f4).endVertex();
+            bufferbuilder.pos((double)left, (double)top, (double)zLevel).color(f1, f2, f3, f).endVertex();
+            bufferbuilder.pos((double)left, (double)bottom, (double)zLevel).color(f1, f2, f3, f).endVertex();
+            bufferbuilder.pos((double)right, (double)bottom, (double)zLevel).color(f5, f6, f7, f4).endVertex();
+            bufferbuilder.pos((double)right, (double)top, (double)zLevel).color(f5, f6, f7, f4).endVertex();
         } else {
-            bufferbuilder.pos(right, top, zLevel).color(f1, f2, f3, f).endVertex();
-            bufferbuilder.pos(left, top, zLevel).color(f1, f2, f3, f).endVertex();
-            bufferbuilder.pos(left, bottom, zLevel).color(f5, f6, f7, f4).endVertex();
-            bufferbuilder.pos(right, bottom, zLevel).color(f5, f6, f7, f4).endVertex();
+            bufferbuilder.pos((double)right, (double)top, (double)zLevel).color(f1, f2, f3, f).endVertex();
+            bufferbuilder.pos((double)left, (double)top, (double)zLevel).color(f1, f2, f3, f).endVertex();
+            bufferbuilder.pos((double)left, (double)bottom, (double)zLevel).color(f5, f6, f7, f4).endVertex();
+            bufferbuilder.pos((double)right, (double)bottom, (double)zLevel).color(f5, f6, f7, f4).endVertex();
         }
         tessellator.draw();
         GlStateManager.shadeModel((int)7424);
@@ -271,18 +294,18 @@ implements Globals {
                 buffer.framebufferClear();
                 timer.reset();
             }
-            GL11.glScissor(x * factor, Render2DUtil.mc.displayHeight - y * factor - height * factor, width * factor, height * factor);
-            GL11.glEnable(3089);
+            GL11.glScissor((int)(x * factor), (int)(Render2DUtil.mc.displayHeight - y * factor - height * factor), (int)(width * factor), (int)(height * factor));
+            GL11.glEnable((int)3089);
             Render2DUtil.setShaderConfigs(intensity, blurWidth, blurHeight);
             buffer.bindFramebuffer(true);
             blurShader.render(mc.getRenderPartialTicks());
             mc.getFramebuffer().bindFramebuffer(true);
-            GL11.glDisable(3089);
+            GL11.glDisable((int)3089);
             GlStateManager.enableBlend();
             GlStateManager.tryBlendFuncSeparate((int)770, (int)771, (int)0, (int)1);
             buffer.framebufferRenderExt(Render2DUtil.mc.displayWidth, Render2DUtil.mc.displayHeight, false);
             GlStateManager.disableBlend();
-            GL11.glScalef(factor, factor, 0.0f);
+            GL11.glScalef((float)factor, (float)factor, (float)0.0f);
         }
     }
 
@@ -300,7 +323,7 @@ implements Globals {
         if (e instanceof EntityItem) {
             bb = new AxisAlignedBB(bb.minX, bb.minY + (double)0.7f, bb.minZ, bb.maxX, bb.maxY, bb.maxZ);
         }
-        bb = bb.expand(0.15f, 0.1f, 0.15f);
+        bb = bb.expand((double)0.15f, (double)0.1f, (double)0.15f);
         for (Vec3d vec : corners = new Vec3d[]{new Vec3d(bb.minX - bb.maxX + (double)(e.width / 2.0f), 0.0, bb.minZ - bb.maxZ + (double)(e.width / 2.0f)), new Vec3d(bb.maxX - bb.minX - (double)(e.width / 2.0f), 0.0, bb.minZ - bb.maxZ + (double)(e.width / 2.0f)), new Vec3d(bb.minX - bb.maxX + (double)(e.width / 2.0f), 0.0, bb.maxZ - bb.minZ - (double)(e.width / 2.0f)), new Vec3d(bb.maxX - bb.minX - (double)(e.width / 2.0f), 0.0, bb.maxZ - bb.minZ - (double)(e.width / 2.0f)), new Vec3d(bb.minX - bb.maxX + (double)(e.width / 2.0f), bb.maxY - bb.minY, bb.minZ - bb.maxZ + (double)(e.width / 2.0f)), new Vec3d(bb.maxX - bb.minX - (double)(e.width / 2.0f), bb.maxY - bb.minY, bb.minZ - bb.maxZ + (double)(e.width / 2.0f)), new Vec3d(bb.minX - bb.maxX + (double)(e.width / 2.0f), bb.maxY - bb.minY, bb.maxZ - bb.minZ - (double)(e.width / 2.0f)), new Vec3d(bb.maxX - bb.minX - (double)(e.width / 2.0f), bb.maxY - bb.minY, bb.maxZ - bb.minZ - (double)(e.width / 2.0f))}) {
             GLUProjection.Projection projection = GLUProjection.getInstance().project(pos.x + vec.x, pos.y + vec.y, pos.z + vec.z, GLUProjection.ClampMode.NONE, false);
             x = Math.max(x, (float)projection.getX());
@@ -326,3 +349,4 @@ implements Globals {
         timer = new StopWatch();
     }
 }
+

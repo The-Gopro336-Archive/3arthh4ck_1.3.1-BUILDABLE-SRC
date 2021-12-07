@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  javax.jnlp.BasicService
+ *  javax.jnlp.FileContents
+ *  javax.jnlp.PersistenceService
+ *  javax.jnlp.ServiceManager
+ */
 package org.newdawn.slick.muffin;
 
 import java.io.DataInputStream;
@@ -21,8 +30,8 @@ implements Muffin {
         URL configURL;
         PersistenceService ps;
         try {
-            ps = (PersistenceService)ServiceManager.lookup("javax.jnlp.PersistenceService");
-            BasicService bs = (BasicService)ServiceManager.lookup("javax.jnlp.BasicService");
+            ps = (PersistenceService)ServiceManager.lookup((String)"javax.jnlp.PersistenceService");
+            BasicService bs = (BasicService)ServiceManager.lookup((String)"javax.jnlp.BasicService");
             URL baseURL = bs.getCodeBase();
             configURL = new URL(baseURL, fileName);
         }
@@ -64,8 +73,8 @@ implements Muffin {
     public HashMap loadFile(String fileName) throws IOException {
         HashMap<String, Object> hashMap = new HashMap<String, Object>();
         try {
-            PersistenceService ps = (PersistenceService)ServiceManager.lookup("javax.jnlp.PersistenceService");
-            BasicService bs = (BasicService)ServiceManager.lookup("javax.jnlp.BasicService");
+            PersistenceService ps = (PersistenceService)ServiceManager.lookup((String)"javax.jnlp.PersistenceService");
+            BasicService bs = (BasicService)ServiceManager.lookup((String)"javax.jnlp.BasicService");
             URL baseURL = bs.getCodeBase();
             URL configURL = new URL(baseURL, fileName);
             FileContents fc = ps.get(configURL);
@@ -96,3 +105,4 @@ implements Muffin {
         return hashMap;
     }
 }
+

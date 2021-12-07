@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.player.EntityPlayer
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal;
 
 import java.util.Collection;
@@ -60,7 +68,7 @@ extends AbstractBreakHelper<CrystalDataMotion> {
             case PRE: {
                 float preDamage = this.module.damageHelper.getDamage(crystal);
                 data.setSelfDmg(preDamage);
-                if (preDamage > EntityUtil.getHealth(HelperBreakMotion.mc.player) - 1.0f && !this.module.suicide.getValue().booleanValue()) {
+                if (preDamage > EntityUtil.getHealth((EntityLivingBase)HelperBreakMotion.mc.player) - 1.0f && !this.module.suicide.getValue().booleanValue()) {
                     data.invalidateTiming(CrystalDataMotion.Timing.PRE);
                 }
                 if (breakCase) break;
@@ -68,7 +76,7 @@ extends AbstractBreakHelper<CrystalDataMotion> {
             case POST: {
                 float postDamage = this.module.damageHelper.getDamage(crystal, RotationUtil.getRotationPlayer().getEntityBoundingBox());
                 data.setPostSelf(postDamage);
-                if (postDamage > EntityUtil.getHealth(HelperBreakMotion.mc.player) - 1.0f) {
+                if (postDamage > EntityUtil.getHealth((EntityLivingBase)HelperBreakMotion.mc.player) - 1.0f) {
                     Managers.SAFETY.setSafe(false);
                     if (!this.module.suicide.getValue().booleanValue()) {
                         data.invalidateTiming(CrystalDataMotion.Timing.POST);
@@ -100,7 +108,7 @@ extends AbstractBreakHelper<CrystalDataMotion> {
             if (playerDamage > crystalData.getDamage()) {
                 crystalData.setDamage(playerDamage);
             }
-            if (playerDamage > EntityUtil.getHealth(player) + 1.0f) {
+            if (playerDamage > EntityUtil.getHealth((EntityLivingBase)player) + 1.0f) {
                 highPreSelf = false;
                 highPostSelf = false;
                 killing = true;
@@ -108,7 +116,7 @@ extends AbstractBreakHelper<CrystalDataMotion> {
             if (!(playerDamage > damage)) continue;
             damage = playerDamage;
         }
-        if (this.module.antiTotem.getValue().booleanValue() && crystal.getPosition().down().equals(this.module.antiTotemHelper.getTargetPos())) {
+        if (this.module.antiTotem.getValue().booleanValue() && crystal.getPosition().down().equals((Object)this.module.antiTotemHelper.getTargetPos())) {
             data.setAntiTotem(crystal);
         }
         if (highPreSelf) {
@@ -122,3 +130,4 @@ extends AbstractBreakHelper<CrystalDataMotion> {
         }
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.server.main;
 
 import java.io.IOException;
@@ -46,3 +49,4 @@ public class ClientMain {
         commands.startListening();
     }
 }
+

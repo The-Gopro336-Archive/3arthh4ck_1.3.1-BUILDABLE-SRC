@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.icons;
 
 import com.formdev.flatlaf.icons.FlatSearchIcon;
@@ -15,3 +18,4 @@ extends FlatSearchIcon {
         g.fill(FlatUIUtils.createPath(11.0, 7.0, 16.0, 7.0, 13.5, 10.0));
     }
 }
+

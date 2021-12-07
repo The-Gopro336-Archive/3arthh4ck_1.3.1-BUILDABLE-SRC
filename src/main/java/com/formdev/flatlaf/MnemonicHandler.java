@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf;
 
 import com.formdev.flatlaf.util.SystemInfo;
@@ -204,3 +207,4 @@ ChangeListener {
         return false;
     }
 }
+

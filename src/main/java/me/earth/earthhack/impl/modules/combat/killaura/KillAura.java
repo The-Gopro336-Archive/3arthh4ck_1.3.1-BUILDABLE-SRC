@@ -1,3 +1,29 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.entity.item.EntityExpBottle
+ *  net.minecraft.entity.item.EntityItem
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.entity.projectile.EntityArrow
+ *  net.minecraft.item.ItemAxe
+ *  net.minecraft.item.ItemElytra
+ *  net.minecraft.item.ItemShield
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.item.ItemSword
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketPlayerDigging
+ *  net.minecraft.network.play.client.CPacketPlayerDigging$Action
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.world.World
+ *  org.lwjgl.input.Mouse
+ */
 package me.earth.earthhack.impl.modules.combat.killaura;
 
 import me.earth.earthhack.api.module.util.Category;
@@ -37,11 +63,13 @@ import net.minecraft.item.ItemElytra;
 import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import org.lwjgl.input.Mouse;
 
 public class KillAura
@@ -114,7 +142,7 @@ extends EntityTypeModule {
         if (distance >= 36.0) {
             name.append("\u00a7c");
         } else if (!RotationUtil.getRotationPlayer().canEntityBeSeen(this.target) && distance >= 9.0) {
-            if (this.target instanceof EntityPlayer && ((EntityPlayer)this.target).canEntityBeSeen(RotationUtil.getRotationPlayer())) {
+            if (this.target instanceof EntityPlayer && ((EntityPlayer)this.target).canEntityBeSeen((Entity)RotationUtil.getRotationPlayer())) {
                 name.append("\u00a7f");
             } else {
                 name.append("\u00a76");
@@ -127,7 +155,7 @@ extends EntityTypeModule {
 
     @Override
     public boolean isValid(Entity entity) {
-        if (entity == null || KillAura.mc.player.getDistanceSq(entity) > (double)MathUtil.square(this.targetRange.getValue().floatValue()) || EntityUtil.isDead(entity) || entity.equals(KillAura.mc.player) || entity.equals(KillAura.mc.player.getRidingEntity()) || entity instanceof EntityPlayer && Managers.FRIENDS.contains((EntityPlayer)entity) || this.passengers.getValue() == false && KillAura.mc.player.getPassengers().contains(entity) || entity instanceof EntityExpBottle || entity instanceof EntityItem || entity instanceof EntityArrow || entity instanceof EntityEnderCrystal) {
+        if (entity == null || KillAura.mc.player.getDistanceSq(entity) > (double)MathUtil.square(this.targetRange.getValue().floatValue()) || EntityUtil.isDead(entity) || entity.equals((Object)KillAura.mc.player) || entity.equals((Object)KillAura.mc.player.getRidingEntity()) || entity instanceof EntityPlayer && Managers.FRIENDS.contains((EntityPlayer)entity) || this.passengers.getValue() == false && KillAura.mc.player.getPassengers().contains((Object)entity) || entity instanceof EntityExpBottle || entity instanceof EntityItem || entity instanceof EntityArrow || entity instanceof EntityEnderCrystal) {
             return false;
         }
         return super.isValid(entity);
@@ -158,7 +186,7 @@ extends EntityTypeModule {
                 bestEnemy = entity;
                 closestEnemy = dist;
             }
-            if (this.isInRange(RotationUtil.getRotationPlayer(), entity)) {
+            if (this.isInRange((Entity)RotationUtil.getRotationPlayer(), entity)) {
                 float h;
                 if (this.health.getValue().floatValue() != 0.0f && entity instanceof EntityLivingBase && (h = EntityUtil.getHealth((EntityLivingBase)entity)) < this.health.getValue().floatValue() && h < lowest) {
                     closest = entity;
@@ -202,7 +230,7 @@ extends EntityTypeModule {
     }
 
     protected boolean shouldAttack() {
-        if (this.m1Attack.getValue().booleanValue() && !Mouse.isButtonDown(0)) {
+        if (this.m1Attack.getValue().booleanValue() && !Mouse.isButtonDown((int)0)) {
             return false;
         }
         return this.swordOnly.getValue() == false || KillAura.mc.player.getHeldItemMainhand().getItem() instanceof ItemSword || KillAura.mc.player.getHeldItemMainhand().getItem() instanceof ItemAxe;
@@ -210,13 +238,13 @@ extends EntityTypeModule {
 
     protected void releaseShield() {
         if (KillAura.mc.player.getHeldItemOffhand().getItem() instanceof ItemShield) {
-            KillAura.mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.RELEASE_USE_ITEM, new BlockPos(KillAura.mc.player), EnumFacing.getFacingFromVector((float)((float)Managers.POSITION.getX()), (float)((float)Managers.POSITION.getY()), (float)((float)Managers.POSITION.getZ()))));
+            KillAura.mc.player.connection.sendPacket((Packet)new CPacketPlayerDigging(CPacketPlayerDigging.Action.RELEASE_USE_ITEM, new BlockPos((Entity)KillAura.mc.player), EnumFacing.getFacingFromVector((float)((float)Managers.POSITION.getX()), (float)((float)Managers.POSITION.getY()), (float)((float)Managers.POSITION.getZ()))));
         }
     }
 
     protected void useShield() {
         if ((KillAura.mc.player.getHeldItemMainhand().getItem() instanceof ItemSword || KillAura.mc.player.getHeldItemMainhand().getItem() instanceof ItemAxe) && KillAura.mc.player.getHeldItemOffhand().getItem() instanceof ItemShield) {
-            Locks.acquire(Locks.PLACE_SWITCH_LOCK, () -> KillAura.mc.playerController.processRightClick(KillAura.mc.player, KillAura.mc.world, EnumHand.OFF_HAND));
+            Locks.acquire(Locks.PLACE_SWITCH_LOCK, () -> KillAura.mc.playerController.processRightClick((EntityPlayer)KillAura.mc.player, (World)KillAura.mc.world, EnumHand.OFF_HAND));
         }
     }
 
@@ -238,3 +266,4 @@ extends EntityTypeModule {
         return vec3d;
     }
 }
+

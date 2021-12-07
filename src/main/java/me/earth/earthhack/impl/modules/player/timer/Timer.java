@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.player.timer;
 
 import me.earth.earthhack.api.module.util.Category;
@@ -102,3 +105,4 @@ extends DisablingModule {
         return this.isSlow ? this.slow.getValue().floatValue() : this.fast.getValue().floatValue();
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.tiled;
 
 import java.io.InputStream;
@@ -145,3 +148,4 @@ public class TileSet {
         return gid >= this.firstGID && gid <= this.lastGID;
     }
 }
+

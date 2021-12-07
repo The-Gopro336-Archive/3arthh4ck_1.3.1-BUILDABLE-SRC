@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.mojang.realmsclient.gui.ChatFormatting
+ *  com.mojang.text2speech.Narrator
+ */
 package me.earth.earthhack.impl.modules.combat.bowkill;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
@@ -22,7 +29,7 @@ extends ModuleListener<BowKiller, EntityChunkEvent> {
             return;
         }
         if (event.getStage() == Stage.PRE && event.getEntity() != null && ((BowKiller)this.module).isValid(event.getEntity())) {
-            ChatUtil.sendMessage(ChatFormatting.RED + "Opp detected I repeat opp detected!");
+            ChatUtil.sendMessage((Object)ChatFormatting.RED + "Opp detected I repeat opp detected!");
             if (!((BowKiller)this.module).hasEntity(event.getEntity().getUniqueID().toString())) {
                 this.narrator.clear();
                 this.narrator.say("Ah pu  Detected!");
@@ -31,3 +38,4 @@ extends ModuleListener<BowKiller, EntityChunkEvent> {
         }
     }
 }
+

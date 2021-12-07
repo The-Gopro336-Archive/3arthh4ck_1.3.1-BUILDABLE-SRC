@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.renderer.GlStateManager
+ *  org.lwjgl.opengl.GL11
+ */
 package me.earth.earthhack.impl.gui.hud;
 
 import java.awt.Color;
@@ -88,14 +95,14 @@ extends AbstractGuiElement {
             this.setY(0.0f);
         }
         GL11.glPushMatrix();
-        GL11.glPushAttrib(1048575);
+        GL11.glPushAttrib((int)1048575);
         GlStateManager.color((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
         Render2DUtil.drawRect(this.getX(), this.getY(), this.getX() + this.getWidth(), this.getY() + this.getHeight(), -1845493760);
         Render2DUtil.drawRect(this.getX(), this.getY(), this.getX() + this.getWidth(), this.getY() + Managers.TEXT.getStringHeight(1.0f) + 10.0f, ((ClickGui)HudPanel.CLICK_GUI.get()).color.getValue().getRGB());
         Managers.TEXT.drawStringScaled("Hud Elements", this.getX() + this.getWidth() / 2.0f - Managers.TEXT.getStringWidthScaled("Hud Elements", 1.0f) / 2.0f, this.getY() + 5.0f, Color.WHITE.getRGB(), true, 1.0f);
         float yOffset = 0.0f;
         RenderUtil.scissor(this.getX(), this.getY(), this.getX() + this.getWidth(), this.getY() + this.getHeight());
-        GL11.glEnable(3089);
+        GL11.glEnable((int)3089);
         for (HudElementButton button : this.elementButtons) {
             button.setX(this.getX());
             button.setWidth(this.getWidth());
@@ -103,7 +110,7 @@ extends AbstractGuiElement {
             button.draw(mouseX, mouseY, partialTicks);
             yOffset += button.getHeight() + 1.0f;
         }
-        GL11.glDisable(3089);
+        GL11.glDisable((int)3089);
         GL11.glPopAttrib();
         GL11.glPopMatrix();
     }
@@ -154,3 +161,4 @@ extends AbstractGuiElement {
         return this.elementButtons;
     }
 }
+

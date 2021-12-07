@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.installer;
 
 import me.earth.earthhack.installer.version.Version;
@@ -11,3 +14,4 @@ public interface Installer {
 
     public boolean update(boolean var1);
 }
+

@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.launchwrapper.ITweaker
+ *  net.minecraft.launchwrapper.LaunchClassLoader
+ */
 package org.spongepowered.asm.launch;
 
 import java.io.File;
@@ -16,7 +23,6 @@ implements ITweaker {
         MixinBootstrap.doInit(args);
     }
 
-    @Override
     public final void injectIntoClassLoader(LaunchClassLoader classLoader) {
         MixinBootstrap.inject();
     }
@@ -29,3 +35,4 @@ implements ITweaker {
         return new String[0];
     }
 }
+

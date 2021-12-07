@@ -1,3 +1,16 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.tileentity.TileEntity
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.world.IBlockAccess
+ *  net.minecraft.world.WorldType
+ *  net.minecraft.world.biome.Biome
+ *  net.minecraft.world.chunk.Chunk
+ */
 package me.earth.earthhack.impl.util.minecraft.blocks.states;
 
 import java.util.HashMap;
@@ -8,6 +21,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
@@ -26,7 +40,7 @@ IBlockStateHelper {
     }
 
     public IBlockState getBlockState(BlockPos pos) {
-        IBlockState state = this.states.get(pos);
+        IBlockState state = this.states.get((Object)pos);
         if (state == null) {
             return BlockStateHelper.mc.world.getBlockState(pos);
         }
@@ -40,7 +54,7 @@ IBlockStateHelper {
 
     @Override
     public void delete(BlockPos pos) {
-        this.states.remove(pos);
+        this.states.remove((Object)pos);
     }
 
     @Override
@@ -57,7 +71,7 @@ IBlockStateHelper {
     }
 
     public boolean isAirBlock(BlockPos pos) {
-        return this.getBlockState(pos).getBlock().isAir(this.getBlockState(pos), this, pos);
+        return this.getBlockState(pos).getBlock().isAir(this.getBlockState(pos), (IBlockAccess)this, pos);
     }
 
     public Biome getBiome(BlockPos pos) {
@@ -65,7 +79,7 @@ IBlockStateHelper {
     }
 
     public int getStrongPower(BlockPos pos, EnumFacing direction) {
-        return this.getBlockState(pos).func_185893_b(this, pos, direction);
+        return this.getBlockState(pos).getStrongPower((IBlockAccess)this, pos, direction);
     }
 
     public WorldType getWorldType() {
@@ -76,10 +90,11 @@ IBlockStateHelper {
         if (!BlockStateHelper.mc.world.isValid(pos)) {
             return _default;
         }
-        Chunk chunk = BlockStateHelper.mc.world.getChunkFromBlockCoords(pos);
+        Chunk chunk = BlockStateHelper.mc.world.getChunk(pos);
         if (chunk == null || chunk.isEmpty()) {
             return _default;
         }
-        return this.getBlockState(pos).isSideSolid(this, pos, side);
+        return this.getBlockState(pos).isSideSolid((IBlockAccess)this, pos, side);
     }
 }
+

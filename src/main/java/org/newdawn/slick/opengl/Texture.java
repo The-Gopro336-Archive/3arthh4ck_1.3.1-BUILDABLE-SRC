@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.opengl;
 
 public interface Texture {
@@ -27,3 +30,4 @@ public interface Texture {
 
     public void setTextureFilter(int var1);
 }
+

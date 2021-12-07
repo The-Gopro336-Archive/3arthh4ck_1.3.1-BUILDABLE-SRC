@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketChunkData
+ */
 package me.earth.earthhack.impl.modules.render.newchunks;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -21,3 +27,4 @@ extends ModuleListener<NewChunks, PacketEvent.Receive<SPacketChunkData>> {
         }
     }
 }
+

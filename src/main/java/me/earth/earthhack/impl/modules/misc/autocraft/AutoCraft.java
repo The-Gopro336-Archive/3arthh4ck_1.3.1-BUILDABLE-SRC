@@ -1,3 +1,20 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.inventory.GuiContainer
+ *  net.minecraft.client.gui.inventory.GuiCrafting
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.item.crafting.CraftingManager
+ *  net.minecraft.item.crafting.IRecipe
+ *  net.minecraft.item.crafting.Ingredient
+ *  net.minecraft.item.crafting.ShapedRecipes
+ *  net.minecraft.item.crafting.ShapelessRecipes
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.ResourceLocation
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.world.IBlockAccess
+ */
 package me.earth.earthhack.impl.modules.misc.autocraft;
 
 import java.util.ArrayList;
@@ -32,6 +49,7 @@ import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 
 public class AutoCraft
 extends BlockPlacingModule {
@@ -64,7 +82,7 @@ extends BlockPlacingModule {
     public BlockPos getCraftingTable() {
         AtomicReference craftingTable = new AtomicReference();
         BlockUtil.sphere(this.tableRange.getValue().floatValue(), pos -> {
-            if (AutoCraft.mc.world.getBlockState((BlockPos)pos).getBlock() == Blocks.CRAFTING_TABLE) {
+            if (AutoCraft.mc.world.getBlockState(pos).getBlock() == Blocks.CRAFTING_TABLE) {
                 craftingTable.set(pos);
             }
             return false;
@@ -75,7 +93,7 @@ extends BlockPlacingModule {
     public BlockPos getCraftingTableBlock() {
         HashSet positions = new HashSet();
         BlockUtil.sphere(this.tableRange.getValue().floatValue(), pos -> {
-            if (AutoCraft.mc.world.getBlockState((BlockPos)pos).getBlock().isReplaceable(AutoCraft.mc.world, (BlockPos)pos) && this.entityCheck((BlockPos)pos)) {
+            if (AutoCraft.mc.world.getBlockState(pos).getBlock().isReplaceable((IBlockAccess)AutoCraft.mc.world, pos) && this.entityCheck((BlockPos)pos)) {
                 positions.add(pos);
             }
             return false;
@@ -98,7 +116,7 @@ extends BlockPlacingModule {
     private int safety(BlockPos pos) {
         int safety = 0;
         for (EnumFacing facing : EnumFacing.values()) {
-            if (AutoCraft.mc.world.getBlockState(pos.offset(facing)).func_185904_a().isReplaceable()) continue;
+            if (AutoCraft.mc.world.getBlockState(pos.offset(facing)).getMaterial().isReplaceable()) continue;
             ++safety;
         }
         return safety;
@@ -198,3 +216,4 @@ extends BlockPlacingModule {
         }
     }
 }
+

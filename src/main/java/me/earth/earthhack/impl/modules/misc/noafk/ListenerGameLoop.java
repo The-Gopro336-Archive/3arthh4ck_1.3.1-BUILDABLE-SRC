@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.EnumHand
+ */
 package me.earth.earthhack.impl.modules.misc.noafk;
 
 import me.earth.earthhack.impl.event.events.misc.GameLoopEvent;
@@ -24,3 +30,4 @@ extends ModuleListener<NoAFK, GameLoopEvent> {
         }
     }
 }
+

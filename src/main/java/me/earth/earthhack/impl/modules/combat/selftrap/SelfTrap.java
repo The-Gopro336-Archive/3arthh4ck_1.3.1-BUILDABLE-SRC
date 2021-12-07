@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.combat.selftrap;
 
 import me.earth.earthhack.api.module.util.Category;
@@ -10,6 +18,7 @@ import me.earth.earthhack.impl.modules.combat.selftrap.SelfTrapMode;
 import me.earth.earthhack.impl.util.helpers.blocks.ObbyListenerModule;
 import me.earth.earthhack.impl.util.math.position.PositionUtil;
 import me.earth.earthhack.impl.util.math.rotation.RotationUtil;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 
@@ -33,7 +42,7 @@ extends ObbyListenerModule<ListenerSelfTrap> {
     protected void onEnable() {
         EntityPlayer entity = RotationUtil.getRotationPlayer();
         if (entity != null) {
-            this.startPos = PositionUtil.getPosition(entity);
+            this.startPos = PositionUtil.getPosition((Entity)entity);
         }
         super.onEnable();
     }
@@ -82,3 +91,4 @@ extends ObbyListenerModule<ListenerSelfTrap> {
         return false;
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.managers.client;
 
 import java.io.File;
@@ -51,3 +54,4 @@ extends Srg2NotchService {
         super.handleEntry(entry, jos, jar, mapping);
     }
 }
+

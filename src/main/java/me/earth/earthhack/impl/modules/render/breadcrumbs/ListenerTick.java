@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.modules.render.breadcrumbs;
 
 import java.util.ArrayList;
@@ -20,7 +26,7 @@ extends ModuleListener<BreadCrumbs, TickEvent> {
             List<Trace.TracePos> trace;
             Vec3d vec3d;
             Vec3d vec = ListenerTick.mc.player.getPositionVector();
-            if (vec.equals(BreadCrumbs.ORIGIN)) {
+            if (vec.equals((Object)BreadCrumbs.ORIGIN)) {
                 return;
             }
             if (((BreadCrumbs)this.module).trace == null) {
@@ -32,10 +38,11 @@ extends ModuleListener<BreadCrumbs, TickEvent> {
                 trace = new ArrayList<Trace.TracePos>();
                 ((BreadCrumbs)this.module).trace = new Trace(((BreadCrumbs)this.module).positions.size() + 1, null, ListenerTick.mc.world.provider.getDimensionType(), vec, trace);
             }
-            if (trace.isEmpty() || !vec.equals(vec3d)) {
+            if (trace.isEmpty() || !vec.equals((Object)vec3d)) {
                 trace.add(new Trace.TracePos(vec, System.currentTimeMillis() + (long)((BreadCrumbs)this.module).fadeDelay.getValue().intValue()));
             }
             ((BreadCrumbs)this.module).timer.reset();
         }
     }
 }
+

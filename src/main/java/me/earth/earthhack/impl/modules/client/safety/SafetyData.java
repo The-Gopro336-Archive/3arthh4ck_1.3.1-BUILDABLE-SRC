@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.safety;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -32,3 +35,4 @@ extends DefaultData<Safety> {
         return "Manages your Safety, doesn't matter if this module is on or not.";
     }
 }
+

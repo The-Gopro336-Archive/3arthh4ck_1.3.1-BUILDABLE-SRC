@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.geom;
 
 public interface GeomUtilListener {
@@ -7,3 +10,4 @@ public interface GeomUtilListener {
 
     public void pointUsed(float var1, float var2);
 }
+

@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.modules.render.logoutspots.util;
 
 import me.earth.earthhack.api.util.interfaces.Globals;
@@ -50,3 +58,4 @@ implements Globals {
         return new Vec3d(MathUtil.round(this.x, 1), MathUtil.round(this.y, 1), MathUtil.round(this.z, 1));
     }
 }
+

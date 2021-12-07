@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.core.ducks.network;
 
 public interface IPlayerControllerMP {
@@ -17,3 +20,4 @@ public interface IPlayerControllerMP {
 
     public boolean getIsHittingBlock();
 }
+

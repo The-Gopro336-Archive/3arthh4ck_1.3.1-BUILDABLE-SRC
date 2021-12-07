@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.svg.inkscape;
 
 import java.util.ArrayList;
@@ -129,3 +132,4 @@ implements ElementProcessor {
         return value.length();
     }
 }
+

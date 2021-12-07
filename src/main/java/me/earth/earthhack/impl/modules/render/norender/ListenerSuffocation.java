@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.render.norender;
 
 import me.earth.earthhack.impl.event.events.render.SuffocationEvent;
@@ -17,3 +20,4 @@ extends ModuleListener<NoRender, SuffocationEvent> {
         }
     }
 }
+

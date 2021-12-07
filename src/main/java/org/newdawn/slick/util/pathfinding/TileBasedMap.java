@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.util.pathfinding;
 
 import org.newdawn.slick.util.pathfinding.PathFindingContext;
@@ -13,3 +16,4 @@ public interface TileBasedMap {
 
     public float getCost(PathFindingContext var1, int var2, int var3);
 }
+

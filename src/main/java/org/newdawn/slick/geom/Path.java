@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.geom;
 
 import java.util.ArrayList;
@@ -107,3 +110,4 @@ extends Shape {
         return this.closed;
     }
 }
+

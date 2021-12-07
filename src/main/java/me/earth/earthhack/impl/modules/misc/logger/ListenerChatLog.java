@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.misc.logger;
 
 import me.earth.earthhack.impl.event.events.render.ChatEvent;
@@ -17,3 +20,4 @@ extends ModuleListener<Logger, ChatEvent.Log> {
         }
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.misc.announcer;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -35,3 +38,4 @@ extends DefaultData<Announcer> {
         return "When you want to be really annoying. You'll find configurable files in the earthhack/util folder.";
     }
 }
+

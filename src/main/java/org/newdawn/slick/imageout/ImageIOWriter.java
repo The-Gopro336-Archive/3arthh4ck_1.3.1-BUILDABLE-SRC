@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.imageout;
 
 import java.awt.Point;
@@ -54,3 +57,4 @@ implements ImageWriter {
         ImageIO.write((RenderedImage)img, format, output);
     }
 }
+

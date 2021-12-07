@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ */
 package me.earth.earthhack.impl.modules.movement.boatfly;
 
 import me.earth.earthhack.impl.event.events.misc.GameLoopEvent;
@@ -21,7 +27,7 @@ extends ModuleListener<BoatFly, GameLoopEvent> {
         if (riding == null) {
             return;
         }
-        if (ListenerGameLoop.mc.player.equals(riding.getControllingPassenger())) {
+        if (ListenerGameLoop.mc.player.equals((Object)riding.getControllingPassenger())) {
             double d = ListenerGameLoop.mc.player.movementInput.jump ? ((BoatFly)this.module).upSpeed.getValue() : (riding.motionY = KeyBoardUtil.isKeyDown(((BoatFly)this.module).downBind) ? -((BoatFly)this.module).downSpeed.getValue().doubleValue() : (double)((BoatFly)this.module).glide.getValue().floatValue());
             if (((BoatFly)this.module).fixYaw.getValue().booleanValue()) {
                 riding.rotationYaw = ListenerGameLoop.mc.player.rotationYaw;
@@ -29,3 +35,4 @@ extends ModuleListener<BoatFly, GameLoopEvent> {
         }
     }
 }
+

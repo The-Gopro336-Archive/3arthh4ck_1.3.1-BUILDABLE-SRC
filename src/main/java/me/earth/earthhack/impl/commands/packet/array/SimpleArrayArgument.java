@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.commands.packet.array;
 
 import me.earth.earthhack.impl.commands.packet.PacketArgument;
@@ -29,3 +32,4 @@ extends AbstractArrayArgument<Object> {
         return result;
     }
 }
+

@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Vec3i
+ *  org.apache.logging.log4j.Logger
+ */
 package me.earth.earthhack.impl.util.math.geocache;
 
 import java.util.TreeSet;
@@ -64,7 +72,7 @@ public class Sphere {
         int i = 0;
         int currentDistance = 0;
         for (BlockPos off : positions) {
-            if (Math.sqrt(pos.distanceSq(off)) > (double)currentDistance) {
+            if (Math.sqrt(pos.distanceSq((Vec3i)off)) > (double)currentDistance) {
                 Sphere.INDICES[currentDistance++] = i;
             }
             Sphere.SPHERE[i++] = off;
@@ -84,3 +92,4 @@ public class Sphere {
         Sphere.SPHERE[Sphere.SPHERE.length - 1] = new Vec3i(Integer.MAX_VALUE, 0, 0);
     }
 }
+

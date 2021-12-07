@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.init.Items
+ */
 package me.earth.earthhack.impl.modules.combat.bowkill;
 
 import me.earth.earthhack.impl.event.events.misc.RightClickItemEvent;
@@ -22,3 +28,4 @@ extends ModuleListener<BowKiller, RightClickItemEvent> {
         }
     }
 }
+

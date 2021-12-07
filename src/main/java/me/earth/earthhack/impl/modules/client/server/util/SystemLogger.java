@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.server.util;
 
 import me.earth.earthhack.impl.modules.client.server.api.ILogger;
@@ -9,3 +12,4 @@ implements ILogger {
         System.out.println(message);
     }
 }
+

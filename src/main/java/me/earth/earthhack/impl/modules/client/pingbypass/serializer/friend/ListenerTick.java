@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.pingbypass.serializer.friend;
 
 import me.earth.earthhack.api.event.bus.EventListener;
@@ -18,3 +21,4 @@ extends EventListener<TickEvent> {
         this.serializer.onTick();
     }
 }
+

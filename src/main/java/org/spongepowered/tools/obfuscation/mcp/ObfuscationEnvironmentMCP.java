@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.tools.obfuscation.mcp;
 
 import javax.annotation.processing.Filer;
@@ -25,3 +28,4 @@ extends ObfuscationEnvironment {
         return new MappingWriterSrg(messager, filer);
     }
 }
+

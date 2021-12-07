@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.MathHelper
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.util.math;
 
 import java.math.BigDecimal;
@@ -91,7 +99,7 @@ public class MathUtil {
     }
 
     public static double angle(Vec3d vec3d, Vec3d other) {
-        double lengthSq = vec3d.lengthVector() * other.lengthVector();
+        double lengthSq = vec3d.length() * other.length();
         if (lengthSq < 1.0E-4) {
             return 0.0;
         }
@@ -178,3 +186,4 @@ public class MathUtil {
         return shifted;
     }
 }
+

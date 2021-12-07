@@ -1,3 +1,31 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.entity.EntityPlayerSP
+ *  net.minecraft.client.gui.GuiChat
+ *  net.minecraft.client.gui.GuiIngame
+ *  net.minecraft.client.gui.GuiScreen
+ *  net.minecraft.client.multiplayer.PlayerControllerMP
+ *  net.minecraft.client.multiplayer.WorldClient
+ *  net.minecraft.client.resources.data.MetadataSerializer
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.entity.player.InventoryPlayer
+ *  net.minecraft.util.EnumActionResult
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.Timer
+ *  net.minecraft.util.Util
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.RayTraceResult
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.world.World
+ *  net.minecraft.world.WorldSettings
+ *  org.apache.logging.log4j.Logger
+ *  org.lwjgl.input.Keyboard
+ */
 package me.earth.earthhack.impl.core.mixins;
 
 import java.io.IOException;
@@ -67,32 +95,32 @@ implements IMinecraft {
     private static boolean isEarthhackRunning = true;
     @Shadow
     @Final
-    private static Logger field_147123_G;
+    private static Logger LOGGER;
     @Shadow
-    private int field_71429_W;
+    private int leftClickCounter;
     @Shadow
-    private int field_71467_ac;
+    private int rightClickDelayTimer;
     @Shadow
     @Final
-    private Queue<FutureTask<?>> field_152351_aB;
+    private Queue<FutureTask<?>> scheduledTasks;
     @Shadow
-    public WorldClient field_71441_e;
+    public WorldClient world;
     @Shadow
-    public EntityPlayerSP field_71439_g;
+    public EntityPlayerSP player;
     private int gameLoop = 0;
     @Shadow
-    public GuiIngame field_71456_v;
+    public GuiIngame ingameGUI;
     @Shadow
-    public GuiScreen field_71462_r;
+    public GuiScreen currentScreen;
 
     @Shadow
-    protected abstract void func_147121_ag();
+    protected abstract void rightClickMouse();
 
     @Shadow
-    protected abstract void func_147116_af();
+    protected abstract void clickMouse();
 
     @Shadow
-    protected abstract void func_147112_ai();
+    protected abstract void middleClickMouse();
 
     @Override
     @Accessor(value="rightClickDelayTimer")
@@ -114,15 +142,15 @@ implements IMinecraft {
     public void click(IMinecraft.Click type) {
         switch (type) {
             case RIGHT: {
-                this.func_147121_ag();
+                this.rightClickMouse();
                 break;
             }
             case LEFT: {
-                this.func_147116_af();
+                this.clickMouse();
                 break;
             }
             case MIDDLE: {
-                this.func_147112_ai();
+                this.middleClickMouse();
                 break;
             }
         }
@@ -143,10 +171,10 @@ implements IMinecraft {
      */
     @Override
     public void runScheduledTasks() {
-        Queue<FutureTask<?>> queue = this.field_152351_aB;
+        Queue<FutureTask<?>> queue = this.scheduledTasks;
         synchronized (queue) {
-            while (!this.field_152351_aB.isEmpty()) {
-                Util.runTask(this.field_152351_aB.poll(), (Logger)field_147123_G);
+            while (!this.scheduledTasks.isEmpty()) {
+                Util.runTask(this.scheduledTasks.poll(), (Logger)LOGGER);
             }
         }
     }
@@ -208,9 +236,9 @@ implements IMinecraft {
 
     @Inject(method={"rightClickMouse"}, at={@At(value="HEAD")}, cancellable=true)
     private void rightClickMouseHook(CallbackInfo callbackInfo) {
-        ClickRightEvent event = new ClickRightEvent(this.field_71467_ac);
+        ClickRightEvent event = new ClickRightEvent(this.rightClickDelayTimer);
         Bus.EVENT_BUS.post(event);
-        this.field_71467_ac = event.getDelay();
+        this.rightClickDelayTimer = event.getDelay();
         if (event.isCancelled()) {
             callbackInfo.cancel();
         }
@@ -278,9 +306,9 @@ implements IMinecraft {
 
     @Inject(method={"clickMouse"}, at={@At(value="HEAD")}, cancellable=true)
     private void clickMouseHook(CallbackInfo callbackInfo) {
-        ClickLeftEvent event = new ClickLeftEvent(this.field_71429_W);
+        ClickLeftEvent event = new ClickLeftEvent(this.leftClickCounter);
         Bus.EVENT_BUS.post(event);
-        this.field_71429_W = event.getLeftClickCounter();
+        this.leftClickCounter = event.getLeftClickCounter();
         if (event.isCancelled()) {
             callbackInfo.cancel();
         }
@@ -293,7 +321,7 @@ implements IMinecraft {
 
     @Inject(method={"displayGuiScreen"}, at={@At(value="HEAD")}, cancellable=true)
     private <T extends GuiScreen> void displayGuiScreenHook(T screen, CallbackInfo info) {
-        if (this.field_71439_g == null && screen instanceof GuiChat) {
+        if (this.player == null && screen instanceof GuiChat) {
             info.cancel();
             return;
         }
@@ -330,15 +358,15 @@ implements IMinecraft {
 
     @Inject(method={"loadWorld(Lnet/minecraft/client/multiplayer/WorldClient;Ljava/lang/String;)V"}, at={@At(value="HEAD")})
     private void loadWorldHook(WorldClient worldClient, String loadingMessage, CallbackInfo info) {
-        if (this.field_71441_e != null) {
-            Bus.EVENT_BUS.post(new WorldClientEvent.Unload(this.field_71441_e));
+        if (this.world != null) {
+            Bus.EVENT_BUS.post(new WorldClientEvent.Unload(this.world));
         }
     }
 
     @Inject(method={"getRenderViewEntity"}, at={@At(value="HEAD")}, cancellable=true)
     private void getRenderViewEntityHook(CallbackInfoReturnable<Entity> cir) {
         if (SPECTATE.isEnabled()) {
-            cir.setReturnValue(((Spectate)SPECTATE.get()).getRender());
+            cir.setReturnValue((Entity)((Spectate)SPECTATE.get()).getRender());
         }
     }
 
@@ -382,3 +410,4 @@ implements IMinecraft {
         }
     }
 }
+

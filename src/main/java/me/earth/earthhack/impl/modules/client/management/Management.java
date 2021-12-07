@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.mojang.authlib.GameProfile
+ */
 package me.earth.earthhack.impl.modules.client.management;
 
 import com.mojang.authlib.GameProfile;
@@ -60,3 +66,4 @@ extends Module {
         }
     }
 }
+

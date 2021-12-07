@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal.util;
 
 import java.util.ArrayList;
@@ -60,7 +67,7 @@ public class PlaceData {
     public void addAllCorrespondingData() {
         for (AntiTotemData antiTotemData : this.antiTotem) {
             for (EntityPlayer player : antiTotemData.getAntiTotems()) {
-                List<PositionData> corresponding = this.corr.get(player);
+                List<PositionData> corresponding = this.corr.get((Object)player);
                 if (corresponding == null) continue;
                 corresponding.forEach(antiTotemData::addCorrespondingData);
             }
@@ -103,8 +110,9 @@ public class PlaceData {
         StringBuilder builder = new StringBuilder();
         builder.append("PlaceData:\n");
         for (PositionData data : this.data) {
-            builder.append("Position: ").append(data.getPos()).append("\n");
+            builder.append("Position: ").append((Object)data.getPos()).append("\n");
         }
         return builder.toString();
     }
 }
+

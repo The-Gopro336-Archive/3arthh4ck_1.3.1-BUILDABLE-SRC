@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.transformers;
 
 import org.spongepowered.asm.lib.ClassReader;
@@ -38,3 +41,4 @@ implements ILegacyClassTransformer {
         return writer.toByteArray();
     }
 }
+

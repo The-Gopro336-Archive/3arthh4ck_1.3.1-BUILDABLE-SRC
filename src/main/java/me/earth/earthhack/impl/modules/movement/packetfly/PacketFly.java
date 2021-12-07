@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketEntityAction$Action
+ *  net.minecraft.network.play.client.CPacketPlayer
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.modules.movement.packetfly;
 
 import java.util.HashSet;
@@ -28,6 +38,8 @@ import me.earth.earthhack.impl.modules.movement.packetfly.util.TimeVec;
 import me.earth.earthhack.impl.modules.movement.packetfly.util.Type;
 import me.earth.earthhack.impl.util.client.ModuleUtil;
 import me.earth.earthhack.impl.util.network.PacketUtil;
+import net.minecraft.entity.Entity;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.math.Vec3d;
@@ -108,14 +120,14 @@ extends Module {
     }
 
     protected void onPacketSend(PacketEvent<? extends CPacketPlayer> event) {
-        if (!this.playerPackets.remove(event.getPacket())) {
+        if (!this.playerPackets.remove((Object)event.getPacket())) {
             event.setCancelled(true);
         }
     }
 
     protected boolean isPlayerCollisionBoundingBoxEmpty() {
         double o = this.bbOffset.getValue() != false ? -0.0625 : 0.0;
-        return !PacketFly.mc.world.getCollisionBoxes(PacketFly.mc.player, PacketFly.mc.player.getEntityBoundingBox().expand(o, o, o)).isEmpty();
+        return !PacketFly.mc.world.getCollisionBoxes((Entity)PacketFly.mc.player, PacketFly.mc.player.getEntityBoundingBox().expand(o, o, o)).isEmpty();
     }
 
     protected boolean checkPackets(int amount) {
@@ -167,6 +179,7 @@ extends Module {
 
     protected void sendCPacket(CPacketPlayer packet) {
         this.playerPackets.add(packet);
-        PacketFly.mc.player.connection.sendPacket(packet);
+        PacketFly.mc.player.connection.sendPacket((Packet)packet);
     }
 }
+

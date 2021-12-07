@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.installer.gui;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
@@ -38,3 +41,4 @@ public class InstallerFrame {
         this.frame.validate();
     }
 }
+

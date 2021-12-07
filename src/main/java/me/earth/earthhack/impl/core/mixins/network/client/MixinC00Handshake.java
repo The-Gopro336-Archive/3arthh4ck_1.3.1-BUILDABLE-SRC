@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.PacketBuffer
+ *  net.minecraft.network.handshake.client.C00Handshake
+ */
 package me.earth.earthhack.impl.core.mixins.network.client;
 
 import me.earth.earthhack.impl.core.ducks.network.IC00Handshake;
@@ -13,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class MixinC00Handshake
 implements IC00Handshake {
     @Shadow
-    private String field_149598_b;
+    private String ip;
     private boolean cancel;
 
     @Override
@@ -32,10 +39,11 @@ implements IC00Handshake {
     @Redirect(method={"writePacketData"}, at=@At(value="INVOKE", target="Lnet/minecraft/network/PacketBuffer;writeString(Ljava/lang/String;)Lnet/minecraft/network/PacketBuffer;"))
     public PacketBuffer writePacketDataHook(PacketBuffer buffer, String string) {
         if (this.cancel) {
-            buffer.writeString(this.field_149598_b);
+            buffer.writeString(this.ip);
         } else {
             buffer.writeString(string);
         }
         return buffer;
     }
 }
+

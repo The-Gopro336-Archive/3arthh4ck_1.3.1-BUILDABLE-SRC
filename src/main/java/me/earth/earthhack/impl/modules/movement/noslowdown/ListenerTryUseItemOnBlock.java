@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemBow
+ *  net.minecraft.item.ItemFood
+ *  net.minecraft.item.ItemPotion
+ *  net.minecraft.network.play.client.CPacketHeldItemChange
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock
+ *  net.minecraft.util.EnumHand
+ */
 package me.earth.earthhack.impl.modules.movement.noslowdown;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -26,3 +38,4 @@ extends ModuleListener<NoSlowDown, PacketEvent.Post<CPacketPlayerTryUseItemOnBlo
         }
     }
 }
+

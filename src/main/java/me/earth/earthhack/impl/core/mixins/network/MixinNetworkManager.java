@@ -1,3 +1,22 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  io.netty.channel.Channel
+ *  io.netty.channel.ChannelFuture
+ *  io.netty.channel.ChannelFutureListener
+ *  io.netty.channel.ChannelHandlerContext
+ *  io.netty.util.concurrent.Future
+ *  io.netty.util.concurrent.GenericFutureListener
+ *  javax.annotation.Nullable
+ *  net.minecraft.network.EnumConnectionState
+ *  net.minecraft.network.INetHandler
+ *  net.minecraft.network.NetworkManager
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.ThreadQuickExitException
+ *  net.minecraft.util.text.ITextComponent
+ *  org.apache.logging.log4j.Logger
+ */
 package me.earth.earthhack.impl.core.mixins.network;
 
 import io.netty.channel.Channel;
@@ -39,26 +58,26 @@ implements INetworkManager {
     private static final ModuleCache<PacketDelay> PACKET_DELAY = Caches.getModule(PacketDelay.class);
     @Shadow
     @Final
-    private static Logger field_150735_g;
+    private static Logger LOGGER;
     @Shadow
-    private Channel field_150746_k;
+    private Channel channel;
     @Shadow
-    private INetHandler field_150744_m;
+    private INetHandler packetListener;
 
     @Shadow
-    public abstract boolean func_150724_d();
+    public abstract boolean isChannelOpen();
 
     @Shadow
-    protected abstract void func_150733_h();
+    protected abstract void flushOutboundQueue();
 
     @Shadow
-    protected abstract void func_150732_b(Packet<?> var1, GenericFutureListener<? extends Future<? super Void>>[] var2);
+    protected abstract void dispatchPacket(Packet<?> var1, GenericFutureListener<? extends Future<? super Void>>[] var2);
 
     @Shadow
-    public abstract void func_150723_a(EnumConnectionState var1);
+    public abstract void setConnectionState(EnumConnectionState var1);
 
     @Shadow
-    public abstract void func_179290_a(Packet<?> var1);
+    public abstract void sendPacket(Packet<?> var1);
 
     @Override
     public Packet<?> sendPacketNoEvent(Packet<?> packetIn) {
@@ -75,10 +94,10 @@ implements INetworkManager {
         if (event.isCancelled()) {
             return packet;
         }
-        if (this.func_150724_d()) {
-            this.func_150733_h();
+        if (this.isChannelOpen()) {
+            this.flushOutboundQueue();
             if (post) {
-                this.func_150732_b(packet, null);
+                this.dispatchPacket(packet, null);
             } else {
                 this.dispatchSilently(packet);
             }
@@ -93,7 +112,7 @@ implements INetworkManager {
             info.cancel();
             ((PacketDelay)MixinNetworkManager.PACKET_DELAY.get()).service.schedule(() -> {
                 ((PacketDelay)MixinNetworkManager.PACKET_DELAY.get()).packets.add(packet);
-                this.func_179290_a(packet);
+                this.sendPacket(packet);
                 ((PacketDelay)MixinNetworkManager.PACKET_DELAY.get()).packets.remove(packet);
             }, (long)((PacketDelay)PACKET_DELAY.get()).getDelay(), TimeUnit.MILLISECONDS);
             return;
@@ -124,7 +143,7 @@ implements INetworkManager {
             info.cancel();
         } else if (!event.getPostEvents().isEmpty()) {
             try {
-                packet.processPacket(this.field_150744_m);
+                packet.processPacket(this.packetListener);
             }
             catch (ThreadQuickExitException threadQuickExitException) {
                 // empty catch block
@@ -138,31 +157,31 @@ implements INetworkManager {
 
     @Inject(method={"closeChannel"}, at={@At(value="INVOKE", target="Lio/netty/channel/Channel;isOpen()Z", remap=false)})
     private void onDisconnectHook(ITextComponent component, CallbackInfo info) {
-        if (this.func_150724_d()) {
+        if (this.isChannelOpen()) {
             Bus.EVENT_BUS.post(new DisconnectEvent(component));
         }
     }
 
     private void dispatchSilently(Packet<?> inPacket) {
         EnumConnectionState enumconnectionstate = EnumConnectionState.getFromPacket(inPacket);
-        EnumConnectionState protocolConnectionState = (EnumConnectionState)this.field_150746_k.attr(NetworkManager.PROTOCOL_ATTRIBUTE_KEY).get();
+        EnumConnectionState protocolConnectionState = (EnumConnectionState)this.channel.attr(NetworkManager.PROTOCOL_ATTRIBUTE_KEY).get();
         if (protocolConnectionState != enumconnectionstate) {
-            field_150735_g.debug("Disabled auto read");
-            this.field_150746_k.config().setAutoRead(false);
+            LOGGER.debug("Disabled auto read");
+            this.channel.config().setAutoRead(false);
         }
-        if (this.field_150746_k.eventLoop().inEventLoop()) {
+        if (this.channel.eventLoop().inEventLoop()) {
             if (enumconnectionstate != protocolConnectionState) {
-                this.func_150723_a(enumconnectionstate);
+                this.setConnectionState(enumconnectionstate);
             }
-            ChannelFuture channelfuture = this.field_150746_k.writeAndFlush(inPacket);
-            channelfuture.addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
+            ChannelFuture channelfuture = this.channel.writeAndFlush(inPacket);
+            channelfuture.addListener((GenericFutureListener)ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
         } else {
-            this.field_150746_k.eventLoop().execute(() -> {
+            this.channel.eventLoop().execute(() -> {
                 if (enumconnectionstate != protocolConnectionState) {
-                    this.func_150723_a(enumconnectionstate);
+                    this.setConnectionState(enumconnectionstate);
                 }
-                ChannelFuture channelfuture1 = this.field_150746_k.writeAndFlush(inPacket);
-                channelfuture1.addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
+                ChannelFuture channelfuture1 = this.channel.writeAndFlush((Object)inPacket);
+                channelfuture1.addListener((GenericFutureListener)ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
             });
         }
     }
@@ -174,3 +193,4 @@ implements INetworkManager {
         Thread.dumpStack();
     }
 }
+

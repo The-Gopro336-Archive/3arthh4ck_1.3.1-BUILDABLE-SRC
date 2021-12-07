@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.json;
 
 import com.formdev.flatlaf.json.JsonParser;
@@ -69,3 +72,4 @@ abstract class JsonHandler<A, O> {
     public void endObjectValue(O object, String name) {
     }
 }
+

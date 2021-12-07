@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.geom;
 
 import org.newdawn.slick.geom.Ellipse;
@@ -135,3 +138,4 @@ extends Ellipse {
         return intersects;
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.helpers.addable.setting;
 
 import me.earth.earthhack.api.setting.event.SettingEvent;
@@ -23,3 +26,4 @@ extends RemovingSetting<Boolean> {
         ComponentFactory.register(SimpleRemovingSetting.class, SimpleRemovingComponent::new);
     }
 }
+

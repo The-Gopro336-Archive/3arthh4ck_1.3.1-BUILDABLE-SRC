@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.inventory.GuiShulkerBox
+ *  net.minecraft.entity.player.InventoryPlayer
+ *  net.minecraft.inventory.IInventory
+ */
 package me.earth.earthhack.impl.core.mixins.gui;
 
 import net.minecraft.client.gui.inventory.GuiShulkerBox;
@@ -14,3 +22,4 @@ public interface IGuiShulkerBox {
     @Accessor(value="playerInventory")
     public InventoryPlayer getPlayerInventory();
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.api.config.preset;
 
 import me.earth.earthhack.api.config.Config;
@@ -34,3 +37,4 @@ implements Config {
         return this.name.hashCode();
     }
 }
+

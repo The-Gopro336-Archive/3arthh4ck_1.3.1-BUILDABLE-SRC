@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.pingbypass.guis;
 
 import me.earth.earthhack.impl.gui.buttons.SimpleButton;
@@ -8,3 +11,4 @@ extends SimpleButton {
         super(buttonID, xPos, yPos, 0, 0, 0, 20);
     }
 }
+

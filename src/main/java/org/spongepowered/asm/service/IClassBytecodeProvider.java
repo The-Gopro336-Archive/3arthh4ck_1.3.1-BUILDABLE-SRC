@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.service;
 
 import java.io.IOException;
@@ -10,3 +13,4 @@ public interface IClassBytecodeProvider {
 
     public ClassNode getClassNode(String var1) throws ClassNotFoundException, IOException;
 }
+

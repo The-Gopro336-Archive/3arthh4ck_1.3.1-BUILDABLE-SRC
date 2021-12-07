@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package org.spongepowered.asm.launch.platform;
 
 import java.io.File;
@@ -21,7 +28,7 @@ import org.spongepowered.asm.service.MixinService;
 public class MixinPlatformManager {
     private static final String DEFAULT_MAIN_CLASS = "net.minecraft.client.main.Main";
     private static final String MIXIN_TWEAKER_CLASS = "org.spongepowered.asm.launch.MixinTweaker";
-    private static final Logger logger = LogManager.getLogger("mixin");
+    private static final Logger logger = LogManager.getLogger((String)"mixin");
     private final Map<URI, MixinContainer> containers = new LinkedHashMap<URI, MixinContainer>();
     private MixinContainer primaryContainer;
     private boolean prepared = false;
@@ -179,3 +186,4 @@ public class MixinPlatformManager {
         MixinEnvironment.getDefaultEnvironment().registerTokenProviderClass(provider);
     }
 }
+

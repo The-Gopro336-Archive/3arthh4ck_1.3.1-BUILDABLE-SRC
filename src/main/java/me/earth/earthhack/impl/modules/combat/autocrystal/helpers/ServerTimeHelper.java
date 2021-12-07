@@ -1,3 +1,20 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Items
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock
+ *  net.minecraft.network.play.client.CPacketUseEntity
+ *  net.minecraft.network.play.client.CPacketUseEntity$Action
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.RayTraceResult
+ *  net.minecraft.world.IBlockAccess
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal.helpers;
 
 import java.util.concurrent.ScheduledExecutorService;
@@ -20,11 +37,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.IBlockAccess;
 
 public class ServerTimeHelper
 extends SubscriberImpl
@@ -60,13 +79,13 @@ implements Globals {
         THREAD.schedule(() -> {
             if (InventoryUtil.isHolding(Items.END_CRYSTAL)) {
                 EnumHand hand = InventoryUtil.getHand(Items.END_CRYSTAL);
-                RayTraceResult ray = RotationUtil.rayTraceTo(pos, ServerTimeHelper.mc.world);
+                RayTraceResult ray = RotationUtil.rayTraceTo(pos, (IBlockAccess)ServerTimeHelper.mc.world);
                 float[] f = RayTraceUtil.hitVecToPlaceVec(pos, ray.hitVec);
                 if (time == SwingTime.Pre) {
                     Swing.Packet.swing(hand);
                     Swing.Client.swing(hand);
                 }
-                ServerTimeHelper.mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(pos, ray.sideHit, hand, f[0], f[1], f[2]));
+                ServerTimeHelper.mc.player.connection.sendPacket((Packet)new CPacketPlayerTryUseItemOnBlock(pos, ray.sideHit, hand, f[0], f[1], f[2]));
                 if (time == SwingTime.Post) {
                     Swing.Packet.swing(hand);
                     Swing.Client.swing(hand);
@@ -75,3 +94,4 @@ implements Globals {
         }, (long)sleep, TimeUnit.MILLISECONDS);
     }
 }
+

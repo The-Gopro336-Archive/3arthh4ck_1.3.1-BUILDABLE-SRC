@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.lib;
 
 import java.lang.reflect.Constructor;
@@ -133,18 +136,22 @@ public class Type {
 
     /*
      * Unable to fully structure code
+     * Enabled aggressive block sorting
+     * Lifted jumps to return sites
      */
     public static Type getReturnType(String methodDescriptor) {
         buf = methodDescriptor.toCharArray();
         off = 1;
-        block0: while (true) {
+        block0: while (true) lbl-1000:
+        // 3 sources
+
+        {
             if ((car = buf[off++]) == ')') {
                 return Type.getType(buf, off);
             }
-            if (car != 'L') continue;
+            if (car != 'L') ** GOTO lbl-1000
             while (true) {
-                if (buf[off++] != ';') ** break;
-                continue block0;
+                if (buf[off++] == ';') continue block0;
             }
             break;
         }
@@ -452,3 +459,4 @@ public class Type {
         return this.getDescriptor();
     }
 }
+

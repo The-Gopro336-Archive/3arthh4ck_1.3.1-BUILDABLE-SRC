@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.player.blocktweaks;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -23,3 +26,4 @@ extends DefaultData<BlockTweaks> {
         return "Tweaks that make the interaction with blocks easier.";
     }
 }
+

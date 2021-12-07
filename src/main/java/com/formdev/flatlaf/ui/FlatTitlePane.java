@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.ui;
 
 import com.formdev.flatlaf.FlatClientProperties;
@@ -358,7 +361,7 @@ extends JComponent {
         int count = menuBar.getComponentCount();
         for (int i = count - 1; i >= 0; --i) {
             Component c = menuBar.getComponent(i);
-            if (!(c instanceof Box.Filler) || c.getMaximumSize().width < Short.MAX_VALUE) continue;
+            if (!(c instanceof Box.Filler) || c.getMaximumSize().width < 32767) continue;
             return c;
         }
         return null;
@@ -771,3 +774,4 @@ extends JComponent {
         }
     }
 }
+

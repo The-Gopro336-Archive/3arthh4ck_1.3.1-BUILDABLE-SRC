@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.EnumHand
+ */
 package me.earth.earthhack.impl.modules.render.viewmodel;
 
 import me.earth.earthhack.api.module.Module;
@@ -56,3 +62,4 @@ extends Module {
         return new float[]{this.angleTranslate.getValue().floatValue(), this.xTranslate.getValue().floatValue(), this.yTranslate.getValue().floatValue(), this.zTranslate.getValue().floatValue()};
     }
 }
+

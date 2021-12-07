@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.collect.Sets
+ */
 package me.earth.earthhack.impl.commands.packet.generic;
 
 import com.google.common.collect.Sets;
@@ -14,6 +20,7 @@ extends AbstractIterableArgument<T, Set<T>> {
 
     @Override
     protected Set<T> create(T[] array) {
-        return Sets.newHashSet(array);
+        return Sets.newHashSet((Object[])array);
     }
 }
+

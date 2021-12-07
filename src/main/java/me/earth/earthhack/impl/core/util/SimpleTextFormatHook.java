@@ -1,6 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.text.ITextComponent
+ *  net.minecraft.util.text.TextComponentBase
+ */
 package me.earth.earthhack.impl.core.util;
 
-import java.util.Iterator;
 import java.util.function.Supplier;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentBase;
@@ -16,11 +22,10 @@ implements Supplier<String> {
     @Override
     public String get() {
         StringBuilder sb = new StringBuilder();
-        Iterator iterator = this.base.iterator();
-        while (iterator.hasNext()) {
-            ITextComponent component = (ITextComponent)iterator.next();
+        for (ITextComponent component : this.base) {
             sb.append(component.getUnformattedComponentText());
         }
         return sb.toString();
     }
 }
+

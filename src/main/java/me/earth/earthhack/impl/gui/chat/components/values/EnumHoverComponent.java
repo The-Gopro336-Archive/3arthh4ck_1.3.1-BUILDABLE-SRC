@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.gui.chat.components.values;
 
 import me.earth.earthhack.api.setting.settings.EnumSetting;
@@ -15,3 +18,4 @@ extends SettingComponent<E, EnumSetting<E>> {
         return "\u00a7b" + ((Enum)((EnumSetting)this.setting).getValue()).name() + "\u00a77" + " -> " + "\u00a7f" + EnumHelper.next((Enum)((EnumSetting)this.setting).getValue()).name();
     }
 }
+

@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.init.MobEffects
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketPlayer$Position
+ *  net.minecraft.potion.PotionEffect
+ */
 package me.earth.earthhack.impl.modules.movement.flight;
 
 import me.earth.earthhack.api.module.Module;
@@ -15,6 +24,7 @@ import me.earth.earthhack.impl.modules.movement.flight.ListenerTick;
 import me.earth.earthhack.impl.modules.movement.flight.mode.FlightMode;
 import me.earth.earthhack.impl.util.network.PacketUtil;
 import net.minecraft.init.MobEffects;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.potion.PotionEffect;
 
@@ -111,8 +121,8 @@ extends Module {
         if (Flight.mc.player != null && Flight.mc.player.onGround) {
             int i = 0;
             while ((double)i <= 4.0 / offset) {
-                Flight.mc.player.connection.sendPacket(new CPacketPlayer.Position(Flight.mc.player.posX, Flight.mc.player.posY + offset, Flight.mc.player.posZ, false));
-                Flight.mc.player.connection.sendPacket(new CPacketPlayer.Position(Flight.mc.player.posX, Flight.mc.player.posY, Flight.mc.player.posZ, (double)i == 4.0 / offset));
+                Flight.mc.player.connection.sendPacket((Packet)new CPacketPlayer.Position(Flight.mc.player.posX, Flight.mc.player.posY + offset, Flight.mc.player.posZ, false));
+                Flight.mc.player.connection.sendPacket((Packet)new CPacketPlayer.Position(Flight.mc.player.posX, Flight.mc.player.posY, Flight.mc.player.posZ, (double)i == 4.0 / offset));
                 ++i;
             }
         }
@@ -124,3 +134,4 @@ extends Module {
         return Flight.mc.player.getMaxFallHeight() + f;
     }
 }
+

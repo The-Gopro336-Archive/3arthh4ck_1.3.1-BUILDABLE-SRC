@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.player.mcp;
 
 import me.earth.earthhack.api.event.events.Stage;
@@ -28,3 +31,4 @@ extends ModuleListener<MiddleClickPearl, MotionUpdateEvent> {
         }
     }
 }
+

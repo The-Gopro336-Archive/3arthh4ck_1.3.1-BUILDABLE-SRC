@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.renderer.entity.Render
+ *  net.minecraft.entity.Entity
+ */
 package me.earth.earthhack.impl.event.events.render;
 
 import me.earth.earthhack.api.event.events.Event;
@@ -67,3 +74,4 @@ extends Event {
         }
     }
 }
+

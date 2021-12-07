@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.entity.EntityOtherPlayerMP
+ */
 package me.earth.earthhack.impl.modules.player.freecam;
 
 import me.earth.earthhack.api.module.util.Category;
@@ -76,3 +82,4 @@ extends DisablingModule {
         }
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.player.autotool;
 
 import me.earth.earthhack.impl.event.events.misc.DeathEvent;
@@ -12,8 +15,9 @@ extends ModuleListener<AutoTool, DeathEvent> {
 
     @Override
     public void invoke(DeathEvent event) {
-        if (event.getEntity().equals(ListenerDeath.mc.player)) {
+        if (event.getEntity().equals((Object)ListenerDeath.mc.player)) {
             ((AutoTool)this.module).reset();
         }
     }
 }
+

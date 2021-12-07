@@ -1,3 +1,17 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.collect.ImmutableList
+ *  com.google.common.collect.Sets
+ *  org.apache.logging.log4j.Level
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ *  org.apache.logging.log4j.core.Appender
+ *  org.apache.logging.log4j.core.LogEvent
+ *  org.apache.logging.log4j.core.Logger
+ *  org.apache.logging.log4j.core.appender.AbstractAppender
+ */
 package org.spongepowered.asm.mixin;
 
 import com.google.common.collect.ImmutableList;
@@ -32,7 +46,7 @@ import org.spongepowered.asm.util.perf.Profiler;
 
 public final class MixinEnvironment
 implements ITokenProvider {
-    private static final Set<String> excludeTransformers = Sets.newHashSet("net.minecraftforge.fml.common.asm.transformers.EventSubscriptionTransformer", "cpw.mods.fml.common.asm.transformers.EventSubscriptionTransformer", "net.minecraftforge.fml.common.asm.transformers.TerminalTransformer", "cpw.mods.fml.common.asm.transformers.TerminalTransformer");
+    private static final Set<String> excludeTransformers = Sets.newHashSet((Object[])new String[]{"net.minecraftforge.fml.common.asm.transformers.EventSubscriptionTransformer", "cpw.mods.fml.common.asm.transformers.EventSubscriptionTransformer", "net.minecraftforge.fml.common.asm.transformers.TerminalTransformer", "cpw.mods.fml.common.asm.transformers.TerminalTransformer"});
     private static MixinEnvironment currentEnvironment;
     private static Phase currentPhase;
     private static CompatibilityLevel compatibility;
@@ -371,7 +385,7 @@ implements ITokenProvider {
         currentPhase = Phase.NOT_INITIALISED;
         compatibility = Option.DEFAULT_COMPATIBILITY_LEVEL.getEnumValue(CompatibilityLevel.JAVA_6);
         showHeader = true;
-        logger = LogManager.getLogger("mixin");
+        logger = LogManager.getLogger((String)"mixin");
         profiler = new Profiler();
     }
 
@@ -384,7 +398,7 @@ implements ITokenProvider {
         }
 
         static void begin() {
-            Logger fmlLog = LogManager.getLogger("FML");
+            Logger fmlLog = LogManager.getLogger((String)"FML");
             if (!(fmlLog instanceof org.apache.logging.log4j.core.Logger)) {
                 return;
             }
@@ -716,7 +730,7 @@ implements ITokenProvider {
         public static final Phase PREINIT = new Phase(0, "PREINIT");
         public static final Phase INIT = new Phase(1, "INIT");
         public static final Phase DEFAULT = new Phase(2, "DEFAULT");
-        static final List<Phase> phases = ImmutableList.of(PREINIT, INIT, DEFAULT);
+        static final List<Phase> phases = ImmutableList.of((Object)PREINIT, (Object)INIT, (Object)DEFAULT);
         final int ordinal;
         final String name;
         private MixinEnvironment environment;
@@ -749,3 +763,4 @@ implements ITokenProvider {
         }
     }
 }
+

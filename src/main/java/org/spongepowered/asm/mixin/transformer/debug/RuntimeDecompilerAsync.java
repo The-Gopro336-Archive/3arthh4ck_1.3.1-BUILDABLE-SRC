@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.transformer.debug;
 
 import java.io.File;
@@ -60,3 +63,4 @@ Thread.UncaughtExceptionHandler {
         }
     }
 }
+

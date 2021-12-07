@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.ui;
 
 import com.formdev.flatlaf.util.MultiResolutionImageSupport;
@@ -37,3 +40,4 @@ extends ScaledImageIcon {
         return (Image)allImages.get(allImages.size() - 1);
     }
 }
+

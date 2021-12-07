@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.installer.main;
 
 import java.net.URL;
@@ -25,3 +28,4 @@ public class Library {
         return this.download;
     }
 }
+

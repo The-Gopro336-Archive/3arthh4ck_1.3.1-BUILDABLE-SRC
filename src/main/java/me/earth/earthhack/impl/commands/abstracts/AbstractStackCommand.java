@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.client.gui.GuiScreen
+ *  net.minecraft.entity.player.EntityPlayerMP
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketCreativeInventoryAction
+ */
 package me.earth.earthhack.impl.commands.abstracts;
 
 import java.util.Objects;
@@ -9,9 +21,11 @@ import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
 import me.earth.earthhack.impl.util.minecraft.ItemUtil;
 import me.earth.earthhack.impl.util.text.ChatUtil;
 import net.minecraft.block.Block;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketCreativeInventoryAction;
 
 public abstract class AbstractStackCommand
@@ -43,7 +57,7 @@ implements Globals {
             hotbar = false;
             slot = AbstractStackCommand.findBlockNoDrag(Blocks.AIR);
             if (slot == -1) {
-                Scheduler.getInstance().schedule(() -> mc.displayGuiScreen(new YesNoNonPausing((result, id) -> {
+                Scheduler.getInstance().schedule(() -> mc.displayGuiScreen((GuiScreen)new YesNoNonPausing((result, id) -> {
                     mc.displayGuiScreen(null);
                     if (result) {
                         this.setSlot(args, AbstractStackCommand.mc.player.inventory.currentItem, true, ghost);
@@ -70,8 +84,8 @@ implements Globals {
         }
         AbstractStackCommand.mc.player.inventoryContainer.putStackInSlot(slot, stack);
         if (AbstractStackCommand.mc.player.isCreative()) {
-            AbstractStackCommand.mc.player.connection.sendPacket(new CPacketCreativeInventoryAction(slot, stack));
-        } else if (mc.isSingleplayer() && (player = Objects.requireNonNull(mc.getIntegratedServer()).func_184103_al().getPlayerByUUID(AbstractStackCommand.mc.player.getUniqueID())) != null) {
+            AbstractStackCommand.mc.player.connection.sendPacket((Packet)new CPacketCreativeInventoryAction(slot, stack));
+        } else if (mc.isSingleplayer() && (player = Objects.requireNonNull(mc.getIntegratedServer()).getPlayerList().getPlayerByUUID(AbstractStackCommand.mc.player.getUniqueID())) != null) {
             player.inventoryContainer.putStackInSlot(slot, stack);
             ghost = false;
         }
@@ -87,3 +101,4 @@ implements Globals {
         return -1;
     }
 }
+

@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.InventoryPlayer
+ */
 package me.earth.earthhack.impl.core.mixins.entity.living.player;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -36,3 +42,4 @@ public abstract class MixinInventoryPlayer {
         }
     }
 }
+

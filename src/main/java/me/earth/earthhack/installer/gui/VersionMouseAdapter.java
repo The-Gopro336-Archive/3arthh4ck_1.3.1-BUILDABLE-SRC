@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.installer.gui;
 
 import java.awt.event.MouseAdapter;
@@ -40,3 +43,4 @@ extends MouseAdapter {
         }
     }
 }
+

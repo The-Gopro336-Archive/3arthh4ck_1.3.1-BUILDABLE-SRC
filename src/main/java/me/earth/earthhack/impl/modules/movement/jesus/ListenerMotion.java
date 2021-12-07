@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.block.BlockLiquid
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.movement.jesus;
 
 import me.earth.earthhack.api.event.events.Stage;
@@ -56,3 +64,4 @@ extends ModuleListener<Jesus, MotionUpdateEvent> {
         }
     }
 }
+

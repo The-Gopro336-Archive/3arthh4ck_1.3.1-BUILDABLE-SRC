@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Items
+ *  net.minecraft.item.Item
+ *  net.minecraft.world.IBlockAccess
+ */
 package me.earth.earthhack.impl.modules.combat.legswitch;
 
 import me.earth.earthhack.api.event.events.Stage;
@@ -7,8 +16,10 @@ import me.earth.earthhack.impl.modules.combat.legswitch.ConstellationFactory;
 import me.earth.earthhack.impl.modules.combat.legswitch.LegSwitch;
 import me.earth.earthhack.impl.modules.combat.legswitch.modes.LegAutoSwitch;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.world.IBlockAccess;
 
 final class ListenerMotion
 extends ModuleListener<LegSwitch, MotionUpdateEvent> {
@@ -27,7 +38,7 @@ extends ModuleListener<LegSwitch, MotionUpdateEvent> {
             return;
         }
         if (event.getStage() == Stage.PRE) {
-            if (((LegSwitch)this.module).constellation == null || !((LegSwitch)this.module).constellation.isValid((LegSwitch)this.module, ListenerMotion.mc.player, ListenerMotion.mc.world)) {
+            if (((LegSwitch)this.module).constellation == null || !((LegSwitch)this.module).constellation.isValid((LegSwitch)this.module, (EntityPlayer)ListenerMotion.mc.player, (IBlockAccess)ListenerMotion.mc.world)) {
                 ((LegSwitch)this.module).constellation = ConstellationFactory.create((LegSwitch)this.module, ListenerMotion.mc.world.playerEntities);
                 if (((LegSwitch)this.module).constellation != null && !((LegSwitch)this.module).obsidian.getValue().booleanValue() && (((LegSwitch)this.module).constellation.firstNeedsObby || ((LegSwitch)this.module).constellation.secondNeedsObby)) {
                     ((LegSwitch)this.module).constellation = null;
@@ -48,3 +59,4 @@ extends ModuleListener<LegSwitch, MotionUpdateEvent> {
         }
     }
 }
+

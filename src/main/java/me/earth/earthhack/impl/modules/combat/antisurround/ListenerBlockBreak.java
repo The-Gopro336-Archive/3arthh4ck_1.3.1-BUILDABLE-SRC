@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.combat.antisurround;
 
 import me.earth.earthhack.api.event.events.Stage;
@@ -20,3 +23,4 @@ extends ModuleListener<AntiSurround, BlockDestroyEvent> {
         ((AntiSurround)this.module).onBlockBreak(event.getPos(), ListenerBlockBreak.mc.world.playerEntities, ListenerBlockBreak.mc.world.loadedEntityList);
     }
 }
+

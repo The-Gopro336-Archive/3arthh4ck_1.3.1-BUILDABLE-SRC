@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.misc.nointeract;
 
 import me.earth.earthhack.api.module.util.Category;
@@ -17,3 +20,4 @@ extends BlockAddingModule {
         this.listeners.add(new ListenerInteract(this));
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.render.crosshair;
 
 import me.earth.earthhack.impl.event.events.render.Render2DEvent;
@@ -34,3 +37,4 @@ extends ModuleListener<Crosshair, Render2DEvent> {
         }
     }
 }
+

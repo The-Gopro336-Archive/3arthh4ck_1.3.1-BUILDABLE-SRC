@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal.util;
 
 import java.util.Set;
@@ -29,3 +32,4 @@ public class ForceData {
         return this.forceData;
     }
 }
+

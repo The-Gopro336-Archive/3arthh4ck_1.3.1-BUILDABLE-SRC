@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.entity.item.EntityItemFrame
+ *  net.minecraft.entity.item.EntityMinecart
+ *  net.minecraft.entity.item.EntityMinecartEmpty
+ *  net.minecraft.entity.item.EntityMinecartFurnace
+ *  net.minecraft.entity.item.EntityMinecartTNT
+ */
 package me.earth.earthhack.impl.util.minecraft.entity;
 
 import java.util.AbstractMap;
@@ -21,7 +33,7 @@ public class EntityNames {
 
     public static String getName(Entity entity) {
         for (Map.Entry<Class<? extends Entity>, String> entry : entityNames) {
-            if (!entry.getKey().isInstance(entity)) continue;
+            if (!entry.getKey().isInstance((Object)entity)) continue;
             return entry.getValue();
         }
         return entity.getName();
@@ -36,3 +48,4 @@ public class EntityNames {
         EntityNames.register(EntityMinecartTNT.class, "Minecart with TNT");
     }
 }
+

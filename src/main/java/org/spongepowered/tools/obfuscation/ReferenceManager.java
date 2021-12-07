@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.tools.obfuscation;
 
 import java.io.File;
@@ -151,3 +154,4 @@ implements IReferenceManager {
         }
     }
 }
+

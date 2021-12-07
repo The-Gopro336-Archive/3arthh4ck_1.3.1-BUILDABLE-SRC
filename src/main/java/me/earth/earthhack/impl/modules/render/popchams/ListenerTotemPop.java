@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.render.popchams;
 
 import me.earth.earthhack.impl.event.events.misc.TotemPopEvent;
@@ -18,3 +21,4 @@ extends ModuleListener<PopChams, TotemPopEvent> {
         ((PopChams)this.module).getPopDataHashMap().put(event.getEntity().getName(), new PopChams.PopData(event.getEntity(), System.currentTimeMillis(), event.getEntity().rotationYaw, event.getEntity().rotationPitch, event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ));
     }
 }
+

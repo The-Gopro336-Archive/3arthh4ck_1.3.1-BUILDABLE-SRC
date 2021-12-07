@@ -1,3 +1,14 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.entity.EntityPlayerSP
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.MoverType
+ *  net.minecraft.network.datasync.EntityDataManager
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.core.mixins.entity;
 
 import java.util.function.Supplier;
@@ -49,51 +60,51 @@ Globals {
     private static final SettingCache<Boolean, BooleanSetting, Velocity> NO_PUSH = Caches.getSetting(Velocity.class, BooleanSetting.class, "NoPush", false);
     private static final SettingCache<Integer, NumberSetting<Integer>, Management> DEATH_TIME = Caches.getSetting(Management.class, Setting.class, "DeathTime", 500);
     @Shadow
-    public double field_70165_t;
+    public double posX;
     @Shadow
-    public double field_70163_u;
+    public double posY;
     @Shadow
-    public double field_70161_v;
+    public double posZ;
     @Shadow
-    public double field_70159_w;
+    public double motionX;
     @Shadow
-    public double field_70181_x;
+    public double motionY;
     @Shadow
-    public double field_70179_y;
+    public double motionZ;
     @Shadow
-    public float field_70177_z;
+    public float rotationYaw;
     @Shadow
-    public float field_70125_A;
+    public float rotationPitch;
     @Shadow
-    public boolean field_70122_E;
+    public boolean onGround;
     @Shadow
-    public World field_70170_p;
+    public World world;
     @Shadow
-    public double field_70169_q;
+    public double prevPosX;
     @Shadow
-    public double field_70167_r;
+    public double prevPosY;
     @Shadow
-    public double field_70166_s;
+    public double prevPosZ;
     @Shadow
-    public double field_70142_S;
+    public double lastTickPosX;
     @Shadow
-    public double field_70137_T;
+    public double lastTickPosY;
     @Shadow
-    public double field_70136_U;
+    public double lastTickPosZ;
     @Shadow
-    protected EntityDataManager field_70180_af;
+    protected EntityDataManager dataManager;
     @Shadow
-    public float field_70138_W;
+    public float stepHeight;
     @Shadow
-    public boolean field_70128_L;
+    public boolean isDead;
     @Shadow
-    public float field_70130_N;
+    public float width;
     @Shadow
-    public float field_70126_B;
+    public float prevRotationYaw;
     @Shadow
-    public float field_70127_C;
+    public float prevRotationPitch;
     @Shadow
-    public float field_70131_O;
+    public float height;
     private final StopWatch pseudoWatch = new StopWatch();
     private MoveEvent moveEvent;
     private Float prevHeight;
@@ -102,28 +113,28 @@ Globals {
     private long stamp;
     private boolean dummy;
     @Shadow
-    public boolean field_70145_X;
+    public boolean noClip;
 
     @Shadow
-    public abstract AxisAlignedBB func_174813_aQ();
+    public abstract AxisAlignedBB getEntityBoundingBox();
 
     @Shadow
-    public abstract boolean func_70093_af();
+    public abstract boolean isSneaking();
 
     @Shadow
-    protected abstract boolean func_70083_f(int var1);
+    protected abstract boolean getFlag(int var1);
 
     @Shadow
-    public abstract boolean func_189652_ae();
+    public abstract boolean hasNoGravity();
 
     @Shadow
     public abstract boolean equals(Object var1);
 
     @Shadow
-    protected abstract void func_70101_b(float var1, float var2);
+    protected abstract void setRotation(float var1, float var2);
 
     @Shadow
-    public abstract boolean func_184218_aH();
+    public abstract boolean isRiding();
 
     @Override
     @Accessor(value="isInWeb")
@@ -141,7 +152,7 @@ Globals {
 
     @Override
     public boolean isPseudoDead() {
-        if (this.pseudoDead && !this.field_70128_L && this.pseudoWatch.passed(DEATH_TIME.getValue().intValue())) {
+        if (this.pseudoDead && !this.isDead && this.pseudoWatch.passed(DEATH_TIME.getValue().intValue())) {
             this.pseudoDead = false;
         }
         return this.pseudoDead;
@@ -191,7 +202,7 @@ Globals {
     @Inject(method={"move"}, at={@At(value="HEAD")})
     public void moveEntityHook_Head(MoverType type, double x, double y, double z, CallbackInfo info) {
         if (EntityPlayerSP.class.isInstance(this)) {
-            this.moveEvent = new MoveEvent(type, x, y, z, this.func_70093_af());
+            this.moveEvent = new MoveEvent(type, x, y, z, this.isSneaking());
             Bus.EVENT_BUS.post(this.moveEvent);
         }
     }
@@ -219,10 +230,10 @@ Globals {
     @Inject(method={"move"}, at={@At(value="FIELD", target="net/minecraft/entity/Entity.onGround:Z", ordinal=1)})
     private void onGroundHook(MoverType type, double x, double y, double z, CallbackInfo info) {
         if (EntityPlayerSP.class.isInstance(this)) {
-            StepEvent event = new StepEvent(Stage.PRE, this.func_174813_aQ(), this.field_70138_W);
+            StepEvent event = new StepEvent(Stage.PRE, this.getEntityBoundingBox(), this.stepHeight);
             Bus.EVENT_BUS.post(event);
-            this.prevHeight = Float.valueOf(this.field_70138_W);
-            this.field_70138_W = event.getHeight();
+            this.prevHeight = Float.valueOf(this.stepHeight);
+            this.stepHeight = event.getHeight();
         }
     }
 
@@ -231,14 +242,14 @@ Globals {
         if (EntityPlayerSP.class.isInstance(this)) {
             OnGroundEvent event = new OnGroundEvent();
             Bus.EVENT_BUS.post(event);
-            this.field_70122_E = this.field_70122_E || event.isCancelled();
+            this.onGround = this.onGround || event.isCancelled();
         }
     }
 
     @Inject(method={"move"}, at={@At(value="INVOKE", target="net/minecraft/entity/Entity.setEntityBoundingBox(Lnet/minecraft/util/math/AxisAlignedBB;)V", ordinal=7, shift=At.Shift.AFTER)})
     private void setEntityBoundingBoxHook(MoverType type, double x, double y, double z, CallbackInfo info) {
         if (EntityPlayerSP.class.isInstance(this)) {
-            StepEvent event = new StepEvent(Stage.POST, this.func_174813_aQ(), this.prevHeight != null ? this.prevHeight.floatValue() : 0.0f);
+            StepEvent event = new StepEvent(Stage.POST, this.getEntityBoundingBox(), this.prevHeight != null ? this.prevHeight.floatValue() : 0.0f);
             Bus.EVENT_BUS.postReversed(event, null);
         }
     }
@@ -255,7 +266,7 @@ Globals {
     @Inject(method={"move"}, at={@At(value="INVOKE", target="net/minecraft/entity/Entity.resetPositionToBB()V", ordinal=1)})
     private void resetPositionToBBHook(MoverType type, double x, double y, double z, CallbackInfo info) {
         if (EntityPlayerSP.class.isInstance(this) && this.prevHeight != null) {
-            this.field_70138_W = this.prevHeight.floatValue();
+            this.stepHeight = this.prevHeight.floatValue();
             this.prevHeight = null;
         }
     }
@@ -276,7 +287,7 @@ Globals {
 
     @Redirect(method={"applyEntityCollision"}, at=@At(value="INVOKE", target="Lnet/minecraft/entity/Entity;addVelocity(DDD)V"))
     public void addVelocityHook(Entity entity, double x, double y, double z) {
-        if (!(entity == null || VELOCITY.isEnabled() && NO_PUSH.getValue().booleanValue() && entity.equals(MixinEntity.mc.player))) {
+        if (!(entity == null || VELOCITY.isEnabled() && NO_PUSH.getValue().booleanValue() && entity.equals((Object)MixinEntity.mc.player))) {
             entity.addVelocity(x, y, z);
         }
     }
@@ -290,19 +301,20 @@ Globals {
     }
 
     private void removeInterpolation() {
-        this.field_70169_q = this.field_70165_t;
-        this.field_70167_r = this.field_70163_u;
-        this.field_70166_s = this.field_70161_v;
-        this.field_70142_S = this.field_70165_t;
-        this.field_70137_T = this.field_70163_u;
-        this.field_70136_U = this.field_70161_v;
-        this.prevHeight = Float.valueOf(this.field_70131_O);
-        this.field_70127_C = this.field_70125_A;
-        this.field_70126_B = this.field_70177_z;
+        this.prevPosX = this.posX;
+        this.prevPosY = this.posY;
+        this.prevPosZ = this.posZ;
+        this.lastTickPosX = this.posX;
+        this.lastTickPosY = this.posY;
+        this.lastTickPosZ = this.posZ;
+        this.prevHeight = Float.valueOf(this.height);
+        this.prevRotationPitch = this.rotationPitch;
+        this.prevRotationYaw = this.rotationYaw;
         if (this instanceof IEntityNoInterp) {
-            ((IEntityNoInterp)((Object)this)).setNoInterpX(this.field_70165_t);
-            ((IEntityNoInterp)((Object)this)).setNoInterpY(this.field_70163_u);
-            ((IEntityNoInterp)((Object)this)).setNoInterpZ(this.field_70161_v);
+            ((IEntityNoInterp)((Object)this)).setNoInterpX(this.posX);
+            ((IEntityNoInterp)((Object)this)).setNoInterpY(this.posY);
+            ((IEntityNoInterp)((Object)this)).setNoInterpZ(this.posZ);
         }
     }
 }
+

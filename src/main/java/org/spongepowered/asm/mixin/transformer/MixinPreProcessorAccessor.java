@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.transformer;
 
 import org.spongepowered.asm.mixin.transformer.MixinInfo;
@@ -9,3 +12,4 @@ extends MixinPreProcessorInterface {
         super(mixin, classNode);
     }
 }
+

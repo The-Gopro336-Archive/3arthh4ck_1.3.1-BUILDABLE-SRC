@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.entity.EntityPlayerSP
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.network.play.server.SPacketAnimation
+ *  net.minecraft.util.EnumHand
+ */
 package me.earth.earthhack.impl.modules.player.spectate;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -32,3 +41,4 @@ extends ModuleListener<Spectate, PacketEvent.Receive<SPacketAnimation>> {
         });
     }
 }
+

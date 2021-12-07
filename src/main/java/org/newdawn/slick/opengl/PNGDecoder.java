@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.opengl;
 
 import java.io.EOFException;
@@ -803,3 +806,4 @@ public class PNGDecoder {
         }
     }
 }
+

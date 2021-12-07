@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.renderer.texture.DynamicTexture
+ *  org.lwjgl.opengl.GL11
+ */
 package me.earth.earthhack.impl.gui.font;
 
 import java.awt.Color;
@@ -93,18 +100,18 @@ public class CustomFont {
         float rSRCY = srcY / 512.0f;
         float rSRCW = srcWidth / 512.0f;
         float rSRCH = srcHeight / 512.0f;
-        GL11.glTexCoord2f(rSRCX + rSRCW, rSRCY);
-        GL11.glVertex2d(x + width, y);
-        GL11.glTexCoord2f(rSRCX, rSRCY);
-        GL11.glVertex2d(x, y);
-        GL11.glTexCoord2f(rSRCX, rSRCY + rSRCH);
-        GL11.glVertex2d(x, y + height);
-        GL11.glTexCoord2f(rSRCX, rSRCY + rSRCH);
-        GL11.glVertex2d(x, y + height);
-        GL11.glTexCoord2f(rSRCX + rSRCW, rSRCY + rSRCH);
-        GL11.glVertex2d(x + width, y + height);
-        GL11.glTexCoord2f(rSRCX + rSRCW, rSRCY);
-        GL11.glVertex2d(x + width, y);
+        GL11.glTexCoord2f((float)(rSRCX + rSRCW), (float)rSRCY);
+        GL11.glVertex2d((double)(x + width), (double)y);
+        GL11.glTexCoord2f((float)rSRCX, (float)rSRCY);
+        GL11.glVertex2d((double)x, (double)y);
+        GL11.glTexCoord2f((float)rSRCX, (float)(rSRCY + rSRCH));
+        GL11.glVertex2d((double)x, (double)(y + height));
+        GL11.glTexCoord2f((float)rSRCX, (float)(rSRCY + rSRCH));
+        GL11.glVertex2d((double)x, (double)(y + height));
+        GL11.glTexCoord2f((float)(rSRCX + rSRCW), (float)(rSRCY + rSRCH));
+        GL11.glVertex2d((double)(x + width), (double)(y + height));
+        GL11.glTexCoord2f((float)(rSRCX + rSRCW), (float)rSRCY);
+        GL11.glVertex2d((double)(x + width), (double)y);
     }
 
     public int getStringHeight(String text) {
@@ -155,3 +162,4 @@ public class CustomFont {
         this.tex = this.setupTexture(font, this.antiAlias, this.fractionalMetrics, this.charData);
     }
 }
+

@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.mojang.authlib.GameProfile
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.commands.packet.util;
 
 import com.mojang.authlib.GameProfile;
@@ -21,3 +29,4 @@ implements Dummy {
         return false;
     }
 }
+

@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.item.ItemBow
+ *  net.minecraft.network.play.client.CPacketPlayer
+ *  net.minecraft.network.play.client.CPacketPlayer$Position
+ *  net.minecraft.network.play.client.CPacketPlayer$PositionRotation
+ *  net.minecraft.network.play.client.CPacketPlayer$Rotation
+ */
 package me.earth.earthhack.impl.modules.player.norotate;
 
 import me.earth.earthhack.api.util.interfaces.Globals;
@@ -41,8 +51,9 @@ implements Globals {
 
     private void onPacket(CPacketPlayer packet) {
         if (this.module.noSpoof.getValue().booleanValue() && !Managers.ROTATION.isBlocking() && (ItemUtil.isThrowable(ListenerCPacket.mc.player.getActiveItemStack().getItem()) || ListenerCPacket.mc.player.getActiveItemStack().getItem() instanceof ItemBow) && packet.getYaw(ListenerCPacket.mc.player.rotationYaw) != ListenerCPacket.mc.player.rotationYaw) {
-            ((ICPacketPlayer)((Object)packet)).setYaw(ListenerCPacket.mc.player.rotationYaw);
-            ((ICPacketPlayer)((Object)packet)).setPitch(ListenerCPacket.mc.player.rotationPitch);
+            ((ICPacketPlayer)packet).setYaw(ListenerCPacket.mc.player.rotationYaw);
+            ((ICPacketPlayer)packet).setPitch(ListenerCPacket.mc.player.rotationPitch);
         }
     }
 }
+

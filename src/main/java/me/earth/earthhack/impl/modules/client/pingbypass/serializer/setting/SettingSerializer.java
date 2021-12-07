@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketChatMessage
+ */
 package me.earth.earthhack.impl.modules.client.pingbypass.serializer.setting;
 
 import java.util.Arrays;
@@ -19,6 +26,7 @@ import me.earth.earthhack.impl.modules.client.pingbypass.serializer.Serializer;
 import me.earth.earthhack.impl.modules.client.pingbypass.serializer.setting.ListenerDisconnect;
 import me.earth.earthhack.impl.modules.client.pingbypass.serializer.setting.ListenerSetting;
 import me.earth.earthhack.impl.modules.client.pingbypass.serializer.setting.ListenerTick;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketChatMessage;
 
 public class SettingSerializer
@@ -92,7 +100,7 @@ Serializer<Setting<?>> {
         String command = "@Server" + name + " " + setting.getName() + " " + setting.getValue().toString();
         Earthhack.getLogger().info(command);
         CPacketChatMessage packet = new CPacketChatMessage(command);
-        Objects.requireNonNull(mc.getConnection()).sendPacket(packet);
+        Objects.requireNonNull(mc.getConnection()).sendPacket((Packet)packet);
     }
 
     private boolean isSettingSerializable(Setting<?> setting) {
@@ -109,3 +117,4 @@ Serializer<Setting<?>> {
         UNSERIALIZABLE.add("Toggle");
     }
 }
+

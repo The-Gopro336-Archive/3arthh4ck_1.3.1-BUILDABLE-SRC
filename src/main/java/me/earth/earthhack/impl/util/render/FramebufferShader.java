@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.gui.ScaledResolution
+ *  net.minecraft.client.renderer.GlStateManager
+ *  net.minecraft.client.renderer.RenderHelper
+ *  net.minecraft.client.shader.Framebuffer
+ *  org.lwjgl.opengl.GL11
+ *  org.lwjgl.opengl.GL20
+ */
 package me.earth.earthhack.impl.util.render;
 
 import java.awt.Color;
@@ -37,13 +49,13 @@ extends Shader {
         framebuffer.bindFramebuffer(true);
         this.entityShadows = FramebufferShader.mc.gameSettings.entityShadows;
         FramebufferShader.mc.gameSettings.entityShadows = false;
-        ((IEntityRenderer)((Object)FramebufferShader.mc.entityRenderer)).invokeSetupCameraTransform(partialTicks, 0);
+        ((IEntityRenderer)FramebufferShader.mc.entityRenderer).invokeSetupCameraTransform(partialTicks, 0);
     }
 
     public void stopDraw(Color color, float radius, float quality) {
         FramebufferShader.mc.gameSettings.entityShadows = this.entityShadows;
         GlStateManager.enableBlend();
-        GL11.glBlendFunc(770, 771);
+        GL11.glBlendFunc((int)770, (int)771);
         mc.getFramebuffer().bindFramebuffer(true);
         this.red = (float)color.getRed() / 255.0f;
         this.green = (float)color.getGreen() / 255.0f;
@@ -84,17 +96,18 @@ extends Shader {
 
     public void drawFramebuffer(Framebuffer framebuffer) {
         ScaledResolution scaledResolution = new ScaledResolution(mc);
-        GL11.glBindTexture(3553, framebuffer.framebufferTexture);
-        GL11.glBegin(7);
-        GL11.glTexCoord2d(0.0, 1.0);
-        GL11.glVertex2d(0.0, 0.0);
-        GL11.glTexCoord2d(0.0, 0.0);
-        GL11.glVertex2d(0.0, scaledResolution.getScaledHeight());
-        GL11.glTexCoord2d(1.0, 0.0);
-        GL11.glVertex2d(scaledResolution.getScaledWidth(), scaledResolution.getScaledHeight());
-        GL11.glTexCoord2d(1.0, 1.0);
-        GL11.glVertex2d(scaledResolution.getScaledWidth(), 0.0);
+        GL11.glBindTexture((int)3553, (int)framebuffer.framebufferTexture);
+        GL11.glBegin((int)7);
+        GL11.glTexCoord2d((double)0.0, (double)1.0);
+        GL11.glVertex2d((double)0.0, (double)0.0);
+        GL11.glTexCoord2d((double)0.0, (double)0.0);
+        GL11.glVertex2d((double)0.0, (double)scaledResolution.getScaledHeight());
+        GL11.glTexCoord2d((double)1.0, (double)0.0);
+        GL11.glVertex2d((double)scaledResolution.getScaledWidth(), (double)scaledResolution.getScaledHeight());
+        GL11.glTexCoord2d((double)1.0, (double)1.0);
+        GL11.glVertex2d((double)scaledResolution.getScaledWidth(), (double)0.0);
         GL11.glEnd();
-        GL20.glUseProgram(0);
+        GL20.glUseProgram((int)0);
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.geom;
 
 import java.io.Serializable;
@@ -428,3 +431,4 @@ implements Serializable {
         return this.maxY - this.minY;
     }
 }
+

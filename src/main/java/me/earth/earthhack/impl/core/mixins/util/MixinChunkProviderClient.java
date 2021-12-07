@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.multiplayer.ChunkProviderClient
+ */
 package me.earth.earthhack.impl.core.mixins.util;
 
 import me.earth.earthhack.api.event.bus.instance.Bus;
@@ -15,3 +21,4 @@ public abstract class MixinChunkProviderClient {
         Bus.EVENT_BUS.post(new UnloadChunkEvent());
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.commands.packet.util;
 
 import java.security.NoSuchAlgorithmException;
@@ -36,3 +39,4 @@ Dummy {
         SECRET_KEY = generator.generateKey();
     }
 }
+

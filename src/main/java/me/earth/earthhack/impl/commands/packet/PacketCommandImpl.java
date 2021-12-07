@@ -1,7 +1,90 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.mojang.authlib.GameProfile
+ *  io.netty.buffer.Unpooled
+ *  io.netty.util.ReferenceCounted
+ *  net.minecraft.advancements.Advancement
+ *  net.minecraft.advancements.AdvancementProgress
+ *  net.minecraft.block.Block
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.ai.attributes.IAttributeInstance
+ *  net.minecraft.entity.item.EntityPainting
+ *  net.minecraft.entity.item.EntityXPOrb
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.entity.player.EntityPlayer$EnumChatVisibility
+ *  net.minecraft.entity.player.PlayerCapabilities
+ *  net.minecraft.inventory.ClickType
+ *  net.minecraft.inventory.EntityEquipmentSlot
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.item.crafting.IRecipe
+ *  net.minecraft.nbt.NBTTagCompound
+ *  net.minecraft.network.EnumConnectionState
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.PacketBuffer
+ *  net.minecraft.network.ServerStatusResponse
+ *  net.minecraft.network.datasync.EntityDataManager
+ *  net.minecraft.network.play.INetHandlerPlayClient
+ *  net.minecraft.network.play.INetHandlerPlayServer
+ *  net.minecraft.network.play.client.CPacketClientStatus$State
+ *  net.minecraft.network.play.client.CPacketEntityAction$Action
+ *  net.minecraft.network.play.client.CPacketPlayerDigging$Action
+ *  net.minecraft.network.play.client.CPacketResourcePackStatus$Action
+ *  net.minecraft.network.play.client.CPacketSeenAdvancements$Action
+ *  net.minecraft.network.play.server.SPacketAdvancementInfo
+ *  net.minecraft.network.play.server.SPacketCombatEvent$Event
+ *  net.minecraft.network.play.server.SPacketEntityProperties
+ *  net.minecraft.network.play.server.SPacketExplosion
+ *  net.minecraft.network.play.server.SPacketMaps
+ *  net.minecraft.network.play.server.SPacketPlayerListHeaderFooter
+ *  net.minecraft.network.play.server.SPacketPlayerListItem
+ *  net.minecraft.network.play.server.SPacketPlayerListItem$Action
+ *  net.minecraft.network.play.server.SPacketPlayerPosLook
+ *  net.minecraft.network.play.server.SPacketPlayerPosLook$EnumFlags
+ *  net.minecraft.network.play.server.SPacketRecipeBook
+ *  net.minecraft.network.play.server.SPacketRecipeBook$State
+ *  net.minecraft.network.play.server.SPacketStatistics
+ *  net.minecraft.network.play.server.SPacketTeams
+ *  net.minecraft.network.play.server.SPacketTitle$Type
+ *  net.minecraft.network.play.server.SPacketUpdateBossInfo$Operation
+ *  net.minecraft.network.play.server.SPacketWindowItems
+ *  net.minecraft.network.play.server.SPacketWorldBorder$Action
+ *  net.minecraft.potion.Potion
+ *  net.minecraft.potion.PotionEffect
+ *  net.minecraft.scoreboard.Score
+ *  net.minecraft.scoreboard.ScoreObjective
+ *  net.minecraft.scoreboard.ScorePlayerTeam
+ *  net.minecraft.stats.StatBase
+ *  net.minecraft.util.CombatTracker
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.EnumHandSide
+ *  net.minecraft.util.EnumParticleTypes
+ *  net.minecraft.util.NonNullList
+ *  net.minecraft.util.ResourceLocation
+ *  net.minecraft.util.SoundCategory
+ *  net.minecraft.util.SoundEvent
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.util.text.ChatType
+ *  net.minecraft.util.text.ITextComponent
+ *  net.minecraft.world.BossInfo
+ *  net.minecraft.world.EnumDifficulty
+ *  net.minecraft.world.GameType
+ *  net.minecraft.world.World
+ *  net.minecraft.world.WorldType
+ *  net.minecraft.world.border.WorldBorder
+ *  net.minecraft.world.chunk.Chunk
+ *  net.minecraft.world.storage.MapDecoration
+ */
 package me.earth.earthhack.impl.commands.packet;
 
 import com.mojang.authlib.GameProfile;
 import io.netty.buffer.Unpooled;
+import io.netty.util.ReferenceCounted;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -257,7 +340,7 @@ PacketCommand {
             finally {
                 BufferUtil.release(rs);
                 BufferUtil.releaseFields(packet);
-                BufferUtil.releaseBuffer(buffer);
+                BufferUtil.releaseBuffer((ReferenceCounted)buffer);
             }
         }
     }
@@ -321,9 +404,9 @@ PacketCommand {
 
     @Override
     public Class<? extends Packet<?>> getPacket(String name) {
-        for (Class<? extends Packet<?>> clazz : this.packets) {
-            if (!TextUtil.startsWith(this.getName(clazz), name)) continue;
-            return clazz;
+        for (Class<? extends Packet<?>> class_ : this.packets) {
+            if (!TextUtil.startsWith(this.getName(class_), name)) continue;
+            return class_;
         }
         return null;
     }
@@ -476,9 +559,9 @@ PacketCommand {
                     }
                 }
             }
-            for (Class clazz : this.packets) {
-                if (!clazz.getSimpleName().equals(packet.getSimpleName()) || clazz.equals(packet)) continue;
-                Earthhack.getLogger().warn(clazz.getName() + " SimpleName clashes with: " + packet.getName());
+            for (Class class_ : this.packets) {
+                if (!class_.getSimpleName().equals(packet.getSimpleName()) || class_.equals(packet)) continue;
+                Earthhack.getLogger().warn(class_.getName() + " SimpleName clashes with: " + packet.getName());
             }
             this.addPacket(packet);
         }
@@ -493,14 +576,15 @@ PacketCommand {
         do {
             Type[] types;
             for (Type genericInterface : types = clazz.getGenericInterfaces()) {
-                Type[] typeArray;
+                Type[] arrtype;
                 int n;
                 int n2;
-                if (!(genericInterface instanceof ParameterizedType) || ((ParameterizedType)genericInterface).getRawType() != Packet.class || (n2 = 0) >= (n = (typeArray = ((ParameterizedType)genericInterface).getActualTypeArguments()).length)) continue;
-                Type type = typeArray[n2];
+                if (!(genericInterface instanceof ParameterizedType) || ((ParameterizedType)genericInterface).getRawType() != Packet.class || (n2 = 0) >= (n = (arrtype = ((ParameterizedType)genericInterface).getActualTypeArguments()).length)) continue;
+                Type type = arrtype[n2];
                 return type;
             }
         } while ((clazz = clazz.getSuperclass()) != Object.class);
         return null;
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.event.events.keyboard;
 
 public class KeyboardEvent {
@@ -26,3 +29,4 @@ public class KeyboardEvent {
     public static class Post {
     }
 }
+

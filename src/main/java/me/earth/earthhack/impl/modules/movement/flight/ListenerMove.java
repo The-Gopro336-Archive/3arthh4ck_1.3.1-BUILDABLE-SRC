@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.init.MobEffects
+ */
 package me.earth.earthhack.impl.modules.movement.flight;
 
 import me.earth.earthhack.impl.event.events.movement.MoveEvent;
@@ -5,6 +12,7 @@ import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import me.earth.earthhack.impl.modules.movement.flight.Flight;
 import me.earth.earthhack.impl.util.math.position.PositionUtil;
 import me.earth.earthhack.impl.util.minecraft.MovementUtil;
+import net.minecraft.entity.Entity;
 import net.minecraft.init.MobEffects;
 
 final class ListenerMove
@@ -61,7 +69,7 @@ extends ModuleListener<Flight, MoveEvent> {
                         double difference = (ListenerMove.mc.player.ticksExisted % 2 == 0 ? 0.0103 : 0.0123) * (((Flight)this.module).oHareLastDist - MovementUtil.getSpeed());
                         ((Flight)this.module).oHareMoveSpeed = ((Flight)this.module).oHareLastDist - difference;
                     } else {
-                        if (ListenerMove.mc.world.getCollisionBoxes(ListenerMove.mc.player, ListenerMove.mc.player.getEntityBoundingBox().offset(0.0, ListenerMove.mc.player.motionY, 0.0)).size() > 0 || ListenerMove.mc.player.collidedVertically) {
+                        if (ListenerMove.mc.world.getCollisionBoxes((Entity)ListenerMove.mc.player, ListenerMove.mc.player.getEntityBoundingBox().offset(0.0, ListenerMove.mc.player.motionY, 0.0)).size() > 0 || ListenerMove.mc.player.collidedVertically) {
                             ((Flight)this.module).oHareLevel = 1;
                         }
                         ((Flight)this.module).oHareMoveSpeed = ((Flight)this.module).oHareLastDist - ((Flight)this.module).oHareLastDist / 159.0;
@@ -117,3 +125,4 @@ extends ModuleListener<Flight, MoveEvent> {
         }
     }
 }
+

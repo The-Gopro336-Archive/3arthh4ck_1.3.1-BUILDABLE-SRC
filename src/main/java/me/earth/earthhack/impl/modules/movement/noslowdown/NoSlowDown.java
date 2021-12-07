@@ -1,3 +1,16 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.GuiIngameMenu
+ *  net.minecraft.client.gui.GuiOptions
+ *  net.minecraft.client.gui.GuiScreen
+ *  net.minecraft.client.gui.GuiScreenOptionsSounds
+ *  net.minecraft.client.gui.GuiVideoSettings
+ *  net.minecraft.client.gui.inventory.GuiContainer
+ *  net.minecraft.client.settings.KeyBinding
+ *  net.minecraft.network.play.client.CPacketPlayer
+ */
 package me.earth.earthhack.impl.modules.movement.noslowdown;
 
 import java.util.ArrayList;
@@ -77,7 +90,7 @@ extends Module {
         block2: {
             block3: {
                 if (!this.guiMove.getValue().booleanValue()) break block2;
-                if (!this.screens.stream().anyMatch(screen -> screen.isInstance(NoSlowDown.mc.currentScreen)) && (!this.phobosGui.getValue().booleanValue() || !(NoSlowDown.mc.currentScreen instanceof Click))) break block3;
+                if (!this.screens.stream().anyMatch(screen -> screen.isInstance((Object)NoSlowDown.mc.currentScreen)) && (!this.phobosGui.getValue().booleanValue() || !(NoSlowDown.mc.currentScreen instanceof Click))) break block3;
                 for (KeyBinding key : this.keys) {
                     KeyBinding.setKeyBindState((int)key.getKeyCode(), (boolean)KeyBoardUtil.isKeyDown(key));
                 }
@@ -94,3 +107,4 @@ extends Module {
     protected void onPacket(CPacketPlayer packet) {
     }
 }
+

@@ -1,8 +1,19 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.gson.Gson
+ *  com.google.gson.annotations.SerializedName
+ *  org.apache.logging.log4j.Level
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package org.spongepowered.asm.mixin.transformer;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -38,7 +49,7 @@ implements Comparable<MixinConfig>,
 IMixinConfig {
     private static int configOrder = 0;
     private static final Set<String> globalMixinList = new HashSet<String>();
-    private final Logger logger = LogManager.getLogger("mixin");
+    private final Logger logger = LogManager.getLogger((String)"mixin");
     private final transient Map<String, List<MixinInfo>> mixinMapping = new HashMap<String, List<MixinInfo>>();
     private final transient Set<String> unhandledTargets = new HashSet<String>();
     private final transient List<MixinInfo> mixins = new ArrayList<MixinInfo>();
@@ -246,12 +257,12 @@ IMixinConfig {
                 }
             }
             catch (InvalidMixinException ex) {
-                this.logger.error(ex.getMixin() + ": " + ex.getMessage(), ex);
+                this.logger.error(ex.getMixin() + ": " + ex.getMessage(), (Throwable)ex);
                 this.removeMixin(mixin);
                 iter.remove();
             }
             catch (Exception ex) {
-                this.logger.error(ex.getMessage(), ex);
+                this.logger.error(ex.getMessage(), (Throwable)ex);
                 this.removeMixin(mixin);
                 iter.remove();
             }
@@ -294,13 +305,13 @@ IMixinConfig {
                 if (this.required) {
                     throw ex;
                 }
-                this.logger.error(ex.getMessage(), ex);
+                this.logger.error(ex.getMessage(), (Throwable)ex);
             }
             catch (Exception ex) {
                 if (this.required) {
                     throw new InvalidMixinException(mixin, "Error initialising mixin " + mixin + " - " + ex.getClass() + ": " + ex.getMessage(), (Throwable)ex);
                 }
-                this.logger.error(ex.getMessage(), ex);
+                this.logger.error(ex.getMessage(), (Throwable)ex);
             }
         }
     }
@@ -469,7 +480,7 @@ IMixinConfig {
     static Config create(String configFile, MixinEnvironment outer) {
         try {
             IMixinService service = MixinService.getService();
-            MixinConfig config = (MixinConfig)new Gson().fromJson(new InputStreamReader(service.getResourceAsStream(configFile)), MixinConfig.class);
+            MixinConfig config = (MixinConfig)new Gson().fromJson((Reader)new InputStreamReader(service.getResourceAsStream(configFile)), MixinConfig.class);
             if (config.onLoad(service, configFile, outer)) {
                 return config.getHandle();
             }
@@ -520,3 +531,4 @@ IMixinConfig {
         }
     }
 }
+

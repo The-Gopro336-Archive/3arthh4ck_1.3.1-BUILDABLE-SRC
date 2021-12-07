@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.notifications;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -26,3 +29,4 @@ extends DefaultData<Notifications> {
         return "Chat notifications for all sorts of stuff.";
     }
 }
+

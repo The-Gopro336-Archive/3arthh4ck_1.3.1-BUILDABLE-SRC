@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.init.Items
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal.modes;
 
 import java.util.function.Supplier;
@@ -25,3 +31,4 @@ public enum Attack {
         return this.shouldAttack.get();
     }
 }
+

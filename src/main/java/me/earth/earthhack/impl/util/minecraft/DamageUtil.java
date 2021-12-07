@@ -1,3 +1,30 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.BlockAnvil
+ *  net.minecraft.block.BlockBed
+ *  net.minecraft.block.BlockWeb
+ *  net.minecraft.enchantment.Enchantment
+ *  net.minecraft.enchantment.EnchantmentHelper
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.init.Enchantments
+ *  net.minecraft.init.MobEffects
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.item.ItemSword
+ *  net.minecraft.item.ItemTool
+ *  net.minecraft.potion.PotionEffect
+ *  net.minecraft.util.CombatRules
+ *  net.minecraft.util.DamageSource
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.RayTraceResult
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.world.Explosion
+ *  net.minecraft.world.IBlockAccess
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.util.minecraft;
 
 import me.earth.earthhack.api.util.interfaces.Globals;
@@ -27,6 +54,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 public class DamageUtil
 implements Globals {
@@ -59,7 +87,7 @@ implements Globals {
     }
 
     public static boolean cacheLowestDura(EntityLivingBase base) {
-        IEntityLivingBase access = (IEntityLivingBase)((Object)base);
+        IEntityLivingBase access = (IEntityLivingBase)base;
         float before = access.getLowestDurability();
         access.setLowestDura(Float.MAX_VALUE);
         try {
@@ -85,7 +113,7 @@ implements Globals {
             return true;
         }
         if (stack.getItem() instanceof ItemTool) {
-            IItemTool tool = (IItemTool)((Object)stack.getItem());
+            IItemTool tool = (IItemTool)stack.getItem();
             return tool.getAttackDamage() > 4.0f;
         }
         return false;
@@ -110,11 +138,11 @@ implements Globals {
     }
 
     public static float calculate(Entity crystal) {
-        return DamageUtil.calculate(crystal.posX, crystal.posY, crystal.posZ, RotationUtil.getRotationPlayer());
+        return DamageUtil.calculate(crystal.posX, crystal.posY, crystal.posZ, (EntityLivingBase)RotationUtil.getRotationPlayer());
     }
 
     public static float calculate(BlockPos pos) {
-        return DamageUtil.calculate((float)pos.getX() + 0.5f, pos.getY() + 1, (float)pos.getZ() + 0.5f, RotationUtil.getRotationPlayer());
+        return DamageUtil.calculate((float)pos.getX() + 0.5f, pos.getY() + 1, (float)pos.getZ() + 0.5f, (EntityLivingBase)RotationUtil.getRotationPlayer());
     }
 
     public static float calculate(BlockPos p, EntityLivingBase base) {
@@ -138,7 +166,7 @@ implements Globals {
     }
 
     public static float calculate(double x, double y, double z, AxisAlignedBB bb, EntityLivingBase base, boolean terrainCalc) {
-        return DamageUtil.calculate(x, y, z, bb, base, DamageUtil.mc.world, terrainCalc);
+        return DamageUtil.calculate(x, y, z, bb, base, (IBlockAccess)DamageUtil.mc.world, terrainCalc);
     }
 
     public static float calculate(double x, double y, double z, AxisAlignedBB bb, EntityLivingBase base, IBlockAccess world, boolean terrainCalc) {
@@ -157,8 +185,8 @@ implements Globals {
         double density = DamageUtil.getBlockDensity(new Vec3d(x, y, z), bb, world, true, true, terrainCalc, anvils);
         double densityDistance = distance = (1.0 - distance) * density;
         float damage = DamageUtil.getDifficultyMultiplier((float)((densityDistance * densityDistance + distance) / 2.0 * 7.0 * 12.0 + 1.0));
-        DamageSource damageSource = DamageSource.causeExplosionDamage((Explosion)new Explosion(DamageUtil.mc.world, DamageUtil.mc.player, x, y, z, power, false, true));
-        ICachedDamage cache = (ICachedDamage)((Object)base);
+        DamageSource damageSource = DamageSource.causeExplosionDamage((Explosion)new Explosion((World)DamageUtil.mc.world, (Entity)DamageUtil.mc.player, x, y, z, power, false, true));
+        ICachedDamage cache = (ICachedDamage)base;
         int armorValue = cache.getArmorValue();
         float toughness = cache.getArmorToughness();
         damage = CombatRules.getDamageAfterAbsorb((float)damage, (float)armorValue, (float)toughness);
@@ -226,6 +254,7 @@ implements Globals {
     }
 
     public static RayTraceResult rayTraceBlocks(Vec3d start, Vec3d end, IBlockAccess world, boolean stopOnLiquid, boolean ignoreNoBox, boolean lastUncollidableBlock, boolean ignoreWebs, boolean ignoreBeds, boolean terrainCalc, boolean anvils) {
-        return RayTracer.trace(DamageUtil.mc.world, world, start, end, stopOnLiquid, ignoreNoBox, lastUncollidableBlock, (b, p) -> !((terrainCalc && b.getExplosionResistance(DamageUtil.mc.player) < 100.0f && p.distanceSq(end.x, end.y, end.z) <= 36.0 || ignoreBeds && b instanceof BlockBed || ignoreWebs && b instanceof BlockWeb) && (!anvils || !(b instanceof BlockAnvil))));
+        return RayTracer.trace((World)DamageUtil.mc.world, world, start, end, stopOnLiquid, ignoreNoBox, lastUncollidableBlock, (b, p) -> !((terrainCalc && b.getExplosionResistance((Entity)DamageUtil.mc.player) < 100.0f && p.distanceSq(end.x, end.y, end.z) <= 36.0 || ignoreBeds && b instanceof BlockBed || ignoreWebs && b instanceof BlockWeb) && (!anvils || !(b instanceof BlockAnvil))));
     }
 }
+

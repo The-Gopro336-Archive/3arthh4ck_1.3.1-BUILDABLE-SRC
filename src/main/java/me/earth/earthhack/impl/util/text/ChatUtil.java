@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.GuiNewChat
+ *  net.minecraft.util.text.ITextComponent
+ *  net.minecraft.util.text.TextComponentString
+ */
 package me.earth.earthhack.impl.util.text;
 
 import java.util.Random;
@@ -16,7 +24,7 @@ implements Globals {
     }
 
     public static void sendMessage(String message, int id) {
-        ChatUtil.sendComponent(new TextComponentString(message == null ? "null" : message), id);
+        ChatUtil.sendComponent((ITextComponent)new TextComponentString(message == null ? "null" : message), id);
     }
 
     public static void deleteMessage(int id) {
@@ -53,3 +61,4 @@ implements Globals {
         return "[" + Integer.toHexString((RND.nextInt() + 11) * RND.nextInt()).substring(0, places) + "]";
     }
 }
+

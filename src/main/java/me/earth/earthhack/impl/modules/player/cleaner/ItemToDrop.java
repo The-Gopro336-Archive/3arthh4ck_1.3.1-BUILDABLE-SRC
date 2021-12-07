@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.player.cleaner;
 
 import me.earth.earthhack.api.setting.Setting;
@@ -25,3 +28,4 @@ extends SlotCount {
         return this.setting == null || this.setting.getValue() < this.stacks;
     }
 }
+

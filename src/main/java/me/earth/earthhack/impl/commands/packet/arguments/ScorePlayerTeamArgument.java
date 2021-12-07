@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.scoreboard.ScorePlayerTeam
+ */
 package me.earth.earthhack.impl.commands.packet.arguments;
 
 import me.earth.earthhack.impl.commands.packet.AbstractArgument;
@@ -16,3 +22,4 @@ extends AbstractArgument<ScorePlayerTeam> {
         return new DummyScorePlayerTeam();
     }
 }
+

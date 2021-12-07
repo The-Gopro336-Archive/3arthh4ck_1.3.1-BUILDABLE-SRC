@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Strings
+ */
 package org.spongepowered.asm.mixin.injection.struct;
 
 import com.google.common.base.Strings;
@@ -258,7 +264,7 @@ implements ISliceContext {
 
     protected String getDynamicInfo() {
         AnnotationNode annotation = Annotations.getInvisible(this.method, Dynamic.class);
-        String description = Strings.nullToEmpty((String)Annotations.getValue(annotation));
+        String description = Strings.nullToEmpty((String)((String)Annotations.getValue(annotation)));
         Type upstream = (Type)Annotations.getValue(annotation, "mixin");
         if (upstream != null) {
             description = String.format("{%s} %s", upstream.getClassName(), description).trim();
@@ -346,3 +352,4 @@ implements ISliceContext {
         return sb.toString();
     }
 }
+

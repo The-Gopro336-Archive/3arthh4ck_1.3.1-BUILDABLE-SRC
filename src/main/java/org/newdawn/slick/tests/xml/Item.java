@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.tests.xml;
 
 public class Item {
@@ -8,3 +11,4 @@ public class Item {
         System.out.println(prefix + "Item " + this.name + "," + this.condition);
     }
 }
+

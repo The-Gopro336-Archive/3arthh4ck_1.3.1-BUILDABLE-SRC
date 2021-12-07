@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.ResourceLocation
+ *  net.minecraftforge.registries.GameData
+ */
 package me.earth.earthhack.forge.mixins.minecraftforge;
 
 import java.util.List;
@@ -25,3 +32,4 @@ public class MixinGameData {
         return list.size();
     }
 }
+

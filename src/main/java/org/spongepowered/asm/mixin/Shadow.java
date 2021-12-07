@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin;
 
 import java.lang.annotation.ElementType;
@@ -14,3 +17,4 @@ public @interface Shadow {
 
     public String[] aliases() default {};
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.math;
 
 import me.earth.earthhack.impl.util.math.Passable;
@@ -8,3 +11,4 @@ extends Passable {
 
     public long getTime();
 }
+

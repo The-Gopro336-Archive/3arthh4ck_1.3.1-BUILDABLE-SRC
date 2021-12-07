@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.gui.visibility;
 
 import java.util.HashMap;
@@ -30,3 +33,4 @@ public class VisibilityManager {
         return this.getVisibility(setting).isVisible();
     }
 }
+

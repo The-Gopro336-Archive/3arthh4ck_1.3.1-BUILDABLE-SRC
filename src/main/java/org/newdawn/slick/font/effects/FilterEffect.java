@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.font.effects;
 
 import java.awt.Graphics2D;
@@ -34,3 +37,4 @@ implements Effect {
         this.filter = filter;
     }
 }
+

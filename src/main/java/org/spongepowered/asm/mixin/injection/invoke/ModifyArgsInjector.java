@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.injection.invoke;
 
 import org.spongepowered.asm.lib.Type;
@@ -94,3 +97,4 @@ extends InvokeInjector {
         }
     }
 }
+

@@ -1,3 +1,14 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Vec3i
+ */
 package me.earth.earthhack.impl.modules.combat.selftrap;
 
 import java.util.ArrayList;
@@ -33,8 +44,8 @@ extends ObbyListener<SelfTrap> {
         if (!((SelfTrap)this.module).autoOff.getValue().booleanValue()) {
             return super.updatePlaced();
         }
-        BlockPos p = PositionUtil.getPosition(RotationUtil.getRotationPlayer());
-        if (!p.equals(((SelfTrap)this.module).startPos)) {
+        BlockPos p = PositionUtil.getPosition((Entity)RotationUtil.getRotationPlayer());
+        if (!p.equals((Object)((SelfTrap)this.module).startPos)) {
             ((SelfTrap)this.module).disable();
             return true;
         }
@@ -57,18 +68,18 @@ extends ObbyListener<SelfTrap> {
         }
         if (((SelfTrap)this.module).mode.getValue() != SelfTrapMode.Obsidian) {
             for (Vec3i offset : ((SelfTrap)this.module).mode.getValue().getOffsets()) {
-                result.getTargets().add(PositionUtil.getPosition(RotationUtil.getRotationPlayer()).add(offset));
+                result.getTargets().add(PositionUtil.getPosition((Entity)RotationUtil.getRotationPlayer()).add(offset));
             }
             return result;
         }
-        BlockPos pos = PositionUtil.getPosition(RotationUtil.getRotationPlayer()).up(2);
-        if (!ListenerSelfTrap.mc.world.getBlockState(pos).func_185904_a().isReplaceable()) {
+        BlockPos pos = PositionUtil.getPosition((Entity)RotationUtil.getRotationPlayer()).up(2);
+        if (!ListenerSelfTrap.mc.world.getBlockState(pos).getMaterial().isReplaceable()) {
             return result.setValid(false);
         }
         for (BlockPos alreadyPlaced : this.placed.keySet()) {
             ObbyModule.HELPER.addBlockState(alreadyPlaced, Blocks.OBSIDIAN.getDefaultState());
         }
-        BasePath path = new BasePath(RotationUtil.getRotationPlayer(), pos, ((SelfTrap)this.module).maxHelping.getValue());
+        BasePath path = new BasePath((Entity)RotationUtil.getRotationPlayer(), pos, ((SelfTrap)this.module).maxHelping.getValue());
         if (((SelfTrap)this.module).prioBehind.getValue().booleanValue()) {
             ArrayList<BlockPos> checkFirst = new ArrayList<BlockPos>(13);
             EnumFacing look = ListenerSelfTrap.mc.player.getHorizontalFacing();
@@ -120,3 +131,4 @@ extends ObbyListener<SelfTrap> {
         return "Disabled, unknown Mode!";
     }
 }
+

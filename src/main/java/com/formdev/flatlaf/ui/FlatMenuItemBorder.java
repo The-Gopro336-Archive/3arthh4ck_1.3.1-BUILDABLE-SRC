@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.ui;
 
 import com.formdev.flatlaf.ui.FlatMarginBorder;
@@ -23,3 +26,4 @@ extends FlatMarginBorder {
         return super.getBorderInsets(c, insets);
     }
 }
+

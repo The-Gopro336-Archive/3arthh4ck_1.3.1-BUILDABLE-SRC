@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.api.util;
 
 public class EnumHelper {
@@ -40,3 +43,4 @@ public class EnumHelper {
         return null;
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.text;
 
 public class ChatIDs {
@@ -11,3 +14,4 @@ public class ChatIDs {
     public static final int CHAT_GUI = 7000;
     public static final int ELEMENT = 8000;
 }
+

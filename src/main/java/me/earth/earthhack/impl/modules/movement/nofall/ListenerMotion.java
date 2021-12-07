@@ -1,3 +1,17 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.BlockLiquid
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Items
+ *  net.minecraft.item.Item
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.math.RayTraceResult
+ *  net.minecraft.util.math.RayTraceResult$Type
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.modules.movement.nofall;
 
 import me.earth.earthhack.api.event.events.Stage;
@@ -9,11 +23,13 @@ import me.earth.earthhack.impl.util.math.position.PositionUtil;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
 import me.earth.earthhack.impl.util.thread.Locks;
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 
 final class ListenerMotion
 extends ModuleListener<NoFall, MotionUpdateEvent> {
@@ -37,7 +53,7 @@ extends ModuleListener<NoFall, MotionUpdateEvent> {
                 if (rayTraceBlocks2 != null && rayTraceBlocks2.typeOfHit == RayTraceResult.Type.BLOCK && !(ListenerMotion.mc.world.getBlockState(rayTraceBlocks2.getBlockPos()).getBlock() instanceof BlockLiquid) && ((NoFall)this.module).timer.passed(1000L)) {
                     Locks.acquire(Locks.PLACE_SWITCH_LOCK, () -> {
                         InventoryUtil.switchTo(slot);
-                        ListenerMotion.mc.playerController.processRightClick(ListenerMotion.mc.player, ListenerMotion.mc.world, slot == -2 ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND);
+                        ListenerMotion.mc.playerController.processRightClick((EntityPlayer)ListenerMotion.mc.player, (World)ListenerMotion.mc.world, slot == -2 ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND);
                     });
                     ((NoFall)this.module).timer.reset();
                 }
@@ -45,3 +61,4 @@ extends ModuleListener<NoFall, MotionUpdateEvent> {
         }
     }
 }
+

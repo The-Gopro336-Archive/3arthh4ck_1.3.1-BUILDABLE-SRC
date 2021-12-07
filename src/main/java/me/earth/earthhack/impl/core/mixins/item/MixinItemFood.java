@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.item.ItemFood
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.core.mixins.item;
 
 import me.earth.earthhack.api.event.bus.instance.Bus;
@@ -21,3 +31,4 @@ public abstract class MixinItemFood {
         }
     }
 }
+

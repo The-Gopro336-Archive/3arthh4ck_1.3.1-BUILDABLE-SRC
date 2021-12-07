@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.opengl.GLContext
+ *  org.lwjgl.opengl.Pbuffer
+ */
 package org.newdawn.slick.opengl.pbuffer;
 
 import java.util.HashMap;
@@ -79,3 +86,4 @@ public class GraphicsFactory {
         throw new SlickException("Failed to create offscreen buffer even though the card reports it's possible");
     }
 }
+

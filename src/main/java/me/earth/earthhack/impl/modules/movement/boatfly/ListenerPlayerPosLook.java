@@ -1,3 +1,14 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.GuiDisconnected
+ *  net.minecraft.client.gui.GuiDownloadTerrain
+ *  net.minecraft.client.gui.GuiMainMenu
+ *  net.minecraft.client.gui.GuiMultiplayer
+ *  net.minecraft.client.multiplayer.GuiConnecting
+ *  net.minecraft.network.play.server.SPacketPlayerPosLook
+ */
 package me.earth.earthhack.impl.modules.movement.boatfly;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -23,3 +34,4 @@ extends ModuleListener<BoatFly, PacketEvent.Receive<SPacketPlayerPosLook>> {
         }
     }
 }
+

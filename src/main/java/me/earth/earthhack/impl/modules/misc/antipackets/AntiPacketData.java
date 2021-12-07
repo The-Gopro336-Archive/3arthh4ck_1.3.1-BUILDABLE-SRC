@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.misc.antipackets;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -19,3 +22,4 @@ extends DefaultData<AntiPackets> {
         return "Cancel packets that you receive (SPackets) or send (CPackets).";
     }
 }
+

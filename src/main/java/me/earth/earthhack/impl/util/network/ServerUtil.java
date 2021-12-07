@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.network.NetHandlerPlayClient
+ *  net.minecraft.client.network.NetworkPlayerInfo
+ *  net.minecraft.util.text.ITextComponent
+ *  net.minecraft.util.text.TextComponentString
+ */
 package me.earth.earthhack.impl.util.network;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -7,6 +16,7 @@ import me.earth.earthhack.impl.modules.client.pingbypass.PingBypass;
 import me.earth.earthhack.impl.modules.misc.pingspoof.PingSpoof;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 
 public class ServerUtil
@@ -17,7 +27,7 @@ implements Globals {
     public static void disconnectFromMC(String message) {
         NetHandlerPlayClient connection = mc.getConnection();
         if (connection != null) {
-            connection.getNetworkManager().closeChannel(new TextComponentString(message));
+            connection.getNetworkManager().closeChannel((ITextComponent)new TextComponentString(message));
         }
     }
 
@@ -46,3 +56,4 @@ implements Globals {
         return 0;
     }
 }
+

@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Strings
+ *  com.google.common.collect.ImmutableSet
+ *  org.apache.logging.log4j.LogManager
+ */
 package org.spongepowered.asm.mixin.gen;
 
 import com.google.common.base.Strings;
@@ -85,7 +93,7 @@ extends SpecialMethodInfo {
 
     protected String getTargetName() {
         String name = (String)Annotations.getValue(this.annotation);
-        if (Strings.isNullOrEmpty(name)) {
+        if (Strings.isNullOrEmpty((String)name)) {
             String inflectedTarget = this.inflectTarget();
             if (inflectedTarget == null) {
                 throw new InvalidAccessorException((IMixinContext)this.mixin, "Failed to inflect target name for " + this + ", supported prefixes: [get, set, is]");
@@ -107,7 +115,7 @@ extends SpecialMethodInfo {
             String remainder = nameMatcher.group(4);
             String name = String.format("%s%s", AccessorInfo.toLowerCase(firstChar, !AccessorInfo.isUpperCase(remainder)), remainder);
             if (!accessorType.isExpectedPrefix(prefix) && verbose) {
-                LogManager.getLogger("mixin").warn("Unexpected prefix for {}, found [{}] expecting {}", new Object[]{accessorDescription, prefix, accessorType.getExpectedPrefixes()});
+                LogManager.getLogger((String)"mixin").warn("Unexpected prefix for {}, found [{}] expecting {}", new Object[]{accessorDescription, prefix, accessorType.getExpectedPrefixes()});
             }
             return MemberInfo.parse((String)name, (IMixinContext)context).name;
         }
@@ -171,7 +179,7 @@ extends SpecialMethodInfo {
         }
         if (exactMatch != null) {
             if (candidates.size() > 1) {
-                LogManager.getLogger("mixin").debug("{} found an exact match for {} but other candidates were found!", new Object[]{this, this.target});
+                LogManager.getLogger((String)"mixin").debug("{} found an exact match for {} but other candidates were found!", new Object[]{this, this.target});
             }
             return exactMatch;
         }
@@ -209,7 +217,7 @@ extends SpecialMethodInfo {
     }
 
     public static enum AccessorType {
-        FIELD_GETTER(ImmutableSet.of("get", "is")){
+        FIELD_GETTER((Set)ImmutableSet.of((Object)"get", (Object)"is")){
 
             @Override
             AccessorGenerator getGenerator(AccessorInfo info) {
@@ -217,7 +225,7 @@ extends SpecialMethodInfo {
             }
         }
         ,
-        FIELD_SETTER(ImmutableSet.of("set")){
+        FIELD_SETTER((Set)ImmutableSet.of((Object)"set")){
 
             @Override
             AccessorGenerator getGenerator(AccessorInfo info) {
@@ -225,7 +233,7 @@ extends SpecialMethodInfo {
             }
         }
         ,
-        METHOD_PROXY(ImmutableSet.of("call", "invoke")){
+        METHOD_PROXY((Set)ImmutableSet.of((Object)"call", (Object)"invoke")){
 
             @Override
             AccessorGenerator getGenerator(AccessorInfo info) {
@@ -250,3 +258,4 @@ extends SpecialMethodInfo {
         abstract AccessorGenerator getGenerator(AccessorInfo var1);
     }
 }
+

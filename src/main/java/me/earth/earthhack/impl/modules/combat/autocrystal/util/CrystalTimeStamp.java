@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal.util;
 
 import me.earth.earthhack.impl.modules.combat.autocrystal.util.TimeStamp;
@@ -14,3 +17,4 @@ extends TimeStamp {
         return this.damage;
     }
 }
+

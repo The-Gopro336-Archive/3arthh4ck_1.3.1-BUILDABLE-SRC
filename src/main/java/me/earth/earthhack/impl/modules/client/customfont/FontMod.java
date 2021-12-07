@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.text.ITextComponent
+ *  net.minecraft.util.text.Style
+ *  net.minecraft.util.text.event.ClickEvent
+ *  net.minecraft.util.text.event.ClickEvent$Action
+ */
 package me.earth.earthhack.impl.modules.client.customfont;
 
 import java.awt.Font;
@@ -20,6 +29,7 @@ import me.earth.earthhack.impl.managers.thread.scheduler.Scheduler;
 import me.earth.earthhack.impl.modules.client.commands.Commands;
 import me.earth.earthhack.impl.modules.client.customfont.FontData;
 import me.earth.earthhack.impl.modules.client.customfont.mode.FontStyle;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.event.ClickEvent;
 
@@ -61,7 +71,7 @@ extends Module {
             final String font = this.fonts.get(i);
             if (font == null) continue;
             int finalI = i;
-            component.appendSibling(new SuppliedComponent(() -> (font.equals(this.fontName.getValue()) ? "\u00a7a" : "\u00a7c") + font + (finalI == this.fonts.size() - 1 ? "" : ", ")).setStyle(new Style().setClickEvent(new SmartClickEvent(ClickEvent.Action.RUN_COMMAND){
+            component.appendSibling(new SuppliedComponent(() -> (font.equals(this.fontName.getValue()) ? "\u00a7a" : "\u00a7c") + font + (finalI == this.fonts.size() - 1 ? "" : ", ")).setStyle(new Style().setClickEvent((ClickEvent)new SmartClickEvent(ClickEvent.Action.RUN_COMMAND){
 
                 @Override
                 public String getValue() {
@@ -69,10 +79,11 @@ extends Module {
                 }
             })));
         }
-        Managers.CHAT.sendDeleteComponent(component, "Fonts", 2000);
+        Managers.CHAT.sendDeleteComponent((ITextComponent)component, "Fonts", 2000);
     }
 
     private void setFont() {
         Managers.TEXT.setFontRenderer(new Font(this.fontName.getValue(), this.fontStyle.getValue().getFontStyle(), this.fontSize.getValue()), this.antiAlias.getValue(), this.metrics.getValue());
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.svg.inkscape;
 
 import org.newdawn.slick.geom.Transform;
@@ -11,3 +14,4 @@ public interface ElementProcessor {
 
     public boolean handles(Element var1);
 }
+

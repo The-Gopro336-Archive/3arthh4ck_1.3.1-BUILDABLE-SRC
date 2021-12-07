@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.misc.antipotion;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -19,3 +22,4 @@ extends DefaultData<AntiPotion> {
         return "Allows you to remove potions on the client side. Only works for some potions like levitation.";
     }
 }
+

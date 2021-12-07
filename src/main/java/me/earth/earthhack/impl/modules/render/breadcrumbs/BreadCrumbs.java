@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.modules.render.breadcrumbs;
 
 import java.awt.Color;
@@ -57,3 +63,4 @@ extends ColorModule {
         this.trace = null;
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.injection.struct;
 
 import java.util.ArrayList;
@@ -169,7 +172,7 @@ Iterable<AbstractInsnNode> {
     }
 
     public String getCallbackDescriptor(Type[] locals, Type[] argumentTypes) {
-        return this.getCallbackDescriptor(false, locals, argumentTypes, 0, Short.MAX_VALUE);
+        return this.getCallbackDescriptor(false, locals, argumentTypes, 0, 32767);
     }
 
     public String getCallbackDescriptor(boolean captureLocals, Type[] locals, Type[] argumentTypes, int startIndex, int extra) {
@@ -290,3 +293,4 @@ Iterable<AbstractInsnNode> {
         this.method.localVariables.add(new LocalVariableNode(name, desc, null, start, end, index));
     }
 }
+

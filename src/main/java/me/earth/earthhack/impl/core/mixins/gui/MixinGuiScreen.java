@@ -1,3 +1,30 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.gui.FontRenderer
+ *  net.minecraft.client.gui.Gui
+ *  net.minecraft.client.gui.GuiConfirmOpenLink
+ *  net.minecraft.client.gui.GuiScreen
+ *  net.minecraft.client.gui.GuiYesNoCallback
+ *  net.minecraft.client.renderer.BufferBuilder
+ *  net.minecraft.client.renderer.GlStateManager
+ *  net.minecraft.client.renderer.GlStateManager$DestFactor
+ *  net.minecraft.client.renderer.GlStateManager$SourceFactor
+ *  net.minecraft.client.renderer.RenderHelper
+ *  net.minecraft.client.renderer.Tessellator
+ *  net.minecraft.client.renderer.texture.TextureManager
+ *  net.minecraft.client.renderer.vertex.DefaultVertexFormats
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.ResourceLocation
+ *  net.minecraft.util.text.ITextComponent
+ *  net.minecraft.util.text.event.ClickEvent
+ *  net.minecraft.util.text.event.ClickEvent$Action
+ *  net.minecraft.util.text.event.HoverEvent
+ *  net.minecraft.util.text.event.HoverEvent$Action
+ *  org.apache.logging.log4j.Logger
+ */
 package me.earth.earthhack.impl.core.mixins.gui;
 
 import java.io.File;
@@ -50,32 +77,32 @@ implements GuiYesNoCallback {
     private static final ResourceLocation BLACK_LOC = new ResourceLocation("earthhack:textures/gui/black.png");
     @Shadow
     @Final
-    private static Logger field_175287_a;
+    private static Logger LOGGER;
     @Shadow
     @Final
-    private static Set<String> field_175284_f;
+    private static Set<String> PROTOCOLS;
     @Shadow
-    public Minecraft field_146297_k;
+    public Minecraft mc;
     @Shadow
-    private URI field_175286_t;
+    private URI clickedLinkURI;
     @Shadow
-    public int field_146294_l;
+    public int width;
     @Shadow
-    public int field_146295_m;
+    public int height;
     @Shadow
-    protected FontRenderer field_146289_q;
+    protected FontRenderer fontRenderer;
 
     @Shadow
-    protected abstract void func_175282_a(URI var1);
+    protected abstract void openWebLink(URI var1);
 
     @Shadow
-    protected abstract void func_175274_a(String var1, boolean var2);
+    protected abstract void setText(String var1, boolean var2);
 
     @Shadow
-    public abstract void func_175281_b(String var1, boolean var2);
+    public abstract void sendChatMessage(String var1, boolean var2);
 
     @Shadow
-    public static boolean func_146272_n() {
+    public static boolean isShiftKeyDown() {
         throw new IllegalStateException("isShiftKeyDown was not shadowed!");
     }
 
@@ -99,7 +126,7 @@ implements GuiYesNoCallback {
 
     @Inject(method={"handleComponentClick"}, at={@At(value="INVOKE", target="Lnet/minecraft/client/gui/GuiScreen;sendChatMessage(Ljava/lang/String;Z)V", shift=At.Shift.BEFORE)}, cancellable=true)
     public void handleComponentClick(ITextComponent component, CallbackInfoReturnable<Boolean> info) {
-        IClickEvent event = (IClickEvent)((Object)component.getStyle().getClickEvent());
+        IClickEvent event = (IClickEvent)component.getStyle().getClickEvent();
         if (event != null && event.getRunnable() != null) {
             event.getRunnable().run();
             info.setReturnValue(true);
@@ -110,14 +137,14 @@ implements GuiYesNoCallback {
         if (component == null) {
             return false;
         }
-        IStyle style = (IStyle)((Object)component.getStyle());
+        IStyle style = (IStyle)component.getStyle();
         ClickEvent event = null;
         if (button == 1) {
             event = style.getRightClickEvent();
         } else if (button == 2) {
             event = style.getMiddleClickEvent();
         }
-        if (MixinGuiScreen.func_146272_n()) {
+        if (MixinGuiScreen.isShiftKeyDown()) {
             String insertion = null;
             if (button == 1) {
                 insertion = style.getRightInsertion();
@@ -125,12 +152,12 @@ implements GuiYesNoCallback {
                 insertion = style.getMiddleInsertion();
             }
             if (insertion != null) {
-                this.func_175274_a(insertion, false);
+                this.setText(insertion, false);
             }
         } else if (event != null) {
             block26: {
                 if (event.getAction() == ClickEvent.Action.OPEN_URL) {
-                    if (!this.field_146297_k.gameSettings.chatLinks) {
+                    if (!this.mc.gameSettings.chatLinks) {
                         return false;
                     }
                     try {
@@ -139,32 +166,32 @@ implements GuiYesNoCallback {
                         if (s == null) {
                             throw new URISyntaxException(event.getValue(), "Missing protocol");
                         }
-                        if (!field_175284_f.contains(s.toLowerCase(Locale.ROOT))) {
+                        if (!PROTOCOLS.contains(s.toLowerCase(Locale.ROOT))) {
                             throw new URISyntaxException(event.getValue(), "Unsupported protocol: " + s.toLowerCase(Locale.ROOT));
                         }
-                        if (this.field_146297_k.gameSettings.chatLinksPrompt) {
-                            this.field_175286_t = uri;
-                            this.field_146297_k.displayGuiScreen(new GuiConfirmOpenLink(this, event.getValue(), 31102009, false));
+                        if (this.mc.gameSettings.chatLinksPrompt) {
+                            this.clickedLinkURI = uri;
+                            this.mc.displayGuiScreen((GuiScreen)new GuiConfirmOpenLink((GuiYesNoCallback)this, event.getValue(), 31102009, false));
                             break block26;
                         }
-                        this.func_175282_a(uri);
+                        this.openWebLink(uri);
                     }
                     catch (URISyntaxException urisyntaxexception) {
-                        field_175287_a.error("Can't open url for {}", event, urisyntaxexception);
+                        LOGGER.error("Can't open url for {}", (Object)event, (Object)urisyntaxexception);
                     }
                 } else if (event.getAction() == ClickEvent.Action.OPEN_FILE) {
                     URI uri1 = new File(event.getValue()).toURI();
-                    this.func_175282_a(uri1);
+                    this.openWebLink(uri1);
                 } else if (event.getAction() == ClickEvent.Action.SUGGEST_COMMAND) {
-                    this.func_175274_a(event.getValue(), true);
+                    this.setText(event.getValue(), true);
                 } else if (event.getAction() == ClickEvent.Action.RUN_COMMAND) {
-                    if (((IClickEvent)((Object)event)).getRunnable() != null) {
-                        ((IClickEvent)((Object)event)).getRunnable().run();
+                    if (((IClickEvent)event).getRunnable() != null) {
+                        ((IClickEvent)event).getRunnable().run();
                         return true;
                     }
-                    this.func_175281_b(event.getValue(), false);
+                    this.sendChatMessage(event.getValue(), false);
                 } else {
-                    field_175287_a.error("Don't know how to handle {}", event);
+                    LOGGER.error("Don't know how to handle {}", (Object)event);
                 }
             }
             return true;
@@ -175,8 +202,8 @@ implements GuiYesNoCallback {
     @Inject(method={"handleComponentHover"}, at={@At(value="HEAD")}, cancellable=true)
     private void handleComponentHoverHook(ITextComponent component, int x, int y, CallbackInfo info) {
         HoverEvent event;
-        if (component != null && component.getStyle().getHoverEvent() != null && (event = component.getStyle().getHoverEvent()).getAction() == HoverEvent.Action.SHOW_TEXT && !((IHoverEvent)((Object)event)).hasOffset()) {
-            this.drawHoveringTextShadow(this.field_146289_q.listFormattedStringToWidth(event.getValue().getFormattedText(), Math.max(this.field_146294_l / 2, 200)), x, y, this.field_146294_l, this.field_146295_m, -1, this.field_146289_q);
+        if (component != null && component.getStyle().getHoverEvent() != null && (event = component.getStyle().getHoverEvent()).getAction() == HoverEvent.Action.SHOW_TEXT && !((IHoverEvent)event).hasOffset()) {
+            this.drawHoveringTextShadow(this.fontRenderer.listFormattedStringToWidth(event.getValue().getFormattedText(), Math.max(this.width / 2, 200)), x, y, this.width, this.height, -1, this.fontRenderer);
             GlStateManager.disableLighting();
             info.cancel();
         }
@@ -245,7 +272,7 @@ implements GuiYesNoCallback {
             MixinGuiScreen.drawGradientRectForge(300, ttX - 3, ttY - 3, ttX + tttW + 3, ttY - 3 + 1, bgcs, bgcs);
             MixinGuiScreen.drawGradientRectForge(300, ttX - 3, ttY + ttH + 2, ttX + tttW + 3, ttY + ttH + 3, bgce, bgce);
             for (String line : textLines) {
-                font.drawStringWithShadow(line, ttX, ttY, -1);
+                font.drawStringWithShadow(line, (float)ttX, (float)ttY, -1);
                 ttY += 10;
             }
             GlStateManager.enableLighting();
@@ -272,10 +299,10 @@ implements GuiYesNoCallback {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
         buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-        buffer.pos(right, top, zLevel).color(startRed, startGreen, startBlue, startAlpha).endVertex();
-        buffer.pos(left, top, zLevel).color(startRed, startGreen, startBlue, startAlpha).endVertex();
-        buffer.pos(left, bottom, zLevel).color(endRed, endGreen, endBlue, endAlpha).endVertex();
-        buffer.pos(right, bottom, zLevel).color(endRed, endGreen, endBlue, endAlpha).endVertex();
+        buffer.pos((double)right, (double)top, (double)zLevel).color(startRed, startGreen, startBlue, startAlpha).endVertex();
+        buffer.pos((double)left, (double)top, (double)zLevel).color(startRed, startGreen, startBlue, startAlpha).endVertex();
+        buffer.pos((double)left, (double)bottom, (double)zLevel).color(endRed, endGreen, endBlue, endAlpha).endVertex();
+        buffer.pos((double)right, (double)bottom, (double)zLevel).color(endRed, endGreen, endBlue, endAlpha).endVertex();
         tessellator.draw();
         GlStateManager.shadeModel((int)7424);
         GlStateManager.disableBlend();
@@ -283,3 +310,4 @@ implements GuiYesNoCallback {
         GlStateManager.enableTexture2D();
     }
 }
+

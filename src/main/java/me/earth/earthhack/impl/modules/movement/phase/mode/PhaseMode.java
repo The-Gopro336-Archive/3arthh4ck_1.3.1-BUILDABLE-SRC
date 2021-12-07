@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.movement.phase.mode;
 
 public enum PhaseMode {
@@ -11,3 +14,4 @@ public enum PhaseMode {
     ConstantiamNew;
 
 }
+

@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.movement.highjump;
 
 import me.earth.earthhack.api.module.util.Category;
@@ -146,3 +154,4 @@ implements InstantAttackingModule {
         return (Integer)this.cooldown.getValue();
     }
 }
+

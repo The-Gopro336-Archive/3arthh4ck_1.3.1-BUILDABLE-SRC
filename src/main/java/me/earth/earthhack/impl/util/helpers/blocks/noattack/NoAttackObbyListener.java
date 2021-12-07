@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.helpers.blocks.noattack;
 
 import me.earth.earthhack.impl.util.helpers.blocks.ObbyListener;
@@ -14,3 +17,4 @@ extends ObbyListener<T> {
         return false;
     }
 }
+

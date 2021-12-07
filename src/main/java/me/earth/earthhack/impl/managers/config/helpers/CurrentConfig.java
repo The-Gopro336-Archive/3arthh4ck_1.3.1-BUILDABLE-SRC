@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.gson.JsonElement
+ *  com.google.gson.JsonObject
+ */
 package me.earth.earthhack.impl.managers.config.helpers;
 
 import com.google.gson.JsonElement;
@@ -5,6 +12,7 @@ import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.OpenOption;
@@ -70,7 +78,7 @@ implements ConfigHelper {
     @Override
     public void refresh() throws IOException {
         try (InputStream stream = Files.newInputStream(Paths.get(PATH, new String[0]), new OpenOption[0]);){
-            JsonObject object = Jsonable.PARSER.parse(new InputStreamReader(stream)).getAsJsonObject();
+            JsonObject object = Jsonable.PARSER.parse((Reader)new InputStreamReader(stream)).getAsJsonObject();
             for (Map.Entry entry : object.entrySet()) {
                 ConfigHelper helper = (ConfigHelper)Managers.CONFIG.getObject((String)entry.getKey());
                 if (helper != null) {
@@ -111,3 +119,4 @@ implements ConfigHelper {
         return "current";
     }
 }
+

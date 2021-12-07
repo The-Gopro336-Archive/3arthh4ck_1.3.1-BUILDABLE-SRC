@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.svg;
 
 import org.newdawn.slick.geom.Line;
@@ -42,3 +45,4 @@ implements TexCoordGenerator {
         return new Vector2f(u /= this.line.length(), 0.0f);
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.commands.packet.arguments;
 
 import java.util.Collections;
@@ -16,3 +19,4 @@ extends AbstractArgument<List> {
         return Collections.EMPTY_LIST;
     }
 }
+

@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketKeepAlive
+ */
 package me.earth.earthhack.impl.modules.client.pingbypass;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -23,3 +29,4 @@ extends ModuleListener<PingBypass, PacketEvent.Receive<SPacketKeepAlive>> {
         }
     }
 }
+

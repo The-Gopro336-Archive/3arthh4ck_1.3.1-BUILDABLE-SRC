@@ -1,3 +1,14 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.LWJGLException
+ *  org.lwjgl.input.Controller
+ *  org.lwjgl.input.Controllers
+ *  org.lwjgl.input.Keyboard
+ *  org.lwjgl.input.Mouse
+ *  org.lwjgl.opengl.Display
+ */
 package org.newdawn.slick;
 
 import java.io.IOException;
@@ -336,7 +347,7 @@ public class Input {
     }
 
     public static String getKeyName(int code) {
-        return Keyboard.getKeyName(code);
+        return Keyboard.getKeyName((int)code);
     }
 
     public boolean isKeyPressed(int code) {
@@ -382,7 +393,7 @@ public class Input {
     }
 
     public boolean isKeyDown(int code) {
-        return Keyboard.isKeyDown(code);
+        return Keyboard.isKeyDown((int)code);
     }
 
     public int getAbsoluteMouseX() {
@@ -402,12 +413,12 @@ public class Input {
     }
 
     public boolean isMouseButtonDown(int button) {
-        return Mouse.isButtonDown(button);
+        return Mouse.isButtonDown((int)button);
     }
 
     private boolean anyMouseDown() {
         for (int i = 0; i < 3; ++i) {
-            if (!Mouse.isButtonDown(i)) continue;
+            if (!Mouse.isButtonDown((int)i)) continue;
             return true;
         }
         return false;
@@ -527,7 +538,7 @@ public class Input {
             Controllers.create();
             int count = Controllers.getControllerCount();
             for (i = 0; i < count; ++i) {
-                Controller controller = Controllers.getController(i);
+                Controller controller = Controllers.getController((int)i);
                 if (controller.getButtonCount() < 3 || controller.getButtonCount() >= 100) continue;
                 controllers.add(controller);
             }
@@ -745,15 +756,15 @@ public class Input {
     }
 
     public void enableKeyRepeat(int initial, int interval) {
-        Keyboard.enableRepeatEvents(true);
+        Keyboard.enableRepeatEvents((boolean)true);
     }
 
     public void enableKeyRepeat() {
-        Keyboard.enableRepeatEvents(true);
+        Keyboard.enableRepeatEvents((boolean)true);
     }
 
     public void disableKeyRepeat() {
-        Keyboard.enableRepeatEvents(false);
+        Keyboard.enableRepeatEvents((boolean)false);
     }
 
     public boolean isKeyRepeatEnabled() {
@@ -872,3 +883,4 @@ public class Input {
         }
     }
 }
+

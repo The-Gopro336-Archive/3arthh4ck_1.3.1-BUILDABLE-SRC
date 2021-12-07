@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.api.command;
 
 public class PossibleInputs {
@@ -35,3 +38,4 @@ public class PossibleInputs {
         return new PossibleInputs("", "");
     }
 }
+

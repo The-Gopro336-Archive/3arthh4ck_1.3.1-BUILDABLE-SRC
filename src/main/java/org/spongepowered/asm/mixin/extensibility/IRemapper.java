@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.extensibility;
 
 public interface IRemapper {
@@ -13,3 +16,4 @@ public interface IRemapper {
 
     public String unmapDesc(String var1);
 }
+

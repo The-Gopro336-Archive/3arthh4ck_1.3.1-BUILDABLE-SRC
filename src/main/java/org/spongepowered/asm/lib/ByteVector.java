@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.lib;
 
 public class ByteVector {
@@ -183,3 +186,4 @@ public class ByteVector {
         this.data = newData;
     }
 }
+

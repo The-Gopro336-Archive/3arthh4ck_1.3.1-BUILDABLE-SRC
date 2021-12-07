@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.player.fastplace;
 
 import me.earth.earthhack.impl.event.events.misc.TickEvent;
@@ -17,3 +20,4 @@ extends ModuleListener<FastPlace, TickEvent> {
         }
     }
 }
+

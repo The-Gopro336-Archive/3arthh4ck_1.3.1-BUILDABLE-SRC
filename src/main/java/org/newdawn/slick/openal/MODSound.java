@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.BufferUtils
+ *  org.lwjgl.openal.AL10
+ */
 package org.newdawn.slick.openal;
 
 import ibxm.Module;
@@ -32,12 +39,12 @@ extends AudioImpl {
     }
 
     private void cleanUpSource() {
-        AL10.alSourceStop(this.store.getSource(0));
-        IntBuffer buffer = BufferUtils.createIntBuffer(1);
-        for (int queued = AL10.alGetSourcei(this.store.getSource(0), 4117); queued > 0; --queued) {
-            AL10.alSourceUnqueueBuffers(this.store.getSource(0), buffer);
+        AL10.alSourceStop((int)this.store.getSource(0));
+        IntBuffer buffer = BufferUtils.createIntBuffer((int)1);
+        for (int queued = AL10.alGetSourcei((int)this.store.getSource(0), (int)4117); queued > 0; --queued) {
+            AL10.alSourceUnqueueBuffers((int)this.store.getSource(0), (IntBuffer)buffer);
         }
-        AL10.alSourcei(this.store.getSource(0), 4105, 0);
+        AL10.alSourcei((int)this.store.getSource(0), (int)4105, (int)0);
     }
 
     public void poll() {
@@ -64,3 +71,4 @@ extends AudioImpl {
         throw new RuntimeException("Positioning on modules is not currently supported");
     }
 }
+

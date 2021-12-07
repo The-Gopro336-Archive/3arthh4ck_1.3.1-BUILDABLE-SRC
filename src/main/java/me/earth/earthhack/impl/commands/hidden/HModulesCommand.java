@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.GuiChat
+ *  net.minecraft.client.gui.GuiScreen
+ *  org.lwjgl.input.Mouse
+ */
 package me.earth.earthhack.impl.commands.hidden;
 
 import me.earth.earthhack.api.command.Command;
@@ -9,6 +17,7 @@ import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.modules.client.commands.Commands;
 import me.earth.earthhack.impl.util.text.ChatUtil;
 import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Mouse;
 
 public class HModulesCommand
@@ -24,8 +33,8 @@ implements Globals {
             String name = args[1];
             Module module = (Module)Managers.MODULES.getObject(name);
             if (module != null) {
-                if (Mouse.isButtonDown(1)) {
-                    mc.displayGuiScreen(new GuiChat(Commands.getPrefix() + module.getName() + " "));
+                if (Mouse.isButtonDown((int)1)) {
+                    mc.displayGuiScreen((GuiScreen)new GuiChat(Commands.getPrefix() + module.getName() + " "));
                 } else {
                     module.toggle();
                 }
@@ -46,3 +55,4 @@ implements Globals {
         return completer;
     }
 }
+

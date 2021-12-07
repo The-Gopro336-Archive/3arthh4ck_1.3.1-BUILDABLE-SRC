@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.init.MobEffects
+ */
 package me.earth.earthhack.impl.modules.render.fullbright;
 
 import me.earth.earthhack.api.module.Module;
@@ -29,3 +35,4 @@ extends Module {
         }
     }
 }
+

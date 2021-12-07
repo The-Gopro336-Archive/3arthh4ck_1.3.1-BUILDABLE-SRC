@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.item.ItemBucketMilk
+ *  net.minecraft.item.ItemFood
+ *  net.minecraft.item.ItemPotion
+ *  net.minecraft.item.ItemStack
+ */
 package me.earth.earthhack.impl.modules.player.fasteat;
 
 import me.earth.earthhack.api.module.Module;
@@ -47,3 +56,4 @@ extends Module {
         return stack != null && FastEat.mc.player.isHandActive() && (stack.getItem() instanceof ItemFood || stack.getItem() instanceof ItemPotion || stack.getItem() instanceof ItemBucketMilk);
     }
 }
+

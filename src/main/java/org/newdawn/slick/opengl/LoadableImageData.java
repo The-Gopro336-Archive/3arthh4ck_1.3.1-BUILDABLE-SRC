@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.opengl;
 
 import java.io.IOException;
@@ -15,3 +18,4 @@ extends ImageData {
 
     public ByteBuffer loadImage(InputStream var1, boolean var2, boolean var3, int[] var4) throws IOException;
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.extensibility;
 
 import org.spongepowered.asm.mixin.MixinEnvironment;
@@ -9,3 +12,4 @@ public interface IEnvironmentTokenProvider {
 
     public Integer getToken(String var1, MixinEnvironment var2);
 }
+

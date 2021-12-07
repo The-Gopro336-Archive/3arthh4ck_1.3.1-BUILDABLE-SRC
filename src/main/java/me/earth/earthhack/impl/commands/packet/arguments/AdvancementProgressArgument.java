@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.gson.JsonElement
+ *  net.minecraft.advancements.AdvancementProgress
+ *  net.minecraft.advancements.AdvancementProgress$Serializer
+ */
 package me.earth.earthhack.impl.commands.packet.arguments;
 
 import com.google.gson.JsonElement;
@@ -24,7 +32,8 @@ extends AbstractArgument<AdvancementProgress> {
             return SERIALIZER.deserialize(element, null, null);
         }
         catch (Exception e) {
-            throw new ArgParseException("Couldn't read AdvancementProgress from Json: " + element + ": " + e.getMessage());
+            throw new ArgParseException("Couldn't read AdvancementProgress from Json: " + (Object)element + ": " + e.getMessage());
         }
     }
 }
+

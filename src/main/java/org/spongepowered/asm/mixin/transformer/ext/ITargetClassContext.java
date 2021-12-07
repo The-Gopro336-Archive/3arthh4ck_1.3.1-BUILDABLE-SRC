@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.transformer.ext;
 
 import org.spongepowered.asm.lib.tree.ClassNode;
@@ -8,3 +11,4 @@ public interface ITargetClassContext {
 
     public ClassNode getClassNode();
 }
+

@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.util.DamageSource
+ */
 package me.earth.earthhack.impl.util.minecraft;
 
 import me.earth.earthhack.api.setting.Setting;
@@ -18,3 +25,4 @@ public interface ICachedDamage {
         return SHOULD_CACHE.getValue() != false && this instanceof EntityPlayer;
     }
 }
+

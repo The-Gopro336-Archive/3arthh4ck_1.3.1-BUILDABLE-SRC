@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.misc;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -29,3 +32,4 @@ public class SkippingCounter {
         this.counter.set(this.initial);
     }
 }
+

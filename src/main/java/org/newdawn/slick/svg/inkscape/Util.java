@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.svg.inkscape;
 
 import java.util.StringTokenizer;
@@ -119,3 +122,4 @@ public class Util {
         return value;
     }
 }
+

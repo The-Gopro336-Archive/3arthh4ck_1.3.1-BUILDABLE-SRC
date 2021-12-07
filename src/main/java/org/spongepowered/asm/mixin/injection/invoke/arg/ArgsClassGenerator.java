@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.collect.BiMap
+ *  com.google.common.collect.HashBiMap
+ */
 package org.spongepowered.asm.mixin.injection.invoke.arg;
 
 import com.google.common.collect.BiMap;
@@ -43,10 +50,10 @@ implements IClassGenerator {
 
     public String getClassName(String desc) {
         String voidDesc = Bytecode.changeDescriptorReturnType(desc, "V");
-        String name = (String)this.classNames.get(voidDesc);
+        String name = (String)this.classNames.get((Object)voidDesc);
         if (name == null) {
             name = String.format("%s%d", CLASS_NAME_BASE, this.nextIndex++);
-            this.classNames.put(voidDesc, name);
+            this.classNames.put((Object)voidDesc, (Object)name);
         }
         return name;
     }
@@ -63,7 +70,7 @@ implements IClassGenerator {
     public byte[] getBytes(String name) {
         byte[] bytes = this.classBytes.get(name);
         if (bytes == null) {
-            String desc = (String)this.classNames.inverse().get(name);
+            String desc = (String)this.classNames.inverse().get((Object)name);
             if (desc == null) {
                 return null;
             }
@@ -282,3 +289,4 @@ implements IClassGenerator {
         return new SignaturePrinter("", null, args).setFullyQualified(true).getFormattedArgs();
     }
 }
+

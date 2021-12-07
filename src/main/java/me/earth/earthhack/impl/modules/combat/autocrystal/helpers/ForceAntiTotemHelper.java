@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal.helpers;
 
 import me.earth.earthhack.api.event.bus.api.EventBus;
@@ -35,3 +41,4 @@ public class ForceAntiTotemHelper {
         return this.pos;
     }
 }
+

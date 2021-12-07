@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.mojang.realmsclient.gui.ChatFormatting
+ *  net.minecraft.client.Minecraft
+ */
 package me.earth.earthhack.impl.gui.click.component.impl;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
@@ -24,7 +31,7 @@ extends Component {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
-        Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(this.getLabel() + ": " + ChatFormatting.GRAY + ((Enum)this.getEnumSetting().getValue()).name(), this.getFinishedX() + 5.0f, this.getFinishedY() + this.getHeight() / 2.0f - (float)(Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT >> 1), -1);
+        Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(this.getLabel() + ": " + (Object)ChatFormatting.GRAY + ((Enum)this.getEnumSetting().getValue()).name(), this.getFinishedX() + 5.0f, this.getFinishedY() + this.getHeight() / 2.0f - (float)(Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT >> 1), -1);
     }
 
     @Override
@@ -49,3 +56,4 @@ extends Component {
         return this.enumSetting;
     }
 }
+

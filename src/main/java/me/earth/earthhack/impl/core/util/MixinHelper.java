@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.core.util;
 
 import java.lang.reflect.Field;
@@ -70,3 +73,4 @@ public class MixinHelper {
         }
     }
 }
+

@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.LWJGLException
+ *  org.lwjgl.Sys
+ *  org.lwjgl.input.Cursor
+ *  org.lwjgl.opengl.Display
+ *  org.lwjgl.opengl.Drawable
+ *  org.lwjgl.opengl.Pbuffer
+ *  org.lwjgl.opengl.PixelFormat
+ */
 package org.newdawn.slick;
 
 import java.io.IOException;
@@ -359,7 +371,7 @@ implements GUIContext {
             GL.flush();
         }
         if (this.targetFPS != -1) {
-            Display.sync(this.targetFPS);
+            Display.sync((int)this.targetFPS);
         }
     }
 
@@ -413,7 +425,7 @@ implements GUIContext {
 
     public void setVSync(boolean vsync) {
         this.vsync = vsync;
-        Display.setVSyncEnabled(vsync);
+        Display.setVSyncEnabled((boolean)vsync);
     }
 
     public boolean isVSyncRequested() {
@@ -442,3 +454,4 @@ implements GUIContext {
         GL.enterOrtho(xsize, ysize);
     }
 }
+

@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.math.RayTraceResult
+ */
 package me.earth.earthhack.impl.modules.player.freecam;
 
 import me.earth.earthhack.api.event.events.Stage;
@@ -6,6 +14,7 @@ import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import me.earth.earthhack.impl.modules.player.freecam.Freecam;
 import me.earth.earthhack.impl.modules.player.freecam.mode.CamMode;
 import me.earth.earthhack.impl.util.math.rotation.RotationUtil;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.RayTraceResult;
 
@@ -20,7 +29,7 @@ extends ModuleListener<Freecam, MotionUpdateEvent> {
         if (event.getStage() == Stage.PRE && ((Freecam)this.module).mode.getValue() == CamMode.Position) {
             RayTraceResult result = ListenerMotion.mc.objectMouseOver;
             if (result != null) {
-                float[] rotations = RotationUtil.getRotations(result.hitVec.x, result.hitVec.y, result.hitVec.z, ((Freecam)this.module).getPlayer());
+                float[] rotations = RotationUtil.getRotations(result.hitVec.x, result.hitVec.y, result.hitVec.z, (Entity)((Freecam)this.module).getPlayer());
                 ((Freecam)this.module).rotate(rotations[0], rotations[1]);
             }
             ((Freecam)this.module).getPlayer().setHeldItem(EnumHand.MAIN_HAND, ListenerMotion.mc.player.getHeldItemMainhand());
@@ -34,3 +43,4 @@ extends ModuleListener<Freecam, MotionUpdateEvent> {
         }
     }
 }
+

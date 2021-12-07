@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.item.ItemStack
+ */
 package me.earth.earthhack.impl.event.events.misc;
 
 import net.minecraft.item.ItemStack;
@@ -13,3 +19,4 @@ public class ProcessRightClickItemEvent {
         return this.itemStack;
     }
 }
+

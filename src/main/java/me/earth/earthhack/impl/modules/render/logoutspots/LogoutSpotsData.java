@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.render.logoutspots;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -23,3 +26,4 @@ extends DefaultData<LogoutSpots> {
         return "Highlights the places where players have logged out.";
     }
 }
+

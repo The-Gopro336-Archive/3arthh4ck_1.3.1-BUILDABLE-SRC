@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.init.Items
+ */
 package me.earth.earthhack.impl.modules.client.pingbypass.submodules.sautototem;
 
 import me.earth.earthhack.api.module.util.Category;
@@ -36,3 +42,4 @@ extends SimpleSubModule<PingBypass> {
         }
     }
 }
+

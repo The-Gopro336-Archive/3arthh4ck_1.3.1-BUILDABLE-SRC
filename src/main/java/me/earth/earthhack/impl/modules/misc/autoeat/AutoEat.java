@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.settings.KeyBinding
+ */
 package me.earth.earthhack.impl.modules.misc.autoeat;
 
 import me.earth.earthhack.api.module.Module;
@@ -59,3 +65,4 @@ extends Module {
         this.server = server;
     }
 }
+

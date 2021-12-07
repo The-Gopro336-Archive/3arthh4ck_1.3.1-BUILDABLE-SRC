@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.api.util;
 
 public class TextUtil {
@@ -34,3 +37,4 @@ public class TextUtil {
         return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 }
+

@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.renderer.chunk.RenderChunk
+ */
 package me.earth.earthhack.impl.core.mixins.render.chunk;
 
 import me.earth.earthhack.api.cache.SettingCache;
@@ -21,3 +27,4 @@ public abstract class MixinRenderChunk {
         }
     }
 }
+

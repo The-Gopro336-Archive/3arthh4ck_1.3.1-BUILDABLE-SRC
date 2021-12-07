@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.render.image;
 
 import java.awt.image.BufferedImage;
@@ -45,3 +48,4 @@ public class ImageFrame {
         return this.height;
     }
 }
+

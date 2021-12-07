@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.collect.Maps
+ *  com.google.gson.Gson
+ *  com.google.gson.GsonBuilder
+ *  com.google.gson.JsonParseException
+ *  org.apache.commons.io.IOUtils
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package org.spongepowered.asm.mixin.refmap;
 
 import com.google.common.collect.Maps;
@@ -103,7 +115,7 @@ Serializable {
         if (this.readOnly || reference == null || newReference == null || reference.equals(newReference)) {
             return null;
         }
-        Map<String, Map<String, String>> mappings = this.mappings;
+        HashMap mappings = this.mappings;
         if (context != null && (mappings = this.data.get(context)) == null) {
             mappings = Maps.newHashMap();
             this.data.put(context, mappings);
@@ -116,18 +128,22 @@ Serializable {
     }
 
     public void write(Appendable writer) {
-        new GsonBuilder().setPrettyPrinting().create().toJson(this, writer);
+        new GsonBuilder().setPrettyPrinting().create().toJson((Object)this, writer);
     }
 
     /*
      * WARNING - Removed try catching itself - possible behaviour change.
      * Loose catch block
+     * Enabled aggressive block sorting
+     * Enabled unnecessary exception pruning
+     * Enabled aggressive exception aggregation
+     * Lifted jumps to return sites
      */
     public static ReferenceMapper read(String resourcePath) {
         InputStreamReader reader;
         block6: {
             ReferenceMapper referenceMapper;
-            Logger logger = LogManager.getLogger("mixin");
+            Logger logger = LogManager.getLogger((String)"mixin");
             reader = null;
             try {
                 IMixinService service = MixinService.getService();
@@ -139,20 +155,22 @@ Serializable {
                 referenceMapper = mapper;
             }
             catch (JsonParseException ex) {
-                logger.error("Invalid REFMAP JSON in " + resourcePath + ": " + ex.getClass().getName() + " " + ex.getMessage());
-                IOUtils.closeQuietly(reader);
-            }
-            catch (Exception ex2) {
-                logger.error("Failed reading REFMAP JSON from " + resourcePath + ": " + ex2.getClass().getName() + " " + ex2.getMessage());
+                logger.error("Invalid REFMAP JSON in " + resourcePath + ": " + ((Object)((Object)ex)).getClass().getName() + " " + ex.getMessage());
                 {
                     catch (Throwable throwable) {
                         IOUtils.closeQuietly(reader);
                         throw throwable;
                     }
                 }
-                IOUtils.closeQuietly(reader);
+                IOUtils.closeQuietly((Reader)reader);
+                return DEFAULT_MAPPER;
+                catch (Exception ex2) {
+                    logger.error("Failed reading REFMAP JSON from " + resourcePath + ": " + ex2.getClass().getName() + " " + ex2.getMessage());
+                    IOUtils.closeQuietly((Reader)reader);
+                    return DEFAULT_MAPPER;
+                }
             }
-            IOUtils.closeQuietly(reader);
+            IOUtils.closeQuietly((Reader)reader);
             return referenceMapper;
         }
         IOUtils.closeQuietly(reader);
@@ -174,3 +192,4 @@ Serializable {
         return (ReferenceMapper)new Gson().fromJson(reader, ReferenceMapper.class);
     }
 }
+

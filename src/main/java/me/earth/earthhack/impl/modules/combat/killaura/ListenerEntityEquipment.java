@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.item.ItemAir
+ *  net.minecraft.item.ItemShield
+ *  net.minecraft.network.play.server.SPacketEntityEquipment
+ */
 package me.earth.earthhack.impl.modules.combat.killaura;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -21,3 +29,4 @@ extends ModuleListener<KillAura, PacketEvent.Receive<SPacketEntityEquipment>> {
         }
     }
 }
+

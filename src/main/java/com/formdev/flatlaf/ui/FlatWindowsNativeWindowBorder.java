@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.ui;
 
 import com.formdev.flatlaf.ui.FlatNativeWindowBorder;
@@ -320,9 +323,10 @@ implements FlatNativeWindowBorder.Provider {
             FlatWindowsNativeWindowBorder.this.fireStateChangedLaterOnce();
         }
 
-        static Rectangle[] access$202(WndProc x0, Rectangle[] x1) {
+        static /* synthetic */ Rectangle[] access$202(WndProc x0, Rectangle[] x1) {
             x0.hitTestSpots = x1;
             return x1;
         }
     }
 }
+

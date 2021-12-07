@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.init.Blocks
+ */
 package me.earth.earthhack.impl.modules.movement.icespeed;
 
 import me.earth.earthhack.api.module.Module;
@@ -27,3 +33,4 @@ extends Module {
         Blocks.FROSTED_ICE.slipperiness = 0.98f;
     }
 }
+

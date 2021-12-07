@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.core.ducks.network;
 
 public interface ICPacketPlayerDigging {
@@ -5,3 +8,4 @@ public interface ICPacketPlayerDigging {
 
     public boolean isClientSideBreaking();
 }
+

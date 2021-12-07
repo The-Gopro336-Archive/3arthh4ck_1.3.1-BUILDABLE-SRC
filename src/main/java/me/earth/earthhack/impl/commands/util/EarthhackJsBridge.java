@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.commands.util;
 
 import me.earth.earthhack.api.module.Module;
@@ -15,3 +18,4 @@ implements Globals {
         return ((Module)Managers.MODULES.getObject(module)).isEnabled();
     }
 }
+

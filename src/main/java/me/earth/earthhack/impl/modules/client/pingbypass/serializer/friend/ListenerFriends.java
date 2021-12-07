@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.pingbypass.serializer.friend;
 
 import me.earth.earthhack.api.observable.Observer;
@@ -17,3 +20,4 @@ implements Observer<PlayerEvent> {
         this.serializer.onChange(event);
     }
 }
+

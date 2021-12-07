@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.text.Style
+ *  net.minecraft.util.text.event.ClickEvent
+ */
 package me.earth.earthhack.impl.core.mixins.util;
 
 import java.util.function.Supplier;
@@ -65,12 +72,12 @@ implements IStyle {
 
     @Inject(method={"createDeepCopy"}, at={@At(value="RETURN")})
     public void createDeepCopyHook(CallbackInfoReturnable<Style> info) {
-        this.copyDucks((IStyle)((Object)info.getReturnValue()));
+        this.copyDucks((IStyle)info.getReturnValue());
     }
 
     @Inject(method={"createShallowCopy"}, at={@At(value="RETURN")})
     public void createShallowCopyHook(CallbackInfoReturnable<Style> info) {
-        this.copyDucks((IStyle)((Object)info.getReturnValue()));
+        this.copyDucks((IStyle)info.getReturnValue());
     }
 
     @Inject(method={"getInsertion"}, at={@At(value="HEAD")}, cancellable=true)
@@ -88,3 +95,4 @@ implements IStyle {
         style.setRightClickEvent(this.rightClickEvent);
     }
 }
+

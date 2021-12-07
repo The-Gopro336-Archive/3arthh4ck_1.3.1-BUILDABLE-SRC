@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.BufferUtils
+ */
 package org.newdawn.slick.opengl;
 
 import java.nio.ByteBuffer;
@@ -172,7 +178,7 @@ implements Texture {
 
     @Override
     public byte[] getTextureData() {
-        ByteBuffer buffer = BufferUtils.createByteBuffer((this.hasAlpha() ? 4 : 3) * this.texWidth * this.texHeight);
+        ByteBuffer buffer = BufferUtils.createByteBuffer((int)((this.hasAlpha() ? 4 : 3) * this.texWidth * this.texHeight));
         this.bind();
         GL.glGetTexImage(3553, 0, this.hasAlpha() ? 6408 : 6407, 5121, buffer);
         byte[] data = new byte[buffer.limit()];
@@ -219,3 +225,4 @@ implements Texture {
         }
     }
 }
+

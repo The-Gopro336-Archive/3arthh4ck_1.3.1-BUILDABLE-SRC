@@ -1,3 +1,18 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.inventory.ClickType
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.RayTraceResult
+ *  net.minecraft.world.IBlockAccess
+ */
 package me.earth.earthhack.impl.modules.misc.autocraft;
 
 import me.earth.earthhack.impl.event.events.network.MotionUpdateEvent;
@@ -11,6 +26,7 @@ import me.earth.earthhack.impl.util.minecraft.blocks.BlockUtil;
 import me.earth.earthhack.impl.util.network.NetworkUtil;
 import me.earth.earthhack.impl.util.network.PacketUtil;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
@@ -18,6 +34,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.IBlockAccess;
 
 final class ListenerMotion
 extends ModuleListener<AutoCraft, MotionUpdateEvent> {
@@ -33,9 +50,9 @@ extends ModuleListener<AutoCraft, MotionUpdateEvent> {
         int slot = InventoryUtil.findHotbarBlock(Blocks.CRAFTING_TABLE, new Block[0]);
         boolean swapped = false;
         if (slot == -1 && inventorySlot != -1) {
-            ListenerMotion.mc.playerController.windowClick(0, inventorySlot, 0, ClickType.PICKUP, ListenerMotion.mc.player);
-            ListenerMotion.mc.playerController.windowClick(0, InventoryUtil.hotbarToInventory(8), 0, ClickType.PICKUP, ListenerMotion.mc.player);
-            ListenerMotion.mc.playerController.windowClick(0, inventorySlot, 0, ClickType.PICKUP, ListenerMotion.mc.player);
+            ListenerMotion.mc.playerController.windowClick(0, inventorySlot, 0, ClickType.PICKUP, (EntityPlayer)ListenerMotion.mc.player);
+            ListenerMotion.mc.playerController.windowClick(0, InventoryUtil.hotbarToInventory(8), 0, ClickType.PICKUP, (EntityPlayer)ListenerMotion.mc.player);
+            ListenerMotion.mc.playerController.windowClick(0, inventorySlot, 0, ClickType.PICKUP, (EntityPlayer)ListenerMotion.mc.player);
             swapped = true;
         }
         slot = InventoryUtil.findHotbarBlock(Blocks.CRAFTING_TABLE, new Block[0]);
@@ -50,14 +67,14 @@ extends ModuleListener<AutoCraft, MotionUpdateEvent> {
                 }
                 ((AutoCraft)this.module).execute();
                 if (swapped) {
-                    ListenerMotion.mc.playerController.windowClick(0, inventorySlot, 0, ClickType.PICKUP, ListenerMotion.mc.player);
-                    ListenerMotion.mc.playerController.windowClick(0, InventoryUtil.hotbarToInventory(8), 0, ClickType.PICKUP, ListenerMotion.mc.player);
-                    ListenerMotion.mc.playerController.windowClick(0, inventorySlot, 0, ClickType.PICKUP, ListenerMotion.mc.player);
+                    ListenerMotion.mc.playerController.windowClick(0, inventorySlot, 0, ClickType.PICKUP, (EntityPlayer)ListenerMotion.mc.player);
+                    ListenerMotion.mc.playerController.windowClick(0, InventoryUtil.hotbarToInventory(8), 0, ClickType.PICKUP, (EntityPlayer)ListenerMotion.mc.player);
+                    ListenerMotion.mc.playerController.windowClick(0, inventorySlot, 0, ClickType.PICKUP, (EntityPlayer)ListenerMotion.mc.player);
                 }
             } else if (wackyPos != null && ListenerMotion.mc.currentScreen == null) {
                 BlockPos craftingPos = ((AutoCraft)this.module).getCraftingTable();
                 float[] rotations = RotationUtil.getRotations(craftingPos, EnumFacing.UP);
-                RayTraceResult ray = RotationUtil.rayTraceTo(craftingPos, ListenerMotion.mc.world);
+                RayTraceResult ray = RotationUtil.rayTraceTo(craftingPos, (IBlockAccess)ListenerMotion.mc.world);
                 float[] f = RayTraceUtil.hitVecToPlaceVec(craftingPos, ray.hitVec);
                 if (((AutoCraft)this.module).rotate.getValue() == Rotate.Normal) {
                     event.setYaw(rotations[0]);
@@ -71,3 +88,4 @@ extends ModuleListener<AutoCraft, MotionUpdateEvent> {
         }
     }
 }
+

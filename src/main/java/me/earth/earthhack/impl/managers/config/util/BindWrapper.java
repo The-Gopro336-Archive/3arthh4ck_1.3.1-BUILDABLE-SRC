@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.gson.annotations.SerializedName
+ */
 package me.earth.earthhack.impl.managers.config.util;
 
 import com.google.gson.annotations.SerializedName;
@@ -28,3 +34,4 @@ public class BindWrapper {
         return this.value;
     }
 }
+

@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  io.netty.buffer.Unpooled
+ *  net.minecraft.network.PacketBuffer
+ */
 package me.earth.earthhack.impl.commands.packet.arguments;
 
 import io.netty.buffer.Unpooled;
@@ -59,3 +66,4 @@ extends AbstractArgument<PacketBuffer> {
         return result;
     }
 }
+

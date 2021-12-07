@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.item.EntityItem
+ *  net.minecraft.entity.player.EntityPlayer
+ */
 package me.earth.earthhack.impl.modules.render.tracers;
 
 import java.util.ArrayList;
@@ -43,8 +51,8 @@ extends EntityTypeModule {
 
     @Override
     public boolean isValid(Entity entity) {
-        if (!(entity == null || EntityUtil.isDead(entity) || entity == mc.getRenderViewEntity() || mc.getRenderViewEntity() != null && entity.equals(mc.getRenderViewEntity().getRidingEntity()))) {
-            if (entity.getDistanceSq(Tracers.mc.player) < (double)MathUtil.square(this.minRange.getValue().floatValue()) || entity.getDistanceSq(Tracers.mc.player) > (double)MathUtil.square(this.maxRange.getValue().floatValue())) {
+        if (!(entity == null || EntityUtil.isDead(entity) || entity == mc.getRenderViewEntity() || mc.getRenderViewEntity() != null && entity.equals((Object)mc.getRenderViewEntity().getRidingEntity()))) {
+            if (entity.getDistanceSq((Entity)Tracers.mc.player) < (double)MathUtil.square(this.minRange.getValue().floatValue()) || entity.getDistanceSq((Entity)Tracers.mc.player) > (double)MathUtil.square(this.maxRange.getValue().floatValue())) {
                 return false;
             }
             if (this.items.getValue().booleanValue() && entity instanceof EntityItem) {
@@ -58,3 +66,4 @@ extends EntityTypeModule {
         return false;
     }
 }
+

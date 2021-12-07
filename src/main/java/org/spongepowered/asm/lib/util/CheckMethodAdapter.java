@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.lib.util;
 
 import java.io.PrintWriter;
@@ -620,7 +623,7 @@ extends MethodVisitor {
     }
 
     static void checkSignedShort(int value, String msg) {
-        if (value < Short.MIN_VALUE || value > Short.MAX_VALUE) {
+        if (value < -32768 || value > 32767) {
             throw new IllegalArgumentException(msg + " (must be a signed short): " + value);
         }
     }
@@ -862,3 +865,4 @@ extends MethodVisitor {
         }
     }
 }
+

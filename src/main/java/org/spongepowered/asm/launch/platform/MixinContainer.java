@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package org.spongepowered.asm.launch.platform;
 
 import java.lang.reflect.Constructor;
@@ -14,7 +21,7 @@ import org.spongepowered.asm.service.MixinService;
 
 public class MixinContainer {
     private static final List<String> agentClasses = new ArrayList<String>();
-    private final Logger logger = LogManager.getLogger("mixin");
+    private final Logger logger = LogManager.getLogger((String)"mixin");
     private final URI uri;
     private final List<IMixinPlatformAgent> agents = new ArrayList<IMixinPlatformAgent>();
 
@@ -29,7 +36,7 @@ public class MixinContainer {
                 this.agents.add(agent);
             }
             catch (Exception ex) {
-                this.logger.catching(ex);
+                this.logger.catching((Throwable)ex);
             }
         }
     }
@@ -86,3 +93,4 @@ public class MixinContainer {
         agentClasses.add("org.spongepowered.asm.launch.platform.MixinPlatformAgentDefault");
     }
 }
+

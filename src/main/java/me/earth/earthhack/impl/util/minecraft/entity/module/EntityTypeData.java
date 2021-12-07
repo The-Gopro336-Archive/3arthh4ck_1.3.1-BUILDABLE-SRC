@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.minecraft.entity.module;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -16,3 +19,4 @@ extends DefaultData<T> {
         this.register(((EntityTypeModule)module).misc, "Targets Unknown Entities.");
     }
 }
+

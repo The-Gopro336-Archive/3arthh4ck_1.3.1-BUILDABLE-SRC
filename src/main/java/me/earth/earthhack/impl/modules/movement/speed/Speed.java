@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.init.MobEffects
+ */
 package me.earth.earthhack.impl.modules.movement.speed;
 
 import java.util.List;
@@ -24,6 +31,7 @@ import me.earth.earthhack.impl.modules.movement.step.Step;
 import me.earth.earthhack.impl.util.math.StopWatch;
 import me.earth.earthhack.impl.util.math.position.PositionUtil;
 import me.earth.earthhack.impl.util.minecraft.MovementUtil;
+import net.minecraft.entity.Entity;
 import net.minecraft.init.MobEffects;
 
 public class Speed
@@ -110,7 +118,7 @@ extends Module {
 
     protected boolean notColliding() {
         boolean stepping = false;
-        List collisions = Speed.mc.world.getCollisionBoxes(Speed.mc.player, Speed.mc.player.getEntityBoundingBox().grow(0.1, 0.0, 0.1));
+        List collisions = Speed.mc.world.getCollisionBoxes((Entity)Speed.mc.player, Speed.mc.player.getEntityBoundingBox().grow(0.1, 0.0, 0.1));
         if (STEP.isEnabled() && !collisions.isEmpty()) {
             stepping = true;
         }
@@ -138,3 +146,4 @@ extends Module {
         return this.mode.getValue();
     }
 }
+

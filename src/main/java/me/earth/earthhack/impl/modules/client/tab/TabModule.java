@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.GuiScreen
+ *  org.lwjgl.input.Mouse
+ */
 package me.earth.earthhack.impl.modules.client.tab;
 
 import me.earth.earthhack.api.event.bus.EventListener;
@@ -24,7 +31,7 @@ extends GuiModule {
             @Override
             public void invoke(TickEvent event) {
                 if (Globals.mc.currentScreen == null && TabModule.this.isSilent) {
-                    Mouse.setGrabbed(false);
+                    Mouse.setGrabbed((boolean)false);
                 }
             }
         });
@@ -57,3 +64,4 @@ extends GuiModule {
         return new GuiScreenTab(this);
     }
 }
+

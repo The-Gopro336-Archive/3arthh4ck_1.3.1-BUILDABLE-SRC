@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.command;
 
 import org.newdawn.slick.command.Command;
@@ -29,3 +32,4 @@ implements Command {
         return "[Command=" + this.name + "]";
     }
 }
+

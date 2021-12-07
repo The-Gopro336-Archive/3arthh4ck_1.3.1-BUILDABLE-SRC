@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.commands;
 
 import me.earth.earthhack.api.cache.SettingCache;
@@ -43,3 +46,4 @@ extends Module {
         return PREFIX.getValue();
     }
 }
+

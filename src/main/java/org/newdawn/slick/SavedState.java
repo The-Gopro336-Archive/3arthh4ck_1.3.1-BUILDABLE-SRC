@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  javax.jnlp.ServiceManager
+ */
 package org.newdawn.slick;
 
 import java.io.IOException;
@@ -76,7 +82,7 @@ public class SavedState {
     private boolean isWebstartAvailable() {
         try {
             Class.forName("javax.jnlp.ServiceManager");
-            ServiceManager.lookup("javax.jnlp.PersistenceService");
+            ServiceManager.lookup((String)"javax.jnlp.PersistenceService");
             Log.info("Webstart detected using Muffins");
         }
         catch (Exception e) {
@@ -86,3 +92,4 @@ public class SavedState {
         return true;
     }
 }
+

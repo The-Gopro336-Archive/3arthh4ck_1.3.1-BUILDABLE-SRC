@@ -1,3 +1,21 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.mojang.realmsclient.gui.ChatFormatting
+ *  net.minecraft.block.material.Material
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.gui.ScaledResolution
+ *  net.minecraft.client.renderer.GlStateManager
+ *  net.minecraft.client.renderer.RenderHelper
+ *  net.minecraft.client.resources.I18n
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.init.MobEffects
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.potion.Potion
+ *  net.minecraft.potion.PotionEffect
+ *  org.lwjgl.opengl.GL11
+ */
 package me.earth.earthhack.impl.modules.client.hud;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
@@ -5,7 +23,6 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -119,18 +136,16 @@ extends Module {
         int offset = 0;
         if (this.potions.getValue() == Potions.Text) {
             ArrayList<Potion> sorted = new ArrayList<Potion>();
-            Iterator iterator = Potion.REGISTRY.iterator();
-            while (iterator.hasNext()) {
-                Potion potion2 = (Potion)iterator.next();
+            for (Potion potion2 : Potion.REGISTRY) {
                 if (potion2 == null || !HUD.mc.player.isPotionActive(potion2)) continue;
                 sorted.add(potion2);
             }
-            sorted.sort(Comparator.comparingDouble(potion -> -RENDERER.getStringWidth(I18n.format((String)potion.getName(), (Object[])new Object[0]) + (HUD.mc.player.getActivePotionEffect((Potion)potion).getAmplifier() > 0 ? " " + (HUD.mc.player.getActivePotionEffect((Potion)potion).getAmplifier() + 1) : "") + ChatFormatting.GRAY + " " + Potion.getPotionDurationString((PotionEffect)Objects.requireNonNull(HUD.mc.player.getActivePotionEffect((Potion)potion)), (float)1.0f))));
+            sorted.sort(Comparator.comparingDouble(potion -> -RENDERER.getStringWidth(I18n.format((String)potion.getName(), (Object[])new Object[0]) + (HUD.mc.player.getActivePotionEffect(potion).getAmplifier() > 0 ? " " + (HUD.mc.player.getActivePotionEffect(potion).getAmplifier() + 1) : "") + (Object)ChatFormatting.GRAY + " " + Potion.getPotionDurationString((PotionEffect)Objects.requireNonNull(HUD.mc.player.getActivePotionEffect(potion)), (float)1.0f))));
             for (Potion potion2 : sorted) {
                 PotionEffect effect = HUD.mc.player.getActivePotionEffect(potion2);
                 if (effect == null) continue;
-                String string = I18n.format((String)potion2.getName(), (Object[])new Object[0]) + (effect.getAmplifier() > 0 ? " " + (effect.getAmplifier() + 1) : "") + ChatFormatting.GRAY + " " + Potion.getPotionDurationString((PotionEffect)effect, (float)1.0f);
-                GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+                String string = I18n.format((String)potion2.getName(), (Object[])new Object[0]) + (effect.getAmplifier() > 0 ? " " + (effect.getAmplifier() + 1) : "") + (Object)ChatFormatting.GRAY + " " + Potion.getPotionDurationString((PotionEffect)effect, (float)1.0f);
+                GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
                 int x = this.width - 2 - RENDERER.getStringWidth(string);
                 this.renderPotionText(string, x, (float)(this.height - 2) - RENDERER.getStringHeight() - (float)offset - this.animationY, effect.getPotion());
                 offset = (int)((float)offset + (RENDERER.getStringHeight() + 3.0f));
@@ -193,7 +208,7 @@ extends Module {
 
     private void renderArmor() {
         if (this.armor.getValue().booleanValue()) {
-            GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+            GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
             int x = 15;
             RenderHelper.enableGUIStandardItemLighting();
             for (int i = 3; i >= 0; --i) {
@@ -237,7 +252,7 @@ extends Module {
 
     public void renderPotionText(String text, float x, float y, Potion potion) {
         String colorCode = this.potionColor.getValue() == PotionColor.Normal ? "" : this.colorMode.getValue().getColor();
-        RENDERER.drawStringWithShadow(colorCode + text, x, y, this.potionColor.getValue() == PotionColor.Normal ? this.potionColorMap.get(potion).getRGB() : (this.colorMode.getValue() == HudRainbow.None ? this.color.getValue().getRGB() : (this.colorMode.getValue() == HudRainbow.Static ? ColorUtil.staticRainbow((y + 1.0f) * 0.89f, this.color.getValue()) : -1)));
+        RENDERER.drawStringWithShadow(colorCode + text, x, y, this.potionColor.getValue() == PotionColor.Normal ? this.potionColorMap.get((Object)potion).getRGB() : (this.colorMode.getValue() == HudRainbow.None ? this.color.getValue().getRGB() : (this.colorMode.getValue() == HudRainbow.Static ? ColorUtil.staticRainbow((y + 1.0f) * 0.89f, this.color.getValue()) : -1)));
     }
 
     public Map<Module, ArrayEntry> getArrayEntries() {
@@ -252,3 +267,4 @@ extends Module {
         return this.getArrayEntries().containsKey(module);
     }
 }
+

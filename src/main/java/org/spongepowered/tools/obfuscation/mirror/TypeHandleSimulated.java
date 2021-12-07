@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.tools.obfuscation.mirror;
 
 import java.lang.annotation.Annotation;
@@ -110,3 +113,4 @@ extends TypeHandle {
         return TypeHandleSimulated.findMethodRecursive(new TypeHandle(element), name, signature, rawSignature, matchCase);
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.combat.autothirtytwok;
 
 import me.earth.earthhack.impl.event.events.render.GuiScreenEvent;
@@ -15,3 +18,4 @@ extends ModuleListener<Auto32k, GuiScreenEvent<?>> {
         ((Auto32k)this.module).onGui(event);
     }
 }
+

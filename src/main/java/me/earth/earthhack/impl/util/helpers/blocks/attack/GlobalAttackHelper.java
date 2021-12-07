@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ */
 package me.earth.earthhack.impl.util.helpers.blocks.attack;
 
 import java.util.List;
@@ -52,7 +59,7 @@ implements AttackHelper {
         boolean noCrystal = true;
         float minDamage = Float.MAX_VALUE;
         for (Entity entity : entities) {
-            if (!(entity instanceof EntityEnderCrystal) || EntityUtil.isDead(entity) || !(entity.getDistanceSq(RotationUtil.getRotationPlayer()) < 36.0)) continue;
+            if (!(entity instanceof EntityEnderCrystal) || EntityUtil.isDead(entity) || !(entity.getDistanceSq((Entity)RotationUtil.getRotationPlayer()) < 36.0)) continue;
             noCrystal = false;
             if (!HelperUtil.valid(entity, module.getRange(), module.getTrace())) continue;
             float damage = DamageUtil.calculate(entity);
@@ -76,3 +83,4 @@ implements AttackHelper {
         this.attacked = attacked;
     }
 }
+

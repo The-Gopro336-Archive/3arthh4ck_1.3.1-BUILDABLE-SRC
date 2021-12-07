@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.renderer.GlStateManager
+ *  net.minecraft.client.renderer.RenderHelper
+ *  net.minecraft.client.renderer.culling.Frustum
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.util.math.MathHelper
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.modules.render.nametags;
 
 import me.earth.earthhack.impl.event.events.render.Render3DEvent;
@@ -35,8 +47,8 @@ extends ModuleListener<Nametags, Render3DEvent> {
             Vec3d interp = Interpolation.interpolateEntity(RenderUtil.getEntity());
             Nametag.isRendering = true;
             for (Nametag nametag : ((Nametags)this.module).nametags) {
-                if (nametag.player.isDead || nametag.player.isInvisible() && !((Nametags)this.module).invisibles.getValue().booleanValue() || ((Nametags)this.module).fov.getValue().booleanValue() && !RotationUtil.inFov(nametag.player)) continue;
-                Vec3d i = Interpolation.interpolateEntity(nametag.player);
+                if (nametag.player.isDead || nametag.player.isInvisible() && !((Nametags)this.module).invisibles.getValue().booleanValue() || ((Nametags)this.module).fov.getValue().booleanValue() && !RotationUtil.inFov((Entity)nametag.player)) continue;
+                Vec3d i = Interpolation.interpolateEntity((Entity)nametag.player);
                 this.renderNametag(nametag, nametag.player, i.x, i.y, i.z, interp);
             }
             Nametag.isRendering = false;
@@ -117,3 +129,4 @@ extends ModuleListener<Nametags, Render3DEvent> {
         }
     }
 }
+

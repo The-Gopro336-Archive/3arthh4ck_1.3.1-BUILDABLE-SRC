@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.text.event.ClickEvent
+ *  net.minecraft.util.text.event.ClickEvent$Action
+ */
 package me.earth.earthhack.impl.gui.chat.clickevents;
 
 import java.util.function.Supplier;
@@ -23,3 +30,4 @@ implements IClickEvent {
         return this.supplier.get();
     }
 }
+

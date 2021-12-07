@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  javax.vecmath.Vector3d
+ *  javax.vecmath.Vector4f
+ *  net.minecraft.client.renderer.GlStateManager
+ *  net.minecraft.client.renderer.culling.Frustum
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.util.math.AxisAlignedBB
+ */
 package me.earth.earthhack.impl.modules.render.nametags;
 
 import javax.vecmath.Vector3d;
@@ -97,3 +109,4 @@ extends ModuleListener<Nametags, Render2DEvent> {
         }
     }
 }
+

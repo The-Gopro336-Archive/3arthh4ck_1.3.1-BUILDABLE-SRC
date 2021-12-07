@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin;
 
 import java.lang.annotation.ElementType;
@@ -9,3 +12,4 @@ import java.lang.annotation.Target;
 @Retention(value=RetentionPolicy.CLASS)
 public @interface SoftOverride {
 }
+

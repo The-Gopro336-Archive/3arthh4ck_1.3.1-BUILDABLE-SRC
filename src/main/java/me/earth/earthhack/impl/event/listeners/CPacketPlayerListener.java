@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.client.CPacketPlayer
+ *  net.minecraft.network.play.client.CPacketPlayer$Position
+ *  net.minecraft.network.play.client.CPacketPlayer$PositionRotation
+ *  net.minecraft.network.play.client.CPacketPlayer$Rotation
+ */
 package me.earth.earthhack.impl.event.listeners;
 
 import me.earth.earthhack.api.event.bus.EventListener;
@@ -50,3 +59,4 @@ extends SubscriberImpl {
 
     protected abstract void onPositionRotation(PacketEvent.Send<CPacketPlayer.PositionRotation> var1);
 }
+

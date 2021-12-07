@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.util;
 
 public interface LogSystem {
@@ -15,3 +18,4 @@ public interface LogSystem {
 
     public void debug(String var1);
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.injection.invoke.arg;
 
 public class ArgumentIndexOutOfBoundsException
@@ -8,3 +11,4 @@ extends IndexOutOfBoundsException {
         super("Argument index is out of bounds: " + index);
     }
 }
+

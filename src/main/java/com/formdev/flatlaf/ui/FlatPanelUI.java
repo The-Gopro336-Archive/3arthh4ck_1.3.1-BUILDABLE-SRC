@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.ui;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
@@ -11,3 +14,4 @@ extends BasicPanelUI {
         return FlatUIUtils.createSharedUI(FlatPanelUI.class, FlatPanelUI::new);
     }
 }
+

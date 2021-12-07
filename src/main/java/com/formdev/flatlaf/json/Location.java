@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.json;
 
 public class Location {
@@ -33,3 +36,4 @@ public class Location {
         return this.offset == other.offset && this.column == other.column && this.line == other.line;
     }
 }
+

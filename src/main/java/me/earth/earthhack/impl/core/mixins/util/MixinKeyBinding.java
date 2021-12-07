@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.settings.KeyBinding
+ */
 package me.earth.earthhack.impl.core.mixins.util;
 
 import me.earth.earthhack.impl.core.ducks.util.IKeyBinding;
@@ -13,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class MixinKeyBinding
 implements IKeyBinding {
     @Shadow
-    private boolean field_74513_e;
+    private boolean pressed;
 
     @Override
     @Accessor(value="pressed")
@@ -22,7 +28,8 @@ implements IKeyBinding {
     @Inject(method={"isKeyDown"}, at={@At(value="RETURN")}, cancellable=true)
     private void isKeyDownHook(CallbackInfoReturnable<Boolean> info) {
         if (!info.getReturnValue().booleanValue()) {
-            info.setReturnValue(this.field_74513_e);
+            info.setReturnValue(this.pressed);
         }
     }
 }
+

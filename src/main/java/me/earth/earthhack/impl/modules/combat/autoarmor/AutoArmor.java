@@ -1,3 +1,27 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.enchantment.EnchantmentHelper
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.entity.item.EntityItem
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Items
+ *  net.minecraft.init.MobEffects
+ *  net.minecraft.inventory.EntityEquipmentSlot
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemArmor
+ *  net.minecraft.item.ItemElytra
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.potion.PotionEffect
+ *  net.minecraft.util.CombatRules
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.world.IBlockAccess
+ *  org.lwjgl.input.Mouse
+ */
 package me.earth.earthhack.impl.modules.combat.autoarmor;
 
 import java.util.HashSet;
@@ -41,6 +65,7 @@ import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
 import me.earth.earthhack.impl.util.thread.Locks;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -55,6 +80,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.CombatRules;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.IBlockAccess;
 import org.lwjgl.input.Mouse;
 
 public class AutoArmor
@@ -214,14 +240,14 @@ extends Module {
         if (SUICIDE.returnIfPresent(Suicide::shouldTakeOffArmor, false).booleanValue()) {
             return this.takeOffLoot.getValue() != false || AutoArmor.mc.world.getEntitiesWithinAABB(EntityItem.class, RotationUtil.getRotationPlayer().getEntityBoundingBox()).isEmpty();
         }
-        if (!this.autoMend.getValue().booleanValue() || this.screenCheck.getValue().booleanValue() && AutoArmor.mc.currentScreen != null || (!Mouse.isButtonDown(1) || !InventoryUtil.isHolding(Items.EXPERIENCE_BOTTLE)) && (!EXP_TWEAKS.isEnabled() || !EXP_TWEAKS.returnIfPresent(ExpTweaks::isMiddleClick, false).booleanValue()) || this.wasteLoot.getValue().booleanValue() && EXP_TWEAKS.returnIfPresent(e -> e.isWastingLoot(AutoArmor.mc.world.loadedEntityList), false).booleanValue() || !this.takeOffLoot.getValue().booleanValue() && !AutoArmor.mc.world.getEntitiesWithinAABB(EntityItem.class, RotationUtil.getRotationPlayer().getEntityBoundingBox()).isEmpty()) {
+        if (!this.autoMend.getValue().booleanValue() || this.screenCheck.getValue().booleanValue() && AutoArmor.mc.currentScreen != null || (!Mouse.isButtonDown((int)1) || !InventoryUtil.isHolding(Items.EXPERIENCE_BOTTLE)) && (!EXP_TWEAKS.isEnabled() || !EXP_TWEAKS.returnIfPresent(ExpTweaks::isMiddleClick, false).booleanValue()) || this.wasteLoot.getValue().booleanValue() && EXP_TWEAKS.returnIfPresent(e -> e.isWastingLoot(AutoArmor.mc.world.loadedEntityList), false).booleanValue() || !this.takeOffLoot.getValue().booleanValue() && !AutoArmor.mc.world.getEntitiesWithinAABB(EntityItem.class, RotationUtil.getRotationPlayer().getEntityBoundingBox()).isEmpty()) {
             return false;
         }
         EntityPlayer closestPlayer = EntityUtil.getClosestEnemy();
-        if (closestPlayer != null && closestPlayer.getDistanceSq(AutoArmor.mc.player) < (double)MathUtil.square(this.closest.getValue().floatValue() * 2.0f)) {
+        if (closestPlayer != null && closestPlayer.getDistanceSq((Entity)AutoArmor.mc.player) < (double)MathUtil.square(this.closest.getValue().floatValue() * 2.0f)) {
             for (Entity entity : AutoArmor.mc.world.loadedEntityList) {
                 double damage;
-                if (!(entity instanceof EntityEnderCrystal) || entity.isDead || !(AutoArmor.mc.player.getDistanceSq(entity) <= 144.0) || !((damage = this.getDamageNoArmor(entity.posX, entity.posY, entity.posZ)) > (double)EntityUtil.getHealth(AutoArmor.mc.player) + 1.0) && !(damage > (double)this.maxDmg.getValue().floatValue())) continue;
+                if (!(entity instanceof EntityEnderCrystal) || entity.isDead || !(AutoArmor.mc.player.getDistanceSq(entity) <= 144.0) || !((damage = this.getDamageNoArmor(entity.posX, entity.posY, entity.posZ)) > (double)EntityUtil.getHealth((EntityLivingBase)AutoArmor.mc.player) + 1.0) && !(damage > (double)this.maxDmg.getValue().floatValue())) continue;
                 return false;
             }
             BlockPos middle = PositionUtil.getPosition();
@@ -229,7 +255,7 @@ extends Module {
             for (int i = 1; i < maxRadius; ++i) {
                 double damage;
                 BlockPos pos = middle.add(Sphere.get(i));
-                if (!BlockUtil.canPlaceCrystal(pos, false, this.newVer.getValue(), AutoArmor.mc.world.loadedEntityList, this.newVerEntities.getValue(), 0L) && (!this.bedCheck.getValue().booleanValue() || !BlockUtil.canPlaceBed(pos, this.newVer.getValue())) || !((damage = this.getDamageNoArmor((double)pos.getX() + 0.5, pos.getY() + 1, (double)pos.getZ() + 0.5)) > (double)EntityUtil.getHealth(AutoArmor.mc.player) + 1.0) && !(damage > (double)this.maxDmg.getValue().floatValue())) continue;
+                if (!BlockUtil.canPlaceCrystal(pos, false, this.newVer.getValue(), AutoArmor.mc.world.loadedEntityList, this.newVerEntities.getValue(), 0L) && (!this.bedCheck.getValue().booleanValue() || !BlockUtil.canPlaceBed(pos, this.newVer.getValue())) || !((damage = this.getDamageNoArmor((double)pos.getX() + 0.5, pos.getY() + 1, (double)pos.getZ() + 0.5)) > (double)EntityUtil.getHealth((EntityLivingBase)AutoArmor.mc.player) + 1.0) && !(damage > (double)this.maxDmg.getValue().floatValue())) continue;
                 return false;
             }
         }
@@ -241,7 +267,7 @@ extends Module {
         if (distance > 1.0) {
             return 0.0;
         }
-        double density = DamageUtil.getBlockDensity(new Vec3d(x, y, z), AutoArmor.mc.player.getEntityBoundingBox(), AutoArmor.mc.world, true, true, false, false);
+        double density = DamageUtil.getBlockDensity(new Vec3d(x, y, z), AutoArmor.mc.player.getEntityBoundingBox(), (IBlockAccess)AutoArmor.mc.world, true, true, false, false);
         double densityDistance = distance = (1.0 - distance) * density;
         float damage = DamageUtil.getDifficultyMultiplier((float)((densityDistance * densityDistance + distance) / 2.0 * 7.0 * 12.0 + 1.0));
         damage = CombatRules.getDamageAfterAbsorb((float)damage, (float)3.0f, (float)2.0f);
@@ -295,7 +321,7 @@ extends Module {
     public static EntityEquipmentSlot getSlot(ItemStack stack) {
         if (!stack.isEmpty()) {
             if (stack.getItem() instanceof ItemArmor) {
-                ItemArmor armor = (ItemArmor)((Object)stack.getItem());
+                ItemArmor armor = (ItemArmor)stack.getItem();
                 return armor.getEquipmentSlot();
             }
             if (stack.getItem() instanceof ItemElytra) {
@@ -327,3 +353,4 @@ extends Module {
         return -1;
     }
 }
+

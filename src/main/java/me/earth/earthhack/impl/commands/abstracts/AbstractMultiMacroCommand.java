@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.GuiScreen
+ */
 package me.earth.earthhack.impl.commands.abstracts;
 
 import java.util.Arrays;
@@ -94,7 +100,7 @@ implements Globals {
         }
         String concatenated = conc.append("\u00a7f").toString();
         GuiScreen before = AbstractMultiMacroCommand.mc.currentScreen;
-        Scheduler.getInstance().schedule(() -> mc.displayGuiScreen(new YesNoNonPausing((result, id) -> {
+        Scheduler.getInstance().schedule(() -> mc.displayGuiScreen((GuiScreen)new YesNoNonPausing((result, id) -> {
             mc.displayGuiScreen(before);
             if (!result) {
                 this.registerMacro((Macro)macro, parsed, concatenated);
@@ -138,3 +144,4 @@ implements Globals {
         }
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.api.event.bus.api;
 
 import me.earth.earthhack.api.event.bus.api.ICancellable;
@@ -30,3 +33,4 @@ public interface EventBus {
 
     public boolean hasSubscribers(Class<?> var1, Class<?> var2);
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.extensibility;
 
 import java.util.List;
@@ -26,3 +29,4 @@ public interface IMixinInfo {
 
     public MixinEnvironment.Phase getPhase();
 }
+

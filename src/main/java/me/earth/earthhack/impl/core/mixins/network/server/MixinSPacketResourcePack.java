@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.PacketBuffer
+ *  net.minecraft.network.play.server.SPacketResourcePackSend
+ */
 package me.earth.earthhack.impl.core.mixins.network.server;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -22,3 +29,4 @@ public abstract class MixinSPacketResourcePack {
         }
     }
 }
+

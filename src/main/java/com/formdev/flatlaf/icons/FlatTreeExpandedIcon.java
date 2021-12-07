@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.icons;
 
 import com.formdev.flatlaf.icons.FlatTreeCollapsedIcon;
@@ -16,3 +19,4 @@ extends FlatTreeCollapsedIcon {
         g.rotate(Math.toRadians(90.0), (double)this.width / 2.0, (double)this.height / 2.0);
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.player.norotate;
 
 import me.earth.earthhack.api.module.Module;
@@ -19,3 +22,4 @@ extends Module {
         this.listeners.addAll(new ListenerCPacket(this).getListeners());
     }
 }
+

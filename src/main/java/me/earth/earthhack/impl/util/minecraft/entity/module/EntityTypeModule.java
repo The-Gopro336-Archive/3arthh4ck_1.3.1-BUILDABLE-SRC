@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ */
 package me.earth.earthhack.impl.util.minecraft.entity.module;
 
 import me.earth.earthhack.api.module.Module;
@@ -27,7 +33,7 @@ extends Module {
         if (entity == null) {
             return false;
         }
-        switch (((IEntity)((Object)entity)).getType()) {
+        switch (((IEntity)entity).getType()) {
             case Animal: {
                 return this.animals.getValue();
             }
@@ -50,3 +56,4 @@ extends Module {
         return this.entities.getValue();
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.lib;
 
 import java.io.IOException;
@@ -257,8 +260,8 @@ public class ClassReader {
                 if ((len += n) != b.length) continue;
                 int last = is.read();
                 if (last < 0) {
-                    byte[] byArray = b;
-                    return byArray;
+                    byte[] arrby = b;
+                    return arrby;
                 }
                 byte[] c = new byte[b.length + 1000];
                 System.arraycopy(b, 0, c, 0, len);
@@ -1758,3 +1761,4 @@ public class ClassReader {
         return new Handle(tag, owner, name, desc, itf);
     }
 }
+

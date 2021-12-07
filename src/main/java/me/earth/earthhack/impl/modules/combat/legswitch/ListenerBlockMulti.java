@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Items
+ *  net.minecraft.network.play.server.SPacketMultiBlockChange
+ *  net.minecraft.network.play.server.SPacketMultiBlockChange$BlockUpdateData
+ */
 package me.earth.earthhack.impl.modules.combat.legswitch;
 
 import java.util.List;
@@ -31,3 +40,4 @@ extends ModuleListener<LegSwitch, PacketEvent.Receive<SPacketMultiBlockChange>> 
         }
     }
 }
+

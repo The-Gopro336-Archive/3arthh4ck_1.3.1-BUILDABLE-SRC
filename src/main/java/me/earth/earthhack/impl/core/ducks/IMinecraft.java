@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.resources.data.MetadataSerializer
+ *  net.minecraft.util.Timer
+ */
 package me.earth.earthhack.impl.core.ducks;
 
 import net.minecraft.client.resources.data.MetadataSerializer;
@@ -27,3 +34,4 @@ public interface IMinecraft {
 
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.movement.velocity;
 
 import me.earth.earthhack.impl.event.events.movement.WaterPushEvent;
@@ -12,8 +15,9 @@ extends ModuleListener<Velocity, WaterPushEvent> {
 
     @Override
     public void invoke(WaterPushEvent event) {
-        if (((Velocity)this.module).water.getValue().booleanValue() && event.getEntity().equals(ListenerWaterPush.mc.player)) {
+        if (((Velocity)this.module).water.getValue().booleanValue() && event.getEntity().equals((Object)ListenerWaterPush.mc.player)) {
             event.setCancelled(true);
         }
     }
 }
+

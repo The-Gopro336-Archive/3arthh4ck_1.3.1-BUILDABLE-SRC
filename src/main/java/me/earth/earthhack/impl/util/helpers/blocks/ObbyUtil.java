@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.network.play.client.CPacketUseEntity
+ */
 package me.earth.earthhack.impl.util.helpers.blocks;
 
 import me.earth.earthhack.impl.util.helpers.blocks.ObbyModule;
@@ -44,3 +53,4 @@ public class ObbyUtil {
         return true;
     }
 }
+

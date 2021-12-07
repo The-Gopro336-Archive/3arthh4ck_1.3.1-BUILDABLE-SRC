@@ -1,3 +1,20 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemBlock
+ *  net.minecraft.item.ItemEgg
+ *  net.minecraft.item.ItemEnderPearl
+ *  net.minecraft.item.ItemExpBottle
+ *  net.minecraft.item.ItemFishingRod
+ *  net.minecraft.item.ItemLingeringPotion
+ *  net.minecraft.item.ItemSnowball
+ *  net.minecraft.item.ItemSplashPotion
+ *  net.minecraft.item.ItemStack
+ */
 package me.earth.earthhack.impl.util.minecraft;
 
 import net.minecraft.block.Block;
@@ -27,7 +44,7 @@ public class ItemUtil {
     }
 
     public static boolean areSame(Block block, Item item) {
-        return item instanceof ItemBlock && ItemUtil.areSame(block, ((ItemBlock)((Object)item)).getBlock());
+        return item instanceof ItemBlock && ItemUtil.areSame(block, ((ItemBlock)item).getBlock());
     }
 
     public static boolean areSame(ItemStack stack, Block block) {
@@ -44,3 +61,4 @@ public class ItemUtil {
         return stack != null && ItemUtil.areSame(stack.getItem(), item);
     }
 }
+

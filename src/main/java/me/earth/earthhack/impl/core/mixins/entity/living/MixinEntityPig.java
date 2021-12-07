@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.passive.EntityAnimal
+ *  net.minecraft.entity.passive.EntityPig
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.core.mixins.entity.living;
 
 import me.earth.earthhack.api.event.bus.instance.Bus;
@@ -32,6 +40,7 @@ extends EntityAnimal {
     private void travelHook(EntityAnimal var1, float strafe, float vertical, float forward) {
         AIEvent event = new AIEvent();
         Bus.EVENT_BUS.post(event);
-        super.func_191986_a(strafe, vertical, event.isCancelled() ? 0.0f : forward);
+        super.travel(strafe, vertical, event.isCancelled() ? 0.0f : forward);
     }
 }
+

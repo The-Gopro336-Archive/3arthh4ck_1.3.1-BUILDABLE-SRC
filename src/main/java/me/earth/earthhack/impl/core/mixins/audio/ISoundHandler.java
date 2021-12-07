@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.audio.SoundHandler
+ *  net.minecraft.client.audio.SoundManager
+ *  net.minecraft.client.audio.SoundRegistry
+ */
 package me.earth.earthhack.impl.core.mixins.audio;
 
 import net.minecraft.client.audio.SoundHandler;
@@ -14,3 +22,4 @@ public interface ISoundHandler {
     @Accessor(value="soundRegistry")
     public SoundRegistry getRegistry();
 }
+

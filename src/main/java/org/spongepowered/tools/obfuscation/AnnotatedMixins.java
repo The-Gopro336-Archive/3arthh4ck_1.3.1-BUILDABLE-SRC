@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.collect.ImmutableList
+ */
 package org.spongepowered.tools.obfuscation;
 
 import com.google.common.collect.ImmutableList;
@@ -72,7 +78,7 @@ IJavadocProvider {
         this.targets = this.initTargetMap();
         this.obf = new ObfuscationManager(this);
         this.obf.init();
-        this.validators = ImmutableList.of(new ParentValidator(this), new TargetValidator(this));
+        this.validators = ImmutableList.of((Object)new ParentValidator(this), (Object)new TargetValidator(this));
         this.initTokenCache(this.getOption("tokens"));
     }
 
@@ -390,3 +396,4 @@ IJavadocProvider {
         return mixins;
     }
 }
+

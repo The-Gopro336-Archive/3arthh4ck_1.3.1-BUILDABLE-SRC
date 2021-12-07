@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.api.setting.event;
 
 public class SettingResult {
@@ -18,3 +21,4 @@ public class SettingResult {
         return this.message;
     }
 }
+

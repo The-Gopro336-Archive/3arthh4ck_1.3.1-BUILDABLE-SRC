@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayer
+ */
 package me.earth.earthhack.impl.modules.client.server.protocol.handlers;
 
 import java.nio.ByteBuffer;
@@ -31,3 +37,4 @@ Globals {
         mc.addScheduledTask(() -> player.setPosition(x, y, z));
     }
 }
+

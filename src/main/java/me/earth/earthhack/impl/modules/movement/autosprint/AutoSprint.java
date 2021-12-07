@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.settings.KeyBinding
+ *  net.minecraft.init.MobEffects
+ */
 package me.earth.earthhack.impl.modules.movement.autosprint;
 
 import me.earth.earthhack.api.module.Module;
@@ -44,3 +51,4 @@ extends Module {
         return !(!AutoSprint.mc.gameSettings.keyBindForward.isKeyDown() && !AutoSprint.mc.gameSettings.keyBindBack.isKeyDown() && !AutoSprint.mc.gameSettings.keyBindLeft.isKeyDown() && !AutoSprint.mc.gameSettings.keyBindRight.isKeyDown() || AutoSprint.mc.player == null || AutoSprint.mc.player.isSneaking() || AutoSprint.mc.player.collidedHorizontally || (float)AutoSprint.mc.player.getFoodStats().getFoodLevel() <= 6.0f);
     }
 }
+

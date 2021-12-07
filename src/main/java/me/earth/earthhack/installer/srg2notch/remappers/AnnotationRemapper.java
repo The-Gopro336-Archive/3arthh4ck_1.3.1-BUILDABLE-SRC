@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.objectweb.asm.Type
+ *  org.objectweb.asm.tree.AnnotationNode
+ *  org.objectweb.asm.tree.ClassNode
+ */
 package me.earth.earthhack.installer.srg2notch.remappers;
 
 import java.util.ArrayList;
@@ -51,3 +59,4 @@ implements Remapper {
         }
     }
 }
+

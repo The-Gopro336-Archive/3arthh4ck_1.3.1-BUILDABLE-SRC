@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.resources.IResource
+ *  net.minecraft.client.resources.data.MetadataSerializer
+ *  net.minecraft.util.ResourceLocation
+ */
 package me.earth.earthhack.impl.managers.client;
 
 import java.util.ArrayList;
@@ -30,7 +38,7 @@ implements Globals {
     }
 
     public ResourceSupplier getSingleResource(ResourceLocation location) {
-        List<ResourceSupplier> suppliers = this.resourceMap.get(location);
+        List<ResourceSupplier> suppliers = this.resourceMap.get((Object)location);
         if (suppliers == null || suppliers.size() != 1) {
             return null;
         }
@@ -39,9 +47,9 @@ implements Globals {
 
     public List<IResource> getPluginResources(ResourceLocation location) {
         List<IResource> result;
-        List<ResourceSupplier> suppliers = this.resourceMap.get(location);
+        List<ResourceSupplier> suppliers = this.resourceMap.get((Object)location);
         if (suppliers != null) {
-            Earthhack.getLogger().info("Found " + suppliers.size() + " custom ResourceLocation" + (suppliers.size() == 1 ? "" : "s") + " for " + location);
+            Earthhack.getLogger().info("Found " + suppliers.size() + " custom ResourceLocation" + (suppliers.size() == 1 ? "" : "s") + " for " + (Object)location);
             result = new ArrayList<IResource>(suppliers.size());
             for (ResourceSupplier supplier : suppliers) {
                 if (supplier == null) continue;
@@ -61,16 +69,16 @@ implements Globals {
     }
 
     public void register(PluginResourceLocation r) {
-        this.register(new ResourceLocation(r.getResourceDomain(), r.getResourcePath()), r);
+        this.register(new ResourceLocation(r.getNamespace(), r.getPath()), r);
     }
 
     public void register(ResourceLocation location, PluginResourceLocation resourceLocation) {
-        Earthhack.getLogger().info("Adding custom ResourceLocation: " + location + " for: " + resourceLocation);
+        Earthhack.getLogger().info("Adding custom ResourceLocation: " + (Object)location + " for: " + (Object)((Object)resourceLocation));
         ClassLoader loader = PluginManager.getInstance().getPluginClassLoader();
         if (loader == null) {
             throw new IllegalStateException("Plugin ClassLoader was null!");
         }
-        MetadataSerializer mds = ((IMinecraft)((Object)mc)).getMetadataSerializer();
+        MetadataSerializer mds = ((IMinecraft)mc).getMetadataSerializer();
         if (mds == null) {
             throw new IllegalStateException("MetadataSerializer was null!");
         }
@@ -86,3 +94,4 @@ implements Globals {
         }
     }
 }
+

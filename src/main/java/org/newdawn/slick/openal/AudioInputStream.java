@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.openal;
 
 import java.io.IOException;
@@ -17,3 +20,4 @@ interface AudioInputStream {
 
     public void close() throws IOException;
 }
+

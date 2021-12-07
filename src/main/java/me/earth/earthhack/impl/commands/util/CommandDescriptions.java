@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.commands.util;
 
 import java.util.Map;
@@ -15,3 +18,4 @@ public class CommandDescriptions {
         return descriptions.get(command.getName());
     }
 }
+

@@ -1,3 +1,23 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.entity.EntityPlayerSP
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.SharedMonsterAttributes
+ *  net.minecraft.entity.ai.attributes.IAttribute
+ *  net.minecraft.entity.ai.attributes.IAttributeInstance
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.item.ItemFood
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.datasync.DataParameter
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItem
+ *  net.minecraft.util.DamageSource
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.core.mixins.entity.living;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -27,6 +47,7 @@ import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.Packet;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItem;
 import net.minecraft.util.DamageSource;
@@ -56,15 +77,15 @@ IEntityRemoteAttack {
     private static final ModuleCache<Spectate> SPECTATE = Caches.getModule(Spectate.class);
     @Shadow
     @Final
-    private static DataParameter<Float> field_184632_c;
+    private static DataParameter<Float> HEALTH;
     @Shadow
-    public float field_70702_br;
+    public float moveStrafing;
     @Shadow
-    public float field_191988_bg;
+    public float moveForward;
     @Shadow
-    protected int field_184628_bn;
+    protected int activeItemStackUseCount;
     @Shadow
-    protected ItemStack field_184627_bm;
+    protected ItemStack activeItemStack;
     protected double noInterpX;
     protected double noInterpY;
     protected double noInterpZ;
@@ -79,16 +100,16 @@ IEntityRemoteAttack {
     protected int explosionModifier = Integer.MAX_VALUE;
 
     @Shadow
-    public abstract IAttributeInstance func_110148_a(IAttribute var1);
+    public abstract IAttributeInstance getEntityAttribute(IAttribute var1);
 
     @Shadow
-    public abstract int func_70658_aO();
+    public abstract int getTotalArmorValue();
 
     @Shadow
-    public abstract Iterable<ItemStack> func_184193_aE();
+    public abstract Iterable<ItemStack> getArmorInventoryList();
 
     @Shadow
-    public abstract boolean func_70613_aW();
+    public abstract boolean isServerWorld();
 
     @Override
     @Invoker(value="getArmSwingAnimationEnd")
@@ -112,22 +133,22 @@ IEntityRemoteAttack {
 
     @Override
     public boolean getElytraFlag() {
-        return this.func_70083_f(7);
+        return this.getFlag(7);
     }
 
     @Override
     public double getNoInterpX() {
-        return this.isNoInterping() ? this.noInterpX : this.field_70165_t;
+        return this.isNoInterping() ? this.noInterpX : this.posX;
     }
 
     @Override
     public double getNoInterpY() {
-        return this.isNoInterping() ? this.noInterpY : this.field_70163_u;
+        return this.isNoInterping() ? this.noInterpY : this.posY;
     }
 
     @Override
     public double getNoInterpZ() {
-        return this.isNoInterping() ? this.noInterpZ : this.field_70161_v;
+        return this.isNoInterping() ? this.noInterpZ : this.posZ;
     }
 
     @Override
@@ -188,7 +209,7 @@ IEntityRemoteAttack {
     @Override
     public boolean isNoInterping() {
         EntityPlayerSP player = MixinEntityLivingBase.mc.player;
-        return !this.func_184218_aH() && this.noInterping && (player == null || !player.isRiding());
+        return !this.isRiding() && this.noInterping && (player == null || !player.isRiding());
     }
 
     @Override
@@ -208,17 +229,17 @@ IEntityRemoteAttack {
 
     @Override
     public int getArmorValue() {
-        return this.shouldCache() ? this.armorValue : this.func_70658_aO();
+        return this.shouldCache() ? this.armorValue : this.getTotalArmorValue();
     }
 
     @Override
     public float getArmorToughness() {
-        return this.shouldCache() ? this.armorToughness : (float)this.func_110148_a(SharedMonsterAttributes.ARMOR_TOUGHNESS).getAttributeValue();
+        return this.shouldCache() ? this.armorToughness : (float)this.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).getAttributeValue();
     }
 
     @Override
     public int getExplosionModifier(DamageSource source) {
-        return this.shouldCache() ? this.explosionModifier : EnchantmentUtil.getEnchantmentModifierDamage(this.func_184193_aE(), source);
+        return this.shouldCache() ? this.explosionModifier : EnchantmentUtil.getEnchantmentModifierDamage(this.getArmorInventoryList(), source);
     }
 
     @Redirect(method={"attackEntityFrom"}, at=@At(value="FIELD", target="Lnet/minecraft/world/World;isRemote:Z"))
@@ -231,16 +252,16 @@ IEntityRemoteAttack {
 
     @Redirect(method={"onUpdate"}, at=@At(value="FIELD", target="Lnet/minecraft/entity/EntityLivingBase;posX:D"))
     private double posXHookOnUpdate(EntityLivingBase base) {
-        if (NoInterp.update((NoInterp)NOINTERP.get(), base)) {
-            return ((IEntityNoInterp)((Object)base)).getNoInterpX();
+        if (NoInterp.update((NoInterp)NOINTERP.get(), (Entity)base)) {
+            return ((IEntityNoInterp)base).getNoInterpX();
         }
         return base.posX;
     }
 
     @Redirect(method={"onUpdate"}, at=@At(value="FIELD", target="Lnet/minecraft/entity/EntityLivingBase;posZ:D"))
     private double posZHookOnUpdate(EntityLivingBase base) {
-        if (NOINTERP.isEnabled() && base instanceof IEntityNoInterp && ((IEntityNoInterp)((Object)base)).isNoInterping() && ((NoInterp)NOINTERP.get()).isSilent()) {
-            return ((IEntityNoInterp)((Object)base)).getNoInterpZ();
+        if (NOINTERP.isEnabled() && base instanceof IEntityNoInterp && ((IEntityNoInterp)base).isNoInterping() && ((NoInterp)NOINTERP.get()).isSilent()) {
+            return ((IEntityNoInterp)base).getNoInterpZ();
         }
         return base.posZ;
     }
@@ -254,7 +275,7 @@ IEntityRemoteAttack {
 
     @Inject(method={"notifyDataManagerChange"}, at={@At(value="RETURN")})
     public void notifyDataManagerChangeHook(DataParameter<?> key, CallbackInfo info) {
-        if (key.equals(field_184632_c) && (double)((Float)this.field_70180_af.get(field_184632_c)).floatValue() <= 0.0 && this.field_70170_p != null && this.field_70170_p.isRemote) {
+        if (key.equals(HEALTH) && (double)((Float)this.dataManager.get(HEALTH)).floatValue() <= 0.0 && this.world != null && this.world.isRemote) {
             Bus.EVENT_BUS.post(new DeathEvent((EntityLivingBase)EntityLivingBase.class.cast(this)));
         }
     }
@@ -279,9 +300,9 @@ IEntityRemoteAttack {
 
     @Redirect(method={"onItemUseFinish"}, at=@At(value="INVOKE", target="Lnet/minecraft/entity/EntityLivingBase;resetActiveHand()V"))
     private void resetActiveHandHook(EntityLivingBase base) {
-        if (this.field_70170_p.isRemote && FAST_EAT.isEnabled() && base instanceof EntityPlayerSP && !mc.isSingleplayer() && ((FastEat)FAST_EAT.get()).getMode() == FastEatMode.NoDelay && this.field_184627_bm.getItem() instanceof ItemFood) {
-            this.field_184628_bn = 0;
-            ((EntityPlayerSP)base).connection.sendPacket(new CPacketPlayerTryUseItem(base.getActiveHand()));
+        if (this.world.isRemote && FAST_EAT.isEnabled() && base instanceof EntityPlayerSP && !mc.isSingleplayer() && ((FastEat)FAST_EAT.get()).getMode() == FastEatMode.NoDelay && this.activeItemStack.getItem() instanceof ItemFood) {
+            this.activeItemStackUseCount = 0;
+            ((EntityPlayerSP)base).connection.sendPacket((Packet)new CPacketPlayerTryUseItem(base.getActiveHand()));
         } else {
             base.resetActiveHand();
         }
@@ -304,6 +325,7 @@ IEntityRemoteAttack {
 
     @Redirect(method={"travel"}, at=@At(value="INVOKE", target="Lnet/minecraft/entity/EntityLivingBase;isServerWorld()Z"))
     public boolean travelHook(EntityLivingBase entityLivingBase) {
-        return this.func_70613_aW() || entityLivingBase instanceof MotionTracker;
+        return this.isServerWorld() || entityLivingBase instanceof MotionTracker;
     }
 }
+

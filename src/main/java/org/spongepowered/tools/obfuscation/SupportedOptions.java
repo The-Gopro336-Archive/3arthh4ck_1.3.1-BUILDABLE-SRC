@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.collect.ImmutableSet
+ *  com.google.common.collect.ImmutableSet$Builder
+ */
 package org.spongepowered.tools.obfuscation;
 
 import com.google.common.collect.ImmutableSet;
@@ -19,8 +26,9 @@ public final class SupportedOptions {
 
     public static Set<String> getAllOptions() {
         ImmutableSet.Builder options = ImmutableSet.builder();
-        options.add(new String[]{TOKENS, OUT_REFMAP_FILE, DISABLE_TARGET_VALIDATOR, DISABLE_TARGET_EXPORT, DISABLE_OVERWRITE_CHECKER, OVERWRITE_ERROR_LEVEL, DEFAULT_OBFUSCATION_ENV, DEPENDENCY_TARGETS_FILE});
+        options.add((Object[])new String[]{TOKENS, OUT_REFMAP_FILE, DISABLE_TARGET_VALIDATOR, DISABLE_TARGET_EXPORT, DISABLE_OVERWRITE_CHECKER, OVERWRITE_ERROR_LEVEL, DEFAULT_OBFUSCATION_ENV, DEPENDENCY_TARGETS_FILE});
         options.addAll(ObfuscationServices.getInstance().getSupportedOptions());
         return options.build();
     }
 }
+

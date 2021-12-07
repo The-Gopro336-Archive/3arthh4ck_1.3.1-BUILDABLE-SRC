@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.util;
 
 import java.io.BufferedInputStream;
@@ -62,3 +65,4 @@ public class ResourceLoader {
         locations.add(new FileSystemLocation(new File(".")));
     }
 }
+

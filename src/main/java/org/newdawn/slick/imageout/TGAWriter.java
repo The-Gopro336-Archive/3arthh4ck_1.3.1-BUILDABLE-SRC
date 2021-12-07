@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.imageout;
 
 import java.io.BufferedOutputStream;
@@ -48,3 +51,4 @@ implements ImageWriter {
         out.close();
     }
 }
+

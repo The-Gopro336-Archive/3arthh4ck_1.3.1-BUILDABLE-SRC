@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.gui.Gui
+ *  net.minecraft.client.renderer.GlStateManager
+ *  net.minecraft.client.renderer.RenderHelper
+ *  net.minecraft.util.ResourceLocation
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.MathHelper
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal;
 
 import java.awt.Color;
@@ -106,3 +118,4 @@ extends ModuleListener<AutoCrystal, Render3DEvent> {
         GlStateManager.color((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
     }
 }
+

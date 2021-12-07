@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.collect.BiMap
+ *  com.google.common.collect.HashBiMap
+ *  org.apache.logging.log4j.Level
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package org.spongepowered.asm.mixin.transformer;
 
 import com.google.common.collect.BiMap;
@@ -59,7 +69,7 @@ import org.spongepowered.asm.util.ClassSignature;
 public class MixinTargetContext
 extends ClassContext
 implements IMixinContext {
-    private static final Logger logger = LogManager.getLogger("mixin");
+    private static final Logger logger = LogManager.getLogger((String)"mixin");
     private final MixinInfo mixin;
     private final ClassNode classNode;
     private final TargetClassContext targetClass;
@@ -89,7 +99,7 @@ implements IMixinContext {
         this.requireVersion(classNode.version);
         InnerClassGenerator icg = (InnerClassGenerator)context.getExtensions().getGenerator(InnerClassGenerator.class);
         for (String innerClass : this.mixin.getInnerClasses()) {
-            this.innerClasses.put(innerClass, icg.registerInnerClass(this.mixin, innerClass, this));
+            this.innerClasses.put((Object)innerClass, (Object)icg.registerInnerClass(this.mixin, innerClass, this));
         }
     }
 
@@ -261,8 +271,8 @@ implements IMixinContext {
                 methodRef.setName(md.getName());
             }
             this.upgradeMethodRef(method, methodRef, md);
-        } else if (this.innerClasses.containsKey(methodRef.getOwner())) {
-            methodRef.setOwner((String)this.innerClasses.get(methodRef.getOwner()));
+        } else if (this.innerClasses.containsKey((Object)methodRef.getOwner())) {
+            methodRef.setOwner((String)this.innerClasses.get((Object)methodRef.getOwner()));
             methodRef.setDesc(this.transformMethodDescriptor(methodRef.getDesc()));
         } else if (this.detachedSuper || this.inheritsFromMixin) {
             if (methodRef.getOpcode() == 183) {
@@ -336,7 +346,7 @@ implements IMixinContext {
         if (typeInsn.desc.equals(this.getClassRef())) {
             typeInsn.desc = this.getTarget().getClassRef();
         } else {
-            String newName = (String)this.innerClasses.get(typeInsn.desc);
+            String newName = (String)this.innerClasses.get((Object)typeInsn.desc);
             if (newName != null) {
                 typeInsn.desc = newName;
             }
@@ -490,11 +500,11 @@ implements IMixinContext {
         if (!isObject) {
             return desc;
         }
-        String innerClassName = (String)this.innerClasses.get(type);
+        String innerClassName = (String)this.innerClasses.get((Object)type);
         if (innerClassName != null) {
             return desc.replace(type, innerClassName);
         }
-        if (this.innerClasses.inverse().containsKey(type)) {
+        if (this.innerClasses.inverse().containsKey((Object)type)) {
             return desc;
         }
         ClassInfo typeInfo = ClassInfo.forName(type);
@@ -682,3 +692,4 @@ implements IMixinContext {
         return methods;
     }
 }
+

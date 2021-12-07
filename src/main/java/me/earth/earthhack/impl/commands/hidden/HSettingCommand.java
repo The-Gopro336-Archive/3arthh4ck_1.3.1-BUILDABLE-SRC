@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.GuiChat
+ *  net.minecraft.client.gui.GuiScreen
+ */
 package me.earth.earthhack.impl.commands.hidden;
 
 import java.util.ArrayList;
@@ -13,6 +20,7 @@ import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.managers.thread.scheduler.Scheduler;
 import me.earth.earthhack.impl.modules.client.commands.Commands;
 import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.gui.GuiScreen;
 
 public class HSettingCommand
 extends Command
@@ -28,7 +36,7 @@ implements Globals {
         if (args.length > 2 && (module = (Module)Managers.MODULES.getObject(args[1])) != null && (setting = module.getSetting(args[2])) != null) {
             if (args.length == 3) {
                 String command = HSettingCommand.getCommand(setting, module);
-                Scheduler.getInstance().schedule(() -> mc.displayGuiScreen(new GuiChat(command)));
+                Scheduler.getInstance().schedule(() -> mc.displayGuiScreen((GuiScreen)new GuiChat(command)));
             } else {
                 HSettingCommand.update(setting, module, args, false);
             }
@@ -79,3 +87,4 @@ implements Globals {
         }
     }
 }
+

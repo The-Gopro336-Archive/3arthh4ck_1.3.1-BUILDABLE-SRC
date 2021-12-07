@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.api.event.events;
 
 import me.earth.earthhack.api.event.bus.api.ICancellable;
@@ -16,3 +19,4 @@ implements ICancellable {
         return this.cancelled;
     }
 }
+

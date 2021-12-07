@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.entity.EntityPlayerSP
+ */
 package me.earth.earthhack.impl.commands;
 
 import me.earth.earthhack.api.command.Command;
@@ -5,7 +11,7 @@ import me.earth.earthhack.api.command.PossibleInputs;
 import me.earth.earthhack.api.util.interfaces.Globals;
 import me.earth.earthhack.impl.commands.util.CommandDescriptions;
 import me.earth.earthhack.impl.util.text.ChatUtil;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.entity.EntityPlayerSP;
 
 public class HClipCommand
 extends Command
@@ -27,7 +33,7 @@ implements Globals {
         }
         try {
             double h = Double.parseDouble(args[1]);
-            Entity entity = HClipCommand.mc.player.getRidingEntity() != null ? HClipCommand.mc.player.getRidingEntity() : HClipCommand.mc.player;
+            EntityPlayerSP entity = HClipCommand.mc.player.getRidingEntity() != null ? HClipCommand.mc.player.getRidingEntity() : HClipCommand.mc.player;
             double yaw = Math.cos(Math.toRadians(HClipCommand.mc.player.rotationYaw + 90.0f));
             double pit = Math.sin(Math.toRadians(HClipCommand.mc.player.rotationYaw + 90.0f));
             entity.setPosition(entity.posX + h * yaw, entity.posY, entity.posZ + h * pit);
@@ -46,3 +52,4 @@ implements Globals {
         return super.getPossibleInputs(args);
     }
 }
+

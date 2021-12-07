@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.gui;
 
 import org.newdawn.slick.Graphics;
@@ -49,3 +52,4 @@ extends AbstractComponent {
         this.y = y;
     }
 }
+

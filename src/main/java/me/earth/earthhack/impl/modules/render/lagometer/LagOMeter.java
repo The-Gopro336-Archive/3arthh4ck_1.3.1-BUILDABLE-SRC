@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.ScaledResolution
+ */
 package me.earth.earthhack.impl.modules.render.lagometer;
 
 import java.awt.Color;
@@ -91,3 +97,4 @@ extends BlockESPModule {
         this.pitch = Managers.ROTATION.getServerPitch();
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.math;
 
 public class Rectangle {
@@ -49,3 +52,4 @@ public class Rectangle {
         return "Rectangle: {" + this.x + ", " + this.y + ", " + (this.x + this.width) + ", " + (this.y + this.height) + "}";
     }
 }
+

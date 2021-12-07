@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.openal;
 
 import org.newdawn.slick.openal.Audio;
@@ -43,3 +46,4 @@ implements Audio {
     public void stop() {
     }
 }
+

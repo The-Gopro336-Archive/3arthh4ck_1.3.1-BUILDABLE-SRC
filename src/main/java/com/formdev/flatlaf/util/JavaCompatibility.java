@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.util;
 
 import com.formdev.flatlaf.util.LoggingFacade;
@@ -17,32 +20,32 @@ public class JavaCompatibility {
      * WARNING - Removed try catching itself - possible behaviour change.
      */
     public static void drawStringUnderlineCharAt(JComponent c, Graphics g, String text, int underlinedIndex, int x, int y) {
-        Class<JavaCompatibility> clazz = JavaCompatibility.class;
+        Class<JavaCompatibility> class_ = JavaCompatibility.class;
         synchronized (JavaCompatibility.class) {
             if (drawStringUnderlineCharAtMethod == null) {
                 try {
-                    Class[] classArray;
+                    Class[] arrclass;
                     Class<?> cls = Class.forName(SystemInfo.isJava_9_orLater ? "javax.swing.plaf.basic.BasicGraphicsUtils" : "sun.swing.SwingUtilities2");
                     if (SystemInfo.isJava_9_orLater) {
-                        Class[] classArray2 = new Class[6];
-                        classArray2[0] = JComponent.class;
-                        classArray2[1] = Graphics2D.class;
-                        classArray2[2] = String.class;
-                        classArray2[3] = Integer.TYPE;
-                        classArray2[4] = Float.TYPE;
-                        classArray = classArray2;
-                        classArray2[5] = Float.TYPE;
+                        Class[] arrclass2 = new Class[6];
+                        arrclass2[0] = JComponent.class;
+                        arrclass2[1] = Graphics2D.class;
+                        arrclass2[2] = String.class;
+                        arrclass2[3] = Integer.TYPE;
+                        arrclass2[4] = Float.TYPE;
+                        arrclass = arrclass2;
+                        arrclass2[5] = Float.TYPE;
                     } else {
-                        Class[] classArray3 = new Class[6];
-                        classArray3[0] = JComponent.class;
-                        classArray3[1] = Graphics.class;
-                        classArray3[2] = String.class;
-                        classArray3[3] = Integer.TYPE;
-                        classArray3[4] = Integer.TYPE;
-                        classArray = classArray3;
-                        classArray3[5] = Integer.TYPE;
+                        Class[] arrclass3 = new Class[6];
+                        arrclass3[0] = JComponent.class;
+                        arrclass3[1] = Graphics.class;
+                        arrclass3[2] = String.class;
+                        arrclass3[3] = Integer.TYPE;
+                        arrclass3[4] = Integer.TYPE;
+                        arrclass = arrclass3;
+                        arrclass3[5] = Integer.TYPE;
                     }
-                    drawStringUnderlineCharAtMethod = cls.getMethod("drawStringUnderlineCharAt", classArray);
+                    drawStringUnderlineCharAtMethod = cls.getMethod("drawStringUnderlineCharAt", arrclass);
                 }
                 catch (Exception ex) {
                     LoggingFacade.INSTANCE.logSevere(null, ex);
@@ -69,7 +72,7 @@ public class JavaCompatibility {
      * WARNING - Removed try catching itself - possible behaviour change.
      */
     public static String getClippedString(JComponent c, FontMetrics fm, String string, int availTextWidth) {
-        Class<JavaCompatibility> clazz = JavaCompatibility.class;
+        Class<JavaCompatibility> class_ = JavaCompatibility.class;
         synchronized (JavaCompatibility.class) {
             if (getClippedStringMethod == null) {
                 try {
@@ -92,3 +95,4 @@ public class JavaCompatibility {
         }
     }
 }
+

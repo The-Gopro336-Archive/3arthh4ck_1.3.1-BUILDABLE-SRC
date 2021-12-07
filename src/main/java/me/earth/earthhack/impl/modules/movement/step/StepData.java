@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.movement.step;
 
 import me.earth.earthhack.impl.modules.movement.step.Step;
@@ -25,3 +28,4 @@ extends BlockESPModuleData<Step> {
         return "Allows you to step up blocks.";
     }
 }
+

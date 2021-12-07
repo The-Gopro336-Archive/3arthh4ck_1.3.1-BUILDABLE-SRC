@@ -1,3 +1,32 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.block.SoundType
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.item.ItemBlock
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketAnimation
+ *  net.minecraft.network.play.client.CPacketEntityAction
+ *  net.minecraft.network.play.client.CPacketEntityAction$Action
+ *  net.minecraft.network.play.client.CPacketPlayer$Rotation
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.SoundCategory
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.RayTraceResult
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.world.IBlockAccess
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.util.helpers.blocks;
 
 import java.util.ArrayList;
@@ -32,6 +61,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
@@ -48,6 +78,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 public abstract class BlockPlacingModule
 extends DisablingModule {
@@ -83,8 +115,8 @@ extends DisablingModule {
 
     public void placeBlock(BlockPos on, EnumFacing facing) {
         EntityPlayer from = this.getPlayerForRotations();
-        float[] r = RotationUtil.getRotations(on, facing, from);
-        RayTraceResult result = RayTraceUtil.getRayTraceResultWithEntity(r[0], r[1], from);
+        float[] r = RotationUtil.getRotations(on, facing, (Entity)from);
+        RayTraceResult result = RayTraceUtil.getRayTraceResultWithEntity(r[0], r[1], (Entity)from);
         this.placeBlock(on, facing, r, result.hitVec);
     }
 
@@ -92,13 +124,13 @@ extends DisablingModule {
         if (this.rotations == null && (this.rotate.getValue() == Rotate.Normal || this.blocksPlaced == 0 && this.rotate.getValue() == Rotate.Packet)) {
             this.rotations = helpingRotations;
         } else if (this.rotate.getValue() == Rotate.Packet) {
-            this.packets.add(new CPacketPlayer.Rotation(helpingRotations[0], helpingRotations[1], this.getPlayer().onGround));
+            this.packets.add((Packet<?>)new CPacketPlayer.Rotation(helpingRotations[0], helpingRotations[1], this.getPlayer().onGround));
         }
         float[] f = RayTraceUtil.hitVecToPlaceVec(on, hitVec);
         EnumHand hand = InventoryUtil.getHand(this.slot);
-        this.packets.add(new CPacketPlayerTryUseItemOnBlock(on, facing, hand, f[0], f[1], f[2]));
+        this.packets.add((Packet<?>)new CPacketPlayerTryUseItemOnBlock(on, facing, hand, f[0], f[1], f[2]));
         if (this.placeSwing.getValue() == PlaceSwing.Always) {
-            this.packets.add(new CPacketAnimation(InventoryUtil.getHand(this.slot)));
+            this.packets.add((Packet<?>)new CPacketAnimation(InventoryUtil.getHand(this.slot)));
         }
         if (!(this.packet.getValue().booleanValue() || NO_GLITCH_BLOCKS.isPresent() && ((NoGlitchBlocks)NO_GLITCH_BLOCKS.get()).noPlace())) {
             ItemStack stack = this.slot == -2 ? BlockPlacingModule.mc.player.getHeldItemOffhand() : BlockPlacingModule.mc.player.inventory.getStackInSlot(this.slot);
@@ -111,17 +143,17 @@ extends DisablingModule {
         if (stack.getItem() instanceof ItemBlock) {
             int i;
             IBlockState placeState;
-            ItemBlock itemBlock = (ItemBlock)((Object)stack.getItem());
+            ItemBlock itemBlock = (ItemBlock)stack.getItem();
             Block block = itemBlock.getBlock();
             IBlockState iblockstate = BlockPlacingModule.mc.world.getBlockState(pos);
             Block iBlock = iblockstate.getBlock();
-            if (!iBlock.isReplaceable(BlockPlacingModule.mc.world, pos)) {
+            if (!iBlock.isReplaceable((IBlockAccess)BlockPlacingModule.mc.world, pos)) {
                 pos = pos.offset(facing);
             }
-            if (!stack.isEmpty() && BlockPlacingModule.mc.player.canPlayerEdit(pos, facing, stack) && BlockPlacingModule.mc.world.mayPlace(block, pos, false, facing, null) && itemBlock.placeBlockAt(stack, BlockPlacingModule.mc.player, BlockPlacingModule.mc.world, pos, facing, hitX, hitY, hitZ, placeState = block.getStateForPlacement(BlockPlacingModule.mc.world, pos, facing, hitX, hitY, hitZ, i = itemBlock.func_77647_b(stack.getMetadata()), BlockPlacingModule.mc.player, hand))) {
+            if (!stack.isEmpty() && BlockPlacingModule.mc.player.canPlayerEdit(pos, facing, stack) && BlockPlacingModule.mc.world.mayPlace(block, pos, false, facing, null) && itemBlock.placeBlockAt(stack, (EntityPlayer)BlockPlacingModule.mc.player, (World)BlockPlacingModule.mc.world, pos, facing, hitX, hitY, hitZ, placeState = block.getStateForPlacement((World)BlockPlacingModule.mc.world, pos, facing, hitX, hitY, hitZ, i = itemBlock.getMetadata(stack.getMetadata()), (EntityLivingBase)BlockPlacingModule.mc.player, hand))) {
                 placeState = BlockPlacingModule.mc.world.getBlockState(pos);
-                SoundType soundtype = placeState.getBlock().getSoundType(placeState, BlockPlacingModule.mc.world, pos, BlockPlacingModule.mc.player);
-                BlockPlacingModule.mc.world.playSound(BlockPlacingModule.mc.player, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0f) / 2.0f, soundtype.getPitch() * 0.8f);
+                SoundType soundtype = placeState.getBlock().getSoundType(placeState, (World)BlockPlacingModule.mc.world, pos, (Entity)BlockPlacingModule.mc.player);
+                BlockPlacingModule.mc.world.playSound((EntityPlayer)BlockPlacingModule.mc.player, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0f) / 2.0f, soundtype.getPitch() * 0.8f);
                 if (!BlockPlacingModule.mc.player.isCreative() && this.stackPacket.getValue().booleanValue()) {
                     stack.shrink(1);
                 }
@@ -147,15 +179,15 @@ extends DisablingModule {
                 }
             }
             if (!sneaking) {
-                BlockPlacingModule.mc.player.connection.sendPacket(new CPacketEntityAction(BlockPlacingModule.mc.player, CPacketEntityAction.Action.START_SNEAKING));
+                BlockPlacingModule.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)BlockPlacingModule.mc.player, CPacketEntityAction.Action.START_SNEAKING));
             }
-            this.packets.forEach(packet -> BlockPlacingModule.mc.player.connection.sendPacket((Packet)packet));
+            this.packets.forEach(packet -> BlockPlacingModule.mc.player.connection.sendPacket(packet));
             this.timer.reset(this.delay.getValue().intValue());
             if (this.placeSwing.getValue() == PlaceSwing.Once) {
                 Swing.Packet.swing(InventoryUtil.getHand(this.slot));
             }
             if (!sneaking) {
-                BlockPlacingModule.mc.player.connection.sendPacket(new CPacketEntityAction(BlockPlacingModule.mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
+                BlockPlacingModule.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)BlockPlacingModule.mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
             }
             this.post.forEach(Runnable::run);
             this.packets.clear();
@@ -219,3 +251,4 @@ extends DisablingModule {
         return this.delay.getValue();
     }
 }
+

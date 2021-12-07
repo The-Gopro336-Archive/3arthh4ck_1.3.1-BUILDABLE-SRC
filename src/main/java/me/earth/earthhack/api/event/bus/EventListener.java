@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.api.event.bus;
 
 import me.earth.earthhack.api.event.bus.api.Listener;
@@ -41,3 +44,4 @@ implements Listener<T> {
         return this.type;
     }
 }
+

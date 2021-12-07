@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.command;
 
 import java.util.ArrayList;
@@ -260,3 +263,4 @@ public class InputProvider {
         }
     }
 }
+

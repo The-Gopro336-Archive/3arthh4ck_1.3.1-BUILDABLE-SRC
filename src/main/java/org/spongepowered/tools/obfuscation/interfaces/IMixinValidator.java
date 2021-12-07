@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.tools.obfuscation.interfaces;
 
 import java.util.Collection;
@@ -15,3 +18,4 @@ public interface IMixinValidator {
 
     }
 }
+

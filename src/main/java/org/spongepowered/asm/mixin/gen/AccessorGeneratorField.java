@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.gen;
 
 import org.spongepowered.asm.lib.Type;
@@ -18,3 +21,4 @@ extends AccessorGenerator {
         this.isInstanceField = (this.targetField.access & 8) == 0;
     }
 }
+

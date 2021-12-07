@@ -1,3 +1,18 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.BufferUtils
+ *  org.lwjgl.LWJGLException
+ *  org.lwjgl.Sys
+ *  org.lwjgl.input.Cursor
+ *  org.lwjgl.input.Mouse
+ *  org.lwjgl.openal.AL
+ *  org.lwjgl.opengl.Display
+ *  org.lwjgl.opengl.DisplayMode
+ *  org.lwjgl.opengl.Drawable
+ *  org.lwjgl.opengl.PixelFormat
+ */
 package org.newdawn.slick;
 
 import java.io.IOException;
@@ -13,6 +28,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.openal.AL;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.Drawable;
 import org.lwjgl.opengl.PixelFormat;
 import org.newdawn.slick.Game;
 import org.newdawn.slick.GameContainer;
@@ -50,7 +66,7 @@ extends GameContainer {
     }
 
     public void setTitle(String title) {
-        Display.setTitle(title);
+        Display.setTitle((String)title);
     }
 
     public void setDisplayMode(int width, int height, boolean fullscreen) throws SlickException {
@@ -81,8 +97,8 @@ extends GameContainer {
             }
             this.width = width;
             this.height = height;
-            Display.setDisplayMode(this.targetDisplayMode);
-            Display.setFullscreen(fullscreen);
+            Display.setDisplayMode((DisplayMode)this.targetDisplayMode);
+            Display.setFullscreen((boolean)fullscreen);
             if (Display.isCreated()) {
                 this.initGL();
                 this.enterOrtho();
@@ -109,7 +125,7 @@ extends GameContainer {
         }
         if (!fullscreen) {
             try {
-                Display.setFullscreen(fullscreen);
+                Display.setFullscreen((boolean)fullscreen);
             }
             catch (LWJGLException e) {
                 throw new SlickException("Unable to set fullscreen=" + fullscreen, e);
@@ -124,7 +140,7 @@ extends GameContainer {
     public void setMouseCursor(String ref, int hotSpotX, int hotSpotY) throws SlickException {
         try {
             Cursor cursor = CursorLoader.get().getCursor(ref, hotSpotX, hotSpotY);
-            Mouse.setNativeCursor(cursor);
+            Mouse.setNativeCursor((Cursor)cursor);
         }
         catch (Throwable e) {
             Log.error("Failed to load and apply cursor.", e);
@@ -136,7 +152,7 @@ extends GameContainer {
     public void setMouseCursor(ImageData data, int hotSpotX, int hotSpotY) throws SlickException {
         try {
             Cursor cursor = CursorLoader.get().getCursor(data, hotSpotX, hotSpotY);
-            Mouse.setNativeCursor(cursor);
+            Mouse.setNativeCursor((Cursor)cursor);
         }
         catch (Throwable e) {
             Log.error("Failed to load and apply cursor.", e);
@@ -147,7 +163,7 @@ extends GameContainer {
     @Override
     public void setMouseCursor(Cursor cursor, int hotSpotX, int hotSpotY) throws SlickException {
         try {
-            Mouse.setNativeCursor(cursor);
+            Mouse.setNativeCursor((Cursor)cursor);
         }
         catch (Throwable e) {
             Log.error("Failed to load and apply cursor.", e);
@@ -167,12 +183,12 @@ extends GameContainer {
         try {
             Image temp = new Image(this.get2Fold(image.getWidth()), this.get2Fold(image.getHeight()));
             Graphics g = temp.getGraphics();
-            ByteBuffer buffer = BufferUtils.createByteBuffer(temp.getWidth() * temp.getHeight() * 4);
+            ByteBuffer buffer = BufferUtils.createByteBuffer((int)(temp.getWidth() * temp.getHeight() * 4));
             g.drawImage(image.getFlippedCopy(false, true), 0.0f, 0.0f);
             g.flush();
             g.getArea(0, 0, temp.getWidth(), temp.getHeight(), buffer);
             Cursor cursor = CursorLoader.get().getCursor(buffer, hotSpotX, hotSpotY, temp.getWidth(), temp.getHeight());
-            Mouse.setNativeCursor(cursor);
+            Mouse.setNativeCursor((Cursor)cursor);
         }
         catch (Throwable e) {
             Log.error("Failed to load and apply cursor.", e);
@@ -197,9 +213,9 @@ extends GameContainer {
 
     private void tryCreateDisplay(PixelFormat format) throws LWJGLException {
         if (SHARED_DRAWABLE == null) {
-            Display.create(format);
+            Display.create((PixelFormat)format);
         } else {
-            Display.create(format, SHARED_DRAWABLE);
+            Display.create((PixelFormat)format, (Drawable)SHARED_DRAWABLE);
         }
     }
 
@@ -226,10 +242,10 @@ extends GameContainer {
         if (this.targetDisplayMode == null) {
             this.setDisplayMode(640, 480, false);
         }
-        Display.setTitle(this.game.getTitle());
+        Display.setTitle((String)this.game.getTitle());
         Log.info("LWJGL Version: " + Sys.getVersion());
-        Log.info("OriginalDisplayMode: " + this.originalDisplayMode);
-        Log.info("TargetDisplayMode: " + this.targetDisplayMode);
+        Log.info("OriginalDisplayMode: " + (Object)this.originalDisplayMode);
+        Log.info("TargetDisplayMode: " + (Object)this.targetDisplayMode);
         AccessController.doPrivileged(new PrivilegedAction(){
 
             public Object run() {
@@ -322,7 +338,7 @@ extends GameContainer {
 
     @Override
     public void setMouseGrabbed(boolean grabbed) {
-        Mouse.setGrabbed(grabbed);
+        Mouse.setGrabbed((boolean)grabbed);
     }
 
     @Override
@@ -371,7 +387,7 @@ extends GameContainer {
                 throw new SlickException("Failed to set the icon");
             }
         }
-        Display.setIcon(bufs);
+        Display.setIcon((ByteBuffer[])bufs);
     }
 
     @Override
@@ -409,3 +425,4 @@ extends GameContainer {
         }
     }
 }
+

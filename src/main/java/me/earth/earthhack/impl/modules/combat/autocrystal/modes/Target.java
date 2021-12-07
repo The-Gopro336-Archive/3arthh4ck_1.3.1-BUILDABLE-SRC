@@ -1,9 +1,17 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal.modes;
 
 import java.util.List;
 import me.earth.earthhack.api.util.interfaces.Globals;
 import me.earth.earthhack.impl.util.math.rotation.RotationUtil;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 
 public enum Target implements Globals
@@ -57,7 +65,7 @@ public enum Target implements Globals
         double closestAngle = 360.0;
         for (EntityPlayer player : players) {
             double angle;
-            if (!EntityUtil.isValid(player, maxRange) || !((angle = RotationUtil.getAngle(player, 1.4)) < closestAngle) || !(angle < (double)(Target.mc.gameSettings.fovSetting / 2.0f))) continue;
+            if (!EntityUtil.isValid((Entity)player, maxRange) || !((angle = RotationUtil.getAngle((Entity)player, 1.4)) < closestAngle) || !(angle < (double)(Target.mc.gameSettings.fovSetting / 2.0f))) continue;
             closest = player;
             closestAngle = angle;
         }
@@ -69,10 +77,11 @@ public enum Target implements Globals
         double closestAngle = 360.0;
         for (EntityPlayer player : players) {
             double angle;
-            if (!EntityUtil.isValid(player, maxRange) || !((angle = RotationUtil.getAngle(player, 1.4)) < closestAngle) || !(angle < (double)(Target.mc.gameSettings.fovSetting / 2.0f))) continue;
+            if (!EntityUtil.isValid((Entity)player, maxRange) || !((angle = RotationUtil.getAngle((Entity)player, 1.4)) < closestAngle) || !(angle < (double)(Target.mc.gameSettings.fovSetting / 2.0f))) continue;
             closest = player;
             closestAngle = angle;
         }
         return closest;
     }
 }
+

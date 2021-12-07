@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.network;
 
 import me.earth.earthhack.api.util.interfaces.Globals;
@@ -7,8 +10,8 @@ import me.earth.earthhack.impl.core.ducks.entity.IEntityPlayerSP;
 public class PhysicsUtil
 implements Globals {
     public static void runPhysicsTick() {
-        int lastSwing = ((IEntityLivingBase)((Object)PhysicsUtil.mc.player)).getTicksSinceLastSwing();
-        int useCount = ((IEntityLivingBase)((Object)PhysicsUtil.mc.player)).getActiveItemStackUseCount();
+        int lastSwing = ((IEntityLivingBase)PhysicsUtil.mc.player).getTicksSinceLastSwing();
+        int useCount = ((IEntityLivingBase)PhysicsUtil.mc.player).getActiveItemStackUseCount();
         int hurtTime = PhysicsUtil.mc.player.hurtTime;
         float prevSwingProgress = PhysicsUtil.mc.player.prevSwingProgress;
         float swingProgress = PhysicsUtil.mc.player.swingProgress;
@@ -37,9 +40,9 @@ implements Globals {
         float limbSwingAmount = PhysicsUtil.mc.player.limbSwingAmount;
         float prevLimbSwingAmount = PhysicsUtil.mc.player.prevLimbSwingAmount;
         float limbSwing = PhysicsUtil.mc.player.limbSwing;
-        ((IEntityPlayerSP)((Object)PhysicsUtil.mc.player)).superUpdate();
-        ((IEntityLivingBase)((Object)PhysicsUtil.mc.player)).setTicksSinceLastSwing(lastSwing);
-        ((IEntityLivingBase)((Object)PhysicsUtil.mc.player)).setActiveItemStackUseCount(useCount);
+        ((IEntityPlayerSP)PhysicsUtil.mc.player).superUpdate();
+        ((IEntityLivingBase)PhysicsUtil.mc.player).setTicksSinceLastSwing(lastSwing);
+        ((IEntityLivingBase)PhysicsUtil.mc.player).setActiveItemStackUseCount(useCount);
         PhysicsUtil.mc.player.hurtTime = hurtTime;
         PhysicsUtil.mc.player.prevSwingProgress = prevSwingProgress;
         PhysicsUtil.mc.player.swingProgress = swingProgress;
@@ -68,6 +71,7 @@ implements Globals {
         PhysicsUtil.mc.player.limbSwingAmount = limbSwingAmount;
         PhysicsUtil.mc.player.prevLimbSwingAmount = prevLimbSwingAmount;
         PhysicsUtil.mc.player.limbSwing = limbSwing;
-        ((IEntityPlayerSP)((Object)PhysicsUtil.mc.player)).invokeUpdateWalkingPlayer();
+        ((IEntityPlayerSP)PhysicsUtil.mc.player).invokeUpdateWalkingPlayer();
     }
 }
+

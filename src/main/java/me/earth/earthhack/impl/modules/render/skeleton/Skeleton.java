@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayer
+ */
 package me.earth.earthhack.impl.modules.render.skeleton;
 
 import java.awt.Color;
@@ -26,3 +32,4 @@ extends Module {
         this.setData(new SimpleData(this, "Spooky."));
     }
 }
+

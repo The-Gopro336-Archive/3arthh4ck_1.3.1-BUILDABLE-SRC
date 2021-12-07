@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.autoconfig;
 
 import me.earth.earthhack.api.setting.event.SettingResult;
@@ -53,3 +56,4 @@ implements Removable {
         ComponentFactory.register(RemovingString.class, RemovingStringComponent::new);
     }
 }
+

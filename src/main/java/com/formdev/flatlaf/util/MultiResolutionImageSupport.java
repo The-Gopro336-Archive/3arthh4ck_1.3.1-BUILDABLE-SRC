@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.util;
 
 import java.awt.Dimension;
@@ -35,3 +38,4 @@ public class MultiResolutionImageSupport {
         return Collections.singletonList(image);
     }
 }
+

@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.GuiTextField
+ *  net.minecraft.network.play.client.CPacketChatMessage
+ */
 package me.earth.earthhack.impl.managers.chat;
 
 import java.util.Collection;
@@ -194,7 +201,7 @@ Register<Command> {
             String[] array = this.createArray(message);
             String possible = this.getCommandForMessage(array).getPossibleInputs(array).getFullText();
             int width = x + CommandManager.mc.fontRenderer.getStringWidth(message.trim());
-            CommandManager.mc.fontRenderer.drawString(possible, width, y, -1, true);
+            CommandManager.mc.fontRenderer.drawString(possible, (float)width, (float)y, -1, true);
         }
     }
 
@@ -258,3 +265,4 @@ Register<Command> {
         return builder.toString();
     }
 }
+

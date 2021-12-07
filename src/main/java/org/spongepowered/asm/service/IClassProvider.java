@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.service;
 
 import java.net.URL;
@@ -11,3 +14,4 @@ public interface IClassProvider {
 
     public Class<?> findAgentClass(String var1, boolean var2) throws ClassNotFoundException;
 }
+

@@ -1,9 +1,25 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.collect.Sets
+ *  net.minecraft.client.resources.I18n
+ *  net.minecraft.init.PotionTypes
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemArrow
+ *  net.minecraft.item.ItemSpectralArrow
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.potion.Potion
+ *  net.minecraft.potion.PotionEffect
+ *  net.minecraft.potion.PotionType
+ *  net.minecraft.potion.PotionUtils
+ *  net.minecraft.util.EnumHand
+ */
 package me.earth.earthhack.impl.modules.player.arrows;
 
 import com.google.common.collect.Sets;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
@@ -37,7 +53,7 @@ import net.minecraft.util.EnumHand;
 public class Arrows
 extends RegisteringModule<Boolean, SimpleRemovingSetting> {
     protected static final PotionType SPECTRAL = new PotionType(new PotionEffect[0]);
-    protected static final Set<PotionType> BAD_TYPES = Sets.newHashSet(PotionTypes.EMPTY, PotionTypes.WATER, PotionTypes.MUNDANE, PotionTypes.THICK, PotionTypes.AWKWARD, PotionTypes.HEALING, PotionTypes.STRONG_HEALING, PotionTypes.STRONG_HARMING, PotionTypes.HARMING);
+    protected static final Set<PotionType> BAD_TYPES = Sets.newHashSet((Object[])new PotionType[]{PotionTypes.EMPTY, PotionTypes.WATER, PotionTypes.MUNDANE, PotionTypes.THICK, PotionTypes.AWKWARD, PotionTypes.HEALING, PotionTypes.STRONG_HEALING, PotionTypes.STRONG_HARMING, PotionTypes.HARMING});
     protected final Setting<Boolean> shoot = this.register(new BooleanSetting("Shoot", false));
     protected final Setting<Boolean> cycle = this.register(new BooleanSetting("Cycle-Shoot", true));
     protected final Setting<Boolean> autoRelease = this.register(new BooleanSetting("Auto-Release", false));
@@ -102,11 +118,11 @@ extends RegisteringModule<Boolean, SimpleRemovingSetting> {
         if (stack.getItem() instanceof ItemSpectralArrow) {
             type = SPECTRAL;
         }
-        if (cycled.contains(type)) {
+        if (cycled.contains((Object)type)) {
             return true;
         }
         if (checkType) {
-            if (BAD_TYPES.contains(type)) {
+            if (BAD_TYPES.contains((Object)type)) {
                 return true;
             }
         } else if (this.keyCycle.getValue().booleanValue() || type.getEffects().isEmpty() && this.isValid("none")) {
@@ -237,9 +253,7 @@ extends RegisteringModule<Boolean, SimpleRemovingSetting> {
             return null;
         }
         name = name.toLowerCase();
-        Iterator iterator = Potion.REGISTRY.iterator();
-        while (iterator.hasNext()) {
-            Potion potion = (Potion)iterator.next();
+        for (Potion potion : Potion.REGISTRY) {
             if (!I18n.format((String)potion.getName(), (Object[])new Object[0]).toLowerCase().startsWith(name)) continue;
             return potion;
         }
@@ -262,3 +276,4 @@ extends RegisteringModule<Boolean, SimpleRemovingSetting> {
         }
     }
 }
+

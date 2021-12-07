@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.collect.ImmutableList
+ *  com.google.common.collect.ImmutableSet
+ *  org.apache.logging.log4j.Level
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package org.spongepowered.asm.mixin.transformer;
 
 import com.google.common.collect.ImmutableList;
@@ -40,7 +50,7 @@ public final class ClassInfo {
     public static final int INCLUDE_PRIVATE = 2;
     public static final int INCLUDE_STATIC = 8;
     public static final int INCLUDE_ALL = 10;
-    private static final Logger logger = LogManager.getLogger("mixin");
+    private static final Logger logger = LogManager.getLogger((String)"mixin");
     private static final Profiler profiler = MixinEnvironment.getProfiler();
     private static final String JAVA_LANG_OBJECT = "java/lang/Object";
     private static final Map<String, ClassInfo> cache = new HashMap<String, ClassInfo>();
@@ -68,7 +78,7 @@ public final class ClassInfo {
         this.superName = null;
         this.outerName = null;
         this.isProbablyStatic = true;
-        this.methods = ImmutableSet.of(new Method("getClass", "()Ljava/lang/Class;"), new Method("hashCode", "()I"), new Method("equals", "(Ljava/lang/Object;)Z"), new Method("clone", "()Ljava/lang/Object;"), new Method("toString", "()Ljava/lang/String;"), new Method("notify", "()V"), new Method[]{new Method("notifyAll", "()V"), new Method("wait", "(J)V"), new Method("wait", "(JI)V"), new Method("wait", "()V"), new Method("finalize", "()V")});
+        this.methods = ImmutableSet.of((Object)new Method("getClass", "()Ljava/lang/Class;"), (Object)new Method("hashCode", "()I"), (Object)new Method("equals", "(Ljava/lang/Object;)Z"), (Object)new Method("clone", "()Ljava/lang/Object;"), (Object)new Method("toString", "()Ljava/lang/String;"), (Object)new Method("notify", "()V"), (Object[])new Method[]{new Method("notifyAll", "()V"), new Method("wait", "(J)V"), new Method("wait", "(JI)V"), new Method("wait", "()V"), new Method("finalize", "()V")});
         this.fields = Collections.emptySet();
         this.isInterface = false;
         this.interfaces = Collections.emptySet();
@@ -229,7 +239,7 @@ public final class ClassInfo {
             targets.addAll(this.mixin.getTargets());
             return targets;
         }
-        return ImmutableList.of(this);
+        return ImmutableList.of((Object)this);
     }
 
     public Set<Method> getMethods() {
@@ -569,7 +579,7 @@ public final class ClassInfo {
                 info = new ClassInfo(classNode);
             }
             catch (Exception ex) {
-                logger.catching(Level.TRACE, ex);
+                logger.catching(Level.TRACE, (Throwable)ex);
                 logger.warn("Error loading class: {} ({}: {})", new Object[]{className, ex.getClass().getName(), ex.getMessage()});
             }
             cache.put(className, info);
@@ -998,3 +1008,4 @@ public final class ClassInfo {
 
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.movement.highjump;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -21,3 +24,4 @@ extends DefaultData<HighJump> {
         return "Allows you to jump higher.";
     }
 }
+

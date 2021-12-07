@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.RayTraceResult
+ *  net.minecraft.util.math.Vec3i
+ */
 package me.earth.earthhack.impl.modules.combat.antitrap;
 
 import java.util.ArrayList;
@@ -112,3 +122,4 @@ extends ObbyModule {
         return result;
     }
 }
+

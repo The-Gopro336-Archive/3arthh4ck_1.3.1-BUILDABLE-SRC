@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketExplosion
+ */
 package me.earth.earthhack.impl.core.mixins.network.server;
 
 import net.minecraft.network.play.server.SPacketExplosion;
@@ -24,3 +30,4 @@ public interface ISPacketExplosion {
     @Accessor(value="motionZ")
     public float getZ();
 }
+

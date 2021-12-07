@@ -1,3 +1,21 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.mojang.authlib.GameProfile
+ *  net.minecraft.block.Block
+ *  net.minecraft.block.BlockAir
+ *  net.minecraft.client.entity.EntityOtherPlayerMP
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.potion.PotionEffect
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.util.math.Vec3i
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.util.minecraft;
 
 import com.mojang.authlib.GameProfile;
@@ -18,6 +36,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
 public class PlayerUtil
@@ -35,12 +54,12 @@ implements Globals {
             randomID = ThreadLocalRandom.current().nextInt(-100000, -100);
         }
         FAKE_PLAYERS.put(randomID, fakePlayer);
-        PlayerUtil.mc.world.addEntityToWorld(randomID, fakePlayer);
+        PlayerUtil.mc.world.addEntityToWorld(randomID, (Entity)fakePlayer);
         return fakePlayer;
     }
 
     public static EntityOtherPlayerMP createFakePlayer(GameProfile profile, BiFunction<World, GameProfile, EntityOtherPlayerMP> create) {
-        EntityOtherPlayerMP fakePlayer = create.apply(PlayerUtil.mc.world, profile);
+        EntityOtherPlayerMP fakePlayer = create.apply((World)PlayerUtil.mc.world, profile);
         fakePlayer.inventory = PlayerUtil.mc.player.inventory;
         fakePlayer.inventoryContainer = PlayerUtil.mc.player.inventoryContainer;
         fakePlayer.setPositionAndRotation(PlayerUtil.mc.player.posX, PlayerUtil.mc.player.getEntityBoundingBox().minY, PlayerUtil.mc.player.posZ, PlayerUtil.mc.player.rotationYaw, PlayerUtil.mc.player.rotationPitch);
@@ -60,7 +79,7 @@ implements Globals {
             FAKE_PLAYERS.remove(fakePlayer.getEntityId());
             mc.addScheduledTask(() -> {
                 if (PlayerUtil.mc.world != null) {
-                    PlayerUtil.mc.world.removeEntity(fakePlayer);
+                    PlayerUtil.mc.world.removeEntity((Entity)fakePlayer);
                 }
             });
         }
@@ -99,19 +118,19 @@ implements Globals {
     }
 
     public static EnumFacing getSide(EntityPlayer player, BlockPos blockPos) {
-        BlockPos playerPos = PositionUtil.getPosition(player);
+        BlockPos playerPos = PositionUtil.getPosition((Entity)player);
         for (EnumFacing facing : EnumFacing.HORIZONTALS) {
-            if (!playerPos.offset(facing).equals(blockPos)) continue;
+            if (!playerPos.offset(facing).equals((Object)blockPos)) continue;
             return facing;
         }
-        if (playerPos.offset(EnumFacing.UP).offset(EnumFacing.UP).equals(blockPos)) {
+        if (playerPos.offset(EnumFacing.UP).offset(EnumFacing.UP).equals((Object)blockPos)) {
             return EnumFacing.UP;
         }
         return EnumFacing.DOWN;
     }
 
     public static boolean isInHole(EntityPlayer player) {
-        BlockPos position = PositionUtil.getPosition(player);
+        BlockPos position = PositionUtil.getPosition((Entity)player);
         int count = 0;
         for (EnumFacing face : EnumFacing.values()) {
             if (face == EnumFacing.UP || face == EnumFacing.DOWN || BlockUtil.isReplaceable(position.offset(face))) continue;
@@ -124,10 +143,11 @@ implements Globals {
         for (EnumFacing face : EnumFacing.HORIZONTALS) {
             BlockPos off = pos.offset(face);
             BlockPos off1 = pos.offset(face).offset(face);
-            BlockPos playerOff = PositionUtil.getPosition(player);
-            if (!new Vec3d(off).equals(new Vec3d(playerOff)) && !new Vec3d(off1).equals(new Vec3d(off1))) continue;
+            BlockPos playerOff = PositionUtil.getPosition((Entity)player);
+            if (!new Vec3d((Vec3i)off).equals((Object)new Vec3d((Vec3i)playerOff)) && !new Vec3d((Vec3i)off1).equals((Object)new Vec3d((Vec3i)off1))) continue;
             return face.getOpposite();
         }
         return null;
     }
 }
+

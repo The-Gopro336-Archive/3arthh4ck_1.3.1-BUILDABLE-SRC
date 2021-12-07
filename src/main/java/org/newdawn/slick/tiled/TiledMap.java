@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.tiled;
 
 import java.io.ByteArrayInputStream;
@@ -521,3 +524,4 @@ public class TiledMap {
         }
     }
 }
+

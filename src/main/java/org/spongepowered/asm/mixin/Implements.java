@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin;
 
 import java.lang.annotation.ElementType;
@@ -11,3 +14,4 @@ import org.spongepowered.asm.mixin.Interface;
 public @interface Implements {
     public Interface[] value();
 }
+

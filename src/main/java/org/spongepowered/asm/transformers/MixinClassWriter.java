@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.transformers;
 
 import org.spongepowered.asm.lib.ClassReader;
@@ -19,3 +22,4 @@ extends ClassWriter {
         return ClassInfo.getCommonSuperClass(type1, type2).getName();
     }
 }
+

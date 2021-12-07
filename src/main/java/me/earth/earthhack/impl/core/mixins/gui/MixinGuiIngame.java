@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.GuiIngame
+ *  net.minecraft.client.gui.ScaledResolution
+ *  net.minecraft.entity.player.InventoryPlayer
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.NonNullList
+ */
 package me.earth.earthhack.impl.core.mixins.gui;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -75,3 +85,4 @@ public abstract class MixinGuiIngame {
         return nonNullList.get(slot);
     }
 }
+

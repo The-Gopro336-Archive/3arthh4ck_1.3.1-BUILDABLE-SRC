@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.math;
 
 import me.earth.earthhack.impl.util.math.DiscreteTimer;
@@ -50,3 +53,4 @@ implements DiscreteTimer {
         this.guard.reset();
     }
 }
+

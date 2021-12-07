@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.gson.JsonObject
+ */
 package me.earth.earthhack.impl.managers.config.util;
 
 import com.google.gson.JsonObject;
@@ -48,3 +54,4 @@ implements Config {
         return config;
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.opengl;
 
 import java.security.AccessController;
@@ -53,3 +56,4 @@ public class ImageDataFactory {
         return new ImageIOImageData();
     }
 }
+

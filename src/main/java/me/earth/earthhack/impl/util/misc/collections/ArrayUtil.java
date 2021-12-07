@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.misc.collections;
 
 public class ArrayUtil {
@@ -9,3 +12,4 @@ public class ArrayUtil {
         return false;
     }
 }
+

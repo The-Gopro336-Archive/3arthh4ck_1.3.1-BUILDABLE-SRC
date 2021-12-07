@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.managers.client.macro;
 
 import java.util.ArrayList;
@@ -13,3 +16,4 @@ public class MacroUtil {
         return commands.toArray(new String[0]);
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.tools.obfuscation;
 
 import java.util.Set;
@@ -125,3 +128,4 @@ extends MixinObfuscationProcessor {
         }
     }
 }
+

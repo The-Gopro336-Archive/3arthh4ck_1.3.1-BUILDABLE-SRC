@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayer
+ */
 package me.earth.earthhack.impl.modules.movement.longjump;
 
 import me.earth.earthhack.impl.event.events.misc.TickEvent;
@@ -7,6 +13,7 @@ import me.earth.earthhack.impl.modules.movement.longjump.LongJump;
 import me.earth.earthhack.impl.modules.movement.longjump.mode.JumpMode;
 import me.earth.earthhack.impl.util.minecraft.KeyBoardUtil;
 import me.earth.earthhack.impl.util.minecraft.MovementUtil;
+import net.minecraft.entity.player.EntityPlayer;
 
 final class ListenerTick
 extends ModuleListener<LongJump, TickEvent> {
@@ -64,7 +71,7 @@ extends ModuleListener<LongJump, TickEvent> {
                 if (ListenerTick.mc.player.motionY == -0.21075983825251726) {
                     ListenerTick.mc.player.motionY *= (double)0.76f;
                 }
-                if (((LongJump)this.module).getDistance(ListenerTick.mc.player, 69.0) < 0.5) {
+                if (((LongJump)this.module).getDistance((EntityPlayer)ListenerTick.mc.player, 69.0) < 0.5) {
                     if (ListenerTick.mc.player.motionY == -0.23537393014173347) {
                         ListenerTick.mc.player.motionY *= (double)0.03f;
                     }
@@ -157,3 +164,4 @@ extends ModuleListener<LongJump, TickEvent> {
         }
     }
 }
+

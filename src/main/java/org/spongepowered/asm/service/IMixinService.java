@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.service;
 
 import java.io.InputStream;
@@ -43,3 +46,4 @@ public interface IMixinService {
 
     public String getSideName();
 }
+

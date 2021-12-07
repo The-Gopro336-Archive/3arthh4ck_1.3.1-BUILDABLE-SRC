@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.ui;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
@@ -201,3 +204,4 @@ extends BasicTableUI {
         return scrollPane.getComponentOrientation().isLeftToRight() ? viewport != rowHeader : viewport == rowHeader || rowHeader == null;
     }
 }
+

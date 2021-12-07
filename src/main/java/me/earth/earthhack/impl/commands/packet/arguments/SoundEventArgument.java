@@ -1,6 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.SoundEvent
+ */
 package me.earth.earthhack.impl.commands.packet.arguments;
 
-import java.util.Iterator;
 import me.earth.earthhack.api.command.PossibleInputs;
 import me.earth.earthhack.api.util.TextUtil;
 import me.earth.earthhack.impl.commands.packet.AbstractArgument;
@@ -45,9 +50,7 @@ extends AbstractArgument<SoundEvent> {
     }
 
     public static SoundEvent getSoundStartingWith(String argument) {
-        Iterator iterator = SoundEvent.REGISTRY.iterator();
-        while (iterator.hasNext()) {
-            SoundEvent event = (SoundEvent)iterator.next();
+        for (SoundEvent event : SoundEvent.REGISTRY) {
             String name = event.getSoundName().toString();
             if (!TextUtil.startsWith(name, argument)) continue;
             return event;
@@ -55,3 +58,4 @@ extends AbstractArgument<SoundEvent> {
         return null;
     }
 }
+

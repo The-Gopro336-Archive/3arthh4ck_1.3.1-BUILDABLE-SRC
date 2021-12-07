@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.tests.xml;
 
 import java.util.ArrayList;
@@ -27,3 +30,4 @@ extends Item {
         }
     }
 }
+

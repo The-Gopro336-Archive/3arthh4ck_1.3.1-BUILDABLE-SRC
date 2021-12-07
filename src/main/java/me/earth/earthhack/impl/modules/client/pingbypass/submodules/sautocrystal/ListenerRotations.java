@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.init.Items
+ */
 package me.earth.earthhack.impl.modules.client.pingbypass.submodules.sautocrystal;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -23,8 +29,8 @@ extends ModuleListener<ServerAutoCrystal, MotionUpdateEvent> {
     @Override
     public void invoke(MotionUpdateEvent event) {
         if (event.getStage() == Stage.PRE && PINGBYPASS.isEnabled() && InventoryUtil.isHolding(Items.END_CRYSTAL)) {
-            float yawDif = event.getYaw() - ((IEntityPlayerSP)((Object)ListenerRotations.mc.player)).getLastReportedYaw();
-            float pitchDif = event.getPitch() - ((IEntityPlayerSP)((Object)ListenerRotations.mc.player)).getLastReportedPitch();
+            float yawDif = event.getYaw() - ((IEntityPlayerSP)ListenerRotations.mc.player).getLastReportedYaw();
+            float pitchDif = event.getPitch() - ((IEntityPlayerSP)ListenerRotations.mc.player).getLastReportedPitch();
             if (yawDif == 0.0f && pitchDif == 0.0f) {
                 this.offset = -this.offset;
                 event.setYaw(event.getYaw() + this.offset);
@@ -33,3 +39,4 @@ extends ModuleListener<ServerAutoCrystal, MotionUpdateEvent> {
         }
     }
 }
+

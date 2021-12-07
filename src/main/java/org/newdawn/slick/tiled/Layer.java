@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.tiled;
 
 import java.io.ByteArrayInputStream;
@@ -172,3 +175,4 @@ public class Layer {
         Layer.baseCodes[47] = 63;
     }
 }
+

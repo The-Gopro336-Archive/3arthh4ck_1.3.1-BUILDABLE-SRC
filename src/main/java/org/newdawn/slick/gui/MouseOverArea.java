@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.gui;
 
 import org.newdawn.slick.Color;
@@ -214,3 +217,4 @@ extends AbstractComponent {
         this.setLocation((float)x, (float)y);
     }
 }
+

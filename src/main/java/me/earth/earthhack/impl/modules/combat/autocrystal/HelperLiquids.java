@@ -1,3 +1,17 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.item.ItemBlock
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.world.IBlockAccess
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal;
 
 import java.util.List;
@@ -36,7 +50,7 @@ implements Globals {
     public EnumFacing getAbsorbFacing(BlockPos pos, List<Entity> entities, IBlockAccess access, double placeRange) {
         for (EnumFacing facing : EnumFacing.VALUES) {
             BlockPos offset;
-            if (facing == EnumFacing.DOWN || BlockUtil.getDistanceSq(offset = pos.offset(facing)) >= MathUtil.square(placeRange) || !access.getBlockState(offset).func_185904_a().isReplaceable()) continue;
+            if (facing == EnumFacing.DOWN || BlockUtil.getDistanceSq(offset = pos.offset(facing)) >= MathUtil.square(placeRange) || !access.getBlockState(offset).getMaterial().isReplaceable()) continue;
             boolean found = false;
             AxisAlignedBB bb = new AxisAlignedBB(offset);
             for (Entity entity : entities) {
@@ -57,7 +71,7 @@ implements Globals {
         for (int i = 8; i > -1; --i) {
             ItemStack stack = HelperLiquids.mc.player.inventory.getStackInSlot(i);
             if (!(stack.getItem() instanceof ItemBlock)) continue;
-            Block block = ((ItemBlock)((Object)stack.getItem())).getBlock();
+            Block block = ((ItemBlock)stack.getItem()).getBlock();
             int tool = MineUtil.findBestTool(BlockPos.ORIGIN, block.getDefaultState());
             float damage = MineUtil.getDamage(block.getDefaultState(), HelperLiquids.mc.player.inventory.getStackInSlot(tool), BlockPos.ORIGIN, !onGroundCheck || RotationUtil.getRotationPlayer().onGround);
             if (!(damage > maxSpeed)) continue;
@@ -68,3 +82,4 @@ implements Globals {
         return new MineSlots(bestBlock, bestTool, maxSpeed);
     }
 }
+

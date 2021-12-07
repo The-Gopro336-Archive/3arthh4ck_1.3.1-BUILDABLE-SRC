@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.launch.platform;
 
 import java.net.URI;
@@ -43,3 +46,4 @@ extends MixinPlatformAgentAbstract {
         return this.attributes.get("Main-Class");
     }
 }
+

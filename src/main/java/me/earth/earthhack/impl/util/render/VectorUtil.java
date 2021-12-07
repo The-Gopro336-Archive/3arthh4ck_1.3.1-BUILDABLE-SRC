@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.gui.ScaledResolution
+ *  net.minecraft.client.renderer.ActiveRenderInfo
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.util.math.Vec3d
+ *  org.lwjgl.util.vector.Matrix4f
+ *  org.lwjgl.util.vector.Vector4f
+ */
 package me.earth.earthhack.impl.util.render;
 
 import me.earth.earthhack.impl.core.mixins.render.IActiveRenderInfo;
@@ -83,3 +95,4 @@ public class VectorUtil {
         }
     }
 }
+

@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.init.SoundEvents
+ *  net.minecraft.network.play.server.SPacketSoundEffect
+ *  net.minecraft.util.SoundCategory
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.modules.misc.packets;
 
 import java.util.List;
@@ -26,3 +36,4 @@ extends ModuleListener<Packets, PacketEvent.Receive<SPacketSoundEffect>> {
         }
     }
 }
+

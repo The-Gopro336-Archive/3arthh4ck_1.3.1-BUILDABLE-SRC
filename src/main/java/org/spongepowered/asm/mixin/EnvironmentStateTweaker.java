@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.launchwrapper.ITweaker
+ *  net.minecraft.launchwrapper.LaunchClassLoader
+ */
 package org.spongepowered.asm.mixin;
 
 import java.io.File;
@@ -12,7 +19,6 @@ implements ITweaker {
     public void acceptOptions(List<String> args, File gameDir, File assetsDir, String profile) {
     }
 
-    @Override
     public void injectIntoClassLoader(LaunchClassLoader classLoader) {
         MixinBootstrap.getPlatform().inject();
     }
@@ -26,3 +32,4 @@ implements ITweaker {
         return new String[0];
     }
 }
+

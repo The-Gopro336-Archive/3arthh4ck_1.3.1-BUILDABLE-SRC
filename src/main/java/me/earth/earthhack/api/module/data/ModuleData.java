@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.api.module.data;
 
 import java.util.Collection;
@@ -14,3 +17,4 @@ public interface ModuleData {
 
     public Collection<ModulePreset> getPresets();
 }
+

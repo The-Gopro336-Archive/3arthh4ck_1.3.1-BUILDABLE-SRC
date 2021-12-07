@@ -1,3 +1,14 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.renderer.culling.Frustum
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.util.render;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -34,10 +45,10 @@ implements Globals {
         double z;
         double y;
         double x;
-        if (NOINTERP.isEnabled() && ((NoInterp)NOINTERP.get()).isSilent() && entity instanceof IEntityNoInterp && ((IEntityNoInterp)((Object)entity)).isNoInterping()) {
-            x = Interpolation.interpolateLastTickPos(((IEntityNoInterp)((Object)entity)).getNoInterpX(), entity.lastTickPosX) - Interpolation.getRenderPosX();
-            y = Interpolation.interpolateLastTickPos(((IEntityNoInterp)((Object)entity)).getNoInterpY(), entity.lastTickPosY) - Interpolation.getRenderPosY();
-            z = Interpolation.interpolateLastTickPos(((IEntityNoInterp)((Object)entity)).getNoInterpZ(), entity.lastTickPosZ) - Interpolation.getRenderPosZ();
+        if (NOINTERP.isEnabled() && ((NoInterp)NOINTERP.get()).isSilent() && entity instanceof IEntityNoInterp && ((IEntityNoInterp)entity).isNoInterping()) {
+            x = Interpolation.interpolateLastTickPos(((IEntityNoInterp)entity).getNoInterpX(), entity.lastTickPosX) - Interpolation.getRenderPosX();
+            y = Interpolation.interpolateLastTickPos(((IEntityNoInterp)entity).getNoInterpY(), entity.lastTickPosY) - Interpolation.getRenderPosY();
+            z = Interpolation.interpolateLastTickPos(((IEntityNoInterp)entity).getNoInterpZ(), entity.lastTickPosZ) - Interpolation.getRenderPosZ();
         } else {
             x = Interpolation.interpolateLastTickPos(entity.posX, entity.lastTickPosX) - Interpolation.getRenderPosX();
             y = Interpolation.interpolateLastTickPos(entity.posY, entity.lastTickPosY) - Interpolation.getRenderPosY();
@@ -70,15 +81,15 @@ implements Globals {
     }
 
     public static double getRenderPosX() {
-        return ((IRenderManager)((Object)mc.getRenderManager())).getRenderPosX();
+        return ((IRenderManager)mc.getRenderManager()).getRenderPosX();
     }
 
     public static double getRenderPosY() {
-        return ((IRenderManager)((Object)mc.getRenderManager())).getRenderPosY();
+        return ((IRenderManager)mc.getRenderManager()).getRenderPosY();
     }
 
     public static double getRenderPosZ() {
-        return ((IRenderManager)((Object)mc.getRenderManager())).getRenderPosZ();
+        return ((IRenderManager)mc.getRenderManager()).getRenderPosZ();
     }
 
     public static Frustum createFrustum(Entity entity) {
@@ -90,3 +101,4 @@ implements Globals {
         return frustum;
     }
 }
+

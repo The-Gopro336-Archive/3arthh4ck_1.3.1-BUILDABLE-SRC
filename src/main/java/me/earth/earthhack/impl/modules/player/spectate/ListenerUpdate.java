@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.util.MovementInput
+ *  net.minecraft.util.MovementInputFromOptions
+ *  net.minecraft.util.math.MathHelper
+ */
 package me.earth.earthhack.impl.modules.player.spectate;
 
 import me.earth.earthhack.impl.event.events.misc.UpdateEvent;
@@ -5,6 +14,7 @@ import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import me.earth.earthhack.impl.modules.player.spectate.EntityPlayerNoInterp;
 import me.earth.earthhack.impl.modules.player.spectate.Spectate;
 import me.earth.earthhack.impl.util.minecraft.MovementUtil;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.MovementInput;
 import net.minecraft.util.MovementInputFromOptions;
 import net.minecraft.util.math.MathHelper;
@@ -69,7 +79,7 @@ extends ModuleListener<Spectate, UpdateEvent> {
         render.prevPosY = render.posY;
         render.prevPosZ = render.posZ;
         ((Spectate)this.module).input.updatePlayerMoveState();
-        double[] dir = MovementUtil.strafe(render, ((Spectate)this.module).input, 0.5);
+        double[] dir = MovementUtil.strafe((Entity)render, ((Spectate)this.module).input, 0.5);
         if (((Spectate)this.module).input.moveStrafe != 0.0f || ((Spectate)this.module).input.moveForward != 0.0f) {
             render.motionX = dir[0];
             render.motionZ = dir[1];
@@ -89,3 +99,4 @@ extends ModuleListener<Spectate, UpdateEvent> {
         render.chunkCoordZ = MathHelper.floor((double)(render.posZ / 16.0));
     }
 }
+

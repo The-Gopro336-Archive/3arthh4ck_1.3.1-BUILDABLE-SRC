@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.text.ITextComponent
+ *  net.minecraft.util.text.TextComponentString
+ */
 package me.earth.earthhack.impl.gui.chat.components;
 
 import me.earth.earthhack.impl.gui.chat.AbstractTextComponent;
@@ -33,3 +40,4 @@ extends AbstractTextComponent {
         return copy;
     }
 }
+

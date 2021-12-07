@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.client.CPacketPlayerDigging
+ */
 package me.earth.earthhack.impl.core.mixins.network.client;
 
 import me.earth.earthhack.impl.core.ducks.network.ICPacketPlayerDigging;
@@ -23,3 +29,4 @@ implements ICPacketPlayerDigging {
         return this.clientSideBreaking;
     }
 }
+

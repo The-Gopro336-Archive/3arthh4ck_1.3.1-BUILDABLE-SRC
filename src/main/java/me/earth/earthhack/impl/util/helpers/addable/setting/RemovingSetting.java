@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.gson.JsonElement
+ */
 package me.earth.earthhack.impl.util.helpers.addable.setting;
 
 import com.google.gson.JsonElement;
@@ -70,3 +76,4 @@ implements Removable {
         return false;
     }
 }
+

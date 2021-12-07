@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketSpawnObject
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.modules.render.trails;
 
 import java.util.ArrayList;
@@ -20,7 +27,7 @@ extends ModuleListener<Trails, PacketEvent.Receive<SPacketSpawnObject>> {
     @Override
     public void invoke(PacketEvent.Receive<SPacketSpawnObject> event) {
         if (((Trails)this.module).pearls.getValue() != false && ((SPacketSpawnObject)event.getPacket()).getType() == 65 || ((Trails)this.module).arrows.getValue() != false && ((SPacketSpawnObject)event.getPacket()).getType() == 60 || ((Trails)this.module).snowballs.getValue().booleanValue() && ((SPacketSpawnObject)event.getPacket()).getType() == 61) {
-            Earthhack.getLogger().info(((SPacketSpawnObject)event.getPacket()).getEntityID());
+            Earthhack.getLogger().info((Object)((SPacketSpawnObject)event.getPacket()).getEntityID());
             TimeAnimation animation = new TimeAnimation(((Trails)this.module).time.getValue() * 1000, 0.0, ((Trails)this.module).color.getAlpha(), false, AnimationMode.LINEAR);
             animation.stop();
             ((Trails)this.module).ids.put(((SPacketSpawnObject)event.getPacket()).getEntityID(), animation);
@@ -29,3 +36,4 @@ extends ModuleListener<Trails, PacketEvent.Receive<SPacketSpawnObject>> {
         }
     }
 }
+

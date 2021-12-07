@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.fills;
 
 import org.newdawn.slick.Color;
@@ -120,3 +123,4 @@ implements ShapeFill {
         return this.none;
     }
 }
+

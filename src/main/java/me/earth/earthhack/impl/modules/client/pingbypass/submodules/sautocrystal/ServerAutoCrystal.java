@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.init.Items
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.client.pingbypass.submodules.sautocrystal;
 
 import me.earth.earthhack.api.module.util.Category;
@@ -100,3 +107,4 @@ extends SimpleSubModule<PingBypass> {
         }
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick;
 
 import org.newdawn.slick.GameContainer;
@@ -15,3 +18,4 @@ public interface Game {
 
     public String getTitle();
 }
+

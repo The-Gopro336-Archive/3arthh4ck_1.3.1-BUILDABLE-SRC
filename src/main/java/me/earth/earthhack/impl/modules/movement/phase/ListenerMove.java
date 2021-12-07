@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.movement.phase;
 
 import me.earth.earthhack.impl.event.events.movement.MoveEvent;
@@ -30,3 +33,4 @@ extends ModuleListener<Phase, MoveEvent> {
         }
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.commands.hidden;
 
 import java.util.Arrays;
@@ -67,3 +70,4 @@ Globals {
         return completer;
     }
 }
+

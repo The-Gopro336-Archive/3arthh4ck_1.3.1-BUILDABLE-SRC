@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.util;
 
 import java.awt.image.RGBImageFilter;
@@ -48,3 +51,4 @@ extends RGBImageFilter {
         return a | gray << 16 | gray << 8 | gray;
     }
 }
+

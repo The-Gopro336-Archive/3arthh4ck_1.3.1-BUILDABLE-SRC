@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketPlayerDigging
+ *  net.minecraft.network.play.client.CPacketPlayerDigging$Action
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.player.speedmine;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -117,9 +129,9 @@ extends Module {
 
     public void abortCurrentPos() {
         AUTO_MINE.computeIfPresent(a -> a.addToBlackList(this.pos));
-        Speedmine.mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.ABORT_DESTROY_BLOCK, this.pos, this.facing));
-        ((IPlayerControllerMP)((Object)Speedmine.mc.playerController)).setIsHittingBlock(false);
-        ((IPlayerControllerMP)((Object)Speedmine.mc.playerController)).setCurBlockDamageMP(0.0f);
+        Speedmine.mc.player.connection.sendPacket((Packet)new CPacketPlayerDigging(CPacketPlayerDigging.Action.ABORT_DESTROY_BLOCK, this.pos, this.facing));
+        ((IPlayerControllerMP)Speedmine.mc.playerController).setIsHittingBlock(false);
+        ((IPlayerControllerMP)Speedmine.mc.playerController).setCurBlockDamageMP(0.0f);
         Speedmine.mc.world.sendBlockBreakProgress(Speedmine.mc.player.getEntityId(), this.pos, -1);
         Speedmine.mc.player.resetCooldown();
         this.reset();
@@ -174,7 +186,7 @@ extends Module {
     protected boolean sendStopDestroy(BlockPos pos, EnumFacing facing, boolean toAir) {
         CPacketPlayerDigging stop = new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, pos, facing);
         if (toAir) {
-            ((ICPacketPlayerDigging)((Object)stop)).setClientSideBreaking(true);
+            ((ICPacketPlayerDigging)stop).setClientSideBreaking(true);
         }
         if (this.rotate.getValue().booleanValue() && this.limitRotations.getValue().booleanValue() && !RotationUtil.isLegit(pos, facing)) {
             this.limitRotationPacket = stop;
@@ -182,7 +194,7 @@ extends Module {
             return false;
         }
         if (this.event.getValue().booleanValue()) {
-            Speedmine.mc.player.connection.sendPacket(stop);
+            Speedmine.mc.player.connection.sendPacket((Packet)stop);
         } else {
             NetworkUtil.sendPacketNoEvent(stop, false);
         }
@@ -205,10 +217,10 @@ extends Module {
     public void forceSend() {
         if (this.pos != null) {
             if (this.mode.getValue() == MineMode.Instant) {
-                Speedmine.mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, this.pos, this.facing));
+                Speedmine.mc.player.connection.sendPacket((Packet)new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, this.pos, this.facing));
                 this.sendStopDestroy(this.pos, this.facing, false);
                 if (this.mode.getValue() == MineMode.Instant) {
-                    Speedmine.mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.ABORT_DESTROY_BLOCK, this.pos, this.facing));
+                    Speedmine.mc.player.connection.sendPacket((Packet)new CPacketPlayerDigging(CPacketPlayerDigging.Action.ABORT_DESTROY_BLOCK, this.pos, this.facing));
                 }
             } else if (this.mode.getValue() == MineMode.Civ) {
                 this.sendStopDestroy(this.pos, this.facing, false);
@@ -227,7 +239,7 @@ extends Module {
                 }
                 CPacketPlayerDigging packet = new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, this.pos, this.facing);
                 if (toAir) {
-                    ((ICPacketPlayerDigging)((Object)packet)).setClientSideBreaking(true);
+                    ((ICPacketPlayerDigging)packet).setClientSideBreaking(true);
                 }
                 NetworkUtil.sendPacketNoEvent(packet, false);
                 if (breakSlot != -1) {
@@ -261,3 +273,4 @@ extends Module {
         this.resetTimer.reset();
     }
 }
+

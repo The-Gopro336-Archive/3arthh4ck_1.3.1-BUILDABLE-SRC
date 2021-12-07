@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.render;
 
 import java.awt.Color;
@@ -41,3 +44,4 @@ public class ColorHelper {
         throw new IllegalArgumentException("Color parameter outside of expected range - Saturation");
     }
 }
+

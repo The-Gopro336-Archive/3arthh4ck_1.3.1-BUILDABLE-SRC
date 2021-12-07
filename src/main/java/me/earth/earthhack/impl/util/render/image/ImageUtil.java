@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.renderer.texture.DynamicTexture
+ *  net.minecraft.client.renderer.texture.ITextureObject
+ *  net.minecraft.util.ResourceLocation
+ */
 package me.earth.earthhack.impl.util.render.image;
 
 import java.awt.Graphics2D;
@@ -17,6 +25,7 @@ import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 import me.earth.earthhack.api.util.interfaces.Globals;
 import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.util.ResourceLocation;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.SlickException;
@@ -51,7 +60,7 @@ implements Globals {
         String name = new String(hash);
         DynamicTexture texture = new DynamicTexture(image);
         ResourceLocation location = mc.getTextureManager().getDynamicTextureLocation(name, texture);
-        mc.getTextureManager().loadTexture(location, texture);
+        mc.getTextureManager().loadTexture(location, (ITextureObject)texture);
         return texture;
     }
 
@@ -129,3 +138,4 @@ implements Globals {
         return ImageUtil.slickImageToBufferedImage(animation.getCurrentFrame(), "GIF");
     }
 }
+

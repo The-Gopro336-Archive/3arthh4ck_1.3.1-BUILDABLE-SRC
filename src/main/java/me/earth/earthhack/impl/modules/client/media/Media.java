@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.media;
 
 import java.util.Map;
@@ -157,3 +160,4 @@ extends RegisteringModule<String, RemovingString> {
         this.pingBypass = this.compile(name);
     }
 }
+

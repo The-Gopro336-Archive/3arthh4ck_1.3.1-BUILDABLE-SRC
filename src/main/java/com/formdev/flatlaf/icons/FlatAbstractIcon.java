@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.icons;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
@@ -54,3 +57,4 @@ UIResource {
         return UIScale.scale(this.height);
     }
 }
+

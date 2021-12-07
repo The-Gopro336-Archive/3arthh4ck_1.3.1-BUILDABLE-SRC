@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.render.waypoints;
 
 import java.awt.Color;
@@ -87,3 +95,4 @@ extends ModuleListener<WayPoints, Render3DEvent> {
         builder.append("(").append(MathUtil.round(distance, 1)).append(")");
     }
 }
+

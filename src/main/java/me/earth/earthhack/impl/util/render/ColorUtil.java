@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.render;
 
 import java.awt.Color;
@@ -36,3 +39,4 @@ public class ColorUtil {
         return Color.getHSBColor(hue /= (float)speed, s, brightness);
     }
 }
+

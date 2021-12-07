@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.api.config;
 
 import java.io.IOException;
@@ -22,3 +25,4 @@ extends Nameable {
 
     public Collection<C> getConfigs();
 }
+

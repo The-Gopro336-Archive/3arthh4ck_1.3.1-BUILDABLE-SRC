@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.ChatLine
+ *  net.minecraft.util.text.ITextComponent
+ */
 package me.earth.earthhack.impl.managers.chat;
 
 import java.util.Map;
@@ -12,6 +19,7 @@ import me.earth.earthhack.impl.event.events.network.DisconnectEvent;
 import me.earth.earthhack.impl.event.events.network.WorldClientEvent;
 import me.earth.earthhack.impl.gui.chat.AbstractTextComponent;
 import net.minecraft.client.gui.ChatLine;
+import net.minecraft.util.text.ITextComponent;
 
 public class WrapManager
 extends SubscriberImpl
@@ -57,7 +65,7 @@ implements Globals {
                 this.components.remove(entry.getKey());
                 continue;
             }
-            ((IGuiNewChat)((Object)WrapManager.mc.ingameGUI.getChatGUI())).replace(entry.getValue(), entry.getKey().getId(), true, false);
+            ((IGuiNewChat)WrapManager.mc.ingameGUI.getChatGUI()).replace((ITextComponent)entry.getValue(), entry.getKey().getId(), true, false);
         }
     }
 
@@ -97,3 +105,4 @@ implements Globals {
         }
     }
 }
+

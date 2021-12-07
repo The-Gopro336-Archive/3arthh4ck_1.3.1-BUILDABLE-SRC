@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.commands;
 
 import me.earth.earthhack.impl.commands.abstracts.AbstractPlayerManagerCommand;
@@ -11,3 +14,4 @@ extends AbstractPlayerManagerCommand {
         CommandDescriptions.register(this, "Manage your friends.");
     }
 }
+

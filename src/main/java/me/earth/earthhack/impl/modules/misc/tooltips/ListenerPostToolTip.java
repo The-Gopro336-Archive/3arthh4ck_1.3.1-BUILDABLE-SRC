@@ -1,3 +1,17 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.renderer.BufferBuilder
+ *  net.minecraft.client.renderer.GlStateManager
+ *  net.minecraft.client.renderer.RenderHelper
+ *  net.minecraft.client.renderer.Tessellator
+ *  net.minecraft.client.renderer.vertex.DefaultVertexFormats
+ *  net.minecraft.init.Items
+ *  net.minecraft.item.ItemMap
+ *  net.minecraft.world.World
+ *  net.minecraft.world.storage.MapData
+ */
 package me.earth.earthhack.impl.modules.misc.tooltips;
 
 import me.earth.earthhack.impl.event.events.render.ToolTipEvent;
@@ -10,6 +24,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemMap;
+import net.minecraft.world.World;
 import net.minecraft.world.storage.MapData;
 
 final class ListenerPostToolTip
@@ -21,7 +36,7 @@ extends ModuleListener<ToolTips, ToolTipEvent.Post> {
     @Override
     public void invoke(ToolTipEvent.Post event) {
         MapData mapData;
-        if (((ToolTips)this.module).maps.getValue().booleanValue() && !event.getStack().isEmpty() && event.getStack().getItem() instanceof ItemMap && (mapData = Items.FILLED_MAP.getMapData(event.getStack(), ListenerPostToolTip.mc.world)) != null) {
+        if (((ToolTips)this.module).maps.getValue().booleanValue() && !event.getStack().isEmpty() && event.getStack().getItem() instanceof ItemMap && (mapData = Items.FILLED_MAP.getMapData(event.getStack(), (World)ListenerPostToolTip.mc.world)) != null) {
             GlStateManager.pushMatrix();
             GlStateManager.color((float)1.0f, (float)1.0f, (float)1.0f);
             RenderHelper.disableStandardItemLighting();
@@ -42,3 +57,4 @@ extends ModuleListener<ToolTips, ToolTipEvent.Post> {
         }
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.util;
 
 public final class Counter {
@@ -11,3 +14,4 @@ public final class Counter {
         return this.value;
     }
 }
+

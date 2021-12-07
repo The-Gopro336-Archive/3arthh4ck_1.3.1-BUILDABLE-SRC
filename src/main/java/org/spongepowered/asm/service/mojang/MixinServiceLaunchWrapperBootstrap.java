@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.launchwrapper.Launch
+ */
 package org.spongepowered.asm.service.mojang;
 
 import net.minecraft.launchwrapper.Launch;
@@ -28,3 +34,4 @@ implements IMixinServiceBootstrap {
         Launch.classLoader.addClassLoaderExclusion(MIXIN_UTIL_PACKAGE);
     }
 }
+

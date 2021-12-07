@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemBow
+ *  net.minecraft.item.ItemFood
+ *  net.minecraft.item.ItemPotion
+ */
 package me.earth.earthhack.impl.modules.movement.noslowdown;
 
 import me.earth.earthhack.impl.event.events.misc.RightClickItemEvent;
@@ -23,3 +32,4 @@ extends ModuleListener<NoSlowDown, RightClickItemEvent> {
         }
     }
 }
+

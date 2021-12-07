@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.objectweb.asm.commons.Remapper
+ */
 package org.spongepowered.asm.bridge;
 
 import java.lang.reflect.Field;
@@ -24,7 +30,7 @@ extends RemapperAdapter {
     @Override
     public String unmap(String typeName) {
         try {
-            return this.mdUnmap.invoke(this.remapper, typeName).toString();
+            return this.mdUnmap.invoke((Object)this.remapper, typeName).toString();
         }
         catch (Exception ex) {
             return typeName;
@@ -54,3 +60,4 @@ extends RemapperAdapter {
         }
     }
 }
+

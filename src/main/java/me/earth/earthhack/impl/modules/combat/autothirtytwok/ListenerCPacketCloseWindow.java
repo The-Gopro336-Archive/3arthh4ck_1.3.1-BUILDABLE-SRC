@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.client.CPacketCloseWindow
+ */
 package me.earth.earthhack.impl.modules.combat.autothirtytwok;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -16,3 +22,4 @@ extends ModuleListener<Auto32k, PacketEvent.Send<CPacketCloseWindow>> {
         ((Auto32k)this.module).onCPacketCloseWindow(event);
     }
 }
+

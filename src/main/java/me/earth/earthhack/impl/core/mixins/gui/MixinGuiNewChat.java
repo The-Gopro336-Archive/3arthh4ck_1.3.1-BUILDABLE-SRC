@@ -1,3 +1,17 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.gui.ChatLine
+ *  net.minecraft.client.gui.FontRenderer
+ *  net.minecraft.client.gui.Gui
+ *  net.minecraft.client.gui.GuiNewChat
+ *  net.minecraft.client.gui.GuiUtilRenderComponents
+ *  net.minecraft.util.math.MathHelper
+ *  net.minecraft.util.text.ITextComponent
+ *  net.minecraft.util.text.TextComponentKeybind
+ */
 package me.earth.earthhack.impl.core.mixins.gui;
 
 import java.util.ArrayList;
@@ -56,36 +70,36 @@ implements IGuiNewChat {
     private int deleteChatLineID;
     @Shadow
     @Final
-    private List<ChatLine> field_146252_h;
+    private List<ChatLine> chatLines;
     @Shadow
     @Final
-    private List<ChatLine> field_146253_i;
+    private List<ChatLine> drawnChatLines;
     @Shadow
     @Final
-    private List<String> field_146248_g;
+    private List<String> sentMessages;
     @Shadow
-    private int field_146250_j;
+    private int scrollPos;
     @Shadow
-    private boolean field_146251_k;
+    private boolean isScrolled;
     @Final
     @Shadow
-    private Minecraft field_146247_f;
+    private Minecraft mc;
     private boolean first = true;
 
     @Shadow
-    protected abstract void func_146237_a(ITextComponent var1, int var2, int var3, boolean var4);
+    protected abstract void setChatLine(ITextComponent var1, int var2, int var3, boolean var4);
 
     @Shadow
-    public abstract void func_146242_c(int var1);
+    public abstract void deleteChatLine(int var1);
 
     @Shadow
-    public abstract int func_146228_f();
+    public abstract int getChatWidth();
 
     @Shadow
-    public abstract boolean func_146241_e();
+    public abstract boolean getChatOpen();
 
     @Shadow
-    public abstract float func_146244_h();
+    public abstract float getChatScale();
 
     @Override
     @Accessor(value="scrollPos")
@@ -105,30 +119,30 @@ implements IGuiNewChat {
 
     @Override
     public void invokeSetChatLine(ITextComponent chatComponent, int chatLineId, int updateCounter, boolean displayOnly) {
-        this.func_146237_a(chatComponent, chatLineId, updateCounter, displayOnly);
+        this.setChatLine(chatComponent, chatLineId, updateCounter, displayOnly);
     }
 
     @Override
     public void invokeClearChat(boolean sent) {
-        this.field_146253_i.clear();
-        this.field_146252_h.clear();
+        this.drawnChatLines.clear();
+        this.chatLines.clear();
         if (sent) {
-            this.field_146248_g.clear();
+            this.sentMessages.clear();
         }
     }
 
     @Override
     public boolean replace(ITextComponent component, int id, boolean wrap, boolean returnFirst) {
-        boolean set = this.setLine(component, id, this.field_146252_h, wrap, returnFirst);
-        set = this.setLine(component, id, this.field_146253_i, wrap, returnFirst) || set;
+        boolean set = this.setLine(component, id, this.chatLines, wrap, returnFirst);
+        set = this.setLine(component, id, this.drawnChatLines, wrap, returnFirst) || set;
         return set;
     }
 
     boolean setLine(ITextComponent component, int id, List<ChatLine> list, boolean wrap, boolean returnFirst) {
         ConvenientStack wrapped = null;
         if (wrap) {
-            int max = MathHelper.floor((float)((float)this.func_146228_f() / this.func_146244_h()));
-            wrapped = new ConvenientStack(GuiUtilRenderComponents.splitText((ITextComponent)component, (int)max, (FontRenderer)this.field_146247_f.fontRenderer, (boolean)false, (boolean)false));
+            int max = MathHelper.floor((float)((float)this.getChatWidth() / this.getChatScale()));
+            wrapped = new ConvenientStack(GuiUtilRenderComponents.splitText((ITextComponent)component, (int)max, (FontRenderer)this.mc.fontRenderer, (boolean)false, (boolean)false));
         }
         int last = 0;
         ArrayList<Integer> toRemove = new ArrayList<Integer>();
@@ -138,14 +152,14 @@ implements IGuiNewChat {
             if (wrap) {
                 ITextComponent itc = (ITextComponent)((Stack)wrapped).pop();
                 if (itc != null) {
-                    ((IChatLine)((Object)line)).setComponent(itc);
+                    ((IChatLine)line).setComponent(itc);
                     last = i2 + 1;
                     continue;
                 }
                 toRemove.add(i2);
                 continue;
             }
-            ((IChatLine)((Object)line)).setComponent(component);
+            ((IChatLine)line).setComponent(component);
             if (!returnFirst) continue;
             return true;
         }
@@ -154,7 +168,7 @@ implements IGuiNewChat {
             while (infinite && wrap && !wrapped.empty()) {
                 ITextComponent itc = (ITextComponent)((Stack)wrapped).pop();
                 if (itc == null) continue;
-                ChatLine newLine = new ChatLine(this.field_146247_f.ingameGUI.getUpdateCounter(), itc, id);
+                ChatLine newLine = new ChatLine(this.mc.ingameGUI.getUpdateCounter(), itc, id);
                 ((Chat)MixinGuiNewChat.CHAT.get()).animationMap.put(newLine, new TimeAnimation(((Chat)MixinGuiNewChat.CHAT.get()).time.getValue().intValue(), -Minecraft.getMinecraft().fontRenderer.getStringWidth(newLine.getChatComponent().getFormattedText()), 0.0, false, AnimationMode.LINEAR));
                 list.add(last, newLine);
                 ++last;
@@ -177,16 +191,16 @@ implements IGuiNewChat {
     public int drawStringWithShadowHook(FontRenderer renderer, String text, float x, float y, int color) {
         TimeAnimation animation = null;
         if (this.currentLine != null) {
-            if (((Chat)MixinGuiNewChat.CHAT.get()).animationMap.containsKey(this.currentLine)) {
-                animation = ((Chat)MixinGuiNewChat.CHAT.get()).animationMap.get(this.currentLine);
+            if (((Chat)MixinGuiNewChat.CHAT.get()).animationMap.containsKey((Object)this.currentLine)) {
+                animation = ((Chat)MixinGuiNewChat.CHAT.get()).animationMap.get((Object)this.currentLine);
             }
             if (animation != null) {
-                animation.add(this.field_146247_f.getRenderPartialTicks());
+                animation.add(this.mc.getRenderPartialTicks());
             }
         }
         String s = MEDIA.returnIfPresent(m -> m.convert(text), text);
         if (CHAT.isEnabled() && TIME_STAMPS.getValue().booleanValue() && this.currentLine != null) {
-            String t = ((IChatLine)((Object)this.currentLine)).getTimeStamp() + s;
+            String t = ((IChatLine)this.currentLine).getTimeStamp() + s;
             return renderer.drawStringWithShadow(t, (float)((double)x + (animation != null && ((Chat)MixinGuiNewChat.CHAT.get()).animated.getValue() != false ? animation.getCurrent() : 0.0)), y, color);
         }
         return renderer.drawStringWithShadow(s, (float)((double)x + (animation != null && ((Chat)MixinGuiNewChat.CHAT.get()).animated.getValue() != false ? animation.getCurrent() : 0.0)), y, color);
@@ -194,7 +208,7 @@ implements IGuiNewChat {
 
     @Inject(method={"getChatOpen"}, at={@At(value="HEAD")}, cancellable=true)
     public void getChatOpenHook(CallbackInfoReturnable<Boolean> info) {
-        if (this.field_146247_f.currentScreen instanceof CommandGui) {
+        if (this.mc.currentScreen instanceof CommandGui) {
             info.setReturnValue(true);
         }
     }
@@ -223,7 +237,7 @@ implements IGuiNewChat {
 
     @Inject(method={"getChatHeight"}, at={@At(value="HEAD")}, cancellable=true)
     private void getChatHeightHook(CallbackInfoReturnable<Integer> info) {
-        if (this.field_146247_f.currentScreen instanceof CommandGui) {
+        if (this.mc.currentScreen instanceof CommandGui) {
             info.setReturnValue(500);
         }
     }
@@ -247,7 +261,7 @@ implements IGuiNewChat {
         ChatEvent.Send event = new ChatEvent.Send(this, chatComponent, chatLineId, updateCounter, displayOnly);
         Bus.EVENT_BUS.post(event);
         if (!event.isCancelled()) {
-            this.func_146237_a(event.getChatComponent(), event.getChatLineId(), event.getUpdateCounter(), event.isDisplayOnly());
+            this.setChatLine(event.getChatComponent(), event.getChatLineId(), event.getUpdateCounter(), event.isDisplayOnly());
         }
     }
 
@@ -270,7 +284,7 @@ implements IGuiNewChat {
     @Redirect(method={"getChatComponent"}, at=@At(value="INVOKE", target="Ljava/util/Iterator;next()Ljava/lang/Object;", remap=false))
     private Object getChatComponentInstanceOfHook(Iterator<ITextComponent> iterator) {
         ITextComponent component = iterator.next();
-        if (component instanceof IHoverable && !((IHoverable)((Object)component)).canBeHovered()) {
+        if (component instanceof IHoverable && !((IHoverable)component).canBeHovered()) {
             return INSTEAD;
         }
         return component;
@@ -280,7 +294,7 @@ implements IGuiNewChat {
     public int getStringWidthHook(FontRenderer renderer, String text) {
         String s = MEDIA.returnIfPresent(m -> m.convert(text), text);
         if (CHAT.isEnabled() && TIME_STAMPS.getValue().booleanValue() && this.first && this.currentHover != null) {
-            String t = ((IChatLine)((Object)this.currentHover)).getTimeStamp() + s;
+            String t = ((IChatLine)this.currentHover).getTimeStamp() + s;
             this.first = false;
             return renderer.getStringWidth(t);
         }
@@ -295,38 +309,38 @@ implements IGuiNewChat {
     public void setChatLineHookHead(ITextComponent chatComponent, int id, int updateCounter, boolean displayOnly, CallbackInfo info) {
         if (chatComponent instanceof AbstractTextComponent) {
             if (id != 0) {
-                this.func_146242_c(id);
+                this.deleteChatLine(id);
             } else {
                 id = -1;
             }
             AbstractTextComponent component = (AbstractTextComponent)chatComponent;
             if (component.isWrapping()) {
-                int max = MathHelper.floor((float)((float)this.func_146228_f() / this.func_146244_h()));
-                List list = GuiUtilRenderComponents.splitText((ITextComponent)component, (int)max, (FontRenderer)this.field_146247_f.fontRenderer, (boolean)false, (boolean)false);
-                boolean chatOpen = this.func_146241_e();
+                int max = MathHelper.floor((float)((float)this.getChatWidth() / this.getChatScale()));
+                List list = GuiUtilRenderComponents.splitText((ITextComponent)component, (int)max, (FontRenderer)this.mc.fontRenderer, (boolean)false, (boolean)false);
+                boolean chatOpen = this.getChatOpen();
                 ChatLine[] references = new ChatLine[list.size()];
                 for (int i = 0; i < list.size(); ++i) {
                     ITextComponent itc = (ITextComponent)list.get(i);
-                    if (chatOpen && this.field_146250_j > 0) {
-                        this.field_146251_k = true;
+                    if (chatOpen && this.scrollPos > 0) {
+                        this.isScrolled = true;
                     }
                     ChatLine line = new ChatLine(updateCounter, itc, id);
                     ((Chat)MixinGuiNewChat.CHAT.get()).animationMap.put(line, new TimeAnimation(((Chat)MixinGuiNewChat.CHAT.get()).time.getValue().intValue(), -Minecraft.getMinecraft().fontRenderer.getStringWidth(line.getChatComponent().getFormattedText()), 0.0, false, AnimationMode.LINEAR));
-                    this.field_146253_i.add(0, line);
+                    this.drawnChatLines.add(0, line);
                     references[i] = line;
                 }
                 Managers.WRAP.registerComponent(component, references);
             } else {
                 ChatLine newLine = new ChatLine(updateCounter, chatComponent, id);
                 ((Chat)MixinGuiNewChat.CHAT.get()).animationMap.put(newLine, new TimeAnimation(((Chat)MixinGuiNewChat.CHAT.get()).time.getValue().intValue(), -Minecraft.getMinecraft().fontRenderer.getStringWidth(newLine.getChatComponent().getFormattedText()), 0.0, false, AnimationMode.LINEAR));
-                this.field_146253_i.add(0, newLine);
+                this.drawnChatLines.add(0, newLine);
             }
             info.cancel();
         }
     }
 
     private int getChatSize(List<ChatLine> list) {
-        return CHAT.isEnabled() && INFINITE.getValue() != false || this.field_146247_f.currentScreen instanceof CommandGui ? -2147483647 : list.size();
+        return CHAT.isEnabled() && INFINITE.getValue() != false || this.mc.currentScreen instanceof CommandGui ? -2147483647 : list.size();
     }
 
     @Inject(method={"deleteChatLine"}, at={@At(value="HEAD")})
@@ -358,3 +372,4 @@ implements IGuiNewChat {
         return iterator.hasNext();
     }
 }
+

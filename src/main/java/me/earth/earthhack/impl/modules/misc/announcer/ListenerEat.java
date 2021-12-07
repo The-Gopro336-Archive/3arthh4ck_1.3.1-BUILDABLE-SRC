@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.item.ItemStack
+ */
 package me.earth.earthhack.impl.modules.misc.announcer;
 
 import me.earth.earthhack.impl.event.events.misc.EatEvent;
@@ -14,9 +20,10 @@ extends ModuleListener<Announcer, EatEvent> {
 
     @Override
     public void invoke(EatEvent event) {
-        if (((Announcer)this.module).eat.getValue().booleanValue() && event.getEntity().equals(ListenerEat.mc.player)) {
+        if (((Announcer)this.module).eat.getValue().booleanValue() && event.getEntity().equals((Object)ListenerEat.mc.player)) {
             ItemStack stack = event.getStack();
             ((Announcer)this.module).addWordAndIncrement(AnnouncementType.Eat, stack.getDisplayName());
         }
     }
 }
+

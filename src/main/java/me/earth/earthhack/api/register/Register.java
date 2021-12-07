@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.api.register;
 
 import java.util.Collection;
@@ -16,3 +19,4 @@ public interface Register<T extends Nameable> {
 
     public Collection<T> getRegistered();
 }
+

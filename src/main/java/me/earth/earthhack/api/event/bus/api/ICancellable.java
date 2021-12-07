@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.api.event.bus.api;
 
 public interface ICancellable {
@@ -5,3 +8,4 @@ public interface ICancellable {
 
     public boolean isCancelled();
 }
+

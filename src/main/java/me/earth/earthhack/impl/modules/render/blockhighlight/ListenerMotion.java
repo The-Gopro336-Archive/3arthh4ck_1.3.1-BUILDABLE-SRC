@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.RayTraceResult
+ *  net.minecraft.util.math.RayTraceResult$Type
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.modules.render.blockhighlight;
 
 import me.earth.earthhack.api.event.events.Stage;
@@ -55,3 +65,4 @@ extends ModuleListener<BlockHighlight, MotionUpdateEvent> {
         return RayTraceUtil.canBeSeen(toSee, m.getX(), m.getY(), m.getZ(), ListenerMotion.mc.player.getEyeHeight());
     }
 }
+

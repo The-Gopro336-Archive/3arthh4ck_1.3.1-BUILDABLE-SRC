@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.client;
 
 import me.earth.earthhack.api.module.Module;
@@ -28,3 +31,4 @@ extends DefaultData<Module> {
         return this.description;
     }
 }
+

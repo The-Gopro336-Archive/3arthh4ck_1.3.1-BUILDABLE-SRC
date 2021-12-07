@@ -1,9 +1,18 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketHeldItemChange
+ *  net.minecraft.network.play.server.SPacketHeldItemChange
+ */
 package me.earth.earthhack.impl.modules.misc.packets;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import me.earth.earthhack.impl.modules.misc.packets.Packets;
 import me.earth.earthhack.impl.util.thread.Locks;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketHeldItemChange;
 import net.minecraft.network.play.server.SPacketHeldItemChange;
 
@@ -24,9 +33,10 @@ extends ModuleListener<Packets, PacketEvent.Receive<SPacketHeldItemChange>> {
                 int l = ListenerHeldItemChange.mc.player.inventory.currentItem;
                 if (l != ((SPacketHeldItemChange)event.getPacket()).getHeldItemHotbarIndex()) {
                     ListenerHeldItemChange.mc.player.inventory.currentItem = l;
-                    mc.getConnection().sendPacket(new CPacketHeldItemChange(l));
+                    mc.getConnection().sendPacket((Packet)new CPacketHeldItemChange(l));
                 }
             }));
         }
     }
 }
+

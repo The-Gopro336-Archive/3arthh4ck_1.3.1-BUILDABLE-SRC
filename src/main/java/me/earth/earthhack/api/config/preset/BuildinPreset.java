@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.api.config.preset;
 
 import java.util.HashMap;
@@ -30,3 +33,4 @@ extends ModulePreset {
         }
     }
 }
+

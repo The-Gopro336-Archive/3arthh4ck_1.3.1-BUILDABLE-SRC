@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.pingbypass.submodules.sSafety;
 
 import me.earth.earthhack.api.module.util.Category;
@@ -22,3 +25,4 @@ extends SimpleSubModule<PingBypass> {
         this.setData(new ServerSafetyData(this));
     }
 }
+

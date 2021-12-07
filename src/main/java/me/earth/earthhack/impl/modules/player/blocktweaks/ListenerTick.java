@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.player.blocktweaks;
 
 import me.earth.earthhack.impl.core.ducks.network.IPlayerControllerMP;
@@ -13,9 +16,10 @@ extends ModuleListener<BlockTweaks, TickEvent> {
 
     @Override
     public void invoke(TickEvent event) {
-        IPlayerControllerMP controller = (IPlayerControllerMP)((Object)ListenerTick.mc.playerController);
+        IPlayerControllerMP controller = (IPlayerControllerMP)ListenerTick.mc.playerController;
         if (controller != null && controller.getBlockHitDelay() > ((BlockTweaks)this.module).delay.getValue()) {
             controller.setBlockHitDelay(((BlockTweaks)this.module).delay.getValue());
         }
     }
 }
+

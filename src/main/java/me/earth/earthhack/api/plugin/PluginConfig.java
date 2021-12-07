@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.gson.annotations.SerializedName
+ */
 package me.earth.earthhack.api.plugin;
 
 import com.google.gson.annotations.SerializedName;
@@ -36,3 +42,4 @@ public final class PluginConfig {
         return this.name.hashCode();
     }
 }
+

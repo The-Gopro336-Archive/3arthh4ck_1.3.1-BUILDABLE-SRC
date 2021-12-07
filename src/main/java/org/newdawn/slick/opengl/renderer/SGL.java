@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.opengl.renderer;
 
 import java.nio.ByteBuffer;
@@ -164,3 +167,4 @@ public interface SGL {
 
     public void glSecondaryColor3ubEXT(byte var1, byte var2, byte var3);
 }
+

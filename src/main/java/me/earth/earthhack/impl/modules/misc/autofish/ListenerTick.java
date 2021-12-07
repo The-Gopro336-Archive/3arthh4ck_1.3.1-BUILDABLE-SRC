@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.projectile.EntityFishHook
+ *  net.minecraft.init.Items
+ *  net.minecraft.item.Item
+ */
 package me.earth.earthhack.impl.modules.misc.autofish;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -27,7 +35,7 @@ extends ModuleListener<AutoFish, TickEvent> {
         if (!event.isSafe() || AUTOEAT.returnIfPresent(AutoEat::isEating, false).booleanValue()) {
             return;
         }
-        int slot = InventoryUtil.findHotbarItem(Items.FISHING_ROD, new Item[0]);
+        int slot = InventoryUtil.findHotbarItem((Item)Items.FISHING_ROD, new Item[0]);
         if (slot == -1) {
             ModuleUtil.disableRed((Module)this.module, "No fishing rod found in your hotbar.");
         }
@@ -58,3 +66,4 @@ extends ModuleListener<AutoFish, TickEvent> {
         }
     }
 }
+

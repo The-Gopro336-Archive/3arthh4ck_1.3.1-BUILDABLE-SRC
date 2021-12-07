@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.client.CPacketHeldItemChange
+ *  net.minecraft.network.play.server.SPacketHeldItemChange
+ */
 package me.earth.earthhack.impl.managers.minecraft.combat;
 
 import me.earth.earthhack.api.event.bus.EventListener;
@@ -38,3 +45,4 @@ extends SubscriberImpl {
         return this.last_slot;
     }
 }
+

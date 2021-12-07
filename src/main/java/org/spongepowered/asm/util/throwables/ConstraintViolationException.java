@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.util.throwables;
 
 import org.spongepowered.asm.util.ConstraintParser;
@@ -63,3 +66,4 @@ extends Exception {
         return this.badValue;
     }
 }
+

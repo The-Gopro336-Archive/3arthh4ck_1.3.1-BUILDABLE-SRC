@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.lib.tree;
 
 import org.spongepowered.asm.lib.MethodVisitor;
@@ -24,3 +27,4 @@ public class LocalVariableNode {
         mv.visitLocalVariable(this.name, this.desc, this.signature, this.start.getLabel(), this.end.getLabel(), this.index);
     }
 }
+

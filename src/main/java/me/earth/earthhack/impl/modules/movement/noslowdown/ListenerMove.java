@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.movement.noslowdown;
 
 import me.earth.earthhack.impl.core.ducks.entity.IEntity;
@@ -14,7 +17,7 @@ extends ModuleListener<NoSlowDown, MoveEvent> {
 
     @Override
     public void invoke(MoveEvent event) {
-        if (Managers.NCP.passed(250) && ((IEntity)((Object)ListenerMove.mc.player)).inWeb()) {
+        if (Managers.NCP.passed(250) && ((IEntity)ListenerMove.mc.player).inWeb()) {
             if (ListenerMove.mc.player.onGround) {
                 event.setX(event.getX() * ((NoSlowDown)this.module).websXZ.getValue());
                 event.setZ(event.getZ() * ((NoSlowDown)this.module).websXZ.getValue());
@@ -24,3 +27,4 @@ extends ModuleListener<NoSlowDown, MoveEvent> {
         }
     }
 }
+

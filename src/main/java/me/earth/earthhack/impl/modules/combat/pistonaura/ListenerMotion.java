@@ -1,3 +1,29 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.init.Items
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketAnimation
+ *  net.minecraft.network.play.client.CPacketEntityAction
+ *  net.minecraft.network.play.client.CPacketEntityAction$Action
+ *  net.minecraft.network.play.client.CPacketPlayer
+ *  net.minecraft.network.play.client.CPacketPlayer$Rotation
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock
+ *  net.minecraft.network.play.client.CPacketUseEntity
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.RayTraceResult
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.modules.combat.pistonaura;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -19,12 +45,14 @@ import me.earth.earthhack.impl.util.minecraft.blocks.SpecialBlocks;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
 import me.earth.earthhack.impl.util.misc.collections.CollectionUtil;
 import me.earth.earthhack.impl.util.thread.Locks;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketAnimation;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.client.CPacketPlayer;
@@ -51,7 +79,7 @@ extends ModuleListener<PistonAura, MotionUpdateEvent> {
             ((PistonAura)this.module).clicked.clear();
             ((PistonAura)this.module).blocksPlaced = 0;
             ((PistonAura)this.module).rotations = null;
-            ((PistonAura)this.module).pistonSlot = InventoryUtil.findHotbarBlock(Blocks.PISTON, Blocks.STICKY_PISTON);
+            ((PistonAura)this.module).pistonSlot = InventoryUtil.findHotbarBlock((Block)Blocks.PISTON, new Block[]{Blocks.STICKY_PISTON});
             if (((PistonAura)this.module).pistonSlot == -1 && this.shouldDisable(PistonStage.PISTON)) {
                 ((PistonAura)this.module).disableWithMessage("<" + ((PistonAura)this.module).getDisplayName() + "> " + "\u00a7c" + "No Pistons found!");
                 return;
@@ -98,11 +126,11 @@ extends ModuleListener<PistonAura, MotionUpdateEvent> {
                 ((PistonAura)this.module).slot = ListenerMotion.mc.player.inventory.currentItem;
                 boolean bl = sneak = ((PistonAura)this.module).blocksPlaced == 0 || ((PistonAura)this.module).actions.isEmpty() || (Boolean)((PistonAura)this.module).smartSneak.getValue() != false && !Managers.ACTION.isSneaking() && !((PistonAura)this.module).clicked.stream().anyMatch(b -> SpecialBlocks.shouldSneak(b, false));
                 if (!sneak) {
-                    ListenerMotion.mc.player.connection.sendPacket(new CPacketEntityAction(ListenerMotion.mc.player, CPacketEntityAction.Action.START_SNEAKING));
+                    ListenerMotion.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)ListenerMotion.mc.player, CPacketEntityAction.Action.START_SNEAKING));
                 }
                 CollectionUtil.emptyQueue(((PistonAura)this.module).actions);
                 if (!sneak) {
-                    ListenerMotion.mc.player.connection.sendPacket(new CPacketEntityAction(ListenerMotion.mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
+                    ListenerMotion.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)ListenerMotion.mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
                 }
                 if (ListenerMotion.mc.player.inventory.currentItem != ((PistonAura)this.module).slot) {
                     InventoryUtil.switchTo(((PistonAura)this.module).slot);
@@ -119,8 +147,8 @@ extends ModuleListener<PistonAura, MotionUpdateEvent> {
                 return false;
             }
             for (EntityEnderCrystal crystal : ListenerMotion.mc.world.getEntitiesWithinAABB(EntityEnderCrystal.class, new AxisAlignedBB(pos))) {
-                if (!crystal.getPosition().equals(pos.up()) && !crystal.getPosition().equals(((PistonAura)this.module).current.getStartPos().up())) continue;
-                float[] crystalRots = RotationUtil.getRotations(crystal);
+                if (!crystal.getPosition().equals((Object)pos.up()) && !crystal.getPosition().equals((Object)((PistonAura)this.module).current.getStartPos().up())) continue;
+                float[] crystalRots = RotationUtil.getRotations((Entity)crystal);
                 CPacketPlayer.Rotation rotation = null;
                 if (((PistonAura)this.module).rotate.getValue() == Rotate.Packet && ((PistonAura)this.module).rotations != null) {
                     rotation = new CPacketPlayer.Rotation(crystalRots[0], crystalRots[1], ListenerMotion.mc.player.onGround);
@@ -131,10 +159,10 @@ extends ModuleListener<PistonAura, MotionUpdateEvent> {
                 ((PistonAura)this.module).actions.add(() -> {
                     if (((PistonAura)this.module).breakTimer.passed(((PistonAura)this.module).breakDelay.getValue().intValue()) && Managers.SWITCH.getLastSwitch() >= (long)((PistonAura)this.module).coolDown.getValue().intValue()) {
                         if (finalRotation != null) {
-                            ListenerMotion.mc.player.connection.sendPacket(finalRotation);
+                            ListenerMotion.mc.player.connection.sendPacket((Packet)finalRotation);
                         }
-                        ListenerMotion.mc.player.connection.sendPacket(new CPacketUseEntity(crystal));
-                        ListenerMotion.mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.MAIN_HAND));
+                        ListenerMotion.mc.player.connection.sendPacket((Packet)new CPacketUseEntity((Entity)crystal));
+                        ListenerMotion.mc.player.connection.sendPacket((Packet)new CPacketAnimation(EnumHand.MAIN_HAND));
                         ((PistonAura)this.module).breakTimer.reset();
                         ((PistonAura)this.module).nextTimer.reset();
                         ((PistonAura)this.module).reset = true;
@@ -150,7 +178,7 @@ extends ModuleListener<PistonAura, MotionUpdateEvent> {
         if (((PistonAura)this.module).stage == PistonStage.CRYSTAL) {
             for (Entity entity : ListenerMotion.mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos.up(), ((PistonAura)this.module).current.getStartPos()))) {
                 if (entity == null || EntityUtil.isDead(entity)) continue;
-                if (entity instanceof EntityEnderCrystal && entity.getPosition().equals(pos.up())) {
+                if (entity instanceof EntityEnderCrystal && entity.getPosition().equals((Object)pos.up())) {
                     ++((PistonAura)this.module).index;
                     ((PistonAura)this.module).stage = ((PistonAura)this.module).current.getOrder()[((PistonAura)this.module).index];
                     pos = ((PistonAura)this.module).stage.getPos(((PistonAura)this.module).current);
@@ -220,7 +248,7 @@ extends ModuleListener<PistonAura, MotionUpdateEvent> {
                 }
                 case Packet: {
                     CPacketPlayer.Rotation rotation = new CPacketPlayer.Rotation(rotations[0], rotations[1], ListenerMotion.mc.player.onGround);
-                    ((PistonAura)this.module).actions.add(() -> ListenerMotion.mc.player.connection.sendPacket(rotation));
+                    ((PistonAura)this.module).actions.add(() -> ListenerMotion.lambda$runPre$4((CPacketPlayer)rotation));
                     break;
                 }
             }
@@ -234,8 +262,8 @@ extends ModuleListener<PistonAura, MotionUpdateEvent> {
                 ((PistonAura)this.module).placeClient(stack, on, InventoryUtil.getHand(slot), facing, f[0], f[1], f[2]);
             }
             ((PistonAura)this.module).actions.add(() -> {
-                ListenerMotion.mc.player.connection.sendPacket(place);
-                ListenerMotion.mc.player.connection.sendPacket(new CPacketAnimation(hand));
+                ListenerMotion.mc.player.connection.sendPacket((Packet)place);
+                ListenerMotion.mc.player.connection.sendPacket((Packet)new CPacketAnimation(hand));
                 if (((Boolean)((PistonAura)this.module).swing.getValue()).booleanValue()) {
                     Swing.Client.swing(hand);
                 }
@@ -261,4 +289,9 @@ extends ModuleListener<PistonAura, MotionUpdateEvent> {
         }
         return false;
     }
+
+    private static /* synthetic */ void lambda$runPre$4(CPacketPlayer rotation) {
+        ListenerMotion.mc.player.connection.sendPacket((Packet)rotation);
+    }
 }
+

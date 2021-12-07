@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.init.Items
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItem
+ */
 package me.earth.earthhack.impl.modules.misc.tracker;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -20,3 +27,4 @@ extends ModuleListener<Tracker, PacketEvent.Post<CPacketPlayerTryUseItem>> {
         }
     }
 }
+

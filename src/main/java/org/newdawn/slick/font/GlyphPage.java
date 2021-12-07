@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.font;
 
 import java.awt.AlphaComposite;
@@ -170,3 +173,4 @@ public class GlyphPage {
         renderContext = scratchGraphics.getFontRenderContext();
     }
 }
+

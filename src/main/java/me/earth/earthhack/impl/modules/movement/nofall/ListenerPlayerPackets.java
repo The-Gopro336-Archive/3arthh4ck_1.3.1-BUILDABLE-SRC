@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.client.CPacketPlayer
+ *  net.minecraft.network.play.client.CPacketPlayer$Position
+ *  net.minecraft.network.play.client.CPacketPlayer$PositionRotation
+ *  net.minecraft.network.play.client.CPacketPlayer$Rotation
+ */
 package me.earth.earthhack.impl.modules.movement.nofall;
 
 import me.earth.earthhack.api.util.interfaces.Globals;
@@ -40,12 +49,12 @@ implements Globals {
         switch (this.module.mode.getValue()) {
             case Packet: {
                 if (!(ListenerPlayerPackets.mc.player.fallDistance > 3.0f)) break;
-                ((ICPacketPlayer)((Object)packet)).setOnGround(true);
+                ((ICPacketPlayer)packet).setOnGround(true);
                 return;
             }
             case Anti: {
                 if (!(ListenerPlayerPackets.mc.player.fallDistance > 3.0f)) break;
-                ((ICPacketPlayer)((Object)packet)).setY(ListenerPlayerPackets.mc.player.posY + (double)0.1f);
+                ((ICPacketPlayer)packet).setY(ListenerPlayerPackets.mc.player.posY + (double)0.1f);
                 return;
             }
             case AAC: {
@@ -53,7 +62,7 @@ implements Globals {
                 ListenerPlayerPackets.mc.player.onGround = true;
                 ListenerPlayerPackets.mc.player.capabilities.isFlying = true;
                 ListenerPlayerPackets.mc.player.capabilities.allowFlying = true;
-                ((ICPacketPlayer)((Object)packet)).setOnGround(false);
+                ((ICPacketPlayer)packet).setOnGround(false);
                 ListenerPlayerPackets.mc.player.velocityChanged = true;
                 ListenerPlayerPackets.mc.player.capabilities.isFlying = false;
                 ListenerPlayerPackets.mc.player.jump();
@@ -61,3 +70,4 @@ implements Globals {
         }
     }
 }
+

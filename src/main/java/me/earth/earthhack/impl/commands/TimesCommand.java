@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.commands;
 
 import java.util.Arrays;
@@ -152,3 +155,4 @@ Globals {
         return command.getPossibleInputs(arguments);
     }
 }
+

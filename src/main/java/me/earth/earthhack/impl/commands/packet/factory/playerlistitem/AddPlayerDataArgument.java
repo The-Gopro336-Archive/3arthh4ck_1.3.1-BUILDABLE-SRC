@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.mojang.authlib.GameProfile
+ *  net.minecraft.network.play.server.SPacketPlayerListItem
+ *  net.minecraft.network.play.server.SPacketPlayerListItem$AddPlayerData
+ *  net.minecraft.util.text.ITextComponent
+ *  net.minecraft.world.GameType
+ */
 package me.earth.earthhack.impl.commands.packet.factory.playerlistitem;
 
 import com.mojang.authlib.GameProfile;
@@ -77,3 +87,4 @@ extends AbstractArgument<SPacketPlayerListItem.AddPlayerData> {
         return inputs;
     }
 }
+

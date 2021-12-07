@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.lib;
 
 public abstract class AnnotationVisitor {
@@ -48,3 +51,4 @@ public abstract class AnnotationVisitor {
         }
     }
 }
+

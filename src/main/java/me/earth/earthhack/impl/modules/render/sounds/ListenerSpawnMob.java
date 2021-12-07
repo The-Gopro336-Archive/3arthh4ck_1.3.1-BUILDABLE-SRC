@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.entity.EntityPlayerSP
+ *  net.minecraft.network.play.server.SPacketSpawnMob
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.render.sounds;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -19,7 +27,8 @@ extends ModuleListener<Sounds, PacketEvent.Receive<SPacketSpawnMob>> {
         EntityPlayerSP player = ListenerSpawnMob.mc.player;
         if (player != null && ((Sounds)this.module).slimes.getValue().booleanValue() && (p = (SPacketSpawnMob)event.getPacket()).getEntityType() == 55 && p.getY() <= 40.0 && !ListenerSpawnMob.mc.world.getBiome(player.getPosition()).getBiomeName().toLowerCase().contains("swamp")) {
             BlockPos pos = new BlockPos(p.getX(), p.getY(), p.getZ());
-            ((Sounds)this.module).log("Slime: " + ListenerSpawnMob.mc.world.getChunkFromBlockCoords((BlockPos)pos).x + "-ChunkX, " + ListenerSpawnMob.mc.world.getChunkFromBlockCoords((BlockPos)pos).z + "-ChunkZ.");
+            ((Sounds)this.module).log("Slime: " + ListenerSpawnMob.mc.world.getChunk((BlockPos)pos).x + "-ChunkX, " + ListenerSpawnMob.mc.world.getChunk((BlockPos)pos).z + "-ChunkZ.");
         }
     }
 }
+

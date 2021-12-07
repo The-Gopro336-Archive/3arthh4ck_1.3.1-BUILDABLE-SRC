@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.init.Blocks
+ */
 package me.earth.earthhack.impl.modules.movement.phase;
 
 import me.earth.earthhack.impl.event.events.misc.CollisionEvent;
@@ -14,7 +20,7 @@ extends ModuleListener<Phase, CollisionEvent> {
 
     @Override
     public void invoke(CollisionEvent event) {
-        if (ListenerCollision.mc.player == null || ListenerCollision.mc.player.movementInput == null || !ListenerCollision.mc.player.equals(event.getEntity())) {
+        if (ListenerCollision.mc.player == null || ListenerCollision.mc.player.movementInput == null || !ListenerCollision.mc.player.equals((Object)event.getEntity())) {
             return;
         }
         switch (((Phase)this.module).mode.getValue()) {
@@ -52,3 +58,4 @@ extends ModuleListener<Phase, CollisionEvent> {
         }
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.server.main.command;
 
 import java.util.HashMap;
@@ -28,3 +31,4 @@ implements ICommandLineHandler {
         this.handlers.put(command.toLowerCase(), handler);
     }
 }
+

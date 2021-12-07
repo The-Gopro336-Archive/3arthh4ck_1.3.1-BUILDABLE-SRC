@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.misc.intintmap;
 
 public interface IntIntMap {
@@ -9,3 +12,4 @@ public interface IntIntMap {
 
     public int size();
 }
+

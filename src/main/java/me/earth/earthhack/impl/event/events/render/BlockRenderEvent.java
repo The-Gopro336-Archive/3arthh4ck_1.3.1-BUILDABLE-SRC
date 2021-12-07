@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.event.events.render;
 
 import net.minecraft.block.state.IBlockState;
@@ -20,3 +27,4 @@ public class BlockRenderEvent {
         return this.state;
     }
 }
+

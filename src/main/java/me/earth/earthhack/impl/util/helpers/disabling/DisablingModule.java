@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.helpers.disabling;
 
 import me.earth.earthhack.api.event.bus.EventListener;
@@ -68,7 +71,7 @@ implements IDisablingModule {
 
                 @Override
                 public void invoke(DeathEvent event) {
-                    if (event.getEntity() != null && event.getEntity().equals(Globals.mc.player)) {
+                    if (event.getEntity() != null && event.getEntity().equals((Object)Globals.mc.player)) {
                         Globals.mc.addScheduledTask(disabling::onDeath);
                     }
                 }
@@ -78,7 +81,7 @@ implements IDisablingModule {
 
             @Override
             public void invoke(DeathEvent event) {
-                if (event.getEntity() != null && event.getEntity().equals(Globals.mc.player)) {
+                if (event.getEntity() != null && event.getEntity().equals((Object)Globals.mc.player)) {
                     Globals.mc.addScheduledTask(module::disable);
                 }
             }
@@ -105,3 +108,4 @@ implements IDisablingModule {
         };
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.combat.pistonaura;
 
 import me.earth.earthhack.impl.modules.combat.pistonaura.PistonAura;
@@ -38,3 +41,4 @@ extends BlockPlacingData<PistonAura> {
         return "Uses pistons and redstone to push crystals into enemies. (Needs Rewrite)";
     }
 }
+

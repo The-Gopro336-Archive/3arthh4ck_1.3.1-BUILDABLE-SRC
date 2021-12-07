@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.movement.step;
 
 import java.awt.Color;
@@ -71,3 +74,4 @@ extends BlockESPModule {
         return !Step.mc.player.isInWater() && Step.mc.player.onGround && !Step.mc.player.isOnLadder() && !Step.mc.player.movementInput.jump && Step.mc.player.collidedVertically && (double)Step.mc.player.fallDistance < 0.1;
     }
 }
+

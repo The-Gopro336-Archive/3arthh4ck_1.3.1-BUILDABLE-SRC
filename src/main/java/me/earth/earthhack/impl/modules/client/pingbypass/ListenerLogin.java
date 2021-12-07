@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.login.client.CPacketLoginStart
+ */
 package me.earth.earthhack.impl.modules.client.pingbypass;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -17,3 +23,4 @@ extends ModuleListener<PingBypass, PacketEvent.Send<CPacketLoginStart>> {
         ((PingBypass)this.module).serializer.clear();
     }
 }
+

@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.BlockLiquid
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.world.IBlockAccess
+ */
 package me.earth.earthhack.impl.core.mixins.block;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -32,7 +42,8 @@ extends MixinBlock {
     @Inject(method={"shouldSideBeRendered"}, at={@At(value="HEAD")}, cancellable=true)
     private void shouldSideBeRenderedHook(IBlockState state, IBlockAccess access, BlockPos pos, EnumFacing facing, CallbackInfoReturnable<Boolean> info) {
         if (XRAY.isEnabled() && ((XRay)XRAY.get()).getMode() == XrayMode.Opacity) {
-            info.setReturnValue(access.getBlockState(pos.offset(facing)).func_185904_a() != this.field_149764_J);
+            info.setReturnValue(access.getBlockState(pos.offset(facing)).getMaterial() != this.material);
         }
     }
 }
+

@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.client.CPacketPlayer
+ *  net.minecraft.network.play.client.CPacketPlayer$Position
+ *  net.minecraft.network.play.client.CPacketPlayer$PositionRotation
+ *  net.minecraft.network.play.client.CPacketPlayer$Rotation
+ */
 package me.earth.earthhack.impl.modules.player.nohunger;
 
 import me.earth.earthhack.api.util.interfaces.Globals;
@@ -37,9 +46,10 @@ implements Globals {
     }
 
     private void onPacket(CPacketPlayer packet) {
-        if (this.module.ground.getValue().booleanValue() && this.module.onGround && ListenerPlayerPacket.mc.player.onGround && packet.getY(0.0) == (!((ICPacketPlayer)((Object)packet)).isMoving() ? 0.0 : ListenerPlayerPacket.mc.player.posY)) {
-            ((ICPacketPlayer)((Object)packet)).setOnGround(false);
+        if (this.module.ground.getValue().booleanValue() && this.module.onGround && ListenerPlayerPacket.mc.player.onGround && packet.getY(0.0) == (!((ICPacketPlayer)packet).isMoving() ? 0.0 : ListenerPlayerPacket.mc.player.posY)) {
+            ((ICPacketPlayer)packet).setOnGround(false);
         }
         this.module.onGround = ListenerPlayerPacket.mc.player.onGround;
     }
 }
+

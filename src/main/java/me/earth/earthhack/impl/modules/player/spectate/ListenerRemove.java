@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.network.play.server.SPacketDestroyEntities
+ */
 package me.earth.earthhack.impl.modules.player.spectate;
 
 import me.earth.earthhack.api.module.Module;
@@ -29,3 +36,4 @@ extends ModuleListener<Spectate, PacketEvent.Receive<SPacketDestroyEntities>> {
         }
     }
 }
+

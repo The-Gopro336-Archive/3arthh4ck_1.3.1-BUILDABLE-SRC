@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.EnumHand
+ */
 package me.earth.earthhack.impl.util.minecraft;
 
 import me.earth.earthhack.impl.util.minecraft.ArmUtil;
@@ -39,3 +45,4 @@ public enum Swing {
 
     public abstract void swing(EnumHand var1);
 }
+

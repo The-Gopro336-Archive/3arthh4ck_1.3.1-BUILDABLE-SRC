@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.BufferUtils
+ *  org.lwjgl.util.glu.GLU
+ *  org.lwjgl.util.vector.Matrix4f
+ */
 package me.earth.earthhack.impl.util.render;
 
 import java.nio.FloatBuffer;
@@ -11,7 +19,7 @@ public final class GLUProjection {
     private IntBuffer viewport;
     private FloatBuffer modelview;
     private FloatBuffer projection;
-    private FloatBuffer coords = BufferUtils.createFloatBuffer(3);
+    private FloatBuffer coords = BufferUtils.createFloatBuffer((int)3);
     private Vector3D frustumPos;
     private Vector3D[] frustum;
     private Vector3D[] invFrustum;
@@ -101,7 +109,7 @@ public final class GLUProjection {
                 if (extrudeInverted && !outsideInvertedFrustum || clampModeOutside == ClampMode.DIRECT && outsideInvertedFrustum) {
                     double vecX = 0.0;
                     double vecY = 0.0;
-                    if (!GLU.gluProject((float)x, (float)y, (float)z, this.modelview, this.projection, this.viewport, this.coords)) return new Projection(0.0, 0.0, Projection.Type.FAIL);
+                    if (!GLU.gluProject((float)((float)x), (float)((float)y), (float)((float)z), (FloatBuffer)this.modelview, (FloatBuffer)this.projection, (IntBuffer)this.viewport, (FloatBuffer)this.coords)) return new Projection(0.0, 0.0, Projection.Type.FAIL);
                     if (opposite) {
                         vecX = this.displayWidth * this.widthScale - (double)this.coords.get(0) * this.widthScale - this.displayWidth * this.widthScale / 2.0;
                         vecY = this.displayHeight * this.heightScale - (this.displayHeight - (double)this.coords.get(1)) * this.heightScale - this.displayHeight * this.heightScale / 2.0;
@@ -122,7 +130,7 @@ public final class GLUProjection {
                     return new Projection(intersect.x, intersect.y, outsideInvertedFrustum ? Projection.Type.OUTSIDE : Projection.Type.INVERTED);
                 }
                 if (clampModeOutside != ClampMode.ORTHOGONAL || !outsideInvertedFrustum) return new Projection(0.0, 0.0, Projection.Type.FAIL);
-                if (!GLU.gluProject((float)x, (float)y, (float)z, this.modelview, this.projection, this.viewport, this.coords)) return new Projection(0.0, 0.0, Projection.Type.FAIL);
+                if (!GLU.gluProject((float)((float)x), (float)((float)y), (float)((float)z), (FloatBuffer)this.modelview, (FloatBuffer)this.projection, (IntBuffer)this.viewport, (FloatBuffer)this.coords)) return new Projection(0.0, 0.0, Projection.Type.FAIL);
                 double guiX = (double)this.coords.get(0) * this.widthScale;
                 double guiY = (this.displayHeight - (double)this.coords.get(1)) * this.heightScale;
                 if (opposite) {
@@ -143,7 +151,7 @@ public final class GLUProjection {
                 }
                 return new Projection(guiX, guiY, outsideInvertedFrustum ? Projection.Type.OUTSIDE : Projection.Type.INVERTED);
             }
-            if (!GLU.gluProject((float)x, (float)y, (float)z, this.modelview, this.projection, this.viewport, this.coords)) return new Projection(0.0, 0.0, Projection.Type.FAIL);
+            if (!GLU.gluProject((float)((float)x), (float)((float)y), (float)((float)z), (FloatBuffer)this.modelview, (FloatBuffer)this.projection, (IntBuffer)this.viewport, (FloatBuffer)this.coords)) return new Projection(0.0, 0.0, Projection.Type.FAIL);
             double guiX = (double)this.coords.get(0) * this.widthScale;
             double guiY = (this.displayHeight - (double)this.coords.get(1)) * this.heightScale;
             if (!opposite) return new Projection(guiX, guiY, outsideInvertedFrustum ? Projection.Type.OUTSIDE : Projection.Type.INVERTED);
@@ -151,7 +159,7 @@ public final class GLUProjection {
             guiY = this.displayHeight * this.heightScale - guiY;
             return new Projection(guiX, guiY, outsideInvertedFrustum ? Projection.Type.OUTSIDE : Projection.Type.INVERTED);
         }
-        if (!GLU.gluProject((float)x, (float)y, (float)z, this.modelview, this.projection, this.viewport, this.coords)) return new Projection(0.0, 0.0, Projection.Type.FAIL);
+        if (!GLU.gluProject((float)((float)x), (float)((float)y), (float)((float)z), (FloatBuffer)this.modelview, (FloatBuffer)this.projection, (IntBuffer)this.viewport, (FloatBuffer)this.coords)) return new Projection(0.0, 0.0, Projection.Type.FAIL);
         double guiX = (double)this.coords.get(0) * this.widthScale;
         double guiY = (this.displayHeight - (double)this.coords.get(1)) * this.heightScale;
         return new Projection(guiX, guiY, Projection.Type.INSIDE);
@@ -463,3 +471,4 @@ public final class GLUProjection {
         }
     }
 }
+

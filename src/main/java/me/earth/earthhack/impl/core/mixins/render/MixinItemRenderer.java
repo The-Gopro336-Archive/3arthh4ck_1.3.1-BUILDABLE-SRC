@@ -1,3 +1,19 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.entity.AbstractClientPlayer
+ *  net.minecraft.client.renderer.GlStateManager
+ *  net.minecraft.client.renderer.ItemRenderer
+ *  net.minecraft.client.renderer.entity.RenderPlayer
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.EnumHandSide
+ *  net.minecraft.util.ResourceLocation
+ *  org.lwjgl.opengl.GL11
+ */
 package me.earth.earthhack.impl.core.mixins.render;
 
 import java.awt.Color;
@@ -12,6 +28,7 @@ import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.entity.RenderPlayer;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
@@ -34,7 +51,7 @@ public abstract class MixinItemRenderer {
     private static final ModuleCache<HandChams> HAND_CHAMS = Caches.getModule(HandChams.class);
 
     @Shadow
-    protected abstract void func_187456_a(float var1, float var2, EnumHandSide var3);
+    protected abstract void renderArmFirstPerson(float var1, float var2, EnumHandSide var3);
 
     @Inject(method={"renderFireInFirstPerson"}, at={@At(value="HEAD")}, cancellable=true)
     public void renderFireInFirstPersonHook(CallbackInfo info) {
@@ -55,8 +72,8 @@ public abstract class MixinItemRenderer {
         if (VIEW_MODEL.isEnabled()) {
             float[] scale = VIEW_MODEL.isPresent() ? ((ViewModel)VIEW_MODEL.get()).getScale() : ViewModel.DEFAULT_SCALE;
             float[] translation = VIEW_MODEL.isPresent() ? ((ViewModel)VIEW_MODEL.get()).getTranslation() : ViewModel.DEFAULT_TRANSLATION;
-            GL11.glScalef(scale[0], scale[1], scale[2]);
-            GL11.glRotatef(translation[0], translation[1], translation[2], translation[3]);
+            GL11.glScalef((float)scale[0], (float)scale[1], (float)scale[2]);
+            GL11.glRotatef((float)translation[0], (float)translation[1], (float)translation[2], (float)translation[3]);
         }
     }
 
@@ -68,54 +85,54 @@ public abstract class MixinItemRenderer {
                 if (((HandChams)MixinItemRenderer.HAND_CHAMS.get()).chams.getValue().booleanValue()) {
                     handColor = ((HandChams)MixinItemRenderer.HAND_CHAMS.get()).color.getValue();
                     GL11.glPushMatrix();
-                    GL11.glPushAttrib(1048575);
-                    GL11.glDisable(3553);
-                    GL11.glDisable(2896);
-                    GL11.glEnable(3042);
-                    GL11.glBlendFunc(770, 771);
-                    GL11.glColor4f((float)handColor.getRed() / 255.0f, (float)handColor.getGreen() / 255.0f, (float)handColor.getBlue() / 255.0f, (float)handColor.getAlpha() / 255.0f);
-                    this.func_187456_a(p_187456_1_, p_187456_2_, p_187456_3_);
-                    GL11.glDisable(3042);
-                    GL11.glEnable(3553);
+                    GL11.glPushAttrib((int)1048575);
+                    GL11.glDisable((int)3553);
+                    GL11.glDisable((int)2896);
+                    GL11.glEnable((int)3042);
+                    GL11.glBlendFunc((int)770, (int)771);
+                    GL11.glColor4f((float)((float)handColor.getRed() / 255.0f), (float)((float)handColor.getGreen() / 255.0f), (float)((float)handColor.getBlue() / 255.0f), (float)((float)handColor.getAlpha() / 255.0f));
+                    this.renderArmFirstPerson(p_187456_1_, p_187456_2_, p_187456_3_);
+                    GL11.glDisable((int)3042);
+                    GL11.glEnable((int)3553);
                     GL11.glPopAttrib();
                     GL11.glPopMatrix();
                 }
                 if (((HandChams)MixinItemRenderer.HAND_CHAMS.get()).wireframe.getValue().booleanValue()) {
                     handColor = ((HandChams)MixinItemRenderer.HAND_CHAMS.get()).wireFrameColor.getValue();
                     GL11.glPushMatrix();
-                    GL11.glPushAttrib(1048575);
-                    GL11.glDisable(3553);
-                    GL11.glDisable(2896);
-                    GL11.glEnable(3042);
-                    GL11.glPolygonMode(1032, 6913);
-                    GL11.glBlendFunc(770, 771);
-                    GL11.glLineWidth(1.5f);
-                    GL11.glDisable(2929);
-                    GL11.glDepthMask(false);
-                    GL11.glColor4f((float)handColor.getRed() / 255.0f, (float)handColor.getGreen() / 255.0f, (float)handColor.getBlue() / 255.0f, (float)handColor.getAlpha() / 255.0f);
-                    this.func_187456_a(p_187456_1_, p_187456_2_, p_187456_3_);
-                    GL11.glDisable(3042);
-                    GL11.glEnable(3553);
+                    GL11.glPushAttrib((int)1048575);
+                    GL11.glDisable((int)3553);
+                    GL11.glDisable((int)2896);
+                    GL11.glEnable((int)3042);
+                    GL11.glPolygonMode((int)1032, (int)6913);
+                    GL11.glBlendFunc((int)770, (int)771);
+                    GL11.glLineWidth((float)1.5f);
+                    GL11.glDisable((int)2929);
+                    GL11.glDepthMask((boolean)false);
+                    GL11.glColor4f((float)((float)handColor.getRed() / 255.0f), (float)((float)handColor.getGreen() / 255.0f), (float)((float)handColor.getBlue() / 255.0f), (float)((float)handColor.getAlpha() / 255.0f));
+                    this.renderArmFirstPerson(p_187456_1_, p_187456_2_, p_187456_3_);
+                    GL11.glDisable((int)3042);
+                    GL11.glEnable((int)3553);
                     GL11.glPopAttrib();
                     GL11.glPopMatrix();
                 }
             } else {
-                GL11.glPushAttrib(1048575);
-                GL11.glDisable(2896);
-                GL11.glEnable(3042);
-                GL11.glDisable(3008);
-                GL11.glBlendFunc(770, 771);
-                GL11.glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
-                GL11.glDisable(3553);
-                GL11.glEnable(10754);
-                GL11.glEnable(2960);
-                this.func_187456_a(p_187456_1_, p_187456_2_, p_187456_3_);
-                GL11.glEnable(3553);
+                GL11.glPushAttrib((int)1048575);
+                GL11.glDisable((int)2896);
+                GL11.glEnable((int)3042);
+                GL11.glDisable((int)3008);
+                GL11.glBlendFunc((int)770, (int)771);
+                GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)0.5f);
+                GL11.glDisable((int)3553);
+                GL11.glEnable((int)10754);
+                GL11.glEnable((int)2960);
+                this.renderArmFirstPerson(p_187456_1_, p_187456_2_, p_187456_3_);
+                GL11.glEnable((int)3553);
                 this.renderEffect(p_187456_1_, p_187456_2_, p_187456_3_);
                 GL11.glPopAttrib();
             }
         } else {
-            this.func_187456_a(p_187456_1_, p_187456_2_, p_187456_3_);
+            this.renderArmFirstPerson(p_187456_1_, p_187456_2_, p_187456_3_);
         }
     }
 
@@ -139,13 +156,13 @@ public abstract class MixinItemRenderer {
             GlStateManager.rotate((float)(30.0f - (float)i * 60.0f), (float)0.0f, (float)0.0f, (float)1.0f);
             GlStateManager.translate((float)0.0f, (float)(f * (0.001f + (float)i * 0.003f) * 20.0f), (float)0.0f);
             GlStateManager.matrixMode((int)5888);
-            RenderPlayer renderPlayer = (RenderPlayer)((Object)Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(Minecraft.getMinecraft().player));
+            RenderPlayer renderPlayer = (RenderPlayer)Minecraft.getMinecraft().getRenderManager().getEntityRenderObject((Entity)Minecraft.getMinecraft().player);
             if (renderPlayer == null) continue;
             if (p_187456_3_ == EnumHandSide.RIGHT) {
-                renderPlayer.renderRightArm(Minecraft.getMinecraft().player);
+                renderPlayer.renderRightArm((AbstractClientPlayer)Minecraft.getMinecraft().player);
                 continue;
             }
-            renderPlayer.renderLeftArm(Minecraft.getMinecraft().player);
+            renderPlayer.renderLeftArm((AbstractClientPlayer)Minecraft.getMinecraft().player);
         }
         GlStateManager.matrixMode((int)5890);
         GlStateManager.loadIdentity();
@@ -157,3 +174,4 @@ public abstract class MixinItemRenderer {
         Minecraft.getMinecraft().entityRenderer.setupFogColor(false);
     }
 }
+

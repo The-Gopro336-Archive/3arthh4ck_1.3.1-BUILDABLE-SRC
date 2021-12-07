@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketSoundEffect
+ */
 package me.earth.earthhack.impl.modules.combat.surround;
 
 import me.earth.earthhack.impl.managers.minecraft.combat.util.SoundObserver;
@@ -19,3 +25,4 @@ extends SoundObserver {
         ListenerMotion.start(this.module);
     }
 }
+

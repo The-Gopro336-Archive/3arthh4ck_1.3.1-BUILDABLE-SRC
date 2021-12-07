@@ -1,3 +1,25 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.block.BlockDirectional
+ *  net.minecraft.block.BlockPistonBase
+ *  net.minecraft.block.material.EnumPushReaction
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.item.ItemBlock
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.MathHelper
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.modules.combat.pistonaura;
 
 import java.util.ArrayList;
@@ -108,7 +130,7 @@ extends BlockPlacingModule {
 
     @Override
     public String getDisplayInfo() {
-        if (EntityUtil.isValid(this.target, 9.0)) {
+        if (EntityUtil.isValid((Entity)this.target, 9.0)) {
             return this.target.getName();
         }
         return null;
@@ -150,9 +172,9 @@ extends BlockPlacingModule {
                 BlockPos pos = null;
                 for (EntityPlayer player : PistonAura.mc.world.playerEntities) {
                     double angle;
-                    if (!EntityUtil.isValid(player, 9.0)) continue;
-                    BlockPos playerPos = PositionUtil.getPosition(player);
-                    if (!this.suicide.getValue().booleanValue() && PositionUtil.getPosition().equals(playerPos) || !HoleUtil.isHole(playerPos, false)[0] && !HoleUtil.is2x1(playerPos) || !((angle = RotationUtil.getAngle(player, 1.4)) < closestAngle)) continue;
+                    if (!EntityUtil.isValid((Entity)player, 9.0)) continue;
+                    BlockPos playerPos = PositionUtil.getPosition((Entity)player);
+                    if (!this.suicide.getValue().booleanValue() && PositionUtil.getPosition().equals((Object)playerPos) || !HoleUtil.isHole(playerPos, false)[0] && !HoleUtil.is2x1(playerPos) || !((angle = RotationUtil.getAngle((Entity)player, 1.4)) < closestAngle)) continue;
                     closest = player;
                     closestAngle = angle;
                     pos = playerPos;
@@ -164,16 +186,16 @@ extends BlockPlacingModule {
             case Closest: {
                 EntityPlayer closestEnemy = EntityUtil.getClosestEnemy();
                 if (closestEnemy == null) break;
-                BlockPos playerPos = PositionUtil.getPosition(closestEnemy);
-                if (!this.suicide.getValue().booleanValue() && PositionUtil.getPosition().equals(playerPos) || !HoleUtil.isHole(playerPos, false)[0] && !HoleUtil.is2x1(playerPos)) break;
+                BlockPos playerPos = PositionUtil.getPosition((Entity)closestEnemy);
+                if (!this.suicide.getValue().booleanValue() && PositionUtil.getPosition().equals((Object)playerPos) || !HoleUtil.isHole(playerPos, false)[0] && !HoleUtil.is2x1(playerPos)) break;
                 data.addAll(this.checkPlayer(closestEnemy, playerPos));
                 break;
             }
             case Calc: {
                 for (EntityPlayer player : PistonAura.mc.world.playerEntities) {
-                    if (!EntityUtil.isValid(player, 9.0)) continue;
-                    BlockPos playerPos = PositionUtil.getPosition(player);
-                    if (!this.suicide.getValue().booleanValue() && PositionUtil.getPosition().equals(playerPos) || !HoleUtil.isHole(playerPos, false)[0] && !HoleUtil.is2x1(playerPos)) continue;
+                    if (!EntityUtil.isValid((Entity)player, 9.0)) continue;
+                    BlockPos playerPos = PositionUtil.getPosition((Entity)player);
+                    if (!this.suicide.getValue().booleanValue() && PositionUtil.getPosition().equals((Object)playerPos) || !HoleUtil.isHole(playerPos, false)[0] && !HoleUtil.is2x1(playerPos)) continue;
                     data.addAll(this.checkPlayer(player, playerPos));
                 }
                 break;
@@ -193,16 +215,16 @@ extends BlockPlacingModule {
 
     private List<PistonData> checkPlayer(EntityPlayer player, BlockPos pos) {
         ArrayList<PistonData> data = new ArrayList<PistonData>(this.checkFacings(player, pos));
-        if (data.isEmpty() && PistonAura.mc.world.getBlockState(pos.up(2)).func_185904_a().isReplaceable()) {
+        if (data.isEmpty() && PistonAura.mc.world.getBlockState(pos.up(2)).getMaterial().isReplaceable()) {
             data.addAll(this.checkFacings(player, pos.up()));
         }
         return data;
     }
 
     protected boolean checkUpdate(BlockPos pos, IBlockState state, BlockPos dataPos, Block block1, Block block2) {
-        if (pos.equals(dataPos)) {
+        if (pos.equals((Object)dataPos)) {
             IBlockState before = PistonAura.mc.world.getBlockState(pos);
-            return (before.getBlock() == block1 || before.getBlock() == block2) && state.func_185904_a().isReplaceable();
+            return (before.getBlock() == block1 || before.getBlock() == block2) && state.getMaterial().isReplaceable();
         }
         return false;
     }
@@ -222,7 +244,7 @@ extends BlockPlacingModule {
         boolean s;
         BlockPos crystal = data.getCrystalPos();
         double placeDist = PistonAura.mc.player.getDistanceSq(crystal);
-        if (placeDist > (double)MathUtil.square(this.placeRange.getValue().floatValue()) || placeDist > (double)MathUtil.square(this.placeTrace.getValue().floatValue()) && !RayTraceUtil.raytracePlaceCheck(PistonAura.mc.player, crystal)) {
+        if (placeDist > (double)MathUtil.square(this.placeRange.getValue().floatValue()) || placeDist > (double)MathUtil.square(this.placeTrace.getValue().floatValue()) && !RayTraceUtil.raytracePlaceCheck((Entity)PistonAura.mc.player, crystal)) {
             return data;
         }
         double breakDist = PistonAura.mc.player.getDistanceSq((double)crystal.getX() + 0.5, (double)crystal.getY() + 1.0, (double)crystal.getZ() + 0.5);
@@ -239,7 +261,7 @@ extends BlockPlacingModule {
         boolean noCrystal = false;
         for (Entity entity : PistonAura.mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(crystal, crystal.add(1, 2, 1)))) {
             if (entity == null || EntityUtil.isDead(entity)) continue;
-            if (entity instanceof EntityEnderCrystal && crystal.equals(entity.getPosition().down())) {
+            if (entity instanceof EntityEnderCrystal && crystal.equals((Object)entity.getPosition().down())) {
                 noCrystal = true;
                 using1 = true;
                 continue;
@@ -253,16 +275,16 @@ extends BlockPlacingModule {
             }
         }
         boolean noPiston = false;
-        if (!toPush.func_185904_a().isReplaceable()) {
+        if (!toPush.getMaterial().isReplaceable()) {
             if (toPush.getBlock() == Blocks.PISTON || toPush.getBlock() == Blocks.STICKY_PISTON) {
-                if (toPush.getProperties().get(BlockDirectional.FACING) == data.getFacing().getOpposite()) {
+                if (toPush.getProperties().get((Object)BlockDirectional.FACING) == data.getFacing().getOpposite()) {
                     noPiston = true;
                     using1 = false;
                 } else {
                     using1 = true;
                 }
             } else {
-                if (!PistonAura.mc.world.getBlockState(piston1).func_185904_a().isReplaceable() && piston1State.getBlock() != Blocks.PISTON && piston1State.getBlock() != Blocks.STICKY_PISTON || toPush.func_185905_o() != EnumPushReaction.DESTROY && !BlockPistonBase.canPush((IBlockState)toPush, (World)PistonAura.mc.world, (BlockPos)piston, (EnumFacing)data.getFacing().getOpposite(), (boolean)false, (EnumFacing)data.getFacing().getOpposite())) {
+                if (!PistonAura.mc.world.getBlockState(piston1).getMaterial().isReplaceable() && piston1State.getBlock() != Blocks.PISTON && piston1State.getBlock() != Blocks.STICKY_PISTON || toPush.getPushReaction() != EnumPushReaction.DESTROY && !BlockPistonBase.canPush((IBlockState)toPush, (World)PistonAura.mc.world, (BlockPos)piston, (EnumFacing)data.getFacing().getOpposite(), (boolean)false, (EnumFacing)data.getFacing().getOpposite())) {
                     return data;
                 }
                 using1 = true;
@@ -270,7 +292,7 @@ extends BlockPlacingModule {
         }
         boolean cantPiston1 = false;
         if (piston1State.getBlock() == Blocks.PISTON || piston1State.getBlock() == Blocks.STICKY_PISTON) {
-            if (piston1State.getProperties().get(BlockDirectional.FACING) == data.getFacing().getOpposite() && !((Boolean)piston1State.getProperties().get(BlockPistonBase.EXTENDED)).booleanValue()) {
+            if (piston1State.getProperties().get((Object)BlockDirectional.FACING) == data.getFacing().getOpposite() && !((Boolean)piston1State.getProperties().get((Object)BlockPistonBase.EXTENDED)).booleanValue()) {
                 using1 = true;
                 noPiston = true;
             } else {
@@ -281,7 +303,7 @@ extends BlockPlacingModule {
             for (EnumFacing facing : this.getRedstoneFacings(data.getFacing(), using1)) {
                 BlockPos redstone;
                 BlockPos blockPos = redstone = using1 ? piston1.offset(facing) : piston.offset(facing);
-                if (PistonAura.mc.player.getDistanceSq(redstone) > (double)MathUtil.square(this.placeRange.getValue().floatValue()) || !PistonAura.mc.world.getBlockState(redstone).func_185904_a().isReplaceable() || this.checkEntities(redstone)) continue;
+                if (PistonAura.mc.player.getDistanceSq(redstone) > (double)MathUtil.square(this.placeRange.getValue().floatValue()) || !PistonAura.mc.world.getBlockState(redstone).getMaterial().isReplaceable() || this.checkEntities(redstone)) continue;
                 data.setRedstonePos(redstone);
                 break;
             }
@@ -340,12 +362,12 @@ extends BlockPlacingModule {
             for (EnumFacing facing : this.getRedstoneFacings(data.getFacing(), using1)) {
                 BlockPos redstone;
                 BlockPos blockPos = redstone = using1 ? piston1.offset(facing) : piston.offset(facing);
-                if (PistonAura.mc.player.getDistanceSq(redstone) > (double)MathUtil.square(this.placeRange.getValue().floatValue()) || !PistonAura.mc.world.getBlockState(redstone).func_185904_a().isReplaceable() || this.checkEntities(redstone) || (redstoneFacing = BlockUtil.getFacing(redstone)) == null && (placeFacing == null || !using1)) continue;
+                if (PistonAura.mc.player.getDistanceSq(redstone) > (double)MathUtil.square(this.placeRange.getValue().floatValue()) || !PistonAura.mc.world.getBlockState(redstone).getMaterial().isReplaceable() || this.checkEntities(redstone) || (redstoneFacing = BlockUtil.getFacing(redstone)) == null && (placeFacing == null || !using1)) continue;
                 data.setRedstonePos(redstone);
                 break;
             }
         }
-        if (!noR && data.getRedstonePos() == null || using1 && !PistonAura.mc.world.getBlockState(piston1).func_185904_a().isReplaceable() || using1 && cantPiston1) {
+        if (!noR && data.getRedstonePos() == null || using1 && !PistonAura.mc.world.getBlockState(piston1).getMaterial().isReplaceable() || using1 && cantPiston1) {
             return data;
         }
         if (!using1 && pistonFacing != data.getFacing().getOpposite()) {
@@ -382,7 +404,7 @@ extends BlockPlacingModule {
             EnumFacing facing = BlockUtil.getFacing(pos);
             rotations = RotationUtil.getRotations(facing == null ? pos : pos.offset(facing), facing == null ? null : facing.getOpposite());
         }
-        return EnumFacing.getHorizontal((int)(MathHelper.floor((double)((double)(rotations[0] * 4.0f / 360.0f) + 0.5)) & 3)).getOpposite();
+        return EnumFacing.byHorizontalIndex((int)(MathHelper.floor((double)((double)(rotations[0] * 4.0f / 360.0f) + 0.5)) & 3)).getOpposite();
     }
 
     protected boolean checkEntities(BlockPos pos) {
@@ -428,8 +450,9 @@ extends BlockPlacingModule {
     public boolean usingTorches() {
         ItemStack stack;
         if (this.redstoneSlot != -1 && (stack = this.redstoneSlot == -2 ? PistonAura.mc.player.getHeldItemOffhand() : PistonAura.mc.player.inventory.getStackInSlot(this.redstoneSlot)).getItem() instanceof ItemBlock) {
-            return ((ItemBlock)((Object)stack.getItem())).getBlock() == Blocks.REDSTONE_TORCH;
+            return ((ItemBlock)stack.getItem()).getBlock() == Blocks.REDSTONE_TORCH;
         }
         return false;
     }
 }
+

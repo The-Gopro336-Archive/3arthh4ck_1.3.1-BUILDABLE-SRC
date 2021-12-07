@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.apache.logging.log4j.LogManager
+ */
 package org.spongepowered.asm.mixin.injection.struct;
 
 import java.util.ArrayList;
@@ -58,7 +64,7 @@ public class InjectorGroupInfo {
             throw new IllegalArgumentException("Cannot set zero or negative value for injector group min count. Attempted to set min=" + min + " on " + this);
         }
         if (this.minCallbackCount > 0 && this.minCallbackCount != min) {
-            LogManager.getLogger("mixin").warn("Conflicting min value '{}' on @Group({}), previously specified {}", new Object[]{min, this.name, this.minCallbackCount});
+            LogManager.getLogger((String)"mixin").warn("Conflicting min value '{}' on @Group({}), previously specified {}", new Object[]{min, this.name, this.minCallbackCount});
         }
         this.minCallbackCount = Math.max(this.minCallbackCount, min);
     }
@@ -68,7 +74,7 @@ public class InjectorGroupInfo {
             throw new IllegalArgumentException("Cannot set zero or negative value for injector group max count. Attempted to set max=" + max + " on " + this);
         }
         if (this.maxCallbackCount < Integer.MAX_VALUE && this.maxCallbackCount != max) {
-            LogManager.getLogger("mixin").warn("Conflicting max value '{}' on @Group({}), previously specified {}", new Object[]{max, this.name, this.maxCallbackCount});
+            LogManager.getLogger((String)"mixin").warn("Conflicting max value '{}' on @Group({}), previously specified {}", new Object[]{max, this.name, this.maxCallbackCount});
         }
         this.maxCallbackCount = Math.min(this.maxCallbackCount, max);
     }
@@ -147,3 +153,4 @@ public class InjectorGroupInfo {
         }
     }
 }
+

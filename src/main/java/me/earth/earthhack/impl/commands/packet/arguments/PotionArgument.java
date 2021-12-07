@@ -1,6 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.potion.Potion
+ */
 package me.earth.earthhack.impl.commands.packet.arguments;
 
-import java.util.Iterator;
 import me.earth.earthhack.api.command.PossibleInputs;
 import me.earth.earthhack.api.util.TextUtil;
 import me.earth.earthhack.impl.commands.packet.AbstractArgument;
@@ -45,9 +50,7 @@ extends AbstractArgument<Potion> {
     }
 
     public static Potion getPotionStartingWith(String argument) {
-        Iterator iterator = Potion.REGISTRY.iterator();
-        while (iterator.hasNext()) {
-            Potion potion = (Potion)iterator.next();
+        for (Potion potion : Potion.REGISTRY) {
             String name = potion.getName();
             if (!TextUtil.startsWith(name, argument)) continue;
             return potion;
@@ -55,3 +58,4 @@ extends AbstractArgument<Potion> {
         return null;
     }
 }
+

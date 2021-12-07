@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.collect.ImmutableList
+ */
 package org.spongepowered.tools.obfuscation.mirror;
 
 import com.google.common.collect.ImmutableList;
@@ -89,7 +95,7 @@ public final class AnnotationHandle {
             return Collections.emptyList();
         }
         if (val instanceof AnnotationMirror) {
-            return ImmutableList.of(AnnotationHandle.of(val));
+            return ImmutableList.of((Object)AnnotationHandle.of(val));
         }
         List list = val;
         ArrayList<AnnotationHandle> annotations = new ArrayList<AnnotationHandle>(list.size());
@@ -143,3 +149,4 @@ public final class AnnotationHandle {
         return new AnnotationHandle(AnnotationHandle.getAnnotation(elem, annotationClass));
     }
 }
+

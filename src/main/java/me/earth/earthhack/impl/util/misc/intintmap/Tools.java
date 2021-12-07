@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.misc.intintmap;
 
 public class Tools {
@@ -29,3 +32,4 @@ public class Tools {
         return h ^ h >> 16;
     }
 }
+

@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.GuiScreen
+ *  net.minecraft.util.text.ITextComponent
+ *  net.minecraft.util.text.Style
+ *  net.minecraft.util.text.TextComponentString
+ *  net.minecraft.util.text.event.ClickEvent
+ *  net.minecraft.util.text.event.HoverEvent
+ *  net.minecraft.util.text.event.HoverEvent$Action
+ */
 package me.earth.earthhack.impl.commands.abstracts;
 
 import java.util.Iterator;
@@ -18,6 +30,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
 
 public abstract class AbstractPlayerManagerCommand
@@ -131,9 +144,9 @@ implements Globals {
         Iterator<String> players = this.manager.getPlayers().iterator();
         while (players.hasNext()) {
             String name = players.next();
-            component.appendSibling(new TextComponentString(this.color + name + "\u00a7f" + (players.hasNext() ? ", " : "")).setStyle(new Style().setHoverEvent(ChatComponentUtil.setOffset(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("UUID: " + this.manager.getPlayersWithUUID().get(name))))).setClickEvent(new RunnableClickEvent(() -> {
+            component.appendSibling(new TextComponentString(this.color + name + "\u00a7f" + (players.hasNext() ? ", " : "")).setStyle(new Style().setHoverEvent(ChatComponentUtil.setOffset(new HoverEvent(HoverEvent.Action.SHOW_TEXT, (ITextComponent)new TextComponentString("UUID: " + this.manager.getPlayersWithUUID().get(name))))).setClickEvent((ClickEvent)new RunnableClickEvent(() -> {
                 GuiScreen before = AbstractPlayerManagerCommand.mc.currentScreen;
-                mc.displayGuiScreen(new YesNoNonPausing((result, id) -> {
+                mc.displayGuiScreen((GuiScreen)new YesNoNonPausing((result, id) -> {
                     mc.displayGuiScreen(before);
                     if (!result) {
                         return;
@@ -147,3 +160,4 @@ implements Globals {
         return component;
     }
 }
+

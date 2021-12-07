@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.render.voidesp;
 
 import java.awt.Color;
@@ -65,7 +72,7 @@ extends BlockESPModule {
                         if (this.liveHoles.getValue().booleanValue() && ++holeAmount >= this.holes.getValue()) continue block0;
                     }
                 }
-                voidHolesIn.sort(Comparator.comparingDouble(pos -> VoidESP.mc.player.getDistanceSq((BlockPos)pos)));
+                voidHolesIn.sort(Comparator.comparingDouble(pos -> VoidESP.mc.player.getDistanceSq(pos)));
                 mc.addScheduledTask(() -> {
                     this.voidHoles = voidHolesIn;
                     return this.voidHoles;
@@ -75,3 +82,4 @@ extends BlockESPModule {
         }
     }
 }
+

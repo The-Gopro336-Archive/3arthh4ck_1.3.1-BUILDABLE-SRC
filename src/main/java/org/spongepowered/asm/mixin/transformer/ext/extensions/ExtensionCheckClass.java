@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.transformer.ext.extensions;
 
 import org.spongepowered.asm.lib.util.CheckClassAdapter;
@@ -49,3 +52,4 @@ implements IExtension {
         }
     }
 }
+

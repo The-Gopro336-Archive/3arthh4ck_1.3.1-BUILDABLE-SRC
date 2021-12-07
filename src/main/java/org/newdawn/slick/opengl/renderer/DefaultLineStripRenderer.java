@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.opengl.renderer;
 
 import org.newdawn.slick.opengl.renderer.LineStripRenderer;
@@ -51,3 +54,4 @@ implements LineStripRenderer {
         return true;
     }
 }
+

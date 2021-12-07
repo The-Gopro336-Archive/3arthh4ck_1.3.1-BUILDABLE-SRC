@@ -1,3 +1,28 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.init.Items
+ *  net.minecraft.item.Item
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketAnimation
+ *  net.minecraft.network.play.client.CPacketPlayer$Rotation
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock
+ *  net.minecraft.network.play.client.CPacketUseEntity
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.RayTraceResult
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.world.IBlockAccess
+ */
 package me.earth.earthhack.impl.modules.combat.legswitch;
 
 import java.util.List;
@@ -52,6 +77,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketAnimation;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
@@ -140,7 +166,7 @@ extends RemovingItemAddingModule {
     }
 
     protected void startCalculation() {
-        this.startCalculation(LegSwitch.mc.world);
+        this.startCalculation((IBlockAccess)LegSwitch.mc.world);
     }
 
     protected void startCalculation(IBlockAccess access) {
@@ -148,7 +174,7 @@ extends RemovingItemAddingModule {
             this.active = false;
             return;
         }
-        if (this.constellation == null || !this.constellation.isValid(this, LegSwitch.mc.player, access)) {
+        if (this.constellation == null || !this.constellation.isValid(this, (EntityPlayer)LegSwitch.mc.player, access)) {
             this.constellation = ConstellationFactory.create(this, LegSwitch.mc.world.playerEntities);
             if (this.constellation != null && !this.obsidian.getValue().booleanValue() && (this.constellation.firstNeedsObby || this.constellation.secondNeedsObby)) {
                 this.constellation = null;
@@ -200,7 +226,7 @@ extends RemovingItemAddingModule {
             if (Managers.SWITCH.getLastSwitch() < (long)this.coolDown.getValue().intValue()) {
                 return;
             }
-            if (crystal.getPosition().down().equals(this.constellation.firstPos)) {
+            if (crystal.getPosition().down().equals((Object)this.constellation.firstPos)) {
                 obbyPos = this.constellation.secondNeedsObby ? this.constellation.secondPos : null;
                 this.targetPos = this.constellation.secondPos;
                 firstNeedsObby = false;
@@ -214,7 +240,7 @@ extends RemovingItemAddingModule {
             if (obbySlot == -1) {
                 return;
             }
-            path = new BasePath(RotationUtil.getRotationPlayer(), obbyPos, this.helpingBlocks.getValue());
+            path = new BasePath((Entity)RotationUtil.getRotationPlayer(), obbyPos, this.helpingBlocks.getValue());
             boolean newVersion = this.newVer.getValue();
             BlockPos[] blacklist = new BlockPos[newVersion ? 4 : 6];
             blacklist[0] = this.constellation.playerPos;
@@ -235,7 +261,7 @@ extends RemovingItemAddingModule {
         this.rotations = path != null ? path.getPath()[0].getRotations() : RotationUtil.getRotationsToTopMiddle(this.targetPos.up());
         if (!this.rotate.getValue().noRotate(ACRotate.Place)) {
             float[] theRotations = this.rotations;
-            IBlockAccess access = LegSwitch.mc.world;
+            Object access = LegSwitch.mc.world;
             if (path != null) {
                 Ray last = path.getPath()[path.getPath().length - 1];
                 theRotations = last.getRotations();
@@ -244,7 +270,7 @@ extends RemovingItemAddingModule {
                 access = helper;
             }
             BlockPos thePos = this.targetPos.up();
-            result = RotationUtil.rayTraceWithYP(thePos, access, theRotations[0], theRotations[1], (b, p) -> p.equals(thePos));
+            result = RotationUtil.rayTraceWithYP(thePos, (IBlockAccess)access, theRotations[0], theRotations[1], (b, p) -> p.equals((Object)thePos));
         } else {
             result = new RayTraceResult(new Vec3d(0.5, 1.0, 0.5), EnumFacing.UP);
             this.rotations = null;
@@ -253,13 +279,13 @@ extends RemovingItemAddingModule {
         if (this.rotationPacket.getValue().booleanValue() && this.rotations != null && this.bRotations != null && finalCrystal != null) {
             int finalWeakSlot = weakSlot;
             Runnable runnable = () -> {
-                LegSwitch.mc.player.connection.sendPacket(new CPacketPlayer.Rotation(this.bRotations[0], this.bRotations[1], LegSwitch.mc.player.onGround));
+                LegSwitch.mc.player.connection.sendPacket((Packet)new CPacketPlayer.Rotation(this.bRotations[0], this.bRotations[1], LegSwitch.mc.player.onGround));
                 int lastSlot = LegSwitch.mc.player.inventory.currentItem;
                 if (finalWeakSlot != -1) {
                     InventoryUtil.switchTo(finalWeakSlot);
                 }
-                LegSwitch.mc.player.connection.sendPacket(new CPacketUseEntity(finalCrystal));
-                LegSwitch.mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.MAIN_HAND));
+                LegSwitch.mc.player.connection.sendPacket((Packet)new CPacketUseEntity(finalCrystal));
+                LegSwitch.mc.player.connection.sendPacket((Packet)new CPacketAnimation(EnumHand.MAIN_HAND));
                 this.bRotations = null;
                 InventoryUtil.switchTo(lastSlot);
             };
@@ -292,8 +318,8 @@ extends RemovingItemAddingModule {
             }
             EnumHand enumHand = hand = LegSwitch.mc.player.getHeldItemMainhand().getItem() == Items.END_CRYSTAL || slot != -2 ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
             if (this.bRotations != null && finalCrystal != null) {
-                LegSwitch.mc.player.connection.sendPacket(new CPacketUseEntity(finalCrystal));
-                LegSwitch.mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.MAIN_HAND));
+                LegSwitch.mc.player.connection.sendPacket((Packet)new CPacketUseEntity(finalCrystal));
+                LegSwitch.mc.player.connection.sendPacket((Packet)new CPacketAnimation(EnumHand.MAIN_HAND));
             }
             if (finalPath != null) {
                 InventoryUtil.switchTo(finalObbySlot);
@@ -302,11 +328,11 @@ extends RemovingItemAddingModule {
                     if (i != 0 && this.obbyRotate.getValue() == Rotate.Packet) {
                         Managers.ROTATION.setBlocking(true);
                         float[] r = ray.getRotations();
-                        LegSwitch.mc.player.connection.sendPacket(PacketUtil.rotation(r[0], r[1], LegSwitch.mc.player.onGround));
+                        LegSwitch.mc.player.connection.sendPacket((Packet)PacketUtil.rotation(r[0], r[1], LegSwitch.mc.player.onGround));
                         Managers.ROTATION.setBlocking(false);
                     }
                     float[] f = RayTraceUtil.hitVecToPlaceVec(ray.getPos(), ray.getResult().hitVec);
-                    LegSwitch.mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(ray.getPos(), ray.getFacing(), hand, f[0], f[1], f[2]));
+                    LegSwitch.mc.player.connection.sendPacket((Packet)new CPacketPlayerTryUseItemOnBlock(ray.getPos(), ray.getFacing(), hand, f[0], f[1], f[2]));
                     if (this.setBlockState.getValue().booleanValue()) {
                         mc.addScheduledTask(() -> {
                             if (LegSwitch.mc.world != null) {
@@ -341,8 +367,8 @@ extends RemovingItemAddingModule {
             }
             CPacketPlayerTryUseItemOnBlock place = new CPacketPlayerTryUseItemOnBlock(this.targetPos, result.sideHit, hand, (float)result.hitVec.x, (float)result.hitVec.y, (float)result.hitVec.z);
             CPacketAnimation animation = new CPacketAnimation(hand);
-            LegSwitch.mc.player.connection.sendPacket(place);
-            LegSwitch.mc.player.connection.sendPacket(animation);
+            LegSwitch.mc.player.connection.sendPacket((Packet)place);
+            LegSwitch.mc.player.connection.sendPacket((Packet)animation);
             if (slot != -1 && this.autoSwitch.getValue() != LegAutoSwitch.Keep) {
                 InventoryUtil.switchTo(lastSlot);
             }
@@ -368,7 +394,7 @@ extends RemovingItemAddingModule {
     }
 
     protected boolean checkPos(BlockPos pos) {
-        if (BlockUtil.getDistanceSq(pos) <= (double)MathUtil.square(this.placeRange.getValue().floatValue()) && LegSwitch.mc.player.getDistanceSq(pos) > (double)MathUtil.square(this.placeTrace.getValue().floatValue()) && !RayTraceUtil.raytracePlaceCheck(LegSwitch.mc.player, pos)) {
+        if (BlockUtil.getDistanceSq(pos) <= (double)MathUtil.square(this.placeRange.getValue().floatValue()) && LegSwitch.mc.player.getDistanceSq(pos) > (double)MathUtil.square(this.placeTrace.getValue().floatValue()) && !RayTraceUtil.raytracePlaceCheck((Entity)LegSwitch.mc.player, pos)) {
             return false;
         }
         BlockPos up = pos.up();
@@ -382,3 +408,4 @@ extends RemovingItemAddingModule {
         return RayTraceUtil.canBeSeen(new Vec3d((double)pos.getX() + 0.5, (double)pos.getY() + 2.7, (double)pos.getZ() + 0.5), (Entity)LegSwitch.mc.player);
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.combat.bowspam;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -22,3 +25,4 @@ extends DefaultData<BowSpam> {
         return "Spam arrows quickly.";
     }
 }
+

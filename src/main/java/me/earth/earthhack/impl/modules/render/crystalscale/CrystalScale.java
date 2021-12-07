@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.render.crystalscale;
 
 import java.util.Map;
@@ -24,3 +27,4 @@ extends Module {
         this.listeners.add(new ListenerSpawnObject(this));
     }
 }
+

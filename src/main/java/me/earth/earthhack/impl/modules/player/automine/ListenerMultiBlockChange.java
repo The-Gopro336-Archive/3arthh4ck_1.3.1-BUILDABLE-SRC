@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketMultiBlockChange
+ *  net.minecraft.network.play.server.SPacketMultiBlockChange$BlockUpdateData
+ */
 package me.earth.earthhack.impl.modules.player.automine;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -26,3 +33,4 @@ extends ModuleListener<AutoMine, PacketEvent.Receive<SPacketMultiBlockChange>> {
         });
     }
 }
+

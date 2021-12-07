@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.ui;
 
 import java.awt.Component;
@@ -116,3 +119,4 @@ extends BasicToolBarUI {
         super.setOrientation(orientation);
     }
 }
+

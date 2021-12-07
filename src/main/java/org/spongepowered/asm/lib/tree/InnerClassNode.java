@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.lib.tree;
 
 import org.spongepowered.asm.lib.ClassVisitor;
@@ -19,3 +22,4 @@ public class InnerClassNode {
         cv.visitInnerClass(this.name, this.outerName, this.innerName, this.access);
     }
 }
+

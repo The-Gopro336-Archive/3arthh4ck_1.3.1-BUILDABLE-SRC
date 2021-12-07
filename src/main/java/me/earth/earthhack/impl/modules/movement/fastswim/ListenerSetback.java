@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketPlayerPosLook
+ */
 package me.earth.earthhack.impl.modules.movement.fastswim;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -17,3 +23,4 @@ extends ModuleListener<FastSwim, PacketEvent.Receive<SPacketPlayerPosLook>> {
         ((FastSwim)this.module).lavaSpeed = ((FastSwim)this.module).hLava.getValue();
     }
 }
+

@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.network.play.server.SPacketEntity
+ *  net.minecraft.network.play.server.SPacketEntity$S15PacketEntityRelMove
+ *  net.minecraft.network.play.server.SPacketEntity$S16PacketEntityLook
+ *  net.minecraft.network.play.server.SPacketEntity$S17PacketEntityLookMove
+ */
 package me.earth.earthhack.impl.modules.misc.packets;
 
 import me.earth.earthhack.impl.core.mixins.network.server.ISPacketEntity;
@@ -42,7 +52,7 @@ extends SPacketEntityListener {
             return;
         }
         SPacketEntity packet = (SPacketEntity)event.getPacket();
-        Entity e = Managers.ENTITIES.getEntity(((ISPacketEntity)((Object)packet)).getEntityId());
+        Entity e = Managers.ENTITIES.getEntity(((ISPacketEntity)packet).getEntityId());
         if (e == null) {
             return;
         }
@@ -61,3 +71,4 @@ extends SPacketEntityListener {
         }
     }
 }
+

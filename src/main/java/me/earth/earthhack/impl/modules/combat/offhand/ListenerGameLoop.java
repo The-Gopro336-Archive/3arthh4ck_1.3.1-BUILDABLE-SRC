@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.combat.offhand;
 
 import me.earth.earthhack.impl.event.events.misc.GameLoopEvent;
@@ -15,3 +18,4 @@ extends ModuleListener<Offhand, GameLoopEvent> {
         ((Offhand)this.module).doOffhand();
     }
 }
+

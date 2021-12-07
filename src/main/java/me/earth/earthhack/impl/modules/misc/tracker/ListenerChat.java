@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketChat
+ */
 package me.earth.earthhack.impl.modules.misc.tracker;
 
 import me.earth.earthhack.api.module.Module;
@@ -26,3 +32,4 @@ extends ModuleListener<Tracker, PacketEvent.Receive<SPacketChat>> {
         }
     }
 }
+

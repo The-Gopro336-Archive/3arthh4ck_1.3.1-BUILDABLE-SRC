@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.item.ItemFood
+ *  net.minecraft.network.play.client.CPacketPlayerDigging
+ *  net.minecraft.network.play.client.CPacketPlayerDigging$Action
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.player.fasteat;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -17,8 +27,9 @@ extends ModuleListener<FastEat, PacketEvent.Send<CPacketPlayerDigging>> {
     @Override
     public void invoke(PacketEvent.Send<CPacketPlayerDigging> event) {
         CPacketPlayerDigging packet;
-        if (((FastEat)this.module).cancel.getValue().booleanValue() && ListenerDigging.mc.player.getActiveItemStack().getItem() instanceof ItemFood && (packet = (CPacketPlayerDigging)event.getPacket()).getAction() == CPacketPlayerDigging.Action.RELEASE_USE_ITEM && packet.getFacing() == EnumFacing.DOWN && packet.getPosition().equals(BlockPos.ORIGIN)) {
+        if (((FastEat)this.module).cancel.getValue().booleanValue() && ListenerDigging.mc.player.getActiveItemStack().getItem() instanceof ItemFood && (packet = (CPacketPlayerDigging)event.getPacket()).getAction() == CPacketPlayerDigging.Action.RELEASE_USE_ITEM && packet.getFacing() == EnumFacing.DOWN && packet.getPosition().equals((Object)BlockPos.ORIGIN)) {
             event.setCancelled(true);
         }
     }
 }
+

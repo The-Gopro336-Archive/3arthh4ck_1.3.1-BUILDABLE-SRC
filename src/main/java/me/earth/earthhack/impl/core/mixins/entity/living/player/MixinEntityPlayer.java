@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.SharedMonsterAttributes
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.entity.player.InventoryPlayer
+ *  net.minecraft.inventory.Container
+ *  net.minecraft.util.DamageSource
+ */
 package me.earth.earthhack.impl.core.mixins.entity.living.player;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -30,26 +40,26 @@ extends MixinEntityLivingBase {
     private static final ModuleCache<TpsSync> TPS_SYNC = Caches.getModule(TpsSync.class);
     private static final SettingCache<Boolean, BooleanSetting, TpsSync> ATTACK = Caches.getSetting(TpsSync.class, BooleanSetting.class, "Attack", false);
     @Shadow
-    public InventoryPlayer field_71071_by;
+    public InventoryPlayer inventory;
     @Shadow
-    public Container field_71069_bz;
+    public Container inventoryContainer;
 
     @Shadow
-    public void func_70071_h_() {
+    public void onUpdate() {
         throw new IllegalStateException("onUpdate was not shadowed!");
     }
 
     @Shadow
-    public boolean func_70097_a(DamageSource source, float amount) {
+    public boolean attackEntityFrom(DamageSource source, float amount) {
         throw new IllegalStateException("attackEntityFrom wasn't shadowed!");
     }
 
     @Inject(method={"onUpdate"}, at={@At(value="RETURN")})
     private void onUpdateHook(CallbackInfo ci) {
         if (this.shouldCache()) {
-            this.armorValue = this.func_70658_aO();
-            this.armorToughness = (float)this.func_110148_a(SharedMonsterAttributes.ARMOR_TOUGHNESS).getAttributeValue();
-            this.explosionModifier = EnchantmentUtil.getEnchantmentModifierDamage(this.func_184193_aE(), DamageSource.FIREWORKS);
+            this.armorValue = this.getTotalArmorValue();
+            this.armorToughness = (float)this.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).getAttributeValue();
+            this.explosionModifier = EnchantmentUtil.getEnchantmentModifierDamage(this.getArmorInventoryList(), DamageSource.FIREWORKS);
         }
     }
 
@@ -67,8 +77,8 @@ extends MixinEntityLivingBase {
         SprintEvent event = new SprintEvent(sprinting);
         Bus.EVENT_BUS.post(event);
         if (event.isCancelled()) {
-            this.field_70159_w /= 0.6;
-            this.field_70179_y /= 0.6;
+            this.motionX /= 0.6;
+            this.motionZ /= 0.6;
         } else {
             entity.setSprinting(event.isSprinting());
         }
@@ -77,7 +87,8 @@ extends MixinEntityLivingBase {
     @Inject(method={"getCooldownPeriod"}, at={@At(value="HEAD")}, cancellable=true)
     private void getCooldownPeriodHook(CallbackInfoReturnable<Float> info) {
         if (TPS_SYNC.isEnabled() && ATTACK.getValue().booleanValue()) {
-            info.setReturnValue(Float.valueOf((float)(1.0 / this.func_110148_a(SharedMonsterAttributes.ATTACK_SPEED).getAttributeValue() * (double)Managers.TPS.getTps())));
+            info.setReturnValue(Float.valueOf((float)(1.0 / this.getEntityAttribute(SharedMonsterAttributes.ATTACK_SPEED).getAttributeValue() * (double)Managers.TPS.getTps())));
         }
     }
 }
+

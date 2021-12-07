@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.icons;
 
 import com.formdev.flatlaf.icons.FlatWindowAbstractIcon;
@@ -15,3 +18,4 @@ extends FlatWindowAbstractIcon {
         g.fill(FlatUIUtils.createRectangle(ix, iy, iwh, iwh, thickness));
     }
 }
+

@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.math.AxisAlignedBB
+ */
 package me.earth.earthhack.impl.util.helpers.render;
 
 import java.awt.Color;
@@ -51,3 +57,4 @@ public class BlockESPBuilder {
         return bb -> RenderUtil.renderBox(this.interpolation.apply(bb), this.color.get(), this.outline.get(), this.width.get().floatValue());
     }
 }
+

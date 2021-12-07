@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.util.pathfinding.navmesh;
 
 import org.newdawn.slick.util.pathfinding.navmesh.Space;
@@ -31,3 +34,4 @@ public class Link {
         return this.target;
     }
 }
+

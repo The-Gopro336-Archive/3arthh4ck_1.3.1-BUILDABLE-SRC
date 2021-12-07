@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf;
 
 public interface FlatSystemProperties {
@@ -27,3 +30,4 @@ public interface FlatSystemProperties {
         return defaultValue;
     }
 }
+

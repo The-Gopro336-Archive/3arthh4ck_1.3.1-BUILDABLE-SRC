@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal;
 
 import java.awt.Color;
@@ -170,3 +173,4 @@ extends BuildinPreset {
         this.add(module.priority, Integer.valueOf(1500));
     }
 }
+

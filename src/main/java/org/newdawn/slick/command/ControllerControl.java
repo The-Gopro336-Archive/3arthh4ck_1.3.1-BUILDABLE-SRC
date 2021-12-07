@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.command;
 
 import org.newdawn.slick.command.Control;
@@ -34,3 +37,4 @@ implements Control {
         return this.event + this.button + this.controllerNumber;
     }
 }
+

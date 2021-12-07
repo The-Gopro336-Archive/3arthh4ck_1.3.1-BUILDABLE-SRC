@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.gen;
 
 import org.spongepowered.asm.lib.Type;
@@ -37,3 +40,4 @@ extends AccessorInfo {
         return this.findTarget(this.classNode.methods);
     }
 }
+

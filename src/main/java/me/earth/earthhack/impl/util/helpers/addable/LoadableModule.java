@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.helpers.addable;
 
 import me.earth.earthhack.api.command.PossibleInputs;
@@ -54,3 +57,4 @@ extends AddableModule {
         return super.getInput(args, inputs);
     }
 }
+

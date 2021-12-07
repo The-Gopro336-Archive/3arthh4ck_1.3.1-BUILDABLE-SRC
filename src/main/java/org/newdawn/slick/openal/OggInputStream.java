@@ -1,3 +1,17 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.jcraft.jogg.Packet
+ *  com.jcraft.jogg.Page
+ *  com.jcraft.jogg.StreamState
+ *  com.jcraft.jogg.SyncState
+ *  com.jcraft.jorbis.Block
+ *  com.jcraft.jorbis.Comment
+ *  com.jcraft.jorbis.DspState
+ *  com.jcraft.jorbis.Info
+ *  org.lwjgl.BufferUtils
+ */
 package org.newdawn.slick.openal;
 
 import com.jcraft.jogg.Packet;
@@ -37,7 +51,7 @@ implements AudioInputStream {
     boolean endOfBitStream = true;
     boolean inited = false;
     private int readIndex;
-    private ByteBuffer pcmBuffer = BufferUtils.createByteBuffer(2048000);
+    private ByteBuffer pcmBuffer = BufferUtils.createByteBuffer((int)2048000);
     private int total;
 
     public OggInputStream(InputStream input) throws IOException {
@@ -184,7 +198,7 @@ implements AudioInputStream {
                         if (this.vorbisBlock.synthesis(this.packet) == 0) {
                             this.dspState.synthesis_blockin(this.vorbisBlock);
                         }
-                        while ((samples = this.dspState.synthesis_pcmout(_pcm, _index)) > 0) {
+                        while ((samples = this.dspState.synthesis_pcmout((float[][][])_pcm, _index)) > 0) {
                             float[][] pcm = _pcm[0];
                             int bout = samples < this.convsize ? samples : this.convsize;
                             for (int i = 0; i < this.oggInfo.channels; ++i) {
@@ -192,11 +206,11 @@ implements AudioInputStream {
                                 int mono = _index[i];
                                 for (int j = 0; j < bout; ++j) {
                                     int val = (int)((double)pcm[i][mono + j] * 32767.0);
-                                    if (val > Short.MAX_VALUE) {
-                                        val = Short.MAX_VALUE;
+                                    if (val > 32767) {
+                                        val = 32767;
                                     }
-                                    if (val < Short.MIN_VALUE) {
-                                        val = Short.MIN_VALUE;
+                                    if (val < -32768) {
+                                        val = -32768;
                                     }
                                     if (val < 0) {
                                         val |= 0x8000;
@@ -311,3 +325,4 @@ implements AudioInputStream {
     public void close() throws IOException {
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.movement.blocklag;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -20,3 +23,4 @@ extends DefaultData<BlockLag> {
         return "The OG Burrow.";
     }
 }
+

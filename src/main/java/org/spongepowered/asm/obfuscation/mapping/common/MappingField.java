@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Objects
+ *  com.google.common.base.Strings
+ */
 package org.spongepowered.asm.obfuscation.mapping.common;
 
 import com.google.common.base.Objects;
@@ -71,7 +78,7 @@ implements IMapping<MappingField> {
     }
 
     public int hashCode() {
-        return Objects.hashCode(this.toString());
+        return Objects.hashCode((Object[])new Object[]{this.toString()});
     }
 
     public boolean equals(Object obj) {
@@ -79,7 +86,7 @@ implements IMapping<MappingField> {
             return true;
         }
         if (obj instanceof MappingField) {
-            return Objects.equal(this.toString(), ((MappingField)obj).toString());
+            return Objects.equal((Object)this.toString(), (Object)((MappingField)obj).toString());
         }
         return false;
     }
@@ -90,6 +97,7 @@ implements IMapping<MappingField> {
     }
 
     public String toString() {
-        return String.format("L%s;%s:%s", this.getOwner(), this.getName(), Strings.nullToEmpty(this.getDesc()));
+        return String.format("L%s;%s:%s", this.getOwner(), this.getName(), Strings.nullToEmpty((String)this.getDesc()));
     }
 }
+

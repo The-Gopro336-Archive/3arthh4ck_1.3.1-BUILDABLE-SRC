@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.RayTraceResult
+ *  net.minecraft.util.math.RayTraceResult$Type
+ *  org.lwjgl.opengl.GL11
+ */
 package me.earth.earthhack.impl.modules.misc.nuker;
 
 import java.util.Set;
@@ -27,7 +37,7 @@ extends ModuleListener<Nuker, Render3DEvent> {
             Set<BlockPos> positions = ((Nuker)this.module).getSelection(result.getBlockPos());
             if (!positions.isEmpty()) {
                 GL11.glPushMatrix();
-                GL11.glPushAttrib(1048575);
+                GL11.glPushAttrib((int)1048575);
             }
             for (BlockPos pos : positions) {
                 AxisAlignedBB bb = Interpolation.interpolatePos(pos, 1.0f);
@@ -36,10 +46,11 @@ extends ModuleListener<Nuker, Render3DEvent> {
                 RenderUtil.endRender();
             }
             if (!positions.isEmpty()) {
-                GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+                GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
                 GL11.glPopAttrib();
                 GL11.glPopMatrix();
             }
         }
     }
 }
+

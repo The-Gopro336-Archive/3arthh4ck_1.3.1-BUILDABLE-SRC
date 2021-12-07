@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayer
+ */
 package me.earth.earthhack.impl.util.minecraft.entity;
 
 import java.util.List;
@@ -9,3 +15,4 @@ public interface IEntityProvider {
 
     public List<EntityPlayer> getPlayers();
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.util.xml;
 
 import org.newdawn.slick.util.xml.SlickXMLException;
@@ -143,3 +146,4 @@ public class XMLElement {
         return value;
     }
 }
+

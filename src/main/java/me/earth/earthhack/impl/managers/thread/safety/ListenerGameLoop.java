@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.managers.thread.safety;
 
 import me.earth.earthhack.impl.event.events.misc.GameLoopEvent;
@@ -22,3 +25,4 @@ extends ModuleListener<SafetyManager, GameLoopEvent> {
         }
     }
 }
+

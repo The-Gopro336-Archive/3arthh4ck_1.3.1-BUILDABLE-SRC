@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.core.mixins.entity;
 
 import me.earth.earthhack.impl.core.mixins.entity.MixinEntity;
@@ -13,11 +20,12 @@ public abstract class MixinEntityEnderCrystal
 extends MixinEntity {
     @Inject(method={"<init>(Lnet/minecraft/world/World;DDD)V"}, at={@At(value="RETURN")})
     private void initHook(World worldIn, double x, double y, double z, CallbackInfo ci) {
-        this.field_70169_q = x;
-        this.field_70167_r = y;
-        this.field_70166_s = z;
-        this.field_70142_S = x;
-        this.field_70137_T = y;
-        this.field_70136_U = z;
+        this.prevPosX = x;
+        this.prevPosY = y;
+        this.prevPosZ = z;
+        this.lastTickPosX = x;
+        this.lastTickPosY = y;
+        this.lastTickPosZ = z;
     }
 }
+

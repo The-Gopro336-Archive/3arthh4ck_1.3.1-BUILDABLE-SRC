@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf;
 
 import com.formdev.flatlaf.FlatLightLaf;
@@ -29,3 +32,4 @@ extends FlatLightLaf {
         return "FlatLaf IntelliJ Look and Feel";
     }
 }
+

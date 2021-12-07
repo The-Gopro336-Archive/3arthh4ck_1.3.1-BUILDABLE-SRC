@@ -1,12 +1,25 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.network.play.server.SPacketExplosion
+ *  net.minecraft.util.DamageSource
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.world.Explosion
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.modules.player.fakeplayer;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import me.earth.earthhack.impl.modules.player.fakeplayer.FakePlayer;
+import net.minecraft.entity.Entity;
 import net.minecraft.network.play.server.SPacketExplosion;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
+import net.minecraft.world.World;
 
 final class ListenerExplosion
 extends ModuleListener<FakePlayer, PacketEvent.Receive<SPacketExplosion>> {
@@ -36,9 +49,10 @@ extends ModuleListener<FakePlayer, PacketEvent.Receive<SPacketExplosion>> {
         double density = ListenerExplosion.mc.world.getBlockDensity(new Vec3d(x, y, z), ((FakePlayer)this.module).fakePlayer.getEntityBoundingBox());
         double densityDistance = distance = (1.0 - distance) * density;
         float damage = (float)((densityDistance * densityDistance + distance) / 2.0 * 7.0 * (double)size * 2.0 + 1.0);
-        DamageSource damageSource = DamageSource.causeExplosionDamage((Explosion)new Explosion(ListenerExplosion.mc.world, ListenerExplosion.mc.player, x, y, z, size, false, true));
+        DamageSource damageSource = DamageSource.causeExplosionDamage((Explosion)new Explosion((World)ListenerExplosion.mc.world, (Entity)ListenerExplosion.mc.player, x, y, z, size, false, true));
         float limbSwing = ((FakePlayer)this.module).fakePlayer.limbSwingAmount;
         ((FakePlayer)this.module).fakePlayer.attackEntityFrom(damageSource, damage);
         ((FakePlayer)this.module).fakePlayer.limbSwingAmount = limbSwing;
     }
 }
+

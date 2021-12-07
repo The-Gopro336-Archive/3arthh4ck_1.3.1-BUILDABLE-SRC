@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.tools.obfuscation;
 
 import javax.lang.model.element.Element;
@@ -135,3 +138,4 @@ extends AnnotatedMixinElementHandler {
         public abstract void addMapping(ObfuscationType var1, IMapping<?> var2);
     }
 }
+

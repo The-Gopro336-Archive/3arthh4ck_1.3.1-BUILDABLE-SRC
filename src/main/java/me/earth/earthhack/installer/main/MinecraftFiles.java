@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.installer.main;
 
 import java.io.File;
@@ -41,3 +44,4 @@ public class MinecraftFiles {
         this.versions = args[2];
     }
 }
+

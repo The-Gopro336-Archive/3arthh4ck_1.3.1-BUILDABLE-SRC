@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.gui.chat.util;
 
 import java.awt.Color;
@@ -109,3 +112,4 @@ public enum ColorEnum implements IColorIncrementor
         return this.textColor;
     }
 }
+

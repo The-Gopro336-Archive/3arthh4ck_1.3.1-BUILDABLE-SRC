@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.audio.SoundManager
+ */
 package me.earth.earthhack.impl.commands;
 
 import me.earth.earthhack.api.command.Command;
@@ -18,7 +24,7 @@ implements Globals {
     @Override
     public void execute(String[] args) {
         try {
-            SoundManager soundManager = ((ISoundHandler)((Object)mc.getSoundHandler())).getManager();
+            SoundManager soundManager = ((ISoundHandler)mc.getSoundHandler()).getManager();
             soundManager.reloadSoundSystem();
             ChatUtil.sendMessage("\u00a7aReloaded SoundSystem.");
         }
@@ -28,3 +34,4 @@ implements Globals {
         }
     }
 }
+

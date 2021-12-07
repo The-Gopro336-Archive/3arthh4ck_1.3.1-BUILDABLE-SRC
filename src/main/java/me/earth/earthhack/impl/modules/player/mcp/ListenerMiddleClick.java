@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Items
+ *  net.minecraft.item.Item
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.modules.player.mcp;
 
 import me.earth.earthhack.impl.event.events.keyboard.ClickMiddleEvent;
@@ -6,8 +15,10 @@ import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.modules.player.mcp.MiddleClickPearl;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
 import me.earth.earthhack.impl.util.thread.Locks;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.world.World;
 
 final class ListenerMiddleClick
 extends ModuleListener<MiddleClickPearl, ClickMiddleEvent> {
@@ -38,7 +49,7 @@ extends ModuleListener<MiddleClickPearl, ClickMiddleEvent> {
                 Locks.acquire(Locks.PLACE_SWITCH_LOCK, () -> {
                     int lastSlot = ListenerMiddleClick.mc.player.inventory.currentItem;
                     InventoryUtil.switchTo(slot);
-                    ListenerMiddleClick.mc.playerController.processRightClick(ListenerMiddleClick.mc.player, ListenerMiddleClick.mc.world, InventoryUtil.getHand(slot));
+                    ListenerMiddleClick.mc.playerController.processRightClick((EntityPlayer)ListenerMiddleClick.mc.player, (World)ListenerMiddleClick.mc.world, InventoryUtil.getHand(slot));
                     InventoryUtil.switchTo(lastSlot);
                 });
             };
@@ -49,3 +60,4 @@ extends ModuleListener<MiddleClickPearl, ClickMiddleEvent> {
         }
     }
 }
+

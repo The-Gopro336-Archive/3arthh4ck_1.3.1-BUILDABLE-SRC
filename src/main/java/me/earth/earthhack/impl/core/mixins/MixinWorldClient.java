@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.multiplayer.WorldClient
+ *  net.minecraft.entity.Entity
+ */
 package me.earth.earthhack.impl.core.mixins;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -39,3 +46,4 @@ public abstract class MixinWorldClient {
         Bus.EVENT_BUS.post(new EntityChunkEvent(Stage.POST, entity));
     }
 }
+

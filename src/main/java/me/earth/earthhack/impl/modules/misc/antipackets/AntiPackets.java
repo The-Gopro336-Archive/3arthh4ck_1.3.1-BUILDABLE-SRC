@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.Packet
+ */
 package me.earth.earthhack.impl.modules.misc.antipackets;
 
 import java.util.Collection;
@@ -111,3 +117,4 @@ extends Module {
         return side ? this.server : this.client;
     }
 }
+

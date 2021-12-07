@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.GuiYesNo
+ *  net.minecraft.client.gui.GuiYesNoCallback
+ */
 package me.earth.earthhack.impl.commands.gui;
 
 import net.minecraft.client.gui.GuiYesNo;
@@ -17,3 +24,4 @@ extends GuiYesNo {
         return false;
     }
 }
+

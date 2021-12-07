@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.math.AxisAlignedBB
+ */
 package me.earth.earthhack.impl.util.math;
 
 import net.minecraft.util.math.AxisAlignedBB;
@@ -25,3 +31,4 @@ extends AxisAlignedBB {
         this.maxZ = maxZ;
     }
 }
+

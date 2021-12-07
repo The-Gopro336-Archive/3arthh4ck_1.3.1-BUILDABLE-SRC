@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal.util;
 
 import net.minecraft.entity.Entity;
@@ -70,3 +76,4 @@ implements Comparable<CrystalData> {
         return false;
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.ui;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
@@ -57,9 +60,9 @@ extends BasicToolBarSeparatorUI {
     public Dimension getMaximumSize(JComponent c) {
         Dimension size = this.getPreferredSize(c);
         if (this.isVertical(c)) {
-            return new Dimension(size.width, Short.MAX_VALUE);
+            return new Dimension(size.width, 32767);
         }
-        return new Dimension(Short.MAX_VALUE, size.height);
+        return new Dimension(32767, size.height);
     }
 
     @Override
@@ -82,3 +85,4 @@ extends BasicToolBarSeparatorUI {
         return ((JToolBar.Separator)c).getOrientation() == 1;
     }
 }
+

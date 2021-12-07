@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.render.sounds;
 
 import java.awt.Color;
@@ -45,3 +48,4 @@ extends ModuleListener<Sounds, Render3DEvent> {
         }
     }
 }
+

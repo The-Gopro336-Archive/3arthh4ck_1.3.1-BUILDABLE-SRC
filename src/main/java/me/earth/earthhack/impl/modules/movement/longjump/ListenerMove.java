@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ */
 package me.earth.earthhack.impl.modules.movement.longjump;
 
 import me.earth.earthhack.impl.event.events.movement.MoveEvent;
@@ -6,6 +12,7 @@ import me.earth.earthhack.impl.modules.movement.longjump.LongJump;
 import me.earth.earthhack.impl.modules.movement.longjump.mode.JumpMode;
 import me.earth.earthhack.impl.util.math.MathUtil;
 import me.earth.earthhack.impl.util.minecraft.MovementUtil;
+import net.minecraft.entity.Entity;
 
 final class ListenerMove
 extends ModuleListener<LongJump, MoveEvent> {
@@ -36,7 +43,7 @@ extends ModuleListener<LongJump, MoveEvent> {
                 double difference = 0.66 * (((LongJump)this.module).distance - MovementUtil.getSpeed());
                 ((LongJump)this.module).speed = ((LongJump)this.module).distance - difference;
             } else {
-                if (ListenerMove.mc.world.getCollisionBoxes(ListenerMove.mc.player, ListenerMove.mc.player.getEntityBoundingBox().offset(0.0, ListenerMove.mc.player.motionY, 0.0)).size() > 0 || ListenerMove.mc.player.collidedVertically) {
+                if (ListenerMove.mc.world.getCollisionBoxes((Entity)ListenerMove.mc.player, ListenerMove.mc.player.getEntityBoundingBox().offset(0.0, ListenerMove.mc.player.motionY, 0.0)).size() > 0 || ListenerMove.mc.player.collidedVertically) {
                     ((LongJump)this.module).stage = 1;
                 }
                 ((LongJump)this.module).speed = ((LongJump)this.module).distance - ((LongJump)this.module).distance / 159.0;
@@ -70,3 +77,4 @@ extends ModuleListener<LongJump, MoveEvent> {
         }
     }
 }
+

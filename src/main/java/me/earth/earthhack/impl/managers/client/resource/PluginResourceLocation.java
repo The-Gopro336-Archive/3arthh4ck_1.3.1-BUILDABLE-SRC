@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.resources.IResource
+ *  net.minecraft.client.resources.data.MetadataSerializer
+ *  net.minecraft.util.ResourceLocation
+ */
 package me.earth.earthhack.impl.managers.client.resource;
 
 import java.io.InputStream;
@@ -33,3 +41,4 @@ extends ResourceLocation {
         return new PluginResource(resourcePackNameIn, srResourceLocationIn, resourceInputStreamIn, mcmetaInputStreamIn, srMetadataSerializerIn);
     }
 }
+

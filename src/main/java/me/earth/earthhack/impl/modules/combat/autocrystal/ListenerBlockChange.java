@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.network.play.server.SPacketBlockChange
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -26,3 +34,4 @@ extends ModuleListener<AutoCrystal, PacketEvent.Receive<SPacketBlockChange>> {
         }
     }
 }
+

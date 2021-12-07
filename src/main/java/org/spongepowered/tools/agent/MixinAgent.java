@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package org.spongepowered.tools.agent;
 
 import java.lang.instrument.ClassDefinition;
@@ -20,7 +27,7 @@ public class MixinAgent
 implements IHotSwap {
     public static final byte[] ERROR_BYTECODE = new byte[]{1};
     static final MixinAgentClassLoader classLoader = new MixinAgentClassLoader();
-    static final Logger logger = LogManager.getLogger("mixin.agent");
+    static final Logger logger = LogManager.getLogger((String)"mixin.agent");
     static Instrumentation instrumentation = null;
     private static List<MixinAgent> agents = new ArrayList<MixinAgent>();
     final MixinTransformer classTransformer;
@@ -132,3 +139,4 @@ implements IHotSwap {
         }
     }
 }
+

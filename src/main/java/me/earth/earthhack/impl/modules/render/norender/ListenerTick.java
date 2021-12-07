@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.item.EntityItem
+ */
 package me.earth.earthhack.impl.modules.render.norender;
 
 import me.earth.earthhack.impl.event.events.misc.TickEvent;
@@ -38,3 +45,4 @@ extends ModuleListener<NoRender, TickEvent> {
         this.previous = shouldUpdate;
     }
 }
+

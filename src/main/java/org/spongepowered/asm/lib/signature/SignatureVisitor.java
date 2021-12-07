@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.lib.signature;
 
 public abstract class SignatureVisitor {
@@ -70,3 +73,4 @@ public abstract class SignatureVisitor {
     public void visitEnd() {
     }
 }
+

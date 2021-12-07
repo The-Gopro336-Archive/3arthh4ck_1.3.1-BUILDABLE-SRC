@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.pingbypass;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -95,7 +98,7 @@ extends Module {
 
     private void registerPayloadReaders() {
         this.payloadManager.register((short)0, buffer -> {
-            String name = buffer.readString(Short.MAX_VALUE);
+            String name = buffer.readString(32767);
             mc.addScheduledTask(() -> {
                 this.setServerName(name);
                 MEDIA.computeIfPresent(media -> media.setPingBypassName(this.getServerName()));
@@ -129,3 +132,4 @@ extends Module {
         return this.payloadManager;
     }
 }
+

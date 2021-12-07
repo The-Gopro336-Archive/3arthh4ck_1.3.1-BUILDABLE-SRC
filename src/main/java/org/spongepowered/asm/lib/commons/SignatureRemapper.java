@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.lib.commons;
 
 import java.util.Stack;
@@ -101,3 +104,4 @@ extends SignatureVisitor {
         this.classNames.pop();
     }
 }
+

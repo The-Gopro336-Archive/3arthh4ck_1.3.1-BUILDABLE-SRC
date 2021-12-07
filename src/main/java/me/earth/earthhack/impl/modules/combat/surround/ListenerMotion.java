@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.combat.surround;
 
 import java.util.ArrayList;
@@ -11,6 +20,7 @@ import me.earth.earthhack.impl.modules.combat.surround.Surround;
 import me.earth.earthhack.impl.modules.player.freecam.Freecam;
 import me.earth.earthhack.impl.util.helpers.blocks.modes.Rotate;
 import me.earth.earthhack.impl.util.thread.Locks;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -44,21 +54,21 @@ extends ModuleListener<Surround, MotionUpdateEvent> {
         if (module.updatePosAndBlocks()) {
             module.placed.removeAll(module.confirmed);
             boolean hasPlaced = false;
-            Optional<BlockPos> crystalPos = module.targets.stream().filter(pos -> !ListenerMotion.mc.world.getEntitiesWithinAABB(EntityEnderCrystal.class, new AxisAlignedBB((BlockPos)pos)).isEmpty() && ListenerMotion.mc.world.getBlockState((BlockPos)pos).func_185904_a().isReplaceable()).findFirst();
+            Optional<BlockPos> crystalPos = module.targets.stream().filter(pos -> !ListenerMotion.mc.world.getEntitiesWithinAABB(EntityEnderCrystal.class, new AxisAlignedBB(pos)).isEmpty() && ListenerMotion.mc.world.getBlockState(pos).getMaterial().isReplaceable()).findFirst();
             if (crystalPos.isPresent()) {
                 BlockPos pos2 = crystalPos.get();
-                module.confirmed.remove(pos2);
+                module.confirmed.remove((Object)pos2);
                 hasPlaced = module.placeBlock(pos2);
             }
             if (!hasPlaced || !module.crystalCheck.getValue().booleanValue()) {
                 ArrayList<BlockPos> surrounding = new ArrayList<BlockPos>(module.targets);
                 if (module.getPlayer().motionX != 0.0 || module.getPlayer().motionZ != 0.0) {
-                    BlockPos pos3 = new BlockPos(module.getPlayer()).add(module.getPlayer().motionX * 10000.0, 0.0, module.getPlayer().motionZ * 10000.0);
-                    surrounding.sort(Comparator.comparingDouble(p -> p.distanceSq((double)pos3.getX() + 0.5, pos3.getY(), (double)pos3.getZ() + 0.5)));
+                    BlockPos pos3 = new BlockPos((Entity)module.getPlayer()).add(module.getPlayer().motionX * 10000.0, 0.0, module.getPlayer().motionZ * 10000.0);
+                    surrounding.sort(Comparator.comparingDouble(p -> p.distanceSq((double)pos3.getX() + 0.5, (double)pos3.getY(), (double)pos3.getZ() + 0.5)));
                 }
                 for (BlockPos pos4 : surrounding) {
-                    if (module.placed.contains(pos4) || !ListenerMotion.mc.world.getBlockState(pos4).func_185904_a().isReplaceable()) continue;
-                    module.confirmed.remove(pos4);
+                    if (module.placed.contains((Object)pos4) || !ListenerMotion.mc.world.getBlockState(pos4).getMaterial().isReplaceable()) continue;
+                    module.confirmed.remove((Object)pos4);
                     if (!module.placeBlock(pos4)) continue;
                     break;
                 }
@@ -81,3 +91,4 @@ extends ModuleListener<Surround, MotionUpdateEvent> {
         }
     }
 }
+

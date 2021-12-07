@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ */
 package me.earth.earthhack.impl.modules.render.tracers;
 
 import java.util.ArrayList;
@@ -18,7 +24,7 @@ extends ModuleListener<Tracers, TickEvent> {
         if (event.isSafe()) {
             ArrayList<Entity> sorted = new ArrayList<Entity>(ListenerTick.mc.world.loadedEntityList);
             try {
-                sorted.sort(Comparator.comparingDouble(entity -> ListenerTick.mc.player.getDistanceSq((Entity)entity)));
+                sorted.sort(Comparator.comparingDouble(entity -> ListenerTick.mc.player.getDistanceSq(entity)));
             }
             catch (IllegalStateException illegalStateException) {
                 // empty catch block
@@ -27,3 +33,4 @@ extends ModuleListener<Tracers, TickEvent> {
         }
     }
 }
+

@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.client.CPacketPlayerDigging
+ *  net.minecraft.network.play.client.CPacketPlayerDigging$Action
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItem
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.player.fasteat;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -23,3 +33,4 @@ extends ModuleListener<FastEat, PacketEvent.Send<CPacketPlayerTryUseItem>> {
         }
     }
 }
+

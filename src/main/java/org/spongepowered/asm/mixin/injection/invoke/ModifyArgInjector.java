@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.injection.invoke;
 
 import java.util.Arrays;
@@ -98,3 +101,4 @@ extends InvokeInjector {
         return argIndex;
     }
 }
+

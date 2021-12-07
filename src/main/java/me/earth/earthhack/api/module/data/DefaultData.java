@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.api.module.data;
 
 import me.earth.earthhack.api.config.preset.DefaultPreset;
@@ -27,3 +30,4 @@ extends AbstractData<M> {
         return "A " + this.module.getCategory().toString() + " module.";
     }
 }
+

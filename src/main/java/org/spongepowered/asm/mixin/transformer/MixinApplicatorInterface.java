@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.transformer;
 
 import java.util.Map;
@@ -59,3 +62,4 @@ extends MixinApplicatorStandard {
     protected void applyInjections(MixinTargetContext mixin) {
     }
 }
+

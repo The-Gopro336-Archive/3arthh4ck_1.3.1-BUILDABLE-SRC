@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketChat
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package me.earth.earthhack.impl.modules.misc.chat;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -19,7 +27,8 @@ extends ModuleListener<Chat, PacketEvent.Receive<SPacketChat>> {
     @Override
     public void invoke(PacketEvent.Receive<SPacketChat> event) {
         if (((Chat)this.module).log.getValue() == LoggerMode.Async) {
-            LOGGER.info("[CHAT] {}", ((SPacketChat)event.getPacket()).getChatComponent().getUnformattedText().replaceAll("\r", "\\\\r").replaceAll("\n", "\\\\n"));
+            LOGGER.info("[CHAT] {}", (Object)((SPacketChat)event.getPacket()).getChatComponent().getUnformattedText().replaceAll("\r", "\\\\r").replaceAll("\n", "\\\\n"));
         }
     }
 }
+

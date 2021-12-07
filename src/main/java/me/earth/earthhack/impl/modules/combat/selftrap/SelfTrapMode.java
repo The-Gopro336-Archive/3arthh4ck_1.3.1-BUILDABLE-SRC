@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.util.math.Vec3i
+ */
 package me.earth.earthhack.impl.modules.combat.selftrap;
 
 import net.minecraft.block.Block;
@@ -26,3 +34,4 @@ public enum SelfTrapMode {
         return this.block;
     }
 }
+

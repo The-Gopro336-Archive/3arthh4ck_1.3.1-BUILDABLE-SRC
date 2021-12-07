@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.api.cache;
 
 import java.util.function.Consumer;
@@ -60,3 +63,4 @@ public class Cache<T> {
         this.frozen = frozen;
     }
 }
+

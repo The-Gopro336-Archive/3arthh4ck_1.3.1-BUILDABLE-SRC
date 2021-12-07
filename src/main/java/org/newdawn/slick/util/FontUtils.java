@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.util;
 
 import org.newdawn.slick.Color;
@@ -79,3 +82,4 @@ public class FontUtils {
         public static final int JUSTIFY = 4;
     }
 }
+

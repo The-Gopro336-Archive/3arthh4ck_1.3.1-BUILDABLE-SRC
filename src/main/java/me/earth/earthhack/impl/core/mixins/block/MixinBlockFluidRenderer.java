@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.client.renderer.BlockFluidRenderer
+ *  net.minecraft.client.renderer.BufferBuilder
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.world.IBlockAccess
+ */
 package me.earth.earthhack.impl.core.mixins.block;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -25,3 +35,4 @@ public abstract class MixinBlockFluidRenderer {
         }
     }
 }
+

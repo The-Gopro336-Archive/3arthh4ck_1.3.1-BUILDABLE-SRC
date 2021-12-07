@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.tweaker;
 
 public interface TweakerCore {
@@ -5,3 +8,4 @@ public interface TweakerCore {
 
     public String[] getTransformers();
 }
+

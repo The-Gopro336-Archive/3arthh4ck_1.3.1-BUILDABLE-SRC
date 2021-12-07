@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.injection.modify;
 
 import org.spongepowered.asm.mixin.injection.InjectionPoint;
@@ -11,3 +14,4 @@ extends BeforeLoadLocal {
         super(data, 54, true);
     }
 }
+

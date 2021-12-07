@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.init.MobEffects
+ *  net.minecraft.util.MovementInput
+ *  net.minecraft.util.math.BlockPos
+ *  org.lwjgl.input.Keyboard
+ */
 package me.earth.earthhack.impl.util.minecraft;
 
 import java.util.Objects;
@@ -24,7 +34,7 @@ implements Globals {
     }
 
     public static boolean noMovementKeysOrJump() {
-        return MovementUtil.noMovementKeys() && !Keyboard.isKeyDown(MovementUtil.mc.gameSettings.keyBindJump.getKeyCode());
+        return MovementUtil.noMovementKeys() && !Keyboard.isKeyDown((int)MovementUtil.mc.gameSettings.keyBindJump.getKeyCode());
     }
 
     public static void setMoveSpeed(double speed) {
@@ -65,7 +75,7 @@ implements Globals {
     }
 
     public static double[] strafe(double speed) {
-        return MovementUtil.strafe(MovementUtil.mc.player, speed);
+        return MovementUtil.strafe((Entity)MovementUtil.mc.player, speed);
     }
 
     public static double[] strafe(Entity entity, double speed) {
@@ -174,8 +184,8 @@ implements Globals {
 
     public static boolean isInMovementDirection(double x, double y, double z) {
         if (MovementUtil.mc.player.motionX != 0.0 || MovementUtil.mc.player.motionZ != 0.0) {
-            BlockPos movingPos = new BlockPos(MovementUtil.mc.player).add(MovementUtil.mc.player.motionX * 10000.0, 0.0, MovementUtil.mc.player.motionZ * 10000.0);
-            BlockPos antiPos = new BlockPos(MovementUtil.mc.player).add(MovementUtil.mc.player.motionX * -10000.0, 0.0, MovementUtil.mc.player.motionY * -10000.0);
+            BlockPos movingPos = new BlockPos((Entity)MovementUtil.mc.player).add(MovementUtil.mc.player.motionX * 10000.0, 0.0, MovementUtil.mc.player.motionZ * 10000.0);
+            BlockPos antiPos = new BlockPos((Entity)MovementUtil.mc.player).add(MovementUtil.mc.player.motionX * -10000.0, 0.0, MovementUtil.mc.player.motionY * -10000.0);
             return movingPos.distanceSq(x, y, z) < antiPos.distanceSq(x, y, z);
         }
         return true;
@@ -184,3 +194,4 @@ implements Globals {
     public static void constantiamDamage() {
     }
 }
+

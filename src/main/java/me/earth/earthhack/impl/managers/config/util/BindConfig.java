@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.managers.config.util;
 
 import java.util.ArrayList;
@@ -58,3 +61,4 @@ implements Config {
         return config;
     }
 }
+

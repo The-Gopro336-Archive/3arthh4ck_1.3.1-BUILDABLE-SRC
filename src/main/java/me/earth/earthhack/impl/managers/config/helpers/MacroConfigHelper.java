@@ -1,9 +1,17 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.gson.JsonElement
+ *  com.google.gson.JsonObject
+ */
 package me.earth.earthhack.impl.managers.config.helpers;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.Map;
 import me.earth.earthhack.api.config.Jsonable;
 import me.earth.earthhack.api.util.bind.Bind;
@@ -42,7 +50,7 @@ extends AbstractConfigHelper<MacroConfig> {
     @Override
     protected MacroConfig readFile(InputStream stream, String name) {
         MacroConfig config = new MacroConfig(name, this.manager);
-        JsonObject object = Jsonable.PARSER.parse(new InputStreamReader(stream)).getAsJsonObject();
+        JsonObject object = Jsonable.PARSER.parse((Reader)new InputStreamReader(stream)).getAsJsonObject();
         block6: for (Map.Entry entry : object.entrySet()) {
             Macro macro;
             JsonObject value = ((JsonElement)entry.getValue()).getAsJsonObject();
@@ -74,3 +82,4 @@ extends AbstractConfigHelper<MacroConfig> {
         return config;
     }
 }
+

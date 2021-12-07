@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayer
+ */
 package me.earth.earthhack.impl.modules.render.popchams;
 
 import java.awt.Color;
@@ -114,3 +120,4 @@ extends BlockESPModule {
         }
     }
 }
+

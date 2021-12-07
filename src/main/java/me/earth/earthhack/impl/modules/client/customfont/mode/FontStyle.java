@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.customfont.mode;
 
 public enum FontStyle {
@@ -16,3 +19,4 @@ public enum FontStyle {
         return this.style;
     }
 }
+

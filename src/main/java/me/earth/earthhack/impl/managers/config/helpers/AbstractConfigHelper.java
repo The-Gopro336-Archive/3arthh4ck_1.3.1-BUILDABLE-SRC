@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.gson.JsonObject
+ */
 package me.earth.earthhack.impl.managers.config.helpers;
 
 import com.google.gson.JsonObject;
@@ -161,3 +167,4 @@ implements ConfigHelper<C> {
         FileUtil.createDirectory(Paths.get(path, new String[0]));
     }
 }
+

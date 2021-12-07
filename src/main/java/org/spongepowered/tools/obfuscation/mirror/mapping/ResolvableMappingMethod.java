@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.tools.obfuscation.mirror.mapping;
 
 import org.spongepowered.asm.obfuscation.mapping.common.MappingMethod;
@@ -54,3 +57,4 @@ extends MappingMethod {
         return new ResolvableMappingMethod(this.ownerHandle, this.getSimpleName(), this.getDesc());
     }
 }
+

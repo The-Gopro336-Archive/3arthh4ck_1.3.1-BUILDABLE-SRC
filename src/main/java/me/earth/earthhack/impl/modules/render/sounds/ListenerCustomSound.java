@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketCustomSound
+ */
 package me.earth.earthhack.impl.modules.render.sounds;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -23,3 +29,4 @@ extends ModuleListener<Sounds, PacketEvent.Receive<SPacketCustomSound>> {
         ((Sounds)this.module).sounds.put(new CustomSound(packet.getX(), packet.getY(), packet.getZ(), (cancelled ? "Cancelled: " : "") + s), System.currentTimeMillis());
     }
 }
+

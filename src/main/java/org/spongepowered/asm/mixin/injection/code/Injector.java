@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package org.spongepowered.asm.mixin.injection.code;
 
 import java.util.ArrayList;
@@ -30,7 +37,7 @@ import org.spongepowered.asm.mixin.transformer.ClassInfo;
 import org.spongepowered.asm.util.Bytecode;
 
 public abstract class Injector {
-    protected static final Logger logger = LogManager.getLogger("mixin");
+    protected static final Logger logger = LogManager.getLogger((String)"mixin");
     protected InjectionInfo info;
     protected final ClassNode classNode;
     protected final MethodNode methodNode;
@@ -193,3 +200,4 @@ public abstract class Injector {
         }
     }
 }
+

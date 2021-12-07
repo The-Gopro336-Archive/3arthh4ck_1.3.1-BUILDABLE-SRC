@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.managers.thread.scheduler;
 
 import java.util.LinkedList;
@@ -23,7 +26,7 @@ implements Globals {
 
             @Override
             public void invoke(GameLoopEvent event) {
-                Scheduler.this.gameLoop = ((IMinecraft)((Object)Globals.mc)).getGameLoop();
+                Scheduler.this.gameLoop = ((IMinecraft)Globals.mc).getGameLoop();
                 Scheduler.this.executing = true;
                 CollectionUtil.emptyQueue(Scheduler.this.scheduled, Runnable::run);
                 Scheduler.this.executing = false;
@@ -46,7 +49,7 @@ implements Globals {
 
     public void schedule(Runnable runnable, boolean checkGameLoop) {
         if (mc.isCallingFromMinecraftThread()) {
-            if (this.executing || checkGameLoop && this.gameLoop != ((IMinecraft)((Object)mc)).getGameLoop()) {
+            if (this.executing || checkGameLoop && this.gameLoop != ((IMinecraft)mc).getGameLoop()) {
                 this.toSchedule.add(runnable);
             } else {
                 this.scheduled.add(runnable);
@@ -56,3 +59,4 @@ implements Globals {
         }
     }
 }
+

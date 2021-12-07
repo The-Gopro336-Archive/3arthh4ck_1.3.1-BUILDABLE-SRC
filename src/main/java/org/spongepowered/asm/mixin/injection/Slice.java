@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.injection;
 
 import java.lang.annotation.Retention;
@@ -12,3 +15,4 @@ public @interface Slice {
 
     public At to() default @At(value="TAIL");
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick;
 
 import java.io.BufferedReader;
@@ -390,3 +393,4 @@ implements Font {
         }
     }
 }
+

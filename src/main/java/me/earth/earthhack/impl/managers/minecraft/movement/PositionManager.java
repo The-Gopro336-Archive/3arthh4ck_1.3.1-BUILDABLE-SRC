@@ -1,3 +1,17 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.network.play.client.CPacketPlayer
+ *  net.minecraft.network.play.client.CPacketPlayer$Position
+ *  net.minecraft.network.play.client.CPacketPlayer$PositionRotation
+ *  net.minecraft.network.play.server.SPacketPlayerPosLook
+ *  net.minecraft.network.play.server.SPacketPlayerPosLook$EnumFlags
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.MathHelper
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.managers.minecraft.movement;
 
 import me.earth.earthhack.api.event.bus.EventListener;
@@ -30,13 +44,13 @@ implements Globals {
                 double x = packet.getX();
                 double y = packet.getY();
                 double z = packet.getZ();
-                if (packet.getFlags().contains(SPacketPlayerPosLook.EnumFlags.X)) {
+                if (packet.getFlags().contains((Object)SPacketPlayerPosLook.EnumFlags.X)) {
                     x += Globals.mc.player.posX;
                 }
-                if (packet.getFlags().contains(SPacketPlayerPosLook.EnumFlags.Y)) {
+                if (packet.getFlags().contains((Object)SPacketPlayerPosLook.EnumFlags.Y)) {
                     y += Globals.mc.player.posY;
                 }
-                if (packet.getFlags().contains(SPacketPlayerPosLook.EnumFlags.Z)) {
+                if (packet.getFlags().contains((Object)SPacketPlayerPosLook.EnumFlags.Z)) {
                     z += Globals.mc.player.posZ;
                 }
                 PositionManager.this.last_x = MathHelper.clamp((double)x, (double)-3.0E7, (double)3.0E7);
@@ -135,3 +149,4 @@ implements Globals {
         return this.blocking;
     }
 }
+

@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.renderer.RenderGlobal
+ *  net.minecraft.client.renderer.culling.ICamera
+ *  net.minecraft.entity.Entity
+ *  net.minecraftforge.client.MinecraftForgeClient
+ */
 package me.earth.earthhack.forge.mixins.render;
 
 import me.earth.earthhack.api.event.bus.instance.Bus;
@@ -19,3 +28,4 @@ public abstract class MixinRenderGlobal {
         Bus.EVENT_BUS.post(new PostRenderEntitiesEvent(partialTicks, pass));
     }
 }
+

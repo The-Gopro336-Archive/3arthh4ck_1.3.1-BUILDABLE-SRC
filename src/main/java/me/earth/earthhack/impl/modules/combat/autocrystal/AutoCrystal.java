@@ -1,3 +1,14 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.item.ItemPickaxe
+ *  net.minecraft.util.math.BlockPos
+ *  org.lwjgl.input.Mouse
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal;
 
 import java.awt.Color;
@@ -93,6 +104,7 @@ import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
 import me.earth.earthhack.impl.util.misc.collections.CollectionUtil;
 import me.earth.earthhack.impl.util.thread.ThreadUtil;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.util.math.BlockPos;
@@ -454,7 +466,7 @@ extends Module {
     }
 
     public float getMinDamage() {
-        return this.holdFacePlace.getValue() != false && AutoCrystal.mc.currentScreen == null && Mouse.isButtonDown(0) && (!(AutoCrystal.mc.player.getHeldItemMainhand().getItem() instanceof ItemPickaxe) || this.pickAxeHold.getValue() != false) ? this.minFaceDmg.getValue().floatValue() : this.minDamage.getValue().floatValue();
+        return this.holdFacePlace.getValue() != false && AutoCrystal.mc.currentScreen == null && Mouse.isButtonDown((int)0) && (!(AutoCrystal.mc.player.getHeldItemMainhand().getItem() instanceof ItemPickaxe) || this.pickAxeHold.getValue() != false) ? this.minFaceDmg.getValue().floatValue() : this.minDamage.getValue().floatValue();
     }
 
     public void runPost() {
@@ -484,7 +496,7 @@ extends Module {
     }
 
     protected boolean shouldDanger() {
-        return this.dangerSpeed.getValue() != false && (!Managers.SAFETY.isSafe() || EntityUtil.getHealth(AutoCrystal.mc.player) < this.dangerHealth.getValue().floatValue());
+        return this.dangerSpeed.getValue() != false && (!Managers.SAFETY.isSafe() || EntityUtil.getHealth((EntityLivingBase)AutoCrystal.mc.player) < this.dangerHealth.getValue().floatValue());
     }
 
     /*
@@ -494,7 +506,7 @@ extends Module {
      */
     protected void checkExecutor() {
         if (started || !this.asyncServerThread.getValue().booleanValue() || !this.serverThread.getValue().booleanValue() || !this.multiThread.getValue().booleanValue() || this.rotate.getValue() != ACRotate.None) return;
-        Class<AutoCrystal> clazz = AutoCrystal.class;
+        Class<AutoCrystal> class_ = AutoCrystal.class;
         synchronized (AutoCrystal.class) {
             if (ATOMIC_STARTED.get()) return;
             this.startExecutor();
@@ -526,3 +538,4 @@ extends Module {
         }
     }
 }
+

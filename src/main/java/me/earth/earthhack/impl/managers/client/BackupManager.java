@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.managers.client;
 
 import java.io.IOException;
@@ -8,3 +11,4 @@ public class BackupManager {
     public void backup(String backUpName) throws IOException {
     }
 }
+

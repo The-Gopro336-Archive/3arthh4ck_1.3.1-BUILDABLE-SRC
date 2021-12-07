@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.installer.main;
 
 import java.lang.reflect.Method;
@@ -36,3 +39,4 @@ public class Main {
         m.invoke(o, cl, args);
     }
 }
+

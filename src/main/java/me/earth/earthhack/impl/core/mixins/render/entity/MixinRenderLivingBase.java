@@ -1,3 +1,14 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.entity.EntityPlayerSP
+ *  net.minecraft.client.model.ModelBase
+ *  net.minecraft.client.renderer.entity.RenderLivingBase
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  org.lwjgl.opengl.GL11
+ */
 package me.earth.earthhack.impl.core.mixins.render.entity;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -35,7 +46,7 @@ public abstract class MixinRenderLivingBase {
 
     @Inject(method={"doRender"}, at={@At(value="HEAD")})
     private void doRenderHookHead(EntityLivingBase entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo info) {
-        if (entity instanceof EntityPlayerSP || SPECTATE.isEnabled() && entity.equals(((Spectate)SPECTATE.get()).getFake())) {
+        if (entity instanceof EntityPlayerSP || SPECTATE.isEnabled() && entity.equals((Object)((Spectate)SPECTATE.get()).getFake())) {
             this.prevRenderYawOffset = entity.prevRenderYawOffset;
             this.renderYawOffset = entity.renderYawOffset;
             this.prevRotationYawHead = entity.prevRotationYawHead;
@@ -53,7 +64,7 @@ public abstract class MixinRenderLivingBase {
 
     @Inject(method={"doRender"}, at={@At(value="RETURN")})
     private void doRenderHookReturn(EntityLivingBase entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo info) {
-        if (entity instanceof EntityPlayerSP || SPECTATE.isEnabled() && entity.equals(((Spectate)SPECTATE.get()).getFake())) {
+        if (entity instanceof EntityPlayerSP || SPECTATE.isEnabled() && entity.equals((Object)((Spectate)SPECTATE.get()).getFake())) {
             entity.prevRenderYawOffset = this.prevRenderYawOffset;
             entity.renderYawOffset = this.renderYawOffset;
             entity.prevRotationYawHead = this.prevRotationYawHead;
@@ -87,17 +98,17 @@ public abstract class MixinRenderLivingBase {
 
     @Inject(method={"doRender"}, at={@At(value="HEAD")})
     public void doRender_Pre(EntityLivingBase entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo info) {
-        if (CHAMS.returnIfPresent(c -> c.isValid(entity, ChamsMode.Normal), false).booleanValue()) {
-            GL11.glEnable(32823);
-            GL11.glPolygonOffset(1.0f, -1100000.0f);
+        if (CHAMS.returnIfPresent(c -> c.isValid((Entity)entity, ChamsMode.Normal), false).booleanValue()) {
+            GL11.glEnable((int)32823);
+            GL11.glPolygonOffset((float)1.0f, (float)-1100000.0f);
         }
     }
 
     @Inject(method={"doRender"}, at={@At(value="RETURN")})
     public void doRender_Post(EntityLivingBase entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo info) {
-        if (CHAMS.returnIfPresent(c -> c.isValid(entity, ChamsMode.Normal), false).booleanValue()) {
-            GL11.glDisable(32823);
-            GL11.glPolygonOffset(1.0f, 1100000.0f);
+        if (CHAMS.returnIfPresent(c -> c.isValid((Entity)entity, ChamsMode.Normal), false).booleanValue()) {
+            GL11.glDisable((int)32823);
+            GL11.glPolygonOffset((float)1.0f, (float)1100000.0f);
         }
     }
 
@@ -113,3 +124,4 @@ public abstract class MixinRenderLivingBase {
         Bus.EVENT_BUS.post(new ModelRenderEvent.Post(renderLiving, entity, model, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale));
     }
 }
+

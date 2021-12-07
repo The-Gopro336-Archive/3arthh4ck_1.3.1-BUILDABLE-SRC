@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.ChatLine
+ */
 package me.earth.earthhack.impl.modules.misc.chat;
 
 import java.util.HashMap;
@@ -79,3 +85,4 @@ extends Module {
         this.cleared = true;
     }
 }
+

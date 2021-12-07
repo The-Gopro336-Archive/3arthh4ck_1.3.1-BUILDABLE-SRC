@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ */
 package me.earth.earthhack.impl.util.math.rotation;
 
 import me.earth.earthhack.impl.managers.minecraft.movement.RotationManager;
@@ -49,3 +55,4 @@ public class RotationSmoother {
         return this.rotating;
     }
 }
+

@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.inventory.EntityEquipmentSlot
+ */
 package me.earth.earthhack.impl.modules.render.norender;
 
 import java.util.HashSet;
@@ -115,3 +121,4 @@ extends Module {
         return slot != EntityEquipmentSlot.FEET || this.boots.getValue() == false;
     }
 }
+

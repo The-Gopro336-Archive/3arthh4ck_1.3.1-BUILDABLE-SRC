@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.misc.intintmap;
 
 import me.earth.earthhack.impl.util.misc.intintmap.IntIntMap;
@@ -166,3 +169,4 @@ implements IntIntMap {
         }
     }
 }
+

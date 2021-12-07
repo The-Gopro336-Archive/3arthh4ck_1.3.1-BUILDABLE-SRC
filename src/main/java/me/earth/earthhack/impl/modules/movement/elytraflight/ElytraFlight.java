@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketEntityAction
+ *  net.minecraft.network.play.client.CPacketEntityAction$Action
+ */
 package me.earth.earthhack.impl.modules.movement.elytraflight;
 
 import me.earth.earthhack.api.module.Module;
@@ -11,6 +20,8 @@ import me.earth.earthhack.impl.modules.movement.elytraflight.ListenerMove;
 import me.earth.earthhack.impl.modules.movement.elytraflight.ListenerPosLook;
 import me.earth.earthhack.impl.modules.movement.elytraflight.mode.ElytraMode;
 import me.earth.earthhack.impl.util.math.StopWatch;
+import net.minecraft.entity.Entity;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketEntityAction;
 
 public class ElytraFlight
@@ -57,6 +68,7 @@ extends Module {
     }
 
     public void sendFallPacket() {
-        ElytraFlight.mc.player.connection.sendPacket(new CPacketEntityAction(ElytraFlight.mc.player, CPacketEntityAction.Action.START_FALL_FLYING));
+        ElytraFlight.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)ElytraFlight.mc.player, CPacketEntityAction.Action.START_FALL_FLYING));
     }
 }
+

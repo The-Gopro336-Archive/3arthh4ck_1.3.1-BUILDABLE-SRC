@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.init.Items
+ *  net.minecraft.item.Item
+ */
 package me.earth.earthhack.impl.modules.player.exptweaks;
 
 import me.earth.earthhack.impl.event.events.keyboard.ClickMiddleEvent;
@@ -21,3 +28,4 @@ extends ModuleListener<ExpTweaks, ClickMiddleEvent> {
         }
     }
 }
+

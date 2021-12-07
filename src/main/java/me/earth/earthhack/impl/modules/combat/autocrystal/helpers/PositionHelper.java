@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.network.play.server.SPacketSpawnPlayer
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal.helpers;
 
 import java.util.HashMap;
@@ -35,7 +44,7 @@ implements Globals {
         this.listeners.add(new ReceiveListener<SPacketSpawnPlayer>(SPacketSpawnPlayer.class, event -> event.addPostEvent(() -> {
             if (PositionHelper.mc.world.getEntityByID(((SPacketSpawnPlayer)event.getPacket()).getEntityID()) instanceof EntityPlayer) {
                 EntityPlayer player = (EntityPlayer)PositionHelper.mc.world.getEntityByID(((SPacketSpawnPlayer)event.getPacket()).getEntityID());
-                this.motionTrackerMap.put(player, new MotionTracker((World)PositionHelper.mc.world, player));
+                this.motionTrackerMap.put((Entity)player, new MotionTracker((World)PositionHelper.mc.world, player));
             }
         })));
         this.listeners.add(new EventListener<UpdateEntitiesEvent>(UpdateEntitiesEvent.class){
@@ -55,6 +64,7 @@ implements Globals {
     }
 
     public MotionTracker getTrackerFromEntity(Entity player) {
-        return this.motionTrackerMap.get(player);
+        return this.motionTrackerMap.get((Object)player);
     }
 }
+

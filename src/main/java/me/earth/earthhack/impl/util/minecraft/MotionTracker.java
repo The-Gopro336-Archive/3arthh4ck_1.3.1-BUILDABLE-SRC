@@ -1,9 +1,21 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.mojang.authlib.GameProfile
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.util.MovementInput
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.util.minecraft;
 
 import com.mojang.authlib.GameProfile;
 import java.util.UUID;
 import me.earth.earthhack.api.util.interfaces.Globals;
 import me.earth.earthhack.impl.util.minecraft.MovementInputFromRemotePlayer;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MovementInput;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -56,7 +68,7 @@ implements Globals {
     public void updateFromTrackedEntity() {
         this.movementInput = new MovementInputFromRemotePlayer(this.tracked);
         this.movementInput.updatePlayerMoveState();
-        this.copyLocationAndAnglesFrom(this.tracked);
+        this.copyLocationAndAnglesFrom((Entity)this.tracked);
         this.setEntityBoundingBox(this.tracked.getEntityBoundingBox());
         this.motionX = this.tracked.motionX;
         this.motionY = this.tracked.motionY;
@@ -81,3 +93,4 @@ implements Globals {
         return false;
     }
 }
+

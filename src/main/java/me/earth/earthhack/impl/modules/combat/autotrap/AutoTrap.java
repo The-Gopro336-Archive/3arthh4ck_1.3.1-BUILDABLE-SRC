@@ -1,12 +1,23 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Vec3i
+ */
 package me.earth.earthhack.impl.modules.combat.autotrap;
 
-import java.lang.invoke.LambdaMetafactory;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
@@ -105,14 +116,14 @@ extends ObbyListenerModule<ListenerAutoTrap> {
         this.cached.clear();
         this.updateSpeed();
         EntityPlayer newTarget = this.calcTarget();
-        if (newTarget == null || !newTarget.equals(this.target)) {
+        if (newTarget == null || !newTarget.equals((Object)this.target)) {
             ((ListenerAutoTrap)this.listener).placed.clear();
         }
         EntityPlayer entityPlayer = this.target = newTarget == null ? this.target : newTarget;
         if (newTarget == null) {
             return result.setValid(false);
         }
-        List<BlockPos> newTrapping = this.cached.get(newTarget);
+        List<BlockPos> newTrapping = this.cached.get((Object)newTarget);
         if (newTrapping == null) {
             newTrapping = this.getPositions(newTarget);
         }
@@ -123,7 +134,7 @@ extends ObbyListenerModule<ListenerAutoTrap> {
         EntityPlayer closest = null;
         double distance = Double.MAX_VALUE;
         for (EntityPlayer player : AutoTrap.mc.world.playerEntities) {
-            double playerDist = AutoTrap.mc.player.getDistanceSq(player);
+            double playerDist = AutoTrap.mc.player.getDistanceSq((Entity)player);
             if (!(playerDist < distance) || !this.isValid(player)) continue;
             closest = player;
             distance = playerDist;
@@ -132,11 +143,11 @@ extends ObbyListenerModule<ListenerAutoTrap> {
     }
 
     private boolean isValid(EntityPlayer player) {
-        if (player != null && !EntityUtil.isDead(player) && !player.equals(AutoTrap.mc.player) && !Managers.FRIENDS.contains(player) && player.getDistanceSq(AutoTrap.mc.player) <= 36.0 && this.getSpeed(player) <= (double)this.speed.getValue().floatValue()) {
+        if (player != null && !EntityUtil.isDead((Entity)player) && !player.equals((Object)AutoTrap.mc.player) && !Managers.FRIENDS.contains(player) && player.getDistanceSq((Entity)AutoTrap.mc.player) <= 36.0 && this.getSpeed(player) <= (double)this.speed.getValue().floatValue()) {
             if (this.targetMode.getValue() == TrapTarget.Untrapped) {
                 List<BlockPos> positions = this.getPositions(player);
                 this.cached.put(player, positions);
-                return positions.stream().anyMatch(pos -> AutoTrap.mc.world.getBlockState((BlockPos)pos).func_185904_a().isReplaceable());
+                return positions.stream().anyMatch(pos -> AutoTrap.mc.world.getBlockState(pos).getMaterial().isReplaceable());
             }
             return true;
         }
@@ -145,7 +156,7 @@ extends ObbyListenerModule<ListenerAutoTrap> {
 
     private void updateSpeed() {
         for (EntityPlayer player : AutoTrap.mc.world.playerEntities) {
-            if (!EntityUtil.isValid(player, this.range.getValue().floatValue() * 2.0f)) continue;
+            if (!EntityUtil.isValid((Entity)player, this.range.getValue().floatValue() * 2.0f)) continue;
             double xDist = player.posX - player.prevPosX;
             double yDist = player.posY - player.prevPosY;
             double zDist = player.posZ - player.prevPosZ;
@@ -155,7 +166,7 @@ extends ObbyListenerModule<ListenerAutoTrap> {
     }
 
     private double getSpeed(EntityPlayer player) {
-        Double playerSpeed = this.speeds.get(player);
+        Double playerSpeed = this.speeds.get((Object)player);
         if (playerSpeed != null && this.speed.getValue().floatValue() != 50.0f) {
             return Math.sqrt(playerSpeed) * 20.0 * 3.6;
         }
@@ -164,12 +175,12 @@ extends ObbyListenerModule<ListenerAutoTrap> {
 
     private List<BlockPos> getPositions(EntityPlayer player) {
         ArrayList<BlockPos> blocked = new ArrayList<BlockPos>();
-        BlockPos playerPos = new BlockPos(player);
+        BlockPos playerPos = new BlockPos((Entity)player);
         if (HoleUtil.isHole(playerPos, false)[0] || this.extend.getValue() == 1) {
             blocked.add(playerPos.up());
         } else {
-            List unfiltered = new ArrayList<BlockPos>(PositionUtil.getBlockedPositions(player)).stream().sorted(Comparator.comparingDouble(BlockUtil::getDistanceSq)).collect(Collectors.toList());
-            List filtered = new ArrayList(unfiltered).stream().filter(pos -> AutoTrap.mc.world.getBlockState((BlockPos)pos).func_185904_a().isReplaceable() && AutoTrap.mc.world.getBlockState(pos.up()).func_185904_a().isReplaceable()).collect(Collectors.toList());
+            List unfiltered = new ArrayList<BlockPos>(PositionUtil.getBlockedPositions((Entity)player)).stream().sorted(Comparator.comparingDouble(BlockUtil::getDistanceSq)).collect(Collectors.toList());
+            List filtered = new ArrayList(unfiltered).stream().filter(pos -> AutoTrap.mc.world.getBlockState(pos).getMaterial().isReplaceable() && AutoTrap.mc.world.getBlockState(pos.up()).getMaterial().isReplaceable()).collect(Collectors.toList());
             if (this.extend.getValue() == 3 && filtered.size() == 2 && unfiltered.size() == 4 && ((BlockPos)unfiltered.get(0)).equals(filtered.get(0)) && ((BlockPos)unfiltered.get(3)).equals(filtered.get(1))) {
                 filtered.clear();
             }
@@ -187,7 +198,7 @@ extends ObbyListenerModule<ListenerAutoTrap> {
         }
         List<BlockPos> positions = this.positionsFromBlocked(blocked);
         positions.sort(Comparator.comparingDouble(pos -> -BlockUtil.getDistanceSq(pos)));
-        positions.sort(Comparator.comparingInt((ToIntFunction<BlockPos>)LambdaMetafactory.metafactory(null, null, null, (Ljava/lang/Object;)I, getY(), (Lnet/minecraft/util/math/BlockPos;)I)()));
+        positions.sort(Comparator.comparingInt(Vec3i::func_177956_o));
         return positions.stream().filter(pos -> BlockUtil.getDistanceSq(pos) <= (double)MathUtil.square(this.range.getValue().floatValue())).collect(Collectors.toList());
     }
 
@@ -198,7 +209,7 @@ extends ObbyListenerModule<ListenerAutoTrap> {
             for (int i = 0; i < helping.length; ++i) {
                 BlockPos pos2 = helping[i];
                 if (pos2 == null) continue;
-                if (!(i != 1 || this.upperBody.getValue().booleanValue() || blockedIn.contains(PositionUtil.getPosition().up()) && this.upperFace.getValue().booleanValue() || helping[5] == null)) {
+                if (!(i != 1 || this.upperBody.getValue().booleanValue() || blockedIn.contains((Object)PositionUtil.getPosition().up()) && this.upperFace.getValue().booleanValue() || helping[5] == null)) {
                     positions.add(helping[5]);
                 }
                 positions.add(helping[i]);
@@ -208,7 +219,7 @@ extends ObbyListenerModule<ListenerAutoTrap> {
         boolean scaffold = this.noScaffold.getValue();
         if (this.top.getValue().booleanValue()) {
             blockedIn.forEach(pos -> positions.addAll(this.applyOffsets((BlockPos)pos, Trap.TOP, (List<BlockPos>)positions)));
-        } else if (blockedIn.size() == 1 && this.smartTop.getValue().booleanValue() && scaffold && AutoTrap.mc.world.getBlockState(blockedIn.get(0).add(Trap.TOP[0])).func_185904_a().isReplaceable() && AutoTrap.mc.world.getBlockState(blockedIn.get(0).add(Trap.NO_SCAFFOLD[0])).func_185904_a().isReplaceable() && AutoTrap.mc.world.getBlockState(blockedIn.get(0).add(Trap.NO_SCAFFOLD_P[0])).func_185904_a().isReplaceable()) {
+        } else if (blockedIn.size() == 1 && this.smartTop.getValue().booleanValue() && scaffold && AutoTrap.mc.world.getBlockState(blockedIn.get(0).add(Trap.TOP[0])).getMaterial().isReplaceable() && AutoTrap.mc.world.getBlockState(blockedIn.get(0).add(Trap.NO_SCAFFOLD[0])).getMaterial().isReplaceable() && AutoTrap.mc.world.getBlockState(blockedIn.get(0).add(Trap.NO_SCAFFOLD_P[0])).getMaterial().isReplaceable()) {
             blockedIn.forEach(pos -> positions.addAll(this.applyOffsets((BlockPos)pos, Trap.TOP, (List<BlockPos>)positions)));
             if (this.noScaffoldPlus.getValue().booleanValue()) {
                 blockedIn.forEach(pos -> positions.addAll(this.applyOffsets((BlockPos)pos, Trap.NO_SCAFFOLD_P, (List<BlockPos>)positions)));
@@ -216,7 +227,7 @@ extends ObbyListenerModule<ListenerAutoTrap> {
             scaffold = false;
             blockedIn.forEach(pos -> positions.addAll(this.applyOffsets((BlockPos)pos, Trap.NO_SCAFFOLD, (List<BlockPos>)positions)));
         }
-        if (this.upperBody.getValue().booleanValue() || this.upperFace.getValue().booleanValue() && blockedIn.contains(PositionUtil.getPosition().up())) {
+        if (this.upperBody.getValue().booleanValue() || this.upperFace.getValue().booleanValue() && blockedIn.contains((Object)PositionUtil.getPosition().up())) {
             blockedIn.forEach(pos -> positions.addAll(this.applyOffsets((BlockPos)pos, Trap.OFFSETS, (List<BlockPos>)positions)));
         }
         if (blockedIn.size() == 1 || this.bigExtend.getValue().booleanValue()) {
@@ -245,7 +256,7 @@ extends ObbyListenerModule<ListenerAutoTrap> {
             BlockPos up = pos.up();
             block9: for (EnumFacing facing : TOP_FACINGS) {
                 BlockPos helping = up.offset(facing);
-                if (!AutoTrap.mc.world.getBlockState(helping).func_185904_a().isReplaceable()) {
+                if (!AutoTrap.mc.world.getBlockState(helping).getMaterial().isReplaceable()) {
                     bestPos[0] = helping;
                     return bestPos;
                 }
@@ -290,7 +301,7 @@ extends ObbyListenerModule<ListenerAutoTrap> {
         for (Entity entity : AutoTrap.mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos))) {
             float damage;
             if (entity == null || EntityUtil.isDead(entity) || !entity.preventEntitySpawning || entity instanceof EntityPlayer && !BlockUtil.isBlocking(pos, (EntityPlayer)entity, (BlockingType)((Object)this.blockingType.getValue()))) continue;
-            if (entity instanceof EntityEnderCrystal && ((Boolean)this.attack.getValue()).booleanValue() && (double)(damage = DamageUtil.calculate(entity, (EntityLivingBase)AutoTrap.mc.player)) <= (double)EntityUtil.getHealth(AutoTrap.mc.player) + 1.0) {
+            if (entity instanceof EntityEnderCrystal && ((Boolean)this.attack.getValue()).booleanValue() && (double)(damage = DamageUtil.calculate(entity, (EntityLivingBase)AutoTrap.mc.player)) <= (double)EntityUtil.getHealth((EntityLivingBase)AutoTrap.mc.player) + 1.0) {
                 blocking = 1;
                 continue;
             }
@@ -303,9 +314,10 @@ extends ObbyListenerModule<ListenerAutoTrap> {
         ArrayList<BlockPos> positions = new ArrayList<BlockPos>();
         for (Vec3i vec3i : offsets) {
             BlockPos offset = pos.add(vec3i);
-            if (alreadyAdded.contains(offset)) continue;
+            if (alreadyAdded.contains((Object)offset)) continue;
             positions.add(offset);
         }
         return positions;
     }
 }
+

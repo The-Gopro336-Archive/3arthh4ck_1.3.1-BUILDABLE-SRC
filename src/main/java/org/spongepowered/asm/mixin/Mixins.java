@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package org.spongepowered.asm.mixin;
 
 import java.util.Collections;
@@ -10,7 +17,7 @@ import org.spongepowered.asm.mixin.MixinEnvironment;
 import org.spongepowered.asm.mixin.transformer.Config;
 
 public final class Mixins {
-    private static final Logger logger = LogManager.getLogger("mixin");
+    private static final Logger logger = LogManager.getLogger((String)"mixin");
     private static final String CONFIGS_KEY = "mixin.configs.queue";
     private static final Set<String> errorHandlers = new LinkedHashSet<String>();
 
@@ -39,7 +46,7 @@ public final class Mixins {
             config = Config.create(configFile, fallback);
         }
         catch (Exception ex) {
-            logger.error("Error encountered reading mixin config " + configFile + ": " + ex.getClass().getName() + " " + ex.getMessage(), ex);
+            logger.error("Error encountered reading mixin config " + configFile + ": " + ex.getClass().getName() + " " + ex.getMessage(), (Throwable)ex);
         }
         Mixins.registerConfiguration(config);
     }
@@ -83,3 +90,4 @@ public final class Mixins {
         return Collections.unmodifiableSet(errorHandlers);
     }
 }
+

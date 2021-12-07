@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package ibxm;
 
 public class Sample {
@@ -81,7 +84,7 @@ public class Sample {
             mix_buffer[n2] = mix_buffer[n2] + (this.sample_data[sample_idx] * right_gain >> 15);
             offset += 2;
             sample_idx += (sample_frac += step) >> 15;
-            sample_frac &= Short.MAX_VALUE;
+            sample_frac &= 0x7FFF;
         }
     }
 
@@ -103,7 +106,7 @@ public class Sample {
             mix_buffer[n2] = mix_buffer[n2] + (amplitude * right_gain >> 15);
             offset += 2;
             sample_idx += (sample_frac += step) >> 15;
-            sample_frac &= Short.MAX_VALUE;
+            sample_frac &= 0x7FFF;
         }
     }
 
@@ -154,7 +157,7 @@ public class Sample {
             mix_buffer[n2] = mix_buffer[n2] + (amplitude * right_gain >> 15);
             offset += 2;
             sample_idx += (sample_frac += step) >> 15;
-            sample_frac &= Short.MAX_VALUE;
+            sample_frac &= 0x7FFF;
         }
     }
 
@@ -166,3 +169,4 @@ public class Sample {
         return finished;
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.managers.client.macro;
 
 import java.util.function.BiConsumer;
@@ -18,7 +21,7 @@ public enum MacroType {
             }
         }
     }),
-    DELEGATE(COMBINED::execute),
+    DELEGATE((arg_0, arg_1) -> COMBINED.execute(arg_0, arg_1)),
     FLOW((c, m) -> {
         if (m.commands.length == 0) {
             return;
@@ -58,3 +61,4 @@ public enum MacroType {
         throw new IllegalArgumentException("Couldn't parse MacroType: " + name);
     }
 }
+

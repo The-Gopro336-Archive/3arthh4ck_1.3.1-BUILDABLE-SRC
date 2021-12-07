@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketMultiBlockChange
+ *  net.minecraft.network.play.server.SPacketMultiBlockChange$BlockUpdateData
+ */
 package me.earth.earthhack.impl.modules.combat.antisurround;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -18,9 +25,10 @@ extends ModuleListener<AntiSurround, PacketEvent.Post<SPacketMultiBlockChange>> 
         if (!((AntiSurround)this.module).async.getValue().booleanValue() || ((AntiSurround)this.module).active.get() || ListenerBlockMulti.mc.player == null || ((AntiSurround)this.module).holdingCheck()) {
             return;
         }
-        SPacketMultiBlockChange.BlockUpdateData[] blockUpdateDataArray = ((SPacketMultiBlockChange)event.getPacket()).getChangedBlocks();
-        int n = blockUpdateDataArray.length;
-        for (int i = 0; !(i >= n || (pos = blockUpdateDataArray[i]).getBlockState().func_185904_a().isReplaceable() && ((AntiSurround)this.module).onBlockBreak(pos.getPos(), Managers.ENTITIES.getPlayers(), Managers.ENTITIES.getEntities())); ++i) {
+        SPacketMultiBlockChange.BlockUpdateData[] arrblockUpdateData = ((SPacketMultiBlockChange)event.getPacket()).getChangedBlocks();
+        int n = arrblockUpdateData.length;
+        for (int i = 0; !(i >= n || (pos = arrblockUpdateData[i]).getBlockState().getMaterial().isReplaceable() && ((AntiSurround)this.module).onBlockBreak(pos.getPos(), Managers.ENTITIES.getPlayers(), Managers.ENTITIES.getEntities())); ++i) {
         }
     }
 }
+

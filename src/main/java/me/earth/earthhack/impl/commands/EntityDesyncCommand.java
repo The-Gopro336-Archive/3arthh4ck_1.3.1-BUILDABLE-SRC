@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketPlayer$Position
+ *  net.minecraft.network.play.client.CPacketPlayer$PositionRotation
+ *  net.minecraft.network.play.client.CPacketVehicleMove
+ */
 package me.earth.earthhack.impl.commands;
 
 import me.earth.earthhack.api.command.Command;
@@ -10,6 +20,7 @@ import me.earth.earthhack.impl.event.events.network.WorldClientEvent;
 import me.earth.earthhack.impl.event.listeners.SendListener;
 import me.earth.earthhack.impl.util.text.ChatUtil;
 import net.minecraft.entity.Entity;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketVehicleMove;
 
@@ -38,7 +49,7 @@ implements Globals {
                         return;
                     }
                     EntityDesyncCommand.this.dismounted.setPosition(Globals.mc.player.posX, Globals.mc.player.posY, Globals.mc.player.posZ);
-                    Globals.mc.player.connection.sendPacket(new CPacketVehicleMove(EntityDesyncCommand.this.dismounted));
+                    Globals.mc.player.connection.sendPacket((Packet)new CPacketVehicleMove(EntityDesyncCommand.this.dismounted));
                 }
             }
         });
@@ -99,3 +110,4 @@ implements Globals {
         }
     }
 }
+

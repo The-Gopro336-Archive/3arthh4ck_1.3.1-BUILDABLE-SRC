@@ -1,3 +1,20 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.block.BlockShulkerBox
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.inventory.ClickType
+ *  net.minecraft.item.ItemBlock
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.RayTraceResult
+ *  net.minecraft.world.IBlockAccess
+ */
 package me.earth.earthhack.impl.modules.misc.autoregear;
 
 import me.earth.earthhack.api.event.events.Stage;
@@ -13,6 +30,7 @@ import me.earth.earthhack.impl.util.network.NetworkUtil;
 import me.earth.earthhack.impl.util.network.PacketUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockShulkerBox;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.item.ItemBlock;
@@ -21,6 +39,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.IBlockAccess;
 
 final class ListenerMotion
 extends ModuleListener<AutoRegear, MotionUpdateEvent> {
@@ -36,7 +55,7 @@ extends ModuleListener<AutoRegear, MotionUpdateEvent> {
         if (((AutoRegear)this.module).steal.getValue().booleanValue() && ListenerMotion.mc.currentScreen == null && !((AutoRegear)this.module).shouldRegear) {
             BlockPos craftingPos = ((AutoRegear)this.module).getShulkerBox();
             float[] rotations = RotationUtil.getRotations(craftingPos, EnumFacing.UP);
-            RayTraceResult ray = RotationUtil.rayTraceTo(craftingPos, ListenerMotion.mc.world);
+            RayTraceResult ray = RotationUtil.rayTraceTo(craftingPos, (IBlockAccess)ListenerMotion.mc.world);
             float[] f = RayTraceUtil.hitVecToPlaceVec(craftingPos, ray.hitVec);
             if (((AutoRegear)this.module).rotate.getValue() == Rotate.Normal) {
                 event.setYaw(rotations[0]);
@@ -68,7 +87,7 @@ extends ModuleListener<AutoRegear, MotionUpdateEvent> {
             if (((AutoRegear)this.module).grabShulker.getValue().booleanValue() && ((AutoRegear)this.module).getBlock(Blocks.ENDER_CHEST) != null && ((AutoRegear)this.module).getShulkerBox() == null && ListenerMotion.mc.currentScreen == null && !((AutoRegear)this.module).hasKit()) {
                 BlockPos craftingPos = ((AutoRegear)this.module).getBlock(Blocks.ENDER_CHEST);
                 float[] rotations = RotationUtil.getRotations(craftingPos, EnumFacing.UP);
-                RayTraceResult ray = RotationUtil.rayTraceTo(craftingPos, ListenerMotion.mc.world);
+                RayTraceResult ray = RotationUtil.rayTraceTo(craftingPos, (IBlockAccess)ListenerMotion.mc.world);
                 float[] f = RayTraceUtil.hitVecToPlaceVec(craftingPos, ray.hitVec);
                 if (((AutoRegear)this.module).rotate.getValue() == Rotate.Normal) {
                     event.setYaw(rotations[0]);
@@ -84,16 +103,16 @@ extends ModuleListener<AutoRegear, MotionUpdateEvent> {
                 if (optimal == null) {
                     return;
                 }
-                int slot = InventoryUtil.findInHotbar(stack -> stack.getItem() instanceof ItemBlock && ((ItemBlock)((Object)stack.getItem())).getBlock() instanceof BlockShulkerBox);
-                int inventorySlot = InventoryUtil.findInInventory(stack -> stack.getItem() instanceof ItemBlock && ((ItemBlock)((Object)stack.getItem())).getBlock() instanceof BlockShulkerBox, true);
+                int slot = InventoryUtil.findInHotbar(stack -> stack.getItem() instanceof ItemBlock && ((ItemBlock)stack.getItem()).getBlock() instanceof BlockShulkerBox);
+                int inventorySlot = InventoryUtil.findInInventory(stack -> stack.getItem() instanceof ItemBlock && ((ItemBlock)stack.getItem()).getBlock() instanceof BlockShulkerBox, true);
                 if (slot == -1) {
                     if (inventorySlot == -1) {
                         return;
                     }
                     slot = InventoryUtil.hotbarToInventory(8);
-                    ListenerMotion.mc.playerController.windowClick(0, inventorySlot, 0, ClickType.PICKUP, ListenerMotion.mc.player);
-                    ListenerMotion.mc.playerController.windowClick(0, slot, 0, ClickType.PICKUP, ListenerMotion.mc.player);
-                    ListenerMotion.mc.playerController.windowClick(0, inventorySlot, 0, ClickType.PICKUP, ListenerMotion.mc.player);
+                    ListenerMotion.mc.playerController.windowClick(0, inventorySlot, 0, ClickType.PICKUP, (EntityPlayer)ListenerMotion.mc.player);
+                    ListenerMotion.mc.playerController.windowClick(0, slot, 0, ClickType.PICKUP, (EntityPlayer)ListenerMotion.mc.player);
+                    ListenerMotion.mc.playerController.windowClick(0, inventorySlot, 0, ClickType.PICKUP, (EntityPlayer)ListenerMotion.mc.player);
                     swapped = true;
                 }
                 ((AutoRegear)this.module).slot = slot;
@@ -105,9 +124,9 @@ extends ModuleListener<AutoRegear, MotionUpdateEvent> {
                 }
                 ((AutoRegear)this.module).execute();
                 if (swapped) {
-                    ListenerMotion.mc.playerController.windowClick(0, inventorySlot, 0, ClickType.PICKUP, ListenerMotion.mc.player);
-                    ListenerMotion.mc.playerController.windowClick(0, slot, 0, ClickType.PICKUP, ListenerMotion.mc.player);
-                    ListenerMotion.mc.playerController.windowClick(0, inventorySlot, 0, ClickType.PICKUP, ListenerMotion.mc.player);
+                    ListenerMotion.mc.playerController.windowClick(0, inventorySlot, 0, ClickType.PICKUP, (EntityPlayer)ListenerMotion.mc.player);
+                    ListenerMotion.mc.playerController.windowClick(0, slot, 0, ClickType.PICKUP, (EntityPlayer)ListenerMotion.mc.player);
+                    ListenerMotion.mc.playerController.windowClick(0, inventorySlot, 0, ClickType.PICKUP, (EntityPlayer)ListenerMotion.mc.player);
                 }
                 return;
             }
@@ -116,7 +135,7 @@ extends ModuleListener<AutoRegear, MotionUpdateEvent> {
                 return;
             }
             float[] rotations = RotationUtil.getRotations(craftingPos, EnumFacing.UP);
-            RayTraceResult ray = RotationUtil.rayTraceTo(craftingPos, ListenerMotion.mc.world);
+            RayTraceResult ray = RotationUtil.rayTraceTo(craftingPos, (IBlockAccess)ListenerMotion.mc.world);
             float[] f = RayTraceUtil.hitVecToPlaceVec(craftingPos, ray.hitVec);
             if (((AutoRegear)this.module).rotate.getValue() == Rotate.Normal) {
                 event.setYaw(rotations[0]);
@@ -129,3 +148,4 @@ extends ModuleListener<AutoRegear, MotionUpdateEvent> {
         }
     }
 }
+

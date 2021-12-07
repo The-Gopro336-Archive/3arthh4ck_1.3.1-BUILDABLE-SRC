@@ -1,5 +1,27 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Predicate
+ *  com.mojang.realmsclient.gui.ChatFormatting
+ *  net.minecraft.block.Block
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.client.entity.EntityPlayerSP
+ *  net.minecraft.client.renderer.culling.Frustum
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.MathHelper
+ *  net.minecraft.util.math.RayTraceResult
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.world.IBlockAccess
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.util.math.rotation;
 
+import com.google.common.base.Predicate;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import java.util.Arrays;
 import java.util.function.BiPredicate;
@@ -14,6 +36,7 @@ import me.earth.earthhack.impl.util.render.Interpolation;
 import me.earth.earthhack.impl.util.render.RenderUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,7 +54,7 @@ implements Globals {
     private static final ModuleCache<Freecam> FREECAM = Caches.getModule(Freecam.class);
 
     public static EntityPlayer getRotationPlayer() {
-        EntityPlayer rotationEntity = RotationUtil.mc.player;
+        EntityPlayerSP rotationEntity = RotationUtil.mc.player;
         if (FREECAM.isEnabled()) {
             rotationEntity = ((Freecam)FREECAM.get()).getPlayer();
         }
@@ -39,15 +62,15 @@ implements Globals {
     }
 
     public static float[] getRotations(BlockPos pos, EnumFacing facing) {
-        return RotationUtil.getRotations(pos, facing, RotationUtil.getRotationPlayer());
+        return RotationUtil.getRotations(pos, facing, (Entity)RotationUtil.getRotationPlayer());
     }
 
     public static float[] getRotations(BlockPos pos, EnumFacing facing, Entity from) {
-        return RotationUtil.getRotations(pos, facing, from, RotationUtil.mc.world, RotationUtil.mc.world.getBlockState(pos));
+        return RotationUtil.getRotations(pos, facing, from, (IBlockAccess)RotationUtil.mc.world, RotationUtil.mc.world.getBlockState(pos));
     }
 
     public static float[] getRotations(BlockPos pos, EnumFacing facing, Entity from, IBlockAccess world, IBlockState state) {
-        AxisAlignedBB bb = state.func_185900_c(world, pos);
+        AxisAlignedBB bb = state.getBoundingBox(world, pos);
         double x = (double)pos.getX() + (bb.minX + bb.maxX) / 2.0;
         double y = (double)pos.getY() + (bb.minY + bb.maxY) / 2.0;
         double z = (double)pos.getZ() + (bb.minZ + bb.maxZ) / 2.0;
@@ -84,7 +107,7 @@ implements Globals {
     }
 
     public static float[] getRotations(double x, double y, double z) {
-        return RotationUtil.getRotations(x, y, z, RotationUtil.getRotationPlayer());
+        return RotationUtil.getRotations(x, y, z, (Entity)RotationUtil.getRotationPlayer());
     }
 
     public static float[] getRotations(double x, double y, double z, Entity f) {
@@ -133,12 +156,12 @@ implements Globals {
         float vx = -MathHelper.sin((float)MathUtil.rad(yaw)) * MathHelper.cos((float)MathUtil.rad(pitch));
         float vz = MathHelper.cos((float)MathUtil.rad(yaw)) * MathHelper.cos((float)MathUtil.rad(pitch));
         float vy = -MathHelper.sin((float)MathUtil.rad(pitch));
-        return new Vec3d(vx, vy, vz);
+        return new Vec3d((double)vx, (double)vy, (double)vz);
     }
 
     public static boolean isLegit(Entity entity, Entity ... additional) {
-        RayTraceResult result = RayTracer.rayTraceEntities((World)RotationUtil.mc.world, (Entity)RotationUtil.getRotationPlayer(), (double)RotationUtil.getRotationPlayer().getDistance(entity) + 1.0, Managers.POSITION, Managers.ROTATION, e -> e != null && e.equals(entity), additional);
-        return result != null && result.entityHit != null && (entity.equals(result.entityHit) || additional != null && additional.length != 0 && Arrays.stream(additional).anyMatch(e -> result.entityHit.equals(e)));
+        RayTraceResult result = RayTracer.rayTraceEntities((World)RotationUtil.mc.world, (Entity)RotationUtil.getRotationPlayer(), (double)RotationUtil.getRotationPlayer().getDistance(entity) + 1.0, Managers.POSITION, Managers.ROTATION, (Predicate<Entity>)((Predicate)e -> e != null && e.equals((Object)entity)), additional);
+        return result != null && result.entityHit != null && (entity.equals((Object)result.entityHit) || additional != null && additional.length != 0 && Arrays.stream(additional).anyMatch(e -> result.entityHit.equals(e)));
     }
 
     public static boolean isLegit(BlockPos pos) {
@@ -146,36 +169,36 @@ implements Globals {
     }
 
     public static boolean isLegit(BlockPos pos, EnumFacing facing) {
-        return RotationUtil.isLegit(pos, facing, RotationUtil.mc.world);
+        return RotationUtil.isLegit(pos, facing, (IBlockAccess)RotationUtil.mc.world);
     }
 
     public static boolean isLegit(BlockPos pos, EnumFacing facing, IBlockAccess world) {
         RayTraceResult ray = RotationUtil.rayTraceTo(pos, world);
-        return ray != null && ray.getBlockPos() != null && ray.getBlockPos().equals(pos) && (facing == null || ray.sideHit == facing);
+        return ray != null && ray.getBlockPos() != null && ray.getBlockPos().equals((Object)pos) && (facing == null || ray.sideHit == facing);
     }
 
     public static RayTraceResult rayTraceTo(BlockPos pos, IBlockAccess world) {
-        return RotationUtil.rayTraceTo(pos, world, (b, p) -> p.equals(pos));
+        return RotationUtil.rayTraceTo(pos, world, (b, p) -> p.equals((Object)pos));
     }
 
     public static RayTraceResult rayTraceTo(BlockPos pos, IBlockAccess world, BiPredicate<Block, BlockPos> check) {
         EntityPlayer from = RotationUtil.getRotationPlayer();
         float yaw = Managers.ROTATION.getServerYaw();
         float pitch = Managers.ROTATION.getServerPitch();
-        Vec3d start = Managers.POSITION.getVec().addVector(0.0, from.getEyeHeight(), 0.0);
+        Vec3d start = Managers.POSITION.getVec().add(0.0, (double)from.getEyeHeight(), 0.0);
         Vec3d look = RotationUtil.getVec3d(yaw, pitch);
         double d = from.getDistance((double)pos.getX() + 0.5, (double)pos.getY() + 0.5, (double)pos.getZ() + 0.5) + 1.0;
-        Vec3d end = start.addVector(look.x * d, look.y * d, look.z * d);
-        return RayTracer.trace(RotationUtil.mc.world, world, start, end, true, false, true, check);
+        Vec3d end = start.add(look.x * d, look.y * d, look.z * d);
+        return RayTracer.trace((World)RotationUtil.mc.world, world, start, end, true, false, true, check);
     }
 
     public static RayTraceResult rayTraceWithYP(BlockPos pos, IBlockAccess world, float yaw, float pitch, BiPredicate<Block, BlockPos> check) {
         EntityPlayer from = RotationUtil.getRotationPlayer();
-        Vec3d start = from.getPositionVector().addVector(0.0, from.getEyeHeight(), 0.0);
+        Vec3d start = from.getPositionVector().add(0.0, (double)from.getEyeHeight(), 0.0);
         Vec3d look = RotationUtil.getVec3d(yaw, pitch);
         double d = from.getDistance((double)pos.getX() + 0.5, (double)pos.getY() + 0.5, (double)pos.getZ() + 0.5) + 1.0;
-        Vec3d end = start.addVector(look.x * d, look.y * d, look.z * d);
-        return RayTracer.trace(RotationUtil.mc.world, world, start, end, true, false, true, check);
+        Vec3d end = start.add(look.x * d, look.y * d, look.z * d);
+        return RayTracer.trace((World)RotationUtil.mc.world, world, start, end, true, false, true, check);
     }
 
     public static float[] faceSmoothly(double curYaw, double curPitch, double intendedYaw, double intendedPitch, double yawSpeed, double pitchSpeed) {
@@ -220,3 +243,4 @@ implements Globals {
         return "East \u00a77[\u00a7f+X\u00a77]";
     }
 }
+

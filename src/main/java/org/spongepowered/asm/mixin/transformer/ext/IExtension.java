@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.transformer.ext;
 
 import org.spongepowered.asm.mixin.MixinEnvironment;
@@ -12,3 +15,4 @@ public interface IExtension {
 
     public void export(MixinEnvironment var1, String var2, boolean var3, byte[] var4);
 }
+

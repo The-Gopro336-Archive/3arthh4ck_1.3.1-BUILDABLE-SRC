@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.server.SPacketPlayerListItem
+ *  net.minecraft.network.play.server.SPacketPlayerListItem$Action
+ *  net.minecraft.network.play.server.SPacketPlayerListItem$AddPlayerData
+ */
 package me.earth.earthhack.impl.commands.packet.factory.playerlistitem;
 
 import java.lang.reflect.Array;
@@ -52,7 +61,7 @@ extends DefaultFactory {
         SPacketPlayerListItem packet = new SPacketPlayerListItem();
         Field action = ReflectionUtil.getField(SPacketPlayerListItem.class, "action", "field_179770_a", "a");
         action.setAccessible(true);
-        action.set(packet, parameters[0]);
+        action.set((Object)packet, parameters[0]);
         for (int i = 1; i < parameters.length; ++i) {
             Object o = parameters[i];
             if (o == null) continue;
@@ -113,3 +122,4 @@ extends DefaultFactory {
         GENERICS.add(ITERABLE_ARGUMENT);
     }
 }
+

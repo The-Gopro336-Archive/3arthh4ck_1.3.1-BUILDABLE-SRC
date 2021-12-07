@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.misc;
 
 import java.io.File;
@@ -87,3 +90,4 @@ public class FileUtil {
         clazz.getMethod("browse", URI.class).invoke(object, url);
     }
 }
+

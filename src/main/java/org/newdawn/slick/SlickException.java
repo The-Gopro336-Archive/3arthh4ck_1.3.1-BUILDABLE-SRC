@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick;
 
 public class SlickException
@@ -10,3 +13,4 @@ extends Exception {
         super(message, e);
     }
 }
+

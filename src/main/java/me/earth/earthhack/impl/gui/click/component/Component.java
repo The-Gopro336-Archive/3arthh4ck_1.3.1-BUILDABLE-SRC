@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.gui.click.component;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -172,3 +175,4 @@ public class Component {
         this.description = description;
     }
 }
+

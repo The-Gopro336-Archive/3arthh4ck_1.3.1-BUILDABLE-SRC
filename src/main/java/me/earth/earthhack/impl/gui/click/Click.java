@@ -1,3 +1,16 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.gui.GuiScreen
+ *  net.minecraft.client.gui.ScaledResolution
+ *  net.minecraft.client.renderer.BufferBuilder
+ *  net.minecraft.client.renderer.GlStateManager
+ *  net.minecraft.client.renderer.Tessellator
+ *  net.minecraft.client.renderer.vertex.DefaultVertexFormats
+ *  net.minecraft.util.ResourceLocation
+ */
 package me.earth.earthhack.impl.gui.click;
 
 import java.awt.Color;
@@ -80,9 +93,9 @@ extends GuiScreen {
                 this.mc.getTextureManager().bindTexture(BLACK_PNG);
                 GlStateManager.color((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
                 bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-                bufferbuilder.pos(0.0, this.height, 0.0).tex(0.0, (float)this.height / 32.0f + 0.0f).color(64, 64, 64, 255).endVertex();
-                bufferbuilder.pos(this.width, this.height, 0.0).tex((float)this.width / 32.0f, (float)this.height / 32.0f + 0.0f).color(64, 64, 64, 255).endVertex();
-                bufferbuilder.pos(this.width, 0.0, 0.0).tex((float)this.width / 32.0f, 0.0).color(64, 64, 64, 255).endVertex();
+                bufferbuilder.pos(0.0, (double)this.height, 0.0).tex(0.0, (double)((float)this.height / 32.0f + 0.0f)).color(64, 64, 64, 255).endVertex();
+                bufferbuilder.pos((double)this.width, (double)this.height, 0.0).tex((double)((float)this.width / 32.0f), (double)((float)this.height / 32.0f + 0.0f)).color(64, 64, 64, 255).endVertex();
+                bufferbuilder.pos((double)this.width, 0.0, 0.0).tex((double)((float)this.width / 32.0f), 0.0).color(64, 64, 64, 255).endVertex();
                 bufferbuilder.pos(0.0, 0.0, 0.0).tex(0.0, 0.0).color(64, 64, 64, 255).endVertex();
                 tessellator.draw();
             }
@@ -158,3 +171,4 @@ extends GuiScreen {
         return this.frames;
     }
 }
+

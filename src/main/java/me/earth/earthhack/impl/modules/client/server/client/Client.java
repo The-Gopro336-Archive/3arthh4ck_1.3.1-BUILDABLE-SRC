@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.server.client;
 
 import java.io.DataInputStream;
@@ -44,3 +47,4 @@ IClient {
         return this.serverList;
     }
 }
+

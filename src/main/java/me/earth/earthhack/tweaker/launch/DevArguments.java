@@ -1,9 +1,19 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.gson.JsonElement
+ *  com.google.gson.JsonObject
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package me.earth.earthhack.tweaker.launch;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.OpenOption;
@@ -19,7 +29,7 @@ import org.apache.logging.log4j.Logger;
 
 public class DevArguments
 implements ArgumentManager {
-    private static final Logger LOGGER = LogManager.getLogger("3arthh4ck-Core");
+    private static final Logger LOGGER = LogManager.getLogger((String)"3arthh4ck-Core");
     private static final DevArguments INSTANCE = new DevArguments();
     private static final String PATH = "earthhack/dev.json";
     private final Map<String, Argument<?>> arguments = new ConcurrentHashMap();
@@ -38,7 +48,7 @@ implements ArgumentManager {
             return;
         }
         try (InputStream stream = Files.newInputStream(path, new OpenOption[0]);){
-            JsonObject object = Jsonable.PARSER.parse(new InputStreamReader(stream)).getAsJsonObject();
+            JsonObject object = Jsonable.PARSER.parse((Reader)new InputStreamReader(stream)).getAsJsonObject();
             for (Map.Entry entry : object.entrySet()) {
                 Argument argument = this.getArgument((String)entry.getKey());
                 if (argument == null) {
@@ -67,3 +77,4 @@ implements ArgumentManager {
         return this.arguments.get(name);
     }
 }
+

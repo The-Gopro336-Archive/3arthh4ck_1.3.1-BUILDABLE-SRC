@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.util;
 
 import java.util.ArrayList;
@@ -29,3 +32,4 @@ public class StringUtils {
         return strs;
     }
 }
+

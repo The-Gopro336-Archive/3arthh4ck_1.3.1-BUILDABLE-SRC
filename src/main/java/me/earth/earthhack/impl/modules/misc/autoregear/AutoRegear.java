@@ -1,3 +1,20 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.block.BlockShulkerBox
+ *  net.minecraft.init.Items
+ *  net.minecraft.inventory.ItemStackHelper
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemShulkerBox
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.nbt.NBTTagCompound
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.NonNullList
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.world.IBlockAccess
+ */
 package me.earth.earthhack.impl.modules.misc.autoregear;
 
 import java.util.Comparator;
@@ -30,6 +47,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 
 public class AutoRegear
 extends BlockPlacingModule
@@ -66,7 +84,7 @@ implements CustomCommandModule {
 
     public void registerInventory() {
         for (int i = 9; i < 45; ++i) {
-            int id = Item.REGISTRY.getIDForObject(((ItemStack)AutoRegear.mc.player.inventoryContainer.getInventory().get(i)).getItem());
+            int id = Item.REGISTRY.getIDForObject((Object)((ItemStack)AutoRegear.mc.player.inventoryContainer.getInventory().get(i)).getItem());
             this.register(new SimpleRemovingSetting(i - 9 + ":" + id));
         }
     }
@@ -107,7 +125,7 @@ implements CustomCommandModule {
     private int safety(BlockPos pos) {
         int safety = 0;
         for (EnumFacing facing : EnumFacing.values()) {
-            if (AutoRegear.mc.world.getBlockState(pos.offset(facing)).func_185904_a().isReplaceable()) continue;
+            if (AutoRegear.mc.world.getBlockState(pos.offset(facing)).getMaterial().isReplaceable()) continue;
             ++safety;
         }
         return safety;
@@ -116,7 +134,7 @@ implements CustomCommandModule {
     public BlockPos getBlock(Block type) {
         AtomicReference block = new AtomicReference();
         BlockUtil.sphere(this.range.getValue().floatValue(), pos -> {
-            if (AutoRegear.mc.world.getBlockState((BlockPos)pos).getBlock() == type) {
+            if (AutoRegear.mc.world.getBlockState(pos).getBlock() == type) {
                 block.set(pos);
             }
             return false;
@@ -127,7 +145,7 @@ implements CustomCommandModule {
     public BlockPos getShulkerBox() {
         AtomicReference block = new AtomicReference();
         BlockUtil.sphere(this.range.getValue().floatValue(), pos -> {
-            if (AutoRegear.mc.world.getBlockState((BlockPos)pos).getBlock() instanceof BlockShulkerBox) {
+            if (AutoRegear.mc.world.getBlockState(pos).getBlock() instanceof BlockShulkerBox) {
                 block.set(pos);
             }
             return false;
@@ -138,7 +156,7 @@ implements CustomCommandModule {
     public BlockPos getOptimalPlacePos(boolean shulkerCheck) {
         HashSet positions = new HashSet();
         BlockUtil.sphere(this.range.getValue().floatValue(), pos -> {
-            if (AutoRegear.mc.world.getBlockState((BlockPos)pos).getBlock().isReplaceable(AutoRegear.mc.world, (BlockPos)pos) && this.entityCheck((BlockPos)pos) && AutoRegear.mc.world.getBlockState(pos.up()).getBlock().isReplaceable(AutoRegear.mc.world, (BlockPos)pos) && (!shulkerCheck || AutoRegear.mc.world.getBlockState(pos.down()).getBlock().isReplaceable(AutoRegear.mc.world, (BlockPos)pos))) {
+            if (AutoRegear.mc.world.getBlockState(pos).getBlock().isReplaceable((IBlockAccess)AutoRegear.mc.world, pos) && this.entityCheck((BlockPos)pos) && AutoRegear.mc.world.getBlockState(pos.up()).getBlock().isReplaceable((IBlockAccess)AutoRegear.mc.world, pos) && (!shulkerCheck || AutoRegear.mc.world.getBlockState(pos.down()).getBlock().isReplaceable((IBlockAccess)AutoRegear.mc.world, pos))) {
                 positions.add(pos);
             }
             return false;
@@ -176,3 +194,4 @@ implements CustomCommandModule {
         return false;
     }
 }
+

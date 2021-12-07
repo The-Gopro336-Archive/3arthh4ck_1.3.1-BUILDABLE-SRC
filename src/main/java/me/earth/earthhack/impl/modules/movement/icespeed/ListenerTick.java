@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.init.Blocks
+ */
 package me.earth.earthhack.impl.modules.movement.icespeed;
 
 import me.earth.earthhack.impl.event.events.misc.TickEvent;
@@ -18,3 +24,4 @@ extends ModuleListener<IceSpeed, TickEvent> {
         Blocks.FROSTED_ICE.slipperiness = ((IceSpeed)this.module).speed.getValue().floatValue();
     }
 }
+

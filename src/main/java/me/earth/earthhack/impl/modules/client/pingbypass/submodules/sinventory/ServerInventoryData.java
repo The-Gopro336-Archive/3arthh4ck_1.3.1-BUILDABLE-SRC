@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.pingbypass.submodules.sinventory;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -20,3 +23,4 @@ extends DefaultData<ServerInventory> {
         return "Resyncs your Inventory with the PingBypass.";
     }
 }
+

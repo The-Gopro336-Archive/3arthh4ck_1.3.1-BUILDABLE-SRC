@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.item.ItemStack
+ */
 package me.earth.earthhack.impl.modules.combat.autoarmor.util;
 
 import me.earth.earthhack.impl.modules.combat.autoarmor.util.DamageStack;
@@ -29,3 +35,4 @@ extends DamageStack {
         return !(damage > this.getDamage());
     }
 }
+

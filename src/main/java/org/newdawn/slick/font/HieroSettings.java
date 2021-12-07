@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.font;
 
 import java.io.BufferedReader;
@@ -232,3 +235,4 @@ public class HieroSettings {
         out.close();
     }
 }
+

@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.objectweb.asm.tree.ClassNode
+ *  org.objectweb.asm.tree.FieldNode
+ */
 package me.earth.earthhack.impl.core.transfomer.patch.patches;
 
 import me.earth.earthhack.impl.core.Core;
@@ -24,3 +31,4 @@ extends ArgumentPatch {
         this.setFinished(this.applied >= 2);
     }
 }
+

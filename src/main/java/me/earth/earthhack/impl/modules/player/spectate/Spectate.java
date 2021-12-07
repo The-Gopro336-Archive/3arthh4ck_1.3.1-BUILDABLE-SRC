@@ -1,3 +1,14 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.entity.EntityPlayerSP
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.util.MovementInput
+ *  net.minecraft.util.MovementInputFromOptions
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.modules.player.spectate;
 
 import me.earth.earthhack.api.command.Completer;
@@ -22,9 +33,11 @@ import me.earth.earthhack.impl.util.helpers.disabling.DisablingModule;
 import me.earth.earthhack.impl.util.text.ChatUtil;
 import me.earth.earthhack.impl.util.thread.LookUpUtil;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MovementInput;
 import net.minecraft.util.MovementInputFromOptions;
+import net.minecraft.world.World;
 
 public class Spectate
 extends DisablingModule
@@ -117,19 +130,19 @@ implements CustomCommandModule {
             Spectate.mc.player.movementInput = new MovementInput();
         }
         this.input = new MovementInputFromOptions(Spectate.mc.gameSettings);
-        this.render = new EntityPlayerNoInterp(Spectate.mc.world);
-        this.render.copyLocationAndAnglesFrom(Spectate.mc.player);
+        this.render = new EntityPlayerNoInterp((World)Spectate.mc.world);
+        this.render.copyLocationAndAnglesFrom((Entity)Spectate.mc.player);
         this.render.inventory = Spectate.mc.player.inventory;
         this.render.inventoryContainer = Spectate.mc.player.inventoryContainer;
         this.render.inventory.copyInventory(Spectate.mc.player.inventory);
         this.render.setEntityBoundingBox(Spectate.mc.player.getEntityBoundingBox());
         this.render.resetPositionToBB();
-        this.fakePlayer = new EntityPlayerNoInterp(Spectate.mc.world);
-        this.fakePlayer.copyLocationAndAnglesFrom(Spectate.mc.player);
+        this.fakePlayer = new EntityPlayerNoInterp((World)Spectate.mc.world);
+        this.fakePlayer.copyLocationAndAnglesFrom((Entity)Spectate.mc.player);
         this.fakePlayer.inventory.copyInventory(Spectate.mc.player.inventory);
         this.fakePlayer.inventory = Spectate.mc.player.inventory;
         this.fakePlayer.inventoryContainer = Spectate.mc.player.inventoryContainer;
-        Spectate.mc.world.addEntityToWorld(-10000, this.fakePlayer);
+        Spectate.mc.world.addEntityToWorld(-10000, (Entity)this.fakePlayer);
         Spectate.mc.entityRenderer.loadEntityShader(null);
     }
 
@@ -145,7 +158,7 @@ implements CustomCommandModule {
         EntityPlayer specPlayer = this.player;
         if (this.spectating) {
             if (specPlayer != null) {
-                ((IEntityNoInterp)((Object)specPlayer)).setNoInterping(true);
+                ((IEntityNoInterp)specPlayer).setNoInterping(true);
             }
             this.spectating = false;
         }
@@ -156,7 +169,7 @@ implements CustomCommandModule {
             mc.addScheduledTask(() -> {
                 if (Spectate.mc.world != null) {
                     this.player = null;
-                    Spectate.mc.world.removeEntity(this.fakePlayer);
+                    Spectate.mc.world.removeEntity((Entity)this.fakePlayer);
                 }
             });
         }
@@ -172,7 +185,7 @@ implements CustomCommandModule {
         }
         this.spectating = true;
         this.player = player;
-        ((IEntityNoInterp)((Object)player)).setNoInterping(false);
+        ((IEntityNoInterp)player).setNoInterping(false);
         this.enable();
     }
 
@@ -184,3 +197,4 @@ implements CustomCommandModule {
         return this.fakePlayer;
     }
 }
+

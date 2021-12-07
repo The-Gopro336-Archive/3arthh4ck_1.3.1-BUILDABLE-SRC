@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.renderer.GlStateManager
+ *  org.apache.commons.io.IOUtils
+ *  org.lwjgl.opengl.ARBShaderObjects
+ *  org.lwjgl.opengl.GL20
+ */
 package me.earth.earthhack.impl.util.render;
 
 import java.io.InputStream;
@@ -19,11 +28,11 @@ implements Globals {
         int vertexShaderID;
         try {
             InputStream vertexStream = this.getClass().getResourceAsStream("/assets/minecraft/earthhack/shaders/vertex.vert");
-            vertexShaderID = this.createShader(IOUtils.toString(vertexStream), 35633);
-            IOUtils.closeQuietly(vertexStream);
+            vertexShaderID = this.createShader(IOUtils.toString((InputStream)vertexStream), 35633);
+            IOUtils.closeQuietly((InputStream)vertexStream);
             InputStream fragmentStream = this.getClass().getResourceAsStream("/assets/minecraft/earthhack/shaders/frag/" + fragmentShader);
-            fragmentShaderID = this.createShader(IOUtils.toString(fragmentStream), 35632);
-            IOUtils.closeQuietly(fragmentStream);
+            fragmentShaderID = this.createShader(IOUtils.toString((InputStream)fragmentStream), 35632);
+            IOUtils.closeQuietly((InputStream)fragmentStream);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -36,15 +45,15 @@ implements Globals {
         if (this.program == 0) {
             return;
         }
-        ARBShaderObjects.glAttachObjectARB(this.program, vertexShaderID);
-        ARBShaderObjects.glAttachObjectARB(this.program, fragmentShaderID);
-        ARBShaderObjects.glLinkProgramARB(this.program);
-        ARBShaderObjects.glValidateProgramARB(this.program);
+        ARBShaderObjects.glAttachObjectARB((int)this.program, (int)vertexShaderID);
+        ARBShaderObjects.glAttachObjectARB((int)this.program, (int)fragmentShaderID);
+        ARBShaderObjects.glLinkProgramARB((int)this.program);
+        ARBShaderObjects.glValidateProgramARB((int)this.program);
     }
 
     public void startShader() {
         GlStateManager.pushMatrix();
-        GL20.glUseProgram(this.program);
+        GL20.glUseProgram((int)this.program);
         if (this.uniformsMap == null) {
             this.uniformsMap = new HashMap<String, Integer>();
             this.setupUniforms();
@@ -53,7 +62,7 @@ implements Globals {
     }
 
     public void stopShader() {
-        GL20.glUseProgram(0);
+        GL20.glUseProgram((int)0);
         GlStateManager.popMatrix();
     }
 
@@ -64,25 +73,25 @@ implements Globals {
     private int createShader(String shaderSource, int shaderType) {
         int shader = 0;
         try {
-            shader = ARBShaderObjects.glCreateShaderObjectARB(shaderType);
+            shader = ARBShaderObjects.glCreateShaderObjectARB((int)shaderType);
             if (shader == 0) {
                 return 0;
             }
-            ARBShaderObjects.glShaderSourceARB(shader, shaderSource);
-            ARBShaderObjects.glCompileShaderARB(shader);
-            if (ARBShaderObjects.glGetObjectParameteriARB(shader, 35713) == 0) {
+            ARBShaderObjects.glShaderSourceARB((int)shader, (CharSequence)shaderSource);
+            ARBShaderObjects.glCompileShaderARB((int)shader);
+            if (ARBShaderObjects.glGetObjectParameteriARB((int)shader, (int)35713) == 0) {
                 throw new RuntimeException("Error creating shaders: " + this.getLogInfo(shader));
             }
             return shader;
         }
         catch (Exception e) {
-            ARBShaderObjects.glDeleteObjectARB(shader);
+            ARBShaderObjects.glDeleteObjectARB((int)shader);
             throw e;
         }
     }
 
     private String getLogInfo(int i) {
-        return ARBShaderObjects.glGetInfoLogARB(i, ARBShaderObjects.glGetObjectParameteriARB(i, 35716));
+        return ARBShaderObjects.glGetInfoLogARB((int)i, (int)ARBShaderObjects.glGetObjectParameteriARB((int)i, (int)35716));
     }
 
     public void setUniform(String uniformName, int location) {
@@ -90,10 +99,11 @@ implements Globals {
     }
 
     public void setupUniform(String uniformName) {
-        this.setUniform(uniformName, GL20.glGetUniformLocation(this.program, uniformName));
+        this.setUniform(uniformName, GL20.glGetUniformLocation((int)this.program, (CharSequence)uniformName));
     }
 
     public int getUniform(String uniformName) {
         return this.uniformsMap.get(uniformName);
     }
 }
+

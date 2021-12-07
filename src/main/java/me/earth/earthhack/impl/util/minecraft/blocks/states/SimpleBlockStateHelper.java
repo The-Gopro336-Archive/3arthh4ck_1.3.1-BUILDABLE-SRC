@@ -1,3 +1,14 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.tileentity.TileEntity
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.world.WorldType
+ *  net.minecraft.world.biome.Biome
+ */
 package me.earth.earthhack.impl.util.minecraft.blocks.states;
 
 import me.earth.earthhack.api.util.interfaces.Globals;
@@ -59,3 +70,4 @@ IBlockStateHelper
         return SimpleBlockStateHelper.mc.world.isSideSolid(pos, side, _default);
     }
 }
+

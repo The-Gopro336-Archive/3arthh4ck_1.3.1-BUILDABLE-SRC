@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketEntityVelocity
+ */
 package me.earth.earthhack.impl.modules.movement.velocity;
 
 import me.earth.earthhack.impl.core.mixins.network.server.ISPacketEntityVelocity;
@@ -26,3 +32,4 @@ extends ModuleListener<Velocity, PacketEvent.Receive<SPacketEntityVelocity>> {
         }
     }
 }
+

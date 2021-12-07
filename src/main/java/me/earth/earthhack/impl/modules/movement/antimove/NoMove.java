@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.movement.antimove;
 
 import me.earth.earthhack.api.module.Module;
@@ -33,3 +36,4 @@ extends Module {
         return this.mode.getValue().toString();
     }
 }
+

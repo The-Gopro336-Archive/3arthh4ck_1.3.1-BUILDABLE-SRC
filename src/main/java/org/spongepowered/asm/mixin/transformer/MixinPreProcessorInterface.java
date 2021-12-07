@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.transformer;
 
 import org.spongepowered.asm.lib.tree.AnnotationNode;
@@ -32,3 +35,4 @@ extends MixinPreProcessorStandard {
         return super.validateField(context, field, shadow);
     }
 }
+

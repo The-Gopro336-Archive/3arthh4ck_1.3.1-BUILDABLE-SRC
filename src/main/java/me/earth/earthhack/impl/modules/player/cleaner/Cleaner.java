@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.player.cleaner;
 
 import me.earth.earthhack.api.module.util.Category;
@@ -71,3 +74,4 @@ extends ItemAddingModule<Integer, RemovingInteger> {
         return this.delay.getValue();
     }
 }
+

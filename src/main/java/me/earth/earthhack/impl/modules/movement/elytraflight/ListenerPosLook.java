@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.init.Items
+ *  net.minecraft.inventory.EntityEquipmentSlot
+ *  net.minecraft.network.play.server.SPacketPlayerPosLook
+ */
 package me.earth.earthhack.impl.modules.movement.elytraflight;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -21,3 +29,4 @@ extends ModuleListener<ElytraFlight, PacketEvent.Receive<SPacketPlayerPosLook>> 
         }
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick;
 
 import java.io.IOException;
@@ -736,3 +739,4 @@ implements Renderable {
         this.pixelData = null;
     }
 }
+

@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.math.Vec3i
+ */
 package me.earth.earthhack.impl.modules.combat.autotrap.util;
 
 import net.minecraft.util.math.Vec3i;
@@ -12,3 +18,4 @@ public class Trap {
     public static final Vec3i[] NO_SCAFFOLD = new Vec3i[]{new Vec3i(0, 2, 0)};
     public static final Vec3i[] NO_SCAFFOLD_P = new Vec3i[]{new Vec3i(0, 3, 0)};
 }
+

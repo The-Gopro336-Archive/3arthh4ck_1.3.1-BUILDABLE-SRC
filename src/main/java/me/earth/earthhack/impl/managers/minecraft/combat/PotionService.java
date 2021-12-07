@@ -1,3 +1,17 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.MobEffects
+ *  net.minecraft.network.datasync.EntityDataManager$DataEntry
+ *  net.minecraft.network.play.server.SPacketEntityMetadata
+ *  net.minecraft.network.play.server.SPacketEntityStatus
+ *  net.minecraft.potion.PotionEffect
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.managers.minecraft.combat;
 
 import me.earth.earthhack.api.event.bus.SubscriberImpl;
@@ -12,6 +26,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.network.play.server.SPacketEntityMetadata;
 import net.minecraft.network.play.server.SPacketEntityStatus;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.world.World;
 
 public class PotionService
 extends SubscriberImpl
@@ -29,7 +44,7 @@ implements Globals {
         if (PotionService.mc.world == null) {
             return;
         }
-        Entity entity = packet.getEntity(PotionService.mc.world);
+        Entity entity = packet.getEntity((World)PotionService.mc.world);
         if (entity instanceof EntityLivingBase) {
             EntityLivingBase base = (EntityLivingBase)entity;
             base.clearActivePotions();
@@ -64,3 +79,4 @@ implements Globals {
         }
     }
 }
+

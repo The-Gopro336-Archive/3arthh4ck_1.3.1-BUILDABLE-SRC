@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin;
 
 import java.lang.annotation.ElementType;
@@ -16,3 +19,4 @@ public @interface Mixin {
 
     public boolean remap() default true;
 }
+

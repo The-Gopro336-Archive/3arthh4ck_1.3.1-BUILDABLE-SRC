@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Strings
+ */
 package org.spongepowered.tools.obfuscation;
 
 import com.google.common.base.Strings;
@@ -155,7 +161,7 @@ implements IMixinContext {
 
     private String getAccessorTargetName(AnnotatedElementAccessor elem) {
         String value = elem.getAnnotationValue();
-        if (Strings.isNullOrEmpty(value)) {
+        if (Strings.isNullOrEmpty((String)value)) {
             return this.inflectAccessorTarget(elem);
         }
         return value;
@@ -248,3 +254,4 @@ implements IMixinContext {
         }
     }
 }
+

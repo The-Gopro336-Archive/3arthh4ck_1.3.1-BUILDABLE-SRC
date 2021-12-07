@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.lib.tree.analysis;
 
 import java.util.Set;
@@ -44,3 +47,4 @@ implements Value {
         return this.insns.hashCode();
     }
 }
+

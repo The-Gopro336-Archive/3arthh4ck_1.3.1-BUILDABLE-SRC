@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.render.breadcrumbs;
 
 import me.earth.earthhack.impl.event.events.misc.DeathEvent;
@@ -12,8 +15,9 @@ extends ModuleListener<BreadCrumbs, DeathEvent> {
 
     @Override
     public void invoke(DeathEvent event) {
-        if (((BreadCrumbs)this.module).clearD.getValue().booleanValue() && event.getEntity() != null && event.getEntity().equals(ListenerDeath.mc.player)) {
+        if (((BreadCrumbs)this.module).clearD.getValue().booleanValue() && event.getEntity() != null && event.getEntity().equals((Object)ListenerDeath.mc.player)) {
             mc.addScheduledTask(((BreadCrumbs)this.module).positions::clear);
         }
     }
 }
+

@@ -1,3 +1,66 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.boss.EntityDragon
+ *  net.minecraft.entity.boss.EntityWither
+ *  net.minecraft.entity.item.EntityBoat
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.entity.item.EntityEnderEye
+ *  net.minecraft.entity.item.EntityEnderPearl
+ *  net.minecraft.entity.item.EntityFallingBlock
+ *  net.minecraft.entity.item.EntityItemFrame
+ *  net.minecraft.entity.item.EntityMinecart
+ *  net.minecraft.entity.item.EntityMinecartEmpty
+ *  net.minecraft.entity.item.EntityMinecartFurnace
+ *  net.minecraft.entity.item.EntityMinecartTNT
+ *  net.minecraft.entity.monster.EntityBlaze
+ *  net.minecraft.entity.monster.EntityCreeper
+ *  net.minecraft.entity.monster.EntityEnderman
+ *  net.minecraft.entity.monster.EntityEndermite
+ *  net.minecraft.entity.monster.EntityEvoker
+ *  net.minecraft.entity.monster.EntityGhast
+ *  net.minecraft.entity.monster.EntityGiantZombie
+ *  net.minecraft.entity.monster.EntityGuardian
+ *  net.minecraft.entity.monster.EntityIllusionIllager
+ *  net.minecraft.entity.monster.EntityIronGolem
+ *  net.minecraft.entity.monster.EntityPigZombie
+ *  net.minecraft.entity.monster.EntityPolarBear
+ *  net.minecraft.entity.monster.EntityShulker
+ *  net.minecraft.entity.monster.EntitySilverfish
+ *  net.minecraft.entity.monster.EntitySkeleton
+ *  net.minecraft.entity.monster.EntitySlime
+ *  net.minecraft.entity.monster.EntitySnowman
+ *  net.minecraft.entity.monster.EntitySpider
+ *  net.minecraft.entity.monster.EntityStray
+ *  net.minecraft.entity.monster.EntityVex
+ *  net.minecraft.entity.monster.EntityVindicator
+ *  net.minecraft.entity.monster.EntityWitch
+ *  net.minecraft.entity.monster.EntityWitherSkeleton
+ *  net.minecraft.entity.monster.EntityZombie
+ *  net.minecraft.entity.passive.EntityBat
+ *  net.minecraft.entity.passive.EntityChicken
+ *  net.minecraft.entity.passive.EntityCow
+ *  net.minecraft.entity.passive.EntityDonkey
+ *  net.minecraft.entity.passive.EntityHorse
+ *  net.minecraft.entity.passive.EntityLlama
+ *  net.minecraft.entity.passive.EntityMule
+ *  net.minecraft.entity.passive.EntityOcelot
+ *  net.minecraft.entity.passive.EntityParrot
+ *  net.minecraft.entity.passive.EntityPig
+ *  net.minecraft.entity.passive.EntityRabbit
+ *  net.minecraft.entity.passive.EntitySheep
+ *  net.minecraft.entity.passive.EntitySkeletonHorse
+ *  net.minecraft.entity.passive.EntitySquid
+ *  net.minecraft.entity.passive.EntityVillager
+ *  net.minecraft.entity.passive.EntityWolf
+ *  net.minecraft.entity.passive.EntityZombieHorse
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.entity.projectile.EntityEvokerFangs
+ *  net.minecraft.entity.projectile.EntityFireball
+ *  net.minecraft.entity.projectile.EntityShulkerBullet
+ */
 package me.earth.earthhack.impl.util.minecraft;
 
 import java.util.HashMap;
@@ -110,11 +173,11 @@ public enum EntityType {
     }
 
     public static boolean isAngryEnderMan(Entity entity) {
-        return entity instanceof EntityEnderman && !((EntityEnderman)((Object)entity)).isScreaming();
+        return entity instanceof EntityEnderman && !((EntityEnderman)entity).isScreaming();
     }
 
     public static boolean isAngryPigMan(Entity entity) {
-        return entity instanceof EntityPigZombie && entity.rotationPitch == 0.0f && ((EntityPigZombie)((Object)entity)).func_142015_aE() <= 0;
+        return entity instanceof EntityPigZombie && entity.rotationPitch == 0.0f && ((EntityPigZombie)entity).getRevengeTimer() <= 0;
     }
 
     public static boolean isAngryGolem(Entity entity) {
@@ -122,15 +185,15 @@ public enum EntityType {
     }
 
     public static boolean isAngryWolf(Entity entity) {
-        return entity instanceof EntityWolf && !((EntityWolf)((Object)entity)).isAngry();
+        return entity instanceof EntityWolf && !((EntityWolf)entity).isAngry();
     }
 
     public static boolean isAngryPolarBear(Entity entity) {
-        return entity instanceof EntityPolarBear && entity.rotationPitch == 0.0f && ((EntityPolarBear)((Object)entity)).func_142015_aE() <= 0;
+        return entity instanceof EntityPolarBear && entity.rotationPitch == 0.0f && ((EntityPolarBear)entity).getRevengeTimer() <= 0;
     }
 
     public static boolean isFriendlyRabbit(Entity entity) {
-        return entity instanceof EntityRabbit && ((EntityRabbit)((Object)entity)).getRabbitType() != 99;
+        return entity instanceof EntityRabbit && ((EntityRabbit)entity).getRabbitType() != 99;
     }
 
     public static String getName(Entity entity) {
@@ -151,3 +214,4 @@ public enum EntityType {
         entityNames.put(EntityMinecartTNT.class, "Minecart with TNT");
     }
 }
+

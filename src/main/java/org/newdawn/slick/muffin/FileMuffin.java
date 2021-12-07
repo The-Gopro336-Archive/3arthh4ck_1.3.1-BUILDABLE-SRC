@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.muffin;
 
 import java.io.EOFException;
@@ -50,3 +53,4 @@ implements Muffin {
         return hashMap;
     }
 }
+

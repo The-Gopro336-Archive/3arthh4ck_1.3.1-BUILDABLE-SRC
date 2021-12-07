@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.ui;
 
 import com.formdev.flatlaf.util.UIScale;
@@ -38,3 +41,4 @@ extends BorderUIResource.EmptyBorderUIResource {
         return super.getBorderInsets();
     }
 }
+

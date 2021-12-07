@@ -1,3 +1,14 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.init.SoundEvents
+ *  net.minecraft.network.play.server.SPacketSoundEffect
+ *  net.minecraft.network.play.server.SPacketSpawnObject
+ *  net.minecraft.util.SoundCategory
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal.helpers;
 
 import me.earth.earthhack.api.event.bus.SubscriberImpl;
@@ -45,7 +56,7 @@ extends SubscriberImpl {
             this.valid = false;
         } else {
             BlockPos crystalPos;
-            this.current = crystalPos = new BlockPos((float)pos.getX() + 0.5f, (double)(pos.getY() + 1), (float)pos.getZ() + 0.5f);
+            this.current = crystalPos = new BlockPos((double)((float)pos.getX() + 0.5f), (double)(pos.getY() + 1), (double)((float)pos.getZ() + 0.5f));
             this.bb = this.createBB(crystalPos, newVer);
             this.valid = true;
             this.placeConfirmed = false;
@@ -59,7 +70,7 @@ extends SubscriberImpl {
         if (this.valid && !this.placeConfirmed) {
             AxisAlignedBB currentBB;
             BlockPos p = new BlockPos(x, y, z);
-            if (p.equals(this.current)) {
+            if (p.equals((Object)this.current)) {
                 this.placeConfirmed = true;
                 this.breakTimer.reset();
             } else if (this.placeTimer.passed(this.placeTime) && (currentBB = this.bb) != null && currentBB.intersects(this.createBB(x, y, z, this.newVer))) {
@@ -71,7 +82,7 @@ extends SubscriberImpl {
     public void confirmBreak(double x, double y, double z) {
         BlockPos current;
         if (this.valid && !this.breakConfirmed && this.placeConfirmed && (current = this.current) != null && current.distanceSq(x, y, z) < 144.0) {
-            if (current.equals(new BlockPos(x, y, z))) {
+            if (current.equals((Object)new BlockPos(x, y, z))) {
                 this.breakConfirmed = true;
             } else {
                 this.valid = false;
@@ -113,3 +124,4 @@ extends SubscriberImpl {
         return confirmer;
     }
 }
+

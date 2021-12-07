@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.svg;
 
 import java.util.ArrayList;
@@ -146,3 +149,4 @@ public class Gradient {
         }
     }
 }
+

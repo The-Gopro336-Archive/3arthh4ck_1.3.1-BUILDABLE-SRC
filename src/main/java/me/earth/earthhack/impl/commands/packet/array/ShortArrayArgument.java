@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.commands.packet.array;
 
 import me.earth.earthhack.api.command.PossibleInputs;
@@ -32,3 +35,4 @@ extends AbstractArgument<short[]> {
         return PossibleInputs.empty();
     }
 }
+

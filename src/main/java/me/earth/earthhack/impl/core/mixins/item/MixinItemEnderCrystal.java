@@ -1,3 +1,14 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.entity.EntityPlayerSP
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.item.ItemEndCrystal
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.core.mixins.item;
 
 import java.util.ArrayList;
@@ -38,7 +49,7 @@ public abstract class MixinItemEnderCrystal {
                 return entities;
             }
             for (Entity entity : entities) {
-                if (((Entity)player).equals(entity)) continue;
+                if (player.equals((Object)entity)) continue;
                 return entities;
             }
             return new ArrayList<Entity>(0);
@@ -46,3 +57,4 @@ public abstract class MixinItemEnderCrystal {
         return entities;
     }
 }
+

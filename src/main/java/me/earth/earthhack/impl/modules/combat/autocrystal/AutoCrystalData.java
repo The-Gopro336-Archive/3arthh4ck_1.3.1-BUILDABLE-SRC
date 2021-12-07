@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -202,3 +205,4 @@ extends DefaultData<AutoCrystal> {
         return "Places and breaks EndCrystals.";
     }
 }
+

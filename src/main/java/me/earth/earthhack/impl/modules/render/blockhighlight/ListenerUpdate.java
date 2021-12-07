@@ -1,3 +1,14 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.material.Material
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.modules.render.blockhighlight;
 
 import me.earth.earthhack.impl.event.events.misc.UpdateEvent;
@@ -9,6 +20,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 final class ListenerUpdate
 extends ModuleListener<BlockHighlight, UpdateEvent> {
@@ -23,8 +35,8 @@ extends ModuleListener<BlockHighlight, UpdateEvent> {
                 case BLOCK: {
                     IBlockState state;
                     BlockPos pos = ListenerUpdate.mc.objectMouseOver.getBlockPos();
-                    if (!ListenerUpdate.mc.world.getWorldBorder().contains(pos) || (state = ListenerUpdate.mc.world.getBlockState(pos)).func_185904_a() == Material.AIR) break;
-                    ItemStack stack = state.getBlock().getItem(ListenerUpdate.mc.world, pos, state);
+                    if (!ListenerUpdate.mc.world.getWorldBorder().contains(pos) || (state = ListenerUpdate.mc.world.getBlockState(pos)).getMaterial() == Material.AIR) break;
+                    ItemStack stack = state.getBlock().getItem((World)ListenerUpdate.mc.world, pos, state);
                     ((BlockHighlight)this.module).current = stack.getItem().getItemStackDisplayName(stack);
                     return;
                 }
@@ -39,3 +51,4 @@ extends ModuleListener<BlockHighlight, UpdateEvent> {
         ((BlockHighlight)this.module).current = null;
     }
 }
+

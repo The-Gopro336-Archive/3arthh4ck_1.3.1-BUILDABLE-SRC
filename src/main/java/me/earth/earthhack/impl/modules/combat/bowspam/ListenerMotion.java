@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.item.ItemBow
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.network.play.client.CPacketPlayer$PositionRotation
+ */
 package me.earth.earthhack.impl.modules.combat.bowspam;
 
 import me.earth.earthhack.api.event.events.Stage;
@@ -7,6 +16,7 @@ import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.modules.combat.bowspam.BowSpam;
 import me.earth.earthhack.impl.util.network.NetworkUtil;
 import me.earth.earthhack.impl.util.thread.Locks;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketPlayer;
@@ -28,7 +38,7 @@ extends ModuleListener<BowSpam, MotionUpdateEvent> {
                     if (stack != null && !ListenerMotion.mc.player.getActiveItemStack().isEmpty() && ListenerMotion.mc.player.getItemInUseCount() > 0) {
                         Managers.TIMER.setTimer(6.0f);
                         if (stack.getMaxItemUseDuration() - ListenerMotion.mc.player.getItemInUseCount() > ((BowSpam)this.module).delay.getValue() * 6) {
-                            Locks.acquire(Locks.PLACE_SWITCH_LOCK, () -> ListenerMotion.mc.playerController.onStoppedUsingItem(ListenerMotion.mc.player));
+                            Locks.acquire(Locks.PLACE_SWITCH_LOCK, () -> ListenerMotion.mc.playerController.onStoppedUsingItem((EntityPlayer)ListenerMotion.mc.player));
                         }
                     } else {
                         if (this.lastTimer > 0.0f && Managers.TIMER.getSpeed() != this.lastTimer) {
@@ -50,7 +60,7 @@ extends ModuleListener<BowSpam, MotionUpdateEvent> {
                             NetworkUtil.sendPacketNoEvent(new CPacketPlayer.PositionRotation(ListenerMotion.mc.player.posX, ListenerMotion.mc.player.posY - 0.0624, ListenerMotion.mc.player.posZ, ListenerMotion.mc.player.rotationYaw, ListenerMotion.mc.player.rotationPitch, false));
                             NetworkUtil.sendPacketNoEvent(new CPacketPlayer.PositionRotation(ListenerMotion.mc.player.posX, ListenerMotion.mc.player.posY - 999.0, ListenerMotion.mc.player.posZ, ListenerMotion.mc.player.rotationYaw, ListenerMotion.mc.player.rotationPitch, true));
                         }
-                        Locks.acquire(Locks.PLACE_SWITCH_LOCK, () -> ListenerMotion.mc.playerController.onStoppedUsingItem(ListenerMotion.mc.player));
+                        Locks.acquire(Locks.PLACE_SWITCH_LOCK, () -> ListenerMotion.mc.playerController.onStoppedUsingItem((EntityPlayer)ListenerMotion.mc.player));
                     }
                 }
             }
@@ -69,3 +79,4 @@ extends ModuleListener<BowSpam, MotionUpdateEvent> {
         return null;
     }
 }
+

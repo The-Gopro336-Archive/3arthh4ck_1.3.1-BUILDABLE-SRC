@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.collect.Lists
+ */
 package me.earth.earthhack.impl.modules.misc.spammer;
 
 import com.google.common.collect.Lists;
@@ -54,7 +60,7 @@ extends Module {
 
     private void loadFile() {
         this.messages.clear();
-        for (String string : FileUtil.readFile(FILE, true, Lists.newArrayList(DEFAULT))) {
+        for (String string : FileUtil.readFile(FILE, true, Lists.newArrayList((Object[])new String[]{DEFAULT}))) {
             if (string.replace("\\s", "").isEmpty()) continue;
             this.messages.add(string);
         }
@@ -90,3 +96,4 @@ extends Module {
         return DEFAULT;
     }
 }
+

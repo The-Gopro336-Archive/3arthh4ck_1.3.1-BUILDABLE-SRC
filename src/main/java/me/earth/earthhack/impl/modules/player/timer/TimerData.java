@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.player.timer;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -31,3 +34,4 @@ extends DefaultData<Timer> {
         return "Makes you move faster by sending more packets to the server.";
     }
 }
+

@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ */
 package me.earth.earthhack.impl.managers.client;
 
 import java.util.Collection;
@@ -84,3 +91,4 @@ extends Observable<PlayerEvent> {
         this.players.clear();
     }
 }
+

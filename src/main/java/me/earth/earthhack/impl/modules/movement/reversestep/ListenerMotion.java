@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.item.EntityEnderPearl
+ */
 package me.earth.earthhack.impl.modules.movement.reversestep;
 
 import java.util.List;
@@ -66,3 +72,4 @@ extends ModuleListener<ReverseStep, MotionUpdateEvent> {
         }
     }
 }
+

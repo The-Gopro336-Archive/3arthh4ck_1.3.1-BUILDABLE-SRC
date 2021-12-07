@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.struct;
 
 import java.util.LinkedHashMap;
@@ -149,3 +152,4 @@ public class SourceMap {
         }
     }
 }
+

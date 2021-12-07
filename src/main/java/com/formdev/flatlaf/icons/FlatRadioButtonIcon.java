@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.icons;
 
 import com.formdev.flatlaf.icons.FlatCheckBoxIcon;
@@ -35,3 +38,4 @@ extends FlatCheckBoxIcon {
         g.fill(new Ellipse2D.Float(xy, xy, this.centerDiameter, this.centerDiameter));
     }
 }
+

@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.BufferUtils
+ *  org.lwjgl.opengl.GL11
+ */
 package org.newdawn.slick.opengl.renderer;
 
 import java.nio.DoubleBuffer;
@@ -18,18 +25,18 @@ extends ImmediateModeOGLRenderer {
     private float[] verts = new float[15000];
     private float[] cols = new float[20000];
     private float[] texs = new float[15000];
-    private FloatBuffer vertices = BufferUtils.createFloatBuffer(15000);
-    private FloatBuffer colors = BufferUtils.createFloatBuffer(20000);
-    private FloatBuffer textures = BufferUtils.createFloatBuffer(10000);
+    private FloatBuffer vertices = BufferUtils.createFloatBuffer((int)15000);
+    private FloatBuffer colors = BufferUtils.createFloatBuffer((int)20000);
+    private FloatBuffer textures = BufferUtils.createFloatBuffer((int)10000);
     private int listMode = 0;
 
     @Override
     public void initDisplay(int width, int height) {
         super.initDisplay(width, height);
         this.startBuffer();
-        GL11.glEnableClientState(32884);
-        GL11.glEnableClientState(32888);
-        GL11.glEnableClientState(32886);
+        GL11.glEnableClientState((int)32884);
+        GL11.glEnableClientState((int)32888);
+        GL11.glEnableClientState((int)32886);
     }
 
     private void startBuffer() {
@@ -44,11 +51,11 @@ extends ImmediateModeOGLRenderer {
             return;
         }
         if (this.vertIndex < 20) {
-            GL11.glBegin(this.currentType);
+            GL11.glBegin((int)this.currentType);
             for (int i = 0; i < this.vertIndex; ++i) {
-                GL11.glColor4f(this.cols[i * 4 + 0], this.cols[i * 4 + 1], this.cols[i * 4 + 2], this.cols[i * 4 + 3]);
-                GL11.glTexCoord2f(this.texs[i * 2 + 0], this.texs[i * 2 + 1]);
-                GL11.glVertex3f(this.verts[i * 3 + 0], this.verts[i * 3 + 1], this.verts[i * 3 + 2]);
+                GL11.glColor4f((float)this.cols[i * 4 + 0], (float)this.cols[i * 4 + 1], (float)this.cols[i * 4 + 2], (float)this.cols[i * 4 + 3]);
+                GL11.glTexCoord2f((float)this.texs[i * 2 + 0], (float)this.texs[i * 2 + 1]);
+                GL11.glVertex3f((float)this.verts[i * 3 + 0], (float)this.verts[i * 3 + 1], (float)this.verts[i * 3 + 2]);
             }
             GL11.glEnd();
             this.currentType = -1;
@@ -63,10 +70,10 @@ extends ImmediateModeOGLRenderer {
         this.vertices.flip();
         this.colors.flip();
         this.textures.flip();
-        GL11.glVertexPointer(3, 0, this.vertices);
-        GL11.glColorPointer(4, 0, this.colors);
-        GL11.glTexCoordPointer(2, 0, this.textures);
-        GL11.glDrawArrays(this.currentType, 0, this.vertIndex);
+        GL11.glVertexPointer((int)3, (int)0, (FloatBuffer)this.vertices);
+        GL11.glColorPointer((int)4, (int)0, (FloatBuffer)this.colors);
+        GL11.glTexCoordPointer((int)2, (int)0, (FloatBuffer)this.textures);
+        GL11.glDrawArrays((int)this.currentType, (int)0, (int)this.vertIndex);
         this.currentType = -1;
     }
 
@@ -301,3 +308,4 @@ extends ImmediateModeOGLRenderer {
         super.glLoadMatrix(buffer);
     }
 }
+

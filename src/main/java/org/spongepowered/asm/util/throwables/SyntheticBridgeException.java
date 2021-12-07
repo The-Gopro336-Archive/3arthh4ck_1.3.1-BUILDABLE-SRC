@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.util.throwables;
 
 import java.util.ListIterator;
@@ -199,3 +202,4 @@ extends MixinException {
         }
     }
 }
+

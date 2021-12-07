@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.player.replenish;
 
 import me.earth.earthhack.impl.event.events.misc.DeathEvent;
@@ -12,8 +15,9 @@ extends ModuleListener<Replenish, DeathEvent> {
 
     @Override
     public void invoke(DeathEvent event) {
-        if (event.getEntity().equals(ListenerDeath.mc.player)) {
+        if (event.getEntity().equals((Object)ListenerDeath.mc.player)) {
             ((Replenish)this.module).clear();
         }
     }
 }
+

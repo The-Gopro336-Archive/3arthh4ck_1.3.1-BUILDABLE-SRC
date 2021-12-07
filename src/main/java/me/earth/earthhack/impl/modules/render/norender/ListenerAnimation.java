@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketAnimation
+ */
 package me.earth.earthhack.impl.modules.render.norender;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -18,3 +24,4 @@ extends ModuleListener<NoRender, PacketEvent.Receive<SPacketAnimation>> {
         }
     }
 }
+

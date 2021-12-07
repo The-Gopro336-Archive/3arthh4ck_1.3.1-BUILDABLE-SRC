@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  io.netty.util.ReferenceCounted
+ */
 package me.earth.earthhack.impl.commands.packet.util;
 
 import io.netty.util.ReferenceCounted;
@@ -58,3 +64,4 @@ public class BufferUtil {
         buffer.release(buffer.refCnt());
     }
 }
+

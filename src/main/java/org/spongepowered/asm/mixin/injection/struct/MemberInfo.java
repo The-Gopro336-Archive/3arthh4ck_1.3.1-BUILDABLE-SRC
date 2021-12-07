@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Objects
+ *  com.google.common.base.Strings
+ */
 package org.spongepowered.asm.mixin.injection.struct;
 
 import com.google.common.base.Objects;
@@ -273,11 +280,11 @@ public final class MemberInfo {
             return false;
         }
         MemberInfo other = (MemberInfo)obj;
-        return this.matchAll == other.matchAll && this.forceField == other.forceField && Objects.equal(this.owner, other.owner) && Objects.equal(this.name, other.name) && Objects.equal(this.desc, other.desc);
+        return this.matchAll == other.matchAll && this.forceField == other.forceField && Objects.equal((Object)this.owner, (Object)other.owner) && Objects.equal((Object)this.name, (Object)other.name) && Objects.equal((Object)this.desc, (Object)other.desc);
     }
 
     public int hashCode() {
-        return Objects.hashCode(this.matchAll, this.owner, this.name, this.desc);
+        return Objects.hashCode((Object[])new Object[]{this.matchAll, this.owner, this.name, this.desc});
     }
 
     public MemberInfo move(String newOwner) {
@@ -318,7 +325,7 @@ public final class MemberInfo {
         boolean matchAll;
         String desc = null;
         String owner = null;
-        String name = Strings.nullToEmpty(input).replaceAll("\\s", "");
+        String name = Strings.nullToEmpty((String)input).replaceAll("\\s", "");
         if (refMapper != null) {
             name = refMapper.remap(mixinClass, name);
         }
@@ -357,3 +364,4 @@ public final class MemberInfo {
         return new MemberInfo(mapping);
     }
 }
+

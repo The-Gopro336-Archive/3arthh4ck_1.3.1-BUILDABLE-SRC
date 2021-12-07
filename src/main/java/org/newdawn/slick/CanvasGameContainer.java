@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.LWJGLException
+ *  org.lwjgl.opengl.Display
+ */
 package org.newdawn.slick;
 
 import java.awt.Canvas;
@@ -123,3 +130,4 @@ extends Canvas {
         }
     }
 }
+

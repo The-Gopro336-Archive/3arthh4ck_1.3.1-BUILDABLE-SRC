@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketPlayer$Position
+ *  net.minecraft.util.math.AxisAlignedBB
+ */
 package me.earth.earthhack.impl.modules.movement.longjump;
 
 import java.util.List;
@@ -17,7 +27,9 @@ import me.earth.earthhack.impl.modules.movement.longjump.LongJumpData;
 import me.earth.earthhack.impl.modules.movement.longjump.mode.JumpMode;
 import me.earth.earthhack.impl.util.helpers.disabling.DisablingModule;
 import me.earth.earthhack.impl.util.minecraft.MovementUtil;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 
@@ -63,11 +75,11 @@ extends DisablingModule {
     }
 
     protected void updatePosition(double x, double y, double z) {
-        LongJump.mc.player.connection.sendPacket(new CPacketPlayer.Position(x, y, z, LongJump.mc.player.onGround));
+        LongJump.mc.player.connection.sendPacket((Packet)new CPacketPlayer.Position(x, y, z, LongJump.mc.player.onGround));
     }
 
     protected double getDistance(EntityPlayer player, double distance) {
-        List boundingBoxes = player.world.getCollisionBoxes(player, player.getEntityBoundingBox().offset(0.0, -distance, 0.0));
+        List boundingBoxes = player.world.getCollisionBoxes((Entity)player, player.getEntityBoundingBox().offset(0.0, -distance, 0.0));
         if (boundingBoxes.isEmpty()) {
             return 0.0;
         }
@@ -79,3 +91,4 @@ extends DisablingModule {
         return player.posY - y;
     }
 }
+

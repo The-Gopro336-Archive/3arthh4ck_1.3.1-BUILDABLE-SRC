@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf;
 
 import com.formdev.flatlaf.FlatLaf;
@@ -188,9 +191,9 @@ class LinuxFontPolicy {
         File userHome = new File(System.getProperty("user.home"));
         String[] configDirs = new String[]{".config", ".kde4/share/config", ".kde/share/config"};
         File file = null;
-        String[] stringArray = configDirs;
-        int n = stringArray.length;
-        for (int i = 0; i < n && !(file = new File(userHome, (configDir = stringArray[i]) + "/" + filename)).isFile(); ++i) {
+        String[] arrstring = configDirs;
+        int n = arrstring.length;
+        for (int i = 0; i < n && !(file = new File(userHome, (configDir = arrstring[i]) + "/" + filename)).isFile(); ++i) {
         }
         if (!file.isFile()) {
             return Collections.emptyList();
@@ -235,3 +238,4 @@ class LinuxFontPolicy {
         return UIScale.getSystemScaleFactor(gc) > 1.0;
     }
 }
+

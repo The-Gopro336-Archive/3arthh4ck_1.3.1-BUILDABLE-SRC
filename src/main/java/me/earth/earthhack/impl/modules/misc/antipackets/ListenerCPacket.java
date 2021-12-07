@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.misc.antipackets;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -15,3 +18,4 @@ extends ModuleListener<AntiPackets, PacketEvent.Send<?>> {
         ((AntiPackets)this.module).onPacket(event, false);
     }
 }
+

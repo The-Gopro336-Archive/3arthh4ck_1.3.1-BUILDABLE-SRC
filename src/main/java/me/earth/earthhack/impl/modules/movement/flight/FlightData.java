@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.movement.flight;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -27,3 +30,4 @@ extends DefaultData<Flight> {
         return "Makes you fly.";
     }
 }
+

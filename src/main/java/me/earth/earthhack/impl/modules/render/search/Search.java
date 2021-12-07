@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.render.search;
 
 import java.util.Map;
@@ -123,9 +131,10 @@ extends RemovingItemAddingModule {
         if (color != 0) {
             return color;
         }
-        int blue = state.func_185904_a().getMaterialMapColor().colorValue;
+        int blue = state.getMaterial().getMaterialMapColor().colorValue;
         int red = blue >> 16 & 0xFF;
         int green = blue >> 8 & 0xFF;
         return ColorUtil.toARGB(red, green, blue &= 0xFF, 100);
     }
 }
+

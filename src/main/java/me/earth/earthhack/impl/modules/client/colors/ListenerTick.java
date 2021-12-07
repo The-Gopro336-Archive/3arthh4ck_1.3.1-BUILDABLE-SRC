@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.colors;
 
 import java.awt.Color;
@@ -20,3 +23,4 @@ extends ModuleListener<Colors, TickEvent> {
         Managers.MODULES.getRegistered().forEach(module1 -> module1.getSettings().stream().filter(setting -> setting instanceof ColorSetting && ((ColorSetting)setting).isRainbow() && !((ColorSetting)setting).isSync()).forEach(setting -> ((ColorSetting)setting).setValueAlpha(((ColorSetting)setting).isStaticRainbow() ? new Color(ColorUtil.staticRainbow(0.0f, (Color)((ColorSetting)setting).getValue())) : ColorUtil.getRainbow((int)Math.max(((ColorSetting)setting).getRainbowSpeed() * 30.0f, 30.0f), 0, ((ColorSetting)setting).getRainbowSaturation() / 100.0f, ((ColorSetting)setting).getRainbowBrightness() / 100.0f))));
     }
 }
+

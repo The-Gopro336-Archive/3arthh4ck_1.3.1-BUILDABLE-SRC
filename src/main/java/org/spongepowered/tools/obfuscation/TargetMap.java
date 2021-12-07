@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.io.Files
+ */
 package org.spongepowered.tools.obfuscation;
 
 import com.google.common.io.Files;
@@ -84,7 +90,7 @@ extends HashMap<TypeReference, Set<TypeReference>> {
         if (!file.isFile()) {
             return;
         }
-        for (String line : Files.readLines(file, Charset.defaultCharset())) {
+        for (String line : Files.readLines((File)file, (Charset)Charset.defaultCharset())) {
             String[] parts = line.split("\t");
             if (parts.length != 2) continue;
             this.addMixin(parts[1], parts[0]);
@@ -163,3 +169,4 @@ extends HashMap<TypeReference, Set<TypeReference>> {
         return new File(tempDir, String.format("mixin-targetdb-%s.tmp", sessionId));
     }
 }
+

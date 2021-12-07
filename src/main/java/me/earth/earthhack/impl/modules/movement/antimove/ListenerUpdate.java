@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.math.RayTraceResult
+ *  net.minecraft.util.math.RayTraceResult$Type
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.modules.movement.antimove;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -34,3 +42,4 @@ extends ModuleListener<NoMove, UpdateEvent> {
         }
     }
 }
+

@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  javax.annotation.Nullable
+ *  net.minecraft.client.resources.SimpleResource
+ *  net.minecraft.client.resources.data.IMetadataSection
+ *  net.minecraft.client.resources.data.MetadataSerializer
+ *  net.minecraft.util.ResourceLocation
+ */
 package me.earth.earthhack.impl.managers.client.resource;
 
 import java.io.InputStream;
@@ -18,3 +28,4 @@ extends SimpleResource {
         return null;
     }
 }
+

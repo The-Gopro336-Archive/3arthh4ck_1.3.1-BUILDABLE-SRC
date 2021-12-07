@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.commands.packet.util;
 
 import java.security.KeyPair;
@@ -38,3 +41,4 @@ Dummy {
         PUBLIC_KEY = pair.getPublic();
     }
 }
+

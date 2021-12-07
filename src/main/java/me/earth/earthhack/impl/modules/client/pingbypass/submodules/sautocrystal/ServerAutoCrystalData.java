@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.pingbypass.submodules.sautocrystal;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -67,3 +70,4 @@ extends DefaultData<ServerAutoCrystal> {
         return "An AutoCrystal for the PingBypass.";
     }
 }
+

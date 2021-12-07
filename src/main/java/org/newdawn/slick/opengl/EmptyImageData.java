@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.BufferUtils
+ */
 package org.newdawn.slick.opengl;
 
 import java.nio.ByteBuffer;
@@ -27,7 +33,7 @@ implements ImageData {
 
     @Override
     public ByteBuffer getImageBufferData() {
-        return BufferUtils.createByteBuffer(this.getTexWidth() * this.getTexHeight() * 4);
+        return BufferUtils.createByteBuffer((int)(this.getTexWidth() * this.getTexHeight() * 4));
     }
 
     @Override
@@ -45,3 +51,4 @@ implements ImageData {
         return this.width;
     }
 }
+

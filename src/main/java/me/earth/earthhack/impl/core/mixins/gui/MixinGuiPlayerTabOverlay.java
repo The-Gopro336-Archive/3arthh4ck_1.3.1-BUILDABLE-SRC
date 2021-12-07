@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.GuiPlayerTabOverlay
+ *  net.minecraft.client.network.NetworkPlayerInfo
+ *  net.minecraft.scoreboard.ScorePlayerTeam
+ *  net.minecraft.scoreboard.Team
+ */
 package me.earth.earthhack.impl.core.mixins.gui;
 
 import java.util.List;
@@ -32,3 +41,4 @@ public abstract class MixinGuiPlayerTabOverlay {
         return info.getDisplayName() != null ? info.getDisplayName().getFormattedText() : ScorePlayerTeam.formatPlayerName((Team)info.getPlayerTeam(), (String)info.getGameProfile().getName());
     }
 }
+

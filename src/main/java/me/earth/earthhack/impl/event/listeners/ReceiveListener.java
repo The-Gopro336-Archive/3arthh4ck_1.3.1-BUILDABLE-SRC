@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.Packet
+ */
 package me.earth.earthhack.impl.event.listeners;
 
 import me.earth.earthhack.api.event.bus.api.Invoker;
@@ -15,3 +21,4 @@ extends LambdaListener<PacketEvent.Receive<P>> {
         super(PacketEvent.Receive.class, priority, target, invoker);
     }
 }
+

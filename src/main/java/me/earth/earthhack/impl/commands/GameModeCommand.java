@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.player.EntityPlayerMP
+ *  net.minecraft.world.GameType
+ */
 package me.earth.earthhack.impl.commands;
 
 import java.util.Objects;
@@ -41,7 +48,7 @@ implements Globals {
                 GameModeCommand.mc.playerController.setGameType(gameType);
             } else if (GameModeCommand.mc.player != null) {
                 EntityPlayerMP player;
-                if (mc.isSingleplayer() && (player = Objects.requireNonNull(mc.getIntegratedServer()).func_184103_al().getPlayerByUUID(GameModeCommand.mc.player.getUniqueID())) != null) {
+                if (mc.isSingleplayer() && (player = Objects.requireNonNull(mc.getIntegratedServer()).getPlayerList().getPlayerByUUID(GameModeCommand.mc.player.getUniqueID())) != null) {
                     player.setGameType(gameType);
                     ChatUtil.sendMessage("\u00a7aGamemode set to \u00a7f" + gameType.getName() + "\u00a7a" + ".");
                     return;
@@ -95,3 +102,4 @@ implements Globals {
         }
     }
 }
+

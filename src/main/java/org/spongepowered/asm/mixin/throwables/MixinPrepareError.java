@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.throwables;
 
 public class MixinPrepareError
@@ -16,3 +19,4 @@ extends Error {
         super(message, cause);
     }
 }
+

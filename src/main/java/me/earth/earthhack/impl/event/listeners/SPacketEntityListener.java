@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketEntity
+ *  net.minecraft.network.play.server.SPacketEntity$S15PacketEntityRelMove
+ *  net.minecraft.network.play.server.SPacketEntity$S16PacketEntityLook
+ *  net.minecraft.network.play.server.SPacketEntity$S17PacketEntityLookMove
+ */
 package me.earth.earthhack.impl.event.listeners;
 
 import me.earth.earthhack.api.event.bus.EventListener;
@@ -52,3 +61,4 @@ implements Globals {
 
     protected abstract void onPositionRotation(PacketEvent.Receive<SPacketEntity.S17PacketEntityLookMove> var1);
 }
+

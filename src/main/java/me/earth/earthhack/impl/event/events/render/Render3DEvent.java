@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.event.events.render;
 
 public class Render3DEvent {
@@ -11,3 +14,4 @@ public class Render3DEvent {
         return this.partialTicks;
     }
 }
+

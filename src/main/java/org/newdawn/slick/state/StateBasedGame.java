@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.state;
 
 import java.util.HashMap;
@@ -348,3 +351,4 @@ InputListener {
         this.currentState.mouseWheelMoved(newValue);
     }
 }
+

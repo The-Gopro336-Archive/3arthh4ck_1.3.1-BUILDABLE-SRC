@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.svg;
 
 import org.newdawn.slick.SlickException;
@@ -21,3 +24,4 @@ extends SlickException {
         super("(" + element.getAttribute("id") + ") " + message);
     }
 }
+

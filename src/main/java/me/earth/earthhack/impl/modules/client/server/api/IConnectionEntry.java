@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.server.api;
 
 import me.earth.earthhack.api.util.interfaces.Nameable;
@@ -8,3 +11,4 @@ extends Nameable {
         return 0;
     }
 }
+

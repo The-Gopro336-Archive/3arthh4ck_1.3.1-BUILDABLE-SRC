@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.tools.obfuscation.mirror;
 
 import org.spongepowered.asm.obfuscation.mapping.IMapping;
@@ -30,3 +33,4 @@ public abstract class MemberHandle<T extends IMapping<T>> {
 
     public abstract T asMapping(boolean var1);
 }
+

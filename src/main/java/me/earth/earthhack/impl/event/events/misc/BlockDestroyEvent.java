@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.event.events.misc;
 
 import me.earth.earthhack.api.event.events.Stage;
@@ -26,3 +32,4 @@ extends StageEvent {
         this.used = used;
     }
 }
+

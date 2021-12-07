@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.item.ItemBow
+ */
 package me.earth.earthhack.impl.modules.player.arrows;
 
 import me.earth.earthhack.impl.event.events.misc.RightClickItemEvent;
@@ -18,3 +24,4 @@ extends ModuleListener<Arrows, RightClickItemEvent> {
         }
     }
 }
+

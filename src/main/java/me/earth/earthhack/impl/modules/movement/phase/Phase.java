@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  io.netty.util.internal.ConcurrentSet
+ *  net.minecraft.client.entity.EntityPlayerSP
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketPlayer
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.MathHelper
+ */
 package me.earth.earthhack.impl.modules.movement.phase;
 
 import io.netty.util.internal.ConcurrentSet;
@@ -127,7 +139,7 @@ implements CollisionEvent.Listener {
         for (int x = MathHelper.floor((double)bb.minX); x < MathHelper.floor((double)bb.maxX) + 1; ++x) {
             for (int y = MathHelper.floor((double)bb.minY); y < MathHelper.floor((double)bb.maxY) + 1; ++y) {
                 for (int z = MathHelper.floor((double)bb.minZ); z < MathHelper.floor((double)bb.maxZ) + 1; ++z) {
-                    if (!Phase.mc.world.getBlockState(new BlockPos(x, y, z)).func_185904_a().blocksMovement() || !bb.intersects(new AxisAlignedBB(x, y, z, x + 1, y + 1, z + 1))) continue;
+                    if (!Phase.mc.world.getBlockState(new BlockPos(x, y, z)).getMaterial().blocksMovement() || !bb.intersects(new AxisAlignedBB((double)x, (double)y, (double)z, (double)(x + 1), (double)(y + 1), (double)(z + 1)))) continue;
                     return true;
                 }
             }
@@ -146,3 +158,4 @@ implements CollisionEvent.Listener {
         }
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.icons;
 
 import com.formdev.flatlaf.icons.FlatAbstractIcon;
@@ -18,3 +21,4 @@ extends FlatAbstractIcon {
         g.fill(FlatUIUtils.createPath(14.0, 11.0, 16.0, 11.0, 16.0, 13.0, 14.0, 13.0, 14.0, 15.0, 12.0, 15.0, 12.0, 13.0, 10.0, 13.0, 10.0, 11.0, 12.0, 11.0, 12.0, 9.0, 14.0, 9.0, 14.0, 11.0));
     }
 }
+

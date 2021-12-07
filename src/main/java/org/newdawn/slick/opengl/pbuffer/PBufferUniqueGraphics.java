@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.LWJGLException
+ *  org.lwjgl.opengl.Display
+ *  org.lwjgl.opengl.GL11
+ *  org.lwjgl.opengl.Pbuffer
+ *  org.lwjgl.opengl.PixelFormat
+ */
 package org.newdawn.slick.opengl.pbuffer;
 
 import org.lwjgl.LWJGLException;
@@ -36,8 +46,8 @@ extends Graphics {
             this.pbuffer.makeCurrent();
             this.initGL();
             this.image.draw(0.0f, 0.0f);
-            GL11.glBindTexture(3553, tex.getTextureID());
-            GL11.glCopyTexImage2D(3553, 0, 6408, 0, 0, tex.getTextureWidth(), tex.getTextureHeight(), 0);
+            GL11.glBindTexture((int)3553, (int)tex.getTextureID());
+            GL11.glCopyTexImage2D((int)3553, (int)0, (int)6408, (int)0, (int)0, (int)tex.getTextureWidth(), (int)tex.getTextureHeight(), (int)0);
             this.image.setTexture(tex);
             Display.makeCurrent();
         }
@@ -49,8 +59,8 @@ extends Graphics {
 
     @Override
     protected void disable() {
-        GL11.glBindTexture(3553, this.image.getTexture().getTextureID());
-        GL11.glCopyTexImage2D(3553, 0, 6408, 0, 0, this.image.getTexture().getTextureWidth(), this.image.getTexture().getTextureHeight(), 0);
+        GL11.glBindTexture((int)3553, (int)this.image.getTexture().getTextureID());
+        GL11.glCopyTexImage2D((int)3553, (int)0, (int)6408, (int)0, (int)0, (int)this.image.getTexture().getTextureWidth(), (int)this.image.getTexture().getTextureHeight(), (int)0);
         try {
             Display.makeCurrent();
         }
@@ -80,25 +90,25 @@ extends Graphics {
     }
 
     protected void initGL() {
-        GL11.glEnable(3553);
-        GL11.glShadeModel(7425);
-        GL11.glDisable(2929);
-        GL11.glDisable(2896);
-        GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-        GL11.glClearDepth(1.0);
-        GL11.glEnable(3042);
-        GL11.glBlendFunc(770, 771);
-        GL11.glViewport(0, 0, this.screenWidth, this.screenHeight);
-        GL11.glMatrixMode(5888);
+        GL11.glEnable((int)3553);
+        GL11.glShadeModel((int)7425);
+        GL11.glDisable((int)2929);
+        GL11.glDisable((int)2896);
+        GL11.glClearColor((float)0.0f, (float)0.0f, (float)0.0f, (float)0.0f);
+        GL11.glClearDepth((double)1.0);
+        GL11.glEnable((int)3042);
+        GL11.glBlendFunc((int)770, (int)771);
+        GL11.glViewport((int)0, (int)0, (int)this.screenWidth, (int)this.screenHeight);
+        GL11.glMatrixMode((int)5888);
         GL11.glLoadIdentity();
         this.enterOrtho();
     }
 
     protected void enterOrtho() {
-        GL11.glMatrixMode(5889);
+        GL11.glMatrixMode((int)5889);
         GL11.glLoadIdentity();
-        GL11.glOrtho(0.0, this.screenWidth, 0.0, this.screenHeight, 1.0, -1.0);
-        GL11.glMatrixMode(5888);
+        GL11.glOrtho((double)0.0, (double)this.screenWidth, (double)0.0, (double)this.screenHeight, (double)1.0, (double)-1.0);
+        GL11.glMatrixMode((int)5888);
     }
 
     @Override
@@ -113,3 +123,4 @@ extends Graphics {
         this.image.flushPixelData();
     }
 }
+

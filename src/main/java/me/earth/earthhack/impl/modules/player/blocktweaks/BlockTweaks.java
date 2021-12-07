@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.input.Mouse
+ */
 package me.earth.earthhack.impl.modules.player.blocktweaks;
 
 import me.earth.earthhack.api.module.util.Category;
@@ -35,6 +41,7 @@ extends RemovingItemAddingModule {
     }
 
     public boolean noMiningTrace() {
-        return this.isEnabled() && this.entityMine.getValue() != false && this.isStackValid(BlockTweaks.mc.player.getHeldItemMainhand()) && (this.m1Attack.getValue() == false || !Mouse.isButtonDown(1));
+        return this.isEnabled() && this.entityMine.getValue() != false && this.isStackValid(BlockTweaks.mc.player.getHeldItemMainhand()) && (this.m1Attack.getValue() == false || !Mouse.isButtonDown((int)1));
     }
 }
+

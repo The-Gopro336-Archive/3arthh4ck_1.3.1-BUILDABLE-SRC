@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.misc.antiaim;
 
 public enum AntiAimMode {
@@ -9,3 +12,4 @@ public enum AntiAimMode {
     Constant;
 
 }
+

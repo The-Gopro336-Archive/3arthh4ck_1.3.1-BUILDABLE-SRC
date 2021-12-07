@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.PacketBuffer
+ *  net.minecraft.network.play.client.CPacketCustomPayload
+ */
 package me.earth.earthhack.impl.core.mixins.network.client;
 
 import net.minecraft.network.PacketBuffer;
@@ -10,3 +17,4 @@ public interface ICPacketCustomPayload {
     @Accessor(value="data")
     public void setData(PacketBuffer var1);
 }
+

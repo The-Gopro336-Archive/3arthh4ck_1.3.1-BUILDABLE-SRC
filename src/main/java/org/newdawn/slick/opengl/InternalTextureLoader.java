@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.BufferUtils
+ */
 package org.newdawn.slick.opengl;
 
 import java.io.BufferedInputStream;
@@ -155,7 +161,7 @@ public class InternalTextureLoader {
         texture.setTextureHeight(imageData.getTexHeight());
         int texWidth = texture.getTextureWidth();
         int texHeight = texture.getTextureHeight();
-        IntBuffer temp = BufferUtils.createIntBuffer(16);
+        IntBuffer temp = BufferUtils.createIntBuffer((int)16);
         GL.glGetInteger(3379, temp);
         int max = temp.get(0);
         if (texWidth > max || texHeight > max) {
@@ -205,7 +211,7 @@ public class InternalTextureLoader {
         texture.setWidth(width);
         texture.setHeight(height);
         texture.setAlpha(hasAlpha);
-        IntBuffer temp = BufferUtils.createIntBuffer(16);
+        IntBuffer temp = BufferUtils.createIntBuffer((int)16);
         GL.glGetInteger(3379, temp);
         int max = temp.get(0);
         if (texWidth > max || texHeight > max) {
@@ -254,3 +260,4 @@ public class InternalTextureLoader {
         return textureID;
     }
 }
+

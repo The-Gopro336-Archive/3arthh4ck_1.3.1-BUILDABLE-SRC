@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.movement.jesus;
 
 import me.earth.earthhack.api.module.Module;
@@ -46,3 +49,4 @@ implements CollisionEvent.Listener {
         return this.mode.getValue().toString();
     }
 }
+

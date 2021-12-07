@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal.util;
 
 public class MineSlots {
@@ -23,3 +26,4 @@ public class MineSlots {
         return this.damage;
     }
 }
+

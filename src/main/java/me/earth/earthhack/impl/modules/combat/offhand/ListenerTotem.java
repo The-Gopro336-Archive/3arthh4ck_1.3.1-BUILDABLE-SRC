@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.entity.EntityPlayerSP
+ *  net.minecraft.init.Items
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.network.play.server.SPacketEntityStatus
+ */
 package me.earth.earthhack.impl.modules.combat.offhand;
 
 import java.util.HashSet;
@@ -78,3 +87,4 @@ extends ModuleListener<Offhand, PacketEvent.Receive<SPacketEntityStatus>> {
         ((Offhand)this.module).postWindowClick();
     }
 }
+

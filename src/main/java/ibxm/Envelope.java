@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package ibxm;
 
 public class Envelope {
@@ -107,3 +110,4 @@ public class Envelope {
         }
     }
 }
+

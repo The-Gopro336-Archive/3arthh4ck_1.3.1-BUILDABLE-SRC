@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.collect.ImmutableList
+ *  com.google.common.collect.ImmutableSet
+ */
 package org.spongepowered.tools.obfuscation.mcp;
 
 import com.google.common.collect.ImmutableList;
@@ -22,11 +29,12 @@ implements IObfuscationService {
 
     @Override
     public Set<String> getSupportedOptions() {
-        return ImmutableSet.of(REOBF_SRG_FILE, REOBF_EXTRA_SRG_FILES, REOBF_NOTCH_FILE, REOBF_EXTRA_NOTCH_FILES, OUT_SRG_SRG_FILE, OUT_NOTCH_SRG_FILE, new String[]{OUT_REFMAP_FILE});
+        return ImmutableSet.of((Object)REOBF_SRG_FILE, (Object)REOBF_EXTRA_SRG_FILES, (Object)REOBF_NOTCH_FILE, (Object)REOBF_EXTRA_NOTCH_FILES, (Object)OUT_SRG_SRG_FILE, (Object)OUT_NOTCH_SRG_FILE, (Object[])new String[]{OUT_REFMAP_FILE});
     }
 
     @Override
     public Collection<ObfuscationTypeDescriptor> getObfuscationTypes() {
-        return ImmutableList.of(new ObfuscationTypeDescriptor(SEARGE, REOBF_SRG_FILE, REOBF_EXTRA_SRG_FILES, OUT_SRG_SRG_FILE, ObfuscationEnvironmentMCP.class), new ObfuscationTypeDescriptor(NOTCH, REOBF_NOTCH_FILE, REOBF_EXTRA_NOTCH_FILES, OUT_NOTCH_SRG_FILE, ObfuscationEnvironmentMCP.class));
+        return ImmutableList.of((Object)new ObfuscationTypeDescriptor(SEARGE, REOBF_SRG_FILE, REOBF_EXTRA_SRG_FILES, OUT_SRG_SRG_FILE, ObfuscationEnvironmentMCP.class), (Object)new ObfuscationTypeDescriptor(NOTCH, REOBF_NOTCH_FILE, REOBF_EXTRA_NOTCH_FILES, OUT_NOTCH_SRG_FILE, ObfuscationEnvironmentMCP.class));
     }
 }
+

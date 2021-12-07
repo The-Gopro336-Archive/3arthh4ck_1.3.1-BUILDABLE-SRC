@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.ui;
 
 import com.formdev.flatlaf.ui.FlatLineBorder;
@@ -25,3 +28,4 @@ extends FlatLineBorder {
         return super.getBorderInsets(c, insets);
     }
 }
+

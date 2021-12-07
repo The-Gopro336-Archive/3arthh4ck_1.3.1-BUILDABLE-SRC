@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.renderer.GlStateManager
+ *  net.minecraft.entity.Entity
+ */
 package me.earth.earthhack.impl.modules.render.esp;
 
 import java.awt.Color;
@@ -6,6 +13,7 @@ import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import me.earth.earthhack.impl.modules.render.esp.ESP;
 import me.earth.earthhack.impl.modules.render.esp.mode.EspMode;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.Entity;
 
 final class ListenerModel
 extends ModuleListener<ESP, ModelRenderEvent.Pre> {
@@ -16,11 +24,11 @@ extends ModuleListener<ESP, ModelRenderEvent.Pre> {
     @Override
     public void invoke(ModelRenderEvent.Pre event) {
         if (((ESP)this.module).mode.getValue() == EspMode.Outline) {
-            if (!((ESP)this.module).isValid(event.getEntity())) {
+            if (!((ESP)this.module).isValid((Entity)event.getEntity())) {
                 return;
             }
             this.render(event);
-            Color clr = ((ESP)this.module).getEntityColor(event.getEntity());
+            Color clr = ((ESP)this.module).getEntityColor((Entity)event.getEntity());
             ((ESP)this.module).renderOne(((ESP)this.module).lineWidth.getValue().floatValue());
             this.render(event);
             GlStateManager.glLineWidth((float)((ESP)this.module).lineWidth.getValue().floatValue());
@@ -37,6 +45,7 @@ extends ModuleListener<ESP, ModelRenderEvent.Pre> {
     }
 
     private void render(ModelRenderEvent.Pre event) {
-        event.getModel().render(event.getEntity(), event.getLimbSwing(), event.getLimbSwingAmount(), event.getAgeInTicks(), event.getNetHeadYaw(), event.getHeadPitch(), event.getScale());
+        event.getModel().render((Entity)event.getEntity(), event.getLimbSwing(), event.getLimbSwingAmount(), event.getAgeInTicks(), event.getNetHeadYaw(), event.getHeadPitch(), event.getScale());
     }
 }
+

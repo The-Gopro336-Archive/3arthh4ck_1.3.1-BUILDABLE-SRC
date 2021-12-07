@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Strings
+ */
 package org.spongepowered.asm.mixin.injection.struct;
 
 import com.google.common.base.Strings;
@@ -26,6 +32,7 @@ extends InjectionInfo {
 
     @Override
     public String getSliceId(String id) {
-        return Strings.nullToEmpty(id);
+        return Strings.nullToEmpty((String)id);
     }
 }
+

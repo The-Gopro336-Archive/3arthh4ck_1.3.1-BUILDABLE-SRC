@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.gson.JsonElement
+ *  com.google.gson.JsonObject
+ *  net.minecraft.init.Items
+ *  net.minecraft.item.Item
+ */
 package me.earth.earthhack.impl.modules.player.sorter;
 
 import com.google.gson.JsonElement;
@@ -5,6 +14,7 @@ import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.OpenOption;
@@ -228,7 +238,7 @@ extends LoadableModule {
             return;
         }
         try (InputStream stream = Files.newInputStream(path, new OpenOption[0]);){
-            JsonObject object = Jsonable.PARSER.parse(new InputStreamReader(stream)).getAsJsonObject();
+            JsonObject object = Jsonable.PARSER.parse((Reader)new InputStreamReader(stream)).getAsJsonObject();
             for (Map.Entry entry : object.entrySet()) {
                 InventoryLayout layout = new InventoryLayout();
                 layout.fromJson((JsonElement)entry.getValue());
@@ -257,3 +267,4 @@ extends LoadableModule {
         }
     }
 }
+

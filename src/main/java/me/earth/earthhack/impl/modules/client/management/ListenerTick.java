@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.management;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -18,10 +21,11 @@ extends ModuleListener<Management, TickEvent> {
 
     @Override
     public void invoke(TickEvent event) {
-        if (((Management)this.module).friend.getValue().booleanValue() && ((Management)this.module).lastProfile != null && !((Management)this.module).lastProfile.equals(mc.getSession().getProfile())) {
+        if (((Management)this.module).friend.getValue().booleanValue() && ((Management)this.module).lastProfile != null && !((Management)this.module).lastProfile.equals((Object)mc.getSession().getProfile())) {
             ((Management)this.module).lastProfile = mc.getSession().getProfile();
             Managers.FRIENDS.add(((Management)this.module).lastProfile.getName(), ((Management)this.module).lastProfile.getId());
             MEDIA.computeIfPresent(Media::reload);
         }
     }
 }
+

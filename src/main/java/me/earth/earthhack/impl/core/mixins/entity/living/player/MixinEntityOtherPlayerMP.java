@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.entity.EntityOtherPlayerMP
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.util.DamageSource
+ */
 package me.earth.earthhack.impl.core.mixins.entity.living.player;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -27,7 +35,7 @@ implements IEntityOtherPlayerMP {
 
     @Override
     public boolean attackEntitySuper(DamageSource source, float amount) {
-        return super.func_70097_a(source, amount);
+        return super.attackEntityFrom(source, amount);
     }
 
     @Inject(method={"attackEntityFrom"}, at={@At(value="HEAD")}, cancellable=true)
@@ -46,16 +54,17 @@ implements IEntityOtherPlayerMP {
 
     @Inject(method={"onLivingUpdate"}, at={@At(value="HEAD")})
     private void onLivingUpdateHead(CallbackInfo ci) {
-        this.theYaw = this.field_70177_z;
-        this.thePitch = this.field_70125_A;
+        this.theYaw = this.rotationYaw;
+        this.thePitch = this.rotationPitch;
     }
 
     @Redirect(method={"onLivingUpdate"}, at=@At(value="INVOKE", target="Lnet/minecraft/client/entity/EntityOtherPlayerMP;setRotation(FF)V"))
     private void setRotationHook(EntityOtherPlayerMP entityOtherPlayerMP, float yaw, float pitch) {
-        if (SPECTATE.isEnabled() && ((Spectate)SPECTATE.get()).shouldTurn() && entityOtherPlayerMP.equals(((Spectate)SPECTATE.get()).getRender())) {
-            this.func_70101_b(this.theYaw, this.thePitch);
+        if (SPECTATE.isEnabled() && ((Spectate)SPECTATE.get()).shouldTurn() && entityOtherPlayerMP.equals((Object)((Spectate)SPECTATE.get()).getRender())) {
+            this.setRotation(this.theYaw, this.thePitch);
             return;
         }
-        this.func_70101_b(yaw, pitch);
+        this.setRotation(yaw, pitch);
     }
 }
+

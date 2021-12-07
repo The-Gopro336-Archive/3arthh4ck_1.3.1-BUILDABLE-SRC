@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.ui;
 
 import com.formdev.flatlaf.FlatLaf;
@@ -86,23 +89,24 @@ extends BasicMenuBarUI {
             JMenuBar menuBar = (JMenuBar)e.getSource();
             JMenu menu = menuBar.getMenu(0);
             if (menu != null) {
-                MenuElement[] menuElementArray;
+                MenuElement[] arrmenuElement;
                 MenuSelectionManager menuSelectionManager = MenuSelectionManager.defaultManager();
                 if (SystemInfo.isWindows) {
-                    MenuElement[] menuElementArray2 = new MenuElement[2];
-                    menuElementArray2[0] = menuBar;
-                    menuElementArray = menuElementArray2;
-                    menuElementArray2[1] = menu;
+                    MenuElement[] arrmenuElement2 = new MenuElement[2];
+                    arrmenuElement2[0] = menuBar;
+                    arrmenuElement = arrmenuElement2;
+                    arrmenuElement2[1] = menu;
                 } else {
-                    MenuElement[] menuElementArray3 = new MenuElement[3];
-                    menuElementArray3[0] = menuBar;
-                    menuElementArray3[1] = menu;
-                    menuElementArray = menuElementArray3;
-                    menuElementArray3[2] = menu.getPopupMenu();
+                    MenuElement[] arrmenuElement3 = new MenuElement[3];
+                    arrmenuElement3[0] = menuBar;
+                    arrmenuElement3[1] = menu;
+                    arrmenuElement = arrmenuElement3;
+                    arrmenuElement3[2] = menu.getPopupMenu();
                 }
-                menuSelectionManager.setSelectedPath(menuElementArray);
+                menuSelectionManager.setSelectedPath(arrmenuElement);
                 FlatLaf.showMnemonics(menuBar);
             }
         }
     }
 }
+

@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketPlayer$Position
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.movement.holetp;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -15,6 +23,7 @@ import me.earth.earthhack.impl.modules.movement.packetfly.PacketFly;
 import me.earth.earthhack.impl.modules.movement.speed.Speed;
 import me.earth.earthhack.impl.modules.movement.speed.SpeedMode;
 import me.earth.earthhack.impl.util.math.position.PositionUtil;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.math.BlockPos;
 
@@ -50,12 +59,13 @@ extends ModuleListener<HoleTP, MotionUpdateEvent> {
                 if (!(ListenerMotion.mc.player.onGround || ListenerMotion.mc.player.isOnLadder() || ListenerMotion.mc.player.isEntityInsideOpaqueBlock() || ListenerMotion.mc.gameSettings.keyBindJump.isKeyDown() || ((HoleTP)this.module).packets <= 0)) {
                     BlockPos pos = new BlockPos(ListenerMotion.mc.player.posX, ListenerMotion.mc.player.posY, ListenerMotion.mc.player.posZ);
                     for (double position : HoleTP.OFFSETS) {
-                        ListenerMotion.mc.player.connection.sendPacket(new CPacketPlayer.Position((float)pos.getX() + 0.5f, ListenerMotion.mc.player.posY - position, (float)pos.getZ() + 0.5f, true));
+                        ListenerMotion.mc.player.connection.sendPacket((Packet)new CPacketPlayer.Position((double)((float)pos.getX() + 0.5f), ListenerMotion.mc.player.posY - position, (double)((float)pos.getZ() + 0.5f), true));
                     }
-                    ListenerMotion.mc.player.setPosition((float)pos.getX() + 0.5f, ((HoleTP)this.module).getNearestBlockBelow() + 0.1, (float)pos.getZ() + 0.5f);
+                    ListenerMotion.mc.player.setPosition((double)((float)pos.getX() + 0.5f), ((HoleTP)this.module).getNearestBlockBelow() + 0.1, (double)((float)pos.getZ() + 0.5f));
                     ((HoleTP)this.module).packets = 0;
                 }
             }
         }
     }
 }
+

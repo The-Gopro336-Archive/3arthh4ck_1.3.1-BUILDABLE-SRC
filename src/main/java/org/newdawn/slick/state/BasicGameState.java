@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.state;
 
 import org.newdawn.slick.GameContainer;
@@ -108,3 +111,4 @@ implements GameState {
     public void mouseWheelMoved(int newValue) {
     }
 }
+

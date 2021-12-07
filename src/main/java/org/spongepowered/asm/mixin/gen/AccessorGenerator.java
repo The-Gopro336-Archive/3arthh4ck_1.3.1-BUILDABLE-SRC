@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.gen;
 
 import java.util.ArrayList;
@@ -24,3 +27,4 @@ public abstract class AccessorGenerator {
 
     public abstract MethodNode generate();
 }
+

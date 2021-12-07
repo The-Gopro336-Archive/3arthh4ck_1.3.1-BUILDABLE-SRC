@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.util;
 
 import com.formdev.flatlaf.util.LoggingFacadeImpl;
@@ -9,3 +12,4 @@ public interface LoggingFacade {
 
     public void logConfig(String var1, Throwable var2);
 }
+

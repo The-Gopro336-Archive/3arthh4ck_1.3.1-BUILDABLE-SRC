@@ -1,9 +1,22 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.item.ItemFood
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketPlayerDigging
+ *  net.minecraft.network.play.client.CPacketPlayerDigging$Action
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItem
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.player.fastplace;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import me.earth.earthhack.impl.modules.player.fastplace.FastPlace;
 import net.minecraft.item.ItemFood;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItem;
 import net.minecraft.util.EnumFacing;
@@ -23,8 +36,9 @@ extends ModuleListener<FastPlace, PacketEvent.Send<CPacketPlayerTryUseItem>> {
             return;
         }
         this.sending = true;
-        ListenerUseItem.mc.player.connection.sendPacket(new CPacketPlayerTryUseItem(((CPacketPlayerTryUseItem)event.getPacket()).getHand()));
+        ListenerUseItem.mc.player.connection.sendPacket((Packet)new CPacketPlayerTryUseItem(((CPacketPlayerTryUseItem)event.getPacket()).getHand()));
         this.sending = false;
-        ListenerUseItem.mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
+        ListenerUseItem.mc.player.connection.sendPacket((Packet)new CPacketPlayerDigging(CPacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
     }
 }
+

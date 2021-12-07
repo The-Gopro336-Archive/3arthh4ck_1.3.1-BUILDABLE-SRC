@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.helpers.addable;
 
 import java.util.function.Function;
@@ -12,3 +15,4 @@ extends ItemAddingModule<Boolean, SimpleRemovingSetting> {
         super(name, category, SimpleRemovingSetting::new, settingDescription);
     }
 }
+

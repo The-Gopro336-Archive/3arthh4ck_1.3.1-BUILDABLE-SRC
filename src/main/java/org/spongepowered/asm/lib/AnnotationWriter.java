@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.lib;
 
 import org.spongepowered.asm.lib.AnnotationVisitor;
@@ -226,3 +229,4 @@ extends AnnotationVisitor {
         }
     }
 }
+

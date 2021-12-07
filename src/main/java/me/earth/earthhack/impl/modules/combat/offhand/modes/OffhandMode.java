@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.init.Items
+ *  net.minecraft.item.Item
+ */
 package me.earth.earthhack.impl.modules.combat.offhand.modes;
 
 import net.minecraft.block.Block;
@@ -41,3 +50,4 @@ public class OffhandMode {
         return false;
     }
 }
+

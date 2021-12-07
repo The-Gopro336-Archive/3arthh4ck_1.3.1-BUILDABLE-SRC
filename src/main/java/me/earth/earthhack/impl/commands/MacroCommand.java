@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.text.ITextComponent
+ *  net.minecraft.util.text.Style
+ *  net.minecraft.util.text.TextComponentString
+ *  net.minecraft.util.text.event.HoverEvent
+ *  net.minecraft.util.text.event.HoverEvent$Action
+ */
 package me.earth.earthhack.impl.commands;
 
 import java.util.ArrayList;
@@ -24,6 +34,7 @@ import me.earth.earthhack.impl.managers.client.macro.Macro;
 import me.earth.earthhack.impl.managers.client.macro.MacroType;
 import me.earth.earthhack.impl.modules.client.commands.Commands;
 import me.earth.earthhack.impl.util.text.ChatUtil;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.event.HoverEvent;
@@ -48,12 +59,12 @@ extends Command {
             while (iterator.hasNext()) {
                 Macro macro = (Macro)iterator.next();
                 TextComponentString macroComp = new TextComponentString("\u00a7b" + macro.getName());
-                macroComp.setStyle(new Style().setHoverEvent(ChatComponentUtil.setOffset(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("Bind: \u00a7b" + macro.getBind().toString() + "\u00a7f" + ", Command: " + "\u00a7c" + Arrays.toString(macro.getCommands()))))));
-                component.appendSibling(macroComp);
+                macroComp.setStyle(new Style().setHoverEvent(ChatComponentUtil.setOffset(new HoverEvent(HoverEvent.Action.SHOW_TEXT, (ITextComponent)new TextComponentString("Bind: \u00a7b" + macro.getBind().toString() + "\u00a7f" + ", Command: " + "\u00a7c" + Arrays.toString(macro.getCommands()))))));
+                component.appendSibling((ITextComponent)macroComp);
                 if (!iterator.hasNext()) continue;
-                component.appendSibling(new TextComponentString("\u00a7f, "));
+                component.appendSibling((ITextComponent)new TextComponentString("\u00a7f, "));
             }
-            Managers.CHAT.sendDeleteComponent(component, "Macros", 3000);
+            Managers.CHAT.sendDeleteComponent((ITextComponent)component, "Macros", 3000);
             return;
         }
         if (args.length == 2) {
@@ -223,3 +234,4 @@ extends Command {
         return (Macro)CommandUtil.getNameableStartingWith(name, Managers.MACRO.getRegistered().stream().filter(m -> m.getType() != MacroType.DELEGATE).collect(Collectors.toList()));
     }
 }
+

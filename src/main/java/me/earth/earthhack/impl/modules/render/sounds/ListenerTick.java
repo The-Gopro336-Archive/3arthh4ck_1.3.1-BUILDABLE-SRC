@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.render.sounds;
 
 import me.earth.earthhack.impl.event.events.misc.TickEvent;
@@ -15,3 +18,4 @@ extends ModuleListener<Sounds, TickEvent> {
         ((Sounds)this.module).sounds.entrySet().removeIf(e -> System.currentTimeMillis() - (Long)e.getValue() > (long)((Sounds)this.module).remove.getValue().intValue());
     }
 }
+

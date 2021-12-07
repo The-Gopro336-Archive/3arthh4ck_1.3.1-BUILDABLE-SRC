@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.gui.hud;
 
 public interface ICoordinate {
@@ -17,3 +20,4 @@ public interface ICoordinate {
 
     public void setHeight(float var1);
 }
+

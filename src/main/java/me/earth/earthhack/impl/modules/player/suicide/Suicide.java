@@ -1,3 +1,14 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.collect.Sets
+ *  net.minecraft.client.gui.GuiScreen
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.network.play.client.CPacketChatMessage
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.RayTraceResult
+ */
 package me.earth.earthhack.impl.modules.player.suicide;
 
 import com.google.common.collect.Sets;
@@ -66,7 +77,7 @@ extends DisablingModule {
         if (this.ask.getValue().booleanValue()) {
             this.displaying = true;
             GuiScreen current = Suicide.mc.currentScreen;
-            mc.displayGuiScreen(new YesNoNonPausing((r, id) -> {
+            mc.displayGuiScreen((GuiScreen)new YesNoNonPausing((r, id) -> {
                 mc.displayGuiScreen(current);
                 if (r) {
                     this.displaying = false;
@@ -91,3 +102,4 @@ extends DisablingModule {
         return this.isEnabled() && !this.displaying && this.mode.getValue() != SuicideMode.Command && this.offhand.getValue() != false;
     }
 }
+

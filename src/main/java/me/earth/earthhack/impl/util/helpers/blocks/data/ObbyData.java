@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.helpers.blocks.data;
 
 import me.earth.earthhack.impl.util.helpers.blocks.ObbyModule;
@@ -25,3 +28,4 @@ extends BlockPlacingData<T> {
         return "A module that places blocks, specialized on Obby.";
     }
 }
+

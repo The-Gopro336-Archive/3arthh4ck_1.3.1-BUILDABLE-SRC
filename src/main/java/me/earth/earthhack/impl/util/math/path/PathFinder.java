@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.collect.Sets
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Vec3i
+ */
 package me.earth.earthhack.impl.util.math.path;
 
 import com.google.common.collect.Sets;
@@ -49,7 +61,7 @@ implements Globals {
         if (pr > 7.0) {
             throw new IllegalArgumentException("Range " + pr + " was bigger than MAX_RANGE: " + 7.0);
         }
-        HashSet<BlockPos> ignored = Sets.newHashSet(ignore);
+        HashSet ignored = Sets.newHashSet((Object[])ignore);
         for (BlockPos pos : tc) {
             if (PathFinder.checkPos(pos, p, ignored, pr, es, m, world, s, c)) break;
         }
@@ -59,7 +71,7 @@ implements Globals {
         if (pr > 7.0) {
             throw new IllegalArgumentException("Range " + pr + " was bigger than MAX_RANGE: " + 7.0);
         }
-        HashSet<BlockPos> ignored = Sets.newHashSet(ignore);
+        HashSet ignored = Sets.newHashSet((Object[])ignore);
         int maxRadius = CACHE.getRadius(pr);
         Vec3i[] offsets = CACHE.array();
         for (int i = 1; i < maxRadius && !PathFinder.checkPos(pathable.getPos().add(offsets[i]), pathable, ignored, pr, entities, mode, world, setState, check); ++i) {
@@ -68,10 +80,10 @@ implements Globals {
 
     private static boolean checkPos(BlockPos pos, Pathable pathable, Set<BlockPos> ignored, double pr, List<Entity> entities, RayTraceMode mode, IBlockStateHelper world, IBlockState setState, TriPredicate<BlockPos, Pathable, Entity> c) {
         IBlockState state = world.getBlockState(pos);
-        if (state.func_185904_a().isReplaceable()) {
+        if (state.getMaterial().isReplaceable()) {
             return false;
         }
-        if (pathable.getFrom().getDistanceSq(pos) > MathUtil.square(pr) || ignored.contains(pos)) {
+        if (pathable.getFrom().getDistanceSq(pos) > MathUtil.square(pr) || ignored.contains((Object)pos)) {
             return false;
         }
         int xDiff = pathable.getPos().getX() - pos.getX();
@@ -111,7 +123,7 @@ implements Globals {
     }
 
     private static boolean check(BlockPos pos, double pr, Set<BlockPos> ignored, Pathable pathable, List<Entity> entities, TriPredicate<BlockPos, Pathable, Entity> c) {
-        return pathable.getFrom().getDistanceSq(pos) > MathUtil.square(pr) || ignored.contains(pos) || PathFinder.checkEntities(pathable, pos, entities, c);
+        return pathable.getFrom().getDistanceSq(pos) > MathUtil.square(pr) || ignored.contains((Object)pos) || PathFinder.checkEntities(pathable, pos, entities, c);
     }
 
     private static boolean checkEntities(Pathable data, BlockPos pos, List<Entity> entities, TriPredicate<BlockPos, Pathable, Entity> check) {
@@ -174,3 +186,4 @@ implements Globals {
         CACHE.cache();
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.lib.commons;
 
 import org.spongepowered.asm.lib.AnnotationVisitor;
@@ -29,3 +32,4 @@ extends FieldVisitor {
         return av == null ? null : new AnnotationRemapper(av, this.remapper);
     }
 }
+

@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.util.CombatTracker
+ */
 package me.earth.earthhack.impl.commands.packet.arguments;
 
 import me.earth.earthhack.api.util.interfaces.Globals;
@@ -26,3 +33,4 @@ implements Globals {
         return entity.getCombatTracker();
     }
 }
+

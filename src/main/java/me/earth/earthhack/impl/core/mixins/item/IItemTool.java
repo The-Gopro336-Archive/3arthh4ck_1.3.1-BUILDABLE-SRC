@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.item.Item$ToolMaterial
+ *  net.minecraft.item.ItemTool
+ */
 package me.earth.earthhack.impl.core.mixins.item;
 
 import net.minecraft.item.Item;
@@ -13,3 +20,4 @@ public interface IItemTool {
     @Accessor(value="toolMaterial")
     public Item.ToolMaterial getToolMaterial();
 }
+

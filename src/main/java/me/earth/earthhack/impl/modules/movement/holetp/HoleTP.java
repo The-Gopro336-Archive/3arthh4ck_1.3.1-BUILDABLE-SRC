@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.BlockSlab
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.world.IBlockAccess
+ */
 package me.earth.earthhack.impl.modules.movement.holetp;
 
 import me.earth.earthhack.api.module.Module;
@@ -10,6 +20,7 @@ import net.minecraft.block.BlockSlab;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 
 public class HoleTP
 extends Module {
@@ -48,7 +59,7 @@ extends Module {
 
     protected double getNearestBlockBelow() {
         for (double y = HoleTP.mc.player.posY; y > 0.0; y -= 0.001) {
-            if (HoleTP.mc.world.getBlockState(new BlockPos(HoleTP.mc.player.posX, y, HoleTP.mc.player.posZ)).getBlock().getDefaultState().func_185890_d(HoleTP.mc.world, new BlockPos(0, 0, 0)) == null) continue;
+            if (HoleTP.mc.world.getBlockState(new BlockPos(HoleTP.mc.player.posX, y, HoleTP.mc.player.posZ)).getBlock().getDefaultState().getCollisionBoundingBox((IBlockAccess)HoleTP.mc.world, new BlockPos(0, 0, 0)) == null) continue;
             if (HoleTP.mc.world.getBlockState(new BlockPos(HoleTP.mc.player.posX, y, HoleTP.mc.player.posZ)).getBlock() instanceof BlockSlab) {
                 return -1.0;
             }
@@ -57,3 +68,4 @@ extends Module {
         return -1.0;
     }
 }
+

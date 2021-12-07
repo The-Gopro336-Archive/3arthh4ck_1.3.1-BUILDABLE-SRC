@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.renderer.GlStateManager
+ *  net.minecraft.client.renderer.RenderHelper
+ *  net.minecraft.enchantment.Enchantment
+ *  net.minecraft.enchantment.EnchantmentHelper
+ *  net.minecraft.init.Items
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.ResourceLocation
+ */
 package me.earth.earthhack.impl.modules.render.nametags;
 
 import java.util.ArrayList;
@@ -129,14 +141,14 @@ implements Globals {
             Managers.TEXT.drawStringWithShadow(enchantment, (float)xOffset * 2.0f, yOffset, -1);
             yOffset += 8;
         }
-        if (stack.getItem().equals(Items.GOLDEN_APPLE) && stack.hasEffect()) {
+        if (stack.getItem().equals((Object)Items.GOLDEN_APPLE) && stack.hasEffect()) {
             Managers.TEXT.drawStringWithShadow("\u00a7cGod", (float)xOffset * 2.0f, yOffset, -3977919);
         }
     }
 
     private String getEnchantText(Enchantment ench, int lvl) {
         int lvlOffset;
-        ResourceLocation resource = (ResourceLocation)Enchantment.REGISTRY.getNameForObject(ench);
+        ResourceLocation resource = (ResourceLocation)Enchantment.REGISTRY.getNameForObject((Object)ench);
         String name = resource == null ? ench.getName() : resource.toString();
         int n = lvlOffset = lvl > 1 ? 12 : 13;
         if (name.length() > lvlOffset) {
@@ -148,3 +160,4 @@ implements Globals {
         return name.length() < 2 ? name : TextUtil.capitalize(name);
     }
 }
+

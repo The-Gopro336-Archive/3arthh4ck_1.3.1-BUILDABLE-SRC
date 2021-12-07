@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.icons;
 
 import com.formdev.flatlaf.icons.FlatAbstractIcon;
@@ -25,3 +28,4 @@ implements AnimatedIcon {
         AnimatedIcon.AnimationSupport.paintIcon(this, c, g, 0, 0);
     }
 }
+

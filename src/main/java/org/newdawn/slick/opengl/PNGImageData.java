@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.BufferUtils
+ */
 package org.newdawn.slick.opengl;
 
 import java.io.IOException;
@@ -63,7 +69,7 @@ implements LoadableImageData {
         this.texHeight = this.get2Fold(this.height);
         int perPixel = decoder.hasAlpha() ? 4 : 3;
         this.bitDepth = decoder.hasAlpha() ? 32 : 24;
-        this.scratch = BufferUtils.createByteBuffer(this.texWidth * this.texHeight * perPixel);
+        this.scratch = BufferUtils.createByteBuffer((int)(this.texWidth * this.texHeight * perPixel));
         decoder.decode(this.scratch, this.texWidth * perPixel, perPixel == 4 ? PNGDecoder.RGBA : PNGDecoder.RGB);
         if (this.height < this.texHeight - 1) {
             int topOffset = (this.texHeight - 1) * (this.texWidth * perPixel);
@@ -84,7 +90,7 @@ implements LoadableImageData {
             }
         }
         if (!decoder.hasAlpha() && forceAlpha) {
-            ByteBuffer temp = BufferUtils.createByteBuffer(this.texWidth * this.texHeight * 4);
+            ByteBuffer temp = BufferUtils.createByteBuffer((int)(this.texWidth * this.texHeight * 4));
             for (int x = 0; x < this.texWidth; ++x) {
                 for (int y = 0; y < this.texHeight; ++y) {
                     int srcOffset = y * 3 + x * this.texHeight * 3;
@@ -145,3 +151,4 @@ implements LoadableImageData {
         return this.height;
     }
 }
+

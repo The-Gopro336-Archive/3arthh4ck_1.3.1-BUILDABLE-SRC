@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.util.helpers.blocks;
 
 import me.earth.earthhack.api.module.util.Category;
@@ -43,3 +51,4 @@ extends ObbyModule {
 
     protected abstract T createListener();
 }
+

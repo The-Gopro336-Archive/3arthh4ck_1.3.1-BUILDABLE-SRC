@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.render.holeesp;
 
 import me.earth.earthhack.impl.event.events.render.Render3DEvent;
@@ -15,3 +18,4 @@ extends ModuleListener<HoleESP, Render3DEvent> {
         ((HoleESP)this.module).onRender3D();
     }
 }
+

@@ -1,3 +1,16 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  io.netty.buffer.ByteBuf
+ *  io.netty.channel.ChannelHandlerContext
+ *  net.minecraft.network.EnumConnectionState
+ *  net.minecraft.network.EnumPacketDirection
+ *  net.minecraft.network.NettyPacketEncoder
+ *  net.minecraft.network.NetworkManager
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.PacketBuffer
+ */
 package me.earth.earthhack.impl.core.mixins.network;
 
 import io.netty.buffer.ByteBuf;
@@ -25,11 +38,11 @@ public abstract class MixinNettyPacketEncoder {
     private static final ModuleCache<Logger> LOGGER_MODULE = Caches.getModule(Logger.class);
     @Shadow
     @Final
-    private EnumPacketDirection field_152500_c;
+    private EnumPacketDirection direction;
 
     @Inject(method={"encode"}, at={@At(value="INVOKE", target="Lnet/minecraft/network/Packet;writePacketData(Lnet/minecraft/network/PacketBuffer;)V", shift=At.Shift.AFTER)})
     private void encodeHook(ChannelHandlerContext p_encode_1_, Packet<?> p_encode_2_, ByteBuf p_encode_3_, CallbackInfo ci) {
-        if (this.field_152500_c == EnumPacketDirection.SERVERBOUND && LOGGER_MODULE.isEnabled() && ((Logger)LOGGER_MODULE.get()).getMode() == LoggerMode.Buffer) {
+        if (this.direction == EnumPacketDirection.SERVERBOUND && LOGGER_MODULE.isEnabled() && ((Logger)LOGGER_MODULE.get()).getMode() == LoggerMode.Buffer) {
             if (p_encode_3_.readableBytes() != 0) {
                 int writerIndex = p_encode_3_.writerIndex();
                 int readerIndex = p_encode_3_.readerIndex();
@@ -60,3 +73,4 @@ public abstract class MixinNettyPacketEncoder {
         }
     }
 }
+

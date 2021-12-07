@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.shader.Framebuffer
+ *  net.minecraft.client.shader.Shader
+ *  net.minecraft.client.shader.ShaderGroup
+ */
 package me.earth.earthhack.impl.core.mixins.render;
 
 import java.util.List;
@@ -19,3 +27,4 @@ implements IShaderGroup {
     @Accessor(value="listShaders")
     public abstract List<Shader> getListShaders();
 }
+

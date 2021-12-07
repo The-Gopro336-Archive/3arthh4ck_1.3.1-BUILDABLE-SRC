@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.core.ducks.util;
 
 public interface IHoverable {
@@ -5,3 +8,4 @@ public interface IHoverable {
         return true;
     }
 }
+

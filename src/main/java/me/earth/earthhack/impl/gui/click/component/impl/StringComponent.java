@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.util.ChatAllowedCharacters
+ *  org.lwjgl.input.Keyboard
+ */
 package me.earth.earthhack.impl.gui.click.component.impl;
 
 import java.awt.Toolkit;
@@ -54,7 +62,7 @@ extends Component {
             } else if (keyCode == 14) {
                 this.setString(StringComponent.removeLastChar(this.currentString.getString()));
             } else {
-                if (keyCode == 47 && (Keyboard.isKeyDown(157) || Keyboard.isKeyDown(29))) {
+                if (keyCode == 47 && (Keyboard.isKeyDown((int)157) || Keyboard.isKeyDown((int)29))) {
                     try {
                         this.setString(this.currentString.getString() + Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor));
                     }
@@ -144,3 +152,4 @@ extends Component {
         }
     }
 }
+

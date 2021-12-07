@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.gen;
 
 import org.spongepowered.asm.lib.tree.FieldInsnNode;
@@ -25,3 +28,4 @@ extends AccessorGeneratorField {
         return method;
     }
 }
+

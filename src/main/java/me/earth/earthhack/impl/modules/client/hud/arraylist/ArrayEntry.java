@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.gui.ScaledResolution
+ *  net.minecraft.client.renderer.GlStateManager
+ *  org.lwjgl.opengl.GL11
+ */
 package me.earth.earthhack.impl.modules.client.hud.arraylist;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -33,10 +42,10 @@ implements Globals {
         float textWidth = HUD.RENDERER.getStringWidth(ModuleUtil.getHudName(this.getModule()));
         float xSpeed = textWidth / (float)(Minecraft.getDebugFPS() >> 2);
         GlStateManager.pushMatrix();
-        GL11.glEnable(3089);
+        GL11.glEnable((int)3089);
         RenderUtil.scissor(desiredX - textWidth - 1.0f, desiredY - 1.0f, desiredX + 1.0f, desiredY + HUD.RENDERER.getStringHeight() + 3.0f);
         ((HUD)HUD_MODULE_CACHE.get()).renderText(ModuleUtil.getHudName(this.getModule()), this.getX(), desiredY);
-        GL11.glDisable(3089);
+        GL11.glDisable((int)3089);
         GlStateManager.popMatrix();
         if (((Module)Caches.getModule(this.getModule().getClass()).get()).isEnabled() && ((Module)Caches.getModule(this.getModule().getClass()).get()).isHidden() != Hidden.Hidden) {
             if (this.stopWatch.passed(1000L)) {
@@ -103,3 +112,4 @@ implements Globals {
         this.startX = startX;
     }
 }
+

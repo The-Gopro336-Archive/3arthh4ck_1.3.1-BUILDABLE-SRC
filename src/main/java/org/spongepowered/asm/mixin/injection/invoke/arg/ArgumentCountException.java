@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.injection.invoke.arg;
 
 public class ArgumentCountException
@@ -8,3 +11,4 @@ extends IllegalArgumentException {
         super("Invalid number of arguments for setAll, received " + received + " but expected " + expected + ": " + desc);
     }
 }
+

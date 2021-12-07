@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.client.CPacketUseEntity
+ */
 package me.earth.earthhack.impl.modules.player.spectate;
 
 import me.earth.earthhack.impl.core.ducks.network.ICPacketUseEntity;
@@ -19,3 +25,4 @@ extends ModuleListener<Spectate, PacketEvent.Send<CPacketUseEntity>> {
         }
     }
 }
+

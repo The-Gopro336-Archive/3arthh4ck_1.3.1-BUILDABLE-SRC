@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.nbt.NBTTagCompound
+ */
 package me.earth.earthhack.vanilla.mixins;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -16,14 +24,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MixinItemStack {
     private static ModuleCache<TrueDurability> trueDurability;
     @Shadow
-    int field_77991_e;
+    int itemDamage;
 
     @Inject(method={"<init>(Lnet/minecraft/item/Item;II)V"}, at={@At(value="RETURN")})
     private void initHook(Item itemIn, int amount, int meta, CallbackInfo ci) {
         if (trueDurability == null) {
             trueDurability = Caches.getModule(TrueDurability.class);
         }
-        this.field_77991_e = this.checkDurability(this.field_77991_e, meta);
+        this.itemDamage = this.checkDurability(this.itemDamage, meta);
     }
 
     @Inject(method={"<init>(Lnet/minecraft/nbt/NBTTagCompound;)V"}, at={@At(value="RETURN")})
@@ -31,7 +39,7 @@ public abstract class MixinItemStack {
         if (trueDurability == null) {
             trueDurability = Caches.getModule(TrueDurability.class);
         }
-        this.field_77991_e = this.checkDurability(this.field_77991_e, compound.getShort("Damage"));
+        this.itemDamage = this.checkDurability(this.itemDamage, compound.getShort("Damage"));
     }
 
     private int checkDurability(int damage, int meta) {
@@ -42,3 +50,4 @@ public abstract class MixinItemStack {
         return durability;
     }
 }
+

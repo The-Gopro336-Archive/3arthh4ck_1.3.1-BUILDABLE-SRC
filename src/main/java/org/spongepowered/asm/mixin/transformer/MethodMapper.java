@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Strings
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package org.spongepowered.asm.mixin.transformer;
 
 import com.google.common.base.Strings;
@@ -15,7 +23,7 @@ import org.spongepowered.asm.mixin.transformer.MixinInfo;
 import org.spongepowered.asm.util.Counter;
 
 public class MethodMapper {
-    private static final Logger logger = LogManager.getLogger("mixin");
+    private static final Logger logger = LogManager.getLogger((String)"mixin");
     private static final List<String> classes = new ArrayList<String>();
     private static final Map<String, Counter> methods = new HashMap<String, Counter>();
     private final ClassInfo info;
@@ -79,6 +87,7 @@ public class MethodMapper {
             c = (char)(c + ((c = hex.charAt(pos)) < ':' ? 49 : 10));
             sb.append(c);
         }
-        return Strings.padStart(sb.toString(), 3, 'z');
+        return Strings.padStart((String)sb.toString(), (int)3, (char)'z');
     }
 }
+

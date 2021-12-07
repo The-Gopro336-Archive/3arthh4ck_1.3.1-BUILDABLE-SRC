@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.GuiChat
+ */
 package me.earth.earthhack.impl.commands.gui;
 
 import java.io.IOException;
@@ -38,3 +44,4 @@ extends GuiChat {
         this.inputField.setText(text);
     }
 }
+

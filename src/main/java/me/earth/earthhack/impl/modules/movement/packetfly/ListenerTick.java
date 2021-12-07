@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.movement.packetfly;
 
 import java.util.concurrent.TimeUnit;
@@ -13,6 +16,7 @@ extends ModuleListener<PacketFly, ListenerTick> {
 
     @Override
     public void invoke(ListenerTick event) {
-        ((PacketFly)this.module).posLooks.entrySet().removeIf(entry -> System.currentTimeMillis() - ((TimeVec)entry.getValue()).getTime() > TimeUnit.SECONDS.toMillis(30L));
+        ((PacketFly)this.module).posLooks.entrySet().removeIf(entry -> System.currentTimeMillis() - ((TimeVec)((Object)((Object)entry.getValue()))).getTime() > TimeUnit.SECONDS.toMillis(30L));
     }
 }
+

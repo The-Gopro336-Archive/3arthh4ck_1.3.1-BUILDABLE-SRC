@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.core.ducks.entity;
 
 public interface IEntityLivingBase {
@@ -17,3 +20,4 @@ public interface IEntityLivingBase {
 
     public float getLowestDurability();
 }
+

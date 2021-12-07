@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.command;
 
 import org.newdawn.slick.command.ControllerControl;
@@ -8,3 +11,4 @@ extends ControllerControl {
         super(controllerIndex, 0, button);
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.api.setting.event;
 
 import me.earth.earthhack.api.event.events.Event;
@@ -25,3 +28,4 @@ extends Event {
         this.value = value;
     }
 }
+

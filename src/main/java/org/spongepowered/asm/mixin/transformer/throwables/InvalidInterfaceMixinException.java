@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.transformer.throwables;
 
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -32,3 +35,4 @@ extends InvalidMixinException {
         super(context, message, cause);
     }
 }
+

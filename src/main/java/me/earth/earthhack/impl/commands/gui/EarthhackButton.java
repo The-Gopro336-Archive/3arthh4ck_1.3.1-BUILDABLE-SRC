@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.GuiScreen
+ */
 package me.earth.earthhack.impl.commands.gui;
 
 import me.earth.earthhack.api.util.interfaces.Globals;
@@ -14,6 +20,7 @@ implements Globals {
 
     @Override
     public void onClick(GuiScreen parent, int id) {
-        mc.displayGuiScreen(new CommandGui(parent, id));
+        mc.displayGuiScreen((GuiScreen)new CommandGui(parent, id));
     }
 }
+

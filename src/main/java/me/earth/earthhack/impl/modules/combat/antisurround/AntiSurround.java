@@ -1,3 +1,25 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.init.Items
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemAnvilBlock
+ *  net.minecraft.item.ItemPickaxe
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.network.play.client.CPacketUseEntity
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.combat.antisurround;
 
 import java.awt.Color;
@@ -43,6 +65,7 @@ import me.earth.earthhack.impl.util.thread.Locks;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -159,7 +182,7 @@ extends ObbyListenerModule<ListenerObby> {
         if (!this.packets.isEmpty() && this.mine) {
             EnumFacing facing;
             BlockPos pos = this.pos;
-            EnumFacing finalFacing = facing = RayTraceUtil.getFacing(RotationUtil.getRotationPlayer(), pos, true);
+            EnumFacing finalFacing = facing = RayTraceUtil.getFacing((Entity)RotationUtil.getRotationPlayer(), pos, true);
             Locks.acquire(Locks.PLACE_SWITCH_LOCK, () -> {
                 int lastSlot = AntiSurround.mc.player.inventory.currentItem;
                 InventoryUtil.switchTo(this.toolSlot);
@@ -219,7 +242,7 @@ extends ObbyListenerModule<ListenerObby> {
     }
 
     public boolean onBlockBreak(BlockPos pos, List<EntityPlayer> players, List<Entity> entities) {
-        return this.onBlockBreak(pos, players, entities, this::placeSync);
+        return this.onBlockBreak(pos, players, entities, (arg_0, arg_1, arg_2, arg_3, arg_4, arg_5, arg_6, arg_7, arg_8, arg_9) -> this.placeSync(arg_0, arg_1, arg_2, arg_3, arg_4, arg_5, arg_6, arg_7, arg_8, arg_9));
     }
 
     public boolean onBlockBreak(BlockPos pos, List<EntityPlayer> players, List<Entity> entities, AntiSurroundFunction function) {
@@ -245,11 +268,11 @@ extends ObbyListenerModule<ListenerObby> {
             BlockPos opposite;
             BlockPos down;
             BlockPos offset = pos.offset(facing);
-            if (!AntiSurround.mc.world.getBlockState(offset).func_185904_a().isReplaceable()) continue;
+            if (!AntiSurround.mc.world.getBlockState(offset).getMaterial().isReplaceable()) continue;
             EntityPlayer found = null;
             AxisAlignedBB offsetBB = new AxisAlignedBB(offset);
             for (EntityPlayer player : players) {
-                if (player == null || EntityUtil.isDead(player) || player.equals(AntiSurround.mc.player) || player.equals(RotationUtil.getRotationPlayer()) || Managers.FRIENDS.contains(player) || !player.getEntityBoundingBox().intersects(offsetBB)) continue;
+                if (player == null || EntityUtil.isDead((Entity)player) || player.equals((Object)AntiSurround.mc.player) || player.equals((Object)RotationUtil.getRotationPlayer()) || Managers.FRIENDS.contains(player) || !player.getEntityBoundingBox().intersects(offsetBB)) continue;
                 found = player;
                 break;
             }
@@ -257,14 +280,14 @@ extends ObbyListenerModule<ListenerObby> {
             IBlockState state = AntiSurround.mc.world.getBlockState(down);
             if ((!this.obby.getValue().booleanValue() || obbySlot == -1) && state.getBlock() != Blocks.OBSIDIAN && state.getBlock() != Blocks.BEDROCK) continue;
             helper.addBlockState(down, Blocks.OBSIDIAN.getDefaultState());
-            float damage = DamageUtil.calculate(down, found, helper);
+            float damage = DamageUtil.calculate(down, (EntityLivingBase)found, helper);
             helper.delete(down);
             if (damage < this.minDmg.getValue().floatValue()) continue;
             BlockPos on = null;
             EnumFacing onFacing = null;
             for (EnumFacing off : EnumFacing.values()) {
                 on = pos.offset(off);
-                if (!(BlockUtil.getDistanceSq(on) <= MathUtil.square(this.range.getValue())) || AntiSurround.mc.world.getBlockState(on).func_185904_a().isReplaceable()) continue;
+                if (!(BlockUtil.getDistanceSq(on) <= MathUtil.square(this.range.getValue())) || AntiSurround.mc.world.getBlockState(on).getMaterial().isReplaceable()) continue;
                 onFacing = off.getOpposite();
                 break;
             }
@@ -300,7 +323,7 @@ extends ObbyListenerModule<ListenerObby> {
         this.crystalPos = down;
         this.pos = pos;
         this.target = found;
-        this.playerPos = PositionUtil.getPosition(found);
+        this.playerPos = PositionUtil.getPosition((Entity)found);
         this.active.set(true);
         this.placeBlock(on, onFacing);
         if (blocking != null) {
@@ -321,3 +344,4 @@ extends ObbyListenerModule<ListenerObby> {
         return stack.getItem() instanceof ItemAnvilBlock;
     }
 }
+

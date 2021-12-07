@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.network.play.server.SPacketMultiBlockChange
+ *  net.minecraft.network.play.server.SPacketMultiBlockChange$BlockUpdateData
+ */
 package me.earth.earthhack.impl.modules.player.speedmine;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -18,9 +26,10 @@ extends ModuleListener<Speedmine, PacketEvent.Receive<SPacketMultiBlockChange>> 
         SPacketMultiBlockChange packet = (SPacketMultiBlockChange)event.getPacket();
         if ((((Speedmine)this.module).mode.getValue() != MineMode.Smart || ((Speedmine)this.module).sentPacket) && ((Speedmine)this.module).mode.getValue() != MineMode.Instant && ((Speedmine)this.module).mode.getValue() != MineMode.Civ) {
             for (SPacketMultiBlockChange.BlockUpdateData data : packet.getChangedBlocks()) {
-                if (!data.getPos().equals(((Speedmine)this.module).pos) || data.getBlockState().getBlock() != Blocks.AIR) continue;
+                if (!data.getPos().equals((Object)((Speedmine)this.module).pos) || data.getBlockState().getBlock() != Blocks.AIR) continue;
                 mc.addScheduledTask(((Speedmine)this.module)::reset);
             }
         }
     }
 }
+

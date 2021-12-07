@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.misc.announcer;
 
 import me.earth.earthhack.impl.event.events.network.ConnectionEvent;
@@ -18,3 +21,4 @@ extends ModuleListener<Announcer, ConnectionEvent.Join> {
         }
     }
 }
+

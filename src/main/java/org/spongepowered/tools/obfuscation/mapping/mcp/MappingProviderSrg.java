@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Strings
+ *  com.google.common.collect.BiMap
+ *  com.google.common.io.Files
+ *  com.google.common.io.LineProcessor
+ */
 package org.spongepowered.tools.obfuscation.mapping.mcp;
 
 import com.google.common.base.Strings;
@@ -27,28 +36,26 @@ extends MappingProvider {
         final BiMap classMap = this.classMap;
         final BiMap fieldMap = this.fieldMap;
         final BiMap methodMap = this.methodMap;
-        Files.readLines(input, Charset.defaultCharset(), new LineProcessor<String>(){
+        Files.readLines((File)input, (Charset)Charset.defaultCharset(), (LineProcessor)new LineProcessor<String>(){
 
-            @Override
             public String getResult() {
                 return null;
             }
 
-            @Override
             public boolean processLine(String line) throws IOException {
-                if (Strings.isNullOrEmpty(line) || line.startsWith("#")) {
+                if (Strings.isNullOrEmpty((String)line) || line.startsWith("#")) {
                     return true;
                 }
                 String type = line.substring(0, 2);
                 String[] args = line.substring(4).split(" ");
                 if (type.equals("PK")) {
-                    packageMap.forcePut(args[0], args[1]);
+                    packageMap.forcePut((Object)args[0], (Object)args[1]);
                 } else if (type.equals("CL")) {
-                    classMap.forcePut(args[0], args[1]);
+                    classMap.forcePut((Object)args[0], (Object)args[1]);
                 } else if (type.equals("FD")) {
-                    fieldMap.forcePut(new MappingFieldSrg(args[0]).copy(), new MappingFieldSrg(args[1]).copy());
+                    fieldMap.forcePut((Object)new MappingFieldSrg(args[0]).copy(), (Object)new MappingFieldSrg(args[1]).copy());
                 } else if (type.equals("MD")) {
-                    methodMap.forcePut(new MappingMethod(args[0], args[1]), new MappingMethod(args[2], args[3]));
+                    methodMap.forcePut((Object)new MappingMethod(args[0], args[1]), (Object)new MappingMethod(args[2], args[3]));
                 } else {
                     throw new MixinException("Invalid SRG file: " + input);
                 }
@@ -62,6 +69,7 @@ extends MappingProvider {
         if (field.getDesc() != null) {
             field = new MappingFieldSrg(field);
         }
-        return (MappingField)this.fieldMap.get(field);
+        return (MappingField)this.fieldMap.get((Object)field);
     }
 }
+

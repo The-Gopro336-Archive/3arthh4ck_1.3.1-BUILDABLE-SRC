@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.MovementInput
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.movement.entityspeed;
 
 import java.util.ArrayList;
@@ -63,3 +70,4 @@ extends Module {
         EntitySpeed.mc.player.getRidingEntity().motionZ = forward * speed * sin - strafe * speed * cos;
     }
 }
+

@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.BufferUtils
+ *  org.lwjgl.LWJGLException
+ *  org.lwjgl.openal.AL
+ *  org.lwjgl.openal.AL10
+ */
 package ibxm;
 
 import ibxm.FastTracker2;
@@ -21,8 +30,8 @@ public class OpenALMODPlayer {
     private IBXM ibxm;
     private int songDuration;
     private byte[] data = new byte[163840];
-    private ByteBuffer bufferData = BufferUtils.createByteBuffer(163840);
-    private IntBuffer unqueued = BufferUtils.createIntBuffer(1);
+    private ByteBuffer bufferData = BufferUtils.createByteBuffer((int)163840);
+    private IntBuffer unqueued = BufferUtils.createIntBuffer((int)1);
     private int source;
     private boolean soundWorks = true;
     private Module module;
@@ -41,8 +50,8 @@ public class OpenALMODPlayer {
             return;
         }
         if (this.soundWorks) {
-            IntBuffer sources = BufferUtils.createIntBuffer(1);
-            AL10.alGenSources(sources);
+            IntBuffer sources = BufferUtils.createIntBuffer((int)1);
+            AL10.alGenSources((IntBuffer)sources);
             if (AL10.alGetError() != 0) {
                 System.err.println("Failed to create sources");
                 this.soundWorks = false;
@@ -76,27 +85,27 @@ public class OpenALMODPlayer {
         this.ibxm.set_module(module);
         this.songDuration = this.ibxm.calculate_song_duration();
         if (this.bufferNames != null) {
-            AL10.alSourceStop(source);
+            AL10.alSourceStop((int)source);
             this.bufferNames.flip();
-            AL10.alDeleteBuffers(this.bufferNames);
+            AL10.alDeleteBuffers((IntBuffer)this.bufferNames);
         }
-        this.bufferNames = BufferUtils.createIntBuffer(2);
-        AL10.alGenBuffers(this.bufferNames);
+        this.bufferNames = BufferUtils.createIntBuffer((int)2);
+        AL10.alGenBuffers((IntBuffer)this.bufferNames);
         this.remainingBufferCount = 2;
         for (int i = 0; i < 2; ++i) {
             this.stream(this.bufferNames.get(i));
         }
-        AL10.alSourceQueueBuffers(source, this.bufferNames);
-        AL10.alSourcef(source, 4099, 1.0f);
-        AL10.alSourcef(source, 4106, 1.0f);
+        AL10.alSourceQueueBuffers((int)source, (IntBuffer)this.bufferNames);
+        AL10.alSourcef((int)source, (int)4099, (float)1.0f);
+        AL10.alSourcef((int)source, (int)4106, (float)1.0f);
         if (start) {
-            AL10.alSourcePlay(source);
+            AL10.alSourcePlay((int)source);
         }
     }
 
     public void setup(float pitch, float gain) {
-        AL10.alSourcef(this.source, 4099, pitch);
-        AL10.alSourcef(this.source, 4106, gain);
+        AL10.alSourcef((int)this.source, (int)4099, (float)pitch);
+        AL10.alSourcef((int)this.source, (int)4106, (float)gain);
     }
 
     public boolean done() {
@@ -131,20 +140,20 @@ public class OpenALMODPlayer {
         if (this.done) {
             return;
         }
-        for (int processed = AL10.alGetSourcei(this.source, 4118); processed > 0; --processed) {
+        for (int processed = AL10.alGetSourcei((int)this.source, (int)4118); processed > 0; --processed) {
             this.unqueued.clear();
-            AL10.alSourceUnqueueBuffers(this.source, this.unqueued);
+            AL10.alSourceUnqueueBuffers((int)this.source, (IntBuffer)this.unqueued);
             if (this.stream(this.unqueued.get(0))) {
-                AL10.alSourceQueueBuffers(this.source, this.unqueued);
+                AL10.alSourceQueueBuffers((int)this.source, (IntBuffer)this.unqueued);
                 continue;
             }
             --this.remainingBufferCount;
             if (this.remainingBufferCount != 0) continue;
             this.done = true;
         }
-        int state = AL10.alGetSourcei(this.source, 4112);
+        int state = AL10.alGetSourcei((int)this.source, (int)4112);
         if (state != 4114) {
-            AL10.alSourcePlay(this.source);
+            AL10.alSourcePlay((int)this.source);
         }
     }
 
@@ -173,7 +182,8 @@ public class OpenALMODPlayer {
             this.songDuration -= frames;
         }
         this.bufferData.flip();
-        AL10.alBufferData(bufferId, 4355, this.bufferData, 48000);
+        AL10.alBufferData((int)bufferId, (int)4355, (ByteBuffer)this.bufferData, (int)48000);
         return more;
     }
 }
+

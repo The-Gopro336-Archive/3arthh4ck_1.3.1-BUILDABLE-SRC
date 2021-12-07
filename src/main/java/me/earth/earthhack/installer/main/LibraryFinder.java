@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.installer.main;
 
 import java.io.File;
@@ -42,3 +45,4 @@ public class LibraryFinder {
         LIBRARIES.put(gson_lib, gson_url);
     }
 }
+

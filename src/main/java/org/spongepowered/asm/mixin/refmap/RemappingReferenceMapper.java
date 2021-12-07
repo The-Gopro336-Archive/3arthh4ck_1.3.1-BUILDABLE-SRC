@@ -1,3 +1,14 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Charsets
+ *  com.google.common.base.Strings
+ *  com.google.common.io.Files
+ *  com.google.common.io.LineProcessor
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package org.spongepowered.asm.mixin.refmap;
 
 import com.google.common.base.Charsets;
@@ -6,6 +17,7 @@ import com.google.common.io.Files;
 import com.google.common.io.LineProcessor;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.logging.log4j.LogManager;
@@ -17,7 +29,7 @@ public final class RemappingReferenceMapper
 implements IReferenceMapper {
     private static final String DEFAULT_RESOURCE_PATH_PROPERTY = "net.minecraftforge.gradle.GradleStart.srg.srg-mcp";
     private static final String DEFAULT_MAPPING_ENV = "searge";
-    private static final Logger logger = LogManager.getLogger("mixin");
+    private static final Logger logger = LogManager.getLogger((String)"mixin");
     private static final Map<String, Map<String, String>> srgs = new HashMap<String, Map<String, String>>();
     private final IReferenceMapper refMap;
     private final Map<String, String> mappings;
@@ -94,16 +106,14 @@ implements IReferenceMapper {
             return map;
         }
         try {
-            Files.readLines(file, Charsets.UTF_8, new LineProcessor<Object>(){
+            Files.readLines((File)file, (Charset)Charsets.UTF_8, (LineProcessor)new LineProcessor<Object>(){
 
-                @Override
                 public Object getResult() {
                     return null;
                 }
 
-                @Override
                 public boolean processLine(String line) throws IOException {
-                    if (Strings.isNullOrEmpty(line) || line.startsWith("#")) {
+                    if (Strings.isNullOrEmpty((String)line) || line.startsWith("#")) {
                         return true;
                     }
                     int fromPos = 0;
@@ -118,7 +128,7 @@ implements IReferenceMapper {
         }
         catch (IOException ex) {
             logger.warn("Could not read input SRG file: {}", new Object[]{fileName});
-            logger.catching(ex);
+            logger.catching((Throwable)ex);
         }
         return map;
     }
@@ -137,11 +147,12 @@ implements IReferenceMapper {
 
     private static String getResource(MixinEnvironment env) {
         String resource = env.getOptionValue(MixinEnvironment.Option.REFMAP_REMAP_RESOURCE);
-        return Strings.isNullOrEmpty(resource) ? System.getProperty(DEFAULT_RESOURCE_PATH_PROPERTY) : resource;
+        return Strings.isNullOrEmpty((String)resource) ? System.getProperty(DEFAULT_RESOURCE_PATH_PROPERTY) : resource;
     }
 
     private static String getMappingEnv(MixinEnvironment env) {
         String resource = env.getOptionValue(MixinEnvironment.Option.REFMAP_REMAP_SOURCE_ENV);
-        return Strings.isNullOrEmpty(resource) ? DEFAULT_MAPPING_ENV : resource;
+        return Strings.isNullOrEmpty((String)resource) ? DEFAULT_MAPPING_ENV : resource;
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.geom;
 
 import org.newdawn.slick.Image;
@@ -244,3 +247,4 @@ public final class ShapeRenderer {
         public float[] preRenderPoint(Shape var1, float var2, float var3);
     }
 }
+

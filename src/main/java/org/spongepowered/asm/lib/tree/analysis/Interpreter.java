@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.lib.tree.analysis;
 
 import java.util.List;
@@ -34,3 +37,4 @@ public abstract class Interpreter<V extends Value> {
 
     public abstract V merge(V var1, V var2);
 }
+

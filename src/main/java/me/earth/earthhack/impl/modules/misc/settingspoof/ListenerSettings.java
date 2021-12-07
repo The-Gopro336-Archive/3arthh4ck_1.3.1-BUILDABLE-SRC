@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.client.CPacketClientSettings
+ */
 package me.earth.earthhack.impl.modules.misc.settingspoof;
 
 import me.earth.earthhack.impl.core.mixins.network.client.ICPacketClientSettings;
@@ -23,3 +29,4 @@ extends ModuleListener<SettingSpoof, PacketEvent.Send<CPacketClientSettings>> {
         p.setMainHand(((SettingSpoof)this.module).getHandSide(p.getMainHand()));
     }
 }
+

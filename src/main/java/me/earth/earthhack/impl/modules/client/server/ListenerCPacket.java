@@ -1,6 +1,21 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  io.netty.buffer.Unpooled
+ *  io.netty.util.ReferenceCounted
+ *  net.minecraft.network.EnumConnectionState
+ *  net.minecraft.network.EnumPacketDirection
+ *  net.minecraft.network.PacketBuffer
+ *  net.minecraft.network.play.client.CPacketPlayer
+ *  net.minecraft.network.play.client.CPacketPlayer$Position
+ *  net.minecraft.network.play.client.CPacketPlayer$PositionRotation
+ *  net.minecraft.network.play.client.CPacketPlayer$Rotation
+ */
 package me.earth.earthhack.impl.modules.client.server;
 
 import io.netty.buffer.Unpooled;
+import io.netty.util.ReferenceCounted;
 import java.io.IOException;
 import me.earth.earthhack.impl.Earthhack;
 import me.earth.earthhack.impl.commands.packet.util.BufferUtil;
@@ -13,7 +28,6 @@ import me.earth.earthhack.impl.modules.client.server.util.ServerMode;
 import me.earth.earthhack.impl.util.math.rotation.RotationUtil;
 import net.minecraft.network.EnumConnectionState;
 import net.minecraft.network.EnumPacketDirection;
-import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.client.CPacketPlayer;
 
@@ -60,7 +74,7 @@ extends CPacketPlayerListener {
         PacketBuffer buffer = null;
         try {
             buffer = new PacketBuffer(Unpooled.buffer());
-            int id = EnumConnectionState.getFromPacket(p).getPacketId(EnumPacketDirection.SERVERBOUND, (Packet)p);
+            int id = EnumConnectionState.getFromPacket(p).getPacketId(EnumPacketDirection.SERVERBOUND, p);
             buffer.writeInt(3);
             int index = buffer.writerIndex();
             buffer.writeInt(-1);
@@ -90,8 +104,9 @@ extends CPacketPlayerListener {
         }
         finally {
             if (buffer != null) {
-                BufferUtil.releaseBuffer(buffer);
+                BufferUtil.releaseBuffer((ReferenceCounted)buffer);
             }
         }
     }
 }
+

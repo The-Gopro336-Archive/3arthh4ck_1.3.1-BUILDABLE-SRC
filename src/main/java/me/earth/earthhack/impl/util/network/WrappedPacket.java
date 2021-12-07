@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.EnumConnectionState
+ *  net.minecraft.network.EnumPacketDirection
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.PacketBuffer
+ *  net.minecraft.network.play.INetHandlerPlayServer
+ */
 package me.earth.earthhack.impl.util.network;
 
 import java.io.IOException;
@@ -39,3 +49,4 @@ CustomPacket {
         throw new UnsupportedOperationException();
     }
 }
+

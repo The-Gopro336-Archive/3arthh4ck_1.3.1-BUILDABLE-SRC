@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.commands;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -21,3 +24,4 @@ extends DefaultData<Commands> {
         return "A Module that manages commands for the Client. Just like with Managers it doesn't matter if this module is enabled or not.";
     }
 }
+

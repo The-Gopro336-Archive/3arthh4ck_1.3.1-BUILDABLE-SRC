@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.launch;
 
 import java.util.ServiceLoader;
@@ -48,3 +51,4 @@ public final class GlobalProperties {
         }
     }
 }
+

@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Strings
+ */
 package org.spongepowered.asm.util;
 
 import com.google.common.base.Strings;
@@ -122,7 +128,7 @@ public class SignaturePrinter {
                 }
             }
             try {
-                String name = typesOnly ? null : (Strings.isNullOrEmpty(this.argNames[var]) ? "unnamed" + var : this.argNames[var]);
+                String name = typesOnly ? null : (Strings.isNullOrEmpty((String)this.argNames[var]) ? "unnamed" + var : this.argNames[var]);
                 this.appendType(sb, this.argTypes[var], name);
                 continue;
             }
@@ -211,7 +217,7 @@ public class SignaturePrinter {
     }
 
     private static String arraySuffix(Type type) {
-        return Strings.repeat("[]", type.getDimensions());
+        return Strings.repeat((String)"[]", (int)type.getDimensions());
     }
 
     private static StringBuilder appendArraySuffix(StringBuilder sb, Type type) {
@@ -221,3 +227,4 @@ public class SignaturePrinter {
         return sb;
     }
 }
+

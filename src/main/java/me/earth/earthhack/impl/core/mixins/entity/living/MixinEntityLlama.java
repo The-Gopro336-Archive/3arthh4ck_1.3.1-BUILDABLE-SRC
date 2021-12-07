@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.passive.EntityLlama
+ */
 package me.earth.earthhack.impl.core.mixins.entity.living;
 
 import me.earth.earthhack.api.event.bus.instance.Bus;
@@ -21,3 +27,4 @@ extends MixinAbstractHorse {
         }
     }
 }
+

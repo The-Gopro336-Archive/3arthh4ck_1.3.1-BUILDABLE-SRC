@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketBlockChange
+ */
 package me.earth.earthhack.impl.modules.misc.packets;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -16,7 +22,8 @@ extends ModuleListener<Packets, PacketEvent.Receive<SPacketBlockChange>> {
         if (((Packets)this.module).fastBlockStates.getValue().booleanValue()) {
             SPacketBlockChange p = (SPacketBlockChange)event.getPacket();
             ((Packets)this.module).stateMap.put(p.getBlockPosition(), p.getBlockState());
-            mc.addScheduledTask(() -> ((Packets)this.module).stateMap.remove(p.getBlockPosition()));
+            mc.addScheduledTask(() -> ((Packets)this.module).stateMap.remove((Object)p.getBlockPosition()));
         }
     }
 }
+

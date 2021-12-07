@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.client.CPacketPlayer
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal.helpers;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -57,7 +63,7 @@ implements Globals {
         float yaw = Managers.ROTATION.getServerYaw();
         float pitch = Managers.ROTATION.getServerPitch();
         boolean onGround = this.last.isOnGround();
-        ICPacketPlayer accessor = (ICPacketPlayer)((Object)this.last);
+        ICPacketPlayer accessor = (ICPacketPlayer)this.last;
         float[] r = function.apply(x, y, z, yaw, pitch);
         if ((double)(r[0] - yaw) == 0.0 || (double)(r[1] - pitch) == 0.0) {
             if (!accessor.isRotating() && !accessor.isMoving() && onGround == Managers.POSITION.isOnGround()) {
@@ -100,3 +106,4 @@ implements Globals {
         this.last = null;
     }
 }
+

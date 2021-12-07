@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketPlayerPosLook
+ */
 package me.earth.earthhack.impl.modules.player.timer;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -18,3 +24,4 @@ extends ModuleListener<Timer, PacketEvent.Receive<SPacketPlayerPosLook>> {
         ((Timer)this.module).pSpeed = 1.0f;
     }
 }
+

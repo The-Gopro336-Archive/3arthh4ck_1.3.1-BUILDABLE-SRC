@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.text.ITextComponent
+ */
 package me.earth.earthhack.impl.managers.chat;
 
 import java.util.Map;
@@ -38,7 +44,7 @@ implements Globals {
 
     public void clear() {
         if (ChatManager.mc.ingameGUI != null) {
-            this.message_ids.values().forEach(m -> m.values().forEach(id -> ChatManager.mc.ingameGUI.getChatGUI().deleteChatLine((int)id)));
+            this.message_ids.values().forEach(m -> m.values().forEach(id -> ChatManager.mc.ingameGUI.getChatGUI().deleteChatLine(id.intValue())));
         }
         this.message_ids.clear();
         this.counter.reset();
@@ -80,7 +86,7 @@ implements Globals {
         IGuiNewChat gui;
         Integer id;
         Map<String, Integer> map = this.message_ids.get(senderID);
-        if (map != null && (id = map.get(uniqueWord)) != null && ChatManager.mc.ingameGUI != null && (gui = (IGuiNewChat)((Object)ChatManager.mc.ingameGUI.getChatGUI())).replace(component, senderID, wrap, !multiple)) {
+        if (map != null && (id = map.get(uniqueWord)) != null && ChatManager.mc.ingameGUI != null && (gui = (IGuiNewChat)ChatManager.mc.ingameGUI.getChatGUI()).replace(component, senderID, wrap, !multiple)) {
             return;
         }
         if (sendIfAbsent) {
@@ -88,3 +94,4 @@ implements Globals {
         }
     }
 }
+

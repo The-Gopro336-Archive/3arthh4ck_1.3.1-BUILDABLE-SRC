@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.player.freecam;
 
 import me.earth.earthhack.impl.event.events.movement.MoveEvent;
@@ -15,3 +18,4 @@ extends ModuleListener<Freecam, MoveEvent> {
         ListenerMove.mc.player.noClip = true;
     }
 }
+

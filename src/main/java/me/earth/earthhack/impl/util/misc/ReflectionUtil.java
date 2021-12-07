@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.misc;
 
 import java.io.File;
@@ -94,3 +97,4 @@ public class ReflectionUtil {
         return name.substring(name.lastIndexOf(".") + 1);
     }
 }
+

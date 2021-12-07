@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.GuiChat
+ *  net.minecraft.item.ItemFishingRod
+ */
 package me.earth.earthhack.impl.modules.misc.autofish;
 
 import me.earth.earthhack.api.module.Module;
@@ -37,9 +44,10 @@ extends Module {
 
     protected void click() {
         if ((!AutoFish.mc.player.inventory.getCurrentItem().isEmpty() || AutoFish.mc.player.inventory.getCurrentItem().getItem() instanceof ItemFishingRod) && (this.openInv.getValue().booleanValue() || AutoFish.mc.currentScreen instanceof GuiChat || AutoFish.mc.currentScreen == null)) {
-            ((IMinecraft)((Object)mc)).click(IMinecraft.Click.RIGHT);
+            ((IMinecraft)mc).click(IMinecraft.Click.RIGHT);
             this.delayCounter = this.delay.getValue().intValue();
             this.timeout = 0;
         }
     }
 }
+

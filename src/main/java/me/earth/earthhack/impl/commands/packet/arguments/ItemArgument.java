@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.item.Item
+ *  net.minecraft.util.ResourceLocation
+ */
 package me.earth.earthhack.impl.commands.packet.arguments;
 
 import me.earth.earthhack.api.command.PossibleInputs;
@@ -37,10 +44,11 @@ extends AbstractArgument<Item> {
         if (s != null) {
             return inputs.setCompletion(TextUtil.substring(s, arg.length()));
         }
-        for (ResourceLocation location : Item.REGISTRY.func_148742_b()) {
+        for (ResourceLocation location : Item.REGISTRY.getKeys()) {
             if (!TextUtil.startsWith(location.toString(), arg)) continue;
             return inputs.setCompletion(TextUtil.substring(location.toString(), arg.length()));
         }
         return PossibleInputs.empty();
     }
 }
+

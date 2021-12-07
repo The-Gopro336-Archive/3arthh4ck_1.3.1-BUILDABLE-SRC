@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.movement.phase;
 
 import me.earth.earthhack.impl.event.events.movement.BlockPushEvent;
@@ -15,3 +18,4 @@ extends ModuleListener<Phase, BlockPushEvent> {
         event.setCancelled(true);
     }
 }
+

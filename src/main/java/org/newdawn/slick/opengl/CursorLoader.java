@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.LWJGLException
+ *  org.lwjgl.input.Cursor
+ */
 package org.newdawn.slick.opengl;
 
 import java.io.IOException;
@@ -111,3 +118,4 @@ public class CursorLoader {
         return new Cursor(width, height, x, y, cursorDelays.length, buf.asIntBuffer(), cursorDelaysBuffer);
     }
 }
+

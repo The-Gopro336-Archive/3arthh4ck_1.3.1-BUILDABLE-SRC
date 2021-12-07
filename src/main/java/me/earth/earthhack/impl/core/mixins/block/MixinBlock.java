@@ -1,3 +1,19 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.block.material.MapColor
+ *  net.minecraft.block.material.Material
+ *  net.minecraft.block.state.BlockStateContainer
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.world.IBlockAccess
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.core.mixins.block;
 
 import java.util.Arrays;
@@ -19,6 +35,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -40,24 +57,24 @@ implements IBlock {
     private final int[] harvestLevelNonForge = new int[16];
     @Shadow
     @Final
-    protected Material field_149764_J;
+    protected Material material;
 
     @Shadow
-    protected static void func_185492_a(BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> cBoxes, AxisAlignedBB blockBox) {
+    protected static void addCollisionBoxToList(BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> cBoxes, AxisAlignedBB blockBox) {
         throw new IllegalStateException("MixinBlock.addCollisionBoxToList has not been shadowed");
     }
 
     @Shadow
-    public abstract BlockStateContainer func_176194_O();
+    public abstract BlockStateContainer getBlockState();
 
     @Shadow
-    public abstract int func_176201_c(IBlockState var1);
+    public abstract int getMetaFromState(IBlockState var1);
 
     @Override
     @Unique
     public void setHarvestLevelNonForge(String toolClass, int level) {
-        for (IBlockState state : this.func_176194_O().getValidStates()) {
-            int idx = this.func_176201_c(state);
+        for (IBlockState state : this.getBlockState().getValidStates()) {
+            int idx = this.getMetaFromState(state);
             this.harvestToolNonForge[idx] = toolClass;
             this.harvestLevelNonForge[idx] = level;
         }
@@ -66,13 +83,13 @@ implements IBlock {
     @Override
     @Unique
     public String getHarvestToolNonForge(IBlockState state) {
-        return this.harvestToolNonForge[this.func_176201_c(state)];
+        return this.harvestToolNonForge[this.getMetaFromState(state)];
     }
 
     @Override
     @Unique
     public int getHarvestLevelNonForge(IBlockState state) {
-        return this.harvestLevelNonForge[this.func_176201_c(state)];
+        return this.harvestLevelNonForge[this.getMetaFromState(state)];
     }
 
     @Inject(method={"<init>(Lnet/minecraft/block/material/Material;Lnet/minecraft/block/material/MapColor;)V"}, at={@At(value="RETURN")})
@@ -87,7 +104,7 @@ implements IBlock {
             return;
         }
         Block block = (Block)Block.class.cast(this);
-        AxisAlignedBB bb = block.getCollisionBoundingBox(state, world, pos);
+        AxisAlignedBB bb = block.getCollisionBoundingBox(state, (IBlockAccess)world, pos);
         CollisionEvent event = new CollisionEvent(pos, bb, entity, block);
         ((Jesus)JESUS.get()).onCollision(event);
         ((Phase)PHASE.get()).onCollision(event);
@@ -97,7 +114,7 @@ implements IBlock {
         if (bb != null && entityBox.intersects(bb)) {
             cBoxes.add(bb);
         }
-        MixinBlock.func_185492_a(pos, entityBox, cBoxes, bb);
+        MixinBlock.addCollisionBoxToList(pos, entityBox, cBoxes, bb);
         info.cancel();
     }
 
@@ -132,3 +149,4 @@ implements IBlock {
         }
     }
 }
+

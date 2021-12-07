@@ -1,5 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  io.netty.util.ReferenceCounted
+ *  net.minecraft.network.play.server.SPacketCustomPayload
+ */
 package me.earth.earthhack.impl.modules.client.pingbypass;
 
+import io.netty.util.ReferenceCounted;
 import me.earth.earthhack.api.event.bus.EventListener;
 import me.earth.earthhack.impl.commands.packet.util.BufferUtil;
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -23,8 +31,9 @@ extends EventListener<PacketEvent.Receive<SPacketCustomPayload>> {
                 event.setCancelled(true);
             }
             finally {
-                BufferUtil.releaseBuffer(((SPacketCustomPayload)event.getPacket()).getBufferData());
+                BufferUtil.releaseBuffer((ReferenceCounted)((SPacketCustomPayload)event.getPacket()).getBufferData());
             }
         }
     }
 }
+

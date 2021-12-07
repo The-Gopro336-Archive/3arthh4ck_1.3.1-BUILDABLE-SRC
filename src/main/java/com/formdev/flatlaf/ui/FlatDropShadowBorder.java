@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.ui;
 
 import com.formdev.flatlaf.ui.FlatEmptyBorder;
@@ -48,7 +51,7 @@ extends FlatEmptyBorder {
         if (this.shadowSize <= 0) {
             return;
         }
-        HiDPIUtils.paintAtScale1x((Graphics2D)g, x, y, width, height, this::paintImpl);
+        HiDPIUtils.paintAtScale1x((Graphics2D)g, x, y, width, height, (arg_0, arg_1, arg_2, arg_3, arg_4, arg_5) -> this.paintImpl(arg_0, arg_1, arg_2, arg_3, arg_4, arg_5));
     }
 
     private void paintImpl(Graphics2D g, int x, int y, int width, int height, double scaleFactor) {
@@ -129,3 +132,4 @@ extends FlatEmptyBorder {
         return image;
     }
 }
+

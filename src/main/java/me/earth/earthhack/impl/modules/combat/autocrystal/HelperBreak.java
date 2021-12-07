@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.player.EntityPlayer
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal;
 
 import java.util.Collection;
@@ -49,7 +57,7 @@ extends AbstractBreakHelper<CrystalData> {
     protected boolean calcSelf(Entity crystal, CrystalData data) {
         float selfDamage = this.module.damageHelper.getDamage(crystal);
         data.setSelfDmg(selfDamage);
-        if (selfDamage > EntityUtil.getHealth(HelperBreak.mc.player) - 1.0f) {
+        if (selfDamage > EntityUtil.getHealth((EntityLivingBase)HelperBreak.mc.player) - 1.0f) {
             Managers.SAFETY.setSafe(false);
             if (!this.module.suicide.getValue().booleanValue()) {
                 return true;
@@ -76,14 +84,14 @@ extends AbstractBreakHelper<CrystalData> {
             if (playerDamage > crystalData.getDamage()) {
                 crystalData.setDamage(playerDamage);
             }
-            if (playerDamage > EntityUtil.getHealth(player) + 1.0f) {
+            if (playerDamage > EntityUtil.getHealth((EntityLivingBase)player) + 1.0f) {
                 killing = true;
                 highSelf = false;
             }
             if (!(playerDamage > damage)) continue;
             damage = playerDamage;
         }
-        if (this.module.antiTotem.getValue().booleanValue() && crystal.getPosition().down().equals(this.module.antiTotemHelper.getTargetPos())) {
+        if (this.module.antiTotem.getValue().booleanValue() && crystal.getPosition().down().equals((Object)this.module.antiTotemHelper.getTargetPos())) {
             data.setAntiTotem(crystal);
         }
         if (!highSelf && (!this.module.efficient.getValue().booleanValue() || damage > crystalData.getSelfDmg() || killing)) {
@@ -91,3 +99,4 @@ extends AbstractBreakHelper<CrystalData> {
         }
     }
 }
+

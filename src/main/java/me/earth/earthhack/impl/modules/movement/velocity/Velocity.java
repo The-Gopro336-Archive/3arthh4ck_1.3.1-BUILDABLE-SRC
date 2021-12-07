@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.movement.velocity;
 
 import me.earth.earthhack.api.module.Module;
@@ -40,3 +43,4 @@ extends Module {
         return "H" + MathUtil.round(this.horizontal.getValue().floatValue(), 1) + "%V" + MathUtil.round(this.vertical.getValue().floatValue(), 1) + "%";
     }
 }
+

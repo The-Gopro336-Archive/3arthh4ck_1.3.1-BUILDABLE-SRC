@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.Minecraft
+ */
 package me.earth.earthhack.impl.gui.click.component.impl;
 
 import java.util.ArrayList;
@@ -292,3 +298,4 @@ extends Component {
         return this.components;
     }
 }
+

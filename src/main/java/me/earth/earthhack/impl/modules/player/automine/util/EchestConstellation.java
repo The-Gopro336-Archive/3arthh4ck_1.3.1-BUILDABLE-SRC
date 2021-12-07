@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.world.IBlockAccess
+ */
 package me.earth.earthhack.impl.modules.player.automine.util;
 
 import me.earth.earthhack.impl.modules.player.automine.util.IConstellation;
@@ -16,7 +25,7 @@ implements IConstellation {
 
     @Override
     public boolean isAffected(BlockPos pos, IBlockState state) {
-        return this.pos.equals(pos) && state.getBlock() != Blocks.ENDER_CHEST;
+        return this.pos.equals((Object)pos) && state.getBlock() != Blocks.ENDER_CHEST;
     }
 
     @Override
@@ -29,3 +38,4 @@ implements IConstellation {
         return false;
     }
 }
+

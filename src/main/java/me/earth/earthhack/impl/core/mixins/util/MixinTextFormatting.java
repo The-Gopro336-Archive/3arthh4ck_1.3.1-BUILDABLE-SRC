@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.text.TextFormatting
+ */
 package me.earth.earthhack.impl.core.mixins.util;
 
 import java.util.regex.Matcher;
@@ -16,3 +22,4 @@ public abstract class MixinTextFormatting {
         return NEW_PATTERN.matcher(s);
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.injection.throwables;
 
 import org.spongepowered.asm.mixin.injection.code.ISliceContext;
@@ -32,3 +35,4 @@ extends InvalidInjectionException {
         super(owner.getContext(), message, cause);
     }
 }
+

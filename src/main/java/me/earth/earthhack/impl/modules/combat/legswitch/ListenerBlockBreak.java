@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.init.Blocks
+ */
 package me.earth.earthhack.impl.modules.combat.legswitch;
 
 import me.earth.earthhack.api.event.events.Stage;
@@ -26,3 +32,4 @@ extends ModuleListener<LegSwitch, BlockDestroyEvent> {
         this.helper.delete(event.getPos());
     }
 }
+

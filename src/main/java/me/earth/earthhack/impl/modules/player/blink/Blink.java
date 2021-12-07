@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.entity.EntityOtherPlayerMP
+ *  net.minecraft.network.Packet
+ */
 package me.earth.earthhack.impl.modules.player.blink;
 
 import java.util.LinkedList;
@@ -47,7 +54,7 @@ extends DisablingModule {
     protected void onDisable() {
         PlayerUtil.removeFakePlayer(this.fakePlayer);
         if (this.shouldSend && mc.getConnection() != null) {
-            CollectionUtil.emptyQueue(this.packets, p -> mc.getConnection().sendPacket((Packet)p));
+            CollectionUtil.emptyQueue(this.packets, p -> mc.getConnection().sendPacket(p));
         } else {
             this.packets.clear();
         }
@@ -72,3 +79,4 @@ extends DisablingModule {
         super.onShutDown();
     }
 }
+

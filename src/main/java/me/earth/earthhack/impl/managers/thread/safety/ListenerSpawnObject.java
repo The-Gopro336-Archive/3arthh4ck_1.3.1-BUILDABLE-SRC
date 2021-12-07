@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketSpawnObject
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.managers.thread.safety;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -24,3 +31,4 @@ extends ModuleListener<SafetyManager, PacketEvent.Receive<SPacketSpawnObject>> {
         }
     }
 }
+

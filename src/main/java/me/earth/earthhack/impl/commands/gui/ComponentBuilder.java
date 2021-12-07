@@ -1,3 +1,14 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.text.ITextComponent
+ *  net.minecraft.util.text.TextComponentString
+ *  net.minecraft.util.text.event.ClickEvent
+ *  net.minecraft.util.text.event.ClickEvent$Action
+ *  net.minecraft.util.text.event.HoverEvent
+ *  net.minecraft.util.text.event.HoverEvent$Action
+ */
 package me.earth.earthhack.impl.commands.gui;
 
 import me.earth.earthhack.impl.gui.chat.clickevents.SmartClickEvent;
@@ -12,7 +23,7 @@ public class ComponentBuilder {
     private ITextComponent current;
 
     public ComponentBuilder(String start) {
-        this(new TextComponentString(start));
+        this((ITextComponent)new TextComponentString(start));
     }
 
     public ComponentBuilder(ITextComponent base) {
@@ -26,7 +37,7 @@ public class ComponentBuilder {
     }
 
     public ComponentBuilder sibling(String siblingText) {
-        return this.sibling(new TextComponentString(siblingText));
+        return this.sibling((ITextComponent)new TextComponentString(siblingText));
     }
 
     public ComponentBuilder sibling(ITextComponent sibling) {
@@ -35,7 +46,7 @@ public class ComponentBuilder {
     }
 
     public ComponentBuilder addHover(String hoverText) {
-        return this.addHover(HoverEvent.Action.SHOW_TEXT, new TextComponentString(hoverText));
+        return this.addHover(HoverEvent.Action.SHOW_TEXT, (ITextComponent)new TextComponentString(hoverText));
     }
 
     public ComponentBuilder addHover(HoverEvent.Action actionIn, ITextComponent valueIn) {
@@ -66,3 +77,4 @@ public class ComponentBuilder {
         return this.base;
     }
 }
+

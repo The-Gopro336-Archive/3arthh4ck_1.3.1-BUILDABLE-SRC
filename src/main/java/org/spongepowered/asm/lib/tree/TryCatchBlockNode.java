@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.lib.tree;
 
 import java.util.List;
@@ -50,3 +53,4 @@ public class TryCatchBlockNode {
         }
     }
 }
+

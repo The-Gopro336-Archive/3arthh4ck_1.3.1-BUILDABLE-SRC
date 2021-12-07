@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.modules.movement.packetfly.util;
 
 import java.util.Random;
@@ -8,7 +14,7 @@ public enum Type {
 
         @Override
         public Vec3d createOutOfBounds(Vec3d vec3d, int invalid) {
-            return vec3d.addVector(0.0, -invalid, 0.0);
+            return vec3d.add(0.0, (double)(-invalid), 0.0);
         }
     }
     ,
@@ -16,7 +22,7 @@ public enum Type {
 
         @Override
         public Vec3d createOutOfBounds(Vec3d vec3d, int invalid) {
-            return vec3d.addVector(0.0, invalid, 0.0);
+            return vec3d.add(0.0, (double)invalid, 0.0);
         }
     }
     ,
@@ -33,7 +39,7 @@ public enum Type {
 
         @Override
         public Vec3d createOutOfBounds(Vec3d vec3d, int invalid) {
-            return vec3d.addVector(this.randomInt(), 0.0, this.randomInt());
+            return vec3d.add((double)this.randomInt(), 0.0, (double)this.randomInt());
         }
     }
     ,
@@ -43,7 +49,7 @@ public enum Type {
         @Override
         public Vec3d createOutOfBounds(Vec3d vec3d, int invalid) {
             boolean down = this.random.nextBoolean();
-            return down ? vec3d.addVector(0.0, -invalid, 0.0) : vec3d.addVector(0.0, invalid, 0.0);
+            return down ? vec3d.add(0.0, (double)(-invalid), 0.0) : vec3d.add(0.0, (double)invalid, 0.0);
         }
     }
     ,
@@ -51,7 +57,7 @@ public enum Type {
 
         @Override
         public Vec3d createOutOfBounds(Vec3d vec3d, int invalid) {
-            return vec3d.addVector(invalid, 0.0, 0.0);
+            return vec3d.add((double)invalid, 0.0, 0.0);
         }
     }
     ,
@@ -59,7 +65,7 @@ public enum Type {
 
         @Override
         public Vec3d createOutOfBounds(Vec3d vec3d, int invalid) {
-            return vec3d.addVector(0.0, 0.0, invalid);
+            return vec3d.add(0.0, 0.0, (double)invalid);
         }
     }
     ,
@@ -67,10 +73,11 @@ public enum Type {
 
         @Override
         public Vec3d createOutOfBounds(Vec3d vec3d, int invalid) {
-            return vec3d.addVector(invalid, 0.0, invalid);
+            return vec3d.add((double)invalid, 0.0, (double)invalid);
         }
     };
 
 
     public abstract Vec3d createOutOfBounds(Vec3d var1, int var2);
 }
+

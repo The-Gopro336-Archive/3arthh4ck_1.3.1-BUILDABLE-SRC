@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.ai.attributes.IAttributeInstance
+ *  net.minecraft.entity.player.EntityPlayer
+ */
 package me.earth.earthhack.impl.commands.packet.arguments;
 
 import me.earth.earthhack.api.command.PossibleInputs;
@@ -10,6 +19,7 @@ import me.earth.earthhack.impl.util.thread.LookUpUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class AttributeArgument
 extends AbstractArgument<IAttributeInstance>
@@ -76,7 +86,7 @@ implements Globals {
         if ("$closest".startsWith(name.toLowerCase())) {
             return EntityUtil.getClosestEnemy();
         }
-        Entity entity = null;
+        EntityPlayer entity = null;
         String s = LookUpUtil.findNextPlayerName(name);
         if (s != null) {
             entity = AttributeArgument.mc.world.getPlayerEntityByName(s);
@@ -101,3 +111,4 @@ implements Globals {
         return null;
     }
 }
+

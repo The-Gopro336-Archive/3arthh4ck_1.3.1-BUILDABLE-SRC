@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.helpers.blocks.attack;
 
 import me.earth.earthhack.impl.util.helpers.blocks.modes.Pop;
@@ -11,3 +14,4 @@ public interface AttackingModule {
 
     public double getTrace();
 }
+

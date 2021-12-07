@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.misc.chat;
 
 import me.earth.earthhack.impl.core.ducks.gui.IGuiNewChat;
@@ -14,10 +17,11 @@ extends ModuleListener<Chat, ChatEvent.Send> {
     @Override
     public void invoke(ChatEvent.Send event) {
         IGuiNewChat chat;
-        if (((Chat)this.module).noScroll.getValue().booleanValue() && ListenerChat.mc.ingameGUI != null && (chat = (IGuiNewChat)((Object)ListenerChat.mc.ingameGUI.getChatGUI())).getScrollPos() != 0) {
+        if (((Chat)this.module).noScroll.getValue().booleanValue() && ListenerChat.mc.ingameGUI != null && (chat = (IGuiNewChat)ListenerChat.mc.ingameGUI.getChatGUI()).getScrollPos() != 0) {
             ((Chat)this.module).events.add(event);
             ((Chat)this.module).cleared = false;
             event.setCancelled(true);
         }
     }
 }
+

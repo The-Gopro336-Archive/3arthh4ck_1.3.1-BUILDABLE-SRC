@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.gui.GuiButton
+ *  net.minecraft.client.gui.GuiScreen
+ *  net.minecraft.client.renderer.GlStateManager
+ *  net.minecraft.util.ResourceLocation
+ */
 package me.earth.earthhack.impl.gui.buttons;
 
 import net.minecraft.client.Minecraft;
@@ -30,7 +40,8 @@ extends GuiButton {
             this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
             mc.getTextureManager().bindTexture(LOCATION);
             GlStateManager.color((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
-            this.func_73729_b(this.x, this.y, this.hovered ? this.hoveredX : this.textureX, this.hovered ? this.hoveredY : this.textureY, this.width, this.height);
+            this.drawTexturedModalRect(this.x, this.y, this.hovered ? this.hoveredX : this.textureX, this.hovered ? this.hoveredY : this.textureY, this.width, this.height);
         }
     }
 }
+

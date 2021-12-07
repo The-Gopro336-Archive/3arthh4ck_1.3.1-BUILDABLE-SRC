@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.injection.struct;
 
 import org.spongepowered.asm.lib.tree.AnnotationNode;
@@ -24,3 +27,4 @@ extends InjectionInfo {
         return "Variable modifier method";
     }
 }
+

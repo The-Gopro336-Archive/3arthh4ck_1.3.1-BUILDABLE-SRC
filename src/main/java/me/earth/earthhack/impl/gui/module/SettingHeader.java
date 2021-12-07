@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.gui.module;
 
 import me.earth.earthhack.api.setting.Setting;
@@ -29,3 +32,4 @@ public class SettingHeader {
         return this;
     }
 }
+

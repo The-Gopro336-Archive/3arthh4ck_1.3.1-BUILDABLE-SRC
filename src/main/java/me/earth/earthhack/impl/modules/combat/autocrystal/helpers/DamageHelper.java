@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal.helpers;
 
 import me.earth.earthhack.api.setting.Setting;
@@ -33,16 +43,16 @@ implements Globals {
     }
 
     public float getDamage(Entity crystal) {
-        return this.getDamage(crystal.posX, crystal.posY, crystal.posZ, Managers.POSITION.getBB(), DamageHelper.mc.player);
+        return this.getDamage(crystal.posX, crystal.posY, crystal.posZ, Managers.POSITION.getBB(), (EntityLivingBase)DamageHelper.mc.player);
     }
 
     public float getDamage(Entity crystal, AxisAlignedBB bb) {
-        return DamageUtil.calculate(crystal.posX, crystal.posY, crystal.posZ, bb, DamageHelper.mc.player);
+        return DamageUtil.calculate(crystal.posX, crystal.posY, crystal.posZ, bb, (EntityLivingBase)DamageHelper.mc.player);
     }
 
     public float getDamage(Entity crystal, EntityLivingBase base) {
         if (this.bExtrapolation.getValue() != 0) {
-            return this.getDamage(crystal.posX, crystal.posY, crystal.posZ, this.extrapolateEntity(base, this.bExtrapolation.getValue()), base);
+            return this.getDamage(crystal.posX, crystal.posY, crystal.posZ, this.extrapolateEntity((Entity)base, this.bExtrapolation.getValue()), base);
         }
         return this.getDamage(crystal.posX, crystal.posY, crystal.posZ, base);
     }
@@ -52,8 +62,8 @@ implements Globals {
     }
 
     public float getDamage(BlockPos pos, EntityLivingBase base) {
-        if (this.pExtrapolation.getValue() != 0 && (this.selfExtrapolation.getValue().booleanValue() || !base.equals(RotationUtil.getRotationPlayer()))) {
-            return this.getDamage((float)pos.getX() + 0.5f, pos.getY() + 1, (float)pos.getZ() + 0.5f, this.extrapolateEntity(base, this.pExtrapolation.getValue()), base);
+        if (this.pExtrapolation.getValue() != 0 && (this.selfExtrapolation.getValue().booleanValue() || !base.equals((Object)RotationUtil.getRotationPlayer()))) {
+            return this.getDamage((float)pos.getX() + 0.5f, pos.getY() + 1, (float)pos.getZ() + 0.5f, this.extrapolateEntity((Entity)base, this.pExtrapolation.getValue()), base);
         }
         return this.getDamage((float)pos.getX() + 0.5f, pos.getY() + 1, (float)pos.getZ() + 0.5f, base);
     }
@@ -67,12 +77,12 @@ implements Globals {
     }
 
     public float getObbyDamage(BlockPos pos, IBlockStateHelper world) {
-        AxisAlignedBB bb = this.selfExtrapolation.getValue() != false ? this.extrapolateEntity(RotationUtil.getRotationPlayer(), this.pExtrapolation.getValue()) : RotationUtil.getRotationPlayer().getEntityBoundingBox();
-        return this.getObbyDamage(pos, DamageHelper.mc.player, bb, world);
+        AxisAlignedBB bb = this.selfExtrapolation.getValue() != false ? this.extrapolateEntity((Entity)RotationUtil.getRotationPlayer(), this.pExtrapolation.getValue()) : RotationUtil.getRotationPlayer().getEntityBoundingBox();
+        return this.getObbyDamage(pos, (EntityLivingBase)DamageHelper.mc.player, bb, world);
     }
 
     public float getObbyDamage(BlockPos pos, EntityLivingBase base, IBlockStateHelper world) {
-        return this.getObbyDamage(pos, base, this.extrapolateEntity(base, this.pExtrapolation.getValue()), world);
+        return this.getObbyDamage(pos, base, this.extrapolateEntity((Entity)base, this.pExtrapolation.getValue()), world);
     }
 
     public float getObbyDamage(BlockPos pos, EntityLivingBase base, AxisAlignedBB bb, IBlockStateHelper world) {
@@ -94,3 +104,4 @@ implements Globals {
         return copy.getEntityBoundingBox();
     }
 }
+

@@ -1,11 +1,64 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.block.BlockAir
+ *  net.minecraft.block.BlockDeadBush
+ *  net.minecraft.block.BlockDispenser
+ *  net.minecraft.block.BlockFire
+ *  net.minecraft.block.BlockHopper
+ *  net.minecraft.block.BlockLiquid
+ *  net.minecraft.block.BlockObsidian
+ *  net.minecraft.block.BlockShulkerBox
+ *  net.minecraft.block.BlockSnow
+ *  net.minecraft.block.BlockTallGrass
+ *  net.minecraft.client.gui.GuiHopper
+ *  net.minecraft.client.gui.inventory.GuiDispenser
+ *  net.minecraft.enchantment.Enchantment
+ *  net.minecraft.enchantment.EnchantmentHelper
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.item.EntityExpBottle
+ *  net.minecraft.entity.item.EntityItem
+ *  net.minecraft.entity.item.EntityXPOrb
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.init.Enchantments
+ *  net.minecraft.init.Items
+ *  net.minecraft.inventory.ClickType
+ *  net.minecraft.inventory.ContainerHopper
+ *  net.minecraft.inventory.Slot
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemBlock
+ *  net.minecraft.item.ItemShulkerBox
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.nbt.NBTTagCompound
+ *  net.minecraft.nbt.NBTTagList
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketCloseWindow
+ *  net.minecraft.network.play.client.CPacketEntityAction
+ *  net.minecraft.network.play.client.CPacketEntityAction$Action
+ *  net.minecraft.network.play.client.CPacketPlayer
+ *  net.minecraft.network.play.client.CPacketPlayer$PositionRotation
+ *  net.minecraft.network.play.client.CPacketPlayer$Rotation
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.NonNullList
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.MathHelper
+ *  net.minecraft.util.math.RayTraceResult$Type
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.util.math.Vec3i
+ *  org.lwjgl.input.Keyboard
+ */
 package me.earth.earthhack.impl.modules.combat.autothirtytwok;
 
-import java.lang.invoke.LambdaMetafactory;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.ToDoubleFunction;
 import me.earth.earthhack.api.cache.ModuleCache;
 import me.earth.earthhack.api.event.events.Stage;
 import me.earth.earthhack.api.module.Module;
@@ -71,6 +124,7 @@ import net.minecraft.item.ItemShulkerBox;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketCloseWindow;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.client.CPacketPlayer;
@@ -83,6 +137,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import org.lwjgl.input.Keyboard;
 
 public class Auto32k
@@ -256,8 +311,8 @@ extends Module {
 
     protected void onCPacketPlayer(CPacketPlayer packet) {
         if ((packet instanceof CPacketPlayer.PositionRotation || packet instanceof CPacketPlayer.Rotation) && this.spoof) {
-            ((ICPacketPlayer)((Object)packet)).setYaw(this.yaw);
-            ((ICPacketPlayer)((Object)packet)).setPitch(this.pitch);
+            ((ICPacketPlayer)packet).setYaw(this.yaw);
+            ((ICPacketPlayer)packet).setPitch(this.pitch);
             this.spoof = false;
         }
     }
@@ -376,10 +431,10 @@ extends Module {
             return;
         }
         this.lastHotbarSlot = Auto32k.mc.player.inventory.currentItem;
-        this.hopperSlot = InventoryUtil.findHotbarBlock(Blocks.HOPPER, new Block[0]);
+        this.hopperSlot = InventoryUtil.findHotbarBlock((Block)Blocks.HOPPER, new Block[0]);
         this.shulkerSlot = InventoryUtil.findInHotbar(item -> item.getItem() instanceof ItemShulkerBox);
         if (Auto32k.mc.player.getHeldItemOffhand().getItem() instanceof ItemBlock) {
-            Block block = ((ItemBlock)((Object)Auto32k.mc.player.getHeldItemOffhand().getItem())).getBlock();
+            Block block = ((ItemBlock)Auto32k.mc.player.getHeldItemOffhand().getItem()).getBlock();
             if (block instanceof BlockShulkerBox) {
                 this.shulkerSlot = -2;
             } else if (block instanceof BlockHopper) {
@@ -401,7 +456,7 @@ extends Module {
             return;
         }
         this.target = EntityUtil.getClosestEnemy();
-        if (this.target == null || Auto32k.mc.player.getDistanceSq(this.target) > MathUtil.square(this.targetRange.getValue())) {
+        if (this.target == null || Auto32k.mc.player.getDistanceSq((Entity)this.target) > MathUtil.square(this.targetRange.getValue())) {
             if (this.autoSwitch.getValue().booleanValue()) {
                 if (this.switching) {
                     this.resetFields();
@@ -476,7 +531,7 @@ extends Module {
             return;
         }
         if (Auto32k.mc.player.openContainer instanceof ContainerHopper) {
-            if (!Auto32k.holding32k(Auto32k.mc.player)) {
+            if (!Auto32k.holding32k((EntityPlayer)Auto32k.mc.player)) {
                 int swordIndex = -1;
                 for (int i = 0; i < 5; ++i) {
                     if (!Auto32k.is32k(((Slot)Auto32k.mc.player.openContainer.inventorySlots.get((int)0)).inventory.getStackInSlot(i))) continue;
@@ -491,11 +546,11 @@ extends Module {
                 } else if (this.mode.getValue() != Mode.NORMAL && this.shulkerSlot > 35 && this.shulkerSlot != 45) {
                     InventoryUtil.switchTo(44 - this.shulkerSlot);
                 }
-                Auto32k.mc.playerController.windowClick(Auto32k.mc.player.openContainer.windowId, swordIndex, this.trashSlot.getValue() == 0 ? Auto32k.mc.player.inventory.currentItem : this.trashSlot.getValue() - 1, ClickType.SWAP, Auto32k.mc.player);
+                Auto32k.mc.playerController.windowClick(Auto32k.mc.player.openContainer.windowId, swordIndex, this.trashSlot.getValue() == 0 ? Auto32k.mc.player.inventory.currentItem : this.trashSlot.getValue() - 1, ClickType.SWAP, (EntityPlayer)Auto32k.mc.player);
             } else if (this.closeGui.getValue().booleanValue() && this.secretClose.getValue().booleanValue()) {
                 Auto32k.mc.player.closeScreen();
             }
-        } else if (Auto32k.holding32k(Auto32k.mc.player)) {
+        } else if (Auto32k.holding32k((EntityPlayer)Auto32k.mc.player)) {
             if (this.autoSwitch.getValue().booleanValue() && this.mode.getValue() == Mode.NORMAL) {
                 this.switching = false;
             } else if (!this.autoSwitch.getValue().booleanValue() || this.mode.getValue() == Mode.DISPENSER) {
@@ -513,7 +568,7 @@ extends Module {
         if (this.antiHopper.getValue().booleanValue() && this.currentStep == Step.HOPPER) {
             boolean foundfacing = false;
             for (EnumFacing facing : EnumFacing.values()) {
-                if (Auto32k.mc.world.getBlockState(pos.offset(facing)).getBlock() == Blocks.HOPPER || Auto32k.mc.world.getBlockState(pos.offset(facing)).func_185904_a().isReplaceable()) continue;
+                if (Auto32k.mc.world.getBlockState(pos.offset(facing)).getBlock() == Blocks.HOPPER || Auto32k.mc.world.getBlockState(pos.offset(facing)).getMaterial().isReplaceable()) continue;
                 foundfacing = true;
                 side = facing;
                 break;
@@ -531,10 +586,10 @@ extends Module {
         }
         BlockPos neighbour = pos.offset(side);
         EnumFacing opposite = side.getOpposite();
-        Vec3d hitVec = new Vec3d(neighbour).addVector(0.5, 0.5, 0.5).add(new Vec3d(opposite.getDirectionVec()).scale(0.5));
+        Vec3d hitVec = new Vec3d((Vec3i)neighbour).add(0.5, 0.5, 0.5).add(new Vec3d(opposite.getDirectionVec()).scale(0.5));
         Block neighbourBlock = Auto32k.mc.world.getBlockState(neighbour).getBlock();
         this.authSneakPacket = true;
-        Auto32k.mc.player.connection.sendPacket(new CPacketEntityAction(Auto32k.mc.player, CPacketEntityAction.Action.START_SNEAKING));
+        Auto32k.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)Auto32k.mc.player, CPacketEntityAction.Action.START_SNEAKING));
         this.authSneakPacket = false;
         if (this.rotate.getValue().booleanValue()) {
             if (this.blocksPerPlace.getValue() > 1) {
@@ -549,7 +604,7 @@ extends Module {
         InventoryUtil.switchTo(slot);
         Auto32k.rightClickBlock(neighbour, hitVec, slot == -2 ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, opposite, this.packet.getValue(), this.swing.getValue());
         this.authSneakPacket = true;
-        Auto32k.mc.player.connection.sendPacket(new CPacketEntityAction(Auto32k.mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
+        Auto32k.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)Auto32k.mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
         this.authSneakPacket = false;
         this.placeTimer.reset();
         ++this.actionsThisTick;
@@ -563,7 +618,7 @@ extends Module {
         for (int i = 1; i < maxRadius; ++i) {
             BlockPos pos1 = middle.add(Sphere.get(i));
             if (!this.canPlace(pos1)) continue;
-            positions.add(pos1);
+            positions.add((Object)pos1);
         }
         if (positions.isEmpty()) {
             return null;
@@ -584,12 +639,12 @@ extends Module {
                 if (pos != null) break;
             }
             case CLOSE: {
-                positions.sort(Comparator.comparingDouble(pos2 -> Auto32k.mc.player.getDistanceSq((BlockPos)pos2)));
+                positions.sort(Comparator.comparingDouble(pos2 -> Auto32k.mc.player.getDistanceSq(pos2)));
                 pos = (BlockPos)positions.get(0);
                 break;
             }
             case ENEMY: {
-                positions.sort(Comparator.comparingDouble((ToDoubleFunction<BlockPos>)LambdaMetafactory.metafactory(null, null, null, (Ljava/lang/Object;)D, getDistanceSq(net.minecraft.util.math.BlockPos ), (Lnet/minecraft/util/math/BlockPos;)D)((EntityPlayer)target)));
+                positions.sort(Comparator.comparingDouble(((EntityPlayer)target)::func_174818_b));
                 pos = (BlockPos)positions.get(0);
                 break;
             }
@@ -606,12 +661,12 @@ extends Module {
                 if (copy.isEmpty()) {
                     copy.addAll((Collection)positions);
                 }
-                copy.sort(Comparator.comparingDouble(pos2 -> Auto32k.mc.player.getDistanceSq((BlockPos)pos2)));
+                copy.sort(Comparator.comparingDouble(pos2 -> Auto32k.mc.player.getDistanceSq(pos2)));
                 pos = (BlockPos)copy.get(0);
                 break;
             }
             case FAR: {
-                positions.sort(Comparator.comparingDouble(pos2 -> -target.getDistanceSq((BlockPos)pos2)));
+                positions.sort(Comparator.comparingDouble(pos2 -> -target.getDistanceSq(pos2)));
                 pos = (BlockPos)positions.get(0);
                 break;
             }
@@ -644,7 +699,7 @@ extends Module {
     }
 
     private void check() {
-        if (!(this.currentStep == Step.PRE || this.currentStep == Step.HOPPER || this.hopperPos == null || Auto32k.mc.currentScreen instanceof GuiHopper || Auto32k.holding32k(Auto32k.mc.player) || !(Auto32k.mc.player.getDistanceSq(this.hopperPos) > (double)MathUtil.square(this.hopperDistance.getValue().floatValue())) && Auto32k.mc.world.getBlockState(this.hopperPos).getBlock() == Blocks.HOPPER)) {
+        if (!(this.currentStep == Step.PRE || this.currentStep == Step.HOPPER || this.hopperPos == null || Auto32k.mc.currentScreen instanceof GuiHopper || Auto32k.holding32k((EntityPlayer)Auto32k.mc.player) || !(Auto32k.mc.player.getDistanceSq(this.hopperPos) > (double)MathUtil.square(this.hopperDistance.getValue().floatValue())) && Auto32k.mc.world.getBlockState(this.hopperPos).getBlock() == Blocks.HOPPER)) {
             this.resetFields();
             if (!this.autoSwitch.getValue().booleanValue() || !this.withBind.getValue().booleanValue() || this.mode.getValue() != Mode.NORMAL) {
                 this.disable();
@@ -696,7 +751,7 @@ extends Module {
                 case DISPENSER: {
                     boolean quickCheck;
                     this.runDispenserStep();
-                    boolean bl = quickCheck = !Auto32k.mc.world.getBlockState(this.finalDispenserData.getHelpingPos()).func_185904_a().isReplaceable();
+                    boolean bl = quickCheck = !Auto32k.mc.world.getBlockState(this.finalDispenserData.getHelpingPos()).getMaterial().isReplaceable();
                     if (this.actionsThisTick >= this.delayDispenser.getValue() && !this.placeTimer.passed(this.delay.getValue().intValue()) || this.currentStep != Step.DISPENSER_HELPING && this.currentStep != Step.CLICK_DISPENSER || this.rotate.getValue().booleanValue() && quickCheck) break;
                 }
                 case DISPENSER_HELPING: {
@@ -754,7 +809,7 @@ extends Module {
         if (!(Auto32k.mc.currentScreen instanceof GuiDispenser)) {
             return;
         }
-        Auto32k.mc.playerController.windowClick(Auto32k.mc.player.openContainer.windowId, this.shulkerSlot, 0, ClickType.QUICK_MOVE, Auto32k.mc.player);
+        Auto32k.mc.playerController.windowClick(Auto32k.mc.player.openContainer.windowId, this.shulkerSlot, 0, ClickType.QUICK_MOVE, (EntityPlayer)Auto32k.mc.player);
         Auto32k.mc.player.closeScreen();
         this.currentStep = Step.REDSTONE;
     }
@@ -764,14 +819,14 @@ extends Module {
             return;
         }
         this.authSneakPacket = true;
-        Auto32k.mc.player.connection.sendPacket(new CPacketEntityAction(Auto32k.mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
+        Auto32k.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)Auto32k.mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
         this.authSneakPacket = false;
-        Vec3d hitVec = new Vec3d(pos).addVector(0.5, -0.5, 0.5);
+        Vec3d hitVec = new Vec3d((Vec3i)pos).add(0.5, -0.5, 0.5);
         if (this.rotate.getValue().booleanValue()) {
             this.rotateToPos(null, hitVec);
         }
         EnumFacing facing = EnumFacing.UP;
-        if (this.finalDispenserData != null && this.finalDispenserData.getDispenserPos() != null && this.finalDispenserData.getDispenserPos().equals(pos) && pos.getY() > new BlockPos(Auto32k.mc.player.getPositionVector()).up().getY()) {
+        if (this.finalDispenserData != null && this.finalDispenserData.getDispenserPos() != null && this.finalDispenserData.getDispenserPos().equals((Object)pos) && pos.getY() > new BlockPos(Auto32k.mc.player.getPositionVector()).up().getY()) {
             facing = EnumFacing.DOWN;
         }
         Auto32k.rightClickBlock(pos, hitVec, this.shulkerSlot == -2 ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, facing, this.packet.getValue(), this.swing.getValue());
@@ -792,13 +847,13 @@ extends Module {
         }
         BlockPos dispenserPos = this.finalDispenserData.getDispenserPos();
         BlockPos helpingPos = this.finalDispenserData.getHelpingPos();
-        if (Auto32k.mc.world.getBlockState(helpingPos).func_185904_a().isReplaceable()) {
+        if (Auto32k.mc.world.getBlockState(helpingPos).getMaterial().isReplaceable()) {
             this.currentStep = Step.DISPENSER_HELPING;
             EnumFacing facing = EnumFacing.DOWN;
             boolean foundHelpingPos = false;
             for (EnumFacing enumFacing : EnumFacing.values()) {
                 BlockPos position = helpingPos.offset(enumFacing);
-                if (position.equals(this.hopperPos) || position.equals(this.hopperPos.up()) || position.equals(dispenserPos) || position.equals(this.finalDispenserData.getRedStonePos()) || !(Auto32k.mc.player.getDistanceSq(position) <= (double)MathUtil.square(this.range.getValue().floatValue())) || this.raytrace.getValue().booleanValue() && !Auto32k.rayTracePlaceCheck(position, this.raytrace.getValue()) || Auto32k.mc.world.getBlockState(position).func_185904_a().isReplaceable()) continue;
+                if (position.equals((Object)this.hopperPos) || position.equals((Object)this.hopperPos.up()) || position.equals((Object)dispenserPos) || position.equals((Object)this.finalDispenserData.getRedStonePos()) || !(Auto32k.mc.player.getDistanceSq(position) <= (double)MathUtil.square(this.range.getValue().floatValue())) || this.raytrace.getValue().booleanValue() && !Auto32k.rayTracePlaceCheck(position, this.raytrace.getValue()) || Auto32k.mc.world.getBlockState(position).getMaterial().isReplaceable()) continue;
                 foundHelpingPos = true;
                 facing = enumFacing;
                 break;
@@ -809,10 +864,10 @@ extends Module {
             }
             BlockPos neighbour = helpingPos.offset(facing);
             EnumFacing opposite = facing.getOpposite();
-            Vec3d hitVec = new Vec3d(neighbour).addVector(0.5, 0.5, 0.5).add(new Vec3d(opposite.getDirectionVec()).scale(0.5));
+            Vec3d hitVec = new Vec3d((Vec3i)neighbour).add(0.5, 0.5, 0.5).add(new Vec3d(opposite.getDirectionVec()).scale(0.5));
             Block neighbourBlock = Auto32k.mc.world.getBlockState(neighbour).getBlock();
             this.authSneakPacket = true;
-            Auto32k.mc.player.connection.sendPacket(new CPacketEntityAction(Auto32k.mc.player, CPacketEntityAction.Action.START_SNEAKING));
+            Auto32k.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)Auto32k.mc.player, CPacketEntityAction.Action.START_SNEAKING));
             this.authSneakPacket = false;
             if (this.rotate.getValue().booleanValue()) {
                 if (this.blocksPerPlace.getValue() > 1) {
@@ -828,7 +883,7 @@ extends Module {
             InventoryUtil.switchTo(slot);
             Auto32k.rightClickBlock(neighbour, hitVec, slot == -2 ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, opposite, this.packet.getValue(), this.swing.getValue());
             this.authSneakPacket = true;
-            Auto32k.mc.player.connection.sendPacket(new CPacketEntityAction(Auto32k.mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
+            Auto32k.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)Auto32k.mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
             this.authSneakPacket = false;
             this.placeTimer.reset();
             ++this.actionsThisTick;
@@ -846,55 +901,55 @@ extends Module {
         EnumFacing facing = EnumFacing.DOWN;
         for (EnumFacing enumFacing : EnumFacing.values()) {
             BlockPos position = dispenserPos.offset(enumFacing);
-            if (!position.equals(helpingPos)) continue;
+            if (!position.equals((Object)helpingPos)) continue;
             facing = enumFacing;
             break;
         }
         EnumFacing opposite = facing.getOpposite();
-        Vec3d hitVec = new Vec3d(helpingPos).addVector(0.5, 0.5, 0.5).add(new Vec3d(opposite.getDirectionVec()).scale(0.5));
+        Vec3d hitVec = new Vec3d((Vec3i)helpingPos).add(0.5, 0.5, 0.5).add(new Vec3d(opposite.getDirectionVec()).scale(0.5));
         Block neighbourBlock = Auto32k.mc.world.getBlockState(helpingPos).getBlock();
         this.authSneakPacket = true;
-        Auto32k.mc.player.connection.sendPacket(new CPacketEntityAction(Auto32k.mc.player, CPacketEntityAction.Action.START_SNEAKING));
+        Auto32k.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)Auto32k.mc.player, CPacketEntityAction.Action.START_SNEAKING));
         this.authSneakPacket = false;
         Vec3d rotationVec = null;
         EnumFacing facings = EnumFacing.UP;
         if (this.rotate.getValue().booleanValue()) {
             if (this.blocksPerPlace.getValue() > 1) {
-                float[] fArray = RotationUtil.getRotations(hitVec);
+                float[] arrf = RotationUtil.getRotations(hitVec);
                 if (this.extra.getValue().booleanValue()) {
-                    Auto32k.faceYawAndPitch(fArray[0], fArray[1]);
+                    Auto32k.faceYawAndPitch(arrf[0], arrf[1]);
                 }
             } else {
                 this.rotateToPos(null, hitVec);
             }
-            rotationVec = new Vec3d(helpingPos).addVector(0.5, 0.5, 0.5).add(new Vec3d(opposite.getDirectionVec()).scale(0.5));
+            rotationVec = new Vec3d((Vec3i)helpingPos).add(0.5, 0.5, 0.5).add(new Vec3d(opposite.getDirectionVec()).scale(0.5));
         } else if (dispenserPos.getY() <= new BlockPos(Auto32k.mc.player.getPositionVector()).up().getY()) {
             for (EnumFacing enumFacing : EnumFacing.values()) {
                 BlockPos position = this.hopperPos.up().offset(enumFacing);
-                if (!position.equals(dispenserPos)) continue;
+                if (!position.equals((Object)dispenserPos)) continue;
                 facings = enumFacing;
                 break;
             }
-            float[] fArray = Auto32k.simpleFacing(facings);
-            this.yaw = fArray[0];
-            this.pitch = fArray[1];
+            float[] arrf = Auto32k.simpleFacing(facings);
+            this.yaw = arrf[0];
+            this.pitch = arrf[1];
             this.spoof = true;
         } else {
-            float[] fArray = Auto32k.simpleFacing(facings);
-            this.yaw = fArray[0];
-            this.pitch = fArray[1];
+            float[] arrf = Auto32k.simpleFacing(facings);
+            this.yaw = arrf[0];
+            this.pitch = arrf[1];
             this.spoof = true;
         }
-        rotationVec = new Vec3d(helpingPos).addVector(0.5, 0.5, 0.5).add(new Vec3d(opposite.getDirectionVec()).scale(0.5));
-        float[] fArray = Auto32k.simpleFacing(facings);
+        rotationVec = new Vec3d((Vec3i)helpingPos).add(0.5, 0.5, 0.5).add(new Vec3d(opposite.getDirectionVec()).scale(0.5));
+        float[] arrf = Auto32k.simpleFacing(facings);
         float[] angle = RotationUtil.getRotations(hitVec);
         if (this.superPacket.getValue().booleanValue()) {
-            Auto32k.faceYawAndPitch(this.rotate.getValue() == false ? fArray[0] : angle[0], this.rotate.getValue() == false ? fArray[1] : angle[1]);
+            Auto32k.faceYawAndPitch(this.rotate.getValue() == false ? arrf[0] : angle[0], this.rotate.getValue() == false ? arrf[1] : angle[1]);
         }
         InventoryUtil.switchTo(this.dispenserSlot);
         Auto32k.rightClickBlock(helpingPos, rotationVec, this.dispenserSlot == -2 ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, opposite, this.packet.getValue(), this.swing.getValue());
         this.authSneakPacket = true;
-        Auto32k.mc.player.connection.sendPacket(new CPacketEntityAction(Auto32k.mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
+        Auto32k.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)Auto32k.mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
         this.authSneakPacket = false;
         this.placeTimer.reset();
         ++this.actionsThisTick;
@@ -913,13 +968,13 @@ extends Module {
             return;
         }
         this.lastHotbarSlot = Auto32k.mc.player.inventory.currentItem;
-        this.hopperSlot = InventoryUtil.findHotbarBlock(Blocks.HOPPER, new Block[0]);
+        this.hopperSlot = InventoryUtil.findHotbarBlock((Block)Blocks.HOPPER, new Block[0]);
         this.shulkerSlot = InventoryUtil.findInInventory(item -> item.getItem() instanceof ItemShulkerBox, false);
         this.dispenserSlot = InventoryUtil.findHotbarBlock(Blocks.DISPENSER, new Block[0]);
         this.redstoneSlot = InventoryUtil.findHotbarBlock(Blocks.REDSTONE_BLOCK, new Block[0]);
         this.obbySlot = InventoryUtil.findHotbarBlock(Blocks.OBSIDIAN, new Block[0]);
         if (Auto32k.mc.player.getHeldItemOffhand().getItem() instanceof ItemBlock) {
-            Block block = ((ItemBlock)((Object)Auto32k.mc.player.getHeldItemOffhand().getItem())).getBlock();
+            Block block = ((ItemBlock)Auto32k.mc.player.getHeldItemOffhand().getItem()).getBlock();
             if (block instanceof BlockHopper) {
                 this.hopperSlot = -2;
             } else if (block instanceof BlockDispenser) {
@@ -952,14 +1007,14 @@ extends Module {
     private DispenserData findBestPos() {
         PlaceType type = this.placeType.getValue();
         this.target = EntityUtil.getClosestEnemy();
-        if (this.target == null || Auto32k.mc.player.getDistanceSq(this.target) > MathUtil.square(this.targetRange.getValue())) {
+        if (this.target == null || Auto32k.mc.player.getDistanceSq((Entity)this.target) > MathUtil.square(this.targetRange.getValue())) {
             type = this.placeType.getValue() == PlaceType.MOUSE ? PlaceType.MOUSE : PlaceType.CLOSE;
         }
         NonNullList positions = NonNullList.create();
         BlockPos middle = PositionUtil.getPosition();
         int maxRadius = Sphere.getRadius(this.range.getValue().floatValue());
         for (int i = 1; i < maxRadius; ++i) {
-            positions.add(middle.add(Sphere.get(i)));
+            positions.add((Object)middle.add(Sphere.get(i)));
         }
         DispenserData data = new DispenserData();
         switch (type) {
@@ -973,11 +1028,11 @@ extends Module {
                 }
             }
             case CLOSE: {
-                positions.sort(Comparator.comparingDouble(pos2 -> Auto32k.mc.player.getDistanceSq((BlockPos)pos2)));
+                positions.sort(Comparator.comparingDouble(pos2 -> Auto32k.mc.player.getDistanceSq(pos2)));
                 break;
             }
             case ENEMY: {
-                positions.sort(Comparator.comparingDouble((ToDoubleFunction<BlockPos>)LambdaMetafactory.metafactory(null, null, null, (Ljava/lang/Object;)D, getDistanceSq(net.minecraft.util.math.BlockPos ), (Lnet/minecraft/util/math/BlockPos;)D)((EntityPlayer)this.target)));
+                positions.sort(Comparator.comparingDouble(((EntityPlayer)this.target)::func_174818_b));
                 break;
             }
             case MIDDLE: {
@@ -993,18 +1048,18 @@ extends Module {
                 if (copy.isEmpty()) {
                     copy.addAll((Collection)positions);
                 }
-                copy.sort(Comparator.comparingDouble(pos2 -> Auto32k.mc.player.getDistanceSq((BlockPos)pos2)));
+                copy.sort(Comparator.comparingDouble(pos2 -> Auto32k.mc.player.getDistanceSq(pos2)));
                 break;
             }
             case FAR: {
-                positions.sort(Comparator.comparingDouble(pos2 -> -this.target.getDistanceSq((BlockPos)pos2)));
+                positions.sort(Comparator.comparingDouble(pos2 -> -this.target.getDistanceSq(pos2)));
                 break;
             }
             case SAFE: {
                 positions.sort(Comparator.comparingInt(pos2 -> -this.safetyFactor((BlockPos)pos2)));
             }
         }
-        data = this.findData(positions);
+        data = this.findData((NonNullList<BlockPos>)positions);
         return data;
     }
 
@@ -1056,7 +1111,7 @@ extends Module {
                 foundFacing = false;
                 break;
             }
-            if (Auto32k.mc.world.getBlockState(pos.offset(facing)).func_185904_a().isReplaceable() || this.antiHopper.getValue().booleanValue() && Auto32k.mc.world.getBlockState(pos.offset(facing)).getBlock() == Blocks.HOPPER) continue;
+            if (Auto32k.mc.world.getBlockState(pos.offset(facing)).getMaterial().isReplaceable() || this.antiHopper.getValue().booleanValue() && Auto32k.mc.world.getBlockState(pos.offset(facing)).getBlock() == Blocks.HOPPER) continue;
             foundFacing = true;
         }
         return foundFacing;
@@ -1074,15 +1129,15 @@ extends Module {
                 }
                 possiblePositions = this.getDispenserPositions(posIn);
                 if (posIn.getY() < playerPos.getY()) {
-                    possiblePositions.remove(posIn.up().up());
+                    possiblePositions.remove((Object)posIn.up().up());
                 } else if (posIn.getY() > playerPos.getY()) {
-                    possiblePositions.remove(posIn.west().up());
-                    possiblePositions.remove(posIn.north().up());
-                    possiblePositions.remove(posIn.south().up());
-                    possiblePositions.remove(posIn.east().up());
+                    possiblePositions.remove((Object)posIn.west().up());
+                    possiblePositions.remove((Object)posIn.north().up());
+                    possiblePositions.remove((Object)posIn.south().up());
+                    possiblePositions.remove((Object)posIn.east().up());
                 }
                 if (!this.rotate.getValue().booleanValue() && !this.simulate.getValue().booleanValue()) break block11;
-                possiblePositions.sort(Comparator.comparingDouble(pos2 -> -Auto32k.mc.player.getDistanceSq((BlockPos)pos2)));
+                possiblePositions.sort(Comparator.comparingDouble(pos2 -> -Auto32k.mc.player.getDistanceSq(pos2)));
                 BlockPos posToCheck = possiblePositions.get(0);
                 if (!this.isGoodMaterial(Auto32k.mc.world.getBlockState(posToCheck).getBlock(), false)) {
                     return pos;
@@ -1110,8 +1165,8 @@ extends Module {
                 pos[2] = helpingStuff[0];
                 break block12;
             }
-            possiblePositions.removeIf(position -> Auto32k.mc.player.getDistanceSq((BlockPos)position) > (double)MathUtil.square(this.range.getValue().floatValue()));
-            possiblePositions.removeIf(position -> !this.isGoodMaterial(Auto32k.mc.world.getBlockState((BlockPos)position).getBlock(), false));
+            possiblePositions.removeIf(position -> Auto32k.mc.player.getDistanceSq(position) > (double)MathUtil.square(this.range.getValue().floatValue()));
+            possiblePositions.removeIf(position -> !this.isGoodMaterial(Auto32k.mc.world.getBlockState(position).getBlock(), false));
             possiblePositions.removeIf(position -> this.raytrace.getValue() != false && !Auto32k.rayTracePlaceCheck(position, this.raytrace.getValue()));
             possiblePositions.removeIf(this::badEntities);
             possiblePositions.removeIf(this::hasAdjancedRedstone);
@@ -1133,12 +1188,12 @@ extends Module {
         for (EnumFacing facing : EnumFacing.values()) {
             toCheck.add(pos.offset(facing));
         }
-        toCheck.removeIf(position -> position.equals(hopperPos.up()));
-        toCheck.removeIf(position -> Auto32k.mc.player.getDistanceSq((BlockPos)position) > (double)MathUtil.square(this.range.getValue().floatValue()));
-        toCheck.removeIf(position -> !this.isGoodMaterial(Auto32k.mc.world.getBlockState((BlockPos)position).getBlock(), false));
+        toCheck.removeIf(position -> position.equals((Object)hopperPos.up()));
+        toCheck.removeIf(position -> Auto32k.mc.player.getDistanceSq(position) > (double)MathUtil.square(this.range.getValue().floatValue()));
+        toCheck.removeIf(position -> !this.isGoodMaterial(Auto32k.mc.world.getBlockState(position).getBlock(), false));
         toCheck.removeIf(position -> this.raytrace.getValue() != false && !Auto32k.rayTracePlaceCheck(position, this.raytrace.getValue()));
         toCheck.removeIf(this::badEntities);
-        toCheck.sort(Comparator.comparingDouble(pos2 -> Auto32k.mc.player.getDistanceSq((BlockPos)pos2)));
+        toCheck.sort(Comparator.comparingDouble(pos2 -> Auto32k.mc.player.getDistanceSq(pos2)));
         return toCheck;
     }
 
@@ -1168,10 +1223,10 @@ extends Module {
         }
         for (EnumFacing facing : EnumFacing.values()) {
             BlockPos facingPos = pos.offset(facing);
-            if (facingPos.equals(hopperPos) || facingPos.equals(hopperPos.up())) continue;
-            if (!Auto32k.mc.world.getBlockState(facingPos).func_185904_a().isReplaceable()) {
-                if (redStonePositions.contains(facingPos)) {
-                    redStonePositions.remove(facingPos);
+            if (facingPos.equals((Object)hopperPos) || facingPos.equals((Object)hopperPos.up())) continue;
+            if (!Auto32k.mc.world.getBlockState(facingPos).getMaterial().isReplaceable()) {
+                if (redStonePositions.contains((Object)facingPos)) {
+                    redStonePositions.remove((Object)facingPos);
                     if (redStonePositions.isEmpty()) {
                         redStonePositions.add(facingPos);
                         continue;
@@ -1186,9 +1241,9 @@ extends Module {
             }
             for (EnumFacing facing1 : EnumFacing.values()) {
                 BlockPos facingPos1 = facingPos.offset(facing1);
-                if (facingPos1.equals(hopperPos) || facingPos1.equals(hopperPos.up()) || facingPos1.equals(pos) || Auto32k.mc.world.getBlockState(facingPos1).func_185904_a().isReplaceable()) continue;
-                if (redStonePositions.contains(facingPos)) {
-                    redStonePositions.remove(facingPos);
+                if (facingPos1.equals((Object)hopperPos) || facingPos1.equals((Object)hopperPos.up()) || facingPos1.equals((Object)pos) || Auto32k.mc.world.getBlockState(facingPos1).getMaterial().isReplaceable()) continue;
+                if (redStonePositions.contains((Object)facingPos)) {
+                    redStonePositions.remove((Object)facingPos);
                     if (redStonePositions.isEmpty()) {
                         redStonePositions.add(facingPos);
                         continue;
@@ -1199,8 +1254,8 @@ extends Module {
                 possiblePositions.add(facingPos);
             }
         }
-        possiblePositions.removeIf(position -> Auto32k.mc.player.getDistanceSq((BlockPos)position) > (double)MathUtil.square(this.range.getValue().floatValue()));
-        possiblePositions.sort(Comparator.comparingDouble(position -> Auto32k.mc.player.getDistanceSq((BlockPos)position)));
+        possiblePositions.removeIf(position -> Auto32k.mc.player.getDistanceSq(position) > (double)MathUtil.square(this.range.getValue().floatValue()));
+        possiblePositions.sort(Comparator.comparingDouble(position -> Auto32k.mc.player.getDistanceSq(position)));
         if (!possiblePositions.isEmpty()) {
             redStonePositions.remove(possiblePositions.get(0));
             if (!redStonePositions.isEmpty()) {
@@ -1213,7 +1268,7 @@ extends Module {
     }
 
     private void rotateToPos(BlockPos pos, Vec3d vec3d) {
-        float[] angle = vec3d == null ? Auto32k.calcAngle(Auto32k.mc.player.getPositionEyes(mc.getRenderPartialTicks()), new Vec3d((float)pos.getX() + 0.5f, (float)pos.getY() - 0.5f, (float)pos.getZ() + 0.5f)) : RotationUtil.getRotations(vec3d);
+        float[] angle = vec3d == null ? Auto32k.calcAngle(Auto32k.mc.player.getPositionEyes(mc.getRenderPartialTicks()), new Vec3d((double)((float)pos.getX() + 0.5f), (double)((float)pos.getY() - 0.5f), (double)((float)pos.getZ() + 0.5f))) : RotationUtil.getRotations(vec3d);
         this.yaw = angle[0];
         this.pitch = angle[1];
         this.spoof = true;
@@ -1254,7 +1309,7 @@ extends Module {
             float f = (float)(vec.x - (double)pos.getX());
             float f1 = (float)(vec.y - (double)pos.getY());
             float f2 = (float)(vec.z - (double)pos.getZ());
-            Auto32k.mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(pos, direction, hand, f, f1, f2));
+            Auto32k.mc.player.connection.sendPacket((Packet)new CPacketPlayerTryUseItemOnBlock(pos, direction, hand, f, f1, f2));
         } else {
             Auto32k.mc.playerController.processRightClickBlock(Auto32k.mc.player, Auto32k.mc.world, pos, direction, vec, hand);
         }
@@ -1264,7 +1319,7 @@ extends Module {
     }
 
     public static boolean rayTracePlaceCheck(BlockPos pos, boolean shouldCheck, float height) {
-        return !shouldCheck || Auto32k.mc.world.rayTraceBlocks(new Vec3d(Auto32k.mc.player.posX, Auto32k.mc.player.posY + (double)Auto32k.mc.player.getEyeHeight(), Auto32k.mc.player.posZ), new Vec3d(pos.getX(), (float)pos.getY() + height, pos.getZ()), false, true, false) == null;
+        return !shouldCheck || Auto32k.mc.world.rayTraceBlocks(new Vec3d(Auto32k.mc.player.posX, Auto32k.mc.player.posY + (double)Auto32k.mc.player.getEyeHeight(), Auto32k.mc.player.posZ), new Vec3d((double)pos.getX(), (double)((float)pos.getY() + height), (double)pos.getZ()), false, true, false) == null;
     }
 
     public static boolean rayTracePlaceCheck(BlockPos pos, boolean shouldCheck) {
@@ -1276,7 +1331,7 @@ extends Module {
     }
 
     public static void faceYawAndPitch(float yaw, float pitch) {
-        Auto32k.mc.player.connection.sendPacket(new CPacketPlayer.Rotation(yaw, pitch, Auto32k.mc.player.onGround));
+        Auto32k.mc.player.connection.sendPacket((Packet)new CPacketPlayer.Rotation(yaw, pitch, Auto32k.mc.player.onGround));
     }
 
     private boolean badEntities(BlockPos pos) {
@@ -1294,7 +1349,7 @@ extends Module {
     private int safety(BlockPos pos) {
         int safety = 0;
         for (EnumFacing facing : EnumFacing.values()) {
-            if (Auto32k.mc.world.getBlockState(pos.offset(facing)).func_185904_a().isReplaceable()) continue;
+            if (Auto32k.mc.world.getBlockState(pos.offset(facing)).getMaterial().isReplaceable()) continue;
             ++safety;
         }
         return safety;
@@ -1435,3 +1490,4 @@ extends Module {
         }
     }
 }
+

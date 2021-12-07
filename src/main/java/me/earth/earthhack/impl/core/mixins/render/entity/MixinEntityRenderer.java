@@ -1,3 +1,36 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Predicate
+ *  net.minecraft.block.BlockAir
+ *  net.minecraft.block.BlockLiquid
+ *  net.minecraft.block.material.Material
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.entity.EntityPlayerSP
+ *  net.minecraft.client.gui.ScaledResolution
+ *  net.minecraft.client.multiplayer.PlayerControllerMP
+ *  net.minecraft.client.multiplayer.WorldClient
+ *  net.minecraft.client.renderer.EntityRenderer
+ *  net.minecraft.client.renderer.GLAllocation
+ *  net.minecraft.client.renderer.GlStateManager
+ *  net.minecraft.client.renderer.RenderGlobal
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.init.Items
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.RayTraceResult
+ *  net.minecraft.util.math.RayTraceResult$Type
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.world.IBlockAccess
+ *  net.minecraft.world.World
+ *  org.lwjgl.opengl.Display
+ *  org.lwjgl.opengl.GL11
+ *  org.lwjgl.util.glu.Project
+ */
 package me.earth.earthhack.impl.core.mixins.render.entity;
 
 import com.google.common.base.Predicate;
@@ -51,6 +84,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Project;
@@ -77,60 +112,60 @@ implements IEntityRenderer {
     private static final SettingCache<Double, NumberSetting<Double>, CameraClip> DISTANCE = Caches.getSetting(CameraClip.class, Setting.class, "Distance", 10.0);
     @Shadow
     @Final
-    private Minecraft field_78531_r;
+    private Minecraft mc;
     @Shadow
-    private ItemStack field_190566_ab;
+    private ItemStack itemActivationItem;
     private float lastReach;
 
     @Shadow
-    protected abstract void func_78467_g(float var1);
+    protected abstract void orientCamera(float var1);
 
     @Shadow
-    protected abstract void func_78479_a(float var1, int var2);
+    protected abstract void setupCameraTransform(float var1, int var2);
 
     @Override
     public void invokeOrientCamera(float partialTicks) {
-        this.func_78467_g(partialTicks);
+        this.orientCamera(partialTicks);
     }
 
     @Override
     public void invokeSetupCameraTransform(float partialTicks, int pass) {
-        this.func_78479_a(partialTicks, pass);
+        this.setupCameraTransform(partialTicks, pass);
     }
 
     @Redirect(method={"setupCameraTransform"}, at=@At(value="INVOKE", target="Lorg/lwjgl/util/glu/Project;gluPerspective(FFFF)V", remap=false))
     private void onSetupCameraTransform(float fovy, float aspect, float zNear, float zFar) {
-        AspectRatioEvent event = new AspectRatioEvent((float)this.field_78531_r.displayWidth / (float)this.field_78531_r.displayHeight);
+        AspectRatioEvent event = new AspectRatioEvent((float)this.mc.displayWidth / (float)this.mc.displayHeight);
         Bus.EVENT_BUS.post(event);
-        Project.gluPerspective(fovy, event.getAspectRatio(), zNear, zFar);
+        Project.gluPerspective((float)fovy, (float)event.getAspectRatio(), (float)zNear, (float)zFar);
     }
 
     @Redirect(method={"renderWorldPass"}, at=@At(value="INVOKE", target="Lorg/lwjgl/util/glu/Project;gluPerspective(FFFF)V", remap=false))
     private void onRenderWorldPass(float fovy, float aspect, float zNear, float zFar) {
-        AspectRatioEvent event = new AspectRatioEvent((float)this.field_78531_r.displayWidth / (float)this.field_78531_r.displayHeight);
+        AspectRatioEvent event = new AspectRatioEvent((float)this.mc.displayWidth / (float)this.mc.displayHeight);
         Bus.EVENT_BUS.post(event);
-        Project.gluPerspective(fovy, event.getAspectRatio(), zNear, zFar);
+        Project.gluPerspective((float)fovy, (float)event.getAspectRatio(), (float)zNear, (float)zFar);
         GLUProjection projection = GLUProjection.getInstance();
         IntBuffer viewPort = GLAllocation.createDirectIntBuffer((int)16);
         FloatBuffer modelView = GLAllocation.createDirectFloatBuffer((int)16);
         FloatBuffer projectionPort = GLAllocation.createDirectFloatBuffer((int)16);
-        GL11.glGetFloat(2982, modelView);
-        GL11.glGetFloat(2983, projectionPort);
-        GL11.glGetInteger(2978, viewPort);
+        GL11.glGetFloat((int)2982, (FloatBuffer)modelView);
+        GL11.glGetFloat((int)2983, (FloatBuffer)projectionPort);
+        GL11.glGetInteger((int)2978, (IntBuffer)viewPort);
         ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft());
         projection.updateMatrices(viewPort, modelView, projectionPort, (double)scaledResolution.getScaledWidth() / (double)Minecraft.getMinecraft().displayWidth, (double)scaledResolution.getScaledHeight() / (double)Minecraft.getMinecraft().displayHeight);
     }
 
     @Redirect(method={"renderCloudsCheck"}, at=@At(value="INVOKE", target="Lorg/lwjgl/util/glu/Project;gluPerspective(FFFF)V", remap=false))
     private void onRenderCloudsCheck(float fovy, float aspect, float zNear, float zFar) {
-        AspectRatioEvent event = new AspectRatioEvent((float)this.field_78531_r.displayWidth / (float)this.field_78531_r.displayHeight);
+        AspectRatioEvent event = new AspectRatioEvent((float)this.mc.displayWidth / (float)this.mc.displayHeight);
         Bus.EVENT_BUS.post(event);
-        Project.gluPerspective(fovy, event.getAspectRatio(), zNear, zFar);
+        Project.gluPerspective((float)fovy, (float)event.getAspectRatio(), (float)zNear, (float)zFar);
     }
 
     @Inject(method={"renderItemActivation"}, at={@At(value="HEAD")}, cancellable=true)
     public void renderItemActivationHook(CallbackInfo info) {
-        if (this.field_190566_ab != null && NO_RENDER.returnIfPresent(NoRender::noTotems, false).booleanValue() && this.field_190566_ab.getItem() == Items.TOTEM_OF_UNDYING) {
+        if (this.itemActivationItem != null && NO_RENDER.returnIfPresent(NoRender::noTotems, false).booleanValue() && this.itemActivationItem.getItem() == Items.TOTEM_OF_UNDYING) {
             info.cancel();
         }
     }
@@ -170,7 +205,7 @@ implements IEntityRenderer {
             return Collections.emptyList();
         }
         try {
-            Predicate p = e -> predicate.test((Entity)e) && !e.equals(this.field_78531_r.player);
+            Predicate p = e -> predicate.test(e) && !e.equals((Object)this.mc.player);
             return worldClient.getEntitiesInAABBexcluding(entityIn, boundingBox, p);
         }
         catch (Exception e2) {
@@ -185,7 +220,7 @@ implements IEntityRenderer {
         ReachEvent event = new ReachEvent(controller.getBlockReachDistance(), 0.0f);
         Bus.EVENT_BUS.post(event);
         this.lastReach = event.isCancelled() ? event.getReach() : 0.0f;
-        return this.field_78531_r.playerController.getBlockReachDistance() + this.lastReach;
+        return this.mc.playerController.getBlockReachDistance() + this.lastReach;
     }
 
     @Redirect(method={"getMouseOver"}, at=@At(value="INVOKE", target="net/minecraft/util/math/Vec3d.distanceTo(Lnet/minecraft/util/math/Vec3d;)D"))
@@ -222,35 +257,35 @@ implements IEntityRenderer {
         if (RAYTRACE.returnIfPresent(RayTrace::isActive, false).booleanValue()) {
             Vec3d start = entity.getPositionEyes(partialTicks);
             Vec3d look = entity.getLook(partialTicks);
-            Vec3d end = start.addVector(look.x * blockReachDistance, look.y * blockReachDistance, look.z * blockReachDistance);
-            if (RAYTRACE.returnIfPresent(RayTrace::liquidCrystalPlace, false).booleanValue() && (this.field_78531_r.player.isInsideOfMaterial(Material.WATER) || this.field_78531_r.player.isInsideOfMaterial(Material.LAVA)) && InventoryUtil.isHolding(Blocks.OBSIDIAN)) {
+            Vec3d end = start.add(look.x * blockReachDistance, look.y * blockReachDistance, look.z * blockReachDistance);
+            if (RAYTRACE.returnIfPresent(RayTrace::liquidCrystalPlace, false).booleanValue() && (this.mc.player.isInsideOfMaterial(Material.WATER) || this.mc.player.isInsideOfMaterial(Material.LAVA)) && InventoryUtil.isHolding(Blocks.OBSIDIAN)) {
                 MutableWrapper<BlockPos> opposite = new MutableWrapper<BlockPos>();
                 RayTraceResult result = this.traceInLiquid(start, end, opposite, true);
                 if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
-                    if (result.getBlockPos().equals(opposite.get())) {
+                    if (result.getBlockPos().equals((Object)opposite.get())) {
                         result.sideHit = result.sideHit.getOpposite();
                     }
                     return result;
                 }
                 result = this.traceInLiquid(start, end, opposite, false);
                 if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
-                    if (result.getBlockPos().equals(opposite.get())) {
+                    if (result.getBlockPos().equals((Object)opposite.get())) {
                         result.sideHit = result.sideHit.getOpposite();
                     }
                     return result;
                 }
             }
             if (RAYTRACE.returnIfPresent(RayTrace::phaseCheck, false).booleanValue()) {
-                return RayTracer.traceTri(this.field_78531_r.world, this.field_78531_r.world, start, end, false, false, true, (b, p, ef) -> {
-                    AxisAlignedBB bb = this.field_78531_r.world.getBlockState((BlockPos)p).func_185900_c(this.field_78531_r.world, (BlockPos)p).offset((BlockPos)p);
-                    if (RotationUtil.getRotationPlayer().getEntityBoundingBox().intersects(bb) && (double)p.getY() > this.field_78531_r.player.posY + 0.25) {
+                return RayTracer.traceTri((World)this.mc.world, (IBlockAccess)this.mc.world, start, end, false, false, true, (b, p, ef) -> {
+                    AxisAlignedBB bb = this.mc.world.getBlockState(p).getBoundingBox((IBlockAccess)this.mc.world, p).offset(p);
+                    if (RotationUtil.getRotationPlayer().getEntityBoundingBox().intersects(bb) && (double)p.getY() > this.mc.player.posY + 0.25) {
                         return false;
                     }
                     if (ef == null) {
                         return true;
                     }
-                    for (Entity e : this.field_78531_r.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(p.offset(ef)))) {
-                        if (e == null || e.isDead || this.field_78531_r.player.equals(e) || RotationUtil.getRotationPlayer().equals(e)) continue;
+                    for (Entity e : this.mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(p.offset(ef)))) {
+                        if (e == null || e.isDead || this.mc.player.equals((Object)e) || RotationUtil.getRotationPlayer().equals((Object)e)) continue;
                         return false;
                     }
                     return true;
@@ -274,18 +309,18 @@ implements IEntityRenderer {
     }
 
     private RayTraceResult traceInLiquid(Vec3d start, Vec3d end, MutableWrapper<BlockPos> opposite, boolean air) {
-        return RayTracer.traceTri(this.field_78531_r.world, this.field_78531_r.world, start, end, false, false, true, (b, p, ef) -> {
-            if (ef == null || RotationUtil.getRotationPlayer().getEntityBoundingBox().intersects(new AxisAlignedBB((BlockPos)p))) {
+        return RayTracer.traceTri((World)this.mc.world, (IBlockAccess)this.mc.world, start, end, false, false, true, (b, p, ef) -> {
+            if (ef == null || RotationUtil.getRotationPlayer().getEntityBoundingBox().intersects(new AxisAlignedBB(p))) {
                 return false;
             }
             BlockPos pos = p.offset(ef);
             BlockPos up = pos.up();
-            if ((!air || this.field_78531_r.world.getBlockState(up).getBlock() == Blocks.AIR && this.field_78531_r.world.getBlockState(up.up()).getBlock() == Blocks.AIR) && this.field_78531_r.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(up.getX(), up.getY(), up.getZ(), (double)up.getX() + 1.0, (double)up.getY() + 2.0, (double)up.getZ() + 1.0)).isEmpty()) {
+            if ((!air || this.mc.world.getBlockState(up).getBlock() == Blocks.AIR && this.mc.world.getBlockState(up.up()).getBlock() == Blocks.AIR) && this.mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB((double)up.getX(), (double)up.getY(), (double)up.getZ(), (double)up.getX() + 1.0, (double)up.getY() + 2.0, (double)up.getZ() + 1.0)).isEmpty()) {
                 return true;
             }
             pos = p.offset(ef.getOpposite());
             up = pos.up();
-            if ((!air || this.field_78531_r.world.getBlockState(up).getBlock() == Blocks.AIR && this.field_78531_r.world.getBlockState(up.up()).getBlock() == Blocks.AIR) && this.field_78531_r.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(up.getX(), up.getY(), up.getZ(), (double)up.getX() + 1.0, (double)up.getY() + 2.0, (double)up.getZ() + 1.0)).isEmpty()) {
+            if ((!air || this.mc.world.getBlockState(up).getBlock() == Blocks.AIR && this.mc.world.getBlockState(up.up()).getBlock() == Blocks.AIR) && this.mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB((double)up.getX(), (double)up.getY(), (double)up.getZ(), (double)up.getX() + 1.0, (double)up.getY() + 2.0, (double)up.getZ() + 1.0)).isEmpty()) {
                 opposite.set((BlockPos)p);
                 return true;
             }
@@ -293,3 +328,4 @@ implements IEntityRenderer {
         }, (b, p, ef) -> true);
     }
 }
+

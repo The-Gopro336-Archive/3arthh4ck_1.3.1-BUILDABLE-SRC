@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.client.CPacketPlayer$Rotation
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal;
 
 import me.earth.earthhack.impl.event.events.network.NoMotionUpdateEvent;
@@ -29,3 +35,4 @@ extends ModuleListener<AutoCrystal, NoMotionUpdateEvent> {
         }
     }
 }
+

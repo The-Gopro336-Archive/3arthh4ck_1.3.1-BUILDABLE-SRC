@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Joiner
+ *  com.google.common.primitives.Ints
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package org.spongepowered.asm.util;
 
 import com.google.common.base.Joiner;
@@ -57,7 +66,7 @@ public final class Bytecode {
     private static final String[] UNBOXING_METHODS = new String[]{null, "booleanValue", "charValue", "byteValue", "shortValue", "intValue", "floatValue", "longValue", "doubleValue", null, null, null};
     private static final Class<?>[] MERGEABLE_MIXIN_ANNOTATIONS = new Class[]{Overwrite.class, Intrinsic.class, Final.class, Debug.class};
     private static Pattern mergeableAnnotationPattern = Bytecode.getMergeableAnnotationPattern();
-    private static final Logger logger = LogManager.getLogger("mixin");
+    private static final Logger logger = LogManager.getLogger((String)"mixin");
 
     private Bytecode() {
     }
@@ -291,7 +300,7 @@ public final class Bytecode {
     }
 
     public static String getDescriptor(Type[] args) {
-        return "(" + Joiner.on("").join(args) + ")";
+        return "(" + Joiner.on((String)"").join((Object[])args) + ")";
     }
 
     public static String getDescriptor(Type[] args, Type returnType) {
@@ -325,7 +334,7 @@ public final class Bytecode {
         if (insn == null) {
             return false;
         }
-        return Ints.contains(CONSTANTS_ALL, insn.getOpcode());
+        return Ints.contains((int[])CONSTANTS_ALL, (int)insn.getOpcode());
     }
 
     public static Object getConstant(AbstractInsnNode insn) {
@@ -342,7 +351,7 @@ public final class Bytecode {
             }
             throw new IllegalArgumentException("IntInsnNode with invalid opcode " + insn.getOpcode() + " in getConstant");
         }
-        int index = Ints.indexOf(CONSTANTS_ALL, insn.getOpcode());
+        int index = Ints.indexOf((int[])CONSTANTS_ALL, (int)insn.getOpcode());
         return index < 0 ? null : CONSTANTS_VALUES[index];
     }
 
@@ -372,7 +381,7 @@ public final class Bytecode {
             }
             throw new IllegalArgumentException("LdcInsnNode with invalid payload type " + cst.getClass() + " in getConstant");
         }
-        int index = Ints.indexOf(CONSTANTS_ALL, insn.getOpcode());
+        int index = Ints.indexOf((int[])CONSTANTS_ALL, (int)insn.getOpcode());
         return index < 0 ? null : Type.getType(CONSTANTS_TYPES[index]);
     }
 
@@ -573,3 +582,4 @@ public final class Bytecode {
         }
     }
 }
+

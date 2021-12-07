@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.world.DimensionType
+ */
 package me.earth.earthhack.impl.modules.render.waypoints.mode;
 
 import net.minecraft.world.DimensionType;
@@ -39,3 +45,4 @@ public enum WayPointType {
         return None;
     }
 }
+

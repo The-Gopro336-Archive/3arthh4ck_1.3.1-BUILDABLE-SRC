@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.render.newchunks.util;
 
 public class ChunkData {
@@ -31,3 +34,4 @@ public class ChunkData {
         return super.equals(o);
     }
 }
+

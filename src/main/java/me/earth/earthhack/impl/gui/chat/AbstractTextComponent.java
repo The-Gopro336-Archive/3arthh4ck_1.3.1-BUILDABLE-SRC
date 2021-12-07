@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.text.TextComponentString
+ */
 package me.earth.earthhack.impl.gui.chat;
 
 import net.minecraft.util.text.TextComponentString;
@@ -49,15 +55,15 @@ extends TextComponentString {
         if (!(o instanceof AbstractTextComponent)) {
             return false;
         }
-        return this.getText().equals(((AbstractTextComponent)o).getText());
+        return this.getText().equals(((AbstractTextComponent)((Object)o)).getText());
     }
 
-    @Override
     public int hashCode() {
         return super.hashCode();
     }
 
     public String toString() {
-        return "CustomComponent{text='" + this.getText() + '\'' + ", siblings=" + this.siblings + ", style=" + this.getStyle() + '}';
+        return "CustomComponent{text='" + this.getText() + '\'' + ", siblings=" + this.siblings + ", style=" + (Object)this.getStyle() + '}';
     }
 }
+

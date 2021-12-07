@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.item.ItemBow
+ */
 package me.earth.earthhack.impl.modules.combat.aimbot;
 
 import me.earth.earthhack.api.event.events.Stage;
@@ -27,3 +33,4 @@ extends ModuleListener<AimBot, MotionUpdateEvent> {
         }
     }
 }
+

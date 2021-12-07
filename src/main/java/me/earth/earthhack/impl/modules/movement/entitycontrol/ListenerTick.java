@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.movement.entitycontrol;
 
 import me.earth.earthhack.impl.core.ducks.entity.IEntityPlayerSP;
@@ -14,7 +17,8 @@ extends ModuleListener<EntityControl, TickEvent> {
     @Override
     public void invoke(TickEvent event) {
         if (event.isSafe() && ((EntityControl)this.module).jumpHeight.getValue() > 0.0) {
-            ((IEntityPlayerSP)((Object)ListenerTick.mc.player)).setHorseJumpPower(1.0f);
+            ((IEntityPlayerSP)ListenerTick.mc.player).setHorseJumpPower(1.0f);
         }
     }
 }
+

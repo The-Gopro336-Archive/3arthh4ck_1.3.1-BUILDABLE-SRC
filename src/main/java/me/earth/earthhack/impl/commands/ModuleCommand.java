@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.commands;
 
 import java.util.Optional;
@@ -220,3 +223,4 @@ implements Registrable {
         return CommandUtil.getNameableStartingWith(name, Managers.ELEMENTS);
     }
 }
+

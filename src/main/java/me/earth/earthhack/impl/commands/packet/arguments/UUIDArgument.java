@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.commands.packet.arguments;
 
 import java.util.UUID;
@@ -46,3 +49,4 @@ extends AbstractArgument<UUID> {
         return CustomCompleterResult.PASS;
     }
 }
+

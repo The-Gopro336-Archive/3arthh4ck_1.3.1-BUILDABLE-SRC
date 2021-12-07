@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.combat.autoarmor;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -32,3 +35,4 @@ extends DefaultData<AutoArmor> {
         return "Automatically puts Armor on.";
     }
 }
+

@@ -1,3 +1,25 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.entity.EntityPlayerSP
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.init.Items
+ *  net.minecraft.item.Item
+ *  net.minecraft.network.Packet
+ *  net.minecraft.network.play.client.CPacketAnimation
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock
+ *  net.minecraft.network.play.client.CPacketUseEntity
+ *  net.minecraft.network.play.server.SPacketSpawnObject
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.RayTraceResult
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.world.IBlockAccess
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.modules.combat.legswitch;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -16,6 +38,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketAnimation;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.network.play.client.CPacketUseEntity;
@@ -25,6 +48,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 final class ListenerSpawnObject
 extends ModuleListener<LegSwitch, PacketEvent.Receive<SPacketSpawnObject>> {
@@ -44,15 +69,15 @@ extends ModuleListener<LegSwitch, PacketEvent.Receive<SPacketSpawnObject>> {
                 double y;
                 double x = packet.getX();
                 BlockPos pos = new BlockPos(x, (y = packet.getY()) - 1.0, z = packet.getZ());
-                if (!pos.equals(previous = ((LegSwitch)this.module).targetPos)) {
+                if (!pos.equals((Object)(previous = ((LegSwitch)this.module).targetPos))) {
                     return;
                 }
-                BlockPos targetPos = constellation.firstPos.equals(previous) ? constellation.secondPos : constellation.firstPos;
-                EntityEnderCrystal entity = new EntityEnderCrystal(ListenerSpawnObject.mc.world, x, y, z);
-                if (!((LegSwitch)this.module).rotate.getValue().noRotate(ACRotate.Break) && !RotationUtil.isLegit(entity, new Entity[0]) || !((LegSwitch)this.module).rotate.getValue().noRotate(ACRotate.Place) && !RotationUtil.isLegit(targetPos)) {
+                BlockPos targetPos = constellation.firstPos.equals((Object)previous) ? constellation.secondPos : constellation.firstPos;
+                EntityEnderCrystal entity = new EntityEnderCrystal((World)ListenerSpawnObject.mc.world, x, y, z);
+                if (!((LegSwitch)this.module).rotate.getValue().noRotate(ACRotate.Break) && !RotationUtil.isLegit((Entity)entity, new Entity[0]) || !((LegSwitch)this.module).rotate.getValue().noRotate(ACRotate.Place) && !RotationUtil.isLegit(targetPos)) {
                     return;
                 }
-                RayTraceResult result = RotationUtil.rayTraceTo(targetPos, ListenerSpawnObject.mc.world);
+                RayTraceResult result = RotationUtil.rayTraceTo(targetPos, (IBlockAccess)ListenerSpawnObject.mc.world);
                 if (result == null) {
                     result = new RayTraceResult(new Vec3d(0.5, 1.0, 0.5), EnumFacing.UP);
                 }
@@ -64,11 +89,11 @@ extends ModuleListener<LegSwitch, PacketEvent.Receive<SPacketSpawnObject>> {
                 Locks.acquire(Locks.PLACE_SWITCH_LOCK, () -> {
                     int last = player.inventory.currentItem;
                     EnumHand hand = player.getHeldItemMainhand().getItem() == Items.END_CRYSTAL || slot != -2 ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
-                    player.connection.sendPacket(new CPacketUseEntity(entity));
-                    player.connection.sendPacket(new CPacketAnimation(EnumHand.MAIN_HAND));
+                    player.connection.sendPacket((Packet)new CPacketUseEntity((Entity)entity));
+                    player.connection.sendPacket((Packet)new CPacketAnimation(EnumHand.MAIN_HAND));
                     InventoryUtil.switchTo(slot);
-                    player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(targetPos, finalResult.sideHit, hand, (float)finalResult.hitVec.x, (float)finalResult.hitVec.y, (float)finalResult.hitVec.z));
-                    player.connection.sendPacket(new CPacketAnimation(hand));
+                    player.connection.sendPacket((Packet)new CPacketPlayerTryUseItemOnBlock(targetPos, finalResult.sideHit, hand, (float)finalResult.hitVec.x, (float)finalResult.hitVec.y, (float)finalResult.hitVec.z));
+                    player.connection.sendPacket((Packet)new CPacketAnimation(hand));
                     if (last != slot && ((LegSwitch)this.module).autoSwitch.getValue() != LegAutoSwitch.Keep) {
                         InventoryUtil.switchTo(last);
                     }
@@ -87,3 +112,4 @@ extends ModuleListener<LegSwitch, PacketEvent.Receive<SPacketSpawnObject>> {
         }
     }
 }
+

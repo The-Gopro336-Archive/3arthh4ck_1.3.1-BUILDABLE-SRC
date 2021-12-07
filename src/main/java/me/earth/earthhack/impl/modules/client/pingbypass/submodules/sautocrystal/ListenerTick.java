@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.client.pingbypass.submodules.sautocrystal;
 
 import me.earth.earthhack.impl.event.events.keyboard.KeyboardEvent;
@@ -15,3 +18,4 @@ extends ModuleListener<ServerAutoCrystal, KeyboardEvent.Post> {
         ((ServerAutoCrystal)this.module).onTick();
     }
 }
+

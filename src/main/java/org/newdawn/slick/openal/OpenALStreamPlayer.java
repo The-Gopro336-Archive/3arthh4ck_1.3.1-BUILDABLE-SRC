@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.lwjgl.BufferUtils
+ *  org.lwjgl.openal.AL10
+ *  org.lwjgl.openal.OpenALException
+ */
 package org.newdawn.slick.openal;
 
 import java.io.IOException;
@@ -17,8 +25,8 @@ public class OpenALStreamPlayer {
     private static final int sectionSize = 81920;
     private byte[] buffer = new byte[81920];
     private IntBuffer bufferNames;
-    private ByteBuffer bufferData = BufferUtils.createByteBuffer(81920);
-    private IntBuffer unqueued = BufferUtils.createIntBuffer(1);
+    private ByteBuffer bufferData = BufferUtils.createByteBuffer((int)81920);
+    private IntBuffer unqueued = BufferUtils.createIntBuffer((int)1);
     private int source;
     private int remainingBufferCount;
     private boolean loop;
@@ -32,15 +40,15 @@ public class OpenALStreamPlayer {
     public OpenALStreamPlayer(int source, String ref) {
         this.source = source;
         this.ref = ref;
-        this.bufferNames = BufferUtils.createIntBuffer(3);
-        AL10.alGenBuffers(this.bufferNames);
+        this.bufferNames = BufferUtils.createIntBuffer((int)3);
+        AL10.alGenBuffers((IntBuffer)this.bufferNames);
     }
 
     public OpenALStreamPlayer(int source, URL url) {
         this.source = source;
         this.url = url;
-        this.bufferNames = BufferUtils.createIntBuffer(3);
-        AL10.alGenBuffers(this.bufferNames);
+        this.bufferNames = BufferUtils.createIntBuffer((int)3);
+        AL10.alGenBuffers((IntBuffer)this.bufferNames);
     }
 
     private void initStreams() throws IOException {
@@ -57,9 +65,9 @@ public class OpenALStreamPlayer {
     }
 
     private void removeBuffers() {
-        IntBuffer buffer = BufferUtils.createIntBuffer(1);
-        for (int queued = AL10.alGetSourcei(this.source, 4117); queued > 0; --queued) {
-            AL10.alSourceUnqueueBuffers(this.source, buffer);
+        IntBuffer buffer = BufferUtils.createIntBuffer((int)1);
+        for (int queued = AL10.alGetSourcei((int)this.source, (int)4117); queued > 0; --queued) {
+            AL10.alSourceUnqueueBuffers((int)this.source, (IntBuffer)buffer);
         }
     }
 
@@ -67,7 +75,7 @@ public class OpenALStreamPlayer {
         this.loop = loop;
         this.initStreams();
         this.done = false;
-        AL10.alSourceStop(this.source);
+        AL10.alSourceStop((int)this.source);
         this.removeBuffers();
         this.startPlayback();
     }
@@ -86,23 +94,23 @@ public class OpenALStreamPlayer {
         }
         float sampleRate = this.audio.getRate();
         float sampleSize = this.audio.getChannels() > 1 ? 4.0f : 2.0f;
-        for (int processed = AL10.alGetSourcei(this.source, 4118); processed > 0; --processed) {
+        for (int processed = AL10.alGetSourcei((int)this.source, (int)4118); processed > 0; --processed) {
             this.unqueued.clear();
-            AL10.alSourceUnqueueBuffers(this.source, this.unqueued);
+            AL10.alSourceUnqueueBuffers((int)this.source, (IntBuffer)this.unqueued);
             int bufferIndex = this.unqueued.get(0);
-            float bufferLength = (float)AL10.alGetBufferi(bufferIndex, 8196) / sampleSize / sampleRate;
+            float bufferLength = (float)AL10.alGetBufferi((int)bufferIndex, (int)8196) / sampleSize / sampleRate;
             this.positionOffset += bufferLength;
             if (this.stream(bufferIndex)) {
-                AL10.alSourceQueueBuffers(this.source, this.unqueued);
+                AL10.alSourceQueueBuffers((int)this.source, (IntBuffer)this.unqueued);
                 continue;
             }
             --this.remainingBufferCount;
             if (this.remainingBufferCount != 0) continue;
             this.done = true;
         }
-        int state = AL10.alGetSourcei(this.source, 4112);
+        int state = AL10.alGetSourcei((int)this.source, (int)4112);
         if (state != 4114) {
-            AL10.alSourcePlay(this.source);
+            AL10.alSourcePlay((int)this.source);
         }
     }
 
@@ -115,7 +123,7 @@ public class OpenALStreamPlayer {
                 this.bufferData.flip();
                 int format = this.audio.getChannels() > 1 ? 4355 : 4353;
                 try {
-                    AL10.alBufferData(bufferId, format, this.bufferData, this.audio.getRate());
+                    AL10.alBufferData((int)bufferId, (int)format, (ByteBuffer)this.bufferData, (int)this.audio.getRate());
                 }
                 catch (OpenALException e) {
                     Log.error("Failed to loop buffer: " + bufferId + " " + format + " " + count + " " + this.audio.getRate(), e);
@@ -167,17 +175,18 @@ public class OpenALStreamPlayer {
     }
 
     private void startPlayback() {
-        AL10.alSourcei(this.source, 4103, 0);
-        AL10.alSourcef(this.source, 4099, this.pitch);
+        AL10.alSourcei((int)this.source, (int)4103, (int)0);
+        AL10.alSourcef((int)this.source, (int)4099, (float)this.pitch);
         this.remainingBufferCount = 3;
         for (int i = 0; i < 3; ++i) {
             this.stream(this.bufferNames.get(i));
         }
-        AL10.alSourceQueueBuffers(this.source, this.bufferNames);
-        AL10.alSourcePlay(this.source);
+        AL10.alSourceQueueBuffers((int)this.source, (IntBuffer)this.bufferNames);
+        AL10.alSourcePlay((int)this.source);
     }
 
     public float getPosition() {
-        return this.positionOffset + AL10.alGetSourcef(this.source, 4132);
+        return this.positionOffset + AL10.alGetSourcef((int)this.source, (int)4132);
     }
 }
+

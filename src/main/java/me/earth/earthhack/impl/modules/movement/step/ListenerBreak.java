@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.movement.step;
 
 import me.earth.earthhack.impl.event.events.misc.BlockDestroyEvent;
@@ -15,3 +18,4 @@ extends ModuleListener<Step, BlockDestroyEvent> {
         ((Step)this.module).onBreak();
     }
 }
+

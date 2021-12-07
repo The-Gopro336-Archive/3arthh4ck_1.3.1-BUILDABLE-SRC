@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.renderer.EntityRenderer
+ */
 package me.earth.earthhack.impl.core.mixins.render.entity;
 
 import net.minecraft.client.renderer.EntityRenderer;
@@ -27,3 +33,4 @@ public interface IEntityRenderer {
     @Accessor(value="debugView")
     public boolean isDebugView();
 }
+

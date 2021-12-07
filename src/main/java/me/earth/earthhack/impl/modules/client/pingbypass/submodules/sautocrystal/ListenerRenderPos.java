@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketSpawnExperienceOrb
+ *  net.minecraft.util.EnumHand
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.client.pingbypass.submodules.sautocrystal;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -29,3 +37,4 @@ extends ModuleListener<ServerAutoCrystal, PacketEvent.Receive<SPacketSpawnExperi
         }
     }
 }
+

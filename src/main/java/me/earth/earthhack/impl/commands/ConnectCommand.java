@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.GuiMainMenu
+ *  net.minecraft.client.gui.GuiMultiplayer
+ *  net.minecraft.client.gui.GuiScreen
+ *  net.minecraft.client.multiplayer.GuiConnecting
+ *  net.minecraft.client.multiplayer.ServerData
+ *  net.minecraft.client.multiplayer.ServerList
+ *  net.minecraft.client.resources.I18n
+ */
 package me.earth.earthhack.impl.commands;
 
 import me.earth.earthhack.api.command.Command;
@@ -9,6 +21,7 @@ import me.earth.earthhack.impl.util.network.ServerUtil;
 import me.earth.earthhack.impl.util.text.ChatUtil;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiMultiplayer;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.multiplayer.ServerList;
@@ -32,7 +45,7 @@ CommandScheduler {
             return;
         }
         ServerUtil.disconnectFromMC("Disconnecting.");
-        SCHEDULER.submit(() -> mc.addScheduledTask(() -> mc.displayGuiScreen(new GuiConnecting(new GuiMultiplayer(new GuiMainMenu()), mc, new ServerData(I18n.format((String)"selectServer.defaultName", (Object[])new Object[0]), args[1], false)))), 100);
+        SCHEDULER.submit(() -> mc.addScheduledTask(() -> mc.displayGuiScreen((GuiScreen)new GuiConnecting((GuiScreen)new GuiMultiplayer((GuiScreen)new GuiMainMenu()), mc, new ServerData(I18n.format((String)"selectServer.defaultName", (Object[])new Object[0]), args[1], false)))), 100);
     }
 
     @Override
@@ -55,3 +68,4 @@ CommandScheduler {
         return super.getPossibleInputs(args);
     }
 }
+

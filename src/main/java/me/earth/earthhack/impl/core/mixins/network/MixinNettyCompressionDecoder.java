@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.NettyCompressionDecoder
+ */
 package me.earth.earthhack.impl.core.mixins.network;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -17,3 +23,4 @@ public abstract class MixinNettyCompressionDecoder {
         return PACKETS.returnIfPresent(Packets::isNoBookBanActive, false) != false ? Integer.MAX_VALUE : threshold;
     }
 }
+

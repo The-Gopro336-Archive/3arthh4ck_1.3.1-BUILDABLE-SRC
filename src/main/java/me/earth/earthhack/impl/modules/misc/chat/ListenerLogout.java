@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.misc.chat;
 
 import me.earth.earthhack.impl.event.events.network.DisconnectEvent;
@@ -15,3 +18,4 @@ extends ModuleListener<Chat, DisconnectEvent> {
         ((Chat)this.module).clearNoScroll();
     }
 }
+

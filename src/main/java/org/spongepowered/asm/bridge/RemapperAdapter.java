@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ *  org.objectweb.asm.commons.Remapper
+ */
 package org.spongepowered.asm.bridge;
 
 import org.apache.logging.log4j.LogManager;
@@ -9,7 +17,7 @@ import org.spongepowered.asm.util.ObfuscationUtil;
 public abstract class RemapperAdapter
 implements IRemapper,
 ObfuscationUtil.IClassRemapper {
-    protected final Logger logger = LogManager.getLogger("mixin");
+    protected final Logger logger = LogManager.getLogger((String)"mixin");
     protected final Remapper remapper;
 
     public RemapperAdapter(Remapper remapper) {
@@ -67,3 +75,4 @@ ObfuscationUtil.IClassRemapper {
         return ObfuscationUtil.unmapDescriptor(desc, this);
     }
 }
+

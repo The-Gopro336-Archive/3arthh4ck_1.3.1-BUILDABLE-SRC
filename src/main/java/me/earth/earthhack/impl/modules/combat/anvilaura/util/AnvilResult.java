@@ -1,3 +1,30 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.block.BlockCompressedPowered
+ *  net.minecraft.block.BlockFalling
+ *  net.minecraft.block.BlockFarmland
+ *  net.minecraft.block.BlockFence
+ *  net.minecraft.block.BlockHopper
+ *  net.minecraft.block.BlockSlab
+ *  net.minecraft.block.BlockSlab$EnumBlockHalf
+ *  net.minecraft.block.BlockSnow
+ *  net.minecraft.block.BlockStairs
+ *  net.minecraft.block.BlockStairs$EnumHalf
+ *  net.minecraft.block.BlockStairs$EnumShape
+ *  net.minecraft.block.properties.IProperty
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.item.EntityFallingBlock
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.world.IBlockAccess
+ */
 package me.earth.earthhack.impl.modules.combat.anvilaura.util;
 
 import java.util.LinkedHashSet;
@@ -22,6 +49,7 @@ import net.minecraft.block.BlockHopper;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.BlockSnow;
 import net.minecraft.block.BlockStairs;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityFallingBlock;
@@ -103,7 +131,7 @@ Comparable<AnvilResult> {
             return true;
         }
         if (obj instanceof AnvilResult) {
-            return ((AnvilResult)obj).player.equals(this.player) && ((AnvilResult)obj).playerPos.equals(this.playerPos);
+            return ((AnvilResult)obj).player.equals((Object)this.player) && ((AnvilResult)obj).playerPos.equals((Object)this.playerPos);
         }
         return false;
     }
@@ -122,7 +150,7 @@ Comparable<AnvilResult> {
         EntityPlayer rotation = RotationUtil.getRotationPlayer();
         for (EntityPlayer player : players) {
             double distance;
-            if (player.posY < 0.0 || EntityUtil.isDead(player) || player.equals(RotationUtil.getRotationPlayer()) || player.equals(AnvilResult.mc.player) || Managers.FRIENDS.contains(player) || (distance = MathUtil.square(player.posX - rotation.posX) + MathUtil.square(player.posZ - rotation.posZ)) > MathUtil.square(range)) continue;
+            if (player.posY < 0.0 || EntityUtil.isDead((Entity)player) || player.equals((Object)RotationUtil.getRotationPlayer()) || player.equals((Object)AnvilResult.mc.player) || Managers.FRIENDS.contains(player) || (distance = MathUtil.square(player.posX - rotation.posX) + MathUtil.square(player.posZ - rotation.posZ)) > MathUtil.square(range)) continue;
             for (BlockPos pos : PositionUtil.getBlockedPositions(player.getEntityBoundingBox(), 1.0)) {
                 if (!player.getEntityBoundingBox().intersects(ANVIL_BB.offset(pos))) continue;
                 AnvilResult.checkPos(player, pos, results, entities, minY, range);
@@ -141,7 +169,7 @@ Comparable<AnvilResult> {
         LinkedHashSet<BlockPos> trap = new LinkedHashSet<BlockPos>();
         for (EnumFacing facing : EnumFacing.HORIZONTALS) {
             BlockPos trapPos = upUp.offset(facing);
-            if (!ObbyModule.HELPER.getBlockState(trapPos).func_185904_a().isReplaceable()) continue;
+            if (!ObbyModule.HELPER.getBlockState(trapPos).getMaterial().isReplaceable()) continue;
             trap.add(trapPos);
         }
         boolean validPressure = true;
@@ -149,16 +177,16 @@ Comparable<AnvilResult> {
         boolean specialPressure = false;
         LinkedHashSet<BlockPos> mine = new LinkedHashSet<BlockPos>();
         IBlockState playerState = ObbyModule.HELPER.getBlockState(pressure);
-        if (!playerState.func_185904_a().isReplaceable() && !SpecialBlocks.PRESSURE_PLATES.contains(playerState.getBlock())) {
+        if (!playerState.getMaterial().isReplaceable() && !SpecialBlocks.PRESSURE_PLATES.contains((Object)playerState.getBlock())) {
             if (playerState.getBlock() == Blocks.ANVIL) {
                 validPressure = false;
                 mine.add(pressure);
-            } else if (!AnvilResult.mc.world.mayPlace(Blocks.ANVIL, pressure, true, EnumFacing.UP, null) && playerState.func_185900_c((IBlockAccess)ObbyModule.HELPER, (BlockPos)pressure).maxY < 1.0) {
+            } else if (!AnvilResult.mc.world.mayPlace(Blocks.ANVIL, pressure, true, EnumFacing.UP, null) && playerState.getBoundingBox((IBlockAccess)ObbyModule.HELPER, (BlockPos)pressure).maxY < 1.0) {
                 specialPressure = true;
             }
             pressure = playerPos.up();
             playerState = ObbyModule.HELPER.getBlockState(pressure);
-            if (!playerState.func_185904_a().isReplaceable()) {
+            if (!playerState.getMaterial().isReplaceable()) {
                 if (playerState.getBlock() == Blocks.ANVIL) {
                     mine.add(pressure);
                 } else {
@@ -215,21 +243,21 @@ Comparable<AnvilResult> {
     }
 
     private static boolean isTopSolid(BlockPos pos, Block block, IBlockState base_state, EnumFacing side, IBlockAccess world) {
-        if (base_state.func_185896_q() && side == EnumFacing.UP) {
+        if (base_state.isTopSolid() && side == EnumFacing.UP) {
             return true;
         }
         if (block instanceof BlockSlab) {
             IBlockState state = block.getActualState(base_state, world, pos);
-            return base_state.func_185913_b() || state.getValue(BlockSlab.HALF) == BlockSlab.EnumBlockHalf.TOP && side == EnumFacing.UP || state.getValue(BlockSlab.HALF) == BlockSlab.EnumBlockHalf.BOTTOM && side == EnumFacing.DOWN;
+            return base_state.isFullBlock() || state.getValue((IProperty)BlockSlab.HALF) == BlockSlab.EnumBlockHalf.TOP && side == EnumFacing.UP || state.getValue((IProperty)BlockSlab.HALF) == BlockSlab.EnumBlockHalf.BOTTOM && side == EnumFacing.DOWN;
         }
         if (block instanceof BlockFarmland) {
             return side != EnumFacing.DOWN && side != EnumFacing.UP;
         }
         if (block instanceof BlockStairs) {
             IBlockState state = block.getActualState(base_state, world, pos);
-            boolean flipped = state.getValue(BlockStairs.HALF) == BlockStairs.EnumHalf.TOP;
-            BlockStairs.EnumShape shape = (BlockStairs.EnumShape)((Object)state.getValue(BlockStairs.SHAPE));
-            EnumFacing facing = (EnumFacing)((Object)state.getValue(BlockStairs.FACING));
+            boolean flipped = state.getValue((IProperty)BlockStairs.HALF) == BlockStairs.EnumHalf.TOP;
+            BlockStairs.EnumShape shape = (BlockStairs.EnumShape)state.getValue((IProperty)BlockStairs.SHAPE);
+            EnumFacing facing = (EnumFacing)state.getValue((IProperty)BlockStairs.FACING);
             if (side == EnumFacing.UP) {
                 return flipped;
             }
@@ -258,7 +286,7 @@ Comparable<AnvilResult> {
         }
         if (block instanceof BlockSnow) {
             IBlockState state = block.getActualState(base_state, world, pos);
-            return (Integer)state.getValue(BlockSnow.LAYERS) >= 8;
+            return (Integer)state.getValue((IProperty)BlockSnow.LAYERS) >= 8;
         }
         if (block instanceof BlockHopper && side == EnumFacing.UP) {
             return true;
@@ -266,6 +294,7 @@ Comparable<AnvilResult> {
         if (block instanceof BlockCompressedPowered) {
             return true;
         }
-        return base_state.func_185896_q();
+        return base_state.isTopSolid();
     }
 }
+

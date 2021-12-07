@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  io.netty.util.internal.ConcurrentSet
+ */
 package me.earth.earthhack.impl.modules.render.newchunks;
 
 import io.netty.util.internal.ConcurrentSet;
@@ -26,3 +32,4 @@ extends Module {
         this.data.clear();
     }
 }
+

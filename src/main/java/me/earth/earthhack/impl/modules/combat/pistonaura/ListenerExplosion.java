@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.network.play.server.SPacketExplosion
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.combat.pistonaura;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -21,12 +28,12 @@ extends ModuleListener<PistonAura, PacketEvent.Receive<SPacketExplosion>> {
             if (((PistonAura)this.module).current != null) {
                 SPacketExplosion packet = (SPacketExplosion)event.getPacket();
                 BlockPos pos = new BlockPos(packet.getX(), packet.getY(), packet.getZ());
-                if (pos.equals(((PistonAura)this.module).current.getStartPos().up()) || pos.equals(((PistonAura)this.module).current.getCrystalPos().up())) {
+                if (pos.equals((Object)((PistonAura)this.module).current.getStartPos().up()) || pos.equals((Object)((PistonAura)this.module).current.getCrystalPos().up())) {
                     ((PistonAura)this.module).current.setValid(false);
                     return;
                 }
                 for (BlockPos affected : packet.getAffectedBlockPositions()) {
-                    if (!affected.equals(((PistonAura)this.module).current.getPistonPos()) && !affected.equals(((PistonAura)this.module).current.getRedstonePos())) continue;
+                    if (!affected.equals((Object)((PistonAura)this.module).current.getPistonPos()) && !affected.equals((Object)((PistonAura)this.module).current.getRedstonePos())) continue;
                     ((PistonAura)this.module).current.setValid(false);
                     break;
                 }
@@ -34,3 +41,4 @@ extends ModuleListener<PistonAura, PacketEvent.Receive<SPacketExplosion>> {
         });
     }
 }
+

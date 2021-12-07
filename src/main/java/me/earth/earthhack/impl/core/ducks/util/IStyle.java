@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.text.event.ClickEvent
+ */
 package me.earth.earthhack.impl.core.ducks.util;
 
 import java.util.function.Supplier;
@@ -22,3 +28,4 @@ public interface IStyle {
 
     public String getMiddleInsertion();
 }
+

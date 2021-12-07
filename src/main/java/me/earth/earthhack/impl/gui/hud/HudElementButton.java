@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.gui.hud;
 
 import java.awt.Color;
@@ -50,3 +53,4 @@ extends AbstractGuiElement {
         return Managers.TEXT.getStringHeight();
     }
 }
+

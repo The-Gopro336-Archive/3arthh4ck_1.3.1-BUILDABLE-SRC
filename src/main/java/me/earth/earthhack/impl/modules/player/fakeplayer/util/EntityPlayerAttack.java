@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.mojang.authlib.GameProfile
+ *  net.minecraft.client.entity.EntityOtherPlayerMP
+ *  net.minecraft.util.DamageSource
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.modules.player.fakeplayer.util;
 
 import com.mojang.authlib.GameProfile;
@@ -47,3 +56,4 @@ IEntityRemoteAttack {
         this.remoteSupplier = remoteSupplier;
     }
 }
+

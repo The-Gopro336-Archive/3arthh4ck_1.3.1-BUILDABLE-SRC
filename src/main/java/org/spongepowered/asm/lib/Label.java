@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.lib;
 
 import org.spongepowered.asm.lib.ByteVector;
@@ -78,7 +81,7 @@ public class Label {
             int reference = this.srcAndRefPositions[i++];
             if (source >= 0) {
                 offset = position - source;
-                if (offset < Short.MIN_VALUE || offset > Short.MAX_VALUE) {
+                if (offset < -32768 || offset > 32767) {
                     int opcode = data[reference - 1] & 0xFF;
                     data[reference - 1] = opcode <= 168 ? (byte)(opcode + 49) : (byte)(opcode + 20);
                     needUpdate = true;
@@ -163,3 +166,4 @@ public class Label {
         return "L" + System.identityHashCode(this);
     }
 }
+

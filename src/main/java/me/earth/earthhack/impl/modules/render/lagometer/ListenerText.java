@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.render.lagometer;
 
 import me.earth.earthhack.impl.event.events.render.Render2DEvent;
@@ -36,3 +39,4 @@ extends ModuleListener<LagOMeter, Render2DEvent> {
         Managers.TEXT.drawString(toRender, (float)((LagOMeter)this.module).resolution.getScaledWidth() / 2.0f - (float)Managers.TEXT.getStringWidth(toRender) / 2.0f + 2.0f, 20.0f, -1, true);
     }
 }
+

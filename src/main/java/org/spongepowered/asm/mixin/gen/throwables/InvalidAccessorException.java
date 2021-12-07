@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.mixin.gen.throwables;
 
 import org.spongepowered.asm.mixin.gen.AccessorInfo;
@@ -43,3 +46,4 @@ extends InvalidMixinException {
         return this.info;
     }
 }
+

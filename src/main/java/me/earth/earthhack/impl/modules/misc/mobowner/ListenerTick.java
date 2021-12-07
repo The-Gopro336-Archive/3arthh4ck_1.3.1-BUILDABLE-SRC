@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.passive.AbstractHorse
+ *  net.minecraft.entity.passive.EntityTameable
+ */
 package me.earth.earthhack.impl.modules.misc.mobowner;
 
 import java.util.UUID;
@@ -24,12 +32,12 @@ extends ModuleListener<MobOwner, TickEvent> {
                 AbstractHorse horse;
                 if (entity == null || entity.getAlwaysRenderNameTag()) continue;
                 if (entity instanceof EntityTameable) {
-                    EntityTameable tameable = (EntityTameable)((Object)entity);
+                    EntityTameable tameable = (EntityTameable)entity;
                     if (!tameable.isTamed()) continue;
                     this.renderNametag(entity, tameable.getOwnerId());
                     continue;
                 }
-                if (!(entity instanceof AbstractHorse) || !(horse = (AbstractHorse)((Object)entity)).isTame()) continue;
+                if (!(entity instanceof AbstractHorse) || !(horse = (AbstractHorse)entity).isTame()) continue;
                 this.renderNametag(entity, horse.getOwnerUniqueId());
             }
         }
@@ -60,3 +68,4 @@ extends ModuleListener<MobOwner, TickEvent> {
         }
     }
 }
+

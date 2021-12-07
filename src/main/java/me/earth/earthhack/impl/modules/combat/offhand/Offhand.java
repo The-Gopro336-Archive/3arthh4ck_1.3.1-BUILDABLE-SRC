@@ -1,3 +1,20 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.item.EntityEnderCrystal
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Items
+ *  net.minecraft.inventory.ClickType
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemAxe
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.item.ItemSword
+ *  net.minecraft.network.play.client.CPacketEntityAction$Action
+ *  net.minecraft.network.play.client.CPacketHeldItemChange
+ *  org.lwjgl.input.Mouse
+ */
 package me.earth.earthhack.impl.modules.combat.offhand;
 
 import java.util.Comparator;
@@ -34,7 +51,9 @@ import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
 import me.earth.earthhack.impl.util.network.NetworkUtil;
 import me.earth.earthhack.impl.util.network.PacketUtil;
 import me.earth.earthhack.impl.util.thread.Locks;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityEnderCrystal;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.item.Item;
@@ -135,10 +154,10 @@ extends Module {
     public void doOffhand() {
         if (Offhand.mc.player != null && this.timer.passed(this.delay.getValue().intValue()) && InventoryUtil.validScreen() && !SUICIDE.returnIfPresent(Suicide::deactivateOffhand, false).booleanValue()) {
             if ((Offhand.mc.player.getHeldItemMainhand().getItem() instanceof ItemSword || Offhand.mc.player.getHeldItemMainhand().getItem() instanceof ItemAxe) && this.swordGap.getValue().booleanValue() && (Offhand.mc.player.getHeldItemOffhand().getItem() == Items.GOLDEN_APPLE || Offhand.mc.player.getHeldItemOffhand().getItem() == Items.TOTEM_OF_UNDYING)) {
-                if (Mouse.isButtonDown(1) && OffhandMode.TOTEM.equals(this.mode)) {
+                if (Mouse.isButtonDown((int)1) && OffhandMode.TOTEM.equals(this.mode)) {
                     this.mode = OffhandMode.GAPPLE;
                     this.swordGapped = true;
-                } else if (this.swordGapped && !Mouse.isButtonDown(1) && OffhandMode.GAPPLE.equals(this.mode)) {
+                } else if (this.swordGapped && !Mouse.isButtonDown((int)1) && OffhandMode.GAPPLE.equals(this.mode)) {
                     this.setMode(OffhandMode.TOTEM);
                 }
             }
@@ -153,7 +172,7 @@ extends Module {
             if (this.pulledFromHotbar && this.hotbarFill.getValue().booleanValue() && InventoryUtil.findEmptyHotbarSlot() != -1 && (hotbar == -1 || hotbar == -2) && tSlot != -1 && this.timer.passed(this.timeOut.getValue().intValue())) {
                 Locks.acquire(Locks.WINDOW_CLICK_LOCK, () -> {
                     if (InventoryUtil.get(tSlot).getItem() == Items.TOTEM_OF_UNDYING) {
-                        Offhand.mc.playerController.windowClick(0, tSlot, 0, ClickType.QUICK_MOVE, Offhand.mc.player);
+                        Offhand.mc.playerController.windowClick(0, tSlot, 0, ClickType.QUICK_MOVE, (EntityPlayer)Offhand.mc.player);
                     }
                 });
                 this.postWindowClick();
@@ -189,7 +208,7 @@ extends Module {
                 this.postWindowClick();
                 this.lookedUp = false;
             } else {
-                Integer last = this.lastSlots.get(item);
+                Integer last = this.lastSlots.get((Object)item);
                 int slot = last != null && InventoryUtil.get(last).getItem() == item ? last.intValue() : this.findItem(item);
                 if (slot != -1 && slot != -2) {
                     this.lastSlots.put(item, slot);
@@ -205,7 +224,7 @@ extends Module {
                 }
             }
         } else if (!drag.isEmpty() && !this.lookedUp) {
-            Integer lastSlot = this.lastSlots.get(dragItem);
+            Integer lastSlot = this.lastSlots.get((Object)dragItem);
             if (lastSlot != null && InventoryUtil.get(lastSlot).isEmpty()) {
                 this.preWindowClick();
                 InventoryUtil.clickLocked(-2, lastSlot, dragItem, InventoryUtil.get(lastSlot).getItem());
@@ -228,7 +247,7 @@ extends Module {
     }
 
     public boolean isSafe() {
-        float playerHealth = EntityUtil.getHealth(Offhand.mc.player);
+        float playerHealth = EntityUtil.getHealth((EntityLivingBase)Offhand.mc.player);
         if (this.crystalCheck.getValue().booleanValue() && Offhand.mc.player != null && Offhand.mc.world != null) {
             float highestDamage = Offhand.mc.world.loadedEntityList.stream().filter(entity -> entity instanceof EntityEnderCrystal).map(DamageUtil::calculate).max(Comparator.comparing(damage -> damage)).orElse(Float.valueOf(0.0f)).floatValue();
             playerHealth -= highestDamage;
@@ -272,3 +291,4 @@ extends Module {
         return this.timer;
     }
 }
+

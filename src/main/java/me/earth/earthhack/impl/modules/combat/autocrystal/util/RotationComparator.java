@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.combat.autocrystal.util;
 
 import java.util.Comparator;
@@ -62,3 +65,4 @@ implements Comparator<CrystalData> {
         return new TreeSet<CrystalData>(new RotationComparator(exponent, diff));
     }
 }
+

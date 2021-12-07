@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.init.Items
+ *  net.minecraft.item.ItemFood
+ *  net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock
+ *  net.minecraft.util.math.BlockPos
+ */
 package me.earth.earthhack.impl.modules.player.fastplace;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -25,10 +35,11 @@ extends ModuleListener<FastPlace, PacketEvent.Send<CPacketPlayerTryUseItemOnBloc
             } else {
                 BlockPos pos = ((CPacketPlayerTryUseItemOnBlock)event.getPacket()).getPos();
                 IBlockState state = ListenerUseOnBlock.mc.world.getBlockState(pos);
-                if (!SpecialBlocks.BAD_BLOCKS.contains(state.getBlock()) && !SpecialBlocks.SHULKERS.contains(state.getBlock())) {
+                if (!SpecialBlocks.BAD_BLOCKS.contains((Object)state.getBlock()) && !SpecialBlocks.SHULKERS.contains((Object)state.getBlock())) {
                     event.setCancelled(true);
                 }
             }
         }
     }
 }
+

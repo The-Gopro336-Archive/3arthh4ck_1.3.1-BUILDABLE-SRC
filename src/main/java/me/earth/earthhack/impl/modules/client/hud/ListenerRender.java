@@ -1,3 +1,10 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.Minecraft
+ *  org.lwjgl.opengl.GL11
+ */
 package me.earth.earthhack.impl.modules.client.hud;
 
 import me.earth.earthhack.api.hud.HudElement;
@@ -18,7 +25,7 @@ extends ModuleListener<HUD, Render2DEvent> {
     @Override
     public void invoke(Render2DEvent event) {
         GL11.glPushMatrix();
-        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
         if (((HUD)this.module).animations.getValue().booleanValue()) {
             float ySpeed = 22.0f / (float)(Minecraft.getDebugFPS() >> 2);
             if (ListenerRender.mc.ingameGUI.getChatGUI().getChatOpen()) {
@@ -62,3 +69,4 @@ extends ModuleListener<HUD, Render2DEvent> {
         GL11.glPopMatrix();
     }
 }
+

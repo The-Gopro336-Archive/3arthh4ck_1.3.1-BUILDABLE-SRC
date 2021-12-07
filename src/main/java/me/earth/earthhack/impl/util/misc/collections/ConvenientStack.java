@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.util.misc.collections;
 
 import java.util.Collection;
@@ -28,3 +31,4 @@ extends Stack<E> {
         return super.peek();
     }
 }
+

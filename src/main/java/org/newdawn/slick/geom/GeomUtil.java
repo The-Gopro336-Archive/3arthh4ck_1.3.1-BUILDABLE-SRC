@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.geom;
 
 import java.util.ArrayList;
@@ -273,3 +276,4 @@ public class GeomUtil {
         public Vector2f pt;
     }
 }
+

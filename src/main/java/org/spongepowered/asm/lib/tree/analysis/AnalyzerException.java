@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.lib.tree.analysis;
 
 import org.spongepowered.asm.lib.tree.AbstractInsnNode;
@@ -22,3 +25,4 @@ extends Exception {
         this.node = node;
     }
 }
+

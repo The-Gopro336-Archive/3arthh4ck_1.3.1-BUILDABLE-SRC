@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.spongepowered.asm.lib;
 
 public interface Opcodes {
@@ -219,3 +222,4 @@ public interface Opcodes {
     public static final int IFNULL = 198;
     public static final int IFNONNULL = 199;
 }
+

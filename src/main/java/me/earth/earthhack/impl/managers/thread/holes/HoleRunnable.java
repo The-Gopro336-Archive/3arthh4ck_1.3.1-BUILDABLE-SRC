@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.BlockPos$MutableBlockPos
+ *  net.minecraft.util.math.Vec3i
+ */
 package me.earth.earthhack.impl.managers.thread.holes;
 
 import java.util.ArrayList;
@@ -61,7 +69,7 @@ Globals {
                 boolean done = true;
                 if (this.safe.size() < this.safes || this.unsafe.size() < this.unsafes) {
                     done = false;
-                    boolean[] isHole = HoleUtil.isHole(mPos, true);
+                    boolean[] isHole = HoleUtil.isHole((BlockPos)mPos, true);
                     if (isHole[0]) {
                         if (isHole[1]) {
                             this.safe.add(mPos.toImmutable());
@@ -97,3 +105,4 @@ Globals {
         }
     }
 }
+

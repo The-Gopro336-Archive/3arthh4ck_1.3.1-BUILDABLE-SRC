@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.renderer.GlStateManager
+ *  net.minecraft.client.renderer.GlStateManager$DestFactor
+ *  net.minecraft.client.renderer.GlStateManager$SourceFactor
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.util.math.Vec3d
+ *  org.lwjgl.opengl.GL11
+ */
 package me.earth.earthhack.impl.modules.render.skeleton;
 
 import java.awt.Color;
@@ -28,33 +40,33 @@ extends ModuleListener<Skeleton, Render3DEvent> {
 
     @Override
     public void invoke(Render3DEvent event) {
-        boolean lightning = GL11.glIsEnabled(2896);
-        boolean blend = GL11.glIsEnabled(3042);
-        boolean texture = GL11.glIsEnabled(3553);
-        boolean depth = GL11.glIsEnabled(2929);
-        boolean lineSmooth = GL11.glIsEnabled(2848);
+        boolean lightning = GL11.glIsEnabled((int)2896);
+        boolean blend = GL11.glIsEnabled((int)3042);
+        boolean texture = GL11.glIsEnabled((int)3553);
+        boolean depth = GL11.glIsEnabled((int)2929);
+        boolean lineSmooth = GL11.glIsEnabled((int)2848);
         if (lightning) {
-            GL11.glDisable(2896);
+            GL11.glDisable((int)2896);
         }
         if (!blend) {
-            GL11.glEnable(3042);
+            GL11.glEnable((int)3042);
         }
-        GL11.glLineWidth(1.0f);
+        GL11.glLineWidth((float)1.0f);
         if (texture) {
-            GL11.glDisable(3553);
+            GL11.glDisable((int)3553);
         }
         if (depth) {
-            GL11.glDisable(2929);
+            GL11.glDisable((int)2929);
         }
         if (!lineSmooth) {
-            GL11.glEnable(2848);
+            GL11.glEnable((int)2848);
         }
         GlStateManager.blendFunc((GlStateManager.SourceFactor)GlStateManager.SourceFactor.SRC_ALPHA, (GlStateManager.DestFactor)GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        GL11.glHint(3154, 4354);
+        GL11.glHint((int)3154, (int)4354);
         GlStateManager.depthMask((boolean)false);
         List playerEntities = ListenerRender.mc.world.playerEntities;
         Entity renderEntity = RenderUtil.getEntity();
-        ((Skeleton)this.module).rotations.keySet().removeIf(player -> player == null || !playerEntities.contains(player) || player.equals(renderEntity) || player.isPlayerSleeping() || EntityUtil.isDead(player));
+        ((Skeleton)this.module).rotations.keySet().removeIf(player -> player == null || !playerEntities.contains(player) || player.equals((Object)renderEntity) || player.isPlayerSleeping() || EntityUtil.isDead((Entity)player));
         playerEntities.forEach(player -> {
             float[][] rotations = ((Skeleton)this.module).rotations.get(player);
             if (rotations != null) {
@@ -65,7 +77,7 @@ extends ModuleListener<Skeleton, Render3DEvent> {
                 } else {
                     EntityPlayer autoCrystal = Managers.TARGET.getAutoCrystal();
                     Entity killAuraTarget = KILL_AURA.returnIfPresent(KillAura::getTarget, null);
-                    if (player.equals(autoCrystal) || player.equals(killAuraTarget)) {
+                    if (player.equals((Object)autoCrystal) || player.equals((Object)killAuraTarget)) {
                         Color targetClr = ((Skeleton)this.module).targetColor.getValue();
                         GlStateManager.color((float)((float)targetClr.getRed() / 255.0f), (float)((float)targetClr.getGreen() / 255.0f), (float)((float)targetClr.getBlue() / 255.0f), (float)((float)targetClr.getAlpha() / 255.0f));
                     } else {
@@ -73,7 +85,7 @@ extends ModuleListener<Skeleton, Render3DEvent> {
                         GlStateManager.color((float)((float)clr.getRed() / 255.0f), (float)((float)clr.getGreen() / 255.0f), (float)((float)clr.getBlue() / 255.0f), (float)((float)clr.getAlpha() / 255.0f));
                     }
                 }
-                Vec3d interpolation = Interpolation.interpolateEntity(player);
+                Vec3d interpolation = Interpolation.interpolateEntity((Entity)player);
                 double pX = interpolation.x;
                 double pY = interpolation.y;
                 double pZ = interpolation.z;
@@ -93,8 +105,8 @@ extends ModuleListener<Skeleton, Render3DEvent> {
                     GlStateManager.rotate((float)(rotations[3][2] * 57.295776f), (float)0.0f, (float)0.0f, (float)1.0f);
                 }
                 GlStateManager.glBegin((int)3);
-                GL11.glVertex3d(0.0, 0.0, 0.0);
-                GL11.glVertex3d(0.0, -sneak, 0.0);
+                GL11.glVertex3d((double)0.0, (double)0.0, (double)0.0);
+                GL11.glVertex3d((double)0.0, (double)(-sneak), (double)0.0);
                 GlStateManager.glEnd();
                 GlStateManager.popMatrix();
                 GlStateManager.pushMatrix();
@@ -109,8 +121,8 @@ extends ModuleListener<Skeleton, Render3DEvent> {
                     GlStateManager.rotate((float)(rotations[4][2] * 57.295776f), (float)0.0f, (float)0.0f, (float)1.0f);
                 }
                 GlStateManager.glBegin((int)3);
-                GL11.glVertex3d(0.0, 0.0, 0.0);
-                GL11.glVertex3d(0.0, -sneak, 0.0);
+                GL11.glVertex3d((double)0.0, (double)0.0, (double)0.0);
+                GL11.glVertex3d((double)0.0, (double)(-sneak), (double)0.0);
                 GlStateManager.glEnd();
                 GlStateManager.popMatrix();
                 GlStateManager.translate((double)0.0, (double)0.0, (double)(player.isSneaking() ? 0.25 : 0.0));
@@ -132,8 +144,8 @@ extends ModuleListener<Skeleton, Render3DEvent> {
                     GlStateManager.rotate((float)(-rotations[1][2] * 57.295776f), (float)0.0f, (float)0.0f, (float)1.0f);
                 }
                 GlStateManager.glBegin((int)3);
-                GL11.glVertex3d(0.0, 0.0, 0.0);
-                GL11.glVertex3d(0.0, -0.5, 0.0);
+                GL11.glVertex3d((double)0.0, (double)0.0, (double)0.0);
+                GL11.glVertex3d((double)0.0, (double)-0.5, (double)0.0);
                 GlStateManager.glEnd();
                 GlStateManager.popMatrix();
                 GlStateManager.pushMatrix();
@@ -148,8 +160,8 @@ extends ModuleListener<Skeleton, Render3DEvent> {
                     GlStateManager.rotate((float)(-rotations[2][2] * 57.295776f), (float)0.0f, (float)0.0f, (float)1.0f);
                 }
                 GlStateManager.glBegin((int)3);
-                GL11.glVertex3d(0.0, 0.0, 0.0);
-                GL11.glVertex3d(0.0, -0.5, 0.0);
+                GL11.glVertex3d((double)0.0, (double)0.0, (double)0.0);
+                GL11.glVertex3d((double)0.0, (double)-0.5, (double)0.0);
                 GlStateManager.glEnd();
                 GlStateManager.popMatrix();
                 GlStateManager.pushMatrix();
@@ -158,8 +170,8 @@ extends ModuleListener<Skeleton, Render3DEvent> {
                     GlStateManager.rotate((float)(rotations[0][0] * 57.295776f), (float)1.0f, (float)0.0f, (float)0.0f);
                 }
                 GlStateManager.glBegin((int)3);
-                GL11.glVertex3d(0.0, 0.0, 0.0);
-                GL11.glVertex3d(0.0, 0.3, 0.0);
+                GL11.glVertex3d((double)0.0, (double)0.0, (double)0.0);
+                GL11.glVertex3d((double)0.0, (double)0.3, (double)0.0);
                 GlStateManager.glEnd();
                 GlStateManager.popMatrix();
                 GlStateManager.popMatrix();
@@ -171,22 +183,22 @@ extends ModuleListener<Skeleton, Render3DEvent> {
                 GlStateManager.pushMatrix();
                 GlStateManager.translate((double)0.0, (double)sneak, (double)0.0);
                 GlStateManager.glBegin((int)3);
-                GL11.glVertex3d(-0.125, 0.0, 0.0);
-                GL11.glVertex3d(0.125, 0.0, 0.0);
+                GL11.glVertex3d((double)-0.125, (double)0.0, (double)0.0);
+                GL11.glVertex3d((double)0.125, (double)0.0, (double)0.0);
                 GlStateManager.glEnd();
                 GlStateManager.popMatrix();
                 GlStateManager.pushMatrix();
                 GlStateManager.translate((double)0.0, (double)sneak, (double)0.0);
                 GlStateManager.glBegin((int)3);
-                GL11.glVertex3d(0.0, 0.0, 0.0);
-                GL11.glVertex3d(0.0, 0.55, 0.0);
+                GL11.glVertex3d((double)0.0, (double)0.0, (double)0.0);
+                GL11.glVertex3d((double)0.0, (double)0.55, (double)0.0);
                 GlStateManager.glEnd();
                 GlStateManager.popMatrix();
                 GlStateManager.pushMatrix();
                 GlStateManager.translate((double)0.0, (double)((double)sneak + 0.55), (double)0.0);
                 GlStateManager.glBegin((int)3);
-                GL11.glVertex3d(-0.375, 0.0, 0.0);
-                GL11.glVertex3d(0.375, 0.0, 0.0);
+                GL11.glVertex3d((double)-0.375, (double)0.0, (double)0.0);
+                GL11.glVertex3d((double)0.375, (double)0.0, (double)0.0);
                 GlStateManager.glEnd();
                 GlStateManager.popMatrix();
                 GlStateManager.popMatrix();
@@ -194,19 +206,20 @@ extends ModuleListener<Skeleton, Render3DEvent> {
         });
         GlStateManager.depthMask((boolean)true);
         if (!lineSmooth) {
-            GL11.glDisable(2848);
+            GL11.glDisable((int)2848);
         }
         if (depth) {
-            GL11.glEnable(2929);
+            GL11.glEnable((int)2929);
         }
         if (texture) {
-            GL11.glEnable(3553);
+            GL11.glEnable((int)3553);
         }
         if (!blend) {
-            GL11.glDisable(3042);
+            GL11.glDisable((int)3042);
         }
         if (lightning) {
-            GL11.glEnable(2896);
+            GL11.glEnable((int)2896);
         }
     }
 }
+

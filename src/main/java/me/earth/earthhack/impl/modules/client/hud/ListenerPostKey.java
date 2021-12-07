@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.ScaledResolution
+ */
 package me.earth.earthhack.impl.modules.client.hud;
 
 import java.util.AbstractMap;
@@ -42,3 +48,4 @@ extends ModuleListener<HUD, KeyboardEvent.Post> {
         }
     }
 }
+

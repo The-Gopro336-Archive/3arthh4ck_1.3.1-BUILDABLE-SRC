@@ -1,3 +1,15 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.entity.EntityPlayerSP
+ *  net.minecraft.client.renderer.GlStateManager
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.Vec3d
+ *  org.lwjgl.opengl.GL11
+ */
 package me.earth.earthhack.impl.modules.render.tracers;
 
 import java.awt.Color;
@@ -14,6 +26,7 @@ import me.earth.earthhack.impl.modules.render.tracers.mode.TracerMode;
 import me.earth.earthhack.impl.util.render.ColorHelper;
 import me.earth.earthhack.impl.util.render.Interpolation;
 import me.earth.earthhack.impl.util.render.RenderUtil;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,7 +44,7 @@ extends ModuleListener<Tracers, Render3DEvent> {
 
     @Override
     public void invoke(Render3DEvent event) {
-        Entity renderEntity = mc.getRenderViewEntity() == null ? ListenerRender.mc.player : mc.getRenderViewEntity();
+        EntityPlayerSP renderEntity = mc.getRenderViewEntity() == null ? ListenerRender.mc.player : mc.getRenderViewEntity();
         int i = 0;
         for (Entity entity : ((Tracers)this.module).sorted) {
             if (i >= ((Tracers)this.module).tracers.getValue()) break;
@@ -47,43 +60,43 @@ extends ModuleListener<Tracers, Render3DEvent> {
             GlStateManager.pushMatrix();
             GlStateManager.loadIdentity();
             if (entity instanceof EntityPlayer && Managers.FRIENDS.contains(entity.getName())) {
-                GL11.glColor4f(0.33333334f, 0.78431374f, 0.78431374f, 0.55f);
+                GL11.glColor4f((float)0.33333334f, (float)0.78431374f, (float)0.78431374f, (float)0.55f);
             } else {
                 float distance = renderEntity.getDistance(entity);
                 float red = distance >= 60.0f ? 120.0f : distance + distance;
                 Color color = ColorHelper.toColor(red, 100.0f, 50.0f, 0.55f);
-                GL11.glColor4f((float)color.getRed() / 255.0f, (float)color.getGreen() / 255.0f, (float)color.getBlue() / 255.0f, (float)color.getAlpha() / 255.0f);
+                GL11.glColor4f((float)((float)color.getRed() / 255.0f), (float)((float)color.getGreen() / 255.0f), (float)((float)color.getBlue() / 255.0f), (float)((float)color.getAlpha() / 255.0f));
             }
             boolean viewBobbing = ListenerRender.mc.gameSettings.viewBobbing;
             ListenerRender.mc.gameSettings.viewBobbing = false;
-            ((IEntityRenderer)((Object)ListenerRender.mc.entityRenderer)).invokeOrientCamera(event.getPartialTicks());
+            ((IEntityRenderer)ListenerRender.mc.entityRenderer).invokeOrientCamera(event.getPartialTicks());
             ListenerRender.mc.gameSettings.viewBobbing = viewBobbing;
-            GL11.glLineWidth(((Tracers)this.module).lineWidth.getValue().floatValue());
+            GL11.glLineWidth((float)((Tracers)this.module).lineWidth.getValue().floatValue());
             Vec3d rotateYaw = new Vec3d(0.0, 0.0, 1.0).rotatePitch(-((float)Math.toRadians(renderEntity.rotationPitch))).rotateYaw(-((float)Math.toRadians(renderEntity.rotationYaw)));
-            GL11.glBegin(1);
+            GL11.glBegin((int)1);
             if (((Tracers)this.module).mode.getValue() == TracerMode.Stem && !ESP.isEnabled()) {
-                GL11.glVertex3d(x, y, z);
-                GL11.glVertex3d(x, (double)renderEntity.getEyeHeight() + y, z);
+                GL11.glVertex3d((double)x, (double)y, (double)z);
+                GL11.glVertex3d((double)x, (double)((double)renderEntity.getEyeHeight() + y), (double)z);
             }
             if (((Tracers)this.module).lines.getValue().booleanValue()) {
-                GL11.glVertex3d(rotateYaw.x, (double)renderEntity.getEyeHeight() + rotateYaw.y, rotateYaw.z);
+                GL11.glVertex3d((double)rotateYaw.x, (double)((double)renderEntity.getEyeHeight() + rotateYaw.y), (double)rotateYaw.z);
                 switch (((Tracers)this.module).target.getValue()) {
                     case Head: {
-                        GL11.glVertex3d(x, y + (double)entity.height - 0.18, z);
+                        GL11.glVertex3d((double)x, (double)(y + (double)entity.height - 0.18), (double)z);
                         break;
                     }
                     case Body: {
-                        GL11.glVertex3d(x, y + (double)(entity.height / 2.0f), z);
+                        GL11.glVertex3d((double)x, (double)(y + (double)(entity.height / 2.0f)), (double)z);
                         break;
                     }
                     case Feet: {
-                        GL11.glVertex3d(x, y, z);
+                        GL11.glVertex3d((double)x, (double)y, (double)z);
                     }
                 }
             }
             GL11.glEnd();
-            GL11.glTranslated(x, y, z);
-            GL11.glTranslated(-x, -y, -z);
+            GL11.glTranslated((double)x, (double)y, (double)z);
+            GL11.glTranslated((double)(-x), (double)(-y), (double)(-z));
             switch (((Tracers)this.module).mode.getValue()) {
                 case Outline: {
                     RenderUtil.doPosition(bb);
@@ -101,3 +114,4 @@ extends ModuleListener<Tracers, Render3DEvent> {
         }
     }
 }
+

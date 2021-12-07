@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.player.speedmine;
 
 import me.earth.earthhack.api.module.data.DefaultData;
@@ -35,3 +38,4 @@ extends DefaultData<Speedmine> {
         return "All kinds of tweaks around mining blocks.";
     }
 }
+

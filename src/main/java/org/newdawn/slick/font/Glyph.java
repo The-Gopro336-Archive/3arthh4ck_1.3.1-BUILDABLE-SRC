@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.font;
 
 import java.awt.Rectangle;
@@ -79,3 +82,4 @@ public class Glyph {
         return this.yOffset;
     }
 }
+

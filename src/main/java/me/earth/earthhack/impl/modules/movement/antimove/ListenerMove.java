@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.movement.antimove;
 
 import me.earth.earthhack.impl.event.events.movement.MoveEvent;
@@ -21,3 +24,4 @@ extends ModuleListener<NoMove, MoveEvent> {
         }
     }
 }
+

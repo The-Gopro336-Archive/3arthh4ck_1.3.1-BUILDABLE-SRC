@@ -1,3 +1,24 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Predicate
+ *  com.google.common.base.Predicates
+ *  net.minecraft.block.Block
+ *  net.minecraft.block.material.Material
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.util.EntitySelectors
+ *  net.minecraft.util.EnumFacing
+ *  net.minecraft.util.math.AxisAlignedBB
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.MathHelper
+ *  net.minecraft.util.math.RayTraceResult
+ *  net.minecraft.util.math.RayTraceResult$Type
+ *  net.minecraft.util.math.Vec3d
+ *  net.minecraft.world.IBlockAccess
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.util.math.raytrace;
 
 import com.google.common.base.Predicate;
@@ -28,7 +49,7 @@ import net.minecraft.world.World;
 
 public class RayTracer
 implements Globals {
-    private static final Predicate<Entity> PREDICATE = Predicates.and(EntitySelectors.NOT_SPECTATING, e -> e != null && e.canBeCollidedWith());
+    private static final Predicate<Entity> PREDICATE = Predicates.and((Predicate)EntitySelectors.NOT_SPECTATING, e -> e != null && e.canBeCollidedWith());
 
     public static RayTraceResult rayTraceEntities(World world, Entity from, double range, PositionManager position, RotationManager rotation, Predicate<Entity> entityCheck, Entity ... additional) {
         return RayTracer.rayTraceEntities(world, from, range, position.getX(), position.getY(), position.getZ(), rotation.getServerYaw(), rotation.getServerPitch(), position.getBB(), entityCheck, additional);
@@ -37,20 +58,20 @@ implements Globals {
     public static RayTraceResult rayTraceEntities(World world, Entity from, double range, double posX, double posY, double posZ, float yaw, float pitch, AxisAlignedBB fromBB, Predicate<Entity> entityCheck, Entity ... additional) {
         Vec3d eyePos = new Vec3d(posX, posY + (double)from.getEyeHeight(), posZ);
         Vec3d rot = RotationUtil.getVec3d(yaw, pitch);
-        Vec3d intercept = eyePos.addVector(rot.x * range, rot.y * range, rot.z * range);
+        Vec3d intercept = eyePos.add(rot.x * range, rot.y * range, rot.z * range);
         Entity pointedEntity = null;
         Vec3d hitVec = null;
         double distance = range;
         AxisAlignedBB within = fromBB.expand(rot.x * range, rot.y * range, rot.z * range).grow(1.0, 1.0, 1.0);
-        Predicate<Entity> predicate = entityCheck == null ? PREDICATE : Predicates.and(PREDICATE, entityCheck);
-        List entities = mc.isCallingFromMinecraftThread() ? world.getEntitiesInAABBexcluding(from, within, predicate) : Managers.ENTITIES.getEntities().stream().filter(e -> e != null && e.getEntityBoundingBox().intersects(within) && predicate.test((Entity)e)).collect(Collectors.toList());
+        Predicate predicate = entityCheck == null ? PREDICATE : Predicates.and(PREDICATE, entityCheck);
+        List entities = mc.isCallingFromMinecraftThread() ? world.getEntitiesInAABBexcluding(from, within, predicate) : Managers.ENTITIES.getEntities().stream().filter(e -> e != null && e.getEntityBoundingBox().intersects(within) && predicate.test(e)).collect(Collectors.toList());
         for (Entity entity : additional) {
             if (entity == null || !entity.getEntityBoundingBox().intersects(within)) continue;
             entities.add(entity);
         }
         for (Entity entity : entities) {
             double hitDistance;
-            AxisAlignedBB bb = entity.getEntityBoundingBox().grow(entity.getCollisionBorderSize());
+            AxisAlignedBB bb = entity.getEntityBoundingBox().grow((double)entity.getCollisionBorderSize());
             RayTraceResult result = bb.calculateIntercept(eyePos, intercept);
             if (bb.contains(eyePos)) {
                 if (!(distance >= 0.0)) continue;
@@ -81,7 +102,7 @@ implements Globals {
     }
 
     public static RayTraceResult trace(World world, Vec3d start, Vec3d end, boolean stopOnLiquid, boolean ignoreBlockWithoutBoundingBox, boolean returnLastUncollidableBlock, BiPredicate<Block, BlockPos> blockChecker) {
-        return RayTracer.trace(world, world, start, end, stopOnLiquid, ignoreBlockWithoutBoundingBox, returnLastUncollidableBlock, blockChecker);
+        return RayTracer.trace(world, (IBlockAccess)world, start, end, stopOnLiquid, ignoreBlockWithoutBoundingBox, returnLastUncollidableBlock, blockChecker);
     }
 
     public static RayTraceResult trace(World world, IBlockAccess access, Vec3d start, Vec3d end, boolean stopOnLiquid, boolean ignoreBlockWithoutBoundingBox, boolean returnLastUncollidableBlock, BiPredicate<Block, BlockPos> blockChecker) {
@@ -109,7 +130,7 @@ implements Globals {
                 BlockPos pos = new BlockPos(fsX, fsY, fsZ);
                 IBlockState state = access.getBlockState(pos);
                 Block block = state.getBlock();
-                if ((!ignoreBlockWithoutBoundingBox || state.func_185890_d(access, pos) != Block.NULL_AABB) && (block.canCollideCheck(state, stopOnLiquid) || collideCheck != null && collideCheck.test(block, pos, null)) && (blockChecker == null || blockChecker.test(block, pos, null)) && (raytraceresult = crt.collisionRayTrace(state, world, pos, start, end)) != null) {
+                if ((!ignoreBlockWithoutBoundingBox || state.getCollisionBoundingBox(access, pos) != Block.NULL_AABB) && (block.canCollideCheck(state, stopOnLiquid) || collideCheck != null && collideCheck.test(block, pos, null)) && (blockChecker == null || blockChecker.test(block, pos, null)) && (raytraceresult = crt.collisionRayTrace(state, world, pos, start, end)) != null) {
                     return raytraceresult;
                 }
                 RayTraceResult result = null;
@@ -189,7 +210,7 @@ implements Globals {
                     pos = new BlockPos(fsX, fsY, fsZ);
                     IBlockState state1 = access.getBlockState(pos);
                     Block block1 = state1.getBlock();
-                    if (ignoreBlockWithoutBoundingBox && state1.func_185904_a() != Material.PORTAL && state1.func_185890_d(access, pos) == Block.NULL_AABB) continue;
+                    if (ignoreBlockWithoutBoundingBox && state1.getMaterial() != Material.PORTAL && state1.getCollisionBoundingBox(access, pos) == Block.NULL_AABB) continue;
                     if ((block1.canCollideCheck(state1, stopOnLiquid) || collideCheck != null && collideCheck.test(block1, pos, enumfacing)) && (blockChecker == null || blockChecker.test(block1, pos, enumfacing))) {
                         RayTraceResult raytraceresult1 = crt.collisionRayTrace(state1, world, pos, start, end);
                         if (raytraceresult1 == null) continue;
@@ -204,3 +225,4 @@ implements Globals {
         return null;
     }
 }
+

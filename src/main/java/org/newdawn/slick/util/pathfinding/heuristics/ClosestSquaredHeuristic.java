@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.util.pathfinding.heuristics;
 
 import org.newdawn.slick.util.pathfinding.AStarHeuristic;
@@ -13,3 +16,4 @@ implements AStarHeuristic {
         return dx * dx + dy * dy;
     }
 }
+

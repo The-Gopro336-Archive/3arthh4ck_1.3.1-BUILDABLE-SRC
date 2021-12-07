@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.material.Material
+ */
 package me.earth.earthhack.impl.modules.movement.fastswim;
 
 import me.earth.earthhack.impl.event.events.movement.MoveEvent;
@@ -92,3 +98,4 @@ extends ModuleListener<FastSwim, MoveEvent> {
         }
     }
 }
+

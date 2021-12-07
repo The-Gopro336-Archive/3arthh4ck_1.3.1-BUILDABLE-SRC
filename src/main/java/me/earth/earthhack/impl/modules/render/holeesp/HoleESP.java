@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.util.math.BlockPos
+ *  net.minecraft.util.math.BlockPos$MutableBlockPos
+ */
 package me.earth.earthhack.impl.modules.render.holeesp;
 
 import java.awt.Color;
@@ -15,6 +23,7 @@ import me.earth.earthhack.impl.modules.render.holeesp.ListenerRender;
 import me.earth.earthhack.impl.util.math.MathUtil;
 import me.earth.earthhack.impl.util.math.rotation.RotationUtil;
 import me.earth.earthhack.impl.util.render.RenderUtil;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 
 public class HoleESP
@@ -68,7 +77,7 @@ implements HoleObserver {
         this.renderList(Managers.HOLES.getUnsafe(), this.unsafeColor.getValue(), this.unsafeHeight.getValue().floatValue(), this.holes.getValue());
         this.renderList(Managers.HOLES.getSafe(), this.safeColor.getValue(), this.height.getValue().floatValue(), this.safeHole.getValue());
         this.renderList(Managers.HOLES.getLongHoles(), this.wideColor.getValue(), this.wideHeight.getValue().floatValue(), this.wide.getValue());
-        BlockPos playerPos = new BlockPos(HoleESP.mc.player);
+        BlockPos playerPos = new BlockPos((Entity)HoleESP.mc.player);
         if (this.big.getValue() != 0 && !Managers.HOLES.getBigHoles().isEmpty()) {
             int i = 1;
             for (BlockPos pos : Managers.HOLES.getBigHoles()) {
@@ -79,7 +88,7 @@ implements HoleObserver {
                 Color bC = this.bigColor.getValue();
                 float bH = this.bigHeight.getValue().floatValue();
                 if (this.fade.getValue().booleanValue()) {
-                    double distance = HoleESP.mc.player.getDistanceSq(pos.getX() + 1, pos.getY(), pos.getZ() + 1);
+                    double distance = HoleESP.mc.player.getDistanceSq((double)(pos.getX() + 1), (double)pos.getY(), (double)(pos.getZ() + 1));
                     double alpha = ((double)(MathUtil.square(this.fadeRange.getValue().floatValue()) + MathUtil.square(this.minFade.getValue().floatValue())) - distance) / (double)MathUtil.square(this.fadeRange.getValue().floatValue());
                     if (alpha > 0.0 && alpha < 1.0) {
                         int alphaInt = MathUtil.clamp((int)(alpha * 255.0), 0, 255);
@@ -87,27 +96,27 @@ implements HoleObserver {
                         int boxInt = (int)((double)alphaInt * this.alphaFactor.getValue());
                         RenderUtil.renderBox(pos, bC1, bH, boxInt);
                         this.mPos.setPos(pos.getX(), pos.getY(), pos.getZ() + 1);
-                        RenderUtil.renderBox(this.mPos, bC1, bH, boxInt);
+                        RenderUtil.renderBox((BlockPos)this.mPos, bC1, bH, boxInt);
                         this.mPos.setPos(pos.getX() + 1, pos.getY(), pos.getZ());
-                        RenderUtil.renderBox(this.mPos, bC1, bH, boxInt);
+                        RenderUtil.renderBox((BlockPos)this.mPos, bC1, bH, boxInt);
                         this.mPos.setPos(pos.getX() + 1, pos.getY(), pos.getZ() + 1);
-                        RenderUtil.renderBox(this.mPos, bC1, bH, boxInt);
+                        RenderUtil.renderBox((BlockPos)this.mPos, bC1, bH, boxInt);
                     } else if (alpha < 0.0) continue;
                 }
                 RenderUtil.renderBox(pos, bC, bH);
                 this.mPos.setPos(pos.getX(), pos.getY(), pos.getZ() + 1);
-                RenderUtil.renderBox(this.mPos, bC, bH);
+                RenderUtil.renderBox((BlockPos)this.mPos, bC, bH);
                 this.mPos.setPos(pos.getX() + 1, pos.getY(), pos.getZ());
-                RenderUtil.renderBox(this.mPos, bC, bH);
+                RenderUtil.renderBox((BlockPos)this.mPos, bC, bH);
                 this.mPos.setPos(pos.getX() + 1, pos.getY(), pos.getZ() + 1);
-                RenderUtil.renderBox(this.mPos, bC, bH);
+                RenderUtil.renderBox((BlockPos)this.mPos, bC, bH);
                 ++i;
             }
         }
     }
 
     private void renderList(List<BlockPos> positions, Color color, float height, int max) {
-        BlockPos playerPos = new BlockPos(HoleESP.mc.player);
+        BlockPos playerPos = new BlockPos((Entity)HoleESP.mc.player);
         if (max != 0 && !positions.isEmpty()) {
             int i = 1;
             for (BlockPos pos : positions) {
@@ -134,7 +143,7 @@ implements HoleObserver {
     }
 
     private boolean checkPos(BlockPos pos, BlockPos playerPos) {
-        return !(this.fov.getValue() != false && !RotationUtil.inFov(pos) || this.own.getValue() == false && pos.equals(playerPos));
+        return !(this.fov.getValue() != false && !RotationUtil.inFov(pos) || this.own.getValue() == false && pos.equals((Object)playerPos));
     }
 
     @Override
@@ -162,3 +171,4 @@ implements HoleObserver {
         return this.big.getValue();
     }
 }
+

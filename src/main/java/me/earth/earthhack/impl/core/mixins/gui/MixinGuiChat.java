@@ -1,3 +1,13 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.client.gui.GuiChat
+ *  net.minecraft.client.gui.GuiTextField
+ *  net.minecraft.util.TabCompleter
+ *  net.minecraft.util.text.ITextComponent
+ *  org.lwjgl.input.Mouse
+ */
 package me.earth.earthhack.impl.core.mixins.gui;
 
 import me.earth.earthhack.impl.core.ducks.gui.IGuiChat;
@@ -20,25 +30,25 @@ public abstract class MixinGuiChat
 extends MixinGuiScreen
 implements IGuiChat {
     @Shadow
-    protected GuiTextField field_146415_a;
+    protected GuiTextField inputField;
 
     @Override
     public void accessSetText(String text, boolean shouldOverwrite) {
         if (shouldOverwrite) {
-            this.field_146415_a.setText(text);
+            this.inputField.setText(text);
         } else {
-            this.field_146415_a.writeText(text);
+            this.inputField.writeText(text);
         }
     }
 
     @Inject(method={"drawScreen(IIF)V"}, at={@At(value="HEAD")})
     public void drawScreenHook(int mouseX, int mouseY, float partialTicks, CallbackInfo callbackInfo) {
-        Managers.COMMANDS.renderCommandGui(this.field_146415_a.getText(), this.field_146415_a.x, this.field_146415_a.y);
+        Managers.COMMANDS.renderCommandGui(this.inputField.getText(), this.inputField.x, this.inputField.y);
     }
 
     @Redirect(method={"keyTyped"}, at=@At(value="INVOKE", target="Lnet/minecraft/util/TabCompleter;complete()V"))
     protected void completerHook(TabCompleter completer) {
-        if (Managers.COMMANDS.onTabComplete(this.field_146415_a)) {
+        if (Managers.COMMANDS.onTabComplete(this.inputField)) {
             completer.complete();
         }
     }
@@ -46,8 +56,9 @@ implements IGuiChat {
     @Inject(method={"mouseClicked"}, at={@At(value="HEAD")}, cancellable=true)
     protected void mouseClickedHook(int mouseX, int mouseY, int mouseButton, CallbackInfo info) {
         ITextComponent tc;
-        if ((mouseButton == 1 || mouseButton == 2) && this.handleClick(tc = this.field_146297_k.ingameGUI.getChatGUI().getChatComponent(Mouse.getX(), Mouse.getY()), mouseButton)) {
+        if ((mouseButton == 1 || mouseButton == 2) && this.handleClick(tc = this.mc.ingameGUI.getChatGUI().getChatComponent(Mouse.getX(), Mouse.getY()), mouseButton)) {
             info.cancel();
         }
     }
 }
+

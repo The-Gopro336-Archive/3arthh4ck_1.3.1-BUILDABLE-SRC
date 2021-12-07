@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.installer.main;
 
 import java.io.File;
@@ -59,11 +62,12 @@ extends URLClassLoader {
             if (resolve) {
                 this.resolveClass(clazz);
             }
-            Class<?> clazz2 = clazz;
-            return clazz2;
+            Class<?> class_ = clazz;
+            return class_;
         }
         catch (IOException e) {
             throw new ClassNotFoundException("Could not load " + name, e);
         }
     }
 }
+

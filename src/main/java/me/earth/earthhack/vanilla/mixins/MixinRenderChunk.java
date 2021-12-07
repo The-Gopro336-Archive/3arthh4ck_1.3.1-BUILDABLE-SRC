@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.client.renderer.chunk.RenderChunk
+ *  net.minecraft.util.BlockRenderLayer
+ */
 package me.earth.earthhack.vanilla.mixins;
 
 import me.earth.earthhack.api.event.bus.instance.Bus;
@@ -18,6 +26,7 @@ public abstract class MixinRenderChunk {
         if (event.getLayer() != null) {
             return event.getLayer();
         }
-        return block.getBlockLayer();
+        return block.getRenderLayer();
     }
 }
+

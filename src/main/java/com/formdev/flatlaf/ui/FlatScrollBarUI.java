@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.ui;
 
 import com.formdev.flatlaf.ui.FlatArrowButton;
@@ -306,3 +309,4 @@ extends BasicScrollBarUI {
         }
     }
 }
+

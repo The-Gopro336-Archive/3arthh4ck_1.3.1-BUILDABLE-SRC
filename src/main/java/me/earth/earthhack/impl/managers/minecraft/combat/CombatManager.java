@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.network.play.server.SPacketEntityStatus
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.managers.minecraft.combat;
 
 import java.util.Map;
@@ -13,6 +22,7 @@ import me.earth.earthhack.impl.util.math.StopWatch;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.server.SPacketEntityStatus;
+import net.minecraft.world.World;
 
 public class CombatManager
 extends SubscriberImpl
@@ -24,7 +34,7 @@ implements Globals {
 
             @Override
             public void invoke(DeathEvent event) {
-                CombatManager.this.onDeath(event.getEntity());
+                CombatManager.this.onDeath((Entity)event.getEntity());
             }
         });
         this.listeners.add(new EventListener<PacketEvent.Receive<SPacketEntityStatus>>(PacketEvent.Receive.class, Integer.MIN_VALUE, SPacketEntityStatus.class){
@@ -33,7 +43,7 @@ implements Globals {
             public void invoke(PacketEvent.Receive<SPacketEntityStatus> event) {
                 switch (((SPacketEntityStatus)event.getPacket()).getOpCode()) {
                     case 3: {
-                        Globals.mc.addScheduledTask(() -> CombatManager.this.onDeath(Globals.mc.world == null ? null : ((SPacketEntityStatus)event.getPacket()).getEntity(Globals.mc.world)));
+                        Globals.mc.addScheduledTask(() -> CombatManager.this.onDeath(Globals.mc.world == null ? null : ((SPacketEntityStatus)event.getPacket()).getEntity((World)Globals.mc.world)));
                         break;
                     }
                     case 35: {
@@ -50,7 +60,7 @@ implements Globals {
 
     public int getPops(Entity player) {
         PopCounter popCounter;
-        if (player instanceof EntityPlayer && (popCounter = this.pops.get(player)) != null) {
+        if (player instanceof EntityPlayer && (popCounter = this.pops.get((Object)player)) != null) {
             return popCounter.getPops();
         }
         return 0;
@@ -58,14 +68,14 @@ implements Globals {
 
     public long lastPop(Entity player) {
         PopCounter popCounter;
-        if (player instanceof EntityPlayer && (popCounter = this.pops.get(player)) != null) {
+        if (player instanceof EntityPlayer && (popCounter = this.pops.get((Object)player)) != null) {
             return popCounter.lastPop();
         }
         return Integer.MAX_VALUE;
     }
 
     private void onTotemPop(SPacketEntityStatus packet) {
-        Entity player = packet.getEntity(CombatManager.mc.world);
+        Entity player = packet.getEntity((World)CombatManager.mc.world);
         if (player instanceof EntityPlayer) {
             this.pops.computeIfAbsent((EntityPlayer)player, v -> new PopCounter()).pop();
             TotemPopEvent totemPopEvent = new TotemPopEvent((EntityPlayer)player);
@@ -75,7 +85,7 @@ implements Globals {
 
     private void onDeath(Entity entity) {
         if (entity instanceof EntityPlayer) {
-            this.pops.remove(entity);
+            this.pops.remove((Object)entity);
         }
     }
 
@@ -104,3 +114,4 @@ implements Globals {
         }
     }
 }
+

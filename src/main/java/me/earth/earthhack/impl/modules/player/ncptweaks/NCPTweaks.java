@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.player.ncptweaks;
 
 import me.earth.earthhack.api.module.Module;
@@ -34,3 +37,4 @@ extends Module {
         return this.stopSpeed.getValue() != false && this.speedStopped;
     }
 }
+

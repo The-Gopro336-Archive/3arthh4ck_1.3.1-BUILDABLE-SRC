@@ -1,3 +1,12 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Strings
+ *  org.apache.logging.log4j.Level
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package org.spongepowered.asm.util;
 
 import com.google.common.base.Strings;
@@ -173,7 +182,7 @@ public class PrettyPrinter {
     }
 
     public PrettyPrinter add(StackTraceElement[] stackTrace, int indent) {
-        String margin = Strings.repeat(" ", indent);
+        String margin = Strings.repeat((String)" ", (int)indent);
         for (StackTraceElement st : stackTrace) {
             this.add("%s%s", margin, st);
         }
@@ -185,7 +194,7 @@ public class PrettyPrinter {
     }
 
     public PrettyPrinter add(Object object, int indent) {
-        String margin = Strings.repeat(" ", indent);
+        String margin = Strings.repeat((String)" ", (int)indent);
         return this.append(object, indent, margin);
     }
 
@@ -314,11 +323,11 @@ public class PrettyPrinter {
     }
 
     public PrettyPrinter trace(String logger) {
-        return this.trace(System.err, LogManager.getLogger(logger));
+        return this.trace(System.err, LogManager.getLogger((String)logger));
     }
 
     public PrettyPrinter trace(String logger, Level level) {
-        return this.trace(System.err, LogManager.getLogger(logger), level);
+        return this.trace(System.err, LogManager.getLogger((String)logger), level);
     }
 
     public PrettyPrinter trace(Logger logger) {
@@ -338,11 +347,11 @@ public class PrettyPrinter {
     }
 
     public PrettyPrinter trace(PrintStream stream, String logger) {
-        return this.trace(stream, LogManager.getLogger(logger));
+        return this.trace(stream, LogManager.getLogger((String)logger));
     }
 
     public PrettyPrinter trace(PrintStream stream, String logger, Level level) {
-        return this.trace(stream, LogManager.getLogger(logger), level);
+        return this.trace(stream, LogManager.getLogger((String)logger), level);
     }
 
     public PrettyPrinter trace(PrintStream stream, Logger logger) {
@@ -601,7 +610,7 @@ public class PrettyPrinter {
         }
 
         void updateFormat() {
-            String spacing = Strings.repeat(" ", this.colSpacing);
+            String spacing = Strings.repeat((String)" ", (int)this.colSpacing);
             StringBuilder format = new StringBuilder();
             boolean addSpacing = false;
             for (Column column : this.columns) {
@@ -671,7 +680,7 @@ public class PrettyPrinter {
         }
 
         public String toString() {
-            return Strings.repeat(new String(this.hrChars), PrettyPrinter.this.width + 2);
+            return Strings.repeat((String)new String(this.hrChars), (int)(PrettyPrinter.this.width + 2));
         }
     }
 
@@ -706,3 +715,4 @@ public class PrettyPrinter {
         public void print(PrettyPrinter var1);
     }
 }
+

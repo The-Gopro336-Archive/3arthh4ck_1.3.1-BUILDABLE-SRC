@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  com.google.common.base.Objects
+ */
 package org.spongepowered.tools.obfuscation.mapping;
 
 import com.google.common.base.Objects;
@@ -40,7 +46,7 @@ public interface IMappingConsumer {
             }
 
             public int hashCode() {
-                return Objects.hashCode(this.from, this.to);
+                return Objects.hashCode((Object[])new Object[]{this.from, this.to});
             }
 
             public String toString() {
@@ -49,3 +55,4 @@ public interface IMappingConsumer {
         }
     }
 }
+

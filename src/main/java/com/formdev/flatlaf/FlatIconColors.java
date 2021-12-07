@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf;
 
 public enum FlatIconColors {
@@ -41,3 +44,4 @@ public enum FlatIconColors {
         this.dark = dark;
     }
 }
+

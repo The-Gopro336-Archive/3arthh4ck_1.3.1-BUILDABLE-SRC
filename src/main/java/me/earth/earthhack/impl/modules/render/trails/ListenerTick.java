@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.projectile.EntityArrow
+ *  net.minecraft.util.math.Vec3d
+ */
 package me.earth.earthhack.impl.modules.render.trails;
 
 import java.util.ArrayList;
@@ -35,12 +43,12 @@ extends ModuleListener<Trails, TickEvent> {
                 return;
             }
             Trace idTrace = ((Trails)this.module).traces.get(id);
-            Entity entity = ListenerTick.mc.world.getEntityByID(id);
+            Entity entity = ListenerTick.mc.world.getEntityByID(id.intValue());
             if (entity != null) {
                 List<Trace.TracePos> trace;
                 Vec3d vec3d;
                 Vec3d vec = entity.getPositionVector();
-                if (vec == null || vec.equals(BreadCrumbs.ORIGIN)) continue;
+                if (vec == null || vec.equals((Object)BreadCrumbs.ORIGIN)) continue;
                 if (!((Trails)this.module).traces.containsKey(id) || idTrace == null) {
                     ((Trails)this.module).traces.put(id, new Trace(0, null, ListenerTick.mc.world.provider.getDimensionType(), vec, new ArrayList<Trace.TracePos>()));
                     idTrace = ((Trails)this.module).traces.get(id);
@@ -51,7 +59,7 @@ extends ModuleListener<Trails, TickEvent> {
                     trace = new ArrayList<Trace.TracePos>();
                     ((Trails)this.module).traces.put(id, new Trace(((Trails)this.module).traceLists.get(id).size() + 1, null, ListenerTick.mc.world.provider.getDimensionType(), vec, new ArrayList<Trace.TracePos>()));
                 }
-                if (trace.isEmpty() || !vec.equals(vec3d)) {
+                if (trace.isEmpty() || !vec.equals((Object)vec3d)) {
                     trace.add(new Trace.TracePos(vec));
                 }
             }
@@ -67,3 +75,4 @@ extends ModuleListener<Trails, TickEvent> {
         }
     }
 }
+

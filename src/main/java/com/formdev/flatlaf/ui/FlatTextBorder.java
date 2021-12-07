@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.ui;
 
 import com.formdev.flatlaf.ui.FlatBorder;
@@ -15,6 +18,7 @@ extends FlatBorder {
             return 0;
         }
         Boolean roundRect = FlatUIUtils.isRoundRect(c);
-        return roundRect != null ? (roundRect.booleanValue() ? Short.MAX_VALUE : 0) : this.arc;
+        return roundRect != null ? (roundRect.booleanValue() ? 32767 : 0) : this.arc;
     }
 }
+

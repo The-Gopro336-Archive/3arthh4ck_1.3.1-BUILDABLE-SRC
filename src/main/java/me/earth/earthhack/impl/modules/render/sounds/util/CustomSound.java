@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.render.sounds.util;
 
 import me.earth.earthhack.impl.modules.render.sounds.util.SoundPosition;
@@ -8,3 +11,4 @@ extends SoundPosition {
         super(x, y, z, name);
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.util.pathfinding.navmesh;
 
 import java.util.ArrayList;
@@ -97,3 +100,4 @@ public class NavMesh {
         }
     }
 }
+

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package com.formdev.flatlaf.icons;
 
 import com.formdev.flatlaf.icons.FlatMenuArrowIcon;
@@ -15,3 +18,4 @@ extends FlatMenuArrowIcon {
     protected void paintIcon(Component c, Graphics2D g) {
     }
 }
+

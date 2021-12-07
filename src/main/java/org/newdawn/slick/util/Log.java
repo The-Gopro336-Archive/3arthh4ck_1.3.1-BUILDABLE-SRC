@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick.util;
 
 import java.security.AccessController;
@@ -81,3 +84,4 @@ public final class Log {
         }
     }
 }
+

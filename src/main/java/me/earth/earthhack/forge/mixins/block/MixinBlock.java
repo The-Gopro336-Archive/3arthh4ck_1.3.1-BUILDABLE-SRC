@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.block.state.IBlockState
+ *  net.minecraft.util.BlockRenderLayer
+ */
 package me.earth.earthhack.forge.mixins.block;
 
 import me.earth.earthhack.api.event.bus.instance.Bus;
@@ -24,3 +32,4 @@ public abstract class MixinBlock {
         }
     }
 }
+

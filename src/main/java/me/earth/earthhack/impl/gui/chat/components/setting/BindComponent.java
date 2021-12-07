@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.gui.chat.components.setting;
 
 import me.earth.earthhack.api.setting.settings.BindSetting;
@@ -15,3 +18,4 @@ extends DefaultComponent<Bind, BindSetting> {
         return super.getText() + "\u00a77";
     }
 }
+

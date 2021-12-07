@@ -1,3 +1,11 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  org.apache.logging.log4j.Level
+ *  org.apache.logging.log4j.LogManager
+ *  org.apache.logging.log4j.Logger
+ */
 package org.spongepowered.asm.mixin.transformer;
 
 import java.lang.reflect.Constructor;
@@ -52,7 +60,7 @@ public class MixinTransformer
 extends TreeTransformer {
     private static final String MIXIN_AGENT_CLASS = "org.spongepowered.tools.agent.MixinAgent";
     private static final String METRONOME_AGENT_CLASS = "org.spongepowered.metronome.Agent";
-    static final Logger logger = LogManager.getLogger("mixin");
+    static final Logger logger = LogManager.getLogger((String)"mixin");
     private final IMixinService service = MixinService.getService();
     private final List<MixinConfig> configs = new ArrayList<MixinConfig>();
     private final List<MixinConfig> pendingConfigs = new ArrayList<MixinConfig>();
@@ -107,20 +115,20 @@ extends TreeTransformer {
         for (MixinConfig config : this.configs) {
             unhandled.addAll(config.getUnhandledTargets());
         }
-        Logger auditLogger = LogManager.getLogger("mixin/audit");
+        Logger auditLogger = LogManager.getLogger((String)"mixin/audit");
         for (String target : unhandled) {
             try {
                 auditLogger.info("Force-loading class {}", new Object[]{target});
                 this.service.getClassProvider().findClass(target, true);
             }
             catch (ClassNotFoundException ex) {
-                auditLogger.error("Could not force-load " + target, ex);
+                auditLogger.error("Could not force-load " + target, (Throwable)ex);
             }
         }
         for (MixinConfig config : this.configs) {
             for (String target : config.getUnhandledTargets()) {
                 ClassAlreadyLoadedException ex = new ClassAlreadyLoadedException(target + " was already classloaded");
-                auditLogger.error("Could not force-load " + target, ex);
+                auditLogger.error("Could not force-load " + target, (Throwable)ex);
             }
         }
         if (environment.getOption(MixinEnvironment.Option.DEBUG_PROFILER)) {
@@ -252,8 +260,8 @@ extends TreeTransformer {
                 byte[] bytes = this.postProcessor.transformClassBytes(name, transformedName, basicClass);
                 postTimer.end();
                 this.extensions.export(environment, transformedName, false, bytes);
-                byte[] byArray = bytes;
-                return byArray;
+                byte[] arrby = bytes;
+                return arrby;
             }
             TreeSet<MixinInfo> mixins = null;
             boolean invalidRef = false;
@@ -273,7 +281,7 @@ extends TreeTransformer {
             }
             if (mixins != null) {
                 if (locked) {
-                    logger.warn("Re-entrance detected, this will cause serious problems.", new MixinException());
+                    logger.warn("Re-entrance detected, this will cause serious problems.", (Throwable)new MixinException());
                     throw new MixinApplyError("Re-entrance error.");
                 }
                 if (this.hotSwapper != null) {
@@ -371,7 +379,7 @@ extends TreeTransformer {
                 this.pendingConfigs.add(config);
             }
             catch (Exception ex) {
-                logger.warn(String.format("Failed to select mixin config: %s", handle), ex);
+                logger.warn(String.format("Failed to select mixin config: %s", handle), (Throwable)ex);
             }
         }
         Collections.sort(this.pendingConfigs);
@@ -407,7 +415,7 @@ extends TreeTransformer {
             }
             catch (Exception ex) {
                 message = ex.getMessage();
-                logger.error("Error encountered whilst initialising mixin config '" + config.getName() + "': " + message, ex);
+                logger.error("Error encountered whilst initialising mixin config '" + config.getName() + "': " + message, (Throwable)ex);
             }
         }
         for (MixinConfig config : this.pendingConfigs) {
@@ -429,7 +437,7 @@ extends TreeTransformer {
             }
             catch (Exception ex) {
                 message = ex.getMessage();
-                logger.error("Error encountered during mixin config postInit step'" + config.getName() + "': " + message, ex);
+                logger.error("Error encountered during mixin config postInit step'" + config.getName() + "': " + message, (Throwable)ex);
             }
         }
         this.configs.addAll(this.pendingConfigs);
@@ -476,7 +484,7 @@ extends TreeTransformer {
         this.errorState = true;
         IMixinInfo mixin = ex.getMixin();
         if (mixin == null) {
-            logger.error("InvalidMixinException has no mixin!", ex);
+            logger.error("InvalidMixinException has no mixin!", (Throwable)ex);
             throw ex;
         }
         IMixinConfig config = mixin.getConfig();
@@ -490,7 +498,7 @@ extends TreeTransformer {
             if (newAction == null) continue;
             action = newAction;
         }
-        logger.log(action.logLevel, errorPhase.getLogMessage(context, ex, mixin), ex);
+        logger.log(action.logLevel, errorPhase.getLogMessage(context, ex, mixin), (Throwable)ex);
         this.errorState = false;
         if (action == IMixinErrorHandler.ErrorAction.ERROR) {
             throw new MixinApplyError(errorPhase.getErrorMessage(mixin, config, phase), ex);
@@ -583,3 +591,4 @@ extends TreeTransformer {
         }
     }
 }
+

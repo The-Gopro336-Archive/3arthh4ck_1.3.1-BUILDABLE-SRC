@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package org.newdawn.slick;
 
 import org.newdawn.slick.ControlledInputReciever;
@@ -8,3 +11,4 @@ extends ControlledInputReciever {
 
     public void keyReleased(int var1, char var2);
 }
+

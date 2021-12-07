@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.150.
+ */
 package me.earth.earthhack.impl.modules.player.multitask;
 
 import me.earth.earthhack.api.module.Module;
@@ -11,3 +14,4 @@ extends Module {
         this.setData(new SimpleData(this, "Allows you to eat while mining for example."));
     }
 }
+

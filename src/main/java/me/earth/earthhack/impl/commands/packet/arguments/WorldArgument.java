@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.150.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.world.World
+ */
 package me.earth.earthhack.impl.commands.packet.arguments;
 
 import me.earth.earthhack.api.util.interfaces.Globals;
@@ -17,3 +23,4 @@ implements Globals {
         return WorldArgument.mc.world;
     }
 }
+
