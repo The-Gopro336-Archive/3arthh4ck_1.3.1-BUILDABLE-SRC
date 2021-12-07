@@ -1,22 +1,5 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  javax.annotation.Nullable
- *  net.minecraft.block.state.IBlockState
- *  net.minecraft.entity.Entity
- *  net.minecraft.entity.item.EntityFallingBlock
- *  net.minecraft.util.EnumParticleTypes
- *  net.minecraft.util.IntHashMap
- *  net.minecraft.util.math.AxisAlignedBB
- *  net.minecraft.util.math.BlockPos
- *  net.minecraft.world.EnumSkyBlock
- *  net.minecraft.world.World
- */
 package me.earth.earthhack.impl.core.mixins;
 
-import java.util.List;
-import javax.annotation.Nullable;
 import me.earth.earthhack.api.cache.ModuleCache;
 import me.earth.earthhack.api.event.bus.instance.Bus;
 import me.earth.earthhack.impl.core.ducks.IWorld;
@@ -27,6 +10,7 @@ import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.misc.packets.Packets;
 import me.earth.earthhack.impl.modules.player.blocktweaks.BlockTweaks;
 import me.earth.earthhack.impl.modules.render.norender.NoRender;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityFallingBlock;
@@ -45,96 +29,183 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(value={World.class})
-public abstract class MixinWorld
-implements IWorld {
-    private static final ModuleCache<NoRender> NO_RENDER = Caches.getModule(NoRender.class);
-    private static final ModuleCache<Packets> PACKETS = Caches.getModule(Packets.class);
-    private static final ModuleCache<BlockTweaks> BLOCK_TWEAKS = Caches.getModule(BlockTweaks.class);
+import javax.annotation.Nullable;
+import java.util.List;
 
-    @Shadow
-    public abstract List<Entity> getEntitiesWithinAABBExcludingEntity(@Nullable Entity var1, AxisAlignedBB var2);
+@Mixin(World.class)
+public abstract class MixinWorld implements IWorld
+{
+    @Shadow public abstract List<Entity> getEntitiesWithinAABBExcludingEntity(@Nullable Entity entityIn, AxisAlignedBB bb);
 
-    @Shadow
-    public abstract World init();
+    @Shadow public abstract World init();
+
+    private static final ModuleCache<NoRender> NO_RENDER =
+            Caches.getModule(NoRender.class);
+    private static final ModuleCache<Packets> PACKETS =
+            Caches.getModule(Packets.class);
+    private static final ModuleCache<BlockTweaks> BLOCK_TWEAKS =
+            Caches.getModule(BlockTweaks.class);
 
     @Override
-    @Invoker(value="isChunkLoaded")
-    public abstract boolean isChunkLoaded(int var1, int var2, boolean var3);
+    @Invoker(value = "isChunkLoaded")
+    public abstract boolean isChunkLoaded(int x, int z, boolean allowEmpty);
 
-    @Redirect(method={"handleMaterialAcceleration"}, at=@At(value="INVOKE", target="Lnet/minecraft/entity/Entity;isPushedByWater()Z"))
-    public boolean isPushedByWaterHook(Entity entity) {
+    @Redirect(
+        method = "handleMaterialAcceleration",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/Entity;isPushedByWater()Z"))
+    public boolean isPushedByWaterHook(Entity entity)
+    {
         WaterPushEvent event = new WaterPushEvent(entity);
         Bus.EVENT_BUS.post(event);
+
         return entity.isPushedByWater() && !event.isCancelled();
     }
 
-    @Inject(method={"checkLightFor"}, at={@At(value="HEAD")}, cancellable=true)
-    private void checkLightForHook(EnumSkyBlock skyBlock, BlockPos pos, CallbackInfoReturnable<Boolean> info) {
-        if (NO_RENDER.returnIfPresent(NoRender::noSkyLight, false).booleanValue() && skyBlock == EnumSkyBlock.SKY) {
+    @Inject(
+        method = "checkLightFor",
+        at = @At(value = "HEAD"),
+        cancellable = true)
+    private void checkLightForHook(EnumSkyBlock skyBlock,
+                                   BlockPos pos,
+                                   CallbackInfoReturnable<Boolean> info)
+    {
+        if (NO_RENDER.returnIfPresent(NoRender::noSkyLight, false)
+                && skyBlock == EnumSkyBlock.SKY)
+        {
             info.setReturnValue(false);
         }
     }
 
-    @Inject(method={"getRainStrength"}, at={@At(value="HEAD")}, cancellable=true)
-    private void getRainStrengthHook(CallbackInfoReturnable<Float> callbackInfoReturnable) {
-        if (NO_RENDER.returnIfPresent(NoRender::noWeather, false).booleanValue()) {
-            callbackInfoReturnable.setReturnValue(Float.valueOf(0.0f));
+    @Inject(
+        method = "getRainStrength",
+        at = @At(value="HEAD"),
+        cancellable = true)
+    private void getRainStrengthHook(
+            CallbackInfoReturnable<Float> callbackInfoReturnable)
+    {
+        if (NO_RENDER.returnIfPresent(NoRender::noWeather, false))
+        {
+            callbackInfoReturnable.setReturnValue(0.0f);
         }
     }
 
-    @Inject(method={"spawnParticle(Lnet/minecraft/util/EnumParticleTypes;DDDDDD[I)V"}, at={@At(value="HEAD")}, cancellable=true)
-    private void spawnParticleHook(EnumParticleTypes particleType, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed, int[] parameters, CallbackInfo ci) {
-        if (NO_RENDER.isEnabled() && ((NoRender)MixinWorld.NO_RENDER.get()).explosions.getValue().booleanValue()) {
-            switch (particleType) {
-                case EXPLOSION_NORMAL: 
-                case EXPLOSION_LARGE: 
-                case EXPLOSION_HUGE: 
-                case FIREWORKS_SPARK: {
+    @Inject(
+        method = "spawnParticle(Lnet/minecraft/util/EnumParticleTypes;DDDDDD[I)V",
+        at = @At("HEAD"),
+        cancellable = true)
+    private void spawnParticleHook(EnumParticleTypes particleType,
+                                   double xCoord,
+                                   double yCoord,
+                                   double zCoord,
+                                   double xSpeed,
+                                   double ySpeed,
+                                   double zSpeed,
+                                   int[] parameters,
+                                   CallbackInfo ci)
+    {
+        if (NO_RENDER.isEnabled() && NO_RENDER.get().explosions.getValue())
+        {
+            // TODO: We could actually make an AntiParticles module?
+            //  White/Blacklist certain types?
+            switch (particleType)
+            {
+                case EXPLOSION_NORMAL:
+                case EXPLOSION_LARGE:
+                case EXPLOSION_HUGE:
+                case FIREWORKS_SPARK:
                     ci.cancel();
-                }
+                default:
             }
         }
     }
 
-    @Redirect(method={"getEntityByID"}, at=@At(value="INVOKE", target="Lnet/minecraft/util/IntHashMap;lookup(I)Ljava/lang/Object;"))
-    private Object getEntityByIDHook(IntHashMap<Entity> intHashMap, int id) {
-        Entity entity = (Entity)intHashMap.lookup(id);
-        if (entity == null && (entity = Managers.SET_DEAD.getEntity(id)) != null) {
-            entity.lastTickPosX = entity.posX;
-            entity.lastTickPosY = entity.posY;
-            entity.lastTickPosZ = entity.posZ;
-            entity.prevPosX = entity.posX;
-            entity.prevPosY = entity.posY;
-            entity.prevPosZ = entity.posZ;
+    @Redirect(
+        method = "getEntityByID",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/util/IntHashMap;lookup(I)Ljava/lang/Object;"))
+    private Object getEntityByIDHook(IntHashMap<Entity> intHashMap, int id)
+    {
+        Entity entity = intHashMap.lookup(id);
+        if (entity == null)
+        {
+            entity = Managers.SET_DEAD.getEntity(id);
+            if (entity != null)
+            {
+                entity.lastTickPosX = entity.posX;
+                entity.lastTickPosY = entity.posY;
+                entity.lastTickPosZ = entity.posZ;
+
+                entity.prevPosX = entity.posX;
+                entity.prevPosY = entity.posY;
+                entity.prevPosZ = entity.posZ;
+            }
         }
+
         return entity;
     }
 
-    @Inject(method={"updateEntities"}, at={@At(value="INVOKE", target="Lnet/minecraft/profiler/Profiler;endStartSection(Ljava/lang/String;)V", ordinal=2)})
-    private void updateEntitiesHook(CallbackInfo ci) {
+    @Inject(
+            method = "updateEntities",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/profiler/Profiler;endStartSection(Ljava/lang/String;)V",
+                    ordinal = 2
+            )
+    )
+    private void updateEntitiesHook(CallbackInfo ci)
+    {
         UpdateEntitiesEvent event = new UpdateEntitiesEvent();
         Bus.EVENT_BUS.post(event);
     }
 
-    @Inject(method={"getBlockState"}, at={@At(value="HEAD")}, cancellable=true)
-    private void getBlockStateHook(BlockPos pos, CallbackInfoReturnable<IBlockState> cir) {
-        IBlockState state;
-        if (PACKETS.isEnabled() && (state = ((Packets)PACKETS.get()).getStateMap().get((Object)pos)) != null) {
-            cir.setReturnValue(state);
+    // We could inject this in the chunks as well, but that would affect render
+    @Inject(method = "getBlockState", at = @At("HEAD"), cancellable = true)
+    private void getBlockStateHook(BlockPos pos,
+                                   CallbackInfoReturnable<IBlockState> cir)
+    {
+        if (PACKETS.isEnabled())
+        {
+            IBlockState state = PACKETS.get().getStateMap().get(pos);
+            if (state != null)
+            {
+                cir.setReturnValue(state);
+            }
         }
     }
 
-    @Redirect(method={"mayPlace"}, at=@At(value="INVOKE", target="Lnet/minecraft/world/World;checkNoEntityCollision(Lnet/minecraft/util/math/AxisAlignedBB;Lnet/minecraft/entity/Entity;)Z"))
-    private boolean checkNoEntityCollisionHook(World world, AxisAlignedBB bb, Entity entityIn) {
-        if (BLOCK_TWEAKS.returnIfPresent(BlockTweaks::isIgnoreFallingActive, false).booleanValue()) {
-            for (Entity entity : world.getEntitiesWithinAABBExcludingEntity(null, bb)) {
-                if (entity.isDead || entity instanceof EntityFallingBlock || !entity.preventEntitySpawning || entity == entityIn || entityIn != null && entity.isRidingSameEntity(entityIn)) continue;
-                return false;
+    @Redirect(
+        method = "mayPlace",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/World;checkNoEntityCollision(Lnet/minecraft/util/math/AxisAlignedBB;Lnet/minecraft/entity/Entity;)Z"))
+    private boolean checkNoEntityCollisionHook(World world,
+                                               AxisAlignedBB bb,
+                                               Entity entityIn)
+    {
+        if (BLOCK_TWEAKS.returnIfPresent(
+                BlockTweaks::isIgnoreFallingActive, false))
+        {
+            for (Entity entity
+                    : world.getEntitiesWithinAABBExcludingEntity(null, bb))
+            {
+                if (!entity.isDead
+                    && !(entity instanceof EntityFallingBlock)
+                    && entity.preventEntitySpawning
+                    && entity != entityIn
+                    && (entityIn == null
+                        || !entity.isRidingSameEntity(entityIn)))
+                {
+                    return false;
+                }
             }
+
             return true;
         }
+
         return world.checkNoEntityCollision(bb, entityIn);
     }
-}
 
+}

@@ -1,46 +1,58 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.api.config.preset;
 
 import me.earth.earthhack.api.config.Config;
 import me.earth.earthhack.api.module.Module;
+import me.earth.earthhack.api.setting.SettingContainer;
 
-public abstract class ModulePreset
-implements Config {
-    private final Module module;
+// TODO: this class could probably be generified and any references to the module class could be replaced with a generic extending SettingContainer
+// I'm too lazy to do the above myself atm!
+// Nvm I wasn't too lazy
+public abstract class ModulePreset<T extends SettingContainer> implements Config
+{
+    private final T module;
     private final String name;
     private final String description;
 
-    public ModulePreset(String name, Module module, String description) {
+    public ModulePreset(String name, T module, String description)
+    {
         this.name = name;
         this.module = module;
         this.description = description;
     }
 
     @Override
-    public String getName() {
-        return this.name;
+    public String getName()
+    {
+        return name;
     }
 
-    public Module getModule() {
-        return this.module;
+    public T getModule()
+    {
+        return module;
     }
 
-    public String getDescription() {
-        return this.description;
+    public String getDescription()
+    {
+        return description;
     }
 
-    public boolean equals(Object o) {
-        if (o instanceof ModulePreset) {
-            ModulePreset other = (ModulePreset)o;
-            return other.name.equals(this.name) && other.module.equals(this.module);
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o instanceof ModulePreset)
+        {
+            ModulePreset<?> other = (ModulePreset<?>) o;
+            return other.name.equals(this.name)
+                    && other.module.equals(this.module);
         }
+
         return false;
     }
 
-    public int hashCode() {
-        return this.name.hashCode();
+    @Override
+    public int hashCode()
+    {
+        return name.hashCode();
     }
-}
 
+}

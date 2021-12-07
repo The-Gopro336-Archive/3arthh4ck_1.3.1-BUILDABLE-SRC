@@ -1,41 +1,14 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.block.Block
- *  net.minecraft.entity.Entity
- *  net.minecraft.entity.item.EntityEnderCrystal
- *  net.minecraft.entity.player.EntityPlayer
- *  net.minecraft.init.Blocks
- *  net.minecraft.init.Items
- *  net.minecraft.item.Item
- *  net.minecraft.network.Packet
- *  net.minecraft.network.play.client.CPacketAnimation
- *  net.minecraft.network.play.client.CPacketPlayer$Rotation
- *  net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock
- *  net.minecraft.util.EnumHand
- *  net.minecraft.util.math.AxisAlignedBB
- *  net.minecraft.util.math.BlockPos
- *  net.minecraft.util.math.Vec3i
- */
 package me.earth.earthhack.impl.modules.combat.antitrap;
 
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
 import me.earth.earthhack.api.cache.ModuleCache;
 import me.earth.earthhack.api.event.events.Stage;
-import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.impl.event.events.network.MotionUpdateEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import me.earth.earthhack.impl.modules.Caches;
-import me.earth.earthhack.impl.modules.combat.antitrap.AntiTrap;
 import me.earth.earthhack.impl.modules.combat.antitrap.util.AntiTrapMode;
 import me.earth.earthhack.impl.modules.combat.offhand.Offhand;
 import me.earth.earthhack.impl.modules.combat.offhand.modes.OffhandMode;
 import me.earth.earthhack.impl.util.client.ModuleUtil;
-import me.earth.earthhack.impl.util.helpers.blocks.ObbyModule;
 import me.earth.earthhack.impl.util.helpers.blocks.modes.Rotate;
 import me.earth.earthhack.impl.util.math.RayTraceUtil;
 import me.earth.earthhack.impl.util.math.position.PositionUtil;
@@ -44,15 +17,12 @@ import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
 import me.earth.earthhack.impl.util.minecraft.Swing;
 import me.earth.earthhack.impl.util.minecraft.blocks.BlockUtil;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
+import me.earth.earthhack.impl.util.text.TextColor;
 import me.earth.earthhack.impl.util.thread.Locks;
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketAnimation;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
@@ -61,166 +31,318 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 
-final class ListenerMotion
-extends ModuleListener<AntiTrap, MotionUpdateEvent> {
-    protected static final ModuleCache<Offhand> OFFHAND = Caches.getModule(Offhand.class);
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
-    public ListenerMotion(AntiTrap module) {
+import static me.earth.earthhack.impl.util.helpers.blocks.ObbyModule.HELPER;
+
+final class ListenerMotion extends ModuleListener<AntiTrap, MotionUpdateEvent>
+{
+    protected static final ModuleCache<Offhand> OFFHAND =
+            Caches.getModule(Offhand.class);
+
+    public ListenerMotion(AntiTrap module)
+    {
         super(module, MotionUpdateEvent.class);
     }
 
     @Override
-    public void invoke(MotionUpdateEvent event) {
-        if (((AntiTrap)this.module).autoOff.getValue().booleanValue() && !PositionUtil.getPosition().equals((Object)((AntiTrap)this.module).startPos)) {
-            ((AntiTrap)this.module).disable();
+    public void invoke(MotionUpdateEvent event)
+    {
+        if (module.autoOff.getValue()
+                && !PositionUtil.getPosition().equals(module.startPos))
+        {
+            module.disable();
             return;
         }
-        switch (((AntiTrap)this.module).mode.getValue()) {
-            case Crystal: {
-                this.doCrystal(event);
+
+        switch (module.mode.getValue())
+        {
+            case Crystal:
+                doCrystal(event);
                 break;
-            }
-            case FacePlace: 
-            case Fill: {
-                this.doObby(event, ((AntiTrap)this.module).mode.getValue().getOffsets());
+            case FacePlace:
+            case Fill:
+                doObby(event, module.mode.getValue().getOffsets());
                 break;
-            }
+            default:
         }
     }
 
-    private void doObby(MotionUpdateEvent event, Vec3i[] offsets) {
-        if (event.getStage() == Stage.PRE) {
-            ((AntiTrap)this.module).rotations = null;
-            ((AntiTrap)this.module).blocksPlaced = 0;
-            for (BlockPos confirmed : ((AntiTrap)this.module).confirmed) {
-                ((AntiTrap)this.module).placed.remove((Object)confirmed);
+    private void doObby(MotionUpdateEvent event, Vec3i[] offsets)
+    {
+        if (event.getStage() == Stage.PRE)
+        {
+            // TODO: this looks very similar to AutoTrap,
+            //  maybe its possible to abstract this even further?
+            module.rotations = null;
+            module.blocksPlaced = 0;
+
+            for (BlockPos confirmed : module.confirmed)
+            {
+                module.placed.remove(confirmed);
             }
-            ((AntiTrap)this.module).placed.entrySet().removeIf(entry -> System.currentTimeMillis() - (Long)entry.getValue() >= (long)((AntiTrap)this.module).confirm.getValue().intValue());
+
+            module.placed.entrySet().removeIf(entry ->
+                    System.currentTimeMillis() - entry.getValue()
+                            >= module.confirm.getValue());
+
             BlockPos playerPos = PositionUtil.getPosition();
             BlockPos[] positions = new BlockPos[offsets.length];
-            for (int i = 0; i < offsets.length; ++i) {
+            for (int i = 0; i < offsets.length; i++)
+            {
                 Vec3i offset = offsets[i];
-                if (((AntiTrap)this.module).mode.getValue() == AntiTrapMode.Fill && ListenerMotion.mc.world.getBlockState(playerPos.add(offset.getX() / 2, 0, offset.getZ() / 2)).getBlock() == Blocks.BEDROCK) continue;
+                if (module.mode.getValue() == AntiTrapMode.Fill)
+                {
+                    if (mc.world.getBlockState(playerPos.add(offset.getX() / 2,
+                                                             0,
+                                                             offset.getZ() / 2))
+                                .getBlock() == Blocks.BEDROCK)
+                    {
+                        continue;
+                    }
+                }
+
                 positions[i] = playerPos.add(offset);
             }
-            if (((AntiTrap)this.module).offhand.getValue().booleanValue()) {
-                if (!InventoryUtil.isHolding(Blocks.OBSIDIAN)) {
-                    ((AntiTrap)this.module).previous = OFFHAND.returnIfPresent(Offhand::getMode, null);
-                    OFFHAND.computeIfPresent(o -> o.setMode(OffhandMode.CRYSTAL));
-                    return;
-                }
-            } else {
-                ((AntiTrap)this.module).slot = InventoryUtil.findHotbarBlock(Blocks.OBSIDIAN, new Block[0]);
-                if (((AntiTrap)this.module).slot == -1) {
-                    ModuleUtil.disable((Module)this.module, "\u00a7cNo Obsidian found.");
+
+            if (module.offhand.getValue())
+            {
+                if (!InventoryUtil.isHolding(Blocks.OBSIDIAN))
+                {
+                    module.previous = OFFHAND.returnIfPresent(Offhand::getMode,
+                                                              null);
+                    OFFHAND.computeIfPresent(o ->
+                            o.setMode(OffhandMode.CRYSTAL));
                     return;
                 }
             }
+            else
+            {
+                module.slot = InventoryUtil.findHotbarBlock(Blocks.OBSIDIAN);
+                if (module.slot == -1)
+                {
+                    ModuleUtil.disable(module, TextColor.RED
+                            + "No Obsidian found.");
+                    return;
+                }
+            }
+
             boolean done = true;
-            LinkedList<BlockPos> toPlace = new LinkedList<BlockPos>();
-            for (BlockPos pos2 : positions) {
-                if (pos2 == null || ((AntiTrap)this.module).mode.getValue() == AntiTrapMode.Fill && !((AntiTrap)this.module).highFill.getValue().booleanValue() && pos2.getY() > playerPos.getY() || !ListenerMotion.mc.world.getBlockState(pos2).getMaterial().isReplaceable()) continue;
-                toPlace.add(pos2);
-                done = false;
+            List<BlockPos> toPlace = new LinkedList<>();
+            for (BlockPos pos : positions)
+            {
+                if (pos == null)
+                {
+                    continue;
+                }
+
+                if (module.mode.getValue() == AntiTrapMode.Fill
+                        && !module.highFill.getValue()
+                        && pos.getY() > playerPos.getY())
+                {
+                    continue;
+                }
+
+                if (mc.world.getBlockState(pos).getMaterial().isReplaceable())
+                {
+                    toPlace.add(pos);
+                    done = false;
+                }
             }
-            if (done) {
-                ((AntiTrap)this.module).disable();
+
+            if (done)
+            {
+                module.disable();
                 return;
             }
+
             boolean hasPlaced = false;
-            Optional<BlockPos> crystalPos = toPlace.stream().filter(pos -> !ListenerMotion.mc.world.getEntitiesWithinAABB(EntityEnderCrystal.class, new AxisAlignedBB(pos)).isEmpty() && ListenerMotion.mc.world.getBlockState(pos).getMaterial().isReplaceable()).findFirst();
-            if (crystalPos.isPresent()) {
-                BlockPos pos3 = crystalPos.get();
-                hasPlaced = ((AntiTrap)this.module).placeBlock(pos3);
+            Optional<BlockPos> crystalPos = toPlace
+                    .stream()
+                    .filter(pos ->
+                            !mc.world.getEntitiesWithinAABB(
+                                    EntityEnderCrystal.class,
+                                    new AxisAlignedBB(pos)).isEmpty()
+                                    && mc.world.getBlockState(pos)
+                                    .getMaterial()
+                                    .isReplaceable())
+                    .findFirst();
+
+            if (crystalPos.isPresent())
+            {
+                BlockPos pos = crystalPos.get();
+                hasPlaced = module.placeBlock(pos);
             }
-            if (!hasPlaced) {
-                for (BlockPos pos2 : toPlace) {
-                    if (((AntiTrap)this.module).placed.containsKey((Object)pos2) || !ObbyModule.HELPER.getBlockState(pos2).getMaterial().isReplaceable()) continue;
-                    ((AntiTrap)this.module).confirmed.remove((Object)pos2);
-                    if (!((AntiTrap)this.module).placeBlock(pos2)) continue;
-                    break;
+
+            // Only after here we need to use the Helper to get the BlockStates.
+            if (!hasPlaced)
+            {
+                for (BlockPos pos : toPlace)
+                {
+                    if (!module.placed.containsKey(pos)
+                            && HELPER.getBlockState(pos)
+                                     .getMaterial()
+                                     .isReplaceable())
+                    {
+                        module.confirmed.remove(pos);
+                        if (module.placeBlock(pos))
+                        {
+                            break;
+                        }
+                    }
                 }
             }
-            if (((AntiTrap)this.module).rotate.getValue() != Rotate.None) {
-                if (((AntiTrap)this.module).rotations != null) {
-                    event.setYaw(((AntiTrap)this.module).rotations[0]);
-                    event.setPitch(((AntiTrap)this.module).rotations[1]);
+
+            if (module.rotate.getValue() != Rotate.None)
+            {
+                if (module.rotations != null)
+                {
+                    event.setYaw(module.rotations[0]);
+                    event.setPitch(module.rotations[1]);
                 }
-            } else {
-                Locks.acquire(Locks.PLACE_SWITCH_LOCK, ((AntiTrap)this.module)::execute);
             }
-        } else {
-            Locks.acquire(Locks.PLACE_SWITCH_LOCK, ((AntiTrap)this.module)::execute);
+            else
+            {
+                Locks.acquire(Locks.PLACE_SWITCH_LOCK, module::execute);
+            }
+        }
+        else
+        {
+            Locks.acquire(Locks.PLACE_SWITCH_LOCK, module::execute);
         }
     }
 
-    private void doCrystal(MotionUpdateEvent event) {
-        if (event.getStage() == Stage.PRE) {
-            EntityPlayer closest;
-            List<BlockPos> positions = ((AntiTrap)this.module).getCrystalPositions();
-            if (positions.isEmpty() || !((AntiTrap)this.module).isEnabled()) {
-                if (!((AntiTrap)this.module).empty.getValue().booleanValue()) {
-                    ((AntiTrap)this.module).disable();
+    private void doCrystal(MotionUpdateEvent event)
+    {
+        if (event.getStage() == Stage.PRE)
+        {
+            List<BlockPos> positions = module.getCrystalPositions();
+
+            if (positions.isEmpty() || !module.isEnabled())
+            {
+                if (!module.empty.getValue())
+                {
+                    module.disable();
                 }
+
                 return;
             }
-            if (((AntiTrap)this.module).offhand.getValue().booleanValue()) {
-                if (!InventoryUtil.isHolding(Items.END_CRYSTAL)) {
-                    ((AntiTrap)this.module).previous = OFFHAND.returnIfPresent(Offhand::getMode, null);
-                    OFFHAND.computeIfPresent(o -> o.setMode(OffhandMode.CRYSTAL));
+
+            if (module.offhand.getValue())
+            {
+                if (!InventoryUtil.isHolding(Items.END_CRYSTAL))
+                {
+                    module.previous = OFFHAND.returnIfPresent(Offhand::getMode,
+                                                              null);
+                    OFFHAND.computeIfPresent(o ->
+                            o.setMode(OffhandMode.CRYSTAL));
                     return;
                 }
-            } else {
-                ((AntiTrap)this.module).slot = InventoryUtil.findHotbarItem(Items.END_CRYSTAL, new Item[0]);
-                if (((AntiTrap)this.module).slot == -1) {
-                    ModuleUtil.disable((Module)this.module, "\u00a7cNo crystals found.");
+            }
+            else
+            {
+                module.slot = InventoryUtil.findHotbarItem(Items.END_CRYSTAL);
+
+                if (module.slot == -1)
+                {
+                    ModuleUtil.disable(module, TextColor.RED
+                                                + "No crystals found.");
                     return;
                 }
             }
-            if ((closest = EntityUtil.getClosestEnemy()) != null) {
-                positions.sort(Comparator.comparingDouble(pos -> BlockUtil.getDistanceSq((Entity)closest, pos)));
+
+            EntityPlayer closest = EntityUtil.getClosestEnemy();
+            if (closest != null)
+            {
+                positions.sort(Comparator.comparingDouble(pos ->
+                        BlockUtil.getDistanceSq(closest, pos)));
             }
-            ((AntiTrap)this.module).pos = positions.get(positions.size() - 1);
-            ((AntiTrap)this.module).rotations = RotationUtil.getRotationsToTopMiddle(((AntiTrap)this.module).pos.up());
-            ((AntiTrap)this.module).result = RayTraceUtil.getRayTraceResult(((AntiTrap)this.module).rotations[0], ((AntiTrap)this.module).rotations[1], 3.0f);
-            if (((AntiTrap)this.module).rotate.getValue() == Rotate.Normal) {
-                event.setYaw(((AntiTrap)this.module).rotations[0]);
-                event.setPitch(((AntiTrap)this.module).rotations[1]);
-            } else {
-                this.executeCrystal();
+
+            // get last, furthest away, pos.
+            module.pos = positions.get(positions.size() - 1);
+            module.rotations = RotationUtil.getRotationsToTopMiddle(module.pos.up());
+            module.result = RayTraceUtil.getRayTraceResult(module.rotations[0],
+                                                           module.rotations[1],
+                                                           3.0f);
+            if (module.rotate.getValue() == Rotate.Normal)
+            {
+                event.setYaw(module.rotations[0]);
+                event.setPitch(module.rotations[1]);
             }
-        } else {
-            this.executeCrystal();
+            else
+            {
+                executeCrystal();
+            }
+        }
+        else
+        {
+            executeCrystal();
         }
     }
 
-    private void executeCrystal() {
-        if (((AntiTrap)this.module).pos != null && ((AntiTrap)this.module).result != null) {
+    private void executeCrystal()
+    {
+        if (module.pos != null && module.result != null)
+        {
             Locks.acquire(Locks.PLACE_SWITCH_LOCK, this::executeLocked);
         }
     }
 
-    private void executeLocked() {
-        int lastSlot = ListenerMotion.mc.player.inventory.currentItem;
-        if (!InventoryUtil.isHolding(Items.END_CRYSTAL)) {
-            if (((AntiTrap)this.module).offhand.getValue().booleanValue() || ((AntiTrap)this.module).slot == -1) {
+    private void executeLocked()
+    {
+        final int lastSlot = mc.player.inventory.currentItem;
+        if (!InventoryUtil.isHolding(Items.END_CRYSTAL))
+        {
+            if (module.offhand.getValue() || module.slot == -1)
+            {
                 return;
             }
-            InventoryUtil.switchTo(((AntiTrap)this.module).slot);
+            else
+            {
+                InventoryUtil.switchTo(module.slot);
+            }
         }
-        EnumHand hand = ListenerMotion.mc.player.getHeldItemOffhand().getItem() == Items.END_CRYSTAL ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
-        CPacketPlayerTryUseItemOnBlock place = new CPacketPlayerTryUseItemOnBlock(((AntiTrap)this.module).pos, ((AntiTrap)this.module).result.sideHit, hand, (float)((AntiTrap)this.module).result.hitVec.x, (float)((AntiTrap)this.module).result.hitVec.y, (float)((AntiTrap)this.module).result.hitVec.z);
+
+        EnumHand hand =
+                mc.player.getHeldItemOffhand().getItem() == Items.END_CRYSTAL
+                        ? EnumHand.OFF_HAND
+                        : EnumHand.MAIN_HAND;
+
+        CPacketPlayerTryUseItemOnBlock place =
+                new CPacketPlayerTryUseItemOnBlock(
+                        module.pos,
+                        module.result.sideHit,
+                        hand,
+                        (float) module.result.hitVec.x,
+                        (float) module.result.hitVec.y,
+                        (float) module.result.hitVec.z);
+
         CPacketAnimation swing = new CPacketAnimation(hand);
-        if (((AntiTrap)this.module).rotate.getValue() == Rotate.Packet && ((AntiTrap)this.module).rotations != null) {
-            ListenerMotion.mc.player.connection.sendPacket((Packet)new CPacketPlayer.Rotation(((AntiTrap)this.module).rotations[0], ((AntiTrap)this.module).rotations[1], ListenerMotion.mc.player.onGround));
+
+        if (module.rotate.getValue() == Rotate.Packet
+                && module.rotations != null)
+        {
+            mc.player.connection.sendPacket(
+                    new CPacketPlayer.Rotation(
+                            module.rotations[0],
+                            module.rotations[1],
+                            mc.player.onGround));
         }
-        ListenerMotion.mc.player.connection.sendPacket((Packet)place);
-        ListenerMotion.mc.player.connection.sendPacket((Packet)swing);
+
+        mc.player.connection.sendPacket(place);
+        mc.player.connection.sendPacket(swing);
+
         InventoryUtil.switchTo(lastSlot);
-        if (((AntiTrap)this.module).swing.getValue().booleanValue()) {
+
+        if (module.swing.getValue())
+        {
             Swing.Client.swing(hand);
         }
-        ((AntiTrap)this.module).disable();
-    }
-}
 
+        module.disable();
+    }
+
+}

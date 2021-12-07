@@ -1,10 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.client.multiplayer.WorldClient
- *  net.minecraft.entity.Entity
- */
 package me.earth.earthhack.impl.core.mixins;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -22,28 +15,42 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value={WorldClient.class})
-public abstract class MixinWorldClient {
-    private static final ModuleCache<NoRender> NO_RENDER = Caches.getModule(NoRender.class);
+@Mixin(WorldClient.class)
+public abstract class MixinWorldClient
+{
+    private static final ModuleCache<NoRender> NO_RENDER =
+            Caches.getModule(NoRender.class);
 
-    @Inject(method={"<init>"}, at={@At(value="RETURN")})
-    private void constructorHook(CallbackInfo callbackInfo) {
-        Bus.EVENT_BUS.post(new WorldClientEvent.Load((WorldClient)WorldClient.class.cast(this)));
+    @Inject(method = "<init>", at = @At(value = "RETURN"))
+    private void constructorHook(CallbackInfo callbackInfo)
+    {
+        Bus.EVENT_BUS.post(new WorldClientEvent.Load(
+                WorldClient.class.cast(this)));
     }
 
-    @ModifyVariable(method={"showBarrierParticles(IIIILjava/util/Random;ZLnet/minecraft/util/math/BlockPos$MutableBlockPos;)V"}, at=@At(value="HEAD"))
-    private boolean showBarrierParticlesHook(boolean holdingBarrier) {
-        return NO_RENDER.returnIfPresent(NoRender::showBarriers, false) != false || holdingBarrier;
+    @ModifyVariable(
+        method = "showBarrierParticles(IIIILjava/util/Random;" +
+                 "ZLnet/minecraft/util/math/BlockPos" +
+                 "$MutableBlockPos;)V",
+        at = @At(value = "HEAD"))
+    private boolean showBarrierParticlesHook(boolean holdingBarrier)
+    {
+        return NO_RENDER.returnIfPresent(NoRender::showBarriers, false)
+                || holdingBarrier;
     }
 
-    @Inject(method={"onEntityAdded"}, at={@At(value="HEAD")})
+
+    @Inject(method = "onEntityAdded", at = @At("HEAD"))
     private void onEntityAdded(Entity entity, CallbackInfo info) {
-        Bus.EVENT_BUS.post(new EntityChunkEvent(Stage.PRE, entity));
+        Bus.EVENT_BUS.post(new EntityChunkEvent(
+                Stage.PRE,
+                entity));
     }
 
-    @Inject(method={"onEntityRemoved"}, at={@At(value="HEAD")})
+    @Inject(method = "onEntityRemoved", at = @At("HEAD"))
     private void onEntityRemoved(Entity entity, CallbackInfo info) {
-        Bus.EVENT_BUS.post(new EntityChunkEvent(Stage.POST, entity));
+        Bus.EVENT_BUS.post(new EntityChunkEvent(
+                Stage.POST,
+                entity));
     }
 }
-

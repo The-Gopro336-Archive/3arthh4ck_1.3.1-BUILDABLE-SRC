@@ -1,26 +1,26 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.movement.autosprint;
 
 import me.earth.earthhack.api.module.data.DefaultData;
-import me.earth.earthhack.impl.modules.movement.autosprint.AutoSprint;
 
-final class AutoSprintData
-extends DefaultData<AutoSprint> {
-    public AutoSprintData(AutoSprint module) {
+final class AutoSprintData extends DefaultData<AutoSprint>
+{
+    public AutoSprintData(AutoSprint module)
+    {
         super(module);
-        this.register(module.mode, "-Rage will sprint into all directions.\n-Legit normal sprint but you don't have to press the button.");
+        register(module.mode, "-Rage will sprint into all directions.\n-" +
+                "Legit normal sprint but you don't have to press the button.");
     }
 
     @Override
-    public int getColor() {
-        return -1;
+    public int getColor()
+    {
+        return 0xffffffff;
     }
 
     @Override
-    public String getDescription() {
+    public String getDescription()
+    {
         return "Sprints for you.";
     }
-}
 
+}

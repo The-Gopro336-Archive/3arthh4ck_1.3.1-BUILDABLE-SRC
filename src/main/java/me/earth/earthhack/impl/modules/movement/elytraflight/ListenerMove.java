@@ -1,18 +1,7 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.init.Items
- *  net.minecraft.inventory.EntityEquipmentSlot
- *  net.minecraft.item.ItemElytra
- *  net.minecraft.item.ItemStack
- *  net.minecraft.util.math.MathHelper
- */
 package me.earth.earthhack.impl.modules.movement.elytraflight;
 
 import me.earth.earthhack.impl.event.events.movement.MoveEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
-import me.earth.earthhack.impl.modules.movement.elytraflight.ElytraFlight;
 import me.earth.earthhack.impl.util.minecraft.MovementUtil;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -20,124 +9,170 @@ import net.minecraft.item.ItemElytra;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 
-final class ListenerMove
-extends ModuleListener<ElytraFlight, MoveEvent> {
+final class ListenerMove extends ModuleListener<ElytraFlight, MoveEvent> {
     public ListenerMove(ElytraFlight module) {
         super(module, MoveEvent.class);
     }
 
     @Override
     public void invoke(MoveEvent event) {
-        ItemStack stack = ListenerMove.mc.player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-        if (stack.getItem() == Items.ELYTRA && ItemElytra.isUsable((ItemStack)stack)) {
-            switch (((ElytraFlight)this.module).mode.getValue()) {
-                case Wasp: {
-                    if (!ListenerMove.mc.player.isElytraFlying()) {
+        ItemStack stack = mc.player
+                .getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+
+        if (stack.getItem() == Items.ELYTRA && ItemElytra.isUsable(stack)) {
+            switch (module.mode.getValue()) {
+                case Wasp:
+                    if (!mc.player.isElytraFlying()) {
                         return;
                     }
-                    double vSpeed = ListenerMove.mc.gameSettings.keyBindJump.isKeyDown() ? ((ElytraFlight)this.module).vSpeed.getValue() : (ListenerMove.mc.gameSettings.keyBindSneak.isKeyDown() ? -((ElytraFlight)this.module).vSpeed.getValue().doubleValue() : 0.0);
+
+                    double vSpeed = mc.gameSettings.keyBindJump.isKeyDown()
+                            ? module.vSpeed.getValue()
+                            : mc.gameSettings.keyBindSneak.isKeyDown()
+                            ? -module.vSpeed.getValue()
+                            : 0;
+
                     event.setY(vSpeed);
-                    ListenerMove.mc.player.setVelocity(0.0, 0.0, 0.0);
-                    ListenerMove.mc.player.motionY = vSpeed;
-                    ListenerMove.mc.player.moveVertical = (float)vSpeed;
-                    if (MovementUtil.noMovementKeys() && !ListenerMove.mc.gameSettings.keyBindJump.isKeyDown() && !ListenerMove.mc.gameSettings.keyBindSneak.isKeyDown()) {
-                        event.setX(0.0);
-                        event.setY(0.0);
-                        event.setY(((ElytraFlight)this.module).antiKick.getValue() != false ? (double)(-((ElytraFlight)this.module).glide.getValue().floatValue()) : 0.0);
+                    mc.player.setVelocity(0, 0, 0);
+                    mc.player.motionY = vSpeed;
+                    mc.player.moveVertical = (float) vSpeed;
+
+                    if (MovementUtil.noMovementKeys()
+                            && !mc.gameSettings.keyBindJump.isKeyDown()
+                            && !mc.gameSettings.keyBindSneak.isKeyDown()) {
+
+                        event.setX(0);
+                        event.setY(0);
+                        event.setY(module.antiKick.getValue() ? -module.glide.getValue() : 0);
                         return;
                     }
-                    MovementUtil.strafe(event, (double)((ElytraFlight)this.module).hSpeed.getValue());
+
+                    MovementUtil.strafe(event, module.hSpeed.getValue());
                     break;
-                }
-                case Packet: {
-                    if (ListenerMove.mc.player.onGround && ((ElytraFlight)this.module).noGround.getValue().booleanValue()) break;
-                    if (((ElytraFlight)this.module).accel.getValue().booleanValue()) {
-                        if (((ElytraFlight)this.module).lag) {
-                            ((ElytraFlight)this.module).speed = 1.0;
-                            ((ElytraFlight)this.module).lag = false;
-                        }
-                        if (((ElytraFlight)this.module).speed < ((ElytraFlight)this.module).hSpeed.getValue()) {
-                            ((ElytraFlight)this.module).speed += 0.1;
-                        }
-                        if (((ElytraFlight)this.module).speed - 0.1 > ((ElytraFlight)this.module).hSpeed.getValue()) {
-                            ((ElytraFlight)this.module).speed -= 0.1;
-                        }
-                    } else {
-                        ((ElytraFlight)this.module).speed = ((ElytraFlight)this.module).hSpeed.getValue();
-                    }
-                    if (!MovementUtil.anyMovementKeys() && !ListenerMove.mc.player.collided && ((ElytraFlight)this.module).antiKick.getValue().booleanValue()) {
-                        if (((ElytraFlight)this.module).timer.passed(1000L)) {
-                            ((ElytraFlight)this.module).lag = true;
-                            ListenerMove.mc.player.motionX += 0.03 * Math.sin(Math.toRadians(++((ElytraFlight)this.module).kick * 4));
-                            ListenerMove.mc.player.motionZ += 0.03 * Math.cos(Math.toRadians(((ElytraFlight)this.module).kick * 4));
-                        }
-                    } else {
-                        ((ElytraFlight)this.module).timer.reset();
-                        ((ElytraFlight)this.module).lag = false;
-                    }
-                    if (((ElytraFlight)this.module).vertical.getValue().booleanValue() && ListenerMove.mc.player.movementInput.jump) {
-                        ListenerMove.mc.player.motionY = ((ElytraFlight)this.module).vSpeed.getValue();
-                        event.setY(((ElytraFlight)this.module).vSpeed.getValue());
-                    } else if (ListenerMove.mc.player.movementInput.sneak) {
-                        ListenerMove.mc.player.motionY = -((ElytraFlight)this.module).vSpeed.getValue().doubleValue();
-                        event.setY(-((ElytraFlight)this.module).vSpeed.getValue().doubleValue());
-                    } else if (((ElytraFlight)this.module).ncp.getValue().booleanValue()) {
-                        if (ListenerMove.mc.player.ticksExisted % 32 != 0 || ((ElytraFlight)this.module).lag || !(Math.abs(event.getX()) >= 0.05) && !(Math.abs(event.getZ()) >= 0.05)) {
-                            ListenerMove.mc.player.motionY = -2.0E-4;
-                            event.setY(-2.0E-4);
+                case Packet:
+                    if (!mc.player.onGround || !module.noGround.getValue()) {
+                        if (module.accel.getValue()) {
+                            if (module.lag) {
+                                module.speed = 1.0;
+                                module.lag = false;
+                            }
+
+                            if (module.speed < module.hSpeed.getValue()) {
+                                module.speed += 0.1;
+                            }
+
+                            if (module.speed - 0.1D > module.hSpeed.getValue()) {
+                                module.speed -= 0.1;
+                            }
                         } else {
-                            ((ElytraFlight)this.module).speed -= ((ElytraFlight)this.module).speed / 2.0 * 0.1;
-                            ListenerMove.mc.player.motionY = -2.0E-4;
-                            event.setY(0.006200000000000001);
+                            module.speed = module.hSpeed.getValue();
                         }
-                    } else {
-                        ListenerMove.mc.player.motionY = 0.0;
-                        event.setY(0.0);
+
+                        if (!MovementUtil.anyMovementKeys()
+                                && !mc.player.collided
+                                && module.antiKick.getValue()) {
+                            if (module.timer.passed(1000)) {
+                                module.lag = true;
+                                mc.player.motionX += 0.03
+                                        * Math.sin(Math.toRadians(++module.kick * 4));
+                                mc.player.motionZ += 0.03
+                                        * Math.cos(Math.toRadians(module.kick * 4));
+                            }
+                        } else {
+                            module.timer.reset();
+                            module.lag = false;
+                        }
+
+                        if (module.vertical.getValue()
+                                && mc.player.movementInput.jump) {
+                            mc.player.motionY = module.vSpeed.getValue();
+                            event.setY(module.vSpeed.getValue());
+                        } else if (mc.player.movementInput.sneak) {
+                            mc.player.motionY = -module.vSpeed.getValue();
+                            event.setY(-module.vSpeed.getValue());
+                        } else if (module.ncp.getValue()) {
+                            if (mc.player.ticksExisted % 32 != 0
+                                    || module.lag
+                                    || !(Math.abs(event.getX()) >= 0.05D)
+                                    && !(Math.abs(event.getZ()) >= 0.05D)) {
+                                mc.player.motionY = -2.0E-4;
+                                event.setY(-2.0E-4);
+                            } else {
+                                module.speed = module.speed - module.speed / 2.0 * 0.1;
+                                mc.player.motionY = -2.0E-4D;
+                                event.setY(0.006200000000000001);
+                            }
+                        } else {
+                            mc.player.motionY = 0.0;
+                            event.setY(0.0);
+                        }
+
+                        event.setX(event.getX() * (module.lag ? 0.5 : module.speed));
+                        event.setZ(event.getZ() * (module.lag ? 0.5 : module.speed));
                     }
-                    event.setX(event.getX() * (((ElytraFlight)this.module).lag ? 0.5 : ((ElytraFlight)this.module).speed));
-                    event.setZ(event.getZ() * (((ElytraFlight)this.module).lag ? 0.5 : ((ElytraFlight)this.module).speed));
+
                     break;
-                }
-                case Boost: {
-                    if (ListenerMove.mc.player.isElytraFlying() && ((ElytraFlight)this.module).noWater.getValue().booleanValue() && ListenerMove.mc.player.isInWater()) {
+                case Boost:
+                    if (mc.player.isElytraFlying()
+                            && module.noWater.getValue()
+                            && mc.player.isInWater()) {
                         return;
                     }
-                    if (!ListenerMove.mc.player.movementInput.jump || !ListenerMove.mc.player.isElytraFlying()) break;
-                    float yaw = ListenerMove.mc.player.rotationYaw * ((float)Math.PI / 180);
-                    ListenerMove.mc.player.motionX -= (double)(MathHelper.sin((float)yaw) * 0.15f);
-                    ListenerMove.mc.player.motionZ += (double)(MathHelper.cos((float)yaw) * 0.15f);
-                    break;
-                }
-                case Control: {
-                    if (!ListenerMove.mc.player.isElytraFlying()) break;
-                    if (!ListenerMove.mc.player.movementInput.forwardKeyDown && !ListenerMove.mc.player.movementInput.sneak) {
-                        ListenerMove.mc.player.setVelocity(0.0, 0.0, 0.0);
-                        break;
+
+                    if (mc.player.movementInput.jump
+                            && mc.player.isElytraFlying()) {
+                        float yaw = mc.player.rotationYaw * 0.017453292f;
+                        mc.player.motionX -= MathHelper.sin(yaw) * 0.15f;
+                        mc.player.motionZ += MathHelper.cos(yaw) * 0.15f;
                     }
-                    if (!ListenerMove.mc.player.movementInput.forwardKeyDown || !((ElytraFlight)this.module).vertical.getValue().booleanValue() && !(ListenerMove.mc.player.prevRotationPitch > 0.0f)) break;
-                    float yaw = (float)Math.toRadians(ListenerMove.mc.player.rotationYaw);
-                    double speed = ((ElytraFlight)this.module).hSpeed.getValue() / 10.0;
-                    ListenerMove.mc.player.motionX = (double)MathHelper.sin((float)yaw) * -speed;
-                    ListenerMove.mc.player.motionZ = (double)MathHelper.cos((float)yaw) * speed;
+
                     break;
-                }
-                case Normal: {
-                    if (ListenerMove.mc.player.isElytraFlying() && ((ElytraFlight)this.module).noWater.getValue().booleanValue() && ListenerMove.mc.player.isInWater()) {
+                case Control:
+                    if (mc.player.isElytraFlying()) {
+                        if (!mc.player.movementInput.forwardKeyDown
+                                && !mc.player.movementInput.sneak) {
+                            mc.player.setVelocity(0.0, 0.0, 0.0);
+                        } else if (mc.player.movementInput.forwardKeyDown
+                                && (module.vertical.getValue()
+                                || mc.player.prevRotationPitch > 0.0F)) {
+                            float yaw = (float) Math.toRadians(mc.player.rotationYaw);
+                            double speed = module.hSpeed.getValue() / 10.0;
+                            mc.player.motionX = MathHelper.sin(yaw) * -speed;
+                            mc.player.motionZ = MathHelper.cos(yaw) * speed;
+                        }
+                    }
+
+                    break;
+                case Normal:
+                    if (mc.player.isElytraFlying()
+                            && module.noWater.getValue()
+                            && mc.player.isInWater()) {
                         return;
                     }
-                    if (ListenerMove.mc.player.movementInput.jump || !ListenerMove.mc.inGameHasFocus && ListenerMove.mc.player.isElytraFlying()) {
+
+                    if (mc.player.movementInput.jump
+                            || !mc.inGameHasFocus
+                            && mc.player.isElytraFlying()) {
                         event.setY(0.0);
                     }
-                    if (!ListenerMove.mc.inGameHasFocus || !((ElytraFlight)this.module).instant.getValue().booleanValue() || !ListenerMove.mc.player.movementInput.jump || ListenerMove.mc.player.isElytraFlying() || !((ElytraFlight)this.module).timer.passed(1000L)) break;
-                    ListenerMove.mc.player.setJumping(false);
-                    ListenerMove.mc.player.setSprinting(true);
-                    ListenerMove.mc.player.jump();
-                    ((ElytraFlight)this.module).sendFallPacket();
-                    ((ElytraFlight)this.module).timer.reset();
-                    return;
-                }
+
+                    if (mc.inGameHasFocus
+                            && module.instant.getValue()
+                            && mc.player.movementInput.jump
+                            && !mc.player.isElytraFlying()
+                            && module.timer.passed(1000)) {
+                        mc.player.setJumping(false);
+                        mc.player.setSprinting(true);
+                        mc.player.jump();
+                        module.sendFallPacket();
+                        module.timer.reset();
+                        return;
+                    }
+
+                    break;
+                default:
             }
         }
     }
-}
 
+}

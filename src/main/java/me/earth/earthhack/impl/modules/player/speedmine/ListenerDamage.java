@@ -1,14 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.player.EntityPlayer
- *  net.minecraft.network.Packet
- *  net.minecraft.network.play.client.CPacketPlayerDigging
- *  net.minecraft.network.play.client.CPacketPlayerDigging$Action
- *  net.minecraft.util.EnumHand
- *  net.minecraft.world.World
- */
 package me.earth.earthhack.impl.modules.player.speedmine;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -20,121 +9,188 @@ import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.combat.antisurround.AntiSurround;
 import me.earth.earthhack.impl.modules.misc.nuker.Nuker;
-import me.earth.earthhack.impl.modules.player.speedmine.Speedmine;
 import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
 import me.earth.earthhack.impl.util.minecraft.Swing;
 import me.earth.earthhack.impl.util.minecraft.blocks.mine.MineUtil;
 import me.earth.earthhack.impl.util.network.NetworkUtil;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.util.EnumHand;
-import net.minecraft.world.World;
 
-final class ListenerDamage
-extends ModuleListener<Speedmine, DamageBlockEvent> {
-    private static final ModuleCache<Nuker> NUKER = Caches.getModule(Nuker.class);
-    private static final SettingCache<Boolean, BooleanSetting, Nuker> NUKE = Caches.getSetting(Nuker.class, BooleanSetting.class, "Nuke", false);
-    private static final ModuleCache<AntiSurround> ANTISURROUND = Caches.getModule(AntiSurround.class);
+final class ListenerDamage extends ModuleListener<Speedmine, DamageBlockEvent>
+{
+    private static final ModuleCache<Nuker> NUKER =
+        Caches.getModule(Nuker.class);
+    private static final SettingCache<Boolean, BooleanSetting, Nuker> NUKE =
+        Caches.getSetting(Nuker.class, BooleanSetting.class, "Nuke", false);
+    private static final ModuleCache<AntiSurround> ANTISURROUND =
+        Caches.getModule(AntiSurround.class);
 
-    public ListenerDamage(Speedmine module) {
+    public ListenerDamage(Speedmine module)
+    {
         super(module, DamageBlockEvent.class);
     }
 
     @Override
-    public void invoke(DamageBlockEvent event) {
-        if (ANTISURROUND.returnIfPresent(AntiSurround::isActive, false).booleanValue()) {
+    public void invoke(DamageBlockEvent event)
+    {
+        if (ANTISURROUND.returnIfPresent(AntiSurround::isActive, false))
+        {
             return;
         }
-        ((Speedmine)this.module).checkReset();
-        if (!(!MineUtil.canBreak(event.getPos()) || PlayerUtil.isCreative((EntityPlayer)ListenerDamage.mc.player) || NUKER.isEnabled() && NUKE.getValue().booleanValue())) {
-            switch (((Speedmine)this.module).mode.getValue()) {
-                case Reset: {
-                    this.setPos(event);
+
+        module.checkReset();
+        if (MineUtil.canBreak(event.getPos())
+                && !PlayerUtil.isCreative(mc.player)
+                && (!NUKER.isEnabled() || !NUKE.getValue()))
+        {
+            switch (module.mode.getValue())
+            {
+                case Reset:
+                    setPos(event);
                     break;
-                }
-                case Packet: 
-                case Civ: {
-                    this.setPos(event);
-                    ListenerDamage.mc.player.swingArm(EnumHand.MAIN_HAND);
-                    CPacketPlayerDigging start = new CPacketPlayerDigging(CPacketPlayerDigging.Action.START_DESTROY_BLOCK, event.getPos(), event.getFacing());
-                    CPacketPlayerDigging stop = new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, event.getPos(), event.getFacing());
-                    if (((Speedmine)this.module).event.getValue().booleanValue()) {
-                        ListenerDamage.mc.player.connection.sendPacket((Packet)start);
-                        ListenerDamage.mc.player.connection.sendPacket((Packet)stop);
-                    } else {
+                case Packet:
+                case Civ:
+                    setPos(event);
+                    mc.player.swingArm(EnumHand.MAIN_HAND);
+
+                    CPacketPlayerDigging start =
+                            new CPacketPlayerDigging(CPacketPlayerDigging
+                                                    .Action
+                                                        .START_DESTROY_BLOCK,
+                                                    event.getPos(),
+                                                    event.getFacing());
+                    CPacketPlayerDigging stop  =
+                            new CPacketPlayerDigging(CPacketPlayerDigging
+                                                    .Action
+                                                        .STOP_DESTROY_BLOCK,
+                                                    event.getPos(),
+                                                    event.getFacing());
+
+                    if (module.event.getValue())
+                    {
+                        mc.player.connection.sendPacket(start);
+                        mc.player.connection.sendPacket(stop);
+                    }
+                    else
+                    {
                         NetworkUtil.sendPacketNoEvent(start, false);
                         NetworkUtil.sendPacketNoEvent(stop, false);
                     }
-                    if (((Speedmine)this.module).swingStop.getValue().booleanValue()) {
+
+                    if (module.swingStop.getValue())
+                    {
                         Swing.Packet.swing(EnumHand.MAIN_HAND);
                     }
+
                     event.setCancelled(true);
                     break;
-                }
-                case Damage: {
-                    this.setPos(event);
-                    if (!(((IPlayerControllerMP)ListenerDamage.mc.playerController).getCurBlockDamageMP() >= ((Speedmine)this.module).limit.getValue().floatValue())) break;
-                    ((IPlayerControllerMP)ListenerDamage.mc.playerController).setCurBlockDamageMP(1.0f);
+                case Damage:
+                    setPos(event);
+                    if (((IPlayerControllerMP) mc.playerController)
+                            .getCurBlockDamageMP() >= module.limit.getValue())
+                    {
+                        ((IPlayerControllerMP) mc.playerController)
+                                .setCurBlockDamageMP(1.0f);
+                    }
                     break;
-                }
-                case Smart: {
+                case Smart:
                     boolean aborted = false;
-                    if (((Speedmine)this.module).pos != null && !((Speedmine)this.module).pos.equals((Object)event.getPos())) {
-                        ((Speedmine)this.module).abortCurrentPos();
+                    if (module.pos != null
+                            && !module.pos.equals(event.getPos()))
+                    {
+                        module.abortCurrentPos();
                         aborted = true;
                     }
-                    if (!aborted && !((Speedmine)this.module).timer.passed(((Speedmine)this.module).delay.getValue().intValue())) break;
-                    if (!aborted && ((Speedmine)this.module).pos != null && ((Speedmine)this.module).pos.equals((Object)event.getPos())) {
-                        ((Speedmine)this.module).abortCurrentPos();
-                        ((Speedmine)this.module).timer.reset();
-                        return;
+
+                    if (aborted || module.timer.passed(module.delay.getValue()))
+                    {
+                        if (!aborted && module.pos != null
+                                && module.pos.equals(event.getPos()))
+                        {
+                            module.abortCurrentPos();
+                            module.timer.reset();
+                            return;
+                        }
+
+                        setPos(event);
+                        mc.player.swingArm(EnumHand.MAIN_HAND);
+                        CPacketPlayerDigging packet =
+                                new CPacketPlayerDigging(CPacketPlayerDigging
+                                                    .Action
+                                                        .START_DESTROY_BLOCK,
+                                                    event.getPos(),
+                                                    event.getFacing());
+
+                        if (module.event.getValue())
+                        {
+                            mc.player.connection.sendPacket(packet);
+                        }
+                        else
+                        {
+                            NetworkUtil.sendPacketNoEvent(packet, false);
+                        }
+
+                        event.setCancelled(true);
+                        module.timer.reset();
                     }
-                    this.setPos(event);
-                    ListenerDamage.mc.player.swingArm(EnumHand.MAIN_HAND);
-                    CPacketPlayerDigging packet = new CPacketPlayerDigging(CPacketPlayerDigging.Action.START_DESTROY_BLOCK, event.getPos(), event.getFacing());
-                    if (((Speedmine)this.module).event.getValue().booleanValue()) {
-                        ListenerDamage.mc.player.connection.sendPacket((Packet)packet);
-                    } else {
-                        NetworkUtil.sendPacketNoEvent(packet, false);
-                    }
-                    event.setCancelled(true);
-                    ((Speedmine)this.module).timer.reset();
                     break;
-                }
-                case Instant: {
+                case Instant:
                     boolean abortedd = false;
-                    if (((Speedmine)this.module).pos != null && !((Speedmine)this.module).pos.equals((Object)event.getPos())) {
-                        ((Speedmine)this.module).abortCurrentPos();
+                    if (module.pos != null
+                            && !module.pos.equals(event.getPos()))
+                    {
+                        module.abortCurrentPos();
                         abortedd = true;
                     }
-                    if (!abortedd && !((Speedmine)this.module).timer.passed(((Speedmine)this.module).delay.getValue().intValue())) break;
-                    if (!abortedd && ((Speedmine)this.module).pos != null && ((Speedmine)this.module).pos.equals((Object)event.getPos())) {
-                        ((Speedmine)this.module).abortCurrentPos();
-                        ((Speedmine)this.module).timer.reset();
-                        return;
+
+                    if (abortedd || module.timer.passed(module.delay.getValue()))
+                    {
+                        if (!abortedd && module.pos != null
+                                && module.pos.equals(event.getPos()))
+                        {
+                            module.abortCurrentPos();
+                            module.timer.reset();
+                            return;
+                        }
+
+                        setPos(event);
+                        mc.player.swingArm(EnumHand.MAIN_HAND);
+                        CPacketPlayerDigging packet =
+                                new CPacketPlayerDigging(CPacketPlayerDigging
+                                        .Action
+                                        .START_DESTROY_BLOCK,
+                                        event.getPos(),
+                                        event.getFacing());
+
+                        if (module.event.getValue())
+                        {
+                            mc.player.connection.sendPacket(packet);
+                        }
+                        else
+                        {
+                            NetworkUtil.sendPacketNoEvent(packet, false);
+                        }
+
+                        module.shouldAbort = true;
+
+                        event.setCancelled(true);
+                        module.timer.reset();
                     }
-                    this.setPos(event);
-                    ListenerDamage.mc.player.swingArm(EnumHand.MAIN_HAND);
-                    CPacketPlayerDigging packet = new CPacketPlayerDigging(CPacketPlayerDigging.Action.START_DESTROY_BLOCK, event.getPos(), event.getFacing());
-                    if (((Speedmine)this.module).event.getValue().booleanValue()) {
-                        ListenerDamage.mc.player.connection.sendPacket((Packet)packet);
-                    } else {
-                        NetworkUtil.sendPacketNoEvent(packet, false);
-                    }
-                    ((Speedmine)this.module).shouldAbort = true;
-                    event.setCancelled(true);
-                    ((Speedmine)this.module).timer.reset();
-                }
+                    break;
+
             }
         }
     }
 
-    private void setPos(DamageBlockEvent event) {
-        ((Speedmine)this.module).reset();
-        ((Speedmine)this.module).pos = event.getPos();
-        ((Speedmine)this.module).facing = event.getFacing();
-        ((Speedmine)this.module).bb = ListenerDamage.mc.world.getBlockState(((Speedmine)this.module).pos).getSelectedBoundingBox((World)ListenerDamage.mc.world, ((Speedmine)this.module).pos).grow((double)0.002f);
+    private void setPos(DamageBlockEvent event)
+    {
+        module.reset();
+        module.pos        = event.getPos();
+        module.facing     = event.getFacing();
+        module.bb         = mc.world
+                                .getBlockState(module.pos)
+                                .getSelectedBoundingBox(mc.world, module.pos)
+                                .grow(0.0020000000949949026);
     }
-}
 
+}

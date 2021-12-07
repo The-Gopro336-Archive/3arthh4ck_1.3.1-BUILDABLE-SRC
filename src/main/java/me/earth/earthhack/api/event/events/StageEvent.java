@@ -1,21 +1,24 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.api.event.events;
 
-import me.earth.earthhack.api.event.events.Event;
-import me.earth.earthhack.api.event.events.Stage;
-
-public class StageEvent
-extends Event {
+/**
+ * An Event that has different {@link Stage}s.
+ *
+ * Having 2 Events should be better if you listen
+ * to only one of the stages sometimes, but otherwise
+ * this Event is convenient.
+ */
+public class StageEvent extends Event
+{
     private final Stage stage;
 
-    public StageEvent(Stage stage) {
+    public StageEvent(Stage stage)
+    {
         this.stage = stage;
     }
 
-    public Stage getStage() {
-        return this.stage;
+    public Stage getStage()
+    {
+        return stage;
     }
-}
 
+}

@@ -1,30 +1,23 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.client.Minecraft
- *  net.minecraft.client.gui.ScaledResolution
- */
 package me.earth.earthhack.impl.gui.hud;
 
-import me.earth.earthhack.impl.gui.hud.ICoordinate;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 
-public abstract class AbstractGuiElement
-implements ICoordinate {
+public abstract class AbstractGuiElement implements ICoordinate {
+
     private float x;
     private float y;
     private float width;
     private float height;
     private String name;
+
     protected Minecraft mc = Minecraft.getMinecraft();
 
     public AbstractGuiElement(String name) {
         this.name = name;
-        this.x = 0.0f;
-        this.y = 0.0f;
-        this.width = 300.0f;
+        this.x = 0;
+        this.y = 0;
+        this.width = 300;
         this.height = new ScaledResolution(Minecraft.getMinecraft()).getScaledHeight();
     }
 
@@ -97,5 +90,5 @@ implements ICoordinate {
     public void setHeight(float height) {
         this.height = height;
     }
-}
 
+}

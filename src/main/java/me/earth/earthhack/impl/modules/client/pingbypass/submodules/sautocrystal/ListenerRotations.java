@@ -1,9 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.init.Items
- */
 package me.earth.earthhack.impl.modules.client.pingbypass.submodules.sautocrystal;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -13,30 +7,48 @@ import me.earth.earthhack.impl.event.events.network.MotionUpdateEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.client.pingbypass.PingBypass;
-import me.earth.earthhack.impl.modules.client.pingbypass.submodules.sautocrystal.ServerAutoCrystal;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
 import net.minecraft.init.Items;
 
-final class ListenerRotations
-extends ModuleListener<ServerAutoCrystal, MotionUpdateEvent> {
-    private static final ModuleCache<PingBypass> PINGBYPASS = Caches.getModule(PingBypass.class);
-    private float offset = 4.0E-4f;
+/**
+ * PingBypass AutoCrystal simulates onUpdateWalkingPlayer
+ * by using the packets we send. We always want to produce a
+ * rotation packet so PingBypass can spoof it.
+ */
+final class ListenerRotations extends
+        ModuleListener<ServerAutoCrystal, MotionUpdateEvent>
+{
+    private static final ModuleCache<PingBypass> PINGBYPASS =
+            Caches.getModule(PingBypass.class);
 
-    public ListenerRotations(ServerAutoCrystal module) {
+    /** The offset made to yaw and pitch. */
+    private float offset = 0.0004f;
+
+    public ListenerRotations(ServerAutoCrystal module)
+    {
         super(module, MotionUpdateEvent.class, Integer.MIN_VALUE);
     }
 
     @Override
-    public void invoke(MotionUpdateEvent event) {
-        if (event.getStage() == Stage.PRE && PINGBYPASS.isEnabled() && InventoryUtil.isHolding(Items.END_CRYSTAL)) {
-            float yawDif = event.getYaw() - ((IEntityPlayerSP)ListenerRotations.mc.player).getLastReportedYaw();
-            float pitchDif = event.getPitch() - ((IEntityPlayerSP)ListenerRotations.mc.player).getLastReportedPitch();
-            if (yawDif == 0.0f && pitchDif == 0.0f) {
-                this.offset = -this.offset;
-                event.setYaw(event.getYaw() + this.offset);
-                event.setPitch(event.getPitch() + this.offset);
+    public void invoke(MotionUpdateEvent event)
+    {
+        if (event.getStage() == Stage.PRE && PINGBYPASS.isEnabled())
+        {
+            if (InventoryUtil.isHolding(Items.END_CRYSTAL))
+            {
+                final float yawDif   = event.getYaw()
+                        - ((IEntityPlayerSP) mc.player).getLastReportedYaw();
+                final float pitchDif = event.getPitch()
+                        - ((IEntityPlayerSP) mc.player).getLastReportedPitch();
+
+                if (yawDif == 0.0f && pitchDif == 0.0f)
+                {
+                    offset = -offset;
+                    event.setYaw(event.getYaw() + offset);
+                    event.setPitch(event.getPitch() + offset);
+                }
             }
         }
     }
-}
 
+}

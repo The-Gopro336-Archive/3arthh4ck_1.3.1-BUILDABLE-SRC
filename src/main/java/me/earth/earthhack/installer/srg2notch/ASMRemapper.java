@@ -1,13 +1,6 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  org.objectweb.asm.tree.ClassNode
- */
 package me.earth.earthhack.installer.srg2notch;
 
 import me.earth.earthhack.impl.core.util.AsmUtil;
-import me.earth.earthhack.installer.srg2notch.Mapping;
 import me.earth.earthhack.installer.srg2notch.remappers.AnnotationRemapper;
 import me.earth.earthhack.installer.srg2notch.remappers.ClassRemapper;
 import me.earth.earthhack.installer.srg2notch.remappers.FieldRemapper;
@@ -16,29 +9,41 @@ import me.earth.earthhack.installer.srg2notch.remappers.MethodRemapper;
 import me.earth.earthhack.installer.srg2notch.remappers.Remapper;
 import org.objectweb.asm.tree.ClassNode;
 
-public class ASMRemapper {
-    private final Remapper[] reMappers = new Remapper[5];
+public class ASMRemapper
+{
+    private final Remapper[] reMappers;
 
-    public ASMRemapper() {
-        this.reMappers[0] = new ClassRemapper();
-        this.reMappers[1] = new FieldRemapper();
-        this.reMappers[2] = new MethodRemapper();
-        this.reMappers[3] = new InstructionRemapper();
-        this.reMappers[4] = new AnnotationRemapper();
+    public ASMRemapper()
+    {
+        reMappers    = new Remapper[5];
+        reMappers[0] = new ClassRemapper();
+        reMappers[1] = new FieldRemapper();
+        reMappers[2] = new MethodRemapper();
+        reMappers[3] = new InstructionRemapper();
+        reMappers[4] = new AnnotationRemapper();
     }
 
-    public byte[] transform(byte[] clazz, Mapping mapping) {
+    public byte[] transform(byte[] clazz, Mapping mapping)
+    {
         ClassNode cn;
-        try {
-            cn = AsmUtil.read(clazz, new int[0]);
+        try
+        {
+            cn = AsmUtil.read(clazz);
         }
-        catch (IllegalArgumentException e) {
+        catch (IllegalArgumentException e)
+        {
+            // bad class file version.
+            // kinda lazy solution, we could just change AsmUtil
+            // in general but whever.
             return clazz;
         }
-        for (Remapper remapper : this.reMappers) {
+
+        for (Remapper remapper : reMappers)
+        {
             remapper.remap(cn, mapping);
         }
-        return AsmUtil.write(cn, new int[0]);
-    }
-}
 
+        return AsmUtil.write(cn);
+    }
+
+}

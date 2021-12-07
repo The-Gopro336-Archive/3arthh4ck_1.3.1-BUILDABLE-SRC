@@ -1,34 +1,31 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  org.objectweb.asm.tree.ClassNode
- */
 package me.earth.earthhack.impl.core.transfomer.patch;
 
-import me.earth.earthhack.impl.core.transfomer.patch.AbstractPatch;
 import org.objectweb.asm.tree.ClassNode;
 
-public class FinishingPatch
-extends AbstractPatch {
+public class FinishingPatch extends AbstractPatch
+{
     private boolean finished;
 
-    public FinishingPatch(String name, String transformed) {
+    public FinishingPatch(String name, String transformed)
+    {
         super(name, transformed);
     }
 
     @Override
-    public void apply(ClassNode node) {
-        this.setFinished(true);
+    public void apply(ClassNode node)
+    {
+        setFinished(true);
     }
 
     @Override
-    public boolean isFinished() {
-        return this.finished;
+    public boolean isFinished()
+    {
+        return finished;
     }
 
-    protected void setFinished(boolean finished) {
+    protected void setFinished(boolean finished)
+    {
         this.finished = finished;
     }
-}
 
+}

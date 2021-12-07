@@ -1,245 +1,293 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.util.text;
 
-public enum TextColor {
-    None{
-
+/**
+ * TextColors for {@link me.earth.earthhack.impl.gui.font.CustomFontRenderer}
+ * and {@link net.minecraft.client.gui.FontRenderer}. Note that theres also
+ * {@link TextColor#CUSTOM}, but its not contained in the enum, because
+ * it's more complex.
+ *
+ * Note that {@link TextColor#None} exists, when iterating over this enums
+ * values.
+ */
+public enum TextColor
+{
+    None()
+    {
         @Override
-        public String getColor() {
+        public String getColor()
+        {
             return "";
         }
-    }
-    ,
-    Black{
-
+    },
+    Black()
+    {
         @Override
-        public String getColor() {
-            return TextColor.BLACK;
+        public String getColor()
+        {
+            return BLACK;
         }
-    }
-    ,
-    White{
-
+    },
+    White()
+    {
         @Override
-        public String getColor() {
-            return TextColor.WHITE;
+        public String getColor()
+        {
+            return WHITE;
         }
-    }
-    ,
-    DarkBlue{
-
+    },
+    DarkBlue
+    {
         @Override
-        public String getColor() {
-            return TextColor.DARK_BLUE;
+        public String getColor()
+        {
+            return DARK_BLUE;
         }
-    }
-    ,
-    DarkGreen{
-
+    },
+    DarkGreen
+    {
         @Override
-        public String getColor() {
-            return TextColor.DARK_GREEN;
+        public String getColor()
+        {
+            return DARK_GREEN;
         }
-    }
-    ,
-    DarkAqua{
-
+    },
+    DarkAqua
+    {
         @Override
-        public String getColor() {
-            return TextColor.DARK_AQUA;
+        public String getColor()
+        {
+            return DARK_AQUA;
         }
-    }
-    ,
-    DarkRed{
-
+    },
+    DarkRed
+    {
         @Override
-        public String getColor() {
-            return TextColor.DARK_RED;
+        public String getColor()
+        {
+            return DARK_RED;
         }
-    }
-    ,
-    DarkPurple{
-
+    },
+    DarkPurple
+    {
         @Override
-        public String getColor() {
-            return TextColor.DARK_PURPLE;
+        public String getColor()
+        {
+            return DARK_PURPLE;
         }
-    }
-    ,
-    Gold{
-
+    },
+    Gold
+    {
         @Override
-        public String getColor() {
-            return TextColor.GOLD;
+        public String getColor()
+        {
+            return GOLD;
         }
-    }
-    ,
-    Gray{
-
+    },
+    Gray
+    {
         @Override
-        public String getColor() {
-            return TextColor.GRAY;
+        public String getColor()
+        {
+            return GRAY;
         }
-    }
-    ,
-    DarkGray{
-
+    },
+    DarkGray
+    {
         @Override
-        public String getColor() {
-            return TextColor.DARK_GRAY;
+        public String getColor()
+        {
+            return DARK_GRAY;
         }
-    }
-    ,
-    Blue{
-
+    },
+    Blue
+    {
         @Override
-        public String getColor() {
-            return TextColor.BLUE;
+        public String getColor()
+        {
+            return BLUE;
         }
-    }
-    ,
-    Green{
-
+    },
+    Green
+    {
         @Override
-        public String getColor() {
-            return TextColor.GREEN;
+        public String getColor()
+        {
+            return GREEN;
         }
-    }
-    ,
-    Aqua{
-
+    },
+    Aqua
+    {
         @Override
-        public String getColor() {
-            return TextColor.AQUA;
+        public String getColor()
+        {
+            return AQUA;
         }
-    }
-    ,
-    Red{
-
+    },
+    Red
+    {
         @Override
-        public String getColor() {
-            return TextColor.RED;
+        public String getColor()
+        {
+            return RED;
         }
-    }
-    ,
-    LightPurple{
-
+    },
+    LightPurple
+    {
         @Override
-        public String getColor() {
-            return TextColor.LIGHT_PURPLE;
+        public String getColor()
+        {
+            return LIGHT_PURPLE;
         }
-    }
-    ,
-    Yellow{
-
+    },
+    Yellow
+    {
         @Override
-        public String getColor() {
-            return TextColor.YELLOW;
+        public String getColor()
+        {
+            return YELLOW;
         }
-    }
-    ,
-    Obfuscated{
-
+    },
+    Obfuscated
+    {
         @Override
-        public String getColor() {
-            return TextColor.OBFUSCATED;
+        public String getColor()
+        {
+            return OBFUSCATED;
         }
-    }
-    ,
-    Bold{
-
+    },
+    Bold
+    {
         @Override
-        public String getColor() {
-            return TextColor.BOLD;
+        public String getColor()
+        {
+            return BOLD;
         }
-    }
-    ,
-    Strike{
-
+    },
+    Strike
+    {
         @Override
-        public String getColor() {
-            return TextColor.STRIKE;
+        public String getColor()
+        {
+            return STRIKE;
         }
-    }
-    ,
-    Underline{
-
+    },
+    Underline
+    {
         @Override
-        public String getColor() {
-            return TextColor.UNDERLINE;
+        public String getColor()
+        {
+            return UNDERLINE;
         }
-    }
-    ,
-    Italic{
-
+    },
+    Italic
+    {
         @Override
-        public String getColor() {
-            return TextColor.ITALIC;
+        public String getColor()
+        {
+            return ITALIC;
         }
-    }
-    ,
-    Reset{
-
+    },
+    Reset
+    {
         @Override
-        public String getColor() {
-            return TextColor.RESET;
+        public String getColor()
+        {
+            return RESET;
         }
-    }
-    ,
-    Rainbow{
-
+    },
+    Rainbow
+    {
         @Override
-        public String getColor() {
-            return TextColor.RAINBOW;
+        public String getColor()
+        {
+            return RAINBOW;
         }
-    }
-    ,
-    RainbowHorizontal{
-
+    },
+    RainbowHorizontal
+    {
         @Override
-        public String getColor() {
-            return TextColor.RAINBOW_PLUS;
+        public String getColor()
+        {
+            return RAINBOW_PLUS;
         }
-    }
-    ,
-    RainbowVertical{
-
+    },
+    RainbowVertical
+    {
         @Override
-        public String getColor() {
-            return TextColor.RAINBOW_MINUS;
+        public String getColor()
+        {
+            return RAINBOW_MINUS;
+        }
+    },
+    PlayerFace
+    {
+        @Override
+        public String getColor()
+        {
+            return PLAYER_FACE;
         }
     };
 
-    public static final char SECTIONSIGN = '\u00a7';
-    public static final String BLACK = "\u00a70";
-    public static final String DARK_BLUE = "\u00a71";
-    public static final String DARK_GREEN = "\u00a72";
-    public static final String DARK_AQUA = "\u00a73";
-    public static final String DARK_RED = "\u00a74";
-    public static final String DARK_PURPLE = "\u00a75";
-    public static final String GOLD = "\u00a76";
-    public static final String GRAY = "\u00a77";
-    public static final String DARK_GRAY = "\u00a78";
-    public static final String BLUE = "\u00a79";
-    public static final String GREEN = "\u00a7a";
-    public static final String AQUA = "\u00a7b";
-    public static final String RED = "\u00a7c";
-    public static final String LIGHT_PURPLE = "\u00a7d";
-    public static final String YELLOW = "\u00a7e";
-    public static final String WHITE = "\u00a7f";
-    public static final String OBFUSCATED = "\u00a7k";
-    public static final String BOLD = "\u00a7l";
-    public static final String STRIKE = "\u00a7m";
-    public static final String UNDERLINE = "\u00a7n";
-    public static final String ITALIC = "\u00a7o";
-    public static final String RESET = "\u00a7r";
-    public static final String CUSTOM = "\u00a7z";
-    public static final String RAINBOW = "\u00a7y";
-    public static final String RAINBOW_PLUS = "\u00a7+";
-    public static final String RAINBOW_MINUS = "\u00a7-";
+    /** The '§' char every color code starts with. */
+    public static final char SECTIONSIGN  = '\u00A7';
+    /** $ + 0 */
+    public static final String BLACK        = SECTIONSIGN + "0";
+    /** $ + 1 */
+    public static final String DARK_BLUE    = SECTIONSIGN + "1";
+    /** $ + 2 */
+    public static final String DARK_GREEN   = SECTIONSIGN + "2";
+    /** $ + 3 */
+    public static final String DARK_AQUA    = SECTIONSIGN + "3";
+    /** $ + 4 */
+    public static final String DARK_RED     = SECTIONSIGN + "4";
+    /** $ + 5 */
+    public static final String DARK_PURPLE  = SECTIONSIGN + "5";
+    /** $ + 6 */
+    public static final String GOLD         = SECTIONSIGN + "6";
+    /** $ + 7 */
+    public static final String GRAY         = SECTIONSIGN + "7";
+    /** $ + 8 */
+    public static final String DARK_GRAY    = SECTIONSIGN + "8";
+    /** $ + 9 */
+    public static final String BLUE         = SECTIONSIGN + "9";
+    /** $ + a */
+    public static final String GREEN        = SECTIONSIGN + "a";
+    /** $ + b */
+    public static final String AQUA         = SECTIONSIGN + "b";
+    /** $ + c */
+    public static final String RED          = SECTIONSIGN + "c";
+    /** $ + d */
+    public static final String LIGHT_PURPLE = SECTIONSIGN + "d";
+    /** $ + e */
+    public static final String YELLOW       = SECTIONSIGN + "e";
+    /** $ + f */
+    public static final String WHITE        = SECTIONSIGN + "f";
+    /** $ + k */
+    public static final String OBFUSCATED   = SECTIONSIGN + "k";
+    /** $ + l */
+    public static final String BOLD         = SECTIONSIGN + "l";
+    /** $ + m */
+    public static final String STRIKE       = SECTIONSIGN + "m";
+    /** $ + n */
+    public static final String UNDERLINE    = SECTIONSIGN + "n";
+    /** $ + o */
+    public static final String ITALIC       = SECTIONSIGN + "o";
+    /** $ + r */
+    public static final String RESET        = SECTIONSIGN + "r";
+    /** $ + "z" + 32-bit Hex String HAS to follow. */
+    public static final String CUSTOM       = SECTIONSIGN + "z";
+    /** $ + "y" */
+    public static final String RAINBOW      = SECTIONSIGN + "y";
+    /** $ + "+" */
+    public static final String RAINBOW_PLUS = SECTIONSIGN + "+";
+    /** $ + "+" */
+    public static final String RAINBOW_MINUS = SECTIONSIGN + "-";
+    /** $ + "p" + UUID of player must follow. */
+    public static final String PLAYER_FACE = SECTIONSIGN + "p";
 
+    /**
+     * @return the colorCode belonging to the color.
+     */
     public abstract String getColor();
-}
 
+}

@@ -1,23 +1,32 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.client.server.api;
+
+import me.earth.earthhack.api.util.interfaces.Nameable;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import me.earth.earthhack.impl.modules.client.server.api.ICloseable;
-import me.earth.earthhack.impl.modules.client.server.api.IConnectionEntry;
-import me.earth.earthhack.impl.modules.client.server.api.ISender;
 
-public interface IConnection
-extends IConnectionEntry,
-ICloseable,
-ISender {
-    public void setName(String var1);
+/**
+ * This interface represents a connection.
+ */
+public interface IConnection extends IConnectionEntry, ICloseable, ISender
+{
+    /**
+     * Sets the Name returned by {@link Nameable#getName()}
+     * for this connection.
+     *
+     * @param name the new name.
+     */
+    void setName(String name);
 
-    public InputStream getInputStream() throws IOException;
+    /**
+     * @return the InputStream for this connection.
+     */
+    InputStream getInputStream() throws IOException;
 
-    public OutputStream getOutputStream() throws IOException;
+    /**
+     * @return this connections OutputStream.
+     */
+    OutputStream getOutputStream() throws IOException;
+
 }
-

@@ -1,11 +1,9 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.util.misc;
 
 import java.util.Objects;
 
 public class Pair<K, V> {
+
     private final K key;
     private final V value;
 
@@ -15,23 +13,24 @@ public class Pair<K, V> {
     }
 
     public K getKey() {
-        return this.key;
+        return key;
     }
 
     public V getValue() {
-        return this.value;
+        return value;
     }
 
     public boolean equals(Object o) {
-        return o instanceof Pair && Objects.equals(this.key, ((Pair)o).key) && Objects.equals(this.value, ((Pair)o).value);
+        return o instanceof Pair &&
+                Objects.equals(key, ((Pair<?,?>)o).key)
+                && Objects.equals(value, ((Pair<?,?>)o).value);
     }
 
     public int hashCode() {
-        return 31 * Objects.hashCode(this.key) + Objects.hashCode(this.value);
+        return 31 * Objects.hashCode(key) + Objects.hashCode(value);
     }
 
     public String toString() {
-        return this.key + "=" + this.value;
+        return key + "=" + value;
     }
 }
-

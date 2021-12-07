@@ -1,28 +1,30 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.installer;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class InstallerGlobals {
-    private static final AtomicBoolean VANILLA = new AtomicBoolean();
-    private static final AtomicBoolean FORGE = new AtomicBoolean();
+public class InstallerGlobals
+{
+    private static final AtomicBoolean VANILLA  = new AtomicBoolean();
+    private static final AtomicBoolean FORGE    = new AtomicBoolean();
 
-    public static void setVanilla(boolean vanilla) {
+    public static void setVanilla(boolean vanilla)
+    {
         VANILLA.set(vanilla);
     }
 
-    public static void setForge(boolean forge) {
+    public static void setForge(boolean forge)
+    {
         FORGE.set(forge);
     }
 
-    public static boolean hasInstalledVanilla() {
+    public static boolean hasInstalledVanilla()
+    {
         return VANILLA.get();
     }
 
-    public static boolean hasInstalledForge() {
+    public static boolean hasInstalledForge()
+    {
         return FORGE.get();
     }
-}
 
+}

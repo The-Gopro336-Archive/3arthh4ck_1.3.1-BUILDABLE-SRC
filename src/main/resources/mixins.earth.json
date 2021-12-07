@@ -94,6 +94,7 @@
     "render.MixinRenderGlobal",
     "render.MixinRenderLivingBase",
     "render.MixinRenderManager",
+    "render.MixinScaledResolution",
     "render.MixinShaderGroup",
     "render.MixinThreadDownloadImageData",
     "render.chunk.MixinRenderChunk",
@@ -126,5 +127,13 @@
   ],
   "injectors": {
     "maxShiftBy": 10
-  }
+  },
+  "client": [
+    "render.MixinFramebuffer",
+    "render.MixinProfile",
+    "render.MixinTextureManager",
+    "render.MixinTileEntityRendererDispatcher",
+    "render.entity.IRenderEnderCrystal",
+    "render.model.MixinModelEnderCrystal"
+  ]
 }

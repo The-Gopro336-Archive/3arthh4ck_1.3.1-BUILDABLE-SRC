@@ -1,13 +1,30 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.core.ducks.network;
 
-public interface IC00Handshake {
-    public void cancelFML(boolean var1);
+/**
+ * Accessor for
+ * {@link net.minecraft.network.handshake.client.C00Handshake}.
+ */
+public interface IC00Handshake
+{
+    /**
+     * Cancels adding of FML marker.
+     *
+     * @param cancel if you want no FML marker.
+     */
+    void cancelFML(boolean cancel);
 
-    public void setIP(String var1);
+    /**
+     * Sets the packets ip.
+     *
+     * @param ip the ip.
+     */
+    void setIP(String ip);
 
-    public void setPort(int var1);
+    /**
+     * Sets the packets port.
+     *
+     * @param port the port.
+     */
+    void setPort(int port);
+
 }
-

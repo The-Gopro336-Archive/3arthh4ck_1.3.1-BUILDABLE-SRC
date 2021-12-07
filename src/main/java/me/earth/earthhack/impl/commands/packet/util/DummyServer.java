@@ -1,82 +1,103 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  com.mojang.authlib.GameProfileRepository
- *  com.mojang.authlib.minecraft.MinecraftSessionService
- *  com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
- *  net.minecraft.server.MinecraftServer
- *  net.minecraft.server.management.PlayerProfileCache
- *  net.minecraft.util.datafix.DataFixer
- *  net.minecraft.world.EnumDifficulty
- *  net.minecraft.world.GameType
- */
 package me.earth.earthhack.impl.commands.packet.util;
 
 import com.mojang.authlib.GameProfileRepository;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
-import java.io.File;
-import java.io.IOException;
-import java.net.Proxy;
+import net.minecraft.network.play.server.SPacketPlayerListItem;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerProfileCache;
 import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.GameType;
 
-public class DummyServer
-extends MinecraftServer {
-    public DummyServer(File anvilFileIn, Proxy proxyIn, DataFixer dataFixerIn, YggdrasilAuthenticationService authServiceIn, MinecraftSessionService sessionServiceIn, GameProfileRepository profileRepoIn, PlayerProfileCache profileCacheIn) {
+import java.io.File;
+import java.io.IOException;
+import java.net.Proxy;
+
+@SuppressWarnings("NullableProblems")
+public class DummyServer extends MinecraftServer
+{
+    public DummyServer(File anvilFileIn,
+                       Proxy proxyIn,
+                       DataFixer dataFixerIn,
+                       YggdrasilAuthenticationService authServiceIn,
+                       MinecraftSessionService sessionServiceIn,
+                       GameProfileRepository profileRepoIn,
+                       PlayerProfileCache profileCacheIn)
+    {
         super(new File("*"), proxyIn, dataFixerIn, authServiceIn, sessionServiceIn, profileRepoIn, profileCacheIn);
     }
 
-    public boolean init() throws IOException {
+    @Override
+    public boolean init() throws IOException
+    {
         return false;
     }
 
-    public boolean canStructuresSpawn() {
+    @Override
+    public boolean canStructuresSpawn()
+    {
         return false;
     }
 
-    public GameType getGameType() {
+    @Override
+    public GameType getGameType()
+    {
         return GameType.SURVIVAL;
     }
 
-    public EnumDifficulty getDifficulty() {
+    @Override
+    public EnumDifficulty getDifficulty()
+    {
         return EnumDifficulty.PEACEFUL;
     }
 
-    public boolean isHardcore() {
+    @Override
+    public boolean isHardcore()
+    {
         return false;
     }
 
-    public int getOpPermissionLevel() {
+    @Override
+    public int getOpPermissionLevel()
+    {
         return 0;
     }
 
-    public boolean shouldBroadcastRconToOps() {
+    @Override
+    public boolean shouldBroadcastRconToOps()
+    {
         return false;
     }
 
-    public boolean shouldBroadcastConsoleToOps() {
+    @Override
+    public boolean shouldBroadcastConsoleToOps()
+    {
         return false;
     }
 
-    public boolean isDedicatedServer() {
+    @Override
+    public boolean isDedicatedServer()
+    {
         return false;
     }
 
-    public boolean shouldUseNativeTransport() {
+    @Override
+    public boolean shouldUseNativeTransport()
+    {
         return false;
     }
 
-    public boolean isCommandBlockEnabled() {
+    @Override
+    public boolean isCommandBlockEnabled()
+    {
         return false;
     }
 
-    public String shareToLAN(GameType type, boolean allowCheats) {
+    @Override
+    public String shareToLAN(GameType type, boolean allowCheats)
+    {
         return "Dummy-Value";
     }
-}
 
+}

@@ -1,15 +1,11 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.tweaker.launch;
 
-import me.earth.earthhack.tweaker.launch.Argument;
+public interface ArgumentManager
+{
+    void loadArguments();
 
-public interface ArgumentManager {
-    public void loadArguments();
+    void addArgument(String name, Argument<?> argument);
 
-    public void addArgument(String var1, Argument<?> var2);
+    <T> Argument<T> getArgument(String name);
 
-    public <T> Argument<T> getArgument(String var1);
 }
-

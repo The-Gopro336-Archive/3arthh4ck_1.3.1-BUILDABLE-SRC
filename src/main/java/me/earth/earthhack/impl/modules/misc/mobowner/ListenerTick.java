@@ -1,71 +1,83 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.Entity
- *  net.minecraft.entity.passive.AbstractHorse
- *  net.minecraft.entity.passive.EntityTameable
- */
 package me.earth.earthhack.impl.modules.misc.mobowner;
 
-import java.util.UUID;
-import me.earth.earthhack.api.util.interfaces.Globals;
 import me.earth.earthhack.impl.event.events.misc.TickEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.managers.thread.lookup.LookUp;
-import me.earth.earthhack.impl.modules.misc.mobowner.MobOwner;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityTameable;
 
-final class ListenerTick
-extends ModuleListener<MobOwner, TickEvent> {
-    public ListenerTick(MobOwner module) {
+import java.util.UUID;
+
+final class ListenerTick extends ModuleListener<MobOwner, TickEvent>
+{
+    public ListenerTick(MobOwner module)
+    {
         super(module, TickEvent.class);
     }
 
     @Override
-    public void invoke(TickEvent event) {
-        if (ListenerTick.mc.world != null) {
-            for (Entity entity : ListenerTick.mc.world.getLoadedEntityList()) {
-                AbstractHorse horse;
-                if (entity == null || entity.getAlwaysRenderNameTag()) continue;
-                if (entity instanceof EntityTameable) {
-                    EntityTameable tameable = (EntityTameable)entity;
-                    if (!tameable.isTamed()) continue;
-                    this.renderNametag(entity, tameable.getOwnerId());
-                    continue;
+    public void invoke(TickEvent event)
+    {
+        if (mc.world != null)
+        {
+            for (Entity entity : mc.world.getLoadedEntityList())
+            {
+                if (entity != null && !entity.getAlwaysRenderNameTag())
+                {
+                    if (entity instanceof EntityTameable)
+                    {
+                        EntityTameable tameable = (EntityTameable) entity;
+                        if (tameable.isTamed())
+                        {
+                            renderNametag(entity, tameable.getOwnerId());
+                        }
+                    }
+                    else if (entity instanceof AbstractHorse)
+                    {
+                        AbstractHorse horse = (AbstractHorse) entity;
+                        if (horse.isTame())
+                        {
+                            renderNametag(entity, horse.getOwnerUniqueId());
+                        }
+                    }
                 }
-                if (!(entity instanceof AbstractHorse) || !(horse = (AbstractHorse)entity).isTame()) continue;
-                this.renderNametag(entity, horse.getOwnerUniqueId());
             }
         }
     }
 
-    private void renderNametag(Entity entity, final UUID id) {
-        if (id != null) {
-            if (((MobOwner)this.module).cache.containsKey(id)) {
-                String owner = ((MobOwner)this.module).cache.get(id);
-                if (owner != null) {
+    private void renderNametag(Entity entity, UUID id)
+    {
+        if (id != null)
+        {
+            if (module.cache.containsKey(id))
+            {
+                String owner = module.cache.get(id);
+                if (owner != null)
+                {
                     entity.setAlwaysRenderNameTag(true);
                     entity.setCustomNameTag(owner);
                 }
-            } else {
-                Managers.LOOK_UP.doLookUp(new LookUp(LookUp.Type.NAME, id){
-
+            }
+            else
+            {
+                Managers.LOOK_UP.doLookUp(new LookUp(LookUp.Type.NAME, id)
+                {
                     @Override
-                    public void onSuccess() {
-                        Globals.mc.addScheduledTask(() -> ((MobOwner)((ListenerTick)ListenerTick.this).module).cache.put(id, this.name));
+                    public void onSuccess()
+                    {
+                        mc.addScheduledTask(() -> module.cache.put(id, name));
                     }
 
                     @Override
-                    public void onFailure() {
-                        Globals.mc.addScheduledTask(() -> ((MobOwner)((ListenerTick)ListenerTick.this).module).cache.put(id, null));
+                    public void onFailure()
+                    {
+                        mc.addScheduledTask(() -> module.cache.put(id, null));
                     }
                 });
             }
         }
     }
-}
 
+}

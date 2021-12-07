@@ -1,12 +1,8 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.combat.autocrystal.modes;
 
-public enum BreakValidity {
+public enum BreakValidity
+{
     INVALID,
     ROTATIONS,
-    VALID;
-
+    VALID
 }
-

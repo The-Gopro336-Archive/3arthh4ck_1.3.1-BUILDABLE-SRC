@@ -1,25 +1,26 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.misc.antipotion;
 
 import me.earth.earthhack.api.module.data.DefaultData;
-import me.earth.earthhack.impl.modules.misc.antipotion.AntiPotion;
 
-final class AntiPotionData
-extends DefaultData<AntiPotion> {
-    public AntiPotionData(AntiPotion module) {
+final class AntiPotionData extends DefaultData<AntiPotion>
+{
+    public AntiPotionData(AntiPotion module)
+    {
         super(module);
     }
 
     @Override
-    public int getColor() {
-        return -1;
+    public int getColor()
+    {
+        return 0xffffffff;
     }
 
     @Override
-    public String getDescription() {
-        return "Allows you to remove potions on the client side. Only works for some potions like levitation.";
+    public String getDescription()
+    {
+        return "Allows you to remove potions on the client side." +
+                " Only works for some potions like levitation.";
     }
+
 }
 

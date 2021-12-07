@@ -1,41 +1,40 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.player.EntityPlayer
- */
 package me.earth.earthhack.impl.commands.packet.arguments;
 
-import me.earth.earthhack.impl.commands.packet.arguments.AbstractEntityArgument;
 import me.earth.earthhack.impl.commands.packet.exception.ArgParseException;
 import net.minecraft.entity.player.EntityPlayer;
 
 public abstract class AbstractEntityPlayerArgument<T extends EntityPlayer>
-extends AbstractEntityArgument<T> {
-    public AbstractEntityPlayerArgument(Class<T> type) {
+        extends AbstractEntityArgument<T>
+{
+    public AbstractEntityPlayerArgument(Class<T> type)
+    {
         super(type);
     }
 
     protected abstract T create();
 
     @Override
-    public T fromString(String arg) throws ArgParseException {
-        if (AbstractEntityPlayerArgument.mc.world == null) {
+    public T fromString(String arg) throws ArgParseException
+    {
+        if (mc.world == null)
+        {
             throw new ArgParseException("Minecraft.world was null!");
         }
-        Object entity = (EntityPlayer)AbstractEntityArgument.getEntity(arg, this.directType);
-        if (entity == null) {
+
+        T entity = AbstractEntityArgument.getEntity(arg, this.directType);
+        if (entity == null)
+        {
             int id = -1337;
-            try {
-                id = (int)Long.parseLong(arg);
+            try
+            {
+                id = (int) Long.parseLong(arg);
             }
-            catch (Exception exception) {
-                // empty catch block
-            }
-            entity = this.create();
+            catch (Exception ignored) { }
+            entity = create();
             entity.setEntityId(id);
         }
-        return (T)entity;
-    }
-}
 
+        return entity;
+    }
+
+}

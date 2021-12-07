@@ -1,12 +1,13 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.render.crosshair.mode;
 
-public enum GapMode {
+/**
+ * @author Gerald
+ * @since 6/17/2021
+ **/
+
+public enum GapMode
+{
     NONE,
     NORMAL,
-    DYNAMIC;
-
+    DYNAMIC
 }
-

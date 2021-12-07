@@ -1,22 +1,24 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.client.hud.modes;
 
-public enum HudRainbow {
+import me.earth.earthhack.impl.util.text.TextColor;
+
+public enum HudRainbow
+{
     None(""),
-    Horizontal("\u00a7+"),
-    Vertical("\u00a7-"),
+    Horizontal(TextColor.RAINBOW_PLUS),
+    Vertical(TextColor.RAINBOW_MINUS),
     Static("");
 
     private final String color;
 
-    private HudRainbow(String color) {
+    HudRainbow(String color)
+    {
         this.color = color;
     }
 
-    public String getColor() {
-        return this.color;
+    public String getColor()
+    {
+        return color;
     }
-}
 
+}

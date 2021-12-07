@@ -1,19 +1,31 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.util.text.ITextComponent
- */
 package me.earth.earthhack.impl.core.ducks.util;
 
-import java.util.function.Supplier;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentBase;
 
-public interface ITextComponentBase {
-    public void setFormattingHook(Supplier<String> var1);
+import java.util.function.Supplier;
 
-    public void setUnFormattedHook(Supplier<String> var1);
+/**
+ * A duck interface for {@link TextComponentBase}.
+ *
+ * Allows you to "override" the final methods
+ * {@link TextComponentBase#getFormattedText()} and
+ * {@link TextComponentBase#getUnformattedText()}
+ */
+public interface ITextComponentBase
+{
+    /**
+     * @param hook overrides {@link TextComponentBase#getFormattedText()}.
+     */
+    void setFormattingHook(Supplier<String> hook);
 
-    public ITextComponent copyNoSiblings();
+    /**
+     * @param hook overrides {@link TextComponentBase#getUnformattedText()}.
+     */
+    void setUnFormattedHook(Supplier<String> hook);
+
+    ITextComponent copyNoSiblings();
+
+
+
 }
-

@@ -1,18 +1,11 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.block.Block
- *  net.minecraft.init.Blocks
- *  net.minecraft.util.math.Vec3i
- */
 package me.earth.earthhack.impl.modules.combat.selftrap;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3i;
 
-public enum SelfTrapMode {
+public enum SelfTrapMode
+{
     Obsidian(Blocks.OBSIDIAN, new Vec3i(0, 2, 0)),
     Web(Blocks.WEB, Vec3i.NULL_VECTOR),
     HighWeb(Blocks.WEB, new Vec3i(0, 1, 0)),
@@ -21,17 +14,20 @@ public enum SelfTrapMode {
     private final Vec3i[] offsets;
     private final Block block;
 
-    private SelfTrapMode(Block block, Vec3i ... offsets) {
+    SelfTrapMode(Block block, Vec3i...offsets)
+    {
         this.offsets = offsets;
         this.block = block;
     }
 
-    public Vec3i[] getOffsets() {
-        return this.offsets;
+    public Vec3i[] getOffsets()
+    {
+        return offsets;
     }
 
-    public Block getBlock() {
-        return this.block;
+    public Block getBlock()
+    {
+        return block;
     }
+
 }
-

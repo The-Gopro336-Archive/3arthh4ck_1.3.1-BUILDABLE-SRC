@@ -1,24 +1,25 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.util.math.MathHelper
- */
 package me.earth.earthhack.impl.util.animation;
 
-import me.earth.earthhack.impl.util.animation.AnimationMode;
 import net.minecraft.util.math.MathHelper;
 
+/**
+ * Class representing an animation
+ * @author megyn
+ */
 public class Animation {
+
     private double start;
     private double end;
     private double speed;
     private double current;
     private double last;
-    private double progress = 0.0;
+
+    private double progress = 0;
+
     private boolean backwards;
     private boolean reverseOnEnd;
     private boolean playing;
+
     private AnimationMode mode;
 
     public Animation(double start, double end, double speed, boolean backwards, AnimationMode mode) {
@@ -26,10 +27,10 @@ public class Animation {
         this.end = end;
         this.speed = speed;
         this.backwards = backwards;
-        this.current = start;
-        this.last = start;
+        current = start;
+        last = start;
         this.mode = mode;
-        this.playing = true;
+        playing = true;
     }
 
     public Animation(double start, double end, double speed, boolean backwards, boolean reverseOnEnd, AnimationMode mode) {
@@ -38,41 +39,63 @@ public class Animation {
         this.speed = speed;
         this.backwards = backwards;
         this.reverseOnEnd = reverseOnEnd;
-        this.current = start;
-        this.last = start;
+        current = start;
+        last = start;
         this.mode = mode;
-        this.playing = true;
+        playing = true;
     }
 
     public void add(float partialTicks) {
-        if (this.playing) {
-            this.last = this.current;
-            if (this.mode == AnimationMode.LINEAR) {
-                this.current += (double)(this.backwards ? -1 : 1) * this.speed;
-            } else if (this.mode == AnimationMode.EXPONENTIAL) {
-                int i = 0;
-                while ((float)i < 1.0f / partialTicks) {
-                    this.current += this.speed;
-                    this.speed *= this.speed;
-                    if (this.speed > 0.0 && this.backwards) {
-                        this.speed *= -1.0;
+        if (playing) {
+            last = current;
+            if (mode == AnimationMode.LINEAR) {
+                current += (backwards ? -1 : 1) * (speed);
+            } else if (mode == AnimationMode.EXPONENTIAL) {
+                for (int i = 0; i < (1 / partialTicks); i++) {
+                    current += speed;
+                    speed *= speed;
+                    if (speed > 0 && backwards) {
+                        speed *= -1;
                     }
-                    ++i;
+                    /*if (current >= 0) {
+                        current *= (backwards ? -1 : 1) * (speed);
+                    } else if (current < 0) {
+                        current = -current * (backwards ? -1 : 1) * (speed);
+                    }*/
                 }
             }
-            this.current = MathHelper.clamp((double)this.current, (double)this.start, (double)this.end);
-            if (this.current >= this.end) {
-                if (this.reverseOnEnd) {
-                    this.backwards = !this.backwards;
+            current = MathHelper.clamp(current, start, end);
+            if (current >= end) {
+                if (reverseOnEnd) {
+                    backwards = !backwards;
                 } else {
-                    this.playing = false;
+                    playing = false;
                 }
             }
         }
     }
 
+    /*public void add() {
+        if (playing) {
+            last = current;
+            if (mode == AnimationMode.LINEAR) {
+                current += (backwards ? -1 : 1) * (speed);
+            } else if (mode == AnimationMode.EXPONENTIAL) {
+                current *= (backwards ? -1 : 1) * (speed);
+            }
+            current = MathHelper.clamp(current, start, end);
+            if (current >= end) {
+                if (reverseOnEnd) {
+                    backwards = !backwards;
+                } else {
+                    playing = false;
+                }
+            }
+        }
+    }*/
+
     public double getStart() {
-        return this.start;
+        return start;
     }
 
     public void setStart(double start) {
@@ -80,7 +103,7 @@ public class Animation {
     }
 
     public double getEnd() {
-        return this.end;
+        return end;
     }
 
     public void setEnd(double end) {
@@ -88,7 +111,7 @@ public class Animation {
     }
 
     public double getSpeed() {
-        return this.speed;
+        return speed;
     }
 
     public void setSpeed(double speed) {
@@ -96,11 +119,11 @@ public class Animation {
     }
 
     public double getCurrent() {
-        return this.current;
+        return current;
     }
 
     public double getCurrent(float partialTicks) {
-        return this.playing ? this.last + (this.current - this.last) * (double)partialTicks : this.current;
+        return playing ? last + (current - last) * partialTicks : current;
     }
 
     public void setCurrent(double current) {
@@ -108,7 +131,7 @@ public class Animation {
     }
 
     public AnimationMode getMode() {
-        return this.mode;
+        return mode;
     }
 
     public void setMode(AnimationMode mode) {
@@ -116,19 +139,19 @@ public class Animation {
     }
 
     public boolean isPlaying() {
-        return this.playing;
+        return playing;
     }
 
     public void play() {
-        this.playing = true;
+        playing = true;
     }
 
     public void stop() {
-        this.playing = false;
+        playing = false;
     }
 
     public boolean isBackwards() {
-        return this.backwards;
+        return backwards;
     }
 
     public void setBackwards(boolean backwards) {
@@ -136,7 +159,7 @@ public class Animation {
     }
 
     public boolean isReverseOnEnd() {
-        return this.reverseOnEnd;
+        return reverseOnEnd;
     }
 
     public void setReverseOnEnd(boolean reverseOnEnd) {
@@ -144,11 +167,10 @@ public class Animation {
     }
 
     public double getProgress() {
-        return this.progress;
+        return progress;
     }
 
     public void setProgress(double progress) {
         this.progress = progress;
     }
 }
-

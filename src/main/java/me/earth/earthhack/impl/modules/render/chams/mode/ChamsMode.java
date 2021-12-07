@@ -1,9 +1,7 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.render.chams.mode;
 
-public enum ChamsMode {
+public enum ChamsMode
+{
     Normal,
     Better,
     CSGO,
@@ -12,7 +10,5 @@ public enum ChamsMode {
     FireShader,
     GalaxyShader,
     WaterShader,
-    Image;
-
+    Image
 }
-

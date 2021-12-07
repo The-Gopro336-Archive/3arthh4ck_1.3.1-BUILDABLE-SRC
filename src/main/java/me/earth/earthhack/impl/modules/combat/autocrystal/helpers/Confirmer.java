@@ -1,14 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.init.SoundEvents
- *  net.minecraft.network.play.server.SPacketSoundEffect
- *  net.minecraft.network.play.server.SPacketSpawnObject
- *  net.minecraft.util.SoundCategory
- *  net.minecraft.util.math.AxisAlignedBB
- *  net.minecraft.util.math.BlockPos
- */
 package me.earth.earthhack.impl.modules.combat.autocrystal.helpers;
 
 import me.earth.earthhack.api.event.bus.SubscriberImpl;
@@ -22,10 +11,11 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
-public class Confirmer
-extends SubscriberImpl {
+public class Confirmer extends SubscriberImpl
+{
     private final StopWatch placeTimer = new StopWatch();
     private final StopWatch breakTimer = new StopWatch();
+
     private BlockPos current;
     private AxisAlignedBB bb;
     private boolean placeConfirmed;
@@ -34,30 +24,44 @@ extends SubscriberImpl {
     private boolean valid;
     private int placeTime;
 
-    public Confirmer() {
-        this.listeners.add(new ReceiveListener<SPacketSpawnObject>(SPacketSpawnObject.class, e -> {
-            SPacketSpawnObject p = (SPacketSpawnObject)e.getPacket();
-            if (p.getType() == 51) {
-                this.confirmPlace(p.getX(), p.getY(), p.getZ());
+    public Confirmer()
+    {
+        this.listeners.add(new ReceiveListener<>(SPacketSpawnObject.class, e ->
+        {
+            SPacketSpawnObject p = e.getPacket();
+            if (p.getType() == 51)
+            {
+                confirmPlace(p.getX(), p.getY(), p.getZ());
             }
         }));
-        this.listeners.add(new ReceiveListener<SPacketSoundEffect>(SPacketSoundEffect.class, e -> {
-            SPacketSoundEffect p = (SPacketSoundEffect)e.getPacket();
-            if (p.getCategory() == SoundCategory.BLOCKS && p.getSound() == SoundEvents.ENTITY_GENERIC_EXPLODE) {
-                this.confirmBreak(p.getX(), p.getY(), p.getZ());
+
+        this.listeners.add(new ReceiveListener<>(SPacketSoundEffect.class, e ->
+        {
+            SPacketSoundEffect p = e.getPacket();
+            if (p.getCategory() == SoundCategory.BLOCKS
+                && p.getSound() == SoundEvents.ENTITY_GENERIC_EXPLODE)
+            {
+                confirmBreak(p.getX(), p.getY(), p.getZ());
             }
         }));
     }
 
-    public void setPos(BlockPos pos, boolean newVer, int placeTime) {
+    public void setPos(BlockPos pos, boolean newVer, int placeTime)
+    {
         this.newVer = newVer;
-        if (pos == null) {
+
+        if (pos == null)
+        {
             this.current = null;
             this.valid = false;
-        } else {
-            BlockPos crystalPos;
-            this.current = crystalPos = new BlockPos((double)((float)pos.getX() + 0.5f), (double)(pos.getY() + 1), (double)((float)pos.getZ() + 0.5f));
-            this.bb = this.createBB(crystalPos, newVer);
+        }
+        else
+        {
+            BlockPos crystalPos = new BlockPos(pos.getX() + 0.5f,
+                                               pos.getY() + 1,
+                                               pos.getZ() + 0.5f);
+            this.current = crystalPos;
+            this.bb = createBB(crystalPos, newVer);
             this.valid = true;
             this.placeConfirmed = false;
             this.breakConfirmed = false;
@@ -66,62 +70,100 @@ extends SubscriberImpl {
         }
     }
 
-    public void confirmPlace(double x, double y, double z) {
-        if (this.valid && !this.placeConfirmed) {
-            AxisAlignedBB currentBB;
+    public void confirmPlace(double x, double y, double z)
+    {
+        if ( valid && !placeConfirmed)
+        {
             BlockPos p = new BlockPos(x, y, z);
-            if (p.equals((Object)this.current)) {
-                this.placeConfirmed = true;
-                this.breakTimer.reset();
-            } else if (this.placeTimer.passed(this.placeTime) && (currentBB = this.bb) != null && currentBB.intersects(this.createBB(x, y, z, this.newVer))) {
-                this.valid = false;
+            if (p.equals(current))
+            {
+                placeConfirmed = true;
+                breakTimer.reset();
+            }
+            else if (placeTimer.passed(placeTime))
+            {
+                AxisAlignedBB currentBB = bb;
+                if (currentBB != null
+                        && currentBB.intersects(createBB(x, y, z, newVer)))
+                {
+                    valid = false;
+                }
             }
         }
     }
 
-    public void confirmBreak(double x, double y, double z) {
-        BlockPos current;
-        if (this.valid && !this.breakConfirmed && this.placeConfirmed && (current = this.current) != null && current.distanceSq(x, y, z) < 144.0) {
-            if (current.equals((Object)new BlockPos(x, y, z))) {
-                this.breakConfirmed = true;
-            } else {
-                this.valid = false;
+    public void confirmBreak(double x, double y, double z)
+    {
+        if (valid && !breakConfirmed && placeConfirmed)
+        {
+            BlockPos current = this.current;
+            if (current != null && current.distanceSq(x, y, z) < 144)
+            {
+                if (current.equals(new BlockPos(x, y, z)))
+                {
+                    breakConfirmed = true;
+                }
+                else
+                {
+                    valid = false;
+                }
             }
         }
     }
 
-    public boolean isValid() {
-        return this.valid;
+    public boolean isValid()
+    {
+        return valid;
     }
 
-    public boolean isPlaceConfirmed(int placeConfirm) {
-        if (!this.placeConfirmed && this.placeTimer.passed(placeConfirm)) {
-            this.valid = false;
+    public boolean isPlaceConfirmed(int placeConfirm)
+    {
+        if (!placeConfirmed && placeTimer.passed(placeConfirm))
+        {
+            valid = false;
             return false;
         }
-        return this.placeConfirmed && this.valid;
+
+        return placeConfirmed && valid;
     }
 
-    public boolean isBreakConfirmed(int breakConfirm) {
-        if (this.placeConfirmed && !this.breakConfirmed && this.breakTimer.passed(breakConfirm)) {
-            this.valid = false;
+    public boolean isBreakConfirmed(int breakConfirm)
+    {
+        if (placeConfirmed
+                && !breakConfirmed
+                && breakTimer.passed(breakConfirm))
+        {
+            valid = false;
             return false;
         }
-        return this.breakConfirmed && this.valid;
+
+        return breakConfirmed && valid;
     }
 
-    private AxisAlignedBB createBB(BlockPos crystalPos, boolean newVer) {
-        return this.createBB((float)crystalPos.getX() + 0.5f, crystalPos.getY(), (float)crystalPos.getZ() + 0.5f, newVer);
+    private AxisAlignedBB createBB(BlockPos crystalPos, boolean newVer)
+    {
+        return createBB(crystalPos.getX() + 0.5f,
+                        crystalPos.getY(),
+                        crystalPos.getZ() + 0.5f,
+                        newVer);
     }
 
-    private AxisAlignedBB createBB(double x, double y, double z, boolean newVer) {
-        return new AxisAlignedBB(x - 1.0, y, z - 1.0, x + 1.0, y + (double)(newVer ? 1 : 2), z + 1.0);
+    private AxisAlignedBB createBB(double x, double y, double z, boolean newVer)
+    {
+        return new AxisAlignedBB(x - 1,
+                                 y,
+                                 z - 1,
+                                 x + 1,
+                                 y + (newVer ? 1 : 2),
+                                 z + 1);
     }
 
-    public static Confirmer createAndSubscribe(EventBus bus) {
+    public static Confirmer createAndSubscribe(EventBus bus)
+    {
         Confirmer confirmer = new Confirmer();
         bus.subscribe(confirmer);
         return confirmer;
     }
+
 }
 

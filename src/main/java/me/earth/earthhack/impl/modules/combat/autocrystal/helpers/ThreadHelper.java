@@ -1,15 +1,5 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.Entity
- *  net.minecraft.entity.player.EntityPlayer
- *  net.minecraft.util.math.BlockPos
- */
 package me.earth.earthhack.impl.modules.combat.autocrystal.helpers;
 
-import java.util.ArrayList;
-import java.util.List;
 import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.util.interfaces.Globals;
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
@@ -24,17 +14,29 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 
-public class ThreadHelper
-implements Globals {
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Helps with processing {@link Calculation}s.
+ */
+public class ThreadHelper implements Globals
+{
     private final StopWatch threadTimer = new StopWatch();
     private final Setting<Boolean> multiThread;
     private final Setting<Integer> threadDelay;
     private final Setting<RotationThread> rotationThread;
     private final Setting<ACRotate> rotate;
     private final AutoCrystal module;
+
     private volatile AbstractCalculation<?> currentCalc;
 
-    public ThreadHelper(AutoCrystal module, Setting<Boolean> multiThread, Setting<Integer> threadDelay, Setting<RotationThread> rotationThread, Setting<ACRotate> rotate) {
+    public ThreadHelper(AutoCrystal module,
+                        Setting<Boolean> multiThread,
+                        Setting<Integer> threadDelay,
+                        Setting<RotationThread> rotationThread,
+                        Setting<ACRotate> rotate)
+    {
         this.module = module;
         this.multiThread = multiThread;
         this.threadDelay = threadDelay;
@@ -42,67 +44,124 @@ implements Globals {
         this.rotate = rotate;
     }
 
-    public synchronized void start(AbstractCalculation<?> calculation, boolean multiThread) {
-        if (!this.module.isPingBypass() && this.threadTimer.passed(this.threadDelay.getValue().intValue()) && (this.currentCalc == null || this.currentCalc.isFinished())) {
-            this.currentCalc = calculation;
-            this.execute(this.currentCalc, multiThread);
+    public synchronized void start(AbstractCalculation<?> calculation,
+                                   boolean multiThread)
+    {
+        if (!module.isPingBypass()
+                && threadTimer.passed(threadDelay.getValue())
+                && (currentCalc == null || currentCalc.isFinished()))
+        {
+            currentCalc = calculation;
+            execute(currentCalc, multiThread);
         }
     }
 
-    public synchronized void startThread(BlockPos ... blackList) {
-        if (ThreadHelper.mc.world == null || ThreadHelper.mc.player == null || this.module.isPingBypass() || !this.threadTimer.passed(this.threadDelay.getValue().intValue()) || this.currentCalc != null && !this.currentCalc.isFinished()) {
+    public synchronized void startThread(BlockPos...blackList)
+    {
+        if (mc.world == null
+            || mc.player == null
+            || module.isPingBypass()
+            || !threadTimer.passed(threadDelay.getValue())
+            || currentCalc != null && !currentCalc.isFinished())
+        {
             return;
         }
-        if (mc.isCallingFromMinecraftThread()) {
-            this.startThread(new ArrayList<Entity>(ThreadHelper.mc.world.loadedEntityList), new ArrayList<EntityPlayer>(ThreadHelper.mc.world.playerEntities), blackList);
-        } else {
-            this.startThread(Managers.ENTITIES.getEntities(), Managers.ENTITIES.getPlayers(), blackList);
+
+        if (mc.isCallingFromMinecraftThread())
+        {
+            startThread(new ArrayList<>(mc.world.loadedEntityList),
+                        new ArrayList<>(mc.world.playerEntities),
+                        blackList);
+        }
+        else
+        {
+            startThread(Managers.ENTITIES.getEntities(),
+                        Managers.ENTITIES.getPlayers(),
+                        blackList);
         }
     }
 
-    public synchronized void startThread(boolean breakOnly, boolean noBreak, BlockPos ... blackList) {
-        if (ThreadHelper.mc.world == null || ThreadHelper.mc.player == null || this.module.isPingBypass() || !this.threadTimer.passed(this.threadDelay.getValue().intValue()) || this.currentCalc != null && !this.currentCalc.isFinished()) {
+    public synchronized void startThread(boolean breakOnly, boolean noBreak, BlockPos...blackList)
+    {
+        if (mc.world == null
+                || mc.player == null
+                || module.isPingBypass()
+                || !threadTimer.passed(threadDelay.getValue())
+                || currentCalc != null && !currentCalc.isFinished())
+        {
             return;
         }
-        if (mc.isCallingFromMinecraftThread()) {
-            this.startThread(new ArrayList<Entity>(ThreadHelper.mc.world.loadedEntityList), new ArrayList<EntityPlayer>(ThreadHelper.mc.world.playerEntities), breakOnly, noBreak, blackList);
-        } else {
-            this.startThread(Managers.ENTITIES.getEntities(), Managers.ENTITIES.getPlayers(), breakOnly, noBreak, blackList);
+
+        if (mc.isCallingFromMinecraftThread())
+        {
+            startThread(new ArrayList<>(mc.world.loadedEntityList),
+                    new ArrayList<>(mc.world.playerEntities),
+                    breakOnly,
+                    noBreak,
+                    blackList);
+        }
+        else
+        {
+            startThread(Managers.ENTITIES.getEntities(),
+                    Managers.ENTITIES.getPlayers(),
+                    breakOnly,
+                    noBreak,
+                    blackList);
         }
     }
 
-    private void startThread(List<Entity> entities, List<EntityPlayer> players, boolean breakOnly, boolean noBreak, BlockPos ... blackList) {
-        this.currentCalc = new Calculation(this.module, entities, players, breakOnly, noBreak, blackList);
-        this.execute(this.currentCalc, this.multiThread.getValue());
+    private void startThread(List<Entity> entities,
+                             List<EntityPlayer> players,
+                             boolean breakOnly,
+                             boolean noBreak,
+                             BlockPos...blackList)
+    {
+        currentCalc = new Calculation(module, entities, players, breakOnly, noBreak, blackList);
+        execute(currentCalc, multiThread.getValue());
     }
 
-    private void startThread(List<Entity> entities, List<EntityPlayer> players, BlockPos ... blackList) {
-        this.currentCalc = new Calculation(this.module, entities, players, blackList);
-        this.execute(this.currentCalc, this.multiThread.getValue());
+    private void startThread(List<Entity> entities,
+                             List<EntityPlayer> players,
+                             BlockPos...blackList)
+    {
+        currentCalc = new Calculation(module, entities, players, blackList);
+        execute(currentCalc, multiThread.getValue());
     }
 
-    private void execute(AbstractCalculation<?> calculation, boolean multiThread) {
-        if (multiThread) {
+    private void execute(AbstractCalculation<?> calculation,
+                         boolean multiThread)
+    {
+        if (multiThread)
+        {
             Managers.THREAD.submitRunnable(calculation);
-            this.threadTimer.reset();
-        } else {
-            this.threadTimer.reset();
+            threadTimer.reset();
+        }
+        else
+        {
+            threadTimer.reset();
             calculation.run();
         }
     }
 
-    public void schedulePacket(PacketEvent.Receive<?> event) {
-        if (this.multiThread.getValue().booleanValue() && (this.rotate.getValue() == ACRotate.None || this.rotationThread.getValue() != RotationThread.Predict)) {
-            event.addPostEvent(() -> this.startThread(new BlockPos[0]));
+    public void schedulePacket(PacketEvent.Receive<?> event)
+    {
+        if (multiThread.getValue()
+            && (rotate.getValue() == ACRotate.None
+                || rotationThread.getValue() != RotationThread.Predict))
+        {
+            event.addPostEvent(this::startThread);
         }
     }
 
-    public AbstractCalculation<?> getCurrentCalc() {
-        return this.currentCalc;
+    /** @return the currently running, or last finished calculation. */
+    public AbstractCalculation<?> getCurrentCalc()
+    {
+        return currentCalc;
     }
 
-    public void reset() {
-        this.currentCalc = null;
+    public void reset()
+    {
+        currentCalc = null;
     }
+
 }
-

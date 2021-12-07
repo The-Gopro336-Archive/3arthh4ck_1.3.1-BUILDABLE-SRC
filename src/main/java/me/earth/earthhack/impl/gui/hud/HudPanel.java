@@ -1,19 +1,7 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.client.renderer.GlStateManager
- *  org.lwjgl.opengl.GL11
- */
 package me.earth.earthhack.impl.gui.hud;
 
-import java.awt.Color;
-import java.util.HashSet;
-import java.util.Set;
 import me.earth.earthhack.api.cache.ModuleCache;
 import me.earth.earthhack.api.hud.HudElement;
-import me.earth.earthhack.impl.gui.hud.AbstractGuiElement;
-import me.earth.earthhack.impl.gui.hud.HudElementButton;
 import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.client.clickgui.ClickGui;
@@ -23,9 +11,14 @@ import me.earth.earthhack.impl.util.render.RenderUtil;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
 
-public class HudPanel
-extends AbstractGuiElement {
+import java.awt.*;
+import java.util.HashSet;
+import java.util.Set;
+
+public class HudPanel extends AbstractGuiElement {
+
     private static final ModuleCache<ClickGui> CLICK_GUI = Caches.getModule(ClickGui.class);
+
     private boolean dragging;
     private boolean hovered;
     private boolean stretching;
@@ -39,126 +32,145 @@ extends AbstractGuiElement {
     private float stretchingX2;
     private float stretchingY2;
     private float scrollOffset;
-    private float elementOffset = 20.0f;
-    private final Set<HudElementButton> elementButtons = new HashSet<HudElementButton>();
+    private float elementOffset = 20;
+
+    private final Set<HudElementButton> elementButtons;
 
     public HudPanel() {
-        super("HudPanel", 200.0f, 200.0f, 100.0f, 300.0f);
+        super("HudPanel", 200, 200, 100, 300);
+        elementButtons = new HashSet<>();
         for (HudElement element : Managers.ELEMENTS.getRegistered()) {
-            this.elementButtons.add(new HudElementButton(element));
+            elementButtons.add(new HudElementButton(element));
         }
     }
 
     public void draw(int mouseX, int mouseY, float partialTicks) {
-        this.hovered = GuiUtil.isHovered(this, mouseX, mouseY);
-        if (this.dragging) {
-            this.setX((float)mouseX - this.draggingX);
-            this.setY((float)mouseY - this.draggingY);
+        hovered = GuiUtil.isHovered(this, mouseX, mouseY);
+        if (dragging) {
+            setX(mouseX - draggingX);
+            setY(mouseY - draggingY);
         }
-        if (this.stretching && this.currentEdge != null) {
-            switch (this.currentEdge) {
-                case BOTTOM: {
-                    this.setHeight(this.stretchingHeight + ((float)mouseY - this.stretchingY));
+        if (stretching && currentEdge != null) {
+            switch (currentEdge) {
+                /*case TOP:
+                    setY(stretchingY + (mouseY - stretchingY));
+                    setHeight(stretchingY2 - getY());
+                    break;*/
+                case BOTTOM:
+                    setHeight(stretchingHeight + (mouseY - stretchingY));
                     break;
-                }
-                case LEFT: {
-                    this.setX(this.stretchingX + ((float)mouseX - this.stretchingX));
-                    this.setWidth(this.stretchingX2 - this.getX());
+                case LEFT:
+                    setX(stretchingX + (mouseX - stretchingX));
+                    setWidth(stretchingX2 - getX());
                     break;
-                }
-                case RIGHT: {
-                    this.setWidth(this.stretchingWidth + ((float)mouseX - this.stretchingX));
+                case RIGHT:
+                    setWidth(stretchingWidth + (mouseX - stretchingX));
                     break;
-                }
-                case BOTTOM_LEFT: {
-                    this.setHeight(this.stretchingHeight + ((float)mouseY - this.stretchingY));
-                    this.setX(this.stretchingX + ((float)mouseX - this.stretchingX));
-                    this.setWidth(this.stretchingX2 - this.getX());
+                /*case TOP_LEFT:
+                    setX(stretchingX + (mouseX - stretchingX));
+                    setY(stretchingY + (mouseY - stretchingY));
+                    setHeight(stretchingY2 - getY());
+                    setWidth(stretchingX2 - getX());
                     break;
-                }
-                case BOTTOM_RIGHT: {
-                    this.setHeight(this.stretchingHeight + ((float)mouseY - this.stretchingY));
-                    this.setWidth(this.stretchingWidth + ((float)mouseX - this.stretchingX));
-                }
+                case TOP_RIGHT:
+                    setY(stretchingY + (mouseY - stretchingY));
+                    setWidth(stretchingWidth + (mouseX - stretchingX));
+                    setHeight(stretchingY2 - getY());
+                    break;*/
+                case BOTTOM_LEFT:
+                    setHeight(stretchingHeight + (mouseY - stretchingY));
+                    setX(stretchingX + (mouseX - stretchingX));
+                    setWidth(stretchingX2 - getX());
+                    break;
+                case BOTTOM_RIGHT:
+                    setHeight(stretchingHeight + (mouseY - stretchingY));
+                    setWidth(stretchingWidth + (mouseX - stretchingX));
+                    break;
             }
         }
-        if (this.getX() <= 0.0f) {
-            this.setX(0.0f);
+        if (getX() <= 0) {
+            setX(0);
         }
-        if (this.getWidth() <= 100.0f) {
-            this.setWidth(100.0f);
+        if (getWidth() <= 100) {
+            setWidth(100);
         }
-        if (this.getHeight() <= 200.0f) {
-            this.setHeight(200.0f);
+        if (getHeight() <= 200) {
+            setHeight(200);
         }
-        if (this.getY() <= 0.0f) {
-            this.setY(0.0f);
+        if (getY() <= 0) {
+            setY(0);
         }
+
         GL11.glPushMatrix();
-        GL11.glPushAttrib((int)1048575);
-        GlStateManager.color((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
-        Render2DUtil.drawRect(this.getX(), this.getY(), this.getX() + this.getWidth(), this.getY() + this.getHeight(), -1845493760);
-        Render2DUtil.drawRect(this.getX(), this.getY(), this.getX() + this.getWidth(), this.getY() + Managers.TEXT.getStringHeight(1.0f) + 10.0f, ((ClickGui)HudPanel.CLICK_GUI.get()).color.getValue().getRGB());
-        Managers.TEXT.drawStringScaled("Hud Elements", this.getX() + this.getWidth() / 2.0f - Managers.TEXT.getStringWidthScaled("Hud Elements", 1.0f) / 2.0f, this.getY() + 5.0f, Color.WHITE.getRGB(), true, 1.0f);
-        float yOffset = 0.0f;
-        RenderUtil.scissor(this.getX(), this.getY(), this.getX() + this.getWidth(), this.getY() + this.getHeight());
-        GL11.glEnable((int)3089);
-        for (HudElementButton button : this.elementButtons) {
-            button.setX(this.getX());
-            button.setWidth(this.getWidth());
-            button.setY(this.getY() + Managers.TEXT.getStringHeight() + 12.0f + yOffset);
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        Render2DUtil.drawRect(getX(), getY(), getX() + getWidth(), getY() + getHeight(), 0x92000000);
+        Render2DUtil.drawRect(getX(), getY(), getX() + getWidth(), getY() + Managers.TEXT.getStringHeight(1.0f) + 10, CLICK_GUI.get().color.getValue().getRGB());
+        Managers.TEXT.drawStringScaled("Hud Elements", getX() + (getWidth() / 2) - (Managers.TEXT.getStringWidthScaled("Hud Elements", 1.0f) / 2.0f), getY() + 5, Color.WHITE.getRGB(), true, 1.0f);
+
+        float yOffset = 0;
+        // GL11.glPushMatrix();
+        RenderUtil.scissor(getX(), getY(),getX()+ getWidth(),getY()+ getHeight());
+        GL11.glEnable(GL11.GL_SCISSOR_TEST);
+        for (HudElementButton button : elementButtons) {
+            button.setX(getX());
+            button.setWidth(getWidth());
+            button.setY(getY() + Managers.TEXT.getStringHeight() + 12 + yOffset);
             button.draw(mouseX, mouseY, partialTicks);
-            yOffset += button.getHeight() + 1.0f;
+            yOffset += button.getHeight() + 1;
         }
-        GL11.glDisable((int)3089);
+        GL11.glDisable(GL11.GL_SCISSOR_TEST);
         GL11.glPopAttrib();
         GL11.glPopMatrix();
     }
 
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        this.currentEdge = GuiUtil.getHoveredEdge(this, mouseX, mouseY, 5);
+        currentEdge = GuiUtil.getHoveredEdge(this, mouseX, mouseY, 5);
         if (GuiUtil.isHovered(this, mouseX, mouseY)) {
-            if (this.currentEdge != null) {
-                this.stretching = true;
-                this.dragging = false;
-                this.stretchingWidth = this.getWidth();
-                this.stretchingHeight = this.getHeight();
-                this.stretchingX = mouseX;
-                this.stretchingY = mouseY;
-                this.stretchingX2 = this.getX() + this.getWidth();
-                this.stretchingY2 = this.getY() + this.getHeight();
-            } else if (GuiUtil.isHovered(this.getX(), this.getY(), this.getWidth(), 20.0f, (float)mouseX, (float)mouseY)) {
-                this.dragging = true;
-                this.stretching = false;
-                this.draggingX = (float)mouseX - this.getX();
-                this.draggingY = (float)mouseY - this.getY();
+            if (currentEdge != null) {
+                stretching = true;
+                dragging = false;
+                stretchingWidth = getWidth();
+                stretchingHeight = getHeight();
+                stretchingX = mouseX;
+                stretchingY = mouseY;
+                stretchingX2 = getX() + getWidth();
+                stretchingY2 = getY() + getHeight();
+            } else if (GuiUtil.isHovered(getX(), getY(), getWidth(), 20, mouseX, mouseY)) {
+                dragging = true;
+                stretching = false;
+                draggingX = (mouseX - getX());
+                draggingY = (mouseY - getY());
             }
         }
-        for (HudElementButton button : this.elementButtons) {
+
+        for (HudElementButton button : elementButtons) {
             button.mouseClicked(mouseX, mouseY, mouseButton);
         }
     }
 
     public void mouseReleased(int mouseX, int mouseY, int mouseButton) {
-        this.dragging = false;
-        this.stretching = false;
-        this.currentEdge = null;
-        for (HudElementButton button : this.elementButtons) {
+        dragging = false;
+        stretching = false;
+        currentEdge = null;
+
+        for (HudElementButton button : elementButtons) {
             button.mouseReleased(mouseX, mouseY, mouseButton);
         }
     }
 
     public void keyPressed(char eventChar, int key) {
-        for (HudElementButton button : this.elementButtons) {
+        for (HudElementButton button : elementButtons) {
             button.keyPressed(eventChar, key);
         }
     }
 
     public void mouseScrolled() {
+
     }
 
     public Set<HudElementButton> getElementButtons() {
-        return this.elementButtons;
+        return elementButtons;
     }
-}
 
+}

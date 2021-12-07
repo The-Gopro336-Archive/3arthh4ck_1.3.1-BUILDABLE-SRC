@@ -1,11 +1,12 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.core.ducks.network;
 
-public interface INetHandlerPlayClient {
-    public boolean isDoneLoadingTerrain();
+/**
+ * Duck interface for {@link net.minecraft.client.network.NetHandlerPlayClient}
+ * not to confuse with {@link net.minecraft.network.play.INetHandlerPlayClient}.
+ */
+public interface INetHandlerPlayClient
+{
+    boolean isDoneLoadingTerrain();
 
-    public void setDoneLoadingTerrain(boolean var1);
+    void setDoneLoadingTerrain(boolean loaded);
 }
-

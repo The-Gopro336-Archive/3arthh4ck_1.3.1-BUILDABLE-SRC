@@ -1,39 +1,40 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.core.ducks.entity;
 
-public interface IEntityNoInterp {
-    public double getNoInterpX();
+public interface IEntityNoInterp
+{
+    double getNoInterpX();
 
-    public double getNoInterpY();
+    double getNoInterpY();
 
-    public double getNoInterpZ();
+    double getNoInterpZ();
 
-    public void setNoInterpX(double var1);
+    void setNoInterpX(double x);
 
-    public void setNoInterpY(double var1);
+    void setNoInterpY(double y);
 
-    public void setNoInterpZ(double var1);
+    void setNoInterpZ(double z);
 
-    public int getPosIncrements();
+    int getPosIncrements();
 
-    public void setPosIncrements(int var1);
+    void setPosIncrements(int posIncrements);
 
-    public float getNoInterpSwingAmount();
+    float getNoInterpSwingAmount();
 
-    public float getNoInterpSwing();
+    float getNoInterpSwing();
 
-    public float getNoInterpPrevSwing();
+    float getNoInterpPrevSwing();
 
-    public void setNoInterpSwingAmount(float var1);
+    void setNoInterpSwingAmount(float noInterpSwingAmount);
 
-    public void setNoInterpSwing(float var1);
+    void setNoInterpSwing(float noInterpSwing);
 
-    public void setNoInterpPrevSwing(float var1);
+    void setNoInterpPrevSwing(float noInterpPrevSwing);
 
-    public boolean isNoInterping();
+    /**
+     * @return <tt>true</tt> unless this Entity is an EntityPlayerSP.
+     */
+    boolean isNoInterping();
 
-    public void setNoInterping(boolean var1);
+    void setNoInterping(boolean noInterping);
+
 }
-

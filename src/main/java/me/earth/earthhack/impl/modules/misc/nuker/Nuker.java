@@ -1,29 +1,5 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.block.Block
- *  net.minecraft.entity.Entity
- *  net.minecraft.entity.EntityLivingBase
- *  net.minecraft.init.Blocks
- *  net.minecraft.network.Packet
- *  net.minecraft.network.play.client.CPacketPlayer$Rotation
- *  net.minecraft.network.play.client.CPacketPlayerDigging
- *  net.minecraft.network.play.client.CPacketPlayerDigging$Action
- *  net.minecraft.util.EnumFacing
- *  net.minecraft.util.EnumHand
- *  net.minecraft.util.math.BlockPos
- *  net.minecraft.util.math.RayTraceResult
- *  net.minecraft.util.math.Vec3d
- */
 package me.earth.earthhack.impl.modules.misc.nuker;
 
-import java.awt.Color;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Set;
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
@@ -31,12 +7,6 @@ import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.api.setting.settings.ColorSetting;
 import me.earth.earthhack.api.setting.settings.EnumSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
-import me.earth.earthhack.impl.modules.misc.nuker.ListenerChange;
-import me.earth.earthhack.impl.modules.misc.nuker.ListenerClickBlock;
-import me.earth.earthhack.impl.modules.misc.nuker.ListenerMotion;
-import me.earth.earthhack.impl.modules.misc.nuker.ListenerMultiChange;
-import me.earth.earthhack.impl.modules.misc.nuker.ListenerRender;
-import me.earth.earthhack.impl.modules.misc.nuker.NukerData;
 import me.earth.earthhack.impl.util.helpers.blocks.modes.Rotate;
 import me.earth.earthhack.impl.util.math.MathUtil;
 import me.earth.earthhack.impl.util.math.RayTraceUtil;
@@ -45,12 +15,10 @@ import me.earth.earthhack.impl.util.math.rotation.RotationUtil;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
 import me.earth.earthhack.impl.util.minecraft.Swing;
 import me.earth.earthhack.impl.util.minecraft.blocks.BlockUtil;
-import me.earth.earthhack.impl.util.minecraft.blocks.SpecialBlocks;
 import me.earth.earthhack.impl.util.minecraft.blocks.mine.MineUtil;
+import me.earth.earthhack.impl.util.minecraft.blocks.SpecialBlocks;
 import me.earth.earthhack.impl.util.thread.Locks;
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketPlayer;
@@ -61,32 +29,57 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 
-public class Nuker
-extends Module {
-    protected final Setting<Boolean> nuke = this.register(new BooleanSetting("Nuke", true));
-    protected final Setting<Integer> blocks = this.register(new NumberSetting<Integer>("Blocks/Attack", 1, 1, 50));
-    protected final Setting<Integer> delay = this.register(new NumberSetting<Integer>("Click-Delay", 25, 0, 250));
-    protected final Setting<Rotate> rotate = this.register(new EnumSetting<Rotate>("Rotations", Rotate.None));
-    protected final Setting<Integer> width = this.register(new NumberSetting<Integer>("Selection-W", 1, 1, 6));
-    protected final Setting<Integer> height = this.register(new NumberSetting<Integer>("Selection-H", 1, 1, 6));
-    protected final Setting<Float> range = this.register(new NumberSetting<Float>("Range", Float.valueOf(6.0f), Float.valueOf(0.1f), Float.valueOf(6.0f)));
-    protected final Setting<Boolean> render = this.register(new BooleanSetting("Render", true));
-    protected final Setting<Color> color = this.register(new ColorSetting("Color", new Color(255, 255, 255, 125)));
-    protected final Setting<Boolean> shulkers = this.register(new BooleanSetting("Shulkers", false));
-    protected final Setting<Boolean> hoppers = this.register(new BooleanSetting("Hoppers", false));
-    protected final Setting<Boolean> instant = this.register(new BooleanSetting("Predict", false));
-    protected final Setting<Swing> swing = this.register(new EnumSetting<Swing>("Swing", Swing.Packet));
-    protected final Setting<Boolean> speedMine = this.register(new BooleanSetting("Packet", true));
-    protected final Setting<Boolean> autoTool = this.register(new BooleanSetting("AutoTool", true));
-    protected final Setting<Integer> timeout = this.register(new NumberSetting<Integer>("Delay", 100, 50, 500));
-    protected final Queue<Runnable> actions = new LinkedList<Runnable>();
+import java.awt.*;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Set;
+
+public class Nuker extends Module
+{
+    protected final Setting<Boolean> nuke =
+            register(new BooleanSetting("Nuke", true));
+    protected final Setting<Integer> blocks =
+            register(new NumberSetting<>("Blocks/Attack", 1, 1, 50));
+    protected final Setting<Integer> delay  =
+            register(new NumberSetting<>("Click-Delay", 25, 0, 250));
+    protected final Setting<Rotate> rotate  =
+            register(new EnumSetting<>("Rotations", Rotate.None));
+    protected final Setting<Integer> width =
+            register(new NumberSetting<>("Selection-W", 1, 1, 6));
+    protected final Setting<Integer> height =
+            register(new NumberSetting<>("Selection-H", 1, 1, 6));
+    protected final Setting<Float> range =
+            register(new NumberSetting<>("Range", 6.0f, 0.1f, 6.0f));
+    protected final Setting<Boolean> render =
+            register(new BooleanSetting("Render", true));
+    protected final Setting<Color> color =
+            register(new ColorSetting("Color", new Color(255, 255, 255, 125)));
+    protected final Setting<Boolean> shulkers =
+            register(new BooleanSetting("Shulkers", false));
+    protected final Setting<Boolean> hoppers =
+            register(new BooleanSetting("Hoppers", false));
+    protected final Setting<Boolean> instant =
+            register(new BooleanSetting("Predict", false));
+    protected final Setting<Swing> swing =
+            register(new EnumSetting<>("Swing", Swing.Packet));
+    protected final Setting<Boolean> speedMine = //TODO: make normal work!
+            register(new BooleanSetting("Packet", true));
+    protected final Setting<Boolean> autoTool =
+            register(new BooleanSetting("AutoTool", true));
+    protected final Setting<Integer> timeout =
+            register(new NumberSetting<>("Delay", 100, 50, 500));
+
+    protected final Queue<Runnable> actions = new LinkedList<>();
     protected final StopWatch timer = new StopWatch();
     protected Set<BlockPos> currentSelection;
     protected float[] rotations;
     protected boolean breaking;
     protected int lastSlot;
 
-    public Nuker() {
+    public Nuker()
+    {
         super("Nuker", Category.Misc);
         this.listeners.add(new ListenerClickBlock(this));
         this.listeners.add(new ListenerMultiChange(this));
@@ -97,164 +90,322 @@ extends Module {
     }
 
     @Override
-    protected void onEnable() {
-        this.currentSelection = null;
-        this.rotations = null;
-        this.breaking = false;
-        this.actions.clear();
+    protected void onEnable()
+    {
+        currentSelection = null;
+        rotations        = null;
+        breaking         = false;
+
+        actions.clear();
     }
 
-    protected Set<Block> getBlocks() {
-        HashSet<Block> result = new HashSet<Block>();
-        if (this.hoppers.getValue().booleanValue()) {
-            result.add((Block)Blocks.HOPPER);
+    /**
+     * @return Blocks that we want to break when Hopper
+     *         or Shulker is enabled.
+     */
+    protected Set<Block> getBlocks()
+    {
+        Set<Block> result = new HashSet<>();
+
+        if (hoppers.getValue())
+        {
+            result.add(Blocks.HOPPER);
         }
-        if (this.shulkers.getValue().booleanValue()) {
+
+        if (shulkers.getValue())
+        {
             result.addAll(SpecialBlocks.SHULKERS);
         }
+
         return result;
     }
 
-    protected void breakSelection(Set<BlockPos> selection, boolean autoTool) {
+    /**
+     * Breaks the given BlockPositions. If we need to
+     * rotate all actions will be added to {@link Nuker#actions},
+     * which will be run after onUpdateWalkingPlayer.
+     *
+     * @param selection the blocks to break.
+     */
+    protected void breakSelection(Set<BlockPos> selection, boolean autoTool)
+    {
         int i = 1;
-        this.lastSlot = -1;
-        HashSet<BlockPos> toRemove = new HashSet<BlockPos>();
-        for (BlockPos pos : selection) {
-            RayTraceResult result;
-            float[] rotations;
-            if (!MineUtil.canBreak(pos)) {
+        lastSlot = -1;
+        Set<BlockPos> toRemove = new HashSet<>();
+        for (BlockPos pos : selection)
+        {
+            if (!MineUtil.canBreak(pos))
+            {
                 toRemove.add(pos);
                 continue;
             }
-            if (this.rotate.getValue() != Rotate.None) {
+
+            RayTraceResult result;
+            float[] rotations;
+            if (rotate.getValue() != Rotate.None)
+            {
                 rotations = RotationUtil.getRotationsToTopMiddle(pos.up());
-                result = RayTraceUtil.getRayTraceResult(rotations[0], rotations[1], this.range.getValue().floatValue());
-            } else {
+                result = RayTraceUtil.getRayTraceResult(
+                            rotations[0],
+                            rotations[1],
+                            range.getValue());
+            }
+            else
+            {
                 rotations = null;
-                result = new RayTraceResult(new Vec3d(0.5, 1.0, 0.5), EnumFacing.UP);
+                result =
+                        new RayTraceResult(new Vec3d(0.5, 1.0, 0.5),
+                                EnumFacing.UP);
             }
-            if (rotations != null) {
-                if (this.rotations == null) {
+
+            if (rotations != null)
+            {
+                if (this.rotations == null)
+                {
                     this.rotations = rotations;
-                } else {
-                    this.actions.add(() -> Nuker.mc.player.connection.sendPacket((Packet)new CPacketPlayer.Rotation(rotations[0], rotations[1], Nuker.mc.player.onGround)));
+                }
+                else
+                {
+                    actions.add(() ->
+                            mc.player.connection.sendPacket(
+                                    new CPacketPlayer.Rotation(
+                                            rotations[0],
+                                            rotations[1],
+                                            mc.player.onGround)));
                 }
             }
-            if (this.rotate.getValue() == Rotate.None) {
-                Locks.acquire(Locks.PLACE_SWITCH_LOCK, () -> {
-                    if (autoTool) {
-                        if (this.lastSlot == -1) {
-                            this.lastSlot = Nuker.mc.player.inventory.currentItem;
+
+            if (rotate.getValue() == Rotate.None)
+            {
+                Locks.acquire(Locks.PLACE_SWITCH_LOCK, () ->
+                {
+                    if (autoTool)
+                    {
+                        if (lastSlot == -1)
+                        {
+                            lastSlot = mc.player.inventory.currentItem;
                         }
+
                         InventoryUtil.switchTo(MineUtil.findBestTool(pos));
                     }
-                    if (this.speedMine.getValue().booleanValue()) {
-                        Nuker.mc.player.connection.sendPacket(this.getPacket(pos, result.sideHit, true));
-                        Nuker.mc.player.connection.sendPacket(this.getPacket(pos, result.sideHit, false));
-                    } else {
-                        Nuker.mc.playerController.onPlayerDamageBlock(pos, result.sideHit);
+
+                    if (speedMine.getValue())
+                    {
+                        mc.player
+                          .connection
+                          .sendPacket(getPacket(pos, result.sideHit, true));
+                        mc.player
+                          .connection
+                          .sendPacket(getPacket(pos, result.sideHit, false));
                     }
-                    this.swing.getValue().swing(EnumHand.MAIN_HAND);
+                    else
+                    {
+                        mc.playerController
+                          .onPlayerDamageBlock(pos, result.sideHit);
+                    }
+
+                    swing.getValue().swing(EnumHand.MAIN_HAND);
                 });
-            } else {
-                if (autoTool) {
-                    this.actions.add(() -> {
-                        if (this.lastSlot == -1) {
-                            this.lastSlot = Nuker.mc.player.inventory.currentItem;
+            }
+            else
+            {
+                if (autoTool)
+                {
+                    actions.add(() ->
+                    {
+                        if (lastSlot == -1)
+                        {
+                            lastSlot = mc.player.inventory.currentItem;
                         }
+
                         InventoryUtil.switchTo(MineUtil.findBestTool(pos));
                     });
                 }
-                if (this.speedMine.getValue().booleanValue()) {
-                    this.actions.add(() -> {
-                        Nuker.mc.player.connection.sendPacket(this.getPacket(pos, result.sideHit, true));
-                        Nuker.mc.player.connection.sendPacket(this.getPacket(pos, result.sideHit, false));
+
+                if (speedMine.getValue())
+                {
+                    actions.add(() ->
+                    {
+                        mc.player.connection
+                            .sendPacket(getPacket(pos, result.sideHit, true));
+                        mc.player.connection
+                            .sendPacket(getPacket(pos, result.sideHit, false));
                     });
-                } else {
-                    this.actions.add(() -> Nuker.mc.playerController.onPlayerDamageBlock(pos, result.sideHit));
                 }
-                this.actions.add(() -> this.swing.getValue().swing(EnumHand.MAIN_HAND));
+                else
+                {
+                    actions.add(() -> mc.playerController
+                            .onPlayerDamageBlock(pos, result.sideHit));
+                }
+
+                actions.add(() -> swing.getValue().swing(EnumHand.MAIN_HAND));
             }
+
             toRemove.add(pos);
-            if (i >= this.blocks.getValue() || this.rotate.getValue() == Rotate.Normal) break;
-            ++i;
-        }
-        selection.removeAll(toRemove);
-        if (!this.actions.isEmpty()) {
-            if (autoTool) {
-                InventoryUtil.switchTo(this.lastSlot);
+
+            if (i >= blocks.getValue()
+                    || rotate.getValue() == Rotate.Normal)
+            {
+                break;
             }
-            this.timer.reset();
+
+            i++;
+        }
+
+        selection.removeAll(toRemove);
+
+        if (!actions.isEmpty())
+        {
+            if (autoTool)
+            {
+                InventoryUtil.switchTo(lastSlot);
+            }
+
+            timer.reset();
         }
     }
 
-    protected void attack(BlockPos pos) {
+    protected void attack(BlockPos pos)
+    {
+        RayTraceResult result;
         float[] rotations = RotationUtil.getRotationsToTopMiddle(pos.up());
-        RayTraceResult result = RayTraceUtil.getRayTraceResult(rotations[0], rotations[1], this.range.getValue().floatValue());
-        if (this.rotate.getValue() == Rotate.Packet) {
-            Nuker.mc.player.connection.sendPacket((Packet)new CPacketPlayer.Rotation(rotations[0], rotations[1], Nuker.mc.player.onGround));
+        result = RayTraceUtil.getRayTraceResult(
+                rotations[0],
+                rotations[1],
+                range.getValue());
+
+        if (rotate.getValue() == Rotate.Packet)
+        {
+            mc.player.connection.sendPacket(
+                    new CPacketPlayer
+                            .Rotation(rotations[0],
+                            rotations[1],
+                            mc.player.onGround));
         }
-        Nuker.mc.player.connection.sendPacket(this.getPacket(pos, result.sideHit, true));
-        Nuker.mc.player.connection.sendPacket(this.getPacket(pos, result.sideHit, false));
+
+        mc.player.connection.sendPacket(
+                getPacket(pos, result.sideHit, true));
+        mc.player.connection.sendPacket(
+                getPacket(pos, result.sideHit, false));
     }
 
-    protected Packet<?> getPacket(BlockPos pos, EnumFacing facing, boolean start) {
-        if (start) {
-            return new CPacketPlayerDigging(CPacketPlayerDigging.Action.START_DESTROY_BLOCK, pos, facing);
+    protected Packet<?> getPacket(BlockPos pos,
+                                  EnumFacing facing,
+                                  boolean start)
+    {
+        if (start)
+        {
+            return new CPacketPlayerDigging(CPacketPlayerDigging
+                    .Action
+                    .START_DESTROY_BLOCK,
+                    pos,
+                    facing);
         }
-        return new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, pos, facing);
+
+        return new CPacketPlayerDigging(CPacketPlayerDigging
+                .Action
+                .STOP_DESTROY_BLOCK,
+                pos,
+                facing);
     }
 
-    public Set<BlockPos> getSelection(BlockPos pos) {
-        LinkedHashSet<BlockPos> result = new LinkedHashSet<BlockPos>();
+    public Set<BlockPos> getSelection(BlockPos pos)
+    {
+        Set<BlockPos> result = new LinkedHashSet<>();
         result.add(pos);
-        EnumFacing entityF = EnumFacing.getDirectionFromEntityLiving((BlockPos)pos, (EntityLivingBase)Nuker.mc.player).getOpposite();
-        EnumFacing horizontal = Nuker.mc.player.getHorizontalFacing();
-        for (int i = 1; i < this.width.getValue(); ++i) {
-            EnumFacing facing = this.getFacing(i, entityF, false, horizontal);
+
+        EnumFacing entityF = EnumFacing
+                               .getDirectionFromEntityLiving(pos, mc.player)
+                               .getOpposite();
+
+        EnumFacing horizontal = mc.player.getHorizontalFacing();
+
+        for (int i = 1; i < width.getValue(); i++)
+        {
+            EnumFacing facing = getFacing(i, entityF, false, horizontal);
+
             BlockPos w = pos.offset(facing);
-            while (result.contains((Object)w)) {
+            while (result.contains(w))
+            {
                 w = w.offset(facing);
             }
-            if (!MineUtil.canBreak(w) || !(BlockUtil.getDistanceSqDigging((Entity)Nuker.mc.player, w) <= (double)MathUtil.square(this.range.getValue().floatValue()))) continue;
-            result.add(w);
-        }
-        LinkedHashSet<BlockPos> added = new LinkedHashSet<BlockPos>(result);
-        for (int i = 1; i < this.height.getValue(); ++i) {
-            EnumFacing facing = this.getFacing(i, entityF, true, horizontal);
-            for (BlockPos p : result) {
-                BlockPos h = p.offset(facing);
-                while (added.contains((Object)h)) {
-                    h = h.offset(facing);
-                }
-                if (!MineUtil.canBreak(h) || !(BlockUtil.getDistanceSqDigging((Entity)Nuker.mc.player, h) <= (double)MathUtil.square(this.range.getValue().floatValue())) || entityF != EnumFacing.DOWN && !(Nuker.mc.player.posY < (double)pos.getY())) continue;
-                added.add(h);
+
+            if (MineUtil.canBreak(w)
+                    && BlockUtil.getDistanceSqDigging(mc.player, w)
+                            <= MathUtil.square(range.getValue()))
+            {
+                result.add(w);
             }
         }
+
+        Set<BlockPos> added = new LinkedHashSet<>(result);
+        for (int i = 1; i < height.getValue(); i++)
+        {
+            EnumFacing facing = getFacing(i, entityF, true, horizontal);
+
+            for (BlockPos p : result)
+            {
+                BlockPos h = p.offset(facing);
+                while (added.contains(h))
+                {
+                    h = h.offset(facing);
+                }
+
+                if (MineUtil.canBreak(h)
+                    && BlockUtil.getDistanceSqDigging(mc.player, h)
+                            <= MathUtil.square(range.getValue())
+                    && (entityF == EnumFacing.DOWN
+                        || mc.player.posY < pos.getY()))
+                {
+                    added.add(h);
+                }
+            }
+        }
+
         return added;
     }
 
-    private EnumFacing getFacing(int index, EnumFacing entityFacing, boolean h, EnumFacing horizontal) {
-        if (entityFacing == EnumFacing.UP || entityFacing == EnumFacing.DOWN) {
-            if (h) {
+    private EnumFacing getFacing(int index,
+                                 EnumFacing entityFacing,
+                                 boolean h,
+                                 EnumFacing horizontal)
+    {
+        if (entityFacing == EnumFacing.UP || entityFacing == EnumFacing.DOWN)
+        {
+            if (h)
+            {
                 return index % 2 == 0 ? horizontal.getOpposite() : horizontal;
             }
-            EnumFacing result = this.get2ndHorizontalOpposite(horizontal);
+
+            EnumFacing result = get2ndHorizontalOpposite(horizontal);
             return index % 2 == 0 ? result.getOpposite() : result;
         }
-        if (h) {
+
+        if (h)
+        {
             return index % 2 == 0 ? EnumFacing.UP : EnumFacing.DOWN;
         }
-        EnumFacing result = this.get2ndHorizontalOpposite(horizontal);
+
+        EnumFacing result = get2ndHorizontalOpposite(horizontal);
         return index % 2 == 0 ? result.getOpposite() : result;
     }
 
-    private EnumFacing get2ndHorizontalOpposite(EnumFacing facing) {
-        for (EnumFacing f : EnumFacing.values()) {
-            if (f == facing || f.getOpposite() == facing || f == EnumFacing.UP || f == EnumFacing.DOWN) continue;
+    private EnumFacing get2ndHorizontalOpposite(EnumFacing facing)
+    {
+        for (EnumFacing f : EnumFacing.values())
+        {
+            if (f == facing
+                    || f.getOpposite() == facing
+                    || f == EnumFacing.UP
+                    || f == EnumFacing.DOWN)
+            {
+                continue;
+            }
+
             return f;
         }
+
         return EnumFacing.UP;
     }
-}
 
+}

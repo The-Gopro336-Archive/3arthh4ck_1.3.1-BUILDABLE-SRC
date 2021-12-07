@@ -1,17 +1,15 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.util.helpers.blocks.attack;
 
 import me.earth.earthhack.impl.util.helpers.blocks.modes.Pop;
 
-public interface AttackingModule {
-    public Pop getPop();
+public interface AttackingModule
+{
+    Pop getPop();
 
-    public int getPopTime();
+    int getPopTime();
 
-    public double getRange();
+    double getRange();
 
-    public double getTrace();
+    double getTrace();
+
 }
-

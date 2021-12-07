@@ -1,8 +1,8 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.loader;
 
-public class Updater {
+/**
+ * Some day... but Im too lazy for all the setup this would require
+ */
+public class Updater
+{
 }
-

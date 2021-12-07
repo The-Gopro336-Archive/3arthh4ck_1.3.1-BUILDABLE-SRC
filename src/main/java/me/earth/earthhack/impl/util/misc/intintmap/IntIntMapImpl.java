@@ -1,172 +1,218 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.util.misc.intintmap;
 
-import me.earth.earthhack.impl.util.misc.intintmap.IntIntMap;
-import me.earth.earthhack.impl.util.misc.intintmap.Tools;
-
-public class IntIntMapImpl
-implements IntIntMap {
+/**
+ * {@see java-performance.info/implementing-world-fastest-java-int-to-int-hash-map/}
+ * {@author Mikhail Vorontsov}
+ */
+public class IntIntMapImpl implements IntIntMap
+{
     private static final int FREE_KEY = 0;
+
     public static final int NO_VALUE = 0;
+
+    /** Keys and values */
     private int[] m_data;
+
+    /** Do we have 'free' key in the map? */
     private boolean m_hasFreeKey;
+    /** Value of 'free' key */
     private int m_freeValue;
+
+    /** Fill factor, must be between (0 and 1) */
     private final float m_fillFactor;
+    /** We will resize a map once it reaches this size */
     private int m_threshold;
+    /** Current map size */
     private int m_size;
+
+    /** Mask to calculate the original position */
     private int m_mask;
     private int m_mask2;
 
-    public IntIntMapImpl(int size, float fillFactor) {
-        if (fillFactor <= 0.0f || fillFactor >= 1.0f) {
+    public IntIntMapImpl( final int size, final float fillFactor )
+    {
+        if ( fillFactor <= 0 || fillFactor >= 1 )
             throw new IllegalArgumentException("FillFactor must be in (0, 1)");
-        }
-        if (size <= 0) {
-            throw new IllegalArgumentException("Size must be positive!");
-        }
-        int capacity = Tools.arraySize(size, fillFactor);
-        this.m_mask = capacity - 1;
-        this.m_mask2 = capacity * 2 - 1;
-        this.m_fillFactor = fillFactor;
-        this.m_data = new int[capacity * 2];
-        this.m_threshold = (int)((float)capacity * fillFactor);
+        if ( size <= 0 )
+            throw new IllegalArgumentException( "Size must be positive!" );
+        final int capacity = Tools.arraySize(size, fillFactor);
+        m_mask = capacity - 1;
+        m_mask2 = capacity*2 - 1;
+        m_fillFactor = fillFactor;
+
+        m_data = new int[capacity * 2];
+        m_threshold = (int) (capacity * fillFactor);
     }
 
-    @Override
-    public int get(int key) {
-        int ptr = (Tools.phiMix(key) & this.m_mask) << 1;
-        if (key == 0) {
-            return this.m_hasFreeKey ? this.m_freeValue : 0;
+    public int get( final int key )
+    {
+        int ptr = ( Tools.phiMix( key ) & m_mask) << 1;
+
+        if ( key == FREE_KEY )
+            return m_hasFreeKey ? m_freeValue : NO_VALUE;
+
+        int k = m_data[ ptr ];
+
+        if ( k == FREE_KEY )
+            return NO_VALUE;  //end of chain already
+        if ( k == key ) //we check FREE prior to this call
+            return m_data[ ptr + 1 ];
+
+        while ( true )
+        {
+            ptr = (ptr + 2) & m_mask2; //that's next index
+            k = m_data[ ptr ];
+            if ( k == FREE_KEY )
+                return NO_VALUE;
+            if ( k == key )
+                return m_data[ ptr + 1 ];
         }
-        int k = this.m_data[ptr];
-        if (k == 0) {
-            return 0;
-        }
-        if (k == key) {
-            return this.m_data[ptr + 1];
-        }
-        do {
-            if ((k = this.m_data[ptr = ptr + 2 & this.m_mask2]) != 0) continue;
-            return 0;
-        } while (k != key);
-        return this.m_data[ptr + 1];
     }
 
-    @Override
-    public int put(int key, int value) {
-        if (key == 0) {
-            int ret = this.m_freeValue;
-            if (!this.m_hasFreeKey) {
-                ++this.m_size;
-            }
-            this.m_hasFreeKey = true;
-            this.m_freeValue = value;
+    public int put( final int key, final int value )
+    {
+        if ( key == FREE_KEY )
+        {
+            final int ret = m_freeValue;
+            if ( !m_hasFreeKey )
+                ++m_size;
+            m_hasFreeKey = true;
+            m_freeValue = value;
             return ret;
         }
-        int ptr = (Tools.phiMix(key) & this.m_mask) << 1;
-        int k = this.m_data[ptr];
-        if (k == 0) {
-            this.m_data[ptr] = key;
-            this.m_data[ptr + 1] = value;
-            if (this.m_size >= this.m_threshold) {
-                this.rehash(this.m_data.length * 2);
-            } else {
-                ++this.m_size;
-            }
-            return 0;
+
+        int ptr = ( Tools.phiMix( key ) & m_mask) << 1;
+        int k = m_data[ptr];
+        //noinspection DuplicatedCode
+        if ( k == FREE_KEY ) //end of chain already
+        {
+            m_data[ ptr ] = key;
+            m_data[ ptr + 1 ] = value;
+            if ( m_size >= m_threshold )
+                rehash( m_data.length * 2 ); //size is set inside
+            else
+                ++m_size;
+            return NO_VALUE;
         }
-        if (k == key) {
-            int ret = this.m_data[ptr + 1];
-            this.m_data[ptr + 1] = value;
+        else if ( k == key ) //we check FREE prior to this call
+        {
+            final int ret = m_data[ ptr + 1 ];
+            m_data[ ptr + 1 ] = value;
             return ret;
         }
-        do {
-            if ((k = this.m_data[ptr = ptr + 2 & this.m_mask2]) != 0) continue;
-            this.m_data[ptr] = key;
-            this.m_data[ptr + 1] = value;
-            if (this.m_size >= this.m_threshold) {
-                this.rehash(this.m_data.length * 2);
-            } else {
-                ++this.m_size;
+
+        while ( true )
+        {
+            ptr = ( ptr + 2 ) & m_mask2; //that's next index calculation
+            k = m_data[ ptr ];
+            //noinspection DuplicatedCode
+            if ( k == FREE_KEY )
+            {
+                m_data[ ptr ] = key;
+                m_data[ ptr + 1 ] = value;
+                if ( m_size >= m_threshold )
+                    rehash( m_data.length * 2 ); //size is set inside
+                else
+                    ++m_size;
+                return NO_VALUE;
             }
-            return 0;
-        } while (k != key);
-        int ret = this.m_data[ptr + 1];
-        this.m_data[ptr + 1] = value;
-        return ret;
+            else if ( k == key )
+            {
+                final int ret = m_data[ ptr + 1 ];
+                m_data[ ptr + 1 ] = value;
+                return ret;
+            }
+        }
     }
 
-    @Override
-    public int remove(int key) {
-        if (key == 0) {
-            if (!this.m_hasFreeKey) {
-                return 0;
+    public int remove( final int key )
+    {
+        if ( key == FREE_KEY )
+        {
+            if ( !m_hasFreeKey )
+                return NO_VALUE;
+            m_hasFreeKey = false;
+            --m_size;
+            return m_freeValue; //value is not cleaned
+        }
+
+        int ptr = ( Tools.phiMix( key ) & m_mask) << 1;
+        int k = m_data[ ptr ];
+        if ( k == key ) //we check FREE prior to this call
+        {
+            final int res = m_data[ ptr + 1 ];
+            shiftKeys( ptr );
+            --m_size;
+            return res;
+        }
+        else if ( k == FREE_KEY )
+            return NO_VALUE;  //end of chain already
+        while ( true )
+        {
+            ptr = ( ptr + 2 ) & m_mask2; //that's next index calculation
+            k = m_data[ ptr ];
+            if ( k == key )
+            {
+                final int res = m_data[ ptr + 1 ];
+                shiftKeys( ptr );
+                --m_size;
+                return res;
             }
-            this.m_hasFreeKey = false;
-            --this.m_size;
-            return this.m_freeValue;
+            else if ( k == FREE_KEY )
+                return NO_VALUE;
         }
-        int ptr = (Tools.phiMix(key) & this.m_mask) << 1;
-        int k = this.m_data[ptr];
-        if (k == key) {
-            int res = this.m_data[ptr + 1];
-            this.shiftKeys(ptr);
-            --this.m_size;
-            return res;
-        }
-        if (k == 0) {
-            return 0;
-        }
-        do {
-            if ((k = this.m_data[ptr = ptr + 2 & this.m_mask2]) != key) continue;
-            int res = this.m_data[ptr + 1];
-            this.shiftKeys(ptr);
-            --this.m_size;
-            return res;
-        } while (k != 0);
-        return 0;
     }
 
-    private void shiftKeys(int pos) {
-        int[] data = this.m_data;
-        while (true) {
-            int k;
-            int last = pos;
-            pos = last + 2 & this.m_mask2;
-            while (true) {
-                if ((k = data[pos]) == 0) {
-                    data[last] = 0;
+    private void shiftKeys(int pos)
+    {
+        // Shift entries with the same hash.
+        int last, slot;
+        int k;
+        final int[] data = this.m_data;
+        while ( true )
+        {
+            pos = ((last = pos) + 2) & m_mask2;
+            while ( true )
+            {
+                if ((k = data[pos]) == FREE_KEY)
+                {
+                    data[last] = FREE_KEY;
                     return;
                 }
-                int slot = (Tools.phiMix(k) & this.m_mask) << 1;
-                if (last <= pos ? last >= slot || slot > pos : last >= slot && slot > pos) break;
-                pos = pos + 2 & this.m_mask2;
+                //calculate the starting slot for the current key
+                slot = ( Tools.phiMix( k ) & m_mask) << 1;
+                if (last <= pos ? last >= slot
+                        || slot > pos : last >= slot && slot > pos) break;
+                pos = (pos + 2) & m_mask2; //go to the next entry
             }
+
             data[last] = k;
             data[last + 1] = data[pos + 1];
         }
     }
 
-    @Override
-    public int size() {
-        return this.m_size;
+    public int size()
+    {
+        return m_size;
     }
 
-    private void rehash(int newCapacity) {
-        this.m_threshold = (int)((float)(newCapacity / 2) * this.m_fillFactor);
-        this.m_mask = newCapacity / 2 - 1;
-        this.m_mask2 = newCapacity - 1;
-        int oldCapacity = this.m_data.length;
-        int[] oldData = this.m_data;
-        this.m_data = new int[newCapacity];
-        this.m_size = this.m_hasFreeKey ? 1 : 0;
-        for (int i = 0; i < oldCapacity; i += 2) {
-            int oldKey = oldData[i];
-            if (oldKey == 0) continue;
-            this.put(oldKey, oldData[i + 1]);
+    private void rehash( final int newCapacity )
+    {
+        m_threshold = (int) (newCapacity/2 * m_fillFactor);
+        m_mask = newCapacity/2 - 1;
+        m_mask2 = newCapacity - 1;
+
+        final int oldCapacity = m_data.length;
+        final int[] oldData = m_data;
+
+        m_data = new int[ newCapacity ];
+        m_size = m_hasFreeKey ? 1 : 0;
+
+        for ( int i = 0; i < oldCapacity; i += 2 ) {
+            final int oldKey = oldData[ i ];
+            if( oldKey != FREE_KEY )
+                put( oldKey, oldData[ i + 1 ]);
         }
     }
-}
 
+}

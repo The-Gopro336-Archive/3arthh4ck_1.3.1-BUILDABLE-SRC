@@ -1,11 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.passive.EntityAnimal
- *  net.minecraft.entity.passive.EntityPig
- *  net.minecraft.world.World
- */
 package me.earth.earthhack.impl.core.mixins.entity.living;
 
 import me.earth.earthhack.api.event.bus.instance.Bus;
@@ -20,27 +12,43 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(value={EntityPig.class})
-public abstract class MixinEntityPig
-extends EntityAnimal {
-    public MixinEntityPig(World world) {
+@Mixin(EntityPig.class)
+public abstract class MixinEntityPig extends EntityAnimal
+{
+    public MixinEntityPig(World world)
+    {
         super(world);
     }
 
-    @Inject(method={"canBeSteered"}, at={@At(value="HEAD")}, cancellable=true)
-    private void canBeSteeredHook(CallbackInfoReturnable<Boolean> info) {
+    @Inject(
+        method = "canBeSteered",
+        at = @At("HEAD"),
+        cancellable = true)
+    private void canBeSteeredHook(CallbackInfoReturnable<Boolean> info)
+    {
         ControlEvent event = new ControlEvent();
         Bus.EVENT_BUS.post(event);
-        if (event.isCancelled()) {
+
+        if (event.isCancelled())
+        {
             info.setReturnValue(true);
         }
     }
 
-    @Redirect(method={"travel"}, at=@At(value="INVOKE", target="net/minecraft/entity/passive/EntityAnimal.travel(FFF)V"))
-    private void travelHook(EntityAnimal var1, float strafe, float vertical, float forward) {
+    @Redirect(
+        method = "travel",
+        at = @At(
+            value = "INVOKE",
+            target = "net/minecraft/entity/passive/EntityAnimal.travel(FFF)V"))
+    private void travelHook(EntityAnimal var1,
+                            float strafe,
+                            float vertical,
+                            float forward)
+    {
         AIEvent event = new AIEvent();
         Bus.EVENT_BUS.post(event);
-        super.travel(strafe, vertical, event.isCancelled() ? 0.0f : forward);
-    }
-}
 
+        super.travel(strafe, vertical, event.isCancelled() ? 0.0F : forward);
+    }
+
+}

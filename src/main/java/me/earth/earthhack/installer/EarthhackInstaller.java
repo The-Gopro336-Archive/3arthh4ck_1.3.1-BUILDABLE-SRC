@@ -1,12 +1,6 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.installer;
 
-import java.util.List;
-import javax.swing.SwingUtilities;
 import me.earth.earthhack.impl.util.thread.SafeRunnable;
-import me.earth.earthhack.installer.Installer;
 import me.earth.earthhack.installer.gui.ErrorPanel;
 import me.earth.earthhack.installer.gui.InstallerFrame;
 import me.earth.earthhack.installer.gui.VersionPanel;
@@ -18,68 +12,100 @@ import me.earth.earthhack.installer.service.InstallerService;
 import me.earth.earthhack.installer.version.Version;
 import me.earth.earthhack.installer.version.VersionFinder;
 
-public class EarthhackInstaller
-implements Installer {
-    private final MinecraftFiles files = new MinecraftFiles();
-    private final InstallerFrame gui = new InstallerFrame();
+import javax.swing.*;
+import java.util.List;
+
+// TODO: allow us to add new profiles etc
+/**
+ * {@link me.earth.earthhack.installer.main.Main#main(String[])}
+ */
+@SuppressWarnings("unused")
+public class EarthhackInstaller implements Installer
+{
+    private final MinecraftFiles files;
+    private final InstallerFrame gui;
     private InstallerService service;
 
-    public void launch(LibraryClassLoader classLoader, String[] args) {
-        SwingUtilities.invokeLater(this.gui::display);
-        this.wrapErrorGui(() -> {
-            this.files.findFiles(args);
+    public EarthhackInstaller()
+    {
+        this.files = new MinecraftFiles();
+        this.gui = new InstallerFrame();
+    }
+
+    public void launch(LibraryClassLoader classLoader, String[] args)
+    {
+        SwingUtilities.invokeLater(gui::display);
+
+        wrapErrorGui(() ->
+        {
+            files.findFiles(args);
+
             LibraryFinder libraryFinder = new LibraryFinder();
-            for (Library library : libraryFinder.findLibraries(this.files)) {
+            for (Library library : libraryFinder.findLibraries(files))
+            {
                 classLoader.installLibrary(library);
             }
-            this.service = new InstallerService();
-            this.refreshVersions();
+
+            service = new InstallerService();
+            refreshVersions();
         });
     }
 
     @Override
-    public boolean refreshVersions() {
-        return this.wrapErrorGui(() -> {
+    public boolean refreshVersions()
+    {
+        return wrapErrorGui(() ->
+        {
             VersionFinder versionFinder = new VersionFinder();
-            List<Version> versions = versionFinder.findVersions(this.files);
-            this.gui.schedule(new VersionPanel(this, versions));
+            List<Version> versions = versionFinder.findVersions(files);
+
+            gui.schedule(new VersionPanel(this, versions));
         });
     }
 
     @Override
-    public boolean install(Version version) {
-        return this.wrapErrorGui(() -> {
-            this.service.install(this.files, version);
-            this.refreshVersions();
+    public boolean install(Version version)
+    {
+        return wrapErrorGui(() ->
+        {
+            service.install(files, version);
+            refreshVersions();
         });
     }
 
     @Override
-    public boolean uninstall(Version version) {
-        return this.wrapErrorGui(() -> {
-            this.service.uninstall(version);
-            this.refreshVersions();
+    public boolean uninstall(Version version)
+    {
+        return wrapErrorGui(() ->
+        {
+            service.uninstall(version);
+            refreshVersions();
         });
     }
 
     @Override
-    public boolean update(boolean forge) {
-        return this.wrapErrorGui(() -> {
-            this.service.update(this.files, forge);
-            this.refreshVersions();
+    public boolean update(boolean forge)
+    {
+        return wrapErrorGui(() ->
+        {
+            service.update(files, forge);
+            refreshVersions();
         });
     }
 
-    private boolean wrapErrorGui(SafeRunnable runnable) {
-        try {
+    private boolean wrapErrorGui(SafeRunnable runnable)
+    {
+        try
+        {
             runnable.runSafely();
             return false;
         }
-        catch (Throwable throwable) {
-            this.gui.schedule(new ErrorPanel(throwable));
+        catch (Throwable throwable)
+        {
+            gui.schedule(new ErrorPanel(throwable));
             throwable.printStackTrace();
             return true;
         }
     }
-}
 
+}

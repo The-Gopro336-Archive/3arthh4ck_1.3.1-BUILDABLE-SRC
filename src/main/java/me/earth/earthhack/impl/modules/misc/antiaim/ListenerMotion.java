@@ -1,75 +1,86 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.misc.antiaim;
 
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 import me.earth.earthhack.api.event.events.Stage;
 import me.earth.earthhack.impl.event.events.network.MotionUpdateEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
-import me.earth.earthhack.impl.modules.misc.antiaim.AntiAim;
 
-final class ListenerMotion
-extends ModuleListener<AntiAim, MotionUpdateEvent> {
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
+final class ListenerMotion extends ModuleListener<AntiAim, MotionUpdateEvent>
+{
     private static final Random RANDOM = new Random();
     private int skip;
 
-    public ListenerMotion(AntiAim module) {
-        super(module, MotionUpdateEvent.class, 2147482647);
+    public ListenerMotion(AntiAim module)
+    {
+        super(module, MotionUpdateEvent.class, Integer.MAX_VALUE - 1000);
     }
 
     @Override
-    public void invoke(MotionUpdateEvent event) {
-        if (event.getStage() == Stage.POST || ((AntiAim)this.module).dontRotate()) {
+    public void invoke(MotionUpdateEvent event)
+    {
+        if (event.getStage() == Stage.POST || module.dontRotate())
+        {
             return;
         }
-        if (((AntiAim)this.module).sneak.getValue().booleanValue() && !ListenerMotion.mc.gameSettings.keyBindSneak.isKeyDown() && ((AntiAim)this.module).timer.passed(((AntiAim)this.module).sneakDelay.getValue().intValue())) {
-            ListenerMotion.mc.player.setSneaking(!ListenerMotion.mc.player.isSneaking());
-            ((AntiAim)this.module).timer.reset();
-        }
-        if (((AntiAim)this.module).skip.getValue() != 1 && this.skip++ % ((AntiAim)this.module).skip.getValue() == 0) {
-            event.setYaw(((AntiAim)this.module).lastYaw);
-            event.setPitch(((AntiAim)this.module).lastPitch);
-            return;
-        }
-        switch (((AntiAim)this.module).mode.getValue()) {
-            case Random: {
-                ((AntiAim)this.module).lastYaw = (float)ThreadLocalRandom.current().nextDouble(-180.0, 180.0);
-                ((AntiAim)this.module).lastPitch = -90.0f + RANDOM.nextFloat() * 180.0f;
-                break;
-            }
-            case Spin: {
-                ((AntiAim)this.module).lastYaw = (((AntiAim)this.module).lastYaw + ((AntiAim)this.module).hSpeed.getValue().floatValue()) % 360.0f;
-                ((AntiAim)this.module).lastPitch += ((AntiAim)this.module).vSpeed.getValue().floatValue();
-                break;
-            }
-            case Down: {
-                ((AntiAim)this.module).lastYaw = event.getYaw();
-                ((AntiAim)this.module).lastPitch = 90.0f;
-                break;
-            }
-            case Headbang: {
-                ((AntiAim)this.module).lastYaw = event.getYaw();
-                ((AntiAim)this.module).lastPitch += ((AntiAim)this.module).vSpeed.getValue().floatValue();
-                break;
-            }
-            case Horizontal: {
-                ((AntiAim)this.module).lastPitch = event.getPitch();
-                ((AntiAim)this.module).lastYaw = (((AntiAim)this.module).lastYaw + ((AntiAim)this.module).hSpeed.getValue().floatValue()) % 360.0f;
-                break;
-            }
-            case Constant: {
-                event.setYaw(((AntiAim)this.module).yaw.getValue().floatValue());
-                event.setPitch(((AntiAim)this.module).pitch.getValue().floatValue());
-                return;
-            }
-        }
-        if (((AntiAim)this.module).lastPitch > 90.0f && ((AntiAim)this.module).lastPitch != event.getPitch()) {
-            ((AntiAim)this.module).lastPitch = -90.0f;
-        }
-        event.setYaw(((AntiAim)this.module).lastYaw);
-        event.setPitch(((AntiAim)this.module).lastPitch);
-    }
-}
 
+        if (module.sneak.getValue()
+                && !mc.gameSettings.keyBindSneak.isKeyDown()
+                && module.timer.passed(module.sneakDelay.getValue()))
+        {
+            mc.player.setSneaking(!mc.player.isSneaking());
+            module.timer.reset();
+        }
+
+        if (module.skip.getValue() != 1 && skip++ % module.skip.getValue() == 0)
+        {
+            event.setYaw(module.lastYaw);
+            event.setPitch(module.lastPitch);
+            return;
+        }
+
+        switch (module.mode.getValue())
+        {
+            case Random:
+                module.lastYaw = (float) ThreadLocalRandom.current()
+                                                    .nextDouble(-180.0, 180.0);
+                module.lastPitch = -90.0f + RANDOM.nextFloat() * (180.0f);
+                break;
+            case Spin:
+                module.lastYaw   =
+                        (module.lastYaw + module.hSpeed.getValue()) % 360;
+                module.lastPitch =
+                        (module.lastPitch + module.vSpeed.getValue());
+                break;
+            case Down:
+                module.lastYaw = event.getYaw();
+                module.lastPitch = 90.0f;
+                break;
+            case Headbang:
+                module.lastYaw = event.getYaw();
+                module.lastPitch =
+                        (module.lastPitch + module.vSpeed.getValue());
+                break;
+            case Horizontal:
+                module.lastPitch = event.getPitch();
+                module.lastYaw   =
+                    (module.lastYaw + module.hSpeed.getValue()) % 360;
+                break;
+            case Constant:
+                event.setYaw(module.yaw.getValue());
+                event.setPitch(module.pitch.getValue());
+                return;
+            default:
+        }
+
+        if (module.lastPitch > 90.0f && module.lastPitch != event.getPitch())
+        {
+            module.lastPitch = -90.0f;
+        }
+
+        event.setYaw(module.lastYaw);
+        event.setPitch(module.lastPitch);
+    }
+
+}

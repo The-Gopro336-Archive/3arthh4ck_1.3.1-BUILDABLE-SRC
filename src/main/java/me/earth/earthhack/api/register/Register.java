@@ -1,22 +1,21 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.api.register;
 
-import java.util.Collection;
 import me.earth.earthhack.api.register.exception.AlreadyRegisteredException;
 import me.earth.earthhack.api.register.exception.CantUnregisterException;
 import me.earth.earthhack.api.util.interfaces.Nameable;
 
-public interface Register<T extends Nameable> {
-    public void register(T var1) throws AlreadyRegisteredException;
+import java.util.Collection;
 
-    public void unregister(T var1) throws CantUnregisterException;
+public interface Register<T extends Nameable>
+{
+    void register(T object) throws AlreadyRegisteredException;
 
-    public T getObject(String var1);
+    void unregister(T object) throws CantUnregisterException;
 
-    public <C extends T> C getByClass(Class<C> var1);
+    T getObject(String name);
 
-    public Collection<T> getRegistered();
+    <C extends T> C getByClass(Class<C> clazz);
+
+    Collection<T> getRegistered();
+
 }
-

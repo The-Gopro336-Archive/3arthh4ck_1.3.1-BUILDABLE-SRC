@@ -1,111 +1,133 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.util.helpers.disabling;
 
 import me.earth.earthhack.api.event.bus.EventListener;
 import me.earth.earthhack.api.event.bus.api.Listener;
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
-import me.earth.earthhack.api.util.interfaces.Globals;
 import me.earth.earthhack.impl.event.events.client.ShutDownEvent;
 import me.earth.earthhack.impl.event.events.misc.DeathEvent;
 import me.earth.earthhack.impl.event.events.network.DisconnectEvent;
-import me.earth.earthhack.impl.util.helpers.disabling.IDisablingModule;
 
-public abstract class DisablingModule
-extends Module
-implements IDisablingModule {
-    public DisablingModule(String name, Category category) {
+/**
+ * A module that turns off when you
+ * log off/ close the game/ die.
+ */
+public abstract class DisablingModule extends Module implements IDisablingModule
+{
+    public DisablingModule(String name, Category category)
+    {
         super(name, category);
-        this.listeners.add(DisablingModule.newDisconnectDisabler(this));
-        this.listeners.add(DisablingModule.newDeathDisabler(this));
-        this.listeners.add(DisablingModule.newShutDownDisabler(this));
+        this.listeners.add(newDisconnectDisabler(this));
+        this.listeners.add(newDeathDisabler(this));
+        this.listeners.add(newShutDownDisabler(this));
     }
 
     @Override
-    public void onShutDown() {
+    public void onShutDown()
+    {
         this.disable();
     }
 
     @Override
-    public void onDeath() {
+    public void onDeath()
+    {
         this.disable();
     }
 
     @Override
-    public void onDisconnect() {
+    public void onDisconnect()
+    {
         this.disable();
     }
 
-    public static void makeDisablingModule(Module module) {
-        module.getListeners().add(DisablingModule.newDisconnectDisabler(module));
-        module.getListeners().add(DisablingModule.newDeathDisabler(module));
-        module.getListeners().add(DisablingModule.newShutDownDisabler(module));
+    public static void makeDisablingModule(Module module)
+    {
+        module.getListeners().add(newDisconnectDisabler(module));
+        module.getListeners().add(newDeathDisabler(module));
+        module.getListeners().add(newShutDownDisabler(module));
     }
 
-    public static Listener<?> newDisconnectDisabler(final Module module) {
-        if (module instanceof IDisablingModule) {
-            final IDisablingModule disabling = (IDisablingModule)((Object)module);
-            return new EventListener<DisconnectEvent>(DisconnectEvent.class){
-
+    public static Listener<?> newDisconnectDisabler(Module module)
+    {
+        if (module instanceof IDisablingModule)
+        {
+            IDisablingModule disabling = (IDisablingModule) module;
+            return new EventListener<DisconnectEvent>(DisconnectEvent.class)
+            {
                 @Override
-                public void invoke(DisconnectEvent event) {
-                    Globals.mc.addScheduledTask(disabling::onDisconnect);
+                public void invoke(DisconnectEvent event)
+                {
+                    mc.addScheduledTask(disabling::onDisconnect);
                 }
             };
         }
-        return new EventListener<DisconnectEvent>(DisconnectEvent.class){
 
+        return new EventListener<DisconnectEvent>(DisconnectEvent.class)
+        {
             @Override
-            public void invoke(DisconnectEvent event) {
-                Globals.mc.addScheduledTask(module::disable);
+            public void invoke(DisconnectEvent event)
+            {
+                mc.addScheduledTask(module::disable);
             }
         };
     }
 
-    public static Listener<?> newDeathDisabler(final Module module) {
-        if (module instanceof IDisablingModule) {
-            final IDisablingModule disabling = (IDisablingModule)((Object)module);
-            return new EventListener<DeathEvent>(DeathEvent.class){
-
+    public static Listener<?> newDeathDisabler(Module module)
+    {
+        if (module instanceof IDisablingModule)
+        {
+            IDisablingModule disabling = (IDisablingModule) module;
+            return new EventListener<DeathEvent>(DeathEvent.class)
+            {
                 @Override
-                public void invoke(DeathEvent event) {
-                    if (event.getEntity() != null && event.getEntity().equals((Object)Globals.mc.player)) {
-                        Globals.mc.addScheduledTask(disabling::onDeath);
+                public void invoke(DeathEvent event)
+                {
+                    if (event.getEntity() != null
+                            && event.getEntity().equals(mc.player))
+                    {
+                        mc.addScheduledTask(disabling::onDeath);
                     }
                 }
             };
         }
-        return new EventListener<DeathEvent>(DeathEvent.class){
 
+        return new EventListener<DeathEvent>(DeathEvent.class)
+        {
             @Override
-            public void invoke(DeathEvent event) {
-                if (event.getEntity() != null && event.getEntity().equals((Object)Globals.mc.player)) {
-                    Globals.mc.addScheduledTask(module::disable);
+            public void invoke(DeathEvent event)
+            {
+                if (event.getEntity() != null
+                        && event.getEntity().equals(mc.player))
+                {
+                    mc.addScheduledTask(module::disable);
                 }
             }
         };
     }
 
-    public static Listener<?> newShutDownDisabler(final Module module) {
-        if (module instanceof IDisablingModule) {
-            final IDisablingModule disabling = (IDisablingModule)((Object)module);
-            return new EventListener<ShutDownEvent>(ShutDownEvent.class){
-
+    public static Listener<?> newShutDownDisabler(Module module)
+    {
+        if (module instanceof IDisablingModule)
+        {
+            IDisablingModule disabling = (IDisablingModule) module;
+            return new EventListener<ShutDownEvent>(ShutDownEvent.class)
+            {
                 @Override
-                public void invoke(ShutDownEvent event) {
-                    Globals.mc.addScheduledTask(disabling::onDisconnect);
+                public void invoke(ShutDownEvent event)
+                {
+                    mc.addScheduledTask(disabling::onDisconnect);
                 }
             };
         }
-        return new EventListener<ShutDownEvent>(ShutDownEvent.class){
 
+        return new EventListener<ShutDownEvent>(ShutDownEvent.class)
+        {
             @Override
-            public void invoke(ShutDownEvent event) {
-                Globals.mc.addScheduledTask(module::disable);
+            public void invoke(ShutDownEvent event)
+            {
+                mc.addScheduledTask(module::disable);
             }
         };
     }
-}
 
+}

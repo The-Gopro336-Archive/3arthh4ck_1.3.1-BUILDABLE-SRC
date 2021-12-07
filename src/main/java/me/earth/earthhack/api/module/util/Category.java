@@ -1,15 +1,12 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.api.module.util;
 
-public enum Category {
+public enum Category
+{
     Combat,
     Misc,
     Render,
     Movement,
     Player,
-    Client;
-
+    Client
+    // Hud // TODO: idk
 }
-

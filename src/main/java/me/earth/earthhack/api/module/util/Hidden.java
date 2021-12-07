@@ -1,12 +1,8 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.api.module.util;
 
-public enum Hidden {
+public enum Hidden
+{
     Visible,
     Info,
-    Hidden;
-
+    Hidden
 }
-

@@ -1,37 +1,47 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.render.newchunks.util;
 
-public class ChunkData {
+public class ChunkData
+{
     private final int x;
     private final int z;
 
-    public ChunkData(int x, int z) {
+    public ChunkData(int x, int z)
+    {
         this.x = x;
         this.z = z;
     }
 
-    public int getX() {
-        return this.x;
+    public int getX()
+    {
+        return x;
     }
 
-    public int getZ() {
-        return this.z;
+    public int getZ()
+    {
+        return z;
     }
 
-    public int hashCode() {
+    @Override
+    public int hashCode()
+    {
         int hash = 23;
-        hash = hash * 31 + this.x;
-        hash = hash * 31 + this.z;
+        hash = hash * 31 + x;
+        hash = hash * 31 + z;
         return hash;
     }
 
-    public boolean equals(Object o) {
-        if (o instanceof ChunkData) {
-            return Double.compare(((ChunkData)o).x, this.x) == 0 && Double.compare(((ChunkData)o).z, this.z) == 0;
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o instanceof ChunkData)
+        {
+            return Double.compare(((ChunkData) o).x, x) == 0
+                    && Double.compare(((ChunkData) o).z, z) == 0;
         }
-        return super.equals(o);
+        else
+        {
+            return super.equals(o);
+        }
     }
-}
 
+}

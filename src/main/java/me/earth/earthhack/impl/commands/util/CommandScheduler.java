@@ -1,12 +1,17 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.commands.util;
 
-import java.util.concurrent.ScheduledExecutorService;
 import me.earth.earthhack.impl.util.thread.ThreadUtil;
 
-public interface CommandScheduler {
-    public static final ScheduledExecutorService SCHEDULER = ThreadUtil.newDaemonScheduledExecutor("Command");
-}
+import java.util.concurrent.ScheduledExecutorService;
 
+/**
+ * ScheduledExecutorService for commands.
+ */
+public interface CommandScheduler
+{
+    /**
+     * Only use for small short lived tasks, which are rarely called!
+     */
+    ScheduledExecutorService SCHEDULER =
+            ThreadUtil.newDaemonScheduledExecutor("Command");
+}

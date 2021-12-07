@@ -1,31 +1,43 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.util.text.event.ClickEvent
- *  net.minecraft.util.text.event.ClickEvent$Action
- */
 package me.earth.earthhack.impl.gui.chat.clickevents;
 
 import net.minecraft.util.text.event.ClickEvent;
 
-public abstract class SmartClickEvent
-extends ClickEvent {
-    public SmartClickEvent(ClickEvent.Action theAction) {
+/**
+ * A {@link ClickEvent}, that can return a different
+ * values.
+ */
+public abstract class SmartClickEvent extends ClickEvent
+{
+    /**
+     * Calls the SuperConstructor for the given action
+     * and "$smart_click_value$".
+     *
+     * @param theAction the action.
+     */
+    public SmartClickEvent(Action theAction)
+    {
         super(theAction, "$smart_click_value$");
     }
 
+    @Override
+    @SuppressWarnings("NullableProblems")
     public abstract String getValue();
 
-    public boolean equals(Object o) {
-        if (o instanceof SmartClickEvent) {
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o instanceof SmartClickEvent)
+        {
             return super.equals(o);
         }
+
         return false;
     }
 
-    public int hashCode() {
+    @Override
+    public int hashCode()
+    {
         return super.hashCode() + 1;
     }
-}
 
+}

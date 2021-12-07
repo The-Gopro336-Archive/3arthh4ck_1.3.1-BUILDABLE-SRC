@@ -1,31 +1,10 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.Entity
- *  net.minecraft.item.Item
- *  net.minecraft.item.ItemBow
- *  net.minecraft.item.ItemEgg
- *  net.minecraft.item.ItemEnderPearl
- *  net.minecraft.item.ItemExpBottle
- *  net.minecraft.item.ItemLingeringPotion
- *  net.minecraft.item.ItemSnowball
- *  net.minecraft.item.ItemSplashPotion
- *  net.minecraft.util.EntitySelectors
- *  net.minecraft.util.math.AxisAlignedBB
- *  net.minecraft.util.math.MathHelper
- */
 package me.earth.earthhack.impl.modules.render.trajectories;
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.api.setting.settings.ColorSetting;
-import me.earth.earthhack.impl.modules.render.trajectories.ListenerRender;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBow;
@@ -39,10 +18,13 @@ import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 
-public class Trajectories
-extends Module {
-    public final Setting<Color> color = this.register(new ColorSetting("Color", new Color(0, 255, 0)));
-    public final Setting<Boolean> landed = this.register(new BooleanSetting("Landed", true));
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Trajectories extends Module {
+    public final Setting<Color> color = register(new ColorSetting("Color", new Color(0, 255, 0)));
+    public final Setting<Boolean> landed = register(new BooleanSetting("Landed", true));
 
     public Trajectories() {
         super("Trajectories", Category.Render);
@@ -50,7 +32,12 @@ extends Module {
     }
 
     protected boolean isThrowable(Item item) {
-        return item instanceof ItemEnderPearl || item instanceof ItemExpBottle || item instanceof ItemSnowball || item instanceof ItemEgg || item instanceof ItemSplashPotion || item instanceof ItemLingeringPotion;
+        return item instanceof ItemEnderPearl
+                || item instanceof ItemExpBottle
+                || item instanceof ItemSnowball
+                || item instanceof ItemEgg
+                || item instanceof ItemSplashPotion
+                || item instanceof ItemLingeringPotion;
     }
 
     protected float getDistance(Item item) {
@@ -62,7 +49,7 @@ extends Module {
             return 0.5f;
         }
         if (item instanceof ItemExpBottle) {
-            return 0.59f;
+           return 0.59f;
         }
         return 1.5f;
     }
@@ -75,25 +62,25 @@ extends Module {
     }
 
     protected float getGravity(Item item) {
-        if (item instanceof ItemBow || item instanceof ItemSplashPotion || item instanceof ItemLingeringPotion || item instanceof ItemExpBottle) {
+         if (item instanceof ItemBow || item instanceof ItemSplashPotion || item instanceof ItemLingeringPotion || item instanceof ItemExpBottle) {
             return 0.05f;
         }
         return 0.03f;
     }
 
     protected List<Entity> getEntitiesWithinAABB(AxisAlignedBB bb) {
-        ArrayList<Entity> list = new ArrayList<Entity>();
-        int chunkMinX = MathHelper.floor((double)((bb.minX - 2.0) / 16.0));
-        int chunkMaxX = MathHelper.floor((double)((bb.maxX + 2.0) / 16.0));
-        int chunkMinZ = MathHelper.floor((double)((bb.minZ - 2.0) / 16.0));
-        int chunkMaxZ = MathHelper.floor((double)((bb.maxZ + 2.0) / 16.0));
+        final ArrayList<Entity> list = new ArrayList<>();
+        final int chunkMinX = MathHelper.floor((bb.minX - 2.0) / 16.0);
+        final int chunkMaxX = MathHelper.floor((bb.maxX + 2.0) / 16.0);
+        final int chunkMinZ = MathHelper.floor((bb.minZ - 2.0) / 16.0);
+        final int chunkMaxZ = MathHelper.floor((bb.maxZ + 2.0) / 16.0);
         for (int x = chunkMinX; x <= chunkMaxX; ++x) {
             for (int z = chunkMinZ; z <= chunkMaxZ; ++z) {
-                if (Trajectories.mc.world.getChunkProvider().getLoadedChunk(x, z) == null) continue;
-                Trajectories.mc.world.getChunk(x, z).getEntitiesWithinAABBForEntity((Entity)Trajectories.mc.player, bb, list, EntitySelectors.NOT_SPECTATING);
+                if (mc.world.getChunkProvider().getLoadedChunk(x, z) != null) {
+                    mc.world.getChunk(x, z).getEntitiesWithinAABBForEntity(mc.player, bb, list, EntitySelectors.NOT_SPECTATING);
+                }
             }
         }
         return list;
     }
 }
-

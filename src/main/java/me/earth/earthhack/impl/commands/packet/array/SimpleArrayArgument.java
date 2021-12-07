@@ -1,35 +1,44 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.commands.packet.array;
 
+import me.earth.earthhack.api.command.Completer;
+import me.earth.earthhack.api.command.PossibleInputs;
+import me.earth.earthhack.impl.commands.packet.AbstractArgument;
 import me.earth.earthhack.impl.commands.packet.PacketArgument;
-import me.earth.earthhack.impl.commands.packet.array.AbstractArrayArgument;
 import me.earth.earthhack.impl.commands.packet.exception.ArgParseException;
+import me.earth.earthhack.impl.util.helpers.command.CustomCompleterResult;
 
-public class SimpleArrayArgument
-extends AbstractArrayArgument<Object> {
-    public SimpleArrayArgument(PacketArgument<Object> parser) {
+public class SimpleArrayArgument extends AbstractArrayArgument<Object>
+{
+    public SimpleArrayArgument(PacketArgument<Object> parser)
+    {
         super(Object[].class, parser);
     }
 
     @Override
-    protected Object[] create(int size) {
+    protected Object[] create(int size)
+    {
         return new Object[size];
     }
 
     @Override
-    public Object[] fromString(String argument) throws ArgParseException {
-        return SimpleArrayArgument.toArray(argument, this.parser);
+    public Object[] fromString(String argument)
+            throws ArgParseException
+    {
+        return toArray(argument, parser);
     }
 
-    public static <T> T[] toArray(String argument, PacketArgument<T> parser) throws ArgParseException {
+    @SuppressWarnings("unchecked")
+    public static <T> T[] toArray(String argument, PacketArgument<T> parser)
+            throws ArgParseException
+    {
         String[] split = argument.split("]");
-        Object[] result = new Object[split.length];
-        for (int i = 0; i < split.length; ++i) {
+        T[] result = (T[]) new Object[split.length];
+        for (int i = 0; i < split.length; i++)
+        {
             result[i] = parser.fromString(split[i]);
         }
+
         return result;
     }
-}
 
+}

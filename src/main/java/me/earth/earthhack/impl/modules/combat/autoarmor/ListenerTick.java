@@ -1,180 +1,271 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.init.Items
- *  net.minecraft.inventory.EntityEquipmentSlot
- *  net.minecraft.item.Item
- *  net.minecraft.item.ItemArmor
- *  net.minecraft.item.ItemStack
- */
 package me.earth.earthhack.impl.modules.combat.autoarmor;
 
-import java.util.ArrayList;
-import java.util.Map;
 import me.earth.earthhack.api.cache.ModuleCache;
-import me.earth.earthhack.api.module.Module;
+import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.impl.event.events.misc.TickEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import me.earth.earthhack.impl.modules.Caches;
-import me.earth.earthhack.impl.modules.combat.autoarmor.AutoArmor;
 import me.earth.earthhack.impl.modules.combat.autoarmor.util.DamageStack;
-import me.earth.earthhack.impl.modules.combat.autoarmor.util.DesyncClick;
 import me.earth.earthhack.impl.modules.player.xcarry.XCarry;
 import me.earth.earthhack.impl.util.client.ModuleUtil;
 import me.earth.earthhack.impl.util.minecraft.DamageUtil;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
+import me.earth.earthhack.impl.util.text.TextColor;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 
-final class ListenerTick
-extends ModuleListener<AutoArmor, TickEvent> {
-    private static final ModuleCache<XCarry> XCARRY = Caches.getModule(XCarry.class);
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-    public ListenerTick(AutoArmor module) {
+final class ListenerTick extends ModuleListener<AutoArmor, TickEvent>
+{
+    private static final ModuleCache<XCarry> XCARRY =
+            Caches.getModule(XCarry.class);
+
+    public ListenerTick(AutoArmor module)
+    {
         super(module, TickEvent.class);
     }
 
     @Override
-    public void invoke(TickEvent event) {
-        if (!event.isSafe() || this.checkDesync()) {
-            ((AutoArmor)this.module).putBackClick = null;
+    @SuppressWarnings("unchecked")
+    public void invoke(TickEvent event)
+    {
+        if (!event.isSafe() || checkDesync())
+        {
+            module.putBackClick = null;
             return;
         }
-        ((AutoArmor)this.module).stackSet = false;
-        ((AutoArmor)this.module).queuedSlots.clear();
-        ((AutoArmor)this.module).windowClicks.clear();
-        ((AutoArmor)this.module).desyncMap.entrySet().removeIf(e -> System.currentTimeMillis() - ((DesyncClick)e.getValue()).getTimeStamp() > (long)((AutoArmor)this.module).removeTime.getValue().intValue());
-        if (InventoryUtil.validScreen()) {
-            if (((AutoArmor)this.module).canAutoMend()) {
-                ((AutoArmor)this.module).queuedSlots.add(-2);
-                ArrayList<DamageStack> stacks = new ArrayList<DamageStack>(4);
-                for (int i = 5; i < 9; ++i) {
-                    float percent;
-                    ItemStack stack = ListenerTick.mc.player.inventoryContainer.getSlot(i).getStack();
-                    if (stack.isEmpty() || !((percent = DamageUtil.getPercent(stack)) > (float)((Integer)((AutoArmor)this.module).damages[i - 5].getValue()).intValue())) continue;
-                    stacks.add(new DamageStack(stack, percent, i));
+
+        module.stackSet = false;
+        module.queuedSlots.clear();
+        module.windowClicks.clear();
+        module.desyncMap.entrySet().removeIf(e ->
+            System.currentTimeMillis() - e.getValue().getTimeStamp()
+                    > module.removeTime.getValue());
+        if (InventoryUtil.validScreen())
+        {
+            if (module.canAutoMend())
+            {
+                module.queuedSlots.add(-2); // blacklist drag slot
+                List<DamageStack> stacks = new ArrayList<>(4);
+                for (int i = 5; i < 9; i++)
+                {
+                    ItemStack stack = mc.player.inventoryContainer
+                                               .getSlot(i)
+                                               .getStack();
+                    if (!stack.isEmpty())
+                    {
+                        float percent = DamageUtil.getPercent(stack);
+                        if (percent > ((Setting<Integer>) module.damages[i - 5])
+                                                                .getValue())
+                        {
+                            stacks.add(new DamageStack(stack, percent, i));
+                        }
+                    }
                 }
+
+                // Sort so we take the ones with the most percent off first.
                 stacks.sort(DamageStack::compareTo);
-                ItemStack setStack = ((AutoArmor)this.module).setStack();
-                if (setStack == null) {
+                ItemStack setStack = module.setStack();
+                if (setStack == null)
+                {
                     return;
                 }
+
                 ItemStack drag = setStack;
-                for (DamageStack stack : stacks) {
+                for (DamageStack stack : stacks)
+                {
                     ItemStack sStack = stack.getStack();
-                    int slot = AutoArmor.findItem(Items.AIR, XCARRY.isEnabled(), ((AutoArmor)this.module).queuedSlots);
-                    if (slot == -1) {
-                        if (((AutoArmor)this.module).dragTakeOff.getValue().booleanValue() && (((AutoArmor)this.module).stackSet || ListenerTick.mc.player.inventory.getItemStack().isEmpty())) {
-                            ((AutoArmor)this.module).queueClick(stack.getSlot(), sStack, drag, -1);
+                    int slot = AutoArmor.findItem(Items.AIR,
+                                                  XCARRY.isEnabled(),
+                                                  module.queuedSlots);
+                    if (slot == -1)
+                    {
+                        if (module.dragTakeOff.getValue()
+                            && (module.stackSet
+                                || mc.player.inventory.getItemStack()
+                                                      .isEmpty()))
+                        {
+                            module.queueClick(
+                                    stack.getSlot(), sStack, drag, -1);
                         }
+
                         return;
                     }
-                    if (slot == -2) continue;
-                    ((AutoArmor)this.module).queueClick(stack.getSlot(), sStack, drag, slot).setDoubleClick(((AutoArmor)this.module).doubleClicks.getValue());
-                    drag = sStack;
-                    ItemStack inSlot = InventoryUtil.get(slot);
-                    ((AutoArmor)this.module).queueClick(slot, inSlot, drag);
-                    ((AutoArmor)this.module).queuedSlots.add(slot);
-                    drag = inSlot;
-                }
-            } else {
-                int slot;
-                Map<EntityEquipmentSlot, Integer> map = ((AutoArmor)this.module).mode.getValue().setup(XCARRY.isEnabled(), ((AutoArmor)this.module).curse.getValue() == false, ((AutoArmor)this.module).prioLow.getValue(), ((AutoArmor)this.module).prioThreshold.getValue().floatValue());
-                int last = -1;
-                ItemStack drag = ListenerTick.mc.player.inventory.getItemStack();
-                for (Map.Entry<EntityEquipmentSlot, Integer> entry : map.entrySet()) {
-                    if (entry.getValue() != 8) continue;
-                    slot = AutoArmor.fromEquipment(entry.getKey());
-                    if (slot != -1 && slot != 45) {
+                    else if (slot != -2) // slot == -2 shouldn't happen.
+                    {
+                        module.queueClick(stack.getSlot(), sStack, drag, slot)
+                              .setDoubleClick(module.doubleClicks.getValue());
+
+                        drag = sStack;
                         ItemStack inSlot = InventoryUtil.get(slot);
-                        ((AutoArmor)this.module).queueClick(slot, inSlot, drag);
+                        module.queueClick(slot, inSlot, drag);
+                        module.queuedSlots.add(slot);
+                        drag = inSlot;
+                    }
+                }
+            }
+            else
+            {
+                Map<EntityEquipmentSlot, Integer> map =
+                    module.mode
+                          .getValue()
+                          .setup(XCARRY.isEnabled(),
+                                 !module.curse.getValue(),
+                                 module.prioLow.getValue(),
+                                 module.prioThreshold.getValue());
+                int last = -1;
+                ItemStack drag = mc.player.inventory.getItemStack();
+                for (Map.Entry<EntityEquipmentSlot, Integer> entry :
+                        map.entrySet())
+                {
+                    if (entry.getValue() == 8)
+                    {
+                        int slot = AutoArmor.fromEquipment(entry.getKey());
+                        if (slot != -1 && slot != 45)
+                        {
+                            ItemStack inSlot = InventoryUtil.get(slot);
+                            module.queueClick(slot, inSlot, drag);
+                            drag = inSlot;
+                            last = slot;
+                        }
+
+                        map.remove(entry.getKey()); // ok, since we break
+                        break;
+                    }
+                }
+
+                for (Map.Entry<EntityEquipmentSlot, Integer> entry :
+                        map.entrySet())
+                {
+                    int slot = AutoArmor.fromEquipment(entry.getKey());
+                    if (slot != -1 && slot != 45 && entry.getValue() != null)
+                    {
+                        int i = entry.getValue();
+                        ItemStack inSlot = InventoryUtil.get(i);
+                        module.queueClick(i, inSlot, drag)
+                              .setDoubleClick(module.doubleClicks.getValue());
+
+                        if (!drag.isEmpty())
+                        {
+                            module.queuedSlots.add(i);
+                        }
+
+                        drag = inSlot;
+                        inSlot = InventoryUtil.get(slot);
+                        module.queueClick(slot, inSlot, drag);
                         drag = inSlot;
                         last = slot;
                     }
-                    map.remove((Object)entry.getKey());
-                    break;
                 }
-                for (Map.Entry<EntityEquipmentSlot, Integer> entry : map.entrySet()) {
-                    slot = AutoArmor.fromEquipment(entry.getKey());
-                    if (slot == -1 || slot == 45 || entry.getValue() == null) continue;
-                    int i = entry.getValue();
-                    ItemStack inSlot = InventoryUtil.get(i);
-                    ((AutoArmor)this.module).queueClick(i, inSlot, drag).setDoubleClick(((AutoArmor)this.module).doubleClicks.getValue());
-                    if (!drag.isEmpty()) {
-                        ((AutoArmor)this.module).queuedSlots.add(i);
-                    }
-                    drag = inSlot;
-                    inSlot = InventoryUtil.get(slot);
-                    ((AutoArmor)this.module).queueClick(slot, inSlot, drag);
-                    drag = inSlot;
-                    last = slot;
-                }
-                if (((AutoArmor)this.module).putBack.getValue().booleanValue()) {
-                    if (last != -1) {
+
+                if (module.putBack.getValue())
+                {
+                    if (last != -1)
+                    {
                         ItemStack stack = InventoryUtil.get(last);
-                        if (!stack.isEmpty()) {
-                            ((AutoArmor)this.module).queuedSlots.add(-2);
-                            int air = AutoArmor.findItem(Items.AIR, XCARRY.isEnabled(), ((AutoArmor)this.module).queuedSlots);
-                            if (air != -1) {
+                        if (!stack.isEmpty())
+                        {
+                            module.queuedSlots.add(-2);
+                            int air = AutoArmor.findItem(Items.AIR,
+                                                         XCARRY.isEnabled(),
+                                                         module.queuedSlots);
+                            if (air != -1)
+                            {
                                 ItemStack inSlot = InventoryUtil.get(air);
-                                ((AutoArmor)this.module).putBackClick = ((AutoArmor)this.module).queueClick(air, inSlot, drag);
-                                ((AutoArmor)this.module).putBackClick.addPost(() -> {
-                                    ((AutoArmor)this.module).putBackClick = null;
-                                });
+                                module.putBackClick =
+                                    module.queueClick(air, inSlot, drag);
+
+                                module.putBackClick.addPost(() ->
+                                    module.putBackClick = null);
                             }
                         }
-                    } else if (((AutoArmor)this.module).putBackClick != null && ((AutoArmor)this.module).putBackClick.isValid()) {
-                        ((AutoArmor)this.module).queueClick(((AutoArmor)this.module).putBackClick);
-                    } else {
-                        ((AutoArmor)this.module).putBackClick = null;
+                    }
+                    else if (module.putBackClick != null
+                            && module.putBackClick.isValid())
+                    {
+                        module.queueClick(module.putBackClick);
+                    }
+                    else
+                    {
+                        module.putBackClick = null;
                     }
                 }
             }
         }
-        ((AutoArmor)this.module).runClick();
+
+        module.runClick();
     }
 
-    private boolean checkDesync() {
-        if (((AutoArmor)this.module).noDesync.getValue().booleanValue() && InventoryUtil.validScreen() && ((AutoArmor)this.module).timer.passed(((AutoArmor)this.module).checkDelay.getValue().intValue()) && ((AutoArmor)this.module).desyncTimer.passed(((AutoArmor)this.module).desyncDelay.getValue().intValue()) && ((AutoArmor)this.module).propertyTimer.passed(((AutoArmor)this.module).propertyDelay.getValue().intValue())) {
+    private boolean checkDesync()
+    {
+        if (module.noDesync.getValue()
+            && InventoryUtil.validScreen()
+            && module.timer.passed(module.checkDelay.getValue())
+            && module.desyncTimer.passed(module.desyncDelay.getValue())
+            && module.propertyTimer.passed(module.propertyDelay.getValue()))
+        {
             int bestSlot = -1;
             int clientValue = 0;
             boolean foundType = false;
-            int armorValue = ListenerTick.mc.player.getTotalArmorValue();
-            for (int i = 5; i < 9; ++i) {
-                ItemStack stack = ListenerTick.mc.player.inventoryContainer.getSlot(i).getStack();
-                if (stack.isEmpty() && !foundType) {
+            int armorValue  = mc.player.getTotalArmorValue();
+            for (int i = 5; i < 9; i++)
+            {
+                ItemStack stack = mc.player.inventoryContainer
+                                           .getSlot(i)
+                                           .getStack();
+                if (stack.isEmpty() && !foundType)
+                {
                     bestSlot = i;
-                    if (((AutoArmor)this.module).lastType != AutoArmor.fromSlot(i)) continue;
-                    foundType = true;
-                    continue;
+                    if (module.lastType == AutoArmor.fromSlot(i))
+                    {
+                        foundType = true;
+                    }
                 }
-                if (!(stack.getItem() instanceof ItemArmor)) continue;
-                ItemArmor itemArmor = (ItemArmor)stack.getItem();
-                clientValue += itemArmor.damageReduceAmount;
+                else if (stack.getItem() instanceof ItemArmor)
+                {
+                    ItemArmor itemArmor = (ItemArmor) stack.getItem();
+                    clientValue += itemArmor.damageReduceAmount;
+                }
             }
-            if (clientValue != armorValue && ((AutoArmor)this.module).timer.passed(((AutoArmor)this.module).delay.getValue().intValue())) {
-                if (((AutoArmor)this.module).illegalSync.getValue().booleanValue()) {
-                    ModuleUtil.sendMessage((Module)this.module, "\u00a7cDesync!");
+
+            if (clientValue != armorValue
+                    && module.timer.passed(module.delay.getValue()))
+            {
+                if (module.illegalSync.getValue())
+                {
+                    ModuleUtil.sendMessage(module, TextColor.RED + "Desync!");
                     InventoryUtil.illegalSync();
-                } else if (bestSlot != -1 && AutoArmor.getSlot(ListenerTick.mc.player.inventory.getItemStack()) == AutoArmor.fromSlot(bestSlot)) {
-                    ModuleUtil.sendMessage((Module)this.module, "\u00a7cDesync! (Code: " + bestSlot + ")");
+                }
+                else if (bestSlot != -1
+                        && AutoArmor.getSlot(mc.player.inventory.getItemStack())
+                            == AutoArmor.fromSlot(bestSlot))
+                {
+                    ModuleUtil.sendMessage(module, TextColor.RED
+                            + "Desync! (Code: " + bestSlot + ")");
+
                     Item i = InventoryUtil.get(bestSlot).getItem();
                     InventoryUtil.clickLocked(bestSlot, bestSlot, i, i);
-                } else {
-                    ModuleUtil.sendMessage((Module)this.module, "\u00a7cDesync!");
+                }
+                else
+                {
+                    ModuleUtil.sendMessage(module, TextColor.RED + "Desync!");
                     Item i = InventoryUtil.get(20).getItem();
                     InventoryUtil.clickLocked(20, 20, i, i);
                 }
-                ((AutoArmor)this.module).resetTimer();
-                ((AutoArmor)this.module).desyncTimer.reset();
+
+                module.resetTimer();
+                module.desyncTimer.reset();
                 return true;
             }
         }
+
         return false;
     }
-}
 
+}

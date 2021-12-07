@@ -1,36 +1,47 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.gui.visibility;
+
+import me.earth.earthhack.api.setting.Setting;
 
 import java.util.HashMap;
 import java.util.Map;
-import me.earth.earthhack.api.setting.Setting;
-import me.earth.earthhack.impl.gui.visibility.VisibilitySupplier;
 
-public class VisibilityManager {
+/**
+ * Manages the Visibility of Settings.
+ */
+@SuppressWarnings("unused")
+public class VisibilityManager
+{
     private static final VisibilitySupplier ALWAYS = () -> true;
-    private final Map<Setting<?>, VisibilitySupplier> visibilities = new HashMap();
+    private final Map<Setting<?>, VisibilitySupplier> visibilities =
+            new HashMap<>();
 
-    public VisibilitySupplier getVisibility(Setting<?> setting) {
-        return this.visibilities.getOrDefault(setting, ALWAYS);
+    public VisibilitySupplier getVisibility(Setting<?> setting)
+    {
+        return visibilities.getOrDefault(setting, ALWAYS);
     }
 
-    public void registerVisibility(Setting<?> setting, VisibilitySupplier visibility) {
-        if (visibility == null) {
-            this.visibilities.remove(setting);
+    public void registerVisibility(Setting<?> setting,
+                                   VisibilitySupplier visibility)
+    {
+        if (visibility == null)
+        {
+            visibilities.remove(setting);
             return;
         }
-        this.visibilities.compute(setting, (k, v) -> {
-            if (v == null) {
+
+        visibilities.compute(setting, (k, v) ->
+        {
+            if (v == null)
+            {
                 return visibility;
             }
-            return visibility.compose((VisibilitySupplier)v);
+
+            return visibility.compose(v);
         });
     }
 
-    public boolean isVisible(Setting<?> setting) {
-        return this.getVisibility(setting).isVisible();
+    public boolean isVisible(Setting<?> setting)
+    {
+        return getVisibility(setting).isVisible();
     }
 }
-

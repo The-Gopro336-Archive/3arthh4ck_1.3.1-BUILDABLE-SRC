@@ -1,12 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.util.EnumFacing
- *  net.minecraft.util.EnumHand
- *  net.minecraft.util.math.BlockPos
- *  net.minecraft.util.math.Vec3d
- */
 package me.earth.earthhack.impl.event.events.misc;
 
 import me.earth.earthhack.api.event.events.Event;
@@ -15,42 +6,47 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
-public class ClickBlockEvent
-extends Event {
+public class ClickBlockEvent extends Event
+{
     private final BlockPos pos;
     private final EnumFacing facing;
 
-    public ClickBlockEvent(BlockPos pos, EnumFacing facing) {
+    public ClickBlockEvent(BlockPos pos, EnumFacing facing)
+    {
         this.pos = pos;
         this.facing = facing;
     }
 
-    public BlockPos getPos() {
-        return this.pos;
+    public BlockPos getPos()
+    {
+        return pos;
     }
 
-    public EnumFacing getFacing() {
-        return this.facing;
+    public EnumFacing getFacing()
+    {
+        return facing;
     }
 
-    public static class Right
-    extends ClickBlockEvent {
+    public static class Right extends ClickBlockEvent
+    {
         private final Vec3d vec;
         private final EnumHand hand;
 
-        public Right(BlockPos pos, EnumFacing facing, Vec3d vec, EnumHand hand) {
+        public Right(BlockPos pos, EnumFacing facing, Vec3d vec, EnumHand hand)
+        {
             super(pos, facing);
             this.vec = vec;
             this.hand = hand;
         }
 
-        public EnumHand getHand() {
-            return this.hand;
+        public EnumHand getHand()
+        {
+            return hand;
         }
 
-        public Vec3d getVec() {
-            return this.vec;
+        public Vec3d getVec()
+        {
+            return vec;
         }
     }
 }
-

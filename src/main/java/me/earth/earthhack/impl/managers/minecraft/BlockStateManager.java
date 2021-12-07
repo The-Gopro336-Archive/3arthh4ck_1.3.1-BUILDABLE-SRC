@@ -1,22 +1,5 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.block.state.IBlockState
- *  net.minecraft.init.Blocks
- *  net.minecraft.network.play.server.SPacketBlockChange
- *  net.minecraft.network.play.server.SPacketExplosion
- *  net.minecraft.network.play.server.SPacketMultiBlockChange
- *  net.minecraft.network.play.server.SPacketMultiBlockChange$BlockUpdateData
- *  net.minecraft.util.math.BlockPos
- */
 package me.earth.earthhack.impl.managers.minecraft;
 
-import java.util.Map;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.function.Consumer;
 import me.earth.earthhack.api.event.bus.EventListener;
 import me.earth.earthhack.api.event.bus.SubscriberImpl;
 import me.earth.earthhack.api.util.interfaces.Globals;
@@ -30,53 +13,89 @@ import net.minecraft.network.play.server.SPacketExplosion;
 import net.minecraft.network.play.server.SPacketMultiBlockChange;
 import net.minecraft.util.math.BlockPos;
 
-public class BlockStateManager
-extends SubscriberImpl
-implements Globals {
-    private final Map<BlockPos, Queue<Consumer<IBlockState>>> callbacks = new ConcurrentHashMap<BlockPos, Queue<Consumer<IBlockState>>>();
+import java.util.Map;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.function.Consumer;
 
-    public BlockStateManager() {
-        this.listeners.add(new ReceiveListener<SPacketBlockChange>(SPacketBlockChange.class, event -> {
-            SPacketBlockChange packet = (SPacketBlockChange)event.getPacket();
-            this.process(packet.getBlockPosition(), packet.getBlockState());
+// TODO: SPacketBlock/MultiBlockChange Listeners
+//  in most modules can be replaced with this
+public class BlockStateManager extends SubscriberImpl implements Globals
+{
+    private final Map<BlockPos, Queue<Consumer<IBlockState>>> callbacks =
+            new ConcurrentHashMap<>();
+
+    public BlockStateManager()
+    {
+        this.listeners.add(
+            new ReceiveListener<>(SPacketBlockChange.class, event ->
+        {
+            SPacketBlockChange packet = event.getPacket();
+            process(packet.getBlockPosition(), packet.getBlockState());
         }));
-        this.listeners.add(new ReceiveListener<SPacketMultiBlockChange>(SPacketMultiBlockChange.class, event -> {
-            SPacketMultiBlockChange packet = (SPacketMultiBlockChange)event.getPacket();
-            for (SPacketMultiBlockChange.BlockUpdateData data : packet.getChangedBlocks()) {
-                this.process(data.getPos(), data.getBlockState());
+        this.listeners.add(
+            new ReceiveListener<>(SPacketMultiBlockChange.class, event ->
+        {
+            SPacketMultiBlockChange packet = event.getPacket();
+            for (SPacketMultiBlockChange.BlockUpdateData data :
+                    packet.getChangedBlocks())
+            {
+                process(data.getPos(), data.getBlockState());
             }
         }));
-        this.listeners.add(new ReceiveListener<SPacketExplosion>(SPacketExplosion.class, event -> {
-            SPacketExplosion packet = (SPacketExplosion)event.getPacket();
-            for (BlockPos pos : packet.getAffectedBlockPositions()) {
-                this.process(pos, Blocks.AIR.getDefaultState());
+        this.listeners.add(
+            new ReceiveListener<>(SPacketExplosion.class, event ->
+        {
+            SPacketExplosion packet = event.getPacket();
+            for (BlockPos pos : packet.getAffectedBlockPositions())
+            {
+                process(pos, Blocks.AIR.getDefaultState());
             }
         }));
-        this.listeners.add(new EventListener<WorldClientEvent.Load>(WorldClientEvent.Load.class){
-
+        this.listeners.add(new EventListener<WorldClientEvent.Load>
+            (WorldClientEvent.Load.class)
+        {
             @Override
-            public void invoke(WorldClientEvent.Load event) {
-                BlockStateManager.this.callbacks.clear();
+            public void invoke(WorldClientEvent.Load event)
+            {
+                callbacks.clear();
             }
         });
-        this.listeners.add(new EventListener<WorldClientEvent.Unload>(WorldClientEvent.Unload.class){
-
+        this.listeners.add(new EventListener<WorldClientEvent.Unload>
+            (WorldClientEvent.Unload.class)
+        {
             @Override
-            public void invoke(WorldClientEvent.Unload event) {
-                BlockStateManager.this.callbacks.clear();
+            public void invoke(WorldClientEvent.Unload event)
+            {
+                callbacks.clear();
             }
         });
     }
 
-    public void addCallback(BlockPos pos, Consumer<IBlockState> callback) {
-        this.callbacks.computeIfAbsent(pos.toImmutable(), v -> new ConcurrentLinkedQueue()).add(callback);
+    /**
+     * The Callback will be invoked and removed when a
+     * {@link SPacketBlockChange} or {@link SPacketMultiBlockChange}
+     * or a {@link SPacketExplosion} packet is received,
+     * which targets the given position.
+     *
+     * @param pos the position we want to detect state changes at.
+     * @param callback called when the BlockState at the pos is changed.
+     */
+    public void addCallback(BlockPos pos, Consumer<IBlockState> callback)
+    {
+        callbacks.computeIfAbsent(pos.toImmutable(), v -> new ConcurrentLinkedQueue<>())
+                 .add(callback);
     }
 
-    private void process(BlockPos pos, IBlockState state) {
-        Queue<Consumer<IBlockState>> cbs = this.callbacks.remove((Object)pos);
-        if (cbs != null) {
+    /** Processes a BlockState change and calls all Callbacks. */
+    private void process(BlockPos pos, IBlockState state)
+    {
+        Queue<Consumer<IBlockState>> cbs = callbacks.remove(pos);
+        if (cbs != null)
+        {
             CollectionUtil.emptyQueue(cbs, c -> c.accept(state));
         }
     }
-}
 
+}

@@ -1,69 +1,93 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.api.register;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import me.earth.earthhack.api.register.Register;
-import me.earth.earthhack.api.register.Registrable;
 import me.earth.earthhack.api.register.exception.AlreadyRegisteredException;
 import me.earth.earthhack.api.register.exception.CantUnregisterException;
 import me.earth.earthhack.api.util.interfaces.Nameable;
 
+import java.util.Collection;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+/**
+ * A {@link Register} backed by a {@link ConcurrentHashMap}.
+ *
+ * @param <T> the of object to register.
+ */
 public abstract class AbstractRegister<T extends Nameable>
-implements Register<T> {
+        implements Register<T>
+{
     protected final Map<String, T> registered;
 
-    public AbstractRegister() {
-        this(new ConcurrentHashMap());
+    @SuppressWarnings("unused")
+    public AbstractRegister()
+    {
+        this(new ConcurrentHashMap<>());
     }
 
-    public AbstractRegister(Map<String, T> map) {
-        this.registered = map;
-    }
-
-    @Override
-    public void register(T object) throws AlreadyRegisteredException {
-        T alreadyRegistered = this.getObject(object.getName());
-        if (alreadyRegistered != null) {
-            throw new AlreadyRegisteredException((Nameable)object, (Nameable)alreadyRegistered);
-        }
-        if (object instanceof Registrable) {
-            ((Registrable)object).onRegister();
-        }
-        this.registered.put(object.getName().toLowerCase(), object);
+    public AbstractRegister(Map<String, T> map)
+    {
+        registered = map;
     }
 
     @Override
-    public void unregister(T object) throws CantUnregisterException {
-        if (object instanceof Registrable) {
-            ((Registrable)object).onUnRegister();
+    public void register(T object) throws AlreadyRegisteredException
+    {
+        T alreadyRegistered = getObject(object.getName());
+        if (alreadyRegistered != null)
+        {
+            throw new AlreadyRegisteredException(object, alreadyRegistered);
         }
-        for (Map.Entry<String, T> entry : this.registered.entrySet()) {
-            if (!object.equals(entry.getValue())) continue;
-            this.registered.remove(entry.getKey());
+
+        if (object instanceof Registrable)
+        {
+            ((Registrable) object).onRegister();
+        }
+
+        registered.put(object.getName().toLowerCase(), object);
+    }
+
+    @Override
+    public void unregister(T object) throws CantUnregisterException
+    {
+        if (object instanceof Registrable)
+        {
+            ((Registrable) object).onUnRegister();
+        }
+
+        for (Map.Entry<String, T> entry : registered.entrySet())
+        {
+            if (object.equals(entry.getValue()))
+            {
+                registered.remove(entry.getKey());
+            }
         }
     }
 
     @Override
-    public T getObject(String name) {
-        return (T)((Nameable)this.registered.get(name.toLowerCase()));
+    public T getObject(String name)
+    {
+        return registered.get(name.toLowerCase());
     }
 
     @Override
-    public <C extends T> C getByClass(Class<C> clazz) {
-        for (Map.Entry<String, T> entry : this.registered.entrySet()) {
-            if (!clazz.isInstance(entry.getValue())) continue;
-            return (C)((Nameable)entry.getValue());
+    @SuppressWarnings("unchecked")
+    public <C extends T> C getByClass(Class<C> clazz)
+    {
+        for (Map.Entry<String, T> entry : registered.entrySet())
+        {
+            if (clazz.isInstance(entry.getValue()))
+            {
+                return (C) entry.getValue();
+            }
         }
+
         return null;
     }
 
     @Override
-    public Collection<T> getRegistered() {
-        return this.registered.values();
+    public Collection<T> getRegistered()
+    {
+        return registered.values();
     }
-}
 
+}

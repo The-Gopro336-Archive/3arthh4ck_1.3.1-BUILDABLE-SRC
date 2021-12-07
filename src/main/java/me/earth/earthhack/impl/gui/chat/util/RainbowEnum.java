@@ -1,64 +1,73 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.gui.chat.util;
 
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.setting.settings.ColorSetting;
 import me.earth.earthhack.impl.commands.hidden.HSettingCommand;
-import me.earth.earthhack.impl.gui.chat.util.IColorIncrementor;
-import me.earth.earthhack.impl.gui.chat.util.IncrementationUtil;
 import me.earth.earthhack.impl.util.math.MathUtil;
+import me.earth.earthhack.impl.util.text.TextColor;
 
 public enum RainbowEnum implements IColorIncrementor
 {
-    RainbowSpeed("<0 - 200>", "\u00a7f"){
-
+    RainbowSpeed("<0 - 200>", TextColor.WHITE)
+    {
         @Override
-        public Runnable getCommand(ColorSetting s, boolean i, Module m) {
-            float speed = (float)IncrementationUtil.crF(s.getRainbowSpeed(), 0.0, 200.0, !i);
-            return () -> {
+        public Runnable getCommand(ColorSetting s, boolean i, Module m)
+        {
+            float speed = (float)
+             IncrementationUtil.crF(s.getRainbowSpeed(), 0.f, 200.f, !i);
+            return () ->
+            {
                 s.setRainbowSpeed(speed);
+                // TODO: updating might not be needed anymore
                 HSettingCommand.update(s, m, null, true);
             };
         }
 
         @Override
-        public String getValue(ColorSetting s) {
+        public String getValue(ColorSetting s)
+        {
             return MathUtil.round(s.getRainbowSpeed(), 2) + "";
         }
-    }
-    ,
-    RainbowSaturation("<0 - 100>", "\u00a76"){
-
+    },
+    RainbowSaturation("<0 - 100>", TextColor.GOLD)
+    {
         @Override
-        public Runnable getCommand(ColorSetting s, boolean i, Module m) {
-            float sat = (float)IncrementationUtil.crF(s.getRainbowSaturation(), 0.0, 100.0, !i);
-            return () -> {
+        public Runnable getCommand(ColorSetting s, boolean i, Module m)
+        {
+            float sat = (float)
+             IncrementationUtil.crF(s.getRainbowSaturation(), 0.f, 100.f, !i);
+            return () ->
+            {
                 s.setRainbowSaturation(sat);
+                // TODO: updating might not be needed anymore
                 HSettingCommand.update(s, m, null, true);
             };
         }
 
         @Override
-        public String getValue(ColorSetting s) {
+        public String getValue(ColorSetting s)
+        {
             return MathUtil.round(s.getRainbowSaturation(), 2) + "";
         }
-    }
-    ,
-    RainbowBrightness("<0 - 100>", "\u00a7f"){
-
+    },
+    RainbowBrightness("<0 - 100>", TextColor.WHITE)
+    {
         @Override
-        public Runnable getCommand(ColorSetting s, boolean i, Module m) {
-            float bright = (float)IncrementationUtil.crF(s.getRainbowBrightness(), 0.0, 100.0, !i);
-            return () -> {
+        public Runnable getCommand(ColorSetting s, boolean i, Module m)
+        {
+            float bright = (float)
+             IncrementationUtil.crF(s.getRainbowBrightness(), 0.f, 100.f, !i);
+            return () ->
+            {
                 s.setRainbowBrightness(bright);
+                // TODO: updating might not be needed anymore
                 HSettingCommand.update(s, m, null, true);
             };
         }
 
         @Override
-        public String getValue(ColorSetting s) {
+        public String getValue(ColorSetting s)
+        {
             return MathUtil.round(s.getRainbowBrightness(), 2) + "";
         }
     };
@@ -66,19 +75,22 @@ public enum RainbowEnum implements IColorIncrementor
     private final String range;
     private final String color;
 
-    private RainbowEnum(String range, String color) {
+    RainbowEnum(String range, String color)
+    {
         this.range = range;
         this.color = color;
     }
 
-    public abstract String getValue(ColorSetting var1);
+    public abstract String getValue(ColorSetting s);
 
-    public String getRange() {
-        return this.range;
+    public String getRange()
+    {
+        return range;
     }
 
-    public String getColor() {
-        return this.color;
+    public String getColor()
+    {
+        return color;
     }
+
 }
-

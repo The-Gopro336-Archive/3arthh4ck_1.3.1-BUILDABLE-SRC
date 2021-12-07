@@ -1,79 +1,92 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.Entity
- */
 package me.earth.earthhack.impl.modules.combat.autocrystal.util;
 
 import net.minecraft.entity.Entity;
 
-public class CrystalData
-implements Comparable<CrystalData> {
+public class CrystalData implements Comparable<CrystalData>
+{
     private final Entity crystal;
     private float selfDmg;
     private float damage;
     private float[] rotations;
     private double angle;
 
-    public CrystalData(Entity crystal) {
+    public CrystalData(Entity crystal)
+    {
         this.crystal = crystal;
     }
 
-    public Entity getCrystal() {
-        return this.crystal;
+    public Entity getCrystal()
+    {
+        return crystal;
     }
 
-    public void setSelfDmg(float damage) {
+    public void setSelfDmg(float damage)
+    {
         this.selfDmg = damage;
     }
 
-    public void setDamage(float damage) {
+    public void setDamage(float damage)
+    {
         this.damage = damage;
     }
 
-    public float getSelfDmg() {
-        return this.selfDmg;
+    public float getSelfDmg()
+    {
+        return selfDmg;
     }
 
-    public float getDamage() {
-        return this.damage;
+    public float getDamage()
+    {
+        return damage;
     }
 
-    public float[] getRotations() {
-        return this.rotations;
+    public float[] getRotations()
+    {
+        return rotations;
     }
 
-    public double getAngle() {
-        return this.angle;
+    public double getAngle()
+    {
+        return angle;
     }
 
-    public boolean hasCachedRotations() {
-        return this.rotations != null;
+    public boolean hasCachedRotations()
+    {
+        return rotations != null;
     }
 
-    public void cacheRotations(float[] rotations, double angle) {
+    public void cacheRotations(float[] rotations, double angle)
+    {
         this.rotations = rotations;
-        this.angle = angle;
+        this.angle     = angle;
     }
 
     @Override
-    public int compareTo(CrystalData o) {
-        if (Math.abs(o.damage - this.damage) < 1.0f) {
+    public int compareTo(CrystalData o)
+    {
+        if (Math.abs(o.damage - this.damage) < 1.0f)
+        {
             return Float.compare(this.selfDmg, o.selfDmg);
         }
+
         return Float.compare(o.damage, this.damage);
     }
 
-    public int hashCode() {
-        return this.crystal.getEntityId();
+    @Override
+    public int hashCode()
+    {
+        return crystal.getEntityId();
     }
 
-    public boolean equals(Object o) {
-        if (o instanceof CrystalData) {
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o instanceof CrystalData)
+        {
             return this.hashCode() == o.hashCode();
         }
+
         return false;
     }
-}
 
+}

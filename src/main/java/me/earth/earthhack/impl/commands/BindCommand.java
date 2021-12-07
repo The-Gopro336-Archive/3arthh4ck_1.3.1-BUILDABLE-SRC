@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.commands;
 
 import me.earth.earthhack.api.command.PossibleInputs;
@@ -13,46 +10,68 @@ import me.earth.earthhack.impl.commands.abstracts.AbstractModuleCommand;
 import me.earth.earthhack.impl.commands.util.CommandDescriptions;
 import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.util.text.ChatUtil;
+import me.earth.earthhack.impl.util.text.TextColor;
 
-public class BindCommand
-extends AbstractModuleCommand {
+public class BindCommand extends AbstractModuleCommand
+{
     private static final BindSetting BIND = new BindSetting("", Bind.none());
 
-    public BindCommand() {
+    public BindCommand()
+    {
         super("bind", new String[][]{{"bind"}});
         CommandDescriptions.register(this, "Sets the binds of modules.");
     }
 
     @Override
-    public void execute(String[] args) {
-        if (args.length == 1) {
-            ChatUtil.sendMessage("\u00a7c Please specify a module!");
+    public void execute(String[] args)
+    {
+        if (args.length == 1)
+        {
+            ChatUtil.sendMessage(TextColor.RED + " Please specify a module!");
             return;
         }
-        if (args.length == 2) {
-            ChatUtil.sendMessage("\u00a7c Please specify a bind!");
+
+        if (args.length == 2)
+        {
+            ChatUtil.sendMessage(TextColor.RED + " Please specify a bind!");
             return;
         }
-        Module module = (Module)Managers.MODULES.getObject(args[1]);
-        if (module == null) {
-            ChatUtil.sendMessage("\u00a7cModule \u00a7f" + args[1] + "\u00a7c" + " not found!");
+
+        Module module = Managers.MODULES.getObject(args[1]);
+        if (module == null)
+        {
+            ChatUtil.sendMessage(TextColor.RED + "Module " + TextColor.WHITE
+                    + args[1] + TextColor.RED + " not found!");
             return;
         }
+
         Setting<?> bind = module.getSetting("Bind");
-        if (bind == null) {
-            ChatUtil.sendMessage("\u00a7c" + module.getName() + " can't be bound.");
+        if (bind == null)
+        {
+            ChatUtil.sendMessage(TextColor.RED
+                                    + module.getName()
+                                    + " can't be bound.");
             return;
         }
+
         bind.fromString(args[2]);
-        ChatUtil.sendMessage(module.getName() + "\u00a7a" + " bound to " + module.getBind().toString());
+        ChatUtil.sendMessage(module.getName()
+                            + TextColor.GREEN
+                            + " bound to "
+                            + module.getBind().toString());
     }
 
     @Override
-    public PossibleInputs getPossibleInputs(String[] args) {
-        if (args.length == 3) {
-            return new PossibleInputs(TextUtil.substring(BIND.getInputs(args[2]), args[2].length()), "");
+    public PossibleInputs getPossibleInputs(String[] args)
+    {
+        if (args.length == 3)
+        {
+            return new PossibleInputs(
+                    TextUtil.substring(BIND.getInputs(args[2]),
+                    args[2].length()), "");
         }
+
         return super.getPossibleInputs(args);
     }
-}
 
+}

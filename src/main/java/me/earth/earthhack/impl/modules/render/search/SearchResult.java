@@ -1,17 +1,12 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.util.math.AxisAlignedBB
- *  net.minecraft.util.math.BlockPos
- */
 package me.earth.earthhack.impl.modules.render.search;
 
-import java.awt.Color;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
-public class SearchResult {
+import java.awt.*;
+
+public class SearchResult
+{
     private final BlockPos pos;
     private final AxisAlignedBB bb;
     private final Color color;
@@ -20,42 +15,54 @@ public class SearchResult {
     private final float blue;
     private final float alpha;
 
-    public SearchResult(BlockPos pos, AxisAlignedBB bb, float red, float green, float blue, float alpha) {
-        this.pos = pos;
-        this.bb = bb;
-        this.red = red;
+    public SearchResult(BlockPos pos,
+                        AxisAlignedBB bb,
+                        float red,
+                        float green,
+                        float blue,
+                        float alpha)
+    {
+        this.pos   = pos;
+        this.bb    = bb;
+        this.red   = red;
         this.green = green;
-        this.blue = blue;
+        this.blue  = blue;
         this.alpha = alpha;
         this.color = new Color(red, green, blue, alpha);
     }
 
-    public BlockPos getPos() {
-        return this.pos;
+    public BlockPos getPos()
+    {
+        return pos;
     }
 
-    public AxisAlignedBB getBb() {
-        return this.bb;
+    public AxisAlignedBB getBb()
+    {
+        return bb;
     }
 
-    public float getRed() {
-        return this.red;
+    public float getRed()
+    {
+        return red;
     }
 
-    public float getGreen() {
-        return this.green;
+    public float getGreen()
+    {
+        return green;
     }
 
-    public float getBlue() {
-        return this.blue;
+    public float getBlue()
+    {
+        return blue;
     }
 
-    public float getAlpha() {
-        return this.alpha;
+    public float getAlpha()
+    {
+        return alpha;
     }
 
-    public Color getColor() {
-        return this.color;
+    public Color getColor()
+    {
+        return color;
     }
 }
-

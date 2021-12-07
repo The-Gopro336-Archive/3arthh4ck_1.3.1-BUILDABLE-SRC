@@ -1,28 +1,41 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.block.state.IBlockState
- *  net.minecraft.util.math.BlockPos
- *  net.minecraft.world.IBlockAccess
- */
 package me.earth.earthhack.impl.modules.player.automine.util;
 
-import me.earth.earthhack.impl.modules.player.automine.util.IAutomine;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
-public interface IConstellation {
-    default public void update(IAutomine automine) {
-    }
+/**
+ * Represents a constellation of a player to a block that
+ * should be mined by Automine.
+ */
+public interface IConstellation
+{
+    /**
+     * Updates this constellation.
+     * @param automine the AutoMine context.
+     */
+    default void update(IAutomine automine) { }
 
-    public boolean isAffected(BlockPos var1, IBlockState var2);
+    /**
+     * @param pos the pos where the blockchange happened.
+     * @param state the new blockstate.
+     * @return <tt>true</tt> if this is affected by the blockchange.
+     */
+    boolean isAffected(BlockPos pos, IBlockState state);
 
-    public boolean isValid(IBlockAccess var1, boolean var2);
+    /**
+     * @param world the world to check.
+     * @param checkPlayerState if the players state should be checked.
+     * @return <tt>true</tt> if this Constellation is still valid.
+     */
+    boolean isValid(IBlockAccess world, boolean checkPlayerState);
 
-    default public boolean cantBeImproved() {
+    /**
+     * @return <tt>true</tt> if this calculation shouldn't be improved.
+     */
+    default boolean cantBeImproved()
+    {
         return true;
     }
-}
 
+}

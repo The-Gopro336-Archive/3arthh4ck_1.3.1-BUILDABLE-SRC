@@ -1,17 +1,11 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.client.Minecraft
- *  net.minecraft.client.gui.ScaledResolution
- */
 package me.earth.earthhack.impl.gui.click.frame;
 
-import java.util.ArrayList;
 import me.earth.earthhack.impl.gui.click.component.Component;
 import me.earth.earthhack.impl.util.render.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+
+import java.util.ArrayList;
 
 public class Frame {
     private final String label;
@@ -21,11 +15,9 @@ public class Frame {
     private float lastPosY;
     private float width;
     private final float height;
-    private boolean extended;
-    private boolean dragging;
-    private final ArrayList<Component> components = new ArrayList();
+    private boolean extended,dragging;
+    private final ArrayList<Component> components = new ArrayList<>();
     private int scrollY;
-
     public Frame(String label, float posX, float posY, float width, float height) {
         this.label = label;
         this.posX = posX;
@@ -35,89 +27,84 @@ public class Frame {
     }
 
     public void init() {
-        this.components.forEach(Component::init);
+        components.forEach(Component::init);
     }
 
-    public void moved(float posX, float posY) {
-        this.components.forEach(component -> component.moved(posX, posY));
+    public void moved(float posX,float posY) {
+        components.forEach(component -> component.moved(posX,posY));
     }
 
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft());
-        if (this.isDragging()) {
-            this.setPosX((float)mouseX + this.getLastPosX());
-            this.setPosY((float)mouseY + this.getLastPosY());
-            this.getComponents().forEach(component -> component.moved(this.getPosX(), this.getPosY() + (float)this.getScrollY()));
+        final ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft());
+        if (isDragging()) {
+            setPosX(mouseX + getLastPosX());
+            setPosY(mouseY + getLastPosY());
+            getComponents().forEach(component -> component.moved(getPosX(),getPosY()+ getScrollY()));
         }
-        if (this.getPosX() < 0.0f) {
-            this.setPosX(0.0f);
-            this.getComponents().forEach(component -> component.moved(this.getPosX(), this.getPosY() + (float)this.getScrollY()));
+        if (getPosX() < 0) {
+            setPosX(0);
+            getComponents().forEach(component -> component.moved(getPosX(),getPosY()+ getScrollY()));
         }
-        if (this.getPosX() + this.getWidth() > (float)scaledResolution.getScaledWidth()) {
-            this.setPosX((float)scaledResolution.getScaledWidth() - this.getWidth());
-            this.getComponents().forEach(component -> component.moved(this.getPosX(), this.getPosY() + (float)this.getScrollY()));
+        if (getPosX() + getWidth() > scaledResolution.getScaledWidth()) {
+            setPosX(scaledResolution.getScaledWidth() - getWidth());
+            getComponents().forEach(component -> component.moved(getPosX(),getPosY()+ getScrollY()));
         }
-        if (this.getPosY() < 0.0f) {
-            this.setPosY(0.0f);
-            this.getComponents().forEach(component -> component.moved(this.getPosX(), this.getPosY() + (float)this.getScrollY()));
+        if (getPosY() < 0) {
+            setPosY(0);
+            getComponents().forEach(component -> component.moved(getPosX(),getPosY()+ getScrollY()));
         }
-        if (this.getPosY() + this.getHeight() > (float)scaledResolution.getScaledHeight()) {
-            this.setPosY((float)scaledResolution.getScaledHeight() - this.getHeight());
-            this.getComponents().forEach(component -> component.moved(this.getPosX(), this.getPosY() + (float)this.getScrollY()));
+        if (getPosY() + getHeight() > scaledResolution.getScaledHeight()) {
+            setPosY(scaledResolution.getScaledHeight() - getHeight());
+            getComponents().forEach(component -> component.moved(getPosX(),getPosY()+ getScrollY()));
         }
     }
 
-    public void keyTyped(char character, int keyCode) {
-        if (this.isExtended()) {
-            this.getComponents().forEach(component -> component.keyTyped(character, keyCode));
-        }
+    public void keyTyped(char character, int keyCode)  {
+        if (isExtended()) getComponents().forEach(component -> component.keyTyped(character, keyCode));
     }
 
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        boolean hovered = RenderUtil.mouseWithinBounds(mouseX, mouseY, this.getPosX(), this.getPosY(), this.getWidth(), this.getHeight());
+        final boolean hovered = RenderUtil.mouseWithinBounds(mouseX, mouseY, getPosX(),getPosY(),getWidth(),getHeight());
         switch (mouseButton) {
-            case 0: {
-                if (!hovered) break;
-                this.setDragging(true);
-                this.setLastPosX(this.getPosX() - (float)mouseX);
-                this.setLastPosY(this.getPosY() - (float)mouseY);
+            case 0:
+                if (hovered) {
+                    setDragging(true);
+                    setLastPosX(getPosX() - mouseX);
+                    setLastPosY(getPosY() - mouseY);
+                }
                 break;
-            }
-            case 1: {
-                if (!hovered) break;
-                this.setExtended(!this.isExtended());
+            case 1:
+                if (hovered)
+                    setExtended(!isExtended());
                 break;
-            }
+            default:
+                break;
         }
     }
 
     public void mouseReleased(int mouseX, int mouseY, int mouseButton) {
-        if (mouseButton == 0 && this.isDragging()) {
-            this.setDragging(false);
-        }
-        if (this.isExtended()) {
-            this.getComponents().forEach(component -> component.mouseReleased(mouseX, mouseY, mouseButton));
-        }
+        if (mouseButton == 0 && isDragging()) setDragging(false);
+        if (isExtended()) getComponents().forEach(component -> component.mouseReleased(mouseX, mouseY, mouseButton));
     }
 
     public ArrayList<Component> getComponents() {
-        return this.components;
+        return components;
     }
 
     public String getLabel() {
-        return this.label;
+        return label;
     }
 
     public float getWidth() {
-        return this.width;
+        return width;
     }
 
     public float getHeight() {
-        return this.height;
+        return height;
     }
 
     public float getPosX() {
-        return this.posX;
+        return posX;
     }
 
     public void setPosX(float posX) {
@@ -125,7 +112,7 @@ public class Frame {
     }
 
     public float getPosY() {
-        return this.posY;
+        return posY;
     }
 
     public void setPosY(float posY) {
@@ -133,7 +120,7 @@ public class Frame {
     }
 
     public float getLastPosX() {
-        return this.lastPosX;
+        return lastPosX;
     }
 
     public void setLastPosX(float lastPosX) {
@@ -141,7 +128,7 @@ public class Frame {
     }
 
     public float getLastPosY() {
-        return this.lastPosY;
+        return lastPosY;
     }
 
     public void setLastPosY(float lastPosY) {
@@ -149,7 +136,7 @@ public class Frame {
     }
 
     public boolean isExtended() {
-        return this.extended;
+        return extended;
     }
 
     public void setExtended(boolean extended) {
@@ -157,7 +144,7 @@ public class Frame {
     }
 
     public boolean isDragging() {
-        return this.dragging;
+        return dragging;
     }
 
     public void setDragging(boolean dragging) {
@@ -165,7 +152,7 @@ public class Frame {
     }
 
     public int getScrollY() {
-        return this.scrollY;
+        return scrollY;
     }
 
     public void setScrollY(int scrollY) {
@@ -176,4 +163,3 @@ public class Frame {
         this.width = width;
     }
 }
-

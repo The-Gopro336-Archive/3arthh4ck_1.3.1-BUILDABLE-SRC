@@ -1,9 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.player.EntityPlayer
- */
 package me.earth.earthhack.impl.modules.client.server;
 
 import me.earth.earthhack.api.module.Module;
@@ -16,15 +10,11 @@ import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.api.setting.settings.StringSetting;
 import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.managers.thread.GlobalExecutor;
-import me.earth.earthhack.impl.modules.client.server.ListenerCPacket;
-import me.earth.earthhack.impl.modules.client.server.ListenerMove;
-import me.earth.earthhack.impl.modules.client.server.ListenerNoUpdate;
-import me.earth.earthhack.impl.modules.client.server.ListenerStartEating;
-import me.earth.earthhack.impl.modules.client.server.ListenerStopEating;
 import me.earth.earthhack.impl.modules.client.server.api.IClient;
 import me.earth.earthhack.impl.modules.client.server.api.IConnectionEntry;
 import me.earth.earthhack.impl.modules.client.server.api.IConnectionManager;
 import me.earth.earthhack.impl.modules.client.server.api.IHost;
+import me.earth.earthhack.impl.modules.client.server.api.ILogger;
 import me.earth.earthhack.impl.modules.client.server.api.IPacketManager;
 import me.earth.earthhack.impl.modules.client.server.api.IServerList;
 import me.earth.earthhack.impl.modules.client.server.api.IShutDownHandler;
@@ -34,6 +24,7 @@ import me.earth.earthhack.impl.modules.client.server.api.SimplePacketManager;
 import me.earth.earthhack.impl.modules.client.server.api.SimpleServerList;
 import me.earth.earthhack.impl.modules.client.server.client.Client;
 import me.earth.earthhack.impl.modules.client.server.host.Host;
+import me.earth.earthhack.impl.modules.client.server.protocol.Protocol;
 import me.earth.earthhack.impl.modules.client.server.protocol.ProtocolUtil;
 import me.earth.earthhack.impl.modules.client.server.protocol.handlers.EatingHandler;
 import me.earth.earthhack.impl.modules.client.server.protocol.handlers.PacketHandler;
@@ -45,24 +36,34 @@ import me.earth.earthhack.impl.modules.client.server.util.ServerMode;
 import me.earth.earthhack.impl.util.client.ModuleUtil;
 import me.earth.earthhack.impl.util.math.rotation.RotationUtil;
 import me.earth.earthhack.impl.util.text.ChatUtil;
+import me.earth.earthhack.impl.util.text.TextColor;
 import me.earth.earthhack.impl.util.thread.SafeRunnable;
 import net.minecraft.entity.player.EntityPlayer;
 
-public class ServerModule
-extends Module
-implements IShutDownHandler,
-GlobalExecutor,
-IVelocityHandler {
-    protected final Setting<ServerMode> mode = this.register(new EnumSetting<ServerMode>("Mode", ServerMode.Client));
-    protected final Setting<String> ip = this.register(new StringSetting("IP", "127.0.0.1"));
-    protected final Setting<String> port = this.register(new StringSetting("Port", "0"));
-    protected final Setting<Integer> max = this.register(new NumberSetting<Integer>("Connections", 50, 1, 50));
-    protected final Setting<Boolean> clientInput = this.register(new BooleanSetting("ClientMessages", false));
-    protected final Setting<String> name = this.register(new StringSetting("Name", "3arthh4ck-Host"));
-    protected final Setting<Boolean> sync = this.register(new BooleanSetting("Sync", false));
+// TODO: maybe instead of opening 1 thread for every
+//  connection we should make some channel thingy?
+public class ServerModule extends Module
+        implements IShutDownHandler, GlobalExecutor, IVelocityHandler
+{
+    protected final Setting<ServerMode> mode =
+        register(new EnumSetting<>("Mode", ServerMode.Client));
+    protected final Setting<String> ip =
+        register(new StringSetting("IP", "127.0.0.1"));
+    protected final Setting<String> port =
+        register(new StringSetting("Port", "0"));
+    protected final Setting<Integer> max =
+        register(new NumberSetting<>("Connections", 50, 1, 50));
+    protected final Setting<Boolean> clientInput =
+        register(new BooleanSetting("ClientMessages", false));
+    protected final Setting<String> name =
+        register(new StringSetting("Name", "3arthh4ck-Host"));
+    protected final Setting<Boolean> sync =
+        register(new BooleanSetting("Sync", false));
+
     protected final IServerList serverList = new SimpleServerList();
     protected final IPacketManager sPackets = new SimplePacketManager();
     protected final IPacketManager cPackets = new SimplePacketManager();
+
     protected ServerMode currentMode;
     protected IConnectionManager connectionManager;
     protected IClient client;
@@ -72,109 +73,139 @@ IVelocityHandler {
     protected double lastY;
     protected double lastZ;
 
-    public ServerModule() {
+    public ServerModule()
+    {
         super("Server", Category.Client);
         this.listeners.addAll(new ListenerCPacket(this).getListeners());
         this.listeners.add(new ListenerStartEating(this));
         this.listeners.add(new ListenerStopEating(this));
         this.listeners.add(new ListenerMove(this));
         this.listeners.add(new ListenerNoUpdate(this));
-        this.name.setValue(mc.getSession().getProfile().getName());
-        Observer<Object> observer = e -> {
-            if (this.isEnabled()) {
-                ChatUtil.sendMessageScheduled("The server has to be restarted in order for the changes to take effect.");
+        name.setValue(mc.getSession().getProfile().getName());
+        Observer<Object> observer = e ->
+        {
+            if (this.isEnabled())
+            {
+                ChatUtil.sendMessageScheduled("The server has to be restarted" +
+                        " in order for the changes to take effect.");
             }
         };
-        this.mode.addObserver(observer);
-        this.ip.addObserver(observer);
-        this.port.addObserver(observer);
-        this.max.addObserver(observer);
-        this.clientInput.addObserver(observer);
-        this.name.addObserver(observer);
-        this.setupConnectionManagers();
+        mode       .addObserver(observer);
+        ip         .addObserver(observer);
+        port       .addObserver(observer);
+        max        .addObserver(observer);
+        clientInput.addObserver(observer);
+        name       .addObserver(observer);
+        setupConnectionManagers();
     }
 
     @Override
-    public String getDisplayInfo() {
-        if (this.host != null) {
-            return this.host.getConnectionManager().getConnections().size() + "";
+    public String getDisplayInfo()
+    {
+        if (host != null)
+        {
+            return host.getConnectionManager().getConnections().size() + "";
         }
+
         return null;
     }
 
     @Override
-    protected void onEnable() {
-        try {
-            boolean receive = this.clientInput.getValue();
+    protected void onEnable()
+    {
+        try
+        {
+            boolean receive = clientInput.getValue();
             int port = Integer.parseInt(this.port.getValue());
-            this.currentMode = this.mode.getValue();
-            switch (this.currentMode) {
-                case Host: {
-                    this.connectionManager = new SimpleConnectionManager(this.cPackets, this.max.getValue());
-                    this.host = Host.createAndStart(EXECUTOR, this.connectionManager, this, port, receive);
-                    ModuleUtil.sendMessage(this, "\u00a7aServer is listening on port: \u00a7f" + this.host.getPort() + "\u00a7a" + ".");
+            currentMode = mode.getValue();
+            switch (currentMode)
+            {
+                case Host:
+                    this.connectionManager =
+                        new SimpleConnectionManager(cPackets, max.getValue());
+                    host = Host.createAndStart(
+                        EXECUTOR, connectionManager, this, port, receive);
+                    ModuleUtil.sendMessage(this, TextColor.GREEN
+                        + "Server is listening on port: " + TextColor.WHITE
+                        + host.getPort() + TextColor.GREEN + ".");
                     break;
-                }
-                case Client: {
-                    this.client = new Client(this.sPackets, this.serverList, this.ip.getValue(), port);
-                    Managers.THREAD.submit((SafeRunnable)((Object)this.client));
-                    String s = this.name.getValue();
-                    this.client.setName(s);
-                    ProtocolUtil.sendMessage(this.client, 0, s);
+                case Client:
+                    client =
+                        new Client(sPackets, serverList, ip.getValue(), port);
+                    Managers.THREAD.submit((SafeRunnable) client);
+                    String s = name.getValue();
+                    client.setName(s);
+                    ProtocolUtil.sendMessage(client, Protocol.NAME, s);
                     break;
-                }
+                default:
             }
         }
-        catch (NumberFormatException e) {
-            ModuleUtil.disableRed(this, "Couldn't parse port: " + this.port.getValue() + ".");
+        catch (NumberFormatException e)
+        {
+            ModuleUtil.disableRed(this, "Couldn't parse port: "
+                    + port.getValue() + ".");
         }
-        catch (Throwable t) {
+        catch (Throwable t)
+        {
             ModuleUtil.disableRed(this, t.getMessage());
         }
     }
 
     @Override
-    protected void onDisable() {
-        if (this.client != null) {
-            this.client.close();
-            this.client = null;
+    protected void onDisable()
+    {
+        if (client != null)
+        {
+            client.close();
+            client = null;
         }
-        if (this.host != null) {
-            this.host.close();
-            this.host = null;
+
+        if (host != null)
+        {
+            host.close();
+            host = null;
         }
+
         this.connectionManager = null;
         this.serverList.set(new IConnectionEntry[0]);
     }
 
     @Override
-    public void disable(String message) {
+    public void disable(String message)
+    {
         mc.addScheduledTask(() -> ModuleUtil.disableRed(this, message));
     }
 
-    public IClient getClient() {
-        return this.client;
+    public IClient getClient()
+    {
+        return client;
     }
 
-    public IHost getHost() {
-        return this.host;
+    public IHost getHost()
+    {
+        return host;
     }
 
-    private void setupConnectionManagers() {
-        ChatLogger logger = new ChatLogger();
-        this.sPackets.add(3, new PacketHandler(logger));
-        this.sPackets.add(9, new PositionHandler(logger));
-        this.sPackets.add(10, new VelocityHandler(this));
-        this.sPackets.add(11, new EatingHandler());
-        this.sPackets.add(8, new ServerListHandler(this.serverList));
+    private void setupConnectionManagers()
+    {
+        ILogger logger = new ChatLogger();
+        sPackets.add(Protocol.PACKET,   new PacketHandler(logger));
+        sPackets.add(Protocol.POSITION, new PositionHandler(logger));
+        sPackets.add(Protocol.VELOCITY, new VelocityHandler(this));
+        sPackets.add(Protocol.EATING,   new EatingHandler());
+        sPackets.add(Protocol.LIST,     new ServerListHandler(serverList));
+        // SERVER.add();
     }
 
     @Override
-    public void onVelocity(double x, double y, double z) {
+    public void onVelocity(double x, double y, double z)
+    {
         EntityPlayer player = RotationUtil.getRotationPlayer();
-        if (player == null) {
+        if (player == null)
+        {
             return;
         }
+
         this.lastX = x;
         this.lastY = y;
         this.lastZ = z;
@@ -182,18 +213,21 @@ IVelocityHandler {
     }
 
     @Override
-    public double getLastX() {
-        return this.lastX;
+    public double getLastX()
+    {
+        return lastX;
     }
 
     @Override
-    public double getLastY() {
-        return this.lastY;
+    public double getLastY()
+    {
+        return lastY;
     }
 
     @Override
-    public double getLastZ() {
-        return this.lastZ;
+    public double getLastZ()
+    {
+        return lastZ;
     }
+
 }
-

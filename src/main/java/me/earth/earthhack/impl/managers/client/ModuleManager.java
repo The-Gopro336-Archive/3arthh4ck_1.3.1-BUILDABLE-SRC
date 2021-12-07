@@ -1,9 +1,5 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.managers.client;
 
-import java.util.ArrayList;
 import me.earth.earthhack.api.event.bus.instance.Bus;
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
@@ -136,6 +132,7 @@ import me.earth.earthhack.impl.modules.player.speedmine.Speedmine;
 import me.earth.earthhack.impl.modules.player.suicide.Suicide;
 import me.earth.earthhack.impl.modules.player.timer.Timer;
 import me.earth.earthhack.impl.modules.player.xcarry.XCarry;
+import me.earth.earthhack.impl.modules.render.ambience.Ambience;
 import me.earth.earthhack.impl.modules.render.blockhighlight.BlockHighlight;
 import me.earth.earthhack.impl.modules.render.breadcrumbs.BreadCrumbs;
 import me.earth.earthhack.impl.modules.render.chams.Chams;
@@ -146,8 +143,10 @@ import me.earth.earthhack.impl.modules.render.esp.ESP;
 import me.earth.earthhack.impl.modules.render.fullbright.Fullbright;
 import me.earth.earthhack.impl.modules.render.handchams.HandChams;
 import me.earth.earthhack.impl.modules.render.holeesp.HoleESP;
+import me.earth.earthhack.impl.modules.render.itemchams.ItemChams;
 import me.earth.earthhack.impl.modules.render.lagometer.LagOMeter;
 import me.earth.earthhack.impl.modules.render.logoutspots.LogoutSpots;
+import me.earth.earthhack.impl.modules.render.modeltotem.ModelTotem;
 import me.earth.earthhack.impl.modules.render.nametags.Nametags;
 import me.earth.earthhack.impl.modules.render.newchunks.NewChunks;
 import me.earth.earthhack.impl.modules.render.norender.NoRender;
@@ -167,9 +166,12 @@ import me.earth.earthhack.impl.modules.render.waypoints.WayPoints;
 import me.earth.earthhack.impl.modules.render.weather.Weather;
 import me.earth.earthhack.impl.modules.render.xray.XRay;
 
-public class ModuleManager
-extends IterationRegister<Module> {
-    public void init() {
+import java.util.ArrayList;
+
+public class ModuleManager extends IterationRegister<Module>
+{
+    public void init()
+    {
         Earthhack.getLogger().info("Initializing Modules.");
         this.forceRegister(new AutoConfig());
         this.forceRegister(new ClickGui());
@@ -185,6 +187,7 @@ extends IterationRegister<Module> {
         this.forceRegister(new TabModule());
         this.forceRegister(new Media());
         this.forceRegister(new HudEditor());
+
         this.forceRegister(new AntiSurround());
         this.forceRegister(new AntiTrap());
         this.forceRegister(new Auto32k());
@@ -194,9 +197,11 @@ extends IterationRegister<Module> {
         this.forceRegister(new AutoTrap());
         this.forceRegister(new BedBomb());
         this.forceRegister(new BowSpam());
+        this.forceRegister(new BowKiller());
         this.forceRegister(new Criticals());
         this.forceRegister(new CrystalBomber());
-        this.forceRegister(new BowKiller());
+        //this.forceRegister(new BowKiller());
+        //this.forceRegister(new HoleFiller());
         this.forceRegister(new HoleFiller());
         this.forceRegister(new KillAura());
         this.forceRegister(new LegSwitch());
@@ -206,6 +211,7 @@ extends IterationRegister<Module> {
         this.forceRegister(new Snowballer());
         this.forceRegister(new SelfTrap());
         this.forceRegister(new WebAura());
+
         this.forceRegister(new Announcer());
         this.forceRegister(new AntiAim());
         this.forceRegister(new AntiPackets());
@@ -242,6 +248,7 @@ extends IterationRegister<Module> {
         this.forceRegister(new AutoRegear());
         this.forceRegister(new PacketDelay());
         this.forceRegister(new RPC());
+
         this.forceRegister(new AutoSprint());
         this.forceRegister(new BlockLag());
         this.forceRegister(new BoatFly());
@@ -265,6 +272,7 @@ extends IterationRegister<Module> {
         this.forceRegister(new Speed());
         this.forceRegister(new Step());
         this.forceRegister(new Velocity());
+
         this.forceRegister(new AutoMine());
         this.forceRegister(new AutoTool());
         this.forceRegister(new Blink());
@@ -323,37 +331,46 @@ extends IterationRegister<Module> {
         this.forceRegister(new RainbowEnchant());
         this.forceRegister(new Crosshair());
         this.forceRegister(new PopChams());
+        this.forceRegister(new ItemChams());
+        this.forceRegister(new Ambience());
+        this.forceRegister(new me.earth.earthhack.impl.modules.render.rechams.Chams());
+        this.forceRegister(new ModelTotem());
+
         this.forceRegister(new PingBypass());
+
         Bus.EVENT_BUS.post(new PostInitEvent());
     }
 
-    public void load() {
+    public void load()
+    {
         Caches.setManager(this);
-        for (Module module : this.getRegistered()) {
+        for (Module module : getRegistered())
+        {
             module.load();
         }
     }
 
     @Override
-    public void unregister(Module module) throws CantUnregisterException {
+    public void unregister(Module module) throws CantUnregisterException
+    {
         super.unregister(module);
         Bus.EVENT_BUS.unsubscribe(module);
     }
 
-    private void forceRegister(Module module) {
-        this.registered.add(module);
-        if (module instanceof Registrable) {
-            ((Registrable)((Object)module)).onRegister();
+    private void forceRegister(Module module)
+    {
+        registered.add(module);
+        if (module instanceof Registrable)
+        {
+            ((Registrable) module).onRegister();
         }
     }
 
     public ArrayList<Module> getModulesFromCategory(Category moduleCategory) {
-        ArrayList<Module> iModules = new ArrayList<Module>();
-        for (Module iModule : this.getRegistered()) {
-            if (iModule.getCategory() != moduleCategory) continue;
-            iModules.add(iModule);
+        final ArrayList<Module> iModules = new ArrayList<>();
+        for (Module iModule : getRegistered()) {
+            if (iModule.getCategory() == moduleCategory) iModules.add(iModule);
         }
         return iModules;
     }
 }
-

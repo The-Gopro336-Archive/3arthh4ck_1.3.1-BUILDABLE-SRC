@@ -1,12 +1,12 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.combat.autocrystal.modes;
 
-public enum PreCalc {
+/**
+ * Calculate the most common spots, the
+ * 4 surrounding blocks before doing a big calculation.
+ */
+public enum PreCalc
+{
     None,
     Target,
-    Damage;
-
+    Damage
 }
-

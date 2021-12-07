@@ -1,10 +1,8 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.gui.click.component;
 
 import me.earth.earthhack.api.cache.ModuleCache;
 import me.earth.earthhack.impl.gui.click.Click;
+import me.earth.earthhack.impl.gui.hud.rewrite.HudEditorGui;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.client.clickgui.ClickGui;
 import me.earth.earthhack.impl.util.render.RenderUtil;
@@ -21,8 +19,7 @@ public class Component {
     private float lastPosY;
     private float width;
     private float height;
-    private boolean extended;
-    private boolean dragging;
+    private boolean extended, dragging;
     private String description;
     private static final ModuleCache<ClickGui> CLICK_GUI = Caches.getModule(ClickGui.class);
 
@@ -39,18 +36,21 @@ public class Component {
     }
 
     public void init() {
+
     }
 
     public void moved(float posX, float posY) {
-        this.setPosX(posX);
-        this.setPosY(posY);
-        this.setFinishedX(this.getPosX() + this.getOffsetX());
-        this.setFinishedY(this.getPosY() + this.getOffsetY());
+        setPosX(posX);
+        setPosY(posY);
+        setFinishedX(getPosX() + getOffsetX());
+        setFinishedY(getPosY() + getOffsetY());
     }
 
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        if (RenderUtil.mouseWithinBounds(mouseX, mouseY, this.getFinishedX() + 5.0f, this.getFinishedY() + 1.0f, this.getWidth() - 10.0f, this.getHeight() - 2.0f)) {
+        if (RenderUtil.mouseWithinBounds(mouseX, mouseY, getFinishedX() + 5, getFinishedY() + 1, getWidth() - 10, getHeight() - 2))
+        {
             Click.descriptionFrame.setDescription(this.getDescription());
+            HudEditorGui.descriptionFrame.setDescription(this.getDescription()); // poor abstraction ):
         }
     }
 
@@ -64,7 +64,7 @@ public class Component {
     }
 
     public float getFinishedX() {
-        return this.finishedX;
+        return finishedX;
     }
 
     public void setFinishedX(float finishedX) {
@@ -72,7 +72,7 @@ public class Component {
     }
 
     public float getFinishedY() {
-        return this.finishedY;
+        return finishedY;
     }
 
     public void setFinishedY(float finishedY) {
@@ -80,7 +80,7 @@ public class Component {
     }
 
     public float getOffsetX() {
-        return this.offsetX;
+        return offsetX;
     }
 
     public void setOffsetX(float offsetX) {
@@ -88,7 +88,7 @@ public class Component {
     }
 
     public float getOffsetY() {
-        return this.offsetY;
+        return offsetY;
     }
 
     public void setOffsetY(float offsetY) {
@@ -96,19 +96,19 @@ public class Component {
     }
 
     public String getLabel() {
-        return this.label;
+        return label;
     }
 
     public float getWidth() {
-        return this.width;
+        return width;
     }
 
     public float getHeight() {
-        return this.height;
+        return height;
     }
 
     public float getPosX() {
-        return this.posX;
+        return posX;
     }
 
     public void setPosX(float posX) {
@@ -116,7 +116,7 @@ public class Component {
     }
 
     public float getPosY() {
-        return this.posY;
+        return posY;
     }
 
     public void setPosY(float posY) {
@@ -124,7 +124,7 @@ public class Component {
     }
 
     public float getLastPosX() {
-        return this.lastPosX;
+        return lastPosX;
     }
 
     public void setLastPosX(float lastPosX) {
@@ -132,7 +132,7 @@ public class Component {
     }
 
     public float getLastPosY() {
-        return this.lastPosY;
+        return lastPosY;
     }
 
     public void setLastPosY(float lastPosY) {
@@ -140,7 +140,7 @@ public class Component {
     }
 
     public boolean isExtended() {
-        return this.extended;
+        return extended;
     }
 
     public void setExtended(boolean extended) {
@@ -148,7 +148,7 @@ public class Component {
     }
 
     public boolean isDragging() {
-        return this.dragging;
+        return dragging;
     }
 
     public void setDragging(boolean dragging) {
@@ -167,12 +167,13 @@ public class Component {
         this.height = height;
     }
 
-    public String getDescription() {
-        return this.description;
+    public String getDescription()
+    {
+        return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(String description)
+    {
         this.description = description;
     }
 }
-

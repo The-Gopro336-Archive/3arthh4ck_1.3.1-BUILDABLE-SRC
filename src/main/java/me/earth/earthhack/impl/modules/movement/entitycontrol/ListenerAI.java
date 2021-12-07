@@ -1,23 +1,22 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.movement.entitycontrol;
 
 import me.earth.earthhack.impl.event.events.misc.AIEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
-import me.earth.earthhack.impl.modules.movement.entitycontrol.EntityControl;
 
-final class ListenerAI
-extends ModuleListener<EntityControl, AIEvent> {
-    public ListenerAI(EntityControl module) {
+final class ListenerAI extends ModuleListener<EntityControl, AIEvent>
+{
+    public ListenerAI(EntityControl module)
+    {
         super(module, AIEvent.class);
     }
 
     @Override
-    public void invoke(AIEvent event) {
-        if (((EntityControl)this.module).noAI.getValue().booleanValue()) {
+    public void invoke(AIEvent event)
+    {
+        if (module.noAI.getValue())
+        {
             event.setCancelled(true);
         }
     }
-}
 
+}

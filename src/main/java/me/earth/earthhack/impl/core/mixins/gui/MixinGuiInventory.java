@@ -1,10 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.client.gui.inventory.GuiInventory
- *  org.lwjgl.input.Keyboard
- */
 package me.earth.earthhack.impl.core.mixins.gui;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -17,16 +10,23 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value={GuiInventory.class})
-public abstract class MixinGuiInventory {
-    private static final ModuleCache<XCarry> XCARRY = Caches.getModule(XCarry.class);
+@Mixin(GuiInventory.class)
+public abstract class MixinGuiInventory
+{
+    private static final ModuleCache<XCarry> XCARRY =
+        Caches.getModule(XCarry.class);
 
-    @Inject(method={"onGuiClosed"}, at={@At(value="HEAD")}, cancellable=true)
-    private void onGuiClosedHook(CallbackInfo info) {
-        if (XCARRY.isEnabled()) {
-            Keyboard.enableRepeatEvents((boolean)false);
+    @Inject(
+        method = "onGuiClosed",
+        at = @At("HEAD"),
+        cancellable = true)
+    private void onGuiClosedHook(CallbackInfo info)
+    {
+        if (XCARRY.isEnabled())
+        {
+            Keyboard.enableRepeatEvents(false);
             info.cancel();
         }
     }
-}
 
+}

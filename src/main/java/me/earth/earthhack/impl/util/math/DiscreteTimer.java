@@ -1,14 +1,24 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.util.math;
 
-import me.earth.earthhack.impl.util.math.Passable;
+/**
+ * A StopWatch that works
+ * in environments with discrete delays(ticks).
+ */
+public interface DiscreteTimer extends Passable
+{
+    /**
+     * Resets this timer. Passed will return
+     * <tt>true</tt> until the delay has been
+     * passed.
+     *
+     * @param delay the delay.
+     * @return this.
+     */
+    DiscreteTimer reset(long delay);
 
-public interface DiscreteTimer
-extends Passable {
-    public DiscreteTimer reset(long var1);
+    /**
+     * @return time since last reset.
+     */
+    long getTime();
 
-    public long getTime();
 }
-

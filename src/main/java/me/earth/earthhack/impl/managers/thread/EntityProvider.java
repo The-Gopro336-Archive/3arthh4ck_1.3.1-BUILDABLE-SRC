@@ -1,81 +1,134 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.Entity
- *  net.minecraft.entity.player.EntityPlayer
- */
 package me.earth.earthhack.impl.managers.thread;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import me.earth.earthhack.api.event.bus.EventListener;
 import me.earth.earthhack.api.event.bus.SubscriberImpl;
 import me.earth.earthhack.api.util.interfaces.Globals;
 import me.earth.earthhack.impl.event.events.misc.TickEvent;
+import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.NetHandlerPlayServer;
 
-public class EntityProvider
-extends SubscriberImpl
-implements Globals {
-    private volatile List<EntityPlayer> players = Collections.emptyList();
-    private volatile List<Entity> entities = Collections.emptyList();
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-    public EntityProvider() {
-        this.listeners.add(new EventListener<TickEvent.PostWorldTick>(TickEvent.PostWorldTick.class){
+/**
+ * Makes snapshots of {@link WorldClient#loadedEntityList} and
+ * {@link WorldClient#playerEntities} so you can access them
+ * on another thread.
+ */
+@SuppressWarnings("unused")
+public class EntityProvider extends SubscriberImpl implements Globals
+{
+    private volatile List<EntityPlayer> players;
+    private volatile List<Entity> entities;
 
+    public EntityProvider()
+    {
+        this.players  = Collections.emptyList();
+        this.entities = Collections.emptyList();
+        /* this.listeners.add(new EventListener<TickEvent>(TickEvent.class)
+        {
             @Override
-            public void invoke(TickEvent.PostWorldTick event) {
-                EntityProvider.this.update();
+            public void invoke(TickEvent event)
+            {
+                update();
+            }
+        }); */
+        this.listeners.add(new EventListener<TickEvent.PostWorldTick>(
+                TickEvent.PostWorldTick.class)
+        {
+            @Override
+            public void invoke(TickEvent.PostWorldTick event)
+            {
+                update();
             }
         });
     }
 
-    private void update() {
-        if (EntityProvider.mc.world != null) {
-            this.setLists(new ArrayList<Entity>(EntityProvider.mc.world.loadedEntityList), new ArrayList<EntityPlayer>(EntityProvider.mc.world.playerEntities));
-        } else {
-            this.setLists(Collections.emptyList(), Collections.emptyList());
+    private void update()
+    {
+        if (mc.world != null)
+        {
+            setLists(
+                new ArrayList<>(mc.world.loadedEntityList),
+                new ArrayList<>(mc.world.playerEntities));
+        }
+        else
+        {
+            setLists(Collections.emptyList(),
+                    Collections.emptyList());
         }
     }
 
-    private void setLists(List<Entity> loadedEntities, List<EntityPlayer> playerEntities) {
-        this.entities = loadedEntities;
-        this.players = playerEntities;
+    private void setLists(List<Entity> loadedEntities,
+                          List<EntityPlayer> playerEntities)
+    {
+        entities = loadedEntities;
+        players  = playerEntities;
     }
 
-    public List<Entity> getEntities() {
-        return this.entities;
+    /**
+     *  Always store this in a local variable when
+     *  you are calling this from another thread!
+     *  Might be null and might contain nullpointers.
+     *
+     *  @return copy of {@link WorldClient#loadedEntityList}
+     */
+    public List<Entity> getEntities()
+    {
+        return entities;
     }
 
-    public List<EntityPlayer> getPlayers() {
-        return this.players;
+    /**
+     *  Always store this in a local variable when
+     *  you are calling this from another thread!
+     *  Might be null and might contain nullpointers.
+     *
+     * @return copy of {@link WorldClient#playerEntities}
+     */
+    public List<EntityPlayer> getPlayers()
+    {
+        return players;
     }
 
-    public List<Entity> getEntitiesAsync() {
-        return this.getEntities(!mc.isCallingFromMinecraftThread());
+    public List<Entity> getEntitiesAsync()
+    {
+        return getEntities(!mc.isCallingFromMinecraftThread());
     }
 
-    public List<EntityPlayer> getPlayersAsync() {
-        return this.getPlayers(!mc.isCallingFromMinecraftThread());
+    public List<EntityPlayer> getPlayersAsync()
+    {
+        return getPlayers(!mc.isCallingFromMinecraftThread());
     }
 
-    public List<Entity> getEntities(boolean async) {
-        return async ? this.entities : EntityProvider.mc.world.loadedEntityList;
+    public List<Entity> getEntities(boolean async)
+    {
+        return async ? entities : mc.world.loadedEntityList;
     }
 
-    public List<EntityPlayer> getPlayers(boolean async) {
-        return async ? this.players : EntityProvider.mc.world.playerEntities;
+    public List<EntityPlayer> getPlayers(boolean async)
+    {
+        return async ? players : mc.world.playerEntities;
     }
 
-    public Entity getEntity(int id) {
-        List<Entity> entities = this.getEntitiesAsync();
-        if (entities != null) {
-            return entities.stream().filter(e -> e != null && e.getEntityId() == id).findFirst().orElse(null);
+    public Entity getEntity(int id)
+    {
+        List<Entity> entities = getEntitiesAsync();
+        if (entities != null)
+        {
+            return entities.stream()
+                           .filter(e -> e != null && e.getEntityId() == id)
+                           .findFirst()
+                           .orElse(null);
         }
+
         return null;
     }
-}
 
+}

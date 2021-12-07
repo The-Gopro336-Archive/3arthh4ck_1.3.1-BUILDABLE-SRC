@@ -1,18 +1,5 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.Entity
- *  net.minecraft.entity.player.EntityPlayer
- *  net.minecraft.network.Packet
- *  net.minecraft.network.play.client.CPacketClickWindow
- *  net.minecraft.network.play.client.CPacketEntityAction
- *  net.minecraft.network.play.client.CPacketEntityAction$Action
- *  net.minecraft.network.play.server.SPacketPlayerPosLook
- */
 package me.earth.earthhack.impl.managers.minecraft.movement;
 
-import java.util.concurrent.atomic.AtomicLong;
 import me.earth.earthhack.api.event.bus.EventListener;
 import me.earth.earthhack.api.event.bus.SubscriberImpl;
 import me.earth.earthhack.api.util.interfaces.Globals;
@@ -21,117 +8,201 @@ import me.earth.earthhack.impl.event.events.network.WorldClientEvent;
 import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.util.math.StopWatch;
 import me.earth.earthhack.impl.util.thread.Locks;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketClickWindow;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.server.SPacketPlayerPosLook;
 
-public class NCPManager
-extends SubscriberImpl
-implements Globals {
-    private final AtomicLong lagTimer = new AtomicLong();
+import java.util.concurrent.atomic.AtomicLong;
+
+/**
+ * Manages the legitimacy of windowClicks against NCP.
+ * Also manages the time that passed since the last
+ * LagBack via {@link SPacketPlayerPosLook}.
+ */
+public class NCPManager extends SubscriberImpl implements Globals
+{
+    private final AtomicLong lagTimer  = new AtomicLong();
     private final StopWatch clickTimer = new StopWatch();
     private boolean endedSprint;
     private boolean endedSneak;
     private boolean windowClicks;
     private boolean strict;
 
-    public NCPManager() {
-        this.listeners.add(new EventListener<PacketEvent.Receive<SPacketPlayerPosLook>>(PacketEvent.Receive.class, Integer.MAX_VALUE, SPacketPlayerPosLook.class){
-
+    /** Constructs a new NCPManager. */
+    public NCPManager()
+    {
+        this.listeners.add(
+            new EventListener<PacketEvent.Receive<SPacketPlayerPosLook>>
+                (PacketEvent.Receive.class,
+                        Integer.MAX_VALUE,
+                        SPacketPlayerPosLook.class)
+        {
             @Override
-            public void invoke(PacketEvent.Receive<SPacketPlayerPosLook> event) {
-                NCPManager.this.lagTimer.set(System.currentTimeMillis());
+            public void invoke(PacketEvent.Receive<SPacketPlayerPosLook> event)
+            {
+                lagTimer.set(System.currentTimeMillis());
             }
         });
-        this.listeners.add(new EventListener<WorldClientEvent.Load>(WorldClientEvent.Load.class){
-
+        this.listeners.add(
+            new EventListener<WorldClientEvent.Load>
+                    (WorldClientEvent.Load.class)
+        {
             @Override
-            public void invoke(WorldClientEvent.Load event) {
-                NCPManager.this.endedSneak = false;
-                NCPManager.this.endedSprint = false;
-                NCPManager.this.windowClicks = false;
+            public void invoke(WorldClientEvent.Load event)
+            {
+                endedSneak   = false;
+                endedSprint  = false;
+                windowClicks = false;
             }
         });
-        this.listeners.add(new EventListener<PacketEvent.Send<CPacketClickWindow>>(PacketEvent.Send.class, -1000, CPacketClickWindow.class){
-
+        this.listeners.add(
+            new EventListener<PacketEvent.Send<CPacketClickWindow>>
+                (PacketEvent.Send.class, -1000, CPacketClickWindow.class)
+        {
             @Override
-            public void invoke(PacketEvent.Send<CPacketClickWindow> event) {
-                if (!NCPManager.this.isStrict() || event.isCancelled()) {
+            public void invoke(PacketEvent.Send<CPacketClickWindow> event)
+            {
+                if (!isStrict() || event.isCancelled())
+                {
                     return;
                 }
-                if (Globals.mc.player.isActiveItemStackBlocking()) {
-                    Locks.acquire(Locks.PLACE_SWITCH_LOCK, () -> Globals.mc.playerController.onStoppedUsingItem((EntityPlayer)Globals.mc.player));
+
+                if (mc.player.isActiveItemStackBlocking())
+                {
+                    Locks.acquire(Locks.PLACE_SWITCH_LOCK, () ->
+                        mc.playerController.onStoppedUsingItem(mc.player));
                 }
-                if (Managers.ACTION.isSneaking()) {
-                    NCPManager.this.endedSneak = true;
-                    Globals.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)Globals.mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
+
+                if (Managers.ACTION.isSneaking())
+                {
+                    endedSneak = true;
+                    mc.player.connection.sendPacket(
+                            new CPacketEntityAction(mc.player,
+                                    CPacketEntityAction.Action.STOP_SNEAKING));
                 }
-                if (Managers.ACTION.isSprinting()) {
-                    NCPManager.this.endedSprint = true;
-                    Globals.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)Globals.mc.player, CPacketEntityAction.Action.STOP_SPRINTING));
+
+                if (Managers.ACTION.isSprinting())
+                {
+                    endedSprint = true;
+                    mc.player.connection.sendPacket(
+                            new CPacketEntityAction(mc.player,
+                                    CPacketEntityAction.Action.STOP_SPRINTING));
                 }
             }
         });
-        this.listeners.add(new EventListener<PacketEvent.Post<CPacketClickWindow>>(PacketEvent.Post.class, -1000, CPacketClickWindow.class){
-
+        this.listeners.add(
+            new EventListener<PacketEvent.Post<CPacketClickWindow>>
+                (PacketEvent.Post.class, -1000, CPacketClickWindow.class)
+        {
             @Override
-            public void invoke(PacketEvent.Post<CPacketClickWindow> event) {
-                NCPManager.this.clickTimer.reset();
-                if (!NCPManager.this.windowClicks && NCPManager.this.isStrict()) {
-                    NCPManager.this.release();
+            public void invoke(PacketEvent.Post<CPacketClickWindow> event)
+            {
+                clickTimer.reset();
+                if (!windowClicks && isStrict())
+                {
+                    release();
                 }
             }
         });
     }
 
-    public StopWatch getClickTimer() {
-        return this.clickTimer;
+    public StopWatch getClickTimer()
+    {
+        return clickTimer;
     }
 
-    public boolean isStrict() {
-        return this.strict;
+    /**
+     * @return <tt>true</tt> if NCP-Strict is active.
+     */
+    public boolean isStrict()
+    {
+        return strict;
     }
 
-    public void setStrict(boolean strict) {
-        if (this.strict && !strict) {
-            this.releaseMultiClick();
+    /**
+     * @param strict set NCP-Strict to this value.
+     */
+    public void setStrict(boolean strict)
+    {
+        if (this.strict && !strict)
+        {
+            releaseMultiClick();
         }
+
         this.strict = strict;
     }
 
-    public void startMultiClick() {
+    /**
+     * Marks that NCP-Strict should expect multiple
+     * WindowClicks in a short period of time and
+     * not spam packets. Always call
+     * {@link NCPManager#releaseMultiClick()}
+     * afterwards.
+     */
+    public void startMultiClick()
+    {
         this.windowClicks = true;
     }
 
-    public void releaseMultiClick() {
+    /**
+     * Call after {@link NCPManager#startMultiClick()}, to
+     * end a streak of multiple windowClicks and send the
+     * packets.
+     */
+    public void releaseMultiClick()
+    {
         this.windowClicks = false;
-        this.release();
+        release();
     }
 
-    public boolean passed(int ms) {
-        return System.currentTimeMillis() - this.lagTimer.get() >= (long)ms;
+    /**
+     * Returns <tt>true</tt> if more time than the given delay in
+     * milliseconds passed since the last {@link SPacketPlayerPosLook}
+     * arrived at our client.
+     *
+     * @param ms the delay in ms to check.
+     */
+    public boolean passed(int ms)
+    {
+        return System.currentTimeMillis() - lagTimer.get() >= ms;
     }
 
-    public long getTimeStamp() {
-        return this.lagTimer.get();
+    /**
+     * @return the {@link System#currentTimeMillis()} of the last lag.
+     */
+    public long getTimeStamp()
+    {
+        return lagTimer.get();
     }
 
-    public void reset() {
-        this.lagTimer.set(System.currentTimeMillis());
+    /**
+     * Resets the LagTimer. {@link NCPManager#passed(int)} is affected.
+     */
+    public void reset()
+    {
+        lagTimer.set(System.currentTimeMillis());
     }
 
-    private void release() {
-        if (this.endedSneak) {
-            this.endedSneak = false;
-            NCPManager.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)NCPManager.mc.player, CPacketEntityAction.Action.START_SNEAKING));
+    /**
+     * Called after a windowClick, sends a SneakPacket
+     * if we stopped sneaking for the windowClick and
+     * a SprintPacket if we stopped sprinting.
+     */
+    private void release()
+    {
+        if (endedSneak)
+        {
+            endedSneak = false;
+            mc.player.connection.sendPacket(new CPacketEntityAction(
+                    mc.player, CPacketEntityAction.Action.START_SNEAKING));
         }
-        if (this.endedSprint) {
-            this.endedSprint = false;
-            NCPManager.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)NCPManager.mc.player, CPacketEntityAction.Action.START_SPRINTING));
+
+        if (endedSprint)
+        {
+            endedSprint = false;
+            mc.player.connection.sendPacket(new CPacketEntityAction(
+                    mc.player, CPacketEntityAction.Action.START_SPRINTING));
         }
     }
+
 }
-

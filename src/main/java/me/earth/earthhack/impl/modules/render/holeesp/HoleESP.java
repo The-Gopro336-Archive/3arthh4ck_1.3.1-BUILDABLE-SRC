@@ -1,15 +1,5 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.Entity
- *  net.minecraft.util.math.BlockPos
- *  net.minecraft.util.math.BlockPos$MutableBlockPos
- */
 package me.earth.earthhack.impl.modules.render.holeesp;
 
-import java.awt.Color;
-import java.util.List;
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
@@ -18,157 +8,253 @@ import me.earth.earthhack.api.setting.settings.ColorSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.managers.thread.holes.HoleObserver;
-import me.earth.earthhack.impl.modules.render.holeesp.HoleESPData;
-import me.earth.earthhack.impl.modules.render.holeesp.ListenerRender;
 import me.earth.earthhack.impl.util.math.MathUtil;
 import me.earth.earthhack.impl.util.math.rotation.RotationUtil;
 import me.earth.earthhack.impl.util.render.RenderUtil;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 
-public class HoleESP
-extends Module
-implements HoleObserver {
-    protected final Setting<Float> range = this.register(new NumberSetting<Float>("Range", Float.valueOf(6.0f), Float.valueOf(0.0f), Float.valueOf(100.0f)));
-    protected final Setting<Integer> holes = this.register(new NumberSetting<Integer>("Holes", 10, 0, 1000));
-    protected final Setting<Integer> safeHole = this.register(new NumberSetting<Integer>("S-Holes", 10, 0, 1000));
-    protected final Setting<Integer> wide = this.register(new NumberSetting<Integer>("2x1-Holes", 1, 0, 1000));
-    protected final Setting<Integer> big = this.register(new NumberSetting<Integer>("2x2-Holes", 1, 0, 1000));
-    protected final Setting<Boolean> fov = this.register(new BooleanSetting("Fov", true));
-    protected final Setting<Boolean> own = this.register(new BooleanSetting("Own", false));
-    protected final Setting<Boolean> fade = this.register(new BooleanSetting("Fade", false));
-    protected final Setting<Float> fadeRange = this.register(new NumberSetting<Float>("Fade-Range", Float.valueOf(4.0f), Float.valueOf(0.0f), Float.valueOf(100.0f)));
-    protected final Setting<Float> minFade = this.register(new NumberSetting<Float>("Min-Fade", Float.valueOf(3.0f), Float.valueOf(0.0f), Float.valueOf(100.0f)));
-    protected final Setting<Double> alphaFactor = this.register(new NumberSetting<Double>("AlphaFactor", 0.3, 0.0, 1.0));
-    protected final Setting<Float> height = this.register(new NumberSetting<Float>("SafeHeight", Float.valueOf(1.0f), Float.valueOf(-1.0f), Float.valueOf(1.0f)));
-    protected final Setting<Float> unsafeHeight = this.register(new NumberSetting<Float>("UnsafeHeight", Float.valueOf(1.0f), Float.valueOf(-1.0f), Float.valueOf(1.0f)));
-    protected final Setting<Float> wideHeight = this.register(new NumberSetting<Float>("2x1-Height", Float.valueOf(0.0f), Float.valueOf(-1.0f), Float.valueOf(1.0f)));
-    protected final Setting<Float> bigHeight = this.register(new NumberSetting<Float>("2x2-Height", Float.valueOf(0.0f), Float.valueOf(-1.0f), Float.valueOf(1.0f)));
-    protected final Setting<Color> unsafeColor = this.register(new ColorSetting("UnsafeColor", Color.RED));
-    protected final Setting<Color> safeColor = this.register(new ColorSetting("SafeColor", Color.GREEN));
-    protected final Setting<Color> wideColor = this.register(new ColorSetting("2x1-Color", new Color(90, 9, 255)));
-    protected final Setting<Color> bigColor = this.register(new ColorSetting("2x2-Color", new Color(0, 80, 255)));
+import java.awt.*;
+import java.util.List;
+
+//TODO: colors etc. gradient
+//TODO: Make HoleManager put 2x1s and 2x2s together so we can draw 1 bb
+public class HoleESP extends Module implements HoleObserver
+{
+    protected final Setting<Float> range      =
+            register(new NumberSetting<>("Range", 6.0f, 0.0f, 100.0f));
+    protected final Setting<Integer> holes    =
+            register(new NumberSetting<>("Holes", 10, 0, 1000));
+    protected final Setting<Integer> safeHole =
+            register(new NumberSetting<>("S-Holes", 10, 0, 1000));
+    protected final Setting<Integer> wide     =
+            register(new NumberSetting<>("2x1-Holes", 1, 0, 1000));
+    protected final Setting<Integer> big      =
+            register(new NumberSetting<>("2x2-Holes", 1, 0, 1000));
+    protected final Setting<Boolean> fov      =
+            register(new BooleanSetting("Fov", true));
+    protected final Setting<Boolean> own      =
+            register(new BooleanSetting("Own", false));
+    protected final Setting<Boolean> fade      =
+            register(new BooleanSetting("Fade", false));
+    protected final Setting<Float> fadeRange      =
+            register(new NumberSetting<>("Fade-Range", 4.0f, 0.0f, 100.0f));
+    protected final Setting<Float> minFade      =
+            register(new NumberSetting<>("Min-Fade", 3.0f, 0.0f, 100.0f));
+    protected final Setting<Double> alphaFactor   =
+            register(new NumberSetting<>("AlphaFactor", 0.3, 0.0, 1.0));
+
+    protected final Setting<Float> height     =
+            register(new NumberSetting<>("SafeHeight", 1.0f, -1.0f, 1.0f));
+    protected final Setting<Float> unsafeHeight =
+            register(new NumberSetting<>("UnsafeHeight", 1.0f, -1.0f, 1.0f));
+    protected final Setting<Float> wideHeight     =
+            register(new NumberSetting<>("2x1-Height", 0.0f, -1.0f, 1.0f));
+    protected final Setting<Float> bigHeight     =
+            register(new NumberSetting<>("2x2-Height", 0.0f, -1.0f, 1.0f));
+
+    protected final Setting<Color> unsafeColor =
+            register(new ColorSetting("UnsafeColor", Color.RED));
+    protected final Setting<Color> safeColor =
+            register(new ColorSetting("SafeColor", Color.GREEN));
+    protected final Setting<Color> wideColor =
+            register(new ColorSetting("2x1-Color", new Color(90, 9, 255)));
+    protected final Setting<Color> bigColor =
+            register(new ColorSetting("2x2-Color", new Color(0, 80, 255)));
+
     private final BlockPos.MutableBlockPos mPos = new BlockPos.MutableBlockPos();
 
-    public HoleESP() {
+    public HoleESP()
+    {
         super("HoleESP", Category.Render);
         this.listeners.add(new ListenerRender(this));
         this.setData(new HoleESPData(this));
     }
 
     @Override
-    public void onLoad() {
-        if (this.isEnabled()) {
+    public void onLoad()
+    {
+        if (this.isEnabled())
+        {
             Managers.HOLES.register(this);
         }
     }
 
     @Override
-    public void onEnable() {
+    public void onEnable()
+    {
         Managers.HOLES.register(this);
     }
 
     @Override
-    public void onDisable() {
+    public void onDisable()
+    {
         Managers.HOLES.unregister(this);
     }
 
-    protected void onRender3D() {
-        this.renderList(Managers.HOLES.getUnsafe(), this.unsafeColor.getValue(), this.unsafeHeight.getValue().floatValue(), this.holes.getValue());
-        this.renderList(Managers.HOLES.getSafe(), this.safeColor.getValue(), this.height.getValue().floatValue(), this.safeHole.getValue());
-        this.renderList(Managers.HOLES.getLongHoles(), this.wideColor.getValue(), this.wideHeight.getValue().floatValue(), this.wide.getValue());
-        BlockPos playerPos = new BlockPos((Entity)HoleESP.mc.player);
-        if (this.big.getValue() != 0 && !Managers.HOLES.getBigHoles().isEmpty()) {
+    protected void onRender3D()
+    {
+        renderList(Managers.HOLES.getUnsafe(),
+                   unsafeColor.getValue(),
+                   unsafeHeight.getValue(),
+                   holes.getValue());
+
+        renderList(Managers.HOLES.getSafe(),
+                   safeColor.getValue(),
+                   height.getValue(),
+                   safeHole.getValue());
+
+        renderList(Managers.HOLES.getLongHoles(),
+                   wideColor.getValue(),
+                   wideHeight.getValue(),
+                   wide.getValue());
+
+        BlockPos playerPos = new BlockPos(mc.player);
+        if (big.getValue() != 0 && !Managers.HOLES.getBigHoles().isEmpty())
+        {
             int i = 1;
-            for (BlockPos pos : Managers.HOLES.getBigHoles()) {
-                if (i > this.big.getValue()) {
+            for (BlockPos pos : Managers.HOLES.getBigHoles())
+            {
+                if (i > big.getValue())
+                {
                     return;
                 }
-                if (!this.checkPos(pos, playerPos)) continue;
-                Color bC = this.bigColor.getValue();
-                float bH = this.bigHeight.getValue().floatValue();
-                if (this.fade.getValue().booleanValue()) {
-                    double distance = HoleESP.mc.player.getDistanceSq((double)(pos.getX() + 1), (double)pos.getY(), (double)(pos.getZ() + 1));
-                    double alpha = ((double)(MathUtil.square(this.fadeRange.getValue().floatValue()) + MathUtil.square(this.minFade.getValue().floatValue())) - distance) / (double)MathUtil.square(this.fadeRange.getValue().floatValue());
-                    if (alpha > 0.0 && alpha < 1.0) {
-                        int alphaInt = MathUtil.clamp((int)(alpha * 255.0), 0, 255);
-                        Color bC1 = new Color(bC.getRed(), bC.getGreen(), bC.getBlue(), alphaInt);
-                        int boxInt = (int)((double)alphaInt * this.alphaFactor.getValue());
-                        RenderUtil.renderBox(pos, bC1, bH, boxInt);
-                        this.mPos.setPos(pos.getX(), pos.getY(), pos.getZ() + 1);
-                        RenderUtil.renderBox((BlockPos)this.mPos, bC1, bH, boxInt);
-                        this.mPos.setPos(pos.getX() + 1, pos.getY(), pos.getZ());
-                        RenderUtil.renderBox((BlockPos)this.mPos, bC1, bH, boxInt);
-                        this.mPos.setPos(pos.getX() + 1, pos.getY(), pos.getZ() + 1);
-                        RenderUtil.renderBox((BlockPos)this.mPos, bC1, bH, boxInt);
-                    } else if (alpha < 0.0) continue;
+
+                if (checkPos(pos, playerPos))
+                {
+                    Color bC = bigColor.getValue();
+                    float bH = bigHeight.getValue();
+
+                    if (fade.getValue())
+                    {
+                        double distance = mc.player.getDistanceSq(
+                                pos.getX() + 1, pos.getY(), pos.getZ() + 1);
+                        double alpha = (MathUtil.square(fadeRange.getValue())
+                                + MathUtil.square(minFade.getValue())
+                                - distance)
+                                / MathUtil.square(fadeRange.getValue());
+
+                        if (alpha > 0 && alpha < 1)
+                        {
+                            int alphaInt = MathUtil.clamp((int) (alpha * 255), 0, 255);
+                            Color bC1 = new Color(bC.getRed(),
+                                                     bC.getGreen(),
+                                                     bC.getBlue(),
+                                                     alphaInt);
+
+                            int boxInt = (int) (alphaInt * alphaFactor.getValue());
+                            RenderUtil.renderBox(pos, bC1, bH, boxInt);
+                            mPos.setPos(pos.getX(), pos.getY(), pos.getZ() + 1);
+                            RenderUtil.renderBox(mPos, bC1, bH, boxInt);
+                            mPos.setPos(pos.getX() + 1, pos.getY(), pos.getZ());
+                            RenderUtil.renderBox(mPos, bC1, bH, boxInt);
+                            mPos.setPos(pos.getX() + 1, pos.getY(), pos.getZ() + 1);
+                            RenderUtil.renderBox(mPos, bC1, bH, boxInt);
+                        }
+                        else if (alpha < 0)
+                        {
+                            continue;
+                        }
+                    }
+
+                    RenderUtil.renderBox(pos, bC, bH);
+                    mPos.setPos(pos.getX(), pos.getY(), pos.getZ() + 1);
+                    RenderUtil.renderBox(mPos, bC, bH);
+                    mPos.setPos(pos.getX() + 1, pos.getY(), pos.getZ());
+                    RenderUtil.renderBox(mPos, bC, bH);
+                    mPos.setPos(pos.getX() + 1, pos.getY(), pos.getZ() + 1);
+                    RenderUtil.renderBox(mPos, bC, bH);
+                    i++;
                 }
-                RenderUtil.renderBox(pos, bC, bH);
-                this.mPos.setPos(pos.getX(), pos.getY(), pos.getZ() + 1);
-                RenderUtil.renderBox((BlockPos)this.mPos, bC, bH);
-                this.mPos.setPos(pos.getX() + 1, pos.getY(), pos.getZ());
-                RenderUtil.renderBox((BlockPos)this.mPos, bC, bH);
-                this.mPos.setPos(pos.getX() + 1, pos.getY(), pos.getZ() + 1);
-                RenderUtil.renderBox((BlockPos)this.mPos, bC, bH);
-                ++i;
             }
         }
     }
 
-    private void renderList(List<BlockPos> positions, Color color, float height, int max) {
-        BlockPos playerPos = new BlockPos((Entity)HoleESP.mc.player);
-        if (max != 0 && !positions.isEmpty()) {
+    private void renderList(List<BlockPos> positions,
+                            Color color,
+                            float height,
+                            int max)
+    {
+        BlockPos playerPos = new BlockPos(mc.player);
+        if (max != 0 && !positions.isEmpty())
+        {
             int i = 1;
-            for (BlockPos pos : positions) {
-                if (i > max) {
+            for (BlockPos pos : positions)
+            {
+                if (i > max)
+                {
                     return;
                 }
-                if (!this.checkPos(pos, playerPos)) continue;
-                if (this.fade.getValue().booleanValue()) {
-                    double alpha = ((double)(MathUtil.square(this.fadeRange.getValue().floatValue()) + MathUtil.square(this.minFade.getValue().floatValue())) - HoleESP.mc.player.getDistanceSq(pos)) / (double)MathUtil.square(this.fadeRange.getValue().floatValue());
-                    if (alpha > 0.0 && alpha < 1.0) {
-                        int alphaInt = MathUtil.clamp((int)(alpha * 255.0), 0, 255);
-                        Color color1 = new Color(color.getRed(), color.getGreen(), color.getBlue(), alphaInt);
-                        RenderUtil.renderBox(pos, color1, height, (int)((double)alphaInt * this.alphaFactor.getValue()));
+
+                if (checkPos(pos, playerPos))
+                {
+                    if (fade.getValue())
+                    {
+                        double alpha = (MathUtil.square(fadeRange.getValue())
+                                        + MathUtil.square(minFade.getValue())
+                                        - mc.player.getDistanceSq(pos))
+                                        / MathUtil.square(fadeRange.getValue());
+
+                        if (alpha > 0 && alpha < 1)
+                        {
+                            int alphaInt =
+                                MathUtil.clamp((int) (alpha * 255), 0, 255);
+                            Color color1 = new Color(color.getRed(),
+                                                     color.getGreen(),
+                                                     color.getBlue(),
+                                                     alphaInt);
+                            RenderUtil.renderBox(pos,
+                                    color1, height, (int) (alphaInt * alphaFactor.getValue()));
+                        }
+                        else if (alpha >= 1)
+                        {
+                            RenderUtil.renderBox(pos, color, height);
+                            continue;
+                        }
+
                         continue;
                     }
-                    if (!(alpha >= 1.0)) continue;
+
                     RenderUtil.renderBox(pos, color, height);
-                    continue;
+                    i++;
                 }
-                RenderUtil.renderBox(pos, color, height);
-                ++i;
             }
         }
     }
 
-    private boolean checkPos(BlockPos pos, BlockPos playerPos) {
-        return !(this.fov.getValue() != false && !RotationUtil.inFov(pos) || this.own.getValue() == false && pos.equals((Object)playerPos));
+    private boolean checkPos(BlockPos pos, BlockPos playerPos)
+    {
+        return (!fov.getValue() || RotationUtil.inFov(pos))
+                && (own.getValue() || !pos.equals(playerPos));
     }
 
     @Override
-    public double getRange() {
-        return this.range.getValue().floatValue();
+    public double getRange()
+    {
+        return range.getValue();
     }
 
     @Override
-    public int getSafeHoles() {
-        return this.safeHole.getValue();
+    public int getSafeHoles()
+    {
+        return safeHole.getValue();
     }
 
     @Override
-    public int getUnsafeHoles() {
-        return this.holes.getValue();
+    public int getUnsafeHoles()
+    {
+        return holes.getValue();
     }
 
     @Override
-    public int get2x1Holes() {
-        return this.wide.getValue();
+    public int get2x1Holes()
+    {
+        return wide.getValue();
     }
 
     @Override
-    public int get2x2Holes() {
-        return this.big.getValue();
+    public int get2x2Holes()
+    {
+        return big.getValue();
     }
+
 }
-

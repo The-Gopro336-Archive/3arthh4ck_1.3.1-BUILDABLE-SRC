@@ -1,23 +1,63 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.core.ducks.network;
 
-public interface IPlayerControllerMP {
-    public void syncItem();
+/**
+ * Duck interface for
+ * {@link net.minecraft.client.multiplayer.PlayerControllerMP}.
+ */
+public interface IPlayerControllerMP
+{
+    /**
+     * Accessor for syncCurrentPlayItem.
+     */
+    void syncItem();
 
-    public int getItem();
+    /**
+     * Accessor for currentPlayerItem.
+     *
+     * @return currentPlayerItem.
+     */
+    int getItem();
 
-    public void setBlockHitDelay(int var1);
+    /**
+     * Accessor for blockHitDelay.
+     *
+     * @param delay set the delay.
+     */
+    void setBlockHitDelay(int delay);
 
-    public int getBlockHitDelay();
+    /**
+     * Accessor for blockHitDelay.
+     *
+     * @return blockHitDelay.
+     */
+    int getBlockHitDelay();
 
-    public float getCurBlockDamageMP();
+    /**
+     * Accessor for curBlockDamageMP.
+     *
+     * @return curBlockDamageMP.
+     */
+    float getCurBlockDamageMP();
 
-    public void setCurBlockDamageMP(float var1);
+    /**
+     * Accessor for curBlockDamageMP.
+     *
+     * @param damage set curBlockDamageMP.
+     */
+    void setCurBlockDamageMP(float damage);
 
-    public void setIsHittingBlock(boolean var1);
+    /**
+     * Accessor for isHittingBlock.
+     *
+     * @param hitting set isHittingBlock.
+     */
+    void setIsHittingBlock(boolean hitting);
 
-    public boolean getIsHittingBlock();
+    /**
+     * Accessor for isHittingBlock.
+     *
+     * @return isHittingBlock.
+     */
+    boolean getIsHittingBlock();
+
 }
-

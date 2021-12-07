@@ -1,32 +1,46 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.combat.autocrystal.helpers;
 
 import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.impl.modules.combat.autocrystal.modes.AntiWeakness;
 import me.earth.earthhack.impl.util.minecraft.DamageUtil;
 
-public class WeaknessHelper {
+public class WeaknessHelper
+{
     private final Setting<AntiWeakness> antiWeakness;
     private final Setting<Integer> cooldown;
     private boolean weaknessed;
 
-    public WeaknessHelper(Setting<AntiWeakness> antiWeakness, Setting<Integer> cooldown) {
+    public WeaknessHelper(Setting<AntiWeakness> antiWeakness,
+                          Setting<Integer> cooldown)
+    {
         this.antiWeakness = antiWeakness;
-        this.cooldown = cooldown;
+        this.cooldown     = cooldown;
     }
 
-    public void updateWeakness() {
-        this.weaknessed = !DamageUtil.canBreakWeakness(true);
+    /**
+     * Updates if we are weaknessed. We poll this since
+     * we multithread and dont want problems with the
+     * PotionMap.
+     */
+    public void updateWeakness()
+    {
+        weaknessed = !DamageUtil.canBreakWeakness(true);
     }
 
-    public boolean isWeaknessed() {
-        return this.weaknessed;
+    /**
+     * @return <tt>true</tt> if we are weaknessed.
+     */
+    public boolean isWeaknessed()
+    {
+        return weaknessed;
     }
 
-    public boolean canSwitch() {
-        return this.antiWeakness.getValue() == AntiWeakness.Switch && this.cooldown.getValue() == 0 && this.weaknessed;
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public boolean canSwitch()
+    {
+        return antiWeakness.getValue() == AntiWeakness.Switch
+                && cooldown.getValue() == 0
+                && weaknessed;
     }
+
 }
-

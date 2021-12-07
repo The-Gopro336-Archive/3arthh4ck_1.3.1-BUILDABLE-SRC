@@ -1,54 +1,55 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.client.Minecraft
- *  net.minecraft.client.gui.GuiScreen
- */
 package me.earth.earthhack.impl.gui.hud;
+
+import me.earth.earthhack.api.hud.HudElement;
+import me.earth.earthhack.impl.Earthhack;
+import me.earth.earthhack.impl.managers.Managers;
+import me.earth.earthhack.impl.modules.render.chams.Chams;
+import me.earth.earthhack.impl.util.misc.GuiUtil;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import me.earth.earthhack.api.hud.HudElement;
-import me.earth.earthhack.impl.Earthhack;
-import me.earth.earthhack.impl.gui.hud.ElementSnapPoint;
-import me.earth.earthhack.impl.gui.hud.HudPanel;
-import me.earth.earthhack.impl.gui.hud.Orientation;
-import me.earth.earthhack.impl.gui.hud.SnapPoint;
-import me.earth.earthhack.impl.managers.Managers;
-import me.earth.earthhack.impl.util.misc.GuiUtil;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 
-public class HudEditorGui
-extends GuiScreen {
+import static me.earth.earthhack.impl.gui.hud.Orientation.BOTTOM;
+import static me.earth.earthhack.impl.gui.hud.Orientation.LEFT;
+import static me.earth.earthhack.impl.gui.hud.Orientation.RIGHT;
+import static me.earth.earthhack.impl.gui.hud.Orientation.TOP;
+
+public class HudEditorGui extends GuiScreen {
+
     private static HudEditorGui INSTANCE;
-    private static final Minecraft mc;
+    private final static Minecraft mc = Minecraft.getMinecraft();
+
     private HudPanel panel;
+
     private Set<SnapPoint> snapPoints;
     private Map<HudElement, SnapPoint> moduleSnapPoints;
 
     public HudEditorGui() {
         INSTANCE = this;
-        this.panel = new HudPanel();
-        this.snapPoints = new HashSet<SnapPoint>();
-        this.moduleSnapPoints = new HashMap<HudElement, SnapPoint>();
+        panel = new HudPanel();
+        snapPoints = new HashSet<>();
+        moduleSnapPoints = new HashMap<>();
         for (HudElement element : Managers.ELEMENTS.getRegistered()) {
-            if (!element.isEnabled()) continue;
-            this.moduleSnapPoints.put(element, new ElementSnapPoint(element, Orientation.TOP));
-            this.moduleSnapPoints.put(element, new ElementSnapPoint(element, Orientation.BOTTOM));
-            this.moduleSnapPoints.put(element, new ElementSnapPoint(element, Orientation.LEFT));
-            this.moduleSnapPoints.put(element, new ElementSnapPoint(element, Orientation.RIGHT));
+            if (element.isEnabled()) {
+                moduleSnapPoints.put(element, new ElementSnapPoint(element, TOP));
+                moduleSnapPoints.put(element, new ElementSnapPoint(element, BOTTOM));
+                moduleSnapPoints.put(element, new ElementSnapPoint(element, LEFT));
+                moduleSnapPoints.put(element, new ElementSnapPoint(element, RIGHT));
+            }
         }
-        this.snapPoints.add(new SnapPoint(2.0f, -2.0f, HudEditorGui.mc.displayHeight + 4, Orientation.LEFT));
-        this.snapPoints.add(new SnapPoint(this.width - 2, -2.0f, HudEditorGui.mc.displayHeight + 4, Orientation.RIGHT));
-        this.snapPoints.add(new SnapPoint(-2.0f, 2.0f, HudEditorGui.mc.displayWidth + 4, Orientation.TOP));
-        this.snapPoints.add(new SnapPoint(-2.0f, this.height - 2, HudEditorGui.mc.displayWidth + 4, Orientation.BOTTOM));
+        snapPoints.add(new SnapPoint(2, -2, mc.displayHeight + 4, LEFT));
+        snapPoints.add(new SnapPoint(width - 2, -2, mc.displayHeight + 4, RIGHT));
+        snapPoints.add(new SnapPoint(-2, 2, mc.displayWidth + 4, TOP));
+        snapPoints.add(new SnapPoint(-2, height - 2, mc.displayWidth + 4, BOTTOM));
     }
 
     public static HudEditorGui getInstance() {
@@ -56,88 +57,102 @@ extends GuiScreen {
     }
 
     public void onToggle() {
-        this.snapPoints.clear();
-        this.moduleSnapPoints.clear();
+        snapPoints.clear();
+        moduleSnapPoints.clear();
         for (HudElement element : Managers.ELEMENTS.getRegistered()) {
-            if (!element.isEnabled()) continue;
-            this.moduleSnapPoints.put(element, new ElementSnapPoint(element, Orientation.TOP));
-            this.moduleSnapPoints.put(element, new ElementSnapPoint(element, Orientation.BOTTOM));
-            this.moduleSnapPoints.put(element, new ElementSnapPoint(element, Orientation.LEFT));
-            this.moduleSnapPoints.put(element, new ElementSnapPoint(element, Orientation.RIGHT));
+            if (element.isEnabled()) {
+                moduleSnapPoints.put(element, new ElementSnapPoint(element, TOP));
+                moduleSnapPoints.put(element, new ElementSnapPoint(element, BOTTOM));
+                moduleSnapPoints.put(element, new ElementSnapPoint(element, LEFT));
+                moduleSnapPoints.put(element, new ElementSnapPoint(element, RIGHT));
+            }
         }
-        this.snapPoints.add(new SnapPoint(2.0f, -2.0f, this.height + 4, Orientation.LEFT));
-        this.snapPoints.add(new SnapPoint(this.width - 2, -2.0f, this.height + 4, Orientation.RIGHT));
-        this.snapPoints.add(new SnapPoint(-2.0f, 2.0f, this.width + 4, Orientation.TOP));
-        this.snapPoints.add(new SnapPoint(-2.0f, this.height - 2, this.width + 4, Orientation.BOTTOM));
+        snapPoints.add(new SnapPoint(2, -2, height + 4, LEFT));
+        snapPoints.add(new SnapPoint(width - 2, -2, height + 4, RIGHT));
+        snapPoints.add(new SnapPoint(-2, 2, width + 4, TOP));
+        snapPoints.add(new SnapPoint(-2, height - 2, width + 4, BOTTOM));
     }
 
     public HudPanel getPanel() {
-        return this.panel;
+        return panel;
     }
 
+    @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         super.mouseClicked(mouseX, mouseY, mouseButton);
-        ArrayList<HudElement> clicked = new ArrayList<HudElement>();
-        for (HudElement element2 : Managers.ELEMENTS.getRegistered()) {
-            if (!element2.isEnabled() || !GuiUtil.isHovered(element2, mouseX, mouseY)) continue;
-            clicked.add(element2);
+        List<HudElement> clicked = new ArrayList<>();
+        for (HudElement element : Managers.ELEMENTS.getRegistered())
+        {
+            if (element.isEnabled() && GuiUtil.isHovered(element, mouseX, mouseY)) {
+                clicked.add(element);
+                // element.guiMouseClicked(mouseX, mouseY, mouseButton);
+            }
         }
-        clicked.sort(Comparator.comparing(element -> Float.valueOf(element.getZ())));
+        clicked.sort(Comparator.comparing(HudElement::getZ));
         if (!clicked.isEmpty()) {
-            ((HudElement)clicked.get(0)).guiMouseClicked(mouseX, mouseY, mouseButton);
+            clicked.get(0).guiMouseClicked(mouseX, mouseY, mouseButton);
         }
-        this.panel.mouseClicked(mouseX, mouseY, mouseButton);
+        panel.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
+    @Override
     protected void mouseReleased(int mouseX, int mouseY, int state) {
         super.mouseReleased(mouseX, mouseY, state);
-        for (HudElement element : Managers.ELEMENTS.getRegistered()) {
-            if (!element.isEnabled()) continue;
-            element.guiMouseReleased(mouseX, mouseY, state);
+        for (HudElement element : Managers.ELEMENTS.getRegistered())
+        {
+            if (element.isEnabled()) {
+                element.guiMouseReleased(mouseX, mouseY, state);
+            }
         }
-        this.panel.mouseReleased(mouseX, mouseY, state);
+        panel.mouseReleased(mouseX, mouseY, state);
     }
 
+    @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         super.keyTyped(typedChar, keyCode);
-        for (HudElement element : Managers.ELEMENTS.getRegistered()) {
-            if (!element.isEnabled()) continue;
-            element.guiKeyPressed(typedChar, keyCode);
+        for (HudElement element : Managers.ELEMENTS.getRegistered())
+        {
+            if (element.isEnabled()) {
+                element.guiKeyPressed(typedChar, keyCode);
+            }
         }
-        this.panel.keyPressed(typedChar, keyCode);
+        panel.keyPressed(typedChar, keyCode);
     }
 
+    @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        for (SnapPoint point : this.snapPoints) {
+        // super.drawScreen(mouseX, mouseY, partialTicks);
+        for (SnapPoint point : snapPoints) {
             point.update(mouseX, mouseY, partialTicks);
             point.draw(mouseX, mouseY, partialTicks);
             Earthhack.getLogger().info(point.orientation.name() + " x: " + point.getX() + " y: " + point.getY() + " length: " + point.getLength());
         }
-        for (SnapPoint point : this.moduleSnapPoints.values()) {
+        for (SnapPoint point : moduleSnapPoints.values()) {
             point.update(mouseX, mouseY, partialTicks);
         }
-        for (HudElement element : Managers.ELEMENTS.getRegistered()) {
-            if (!element.isEnabled()) continue;
-            element.guiUpdate(mouseX, mouseY, partialTicks);
-            element.guiDraw(mouseX, mouseY, partialTicks);
+        for (HudElement element : Managers.ELEMENTS.getRegistered())
+        {
+            if (element.isEnabled()) {
+                element.guiUpdate(mouseX, mouseY, partialTicks);
+                element.guiDraw(mouseX, mouseY, partialTicks);
+            }
         }
-        this.panel.draw(mouseX, mouseY, partialTicks);
+        panel.draw(mouseX, mouseY, partialTicks);
+        // animation.play();
+        // animation.add(partialTicks);
     }
 
+    @Override
     public void onGuiClosed() {
         super.onGuiClosed();
     }
 
+    @Override
     public boolean doesGuiPauseGame() {
         return false;
     }
 
     public Set<SnapPoint> getSnapPoints() {
-        return this.snapPoints;
-    }
-
-    static {
-        mc = Minecraft.getMinecraft();
+        return snapPoints;
     }
 }
-

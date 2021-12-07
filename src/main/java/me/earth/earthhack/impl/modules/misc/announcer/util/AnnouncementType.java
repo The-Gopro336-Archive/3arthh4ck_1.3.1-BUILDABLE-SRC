@@ -1,115 +1,121 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.misc.announcer.util;
 
-public enum AnnouncementType {
-    Distance{
-
+public enum AnnouncementType
+{
+    Distance()
+    {
         @Override
-        public String getDefaultMessage() {
+        public String getDefaultMessage()
+        {
             return "I just walked <NUMBER> Blocks!";
         }
 
         @Override
-        public String getFile() {
-            return "earthhack/util/Announcer_Distance.txt";
+        public String getFile()
+        {
+            return PATH + "Announcer_Distance.txt";
         }
-    }
-    ,
-    Mine{
-
+    },
+    Mine()
+    {
         @Override
-        public String getDefaultMessage() {
+        public String getDefaultMessage()
+        {
             return "I just mined <NUMBER> <NAME>!";
         }
 
         @Override
-        public String getFile() {
-            return "earthhack/util/Announcer_Mine.txt";
+        public String getFile()
+        {
+            return PATH + "Announcer_Mine.txt";
         }
-    }
-    ,
-    Place{
-
+    },
+    Place()
+    {
         @Override
-        public String getDefaultMessage() {
+        public String getDefaultMessage()
+        {
             return "I just placed <NUMBER> <NAME>!";
         }
 
         @Override
-        public String getFile() {
-            return "earthhack/util/Announcer_Place.txt";
+        public String getFile()
+        {
+            return PATH + "Announcer_Place.txt";
         }
-    }
-    ,
-    Eat{
-
+    },
+    Eat()
+    {
         @Override
-        public String getDefaultMessage() {
+        public String getDefaultMessage()
+        {
             return "I just ate <NUMBER> <NAME>!";
         }
 
         @Override
-        public String getFile() {
-            return "earthhack/util/Announcer_Eat.txt";
+        public String getFile()
+        {
+            return PATH + "Announcer_Eat.txt";
         }
-    }
-    ,
-    Join{
-
+    },
+    Join()
+    {
         @Override
-        public String getDefaultMessage() {
+        public String getDefaultMessage()
+        {
             return "Hey <NAME>!";
         }
 
         @Override
-        public String getFile() {
-            return "earthhack/util/Announcer_Join.txt";
+        public String getFile()
+        {
+            return PATH + "Announcer_Join.txt";
         }
-    }
-    ,
-    Leave{
-
+    },
+    Leave()
+    {
         @Override
-        public String getDefaultMessage() {
+        public String getDefaultMessage()
+        {
             return "Bye <NAME>!";
         }
 
         @Override
-        public String getFile() {
-            return "earthhack/util/Announcer_Leave.txt";
+        public String getFile()
+        {
+            return PATH + "Announcer_Leave.txt";
         }
-    }
-    ,
-    Totems{
-
+    },
+    Totems()
+    {
         @Override
-        public String getDefaultMessage() {
+        public String getDefaultMessage()
+        {
             return "EZZ <NUMBER> Pop <NAME>!";
         }
 
         @Override
-        public String getFile() {
-            return "earthhack/util/Announcer_Totems.txt";
+        public String getFile()
+        {
+            return PATH + "Announcer_Totems.txt";
         }
-    }
-    ,
-    Death{
-
+    },
+    Death()
+    {
         @Override
-        public String getDefaultMessage() {
+        public String getDefaultMessage()
+        {
             return "Good fight <NAME>!";
         }
 
         @Override
-        public String getFile() {
-            return "earthhack/util/Announcer_Death.txt";
+        public String getFile()
+        {
+            return PATH + "Announcer_Death.txt";
         }
-    }
-    ,
-    Miss{
-
+    },
+    Miss()
+            {
         @Override
         public String getDefaultMessage() {
             return "Nice shot <NAME>, try hitting next time!";
@@ -117,7 +123,7 @@ public enum AnnouncementType {
 
         @Override
         public String getFile() {
-            return "earthhack/util/Announcer_Miss.txt";
+            return PATH + "Announcer_Miss.txt";
         }
     };
 
@@ -126,5 +132,5 @@ public enum AnnouncementType {
     public abstract String getDefaultMessage();
 
     public abstract String getFile();
-}
 
+}

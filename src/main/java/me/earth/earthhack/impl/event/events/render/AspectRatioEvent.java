@@ -1,21 +1,18 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.event.events.render;
 
 public class AspectRatioEvent {
     private float aspectRatio;
 
-    public AspectRatioEvent(float aspectRatio) {
+    public AspectRatioEvent(float aspectRatio)
+    {
         this.aspectRatio = aspectRatio;
     }
 
     public float getAspectRatio() {
-        return this.aspectRatio;
+        return aspectRatio;
     }
 
     public void setAspectRatio(float aspectRatio) {
         this.aspectRatio = aspectRatio;
     }
 }
-

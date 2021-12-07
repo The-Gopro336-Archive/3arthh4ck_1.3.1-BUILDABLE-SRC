@@ -1,21 +1,23 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.util.math;
 
-public class Timer {
-    private long startTime = System.currentTimeMillis();
+public class Timer
+{
+    private long startTime;
+
+    public Timer() {
+        startTime = System.currentTimeMillis();
+    }
 
     public long getTime() {
-        return System.currentTimeMillis() - this.startTime;
+        return System.currentTimeMillis() - startTime;
     }
 
     public void reset() {
-        this.startTime = System.currentTimeMillis();
+        startTime = System.currentTimeMillis();
     }
 
     public void adjust(int by) {
-        this.startTime += (long)by;
+        startTime += by;
     }
-}
 
+}

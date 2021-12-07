@@ -1,32 +1,11 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.Entity
- *  net.minecraft.entity.EntityLivingBase
- *  net.minecraft.entity.item.EntityEnderCrystal
- *  net.minecraft.entity.player.EntityPlayer
- *  net.minecraft.util.EnumFacing
- *  net.minecraft.util.math.AxisAlignedBB
- *  net.minecraft.util.math.BlockPos
- *  net.minecraft.util.math.Vec3i
- */
 package me.earth.earthhack.impl.modules.combat.autotrap;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.api.setting.settings.EnumSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.managers.Managers;
-import me.earth.earthhack.impl.modules.combat.autotrap.AutoTrapData;
-import me.earth.earthhack.impl.modules.combat.autotrap.ListenerAutoTrap;
 import me.earth.earthhack.impl.modules.combat.autotrap.modes.TrapTarget;
 import me.earth.earthhack.impl.modules.combat.autotrap.util.Trap;
 import me.earth.earthhack.impl.util.helpers.blocks.ObbyListenerModule;
@@ -35,11 +14,9 @@ import me.earth.earthhack.impl.util.math.MathUtil;
 import me.earth.earthhack.impl.util.math.position.PositionUtil;
 import me.earth.earthhack.impl.util.minecraft.DamageUtil;
 import me.earth.earthhack.impl.util.minecraft.blocks.BlockUtil;
-import me.earth.earthhack.impl.util.minecraft.blocks.BlockingType;
 import me.earth.earthhack.impl.util.minecraft.blocks.HoleUtil;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
@@ -47,277 +24,627 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 
-public class AutoTrap
-extends ObbyListenerModule<ListenerAutoTrap> {
-    private static final EnumFacing[] TOP_FACINGS = new EnumFacing[]{EnumFacing.UP, EnumFacing.NORTH, EnumFacing.WEST, EnumFacing.SOUTH, EnumFacing.EAST};
-    protected final Setting<Float> range = this.register(new NumberSetting<Float>("Range", Float.valueOf(6.0f), Float.valueOf(0.0f), Float.valueOf(6.0f)));
-    protected final Setting<Boolean> noScaffold = this.register(new BooleanSetting("NoScaffold", false));
-    protected final Setting<Boolean> top = this.register(new BooleanSetting("Top", true));
-    protected final Setting<Boolean> noStep = this.register(new BooleanSetting("NoStep", false));
-    protected final Setting<Boolean> upperBody = this.register(new BooleanSetting("UpperBody", true));
-    protected final Setting<Boolean> legs = this.register(new BooleanSetting("Legs", false));
-    protected final Setting<Boolean> platform = this.register(new BooleanSetting("Platform", false));
-    protected final Setting<Boolean> noDrop = this.register(new BooleanSetting("NoDrop", false));
-    protected final Setting<Integer> extend = this.register(new NumberSetting<Integer>("Extend", 2, 1, 3));
-    protected final Setting<TrapTarget> targetMode = this.register(new EnumSetting<TrapTarget>("Target", TrapTarget.Closest));
-    protected final Setting<Float> speed = this.register(new NumberSetting<Float>("Speed", Float.valueOf(19.0f), Float.valueOf(0.0f), Float.valueOf(50.0f)));
-    protected final Setting<Boolean> freeCam = this.register(new BooleanSetting("FreeCam", false));
-    protected final Setting<Boolean> bigExtend = this.register(new BooleanSetting("BigExtend", false));
-    protected final Setting<Boolean> helping = this.register(new BooleanSetting("Helping", false));
-    protected final Setting<Boolean> smartTop = this.register(new BooleanSetting("SmartTop", true));
-    protected final Setting<Boolean> noScaffoldPlus = this.register(new BooleanSetting("NoScaffold+", false));
-    protected final Setting<Boolean> upperFace = this.register(new BooleanSetting("Upper-FP", false));
-    protected final Map<EntityPlayer, Double> speeds = new HashMap<EntityPlayer, Double>();
-    protected final Map<EntityPlayer, List<BlockPos>> cached = new HashMap<EntityPlayer, List<BlockPos>>();
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+public class AutoTrap extends ObbyListenerModule<ListenerAutoTrap>
+{
+    /** EnumFacings for the top helpingPos */
+    private static final EnumFacing[] TOP_FACINGS = new EnumFacing[]
+    {
+            EnumFacing.UP,
+            EnumFacing.NORTH,
+            EnumFacing.WEST,
+            EnumFacing.SOUTH,
+            EnumFacing.EAST
+    };
+
+    protected final Setting<Float> range           =
+            register(new NumberSetting<>("Range", 6.0f, 0.0f, 6.0f));
+    protected final Setting<Boolean> noScaffold    =
+            register(new BooleanSetting("NoScaffold", false));
+    protected final Setting<Boolean> top        =
+            register(new BooleanSetting("Top", true));
+    protected final Setting<Boolean> noStep        =
+            register(new BooleanSetting("NoStep", false));
+    protected final Setting<Boolean> upperBody     =
+            register(new BooleanSetting("UpperBody", true));
+    protected final Setting<Boolean> legs          =
+            register(new BooleanSetting("Legs", false));
+    protected final Setting<Boolean> platform      =
+            register(new BooleanSetting("Platform", false));
+    protected final Setting<Boolean> noDrop        =
+            register(new BooleanSetting("NoDrop", false));
+    protected final Setting<Integer> extend        =
+            register(new NumberSetting<>("Extend", 2, 1, 3));
+    protected final Setting<TrapTarget> targetMode =
+            register(new EnumSetting<>("Target", TrapTarget.Closest));
+    protected final Setting<Float> speed           =
+            register(new NumberSetting<>("Speed", 19.0f, 0.0f, 50.0f));
+    protected final Setting<Boolean> freeCam       =
+            register(new BooleanSetting("FreeCam", false));
+    protected final Setting<Boolean> bigExtend =
+            register(new BooleanSetting("BigExtend", false));
+    protected final Setting<Boolean> helping       =
+            register(new BooleanSetting("Helping", false));
+    protected final Setting<Boolean> smartTop       =
+            register(new BooleanSetting("SmartTop", true));
+    protected final Setting<Boolean> noScaffoldPlus       =
+            register(new BooleanSetting("NoScaffold+", false));
+    protected final Setting<Boolean> upperFace     =
+            register(new BooleanSetting("Upper-FP", false));
+
+    /** Players in range mapped to their speed */
+    protected final Map<EntityPlayer, Double> speeds = new HashMap<>();
+    /** Caches trapping positions for players while looking for a target */
+    protected final Map<EntityPlayer, List<BlockPos>> cached = new HashMap<>();
+    /** The current target */
     protected EntityPlayer target;
 
-    public AutoTrap() {
+    public AutoTrap()
+    {
         super("AutoTrap", Category.Combat);
         this.setData(new AutoTrapData(this));
     }
 
     @Override
-    protected void onDisable() {
+    protected void onDisable()
+    {
         super.onDisable();
         Managers.ROTATION.setBlocking(false);
     }
 
     @Override
-    protected boolean checkNull() {
+    protected boolean checkNull()
+    {
         boolean checkNull = super.checkNull();
-        this.cached.clear();
-        this.speeds.clear();
-        if (checkNull) {
-            this.updateSpeed();
+        cached.clear();
+        speeds.clear();
+        if (checkNull)
+        {
+            updateSpeed();
         }
+
         return checkNull;
     }
 
     @Override
-    protected ListenerAutoTrap createListener() {
+    protected ListenerAutoTrap createListener()
+    {
         return new ListenerAutoTrap(this);
     }
 
     @Override
-    public String getDisplayInfo() {
-        return this.target == null ? null : this.target.getName();
+    public String getDisplayInfo()
+    {
+        return target == null ? null : target.getName();
     }
 
     @Override
-    protected boolean shouldHelp(EnumFacing facing, BlockPos pos) {
-        return super.shouldHelp(facing, pos) && this.helping.getValue() != false && this.legs.getValue() == false;
+    protected boolean shouldHelp(EnumFacing facing, BlockPos pos)
+    {
+        return super.shouldHelp(facing, pos) // ??????
+                && helping.getValue()
+                && !legs.getValue();
     }
 
-    public EntityPlayer getTarget() {
-        return this.target;
+    public EntityPlayer getTarget()
+    {
+        return target;
     }
 
-    protected TargetResult getTargets(TargetResult result) {
-        this.cached.clear();
-        this.updateSpeed();
-        EntityPlayer newTarget = this.calcTarget();
-        if (newTarget == null || !newTarget.equals((Object)this.target)) {
-            ((ListenerAutoTrap)this.listener).placed.clear();
+    protected TargetResult getTargets(TargetResult result)
+    {
+        cached.clear();
+        updateSpeed();
+        EntityPlayer newTarget = calcTarget();
+        if (newTarget == null || !newTarget.equals(target))
+        {
+            listener.placed.clear();
         }
-        EntityPlayer entityPlayer = this.target = newTarget == null ? this.target : newTarget;
-        if (newTarget == null) {
+
+        target = newTarget == null ? target : newTarget;
+        if (newTarget == null)
+        {
             return result.setValid(false);
         }
-        List<BlockPos> newTrapping = this.cached.get((Object)newTarget);
-        if (newTrapping == null) {
-            newTrapping = this.getPositions(newTarget);
+
+        List<BlockPos> newTrapping = cached.get(newTarget);
+        if (newTrapping == null)
+        {
+            newTrapping = getPositions(newTarget);
         }
+
         return result.setTargets(newTrapping);
     }
 
-    private EntityPlayer calcTarget() {
+    /**
+     * Finds the closest valid player,
+     * or if mode == Untrapped, the closest
+     * untrapped player.
+     *
+     * @return the target.
+     */
+    private EntityPlayer calcTarget()
+    {
         EntityPlayer closest = null;
         double distance = Double.MAX_VALUE;
-        for (EntityPlayer player : AutoTrap.mc.world.playerEntities) {
-            double playerDist = AutoTrap.mc.player.getDistanceSq((Entity)player);
-            if (!(playerDist < distance) || !this.isValid(player)) continue;
-            closest = player;
-            distance = playerDist;
+        for (EntityPlayer player : mc.world.playerEntities)
+        {
+            double playerDist = mc.player.getDistanceSq(player);
+            if (playerDist < distance && isValid(player))
+            {
+                closest = player;
+                distance = playerDist;
+            }
         }
+
         return closest;
     }
 
-    private boolean isValid(EntityPlayer player) {
-        if (player != null && !EntityUtil.isDead((Entity)player) && !player.equals((Object)AutoTrap.mc.player) && !Managers.FRIENDS.contains(player) && player.getDistanceSq((Entity)AutoTrap.mc.player) <= 36.0 && this.getSpeed(player) <= (double)this.speed.getValue().floatValue()) {
-            if (this.targetMode.getValue() == TrapTarget.Untrapped) {
-                List<BlockPos> positions = this.getPositions(player);
-                this.cached.put(player, positions);
-                return positions.stream().anyMatch(pos -> AutoTrap.mc.world.getBlockState(pos).getMaterial().isReplaceable());
+    /**
+     * Checks if a given player is valid,
+     * that means != null, not dead, not mc.player,
+     * not friended, in range, moving slower than
+     * the speed setting, and if mode == Untrapped,
+     * if hes not trapped.
+     *
+     * @param player the player to check.
+     * @return if the given player can be trapped.
+     */
+    private boolean isValid(EntityPlayer player)
+    {
+        if (player != null
+                && !EntityUtil.isDead(player)
+                && !player.equals(mc.player)
+                && !Managers.FRIENDS.contains(player))
+        {
+            if (player.getDistanceSq(mc.player) <= 36
+                    && getSpeed(player) <= speed.getValue())
+            {
+                if (targetMode.getValue() == TrapTarget.Untrapped)
+                {
+                    List<BlockPos> positions = getPositions(player);
+                    cached.put(player, positions);
+                    return positions.stream()
+                            .anyMatch(pos ->
+                                    mc.world.getBlockState(pos)
+                                            .getMaterial()
+                                            .isReplaceable());
+                }
+
+                return true;
             }
-            return true;
         }
+
         return false;
     }
 
-    private void updateSpeed() {
-        for (EntityPlayer player : AutoTrap.mc.world.playerEntities) {
-            if (!EntityUtil.isValid((Entity)player, this.range.getValue().floatValue() * 2.0f)) continue;
-            double xDist = player.posX - player.prevPosX;
-            double yDist = player.posY - player.prevPosY;
-            double zDist = player.posZ - player.prevPosZ;
-            double speed = xDist * xDist + yDist * yDist + zDist * zDist;
-            this.speeds.put(player, speed);
+    /**
+     * Updates the speed map for all
+     * players in range.
+     */
+    private void updateSpeed()
+    {
+        for (EntityPlayer player : mc.world.playerEntities)
+        {
+            if (EntityUtil.isValid(player, range.getValue() * 2))
+            {
+                double xDist = player.posX - player.prevPosX;
+                double yDist = player.posY - player.prevPosY;
+                double zDist = player.posZ - player.prevPosZ;
+                double speed = xDist * xDist + yDist * yDist + zDist * zDist;
+
+                speeds.put(player, speed);
+            }
         }
     }
 
-    private double getSpeed(EntityPlayer player) {
-        Double playerSpeed = this.speeds.get((Object)player);
-        if (playerSpeed != null && this.speed.getValue().floatValue() != 50.0f) {
-            return Math.sqrt(playerSpeed) * 20.0 * 3.6;
+    /**
+     * Looks up a player from the speed
+     * map and returns his speed or 0.0 if
+     * he hasn't been mapped yet.
+     *
+     * @param player the player whose speed to check.
+     * @return the players speed.
+     */
+    private double getSpeed(EntityPlayer player)
+    {
+        Double playerSpeed = speeds.get(player);
+        if (playerSpeed != null && speed.getValue() != 50.0f)
+        {
+            return Math.sqrt(playerSpeed) * 20 * 3.6;
         }
+
         return 0.0;
     }
 
-    private List<BlockPos> getPositions(EntityPlayer player) {
-        ArrayList<BlockPos> blocked = new ArrayList<BlockPos>();
-        BlockPos playerPos = new BlockPos((Entity)player);
-        if (HoleUtil.isHole(playerPos, false)[0] || this.extend.getValue() == 1) {
+    /**
+     * Gets the positions to trap
+     * for the given player. Takes extend
+     * and the noScaffold... etc. settings into
+     * account.
+     *
+     * @param player the player to trap.
+     * @return trapping positions.
+     */
+    private List<BlockPos> getPositions(EntityPlayer player)
+    {
+        List<BlockPos> blocked   = new ArrayList<>();
+        BlockPos playerPos = new BlockPos(player);
+        if (HoleUtil.isHole(playerPos, false)[0] || extend.getValue() == 1)
+        {
             blocked.add(playerPos.up());
-        } else {
-            List unfiltered = new ArrayList<BlockPos>(PositionUtil.getBlockedPositions((Entity)player)).stream().sorted(Comparator.comparingDouble(BlockUtil::getDistanceSq)).collect(Collectors.toList());
-            List filtered = new ArrayList(unfiltered).stream().filter(pos -> AutoTrap.mc.world.getBlockState(pos).getMaterial().isReplaceable() && AutoTrap.mc.world.getBlockState(pos.up()).getMaterial().isReplaceable()).collect(Collectors.toList());
-            if (this.extend.getValue() == 3 && filtered.size() == 2 && unfiltered.size() == 4 && ((BlockPos)unfiltered.get(0)).equals(filtered.get(0)) && ((BlockPos)unfiltered.get(3)).equals(filtered.get(1))) {
-                filtered.clear();
+        }
+        else
+        {
+            List<BlockPos> unfiltered =
+                    new ArrayList<>(PositionUtil.getBlockedPositions(player))
+                            .stream()
+                            .sorted(Comparator
+                                    .comparingDouble(BlockUtil::getDistanceSq))
+                            .collect(Collectors.toList());
+
+            List<BlockPos> filtered = new ArrayList<>(unfiltered)
+                    .stream()
+                    .filter(pos -> mc.world.getBlockState(pos)
+                                           .getMaterial()
+                                           .isReplaceable()
+                                && mc.world.getBlockState(pos.up())
+                                           .getMaterial()
+                                           .isReplaceable())
+                    .collect(Collectors.toList());
+
+            if (extend.getValue() == 3
+                    && filtered.size() == 2
+                    && unfiltered.size() == 4)
+            {
+                /*
+                    Prevents that a pos like this
+                   (x == block, o == air, i = player):
+
+                    o x                              x
+                    x i     can extend to this:    x o x
+                                                     x i
+                */
+                if (unfiltered.get(0).equals(filtered.get(0))
+                        && unfiltered.get(3).equals(filtered.get(1)))
+                {
+                    filtered.clear();
+                }
             }
-            if (this.extend.getValue() == 2 && filtered.size() > 2 || this.extend.getValue() == 3 && filtered.size() == 3) {
-                while (filtered.size() > 2) {
+
+            if (extend.getValue() == 2 && filtered.size() > 2
+                    || extend.getValue() == 3 && filtered.size() == 3)
+            {
+                /*
+                    Prevents that a pos like this
+                   (x == block, o == air, i = player):
+
+                    x  o                               x
+                     i      can extend to this:    x   o  x
+                                                 x   i    x
+                                                   x   x
+
+                   we should, unless he phased in, be able to place on o
+                */
+                while (filtered.size() > 2)
+                {
                     filtered.remove(filtered.size() - 1);
                 }
             }
-            for (BlockPos pos2 : filtered) {
-                blocked.add(pos2.up());
+
+            for (BlockPos pos : filtered)
+            {
+                blocked.add(pos.up());
             }
         }
-        if (blocked.isEmpty()) {
+
+        if (blocked.isEmpty())
+        {
             blocked.add(playerPos.up());
         }
-        List<BlockPos> positions = this.positionsFromBlocked(blocked);
-        positions.sort(Comparator.comparingDouble(pos -> -BlockUtil.getDistanceSq(pos)));
-        positions.sort(Comparator.comparingInt(Vec3i::func_177956_o));
-        return positions.stream().filter(pos -> BlockUtil.getDistanceSq(pos) <= (double)MathUtil.square(this.range.getValue().floatValue())).collect(Collectors.toList());
+
+        List<BlockPos> positions = positionsFromBlocked(blocked);
+        // sort so we start placing behind (furthest away) first.
+        positions.sort(Comparator.comparingDouble(pos ->
+                -BlockUtil.getDistanceSq(pos)));
+        // sort by y so we start placing from bottom up.
+        positions.sort(Comparator.comparingInt(Vec3i::getY));
+
+        return positions.stream().filter(pos ->
+                    BlockUtil.getDistanceSq(pos)
+                        <= MathUtil.square(range.getValue()))
+                .collect(Collectors.toList());
     }
 
-    private List<BlockPos> positionsFromBlocked(List<BlockPos> blockedIn) {
-        ArrayList<BlockPos> positions = new ArrayList<BlockPos>();
-        if (!this.noStep.getValue().booleanValue() && !blockedIn.isEmpty()) {
-            BlockPos[] helping = this.findTopHelping(blockedIn, true);
-            for (int i = 0; i < helping.length; ++i) {
-                BlockPos pos2 = helping[i];
-                if (pos2 == null) continue;
-                if (!(i != 1 || this.upperBody.getValue().booleanValue() || blockedIn.contains((Object)PositionUtil.getPosition().up()) && this.upperFace.getValue().booleanValue() || helping[5] == null)) {
-                    positions.add(helping[5]);
+    /**
+     * Creates trapping positions
+     * from a list of positions that
+     * are blocked by a player.
+     *
+     * @param blockedIn the positions to trap.
+     * @return trapping positions.
+     */
+    private List<BlockPos> positionsFromBlocked(List<BlockPos> blockedIn)
+    {
+        List<BlockPos> positions = new ArrayList<>();
+        if (!noStep.getValue() && !blockedIn.isEmpty())
+        {
+            BlockPos[] helping = findTopHelping(blockedIn, true);
+            for (int i = 0; i < helping.length; i++)
+            {
+                BlockPos pos = helping[i];
+                if (pos != null)
+                {
+                    if (i == 1
+                            && !upperBody.getValue()
+                            && (!blockedIn.contains(PositionUtil
+                            .getPosition()
+                            .up())
+                            || !upperFace.getValue())
+                            && helping[5] != null)
+                    {
+                        positions.add(helping[5]);
+                    }
+
+                    positions.add(helping[i]);
+                    break;
                 }
-                positions.add(helping[i]);
-                break;
             }
         }
-        boolean scaffold = this.noScaffold.getValue();
-        if (this.top.getValue().booleanValue()) {
-            blockedIn.forEach(pos -> positions.addAll(this.applyOffsets((BlockPos)pos, Trap.TOP, (List<BlockPos>)positions)));
-        } else if (blockedIn.size() == 1 && this.smartTop.getValue().booleanValue() && scaffold && AutoTrap.mc.world.getBlockState(blockedIn.get(0).add(Trap.TOP[0])).getMaterial().isReplaceable() && AutoTrap.mc.world.getBlockState(blockedIn.get(0).add(Trap.NO_SCAFFOLD[0])).getMaterial().isReplaceable() && AutoTrap.mc.world.getBlockState(blockedIn.get(0).add(Trap.NO_SCAFFOLD_P[0])).getMaterial().isReplaceable()) {
-            blockedIn.forEach(pos -> positions.addAll(this.applyOffsets((BlockPos)pos, Trap.TOP, (List<BlockPos>)positions)));
-            if (this.noScaffoldPlus.getValue().booleanValue()) {
-                blockedIn.forEach(pos -> positions.addAll(this.applyOffsets((BlockPos)pos, Trap.NO_SCAFFOLD_P, (List<BlockPos>)positions)));
+
+        boolean scaffold = noScaffold.getValue();
+        if (top.getValue())
+        {
+            blockedIn.forEach(pos ->
+                positions.addAll(applyOffsets(pos, Trap.TOP, positions)));
+        }
+        else if (blockedIn.size() == 1
+                && smartTop.getValue()
+                && scaffold
+                && mc.world.getBlockState(blockedIn.get(0)
+                                                   .add(Trap.TOP[0]))
+                           .getMaterial()
+                           .isReplaceable()
+                && mc.world.getBlockState(blockedIn.get(0)
+                                                   .add(Trap.NO_SCAFFOLD[0]))
+                           .getMaterial()
+                           .isReplaceable()
+                && mc.world.getBlockState(blockedIn.get(0)
+                                                   .add(Trap.NO_SCAFFOLD_P[0]))
+                           .getMaterial()
+                           .isReplaceable())
+        {
+            blockedIn.forEach(pos ->
+                    positions.addAll(applyOffsets(pos, Trap.TOP, positions)));
+
+            if (noScaffoldPlus.getValue())
+            {
+                blockedIn.forEach(pos ->
+                    positions.addAll(
+                        applyOffsets(pos, Trap.NO_SCAFFOLD_P, positions)));
             }
+
             scaffold = false;
-            blockedIn.forEach(pos -> positions.addAll(this.applyOffsets((BlockPos)pos, Trap.NO_SCAFFOLD, (List<BlockPos>)positions)));
+            blockedIn.forEach(pos ->
+                positions.addAll(
+                    applyOffsets(pos, Trap.NO_SCAFFOLD, positions)));
         }
-        if (this.upperBody.getValue().booleanValue() || this.upperFace.getValue().booleanValue() && blockedIn.contains((Object)PositionUtil.getPosition().up())) {
-            blockedIn.forEach(pos -> positions.addAll(this.applyOffsets((BlockPos)pos, Trap.OFFSETS, (List<BlockPos>)positions)));
+
+        if (upperBody.getValue()
+                || upperFace.getValue()
+                    && blockedIn.contains(PositionUtil.getPosition().up()))
+        {
+            blockedIn.forEach(pos ->
+                positions.addAll(applyOffsets(pos, Trap.OFFSETS, positions)));
         }
-        if (blockedIn.size() == 1 || this.bigExtend.getValue().booleanValue()) {
-            if (scaffold) {
-                blockedIn.forEach(pos -> positions.addAll(this.applyOffsets((BlockPos)pos, Trap.NO_SCAFFOLD, (List<BlockPos>)positions)));
+
+        // Only apply these if we dont need to extend, otherwise overkill
+        if (blockedIn.size() == 1 || bigExtend.getValue())
+        {
+            if (scaffold)
+            {
+                blockedIn.forEach(pos ->
+                    positions.addAll(
+                        applyOffsets(pos, Trap.NO_SCAFFOLD, positions)));
             }
-            if (this.noStep.getValue().booleanValue()) {
-                blockedIn.forEach(pos -> positions.addAll(this.applyOffsets((BlockPos)pos, Trap.NO_STEP, (List<BlockPos>)positions)));
+
+            if (noStep.getValue())
+            {
+                blockedIn.forEach(pos ->
+                    positions.addAll(
+                        applyOffsets(pos, Trap.NO_STEP, positions)));
             }
-            if (this.legs.getValue().booleanValue()) {
-                blockedIn.forEach(pos -> positions.addAll(this.applyOffsets((BlockPos)pos, Trap.LEGS, (List<BlockPos>)positions)));
+
+            if (legs.getValue())
+            {
+                blockedIn.forEach(pos ->
+                    positions.addAll(
+                        applyOffsets(pos, Trap.LEGS, positions)));
             }
-            if (this.platform.getValue().booleanValue()) {
-                blockedIn.forEach(pos -> positions.addAll(this.applyOffsets((BlockPos)pos, Trap.PLATFORM, (List<BlockPos>)positions)));
+
+            if (platform.getValue())
+            {
+                blockedIn.forEach(pos ->
+                    positions.addAll(
+                        applyOffsets(pos, Trap.PLATFORM, positions)));
             }
-            if (this.noDrop.getValue().booleanValue()) {
-                blockedIn.forEach(pos -> positions.addAll(this.applyOffsets((BlockPos)pos, Trap.NO_DROP, (List<BlockPos>)positions)));
+
+            if (noDrop.getValue())
+            {
+                blockedIn.forEach(pos ->
+                    positions.addAll(
+                        applyOffsets(pos, Trap.NO_DROP, positions)));
             }
         }
+
         return positions;
     }
 
-    private BlockPos[] findTopHelping(List<BlockPos> positions, boolean first) {
-        BlockPos[] bestPos = new BlockPos[]{null, null, null, null, positions.get(0).up().north(), null};
-        for (BlockPos pos : positions) {
+    /**
+     * Finds helping blocks for the top pos.
+     * Returns an Array with possible helping Positions.
+     * The Indices work this way:
+     * 0 : has a facing and no entities,
+     * 1 : no facing no entities,
+     * 2 : has a facing but entities,
+     * 3 : no facing, entities blocking
+     * 4 : random pos when everything is shit.
+     * 5 : A helping Pos for index 1.
+     *
+     * @param positions positions to find a helpingPos for. (not empty!)
+     * @param first used for recursion should always be <tt>true</tt>.
+     * @return possible helping positions.
+     */
+    private BlockPos[] findTopHelping(List<BlockPos> positions, boolean first)
+    {
+        BlockPos[] bestPos = new BlockPos[] {
+                null,
+                null,
+                null,
+                null,
+                positions.get(0).up().north(),
+                null
+        };
+        for (BlockPos pos : positions)
+        {
             BlockPos up = pos.up();
-            block9: for (EnumFacing facing : TOP_FACINGS) {
+            //TODO: Sort facings so that we dont block piston aura
+            for (EnumFacing facing : TOP_FACINGS)
+            {
                 BlockPos helping = up.offset(facing);
-                if (!AutoTrap.mc.world.getBlockState(helping).getMaterial().isReplaceable()) {
+                // return instantly, no helping needed
+                if (!mc.world
+                        .getBlockState(helping)
+                        .getMaterial()
+                        .isReplaceable())
+                {
                     bestPos[0] = helping;
                     return bestPos;
                 }
+
                 EnumFacing helpingFace = BlockUtil.getFacing(helping, HELPER);
-                byte blockingFactor = this.helpingEntityCheck(helping);
-                if (helpingFace == null) {
-                    switch (blockingFactor) {
-                        case 0: {
-                            if (!first || bestPos[5] != null) break;
-                            ArrayList<BlockPos> hPositions = new ArrayList<BlockPos>();
-                            for (BlockPos hPos : positions) {
-                                hPositions.add(hPos.down());
+                byte blockingFactor = helpingEntityCheck(helping);
+                if (helpingFace == null)
+                {
+                    switch (blockingFactor)
+                    {
+                        case 0:
+                            if (first && bestPos[5] == null)
+                            {
+                                List<BlockPos> hPositions = new ArrayList<>();
+                                for (BlockPos hPos : positions)
+                                {
+                                    // won't check up up helping I think
+                                    hPositions.add(hPos.down());
+                                }
+
+                                bestPos[5] =
+                                        findTopHelping(hPositions, false)[0];
                             }
-                            bestPos[5] = this.findTopHelping(hPositions, false)[0];
+                            else
+                            {
+                                break;
+                            }
+
                             bestPos[1] = helping;
                             break;
-                        }
-                        case 1: {
+                        case 1:
                             bestPos[3] = helping;
                             break;
-                        }
+                        case 2:
+                            break;
                     }
-                    continue;
                 }
-                switch (blockingFactor) {
-                    case 0: {
-                        bestPos[0] = helping;
-                        continue block9;
-                    }
-                    case 1: {
-                        bestPos[2] = helping;
-                        continue block9;
+                else
+                {
+                    switch (blockingFactor)
+                    {
+                        case 0:
+                            bestPos[0] = helping;
+                            break;
+                        case 1:
+                            bestPos[2] = helping;
+                            break;
+                        case 2:
+                            break;
                     }
                 }
             }
         }
+
         return bestPos;
     }
 
-    private byte helpingEntityCheck(BlockPos pos) {
+    /**
+     * EntityCheck for the helping position.
+     *
+     * @param pos the position to check.
+     * @return 0 if free of entities, 1 if crystal, 2 if blocking.
+     */
+    private byte helpingEntityCheck(BlockPos pos)
+    {
         byte blocking = 0;
-        for (Entity entity : AutoTrap.mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos))) {
-            float damage;
-            if (entity == null || EntityUtil.isDead(entity) || !entity.preventEntitySpawning || entity instanceof EntityPlayer && !BlockUtil.isBlocking(pos, (EntityPlayer)entity, (BlockingType)((Object)this.blockingType.getValue()))) continue;
-            if (entity instanceof EntityEnderCrystal && ((Boolean)this.attack.getValue()).booleanValue() && (double)(damage = DamageUtil.calculate(entity, (EntityLivingBase)AutoTrap.mc.player)) <= (double)EntityUtil.getHealth((EntityLivingBase)AutoTrap.mc.player) + 1.0) {
-                blocking = 1;
+        for (Entity entity : mc.world
+                .getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos)))
+        {
+            if (entity == null
+                    || EntityUtil.isDead(entity)
+                    || !entity.preventEntitySpawning
+                    || (entity instanceof EntityPlayer
+                    && !BlockUtil.isBlocking(pos,
+                    (EntityPlayer) entity,
+                    blockingType.getValue())))
+            {
                 continue;
             }
+
+            if (entity instanceof EntityEnderCrystal && attack.getValue())
+            {
+                float damage = DamageUtil.calculate(entity, mc.player);
+                if (damage <= EntityUtil.getHealth(mc.player) + 1.0)
+                {
+                    blocking = 1;
+                    continue;
+                }
+            }
+
             return 2;
         }
+
         return blocking;
     }
 
-    private List<BlockPos> applyOffsets(BlockPos pos, Vec3i[] offsets, List<BlockPos> alreadyAdded) {
-        ArrayList<BlockPos> positions = new ArrayList<BlockPos>();
-        for (Vec3i vec3i : offsets) {
+    /**
+     * Applies the given offsets to the position and
+     * returns a list that doesnt contain any positions
+     * already contained by alreadyAdded.
+     *
+     * @param pos the pos to apply the offsets to.
+     * @param offsets the offsets.
+     * @param alreadyAdded list to prevent duplicates.
+     * @return offsets for the position.
+     */
+    private List<BlockPos> applyOffsets(BlockPos pos,
+                                        Vec3i[] offsets,
+                                        List<BlockPos> alreadyAdded)
+    {
+        List<BlockPos> positions = new ArrayList<>();
+        for (Vec3i vec3i : offsets)
+        {
             BlockPos offset = pos.add(vec3i);
-            if (alreadyAdded.contains((Object)offset)) continue;
-            positions.add(offset);
+            if (!alreadyAdded.contains(offset))
+            {
+                positions.add(offset);
+            }
         }
+
         return positions;
     }
-}
 
+}

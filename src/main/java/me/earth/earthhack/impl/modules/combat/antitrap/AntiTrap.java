@@ -1,28 +1,10 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.item.EntityEnderCrystal
- *  net.minecraft.util.math.AxisAlignedBB
- *  net.minecraft.util.math.BlockPos
- *  net.minecraft.util.math.RayTraceResult
- *  net.minecraft.util.math.Vec3i
- */
 package me.earth.earthhack.impl.modules.combat.antitrap;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.api.setting.settings.EnumSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
-import me.earth.earthhack.impl.modules.combat.antitrap.AntiTrapData;
-import me.earth.earthhack.impl.modules.combat.antitrap.ListenerMotion;
 import me.earth.earthhack.impl.modules.combat.antitrap.util.AntiTrapMode;
 import me.earth.earthhack.impl.modules.combat.offhand.modes.OffhandMode;
 import me.earth.earthhack.impl.util.helpers.blocks.ObbyModule;
@@ -35,91 +17,120 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3i;
 
-public class AntiTrap
-extends ObbyModule {
-    protected final Setting<AntiTrapMode> mode;
-    protected final Setting<Boolean> offhand;
-    protected final Setting<Integer> timeOut;
-    protected final Setting<Boolean> empty;
-    protected final Setting<Boolean> swing;
-    protected final Setting<Boolean> highFill;
-    protected final Setting<Integer> confirm;
-    protected final Setting<Boolean> autoOff;
-    protected final Map<BlockPos, Long> placed;
-    protected final Set<BlockPos> confirmed;
-    protected final StopWatch interval;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+// TODO: INSTANT!!!!
+public class AntiTrap extends ObbyModule
+{
+    protected final Setting<AntiTrapMode> mode =
+        registerBefore(new EnumSetting<>("Mode", AntiTrapMode.Crystal), blocks);
+    protected final Setting<Boolean> offhand =
+        register(new BooleanSetting("Offhand", false));
+    protected final Setting<Integer> timeOut =
+        register(new NumberSetting<>("TimeOut", 400, 0, 1000));
+    protected final Setting<Boolean> empty   =
+        register(new BooleanSetting("Empty", true));
+    protected final Setting<Boolean> swing   =
+        register(new BooleanSetting("Swing", false));
+    protected final Setting<Boolean> highFill =
+        register(new BooleanSetting("HighFill", false));
+    protected final Setting<Integer> confirm =
+        register(new NumberSetting<>("Confirm", 250, 0, 1000));
+    protected final Setting<Boolean> autoOff =
+        register(new BooleanSetting("Auto-Off", true));
+
+    /** Blocks that have been placed an await a SPacketBlockChange */
+    protected final Map<BlockPos, Long> placed = new HashMap<>();
+    /** Positions that have been confirmed by a SPacketBlockChange */
+    protected final Set<BlockPos> confirmed = new HashSet<>();
+    /** Manages the {@link AntiTrap#timeOut}. */
+    protected final StopWatch interval = new StopWatch();
     protected RayTraceResult result;
     protected OffhandMode previous;
     protected BlockPos startPos;
     protected BlockPos pos;
 
-    public AntiTrap() {
+    public AntiTrap()
+    {
         super("AntiTrap", Category.Combat);
-        this.mode = this.registerBefore(new EnumSetting<AntiTrapMode>("Mode", AntiTrapMode.Crystal), this.blocks);
-        this.offhand = this.register(new BooleanSetting("Offhand", false));
-        this.timeOut = this.register(new NumberSetting<Integer>("TimeOut", 400, 0, 1000));
-        this.empty = this.register(new BooleanSetting("Empty", true));
-        this.swing = this.register(new BooleanSetting("Swing", false));
-        this.highFill = this.register(new BooleanSetting("HighFill", false));
-        this.confirm = this.register(new NumberSetting<Integer>("Confirm", 250, 0, 1000));
-        this.autoOff = this.register(new BooleanSetting("Auto-Off", true));
-        this.placed = new HashMap<BlockPos, Long>();
-        this.confirmed = new HashSet<BlockPos>();
-        this.interval = new StopWatch();
         this.listeners.add(new ListenerMotion(this));
         this.setData(new AntiTrapData(this));
     }
 
     @Override
-    public String getDisplayInfo() {
-        return this.mode.getValue().name();
+    public String getDisplayInfo()
+    {
+        return mode.getValue().name();
     }
 
     @Override
-    protected void onEnable() {
+    protected void onEnable()
+    {
         super.onEnable();
-        this.previous = null;
-        this.placed.clear();
-        this.confirmed.clear();
-        if (super.checkNull() && this.interval.passed(this.timeOut.getValue().intValue())) {
-            this.interval.reset();
-            this.result = null;
-            this.pos = null;
-            this.startPos = PositionUtil.getPosition();
-        } else {
+        previous = null;
+        placed.clear();
+        confirmed.clear();
+        if (super.checkNull() && interval.passed(timeOut.getValue()))
+        {
+            interval.reset();
+            result = null;
+            pos    = null;
+            startPos = PositionUtil.getPosition();
+        }
+        else
+        {
             this.disable();
         }
     }
 
     @Override
-    protected void onDisable() {
-        if (this.offhand.getValue().booleanValue() && this.previous != null) {
-            ListenerMotion.OFFHAND.computeIfPresent(o -> o.setMode(this.previous));
+    protected void onDisable()
+    {
+        if (offhand.getValue() && previous != null)
+        {
+            ListenerMotion.OFFHAND.computeIfPresent(o -> o.setMode(previous));
         }
     }
 
     @Override
-    public boolean placeBlock(BlockPos pos) {
+    public boolean placeBlock(BlockPos pos)
+    {
         boolean hasPlaced = super.placeBlock(pos);
-        if (hasPlaced) {
-            this.placed.put(pos, System.currentTimeMillis());
+        if (hasPlaced)
+        {
+            placed.put(pos, System.currentTimeMillis());
         }
+
         return hasPlaced;
     }
 
-    protected List<BlockPos> getCrystalPositions() {
-        ArrayList<BlockPos> result = new ArrayList<BlockPos>();
+    protected List<BlockPos> getCrystalPositions()
+    {
+        List<BlockPos> result = new ArrayList<>();
         BlockPos playerPos = PositionUtil.getPosition();
-        if (!AntiTrap.mc.world.getEntitiesWithinAABB(EntityEnderCrystal.class, new AxisAlignedBB(playerPos, playerPos.up().add(1, 2, 1))).isEmpty()) {
+        if (!mc.world.getEntitiesWithinAABB(EntityEnderCrystal.class,
+                    new AxisAlignedBB(playerPos, playerPos.up().add(1, 2, 1)))
+               .isEmpty())
+        {
             this.disable();
             return result;
         }
-        for (Vec3i vec : AntiTrapMode.Crystal.getOffsets()) {
+
+        for (Vec3i vec : AntiTrapMode.Crystal.getOffsets())
+        {
             BlockPos pos = playerPos.add(vec);
-            if (!BlockUtil.canPlaceCrystal(pos, false, false)) continue;
-            result.add(pos);
+            if (BlockUtil.canPlaceCrystal(pos, false, false))
+            {
+                result.add(pos);
+            }
         }
+
         return result;
     }
-}
 
+}

@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.client.commands;
 
 import me.earth.earthhack.api.cache.SettingCache;
@@ -11,39 +8,55 @@ import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.api.setting.settings.StringSetting;
 import me.earth.earthhack.impl.modules.Caches;
-import me.earth.earthhack.impl.modules.client.commands.CommandData;
-import me.earth.earthhack.impl.modules.client.commands.KeyboardListener;
 
-public class Commands
-extends Module {
-    private static final SettingCache<String, StringSetting, Commands> PREFIX = Caches.getSetting(Commands.class, StringSetting.class, "Prefix", "+");
-    protected final Setting<Boolean> prefixBind = this.register(new BooleanSetting("PrefixBind", false));
-    protected char prefixChar = (char)43;
+public class Commands extends Module
+{
+    private static final SettingCache<String, StringSetting, Commands> PREFIX =
+        Caches.getSetting(Commands.class, StringSetting.class, "Prefix", "+");
 
-    public Commands() {
+    protected final Setting<Boolean> prefixBind =
+        register(new BooleanSetting("PrefixBind", false));
+
+    protected char prefixChar = '+';
+
+    public Commands()
+    {
         super("Commands", Category.Client);
-        StringSetting prefix = this.register(new StringSetting("Prefix", "+"));
-        this.register(new BooleanSetting("BackgroundGui", false));
-        prefix.addObserver(s -> {
-            if (!s.isCancelled()) {
-                this.prefixChar = ((String)s.getValue()).length() == 1 ? ((String)s.getValue()).charAt(0) : (char)'\u0000';
+        StringSetting prefix = register(new StringSetting("Prefix", "+"));
+        register(new BooleanSetting("BackgroundGui", false));
+        prefix.addObserver(s ->
+        {
+            if (!s.isCancelled())
+            {
+                if (s.getValue().length() == 1)
+                {
+                    prefixChar = s.getValue().charAt(0);
+                }
+                else
+                {
+                    prefixChar = '\0';
+                }
             }
         });
         PREFIX.setContainer(this);
-        PREFIX.set((String)((Object)prefix));
+        PREFIX.set(prefix);
         Bus.EVENT_BUS.register(new KeyboardListener(this));
         this.setData(new CommandData(this));
     }
 
-    public static void setPrefix(String prefix) {
+    public static void setPrefix(String prefix)
+    {
         PREFIX.computeIfPresent(s -> s.setValue(prefix));
     }
 
-    public static String getPrefix() {
-        if (!PREFIX.isPresent()) {
+    public static String getPrefix()
+    {
+        if (!PREFIX.isPresent())
+        {
             return "+";
         }
+
         return PREFIX.getValue();
     }
-}
 
+}

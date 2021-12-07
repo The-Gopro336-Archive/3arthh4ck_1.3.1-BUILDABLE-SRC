@@ -1,9 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.client.settings.KeyBinding
- */
 package me.earth.earthhack.impl.core.mixins.settings;
 
 import net.minecraft.client.settings.KeyBinding;
@@ -12,10 +6,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value={KeyBinding.class})
-public abstract class MixinKeyBinding {
-    @Inject(method={"unpressKey"}, at={@At(value="HEAD")})
-    private void onUnpress(CallbackInfo info) {
+@Mixin(KeyBinding.class)
+public abstract class MixinKeyBinding
+{
+    @Inject(method = "unpressKey", at = @At("HEAD"))
+    private void onUnpress(CallbackInfo info)
+    {
+        // Managers.KEYBOARD.onUnpress(KeyBinding.class.cast(this));
     }
-}
 
+}

@@ -1,26 +1,10 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  javax.vecmath.Vector3d
- *  javax.vecmath.Vector4f
- *  net.minecraft.client.renderer.GlStateManager
- *  net.minecraft.client.renderer.culling.Frustum
- *  net.minecraft.entity.Entity
- *  net.minecraft.entity.player.EntityPlayer
- *  net.minecraft.util.math.AxisAlignedBB
- */
 package me.earth.earthhack.impl.modules.render.nametags;
 
-import javax.vecmath.Vector3d;
-import javax.vecmath.Vector4f;
 import me.earth.earthhack.impl.core.ducks.IMinecraft;
 import me.earth.earthhack.impl.event.events.render.Render2DEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import me.earth.earthhack.impl.managers.Managers;
-import me.earth.earthhack.impl.modules.render.nametags.Nametag;
-import me.earth.earthhack.impl.modules.render.nametags.Nametags;
-import me.earth.earthhack.impl.modules.render.nametags.StackRenderer;
+import me.earth.earthhack.impl.util.math.rotation.RotationUtil;
 import me.earth.earthhack.impl.util.render.GLUProjection;
 import me.earth.earthhack.impl.util.render.Interpolation;
 import me.earth.earthhack.impl.util.render.RenderUtil;
@@ -30,8 +14,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 
-final class ListenerRender2D
-extends ModuleListener<Nametags, Render2DEvent> {
+import javax.vecmath.Vector3d;
+import javax.vecmath.Vector4f;
+
+final class ListenerRender2D extends ModuleListener<Nametags, Render2DEvent> {
     private int xOffset;
     private int maxEnchHeight;
     private boolean renderDurability;
@@ -42,71 +28,100 @@ extends ModuleListener<Nametags, Render2DEvent> {
 
     @Override
     public void invoke(Render2DEvent event) {
-        if (((Nametags)this.module).twoD.getValue().booleanValue()) {
-            ((Nametags)this.module).updateNametags();
+        if (module.twoD.getValue()) {
+            module.updateNametags();
             Nametag.isRendering = true;
             Entity renderEntity = RenderUtil.getEntity();
             Frustum frustum = Interpolation.createFrustum(renderEntity);
-            for (Nametag nametag : ((Nametags)this.module).nametags) {
-                if (nametag.player.isDead || nametag.player.isInvisible() && !((Nametags)this.module).invisibles.getValue().booleanValue() || ((Nametags)this.module).fov.getValue().booleanValue() && !frustum.isBoundingBoxInFrustum(nametag.player.getRenderBoundingBox())) continue;
-                this.renderNametag(nametag, nametag.player, event);
+            for (Nametag nametag : module.nametags) {
+                if (nametag.player.isDead
+                        || nametag.player.isInvisible()
+                        && !module.invisibles.getValue()
+                        || module.fov.getValue()
+                        && !frustum.isBoundingBoxInFrustum(
+                        nametag.player.getRenderBoundingBox()))
+                {
+                    continue;
+                }
+
+                renderNametag(nametag, nametag.player, event);
             }
             Nametag.isRendering = false;
         }
     }
 
-    private void renderNametag(Nametag nametag, EntityPlayer entity, Render2DEvent event) {
-        double posX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double)((IMinecraft)ListenerRender2D.mc).getTimer().renderPartialTicks;
-        double posY = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double)((IMinecraft)ListenerRender2D.mc).getTimer().renderPartialTicks;
-        double posZ = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double)((IMinecraft)ListenerRender2D.mc).getTimer().renderPartialTicks;
-        AxisAlignedBB bb = entity.getEntityBoundingBox().expand(0.1, 0.1, 0.1);
-        Vector3d[] corners = new Vector3d[]{new Vector3d(posX + bb.minX - bb.maxX + (double)(entity.width / 2.0f), posY, posZ + bb.minZ - bb.maxZ + (double)(entity.width / 2.0f)), new Vector3d(posX + bb.maxX - bb.minX - (double)(entity.width / 2.0f), posY, posZ + bb.minZ - bb.maxZ + (double)(entity.width / 2.0f)), new Vector3d(posX + bb.minX - bb.maxX + (double)(entity.width / 2.0f), posY, posZ + bb.maxZ - bb.minZ - (double)(entity.width / 2.0f)), new Vector3d(posX + bb.maxX - bb.minX - (double)(entity.width / 2.0f), posY, posZ + bb.maxZ - bb.minZ - (double)(entity.width / 2.0f)), new Vector3d(posX + bb.minX - bb.maxX + (double)(entity.width / 2.0f), posY + bb.maxY - bb.minY, posZ + bb.minZ - bb.maxZ + (double)(entity.width / 2.0f)), new Vector3d(posX + bb.maxX - bb.minX - (double)(entity.width / 2.0f), posY + bb.maxY - bb.minY, posZ + bb.minZ - bb.maxZ + (double)(entity.width / 2.0f)), new Vector3d(posX + bb.minX - bb.maxX + (double)(entity.width / 2.0f), posY + bb.maxY - bb.minY, posZ + bb.maxZ - bb.minZ - (double)(entity.width / 2.0f)), new Vector3d(posX + bb.maxX - bb.minX - (double)(entity.width / 2.0f), posY + bb.maxY - bb.minY, posZ + bb.maxZ - bb.minZ - (double)(entity.width / 2.0f))};
-        Vector4f transformed = new Vector4f((float)event.getResolution().getScaledWidth() * 2.0f, (float)event.getResolution().getScaledHeight() * 2.0f, -1.0f, -1.0f);
+    private void renderNametag(Nametag nametag,
+                               EntityPlayer entity,
+                               Render2DEvent event) {
+        double posX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * ((IMinecraft) mc).getTimer().renderPartialTicks;
+        double posY = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * ((IMinecraft) mc).getTimer().renderPartialTicks;
+        double posZ = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * ((IMinecraft) mc).getTimer().renderPartialTicks;
+        final AxisAlignedBB bb = entity.getEntityBoundingBox().expand(0.1, 0.1, 0.1);
+        final Vector3d[] corners = {new Vector3d(posX + bb.minX - bb.maxX + entity.width / 2.0f, posY, posZ + bb.minZ - bb.maxZ + entity.width / 2.0f), new Vector3d(posX + bb.maxX - bb.minX - entity.width / 2.0f, posY, posZ + bb.minZ - bb.maxZ + entity.width / 2.0f), new Vector3d(posX + bb.minX - bb.maxX + entity.width / 2.0f, posY, posZ + bb.maxZ - bb.minZ - entity.width / 2.0f), new Vector3d(posX + bb.maxX - bb.minX - entity.width / 2.0f, posY, posZ + bb.maxZ - bb.minZ - entity.width / 2.0f), new Vector3d(posX + bb.minX - bb.maxX + entity.width / 2.0f, posY + bb.maxY - bb.minY, posZ + bb.minZ - bb.maxZ + entity.width / 2.0f), new Vector3d(posX + bb.maxX - bb.minX - entity.width / 2.0f, posY + bb.maxY - bb.minY, posZ + bb.minZ - bb.maxZ + entity.width / 2.0f), new Vector3d(posX + bb.minX - bb.maxX + entity.width / 2.0f, posY + bb.maxY - bb.minY, posZ + bb.maxZ - bb.minZ - entity.width / 2.0f), new Vector3d(posX + bb.maxX - bb.minX - entity.width / 2.0f, posY + bb.maxY - bb.minY, posZ + bb.maxZ - bb.minZ - entity.width / 2.0f)};
+        GLUProjection.Projection result;
+        final Vector4f transformed = new Vector4f(event.getResolution().getScaledWidth() * 2.0f, event.getResolution().getScaledHeight() * 2.0f, -1.0f, -1.0f);
         for (Vector3d vec : corners) {
-            GLUProjection.Projection result = GLUProjection.getInstance().project(vec.x - ListenerRender2D.mc.getRenderManager().viewerPosX, vec.y - ListenerRender2D.mc.getRenderManager().viewerPosY, vec.z - ListenerRender2D.mc.getRenderManager().viewerPosZ, GLUProjection.ClampMode.NONE, true);
-            transformed.setX((float)Math.min((double)transformed.getX(), result.getX()));
-            transformed.setY((float)Math.min((double)transformed.getY(), result.getY()));
-            transformed.setW((float)Math.max((double)transformed.getW(), result.getX()));
-            transformed.setZ((float)Math.max((double)transformed.getZ(), result.getY()));
+            result = GLUProjection.getInstance().project(vec.x - mc.getRenderManager().viewerPosX, vec.y - mc.getRenderManager().viewerPosY, vec.z - mc.getRenderManager().viewerPosZ, GLUProjection.ClampMode.NONE, true);
+            transformed.setX((float) Math.min(transformed.getX(), result.getX()));
+            transformed.setY((float) Math.min(transformed.getY(), result.getY()));
+            transformed.setW((float) Math.max(transformed.getW(), result.getX()));
+            transformed.setZ((float) Math.max(transformed.getZ(), result.getY()));
         }
-        float x1 = transformed.x;
-        float w1 = transformed.w - x1;
-        float y1 = transformed.y;
+        final float x1 = transformed.x;
+        final float w1 = transformed.w - x1;
+        final float y1 = transformed.y;
         int nameWidth = nametag.nameWidth / 2;
+
         GlStateManager.pushMatrix();
-        Managers.TEXT.drawStringWithShadow(nametag.nameString, x1 + w1 / 2.0f - (float)nameWidth, y1 - 3.0f - (float)ListenerRender2D.mc.fontRenderer.FONT_HEIGHT, nametag.nameColor);
-        this.xOffset = -nametag.stacks.size() * 8 - (nametag.mainHand == null ? 0 : 8);
-        this.maxEnchHeight = nametag.maxEnchHeight;
-        this.renderDurability = nametag.renderDura;
+        Managers.TEXT.drawStringWithShadow(
+                nametag.nameString,
+                (x1 + (w1 / 2)) - nameWidth,
+                y1 - 3 - mc.fontRenderer.FONT_HEIGHT,
+                nametag.nameColor);
+
+        xOffset = -nametag.stacks.size() * 8
+                - (nametag.mainHand == null ? 0 : 8);
+        maxEnchHeight = nametag.maxEnchHeight;
+        renderDurability = nametag.renderDura;
         GlStateManager.popMatrix();
+
         GlStateManager.pushMatrix();
+
         if (nametag.mainHand != null) {
-            this.renderStackRenderer(nametag.mainHand, x1 + w1 / 2.0f, y1 - 3.0f, true);
+            renderStackRenderer(nametag.mainHand, x1 + (w1 / 2), y1 - 3, true);
         }
+
         for (StackRenderer sr : nametag.stacks) {
-            this.renderStackRenderer(sr, x1 + w1 / 2.0f, y1 - 3.0f, false);
+            renderStackRenderer(sr, x1 + (w1 / 2), y1 - 3, false);
         }
         GlStateManager.popMatrix();
+
     }
 
     private void renderStackRenderer(StackRenderer sr, float x, float y, boolean main) {
-        int fontOffset = ((Nametags)this.module).getFontOffset(this.maxEnchHeight);
-        if (((Nametags)this.module).armor.getValue().booleanValue()) {
-            sr.renderStack2D((int)x + this.xOffset, (int)y + fontOffset, this.maxEnchHeight);
+        int fontOffset = module.getFontOffset(maxEnchHeight);
+        if (module.armor.getValue()) {
+            sr.renderStack2D((int) x + xOffset, (int) y + fontOffset, maxEnchHeight);
             fontOffset -= 32;
         }
-        if (((Nametags)this.module).durability.getValue().booleanValue() && sr.isDamageable()) {
-            sr.renderDurability(x + (float)this.xOffset, y * 2.0f + (float)fontOffset);
-            fontOffset = (int)((float)fontOffset - Managers.TEXT.getStringHeight());
-        } else if (this.renderDurability) {
-            fontOffset = (int)((float)fontOffset - Managers.TEXT.getStringHeight());
+
+        if (module.durability.getValue() && sr.isDamageable()) {
+            sr.renderDurability(x + xOffset, (y * 2) + fontOffset);
+            fontOffset -= Managers.TEXT.getStringHeight();
+        } else {
+            if (renderDurability) {
+                fontOffset -= Managers.TEXT.getStringHeight();
+            }
         }
-        if (((Nametags)this.module).itemStack.getValue().booleanValue() && main) {
-            sr.renderText(x * 2.0f, y * 2.0f + (float)fontOffset);
+
+        if (module.itemStack.getValue() && main) {
+            sr.renderText(x * 2, (y * 2) + fontOffset);
         }
-        if (((Nametags)this.module).armor.getValue().booleanValue() || ((Nametags)this.module).durability.getValue().booleanValue() || sr.isDamageable()) {
-            this.xOffset += 16;
+
+        if (module.armor.getValue()
+                || module.durability.getValue()
+                || sr.isDamageable()) {
+            xOffset += 16;
         }
     }
 }
-

@@ -1,13 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.SharedMonsterAttributes
- *  net.minecraft.entity.player.EntityPlayer
- *  net.minecraft.entity.player.InventoryPlayer
- *  net.minecraft.inventory.Container
- *  net.minecraft.util.DamageSource
- */
 package me.earth.earthhack.impl.core.mixins.entity.living.player;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -34,61 +24,104 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(value={EntityPlayer.class})
-public abstract class MixinEntityPlayer
-extends MixinEntityLivingBase {
-    private static final ModuleCache<TpsSync> TPS_SYNC = Caches.getModule(TpsSync.class);
-    private static final SettingCache<Boolean, BooleanSetting, TpsSync> ATTACK = Caches.getSetting(TpsSync.class, BooleanSetting.class, "Attack", false);
+@Mixin(EntityPlayer.class)
+public abstract class MixinEntityPlayer extends MixinEntityLivingBase
+{
+    private static final ModuleCache<TpsSync> TPS_SYNC =
+        Caches.getModule(TpsSync.class);
+    private static final SettingCache<Boolean, BooleanSetting, TpsSync> ATTACK =
+        Caches.getSetting(TpsSync.class, BooleanSetting.class, "Attack", false);
+
     @Shadow
     public InventoryPlayer inventory;
     @Shadow
     public Container inventoryContainer;
 
     @Shadow
-    public void onUpdate() {
+    public void onUpdate()
+    {
         throw new IllegalStateException("onUpdate was not shadowed!");
     }
 
     @Shadow
-    public boolean attackEntityFrom(DamageSource source, float amount) {
+    public boolean attackEntityFrom(DamageSource source, float amount)
+    {
         throw new IllegalStateException("attackEntityFrom wasn't shadowed!");
     }
 
-    @Inject(method={"onUpdate"}, at={@At(value="RETURN")})
-    private void onUpdateHook(CallbackInfo ci) {
-        if (this.shouldCache()) {
+    @Inject(method = "onUpdate", at = @At("RETURN"))
+    private void onUpdateHook(CallbackInfo ci)
+    {
+        if (this.shouldCache())
+        {
             this.armorValue = this.getTotalArmorValue();
-            this.armorToughness = (float)this.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).getAttributeValue();
-            this.explosionModifier = EnchantmentUtil.getEnchantmentModifierDamage(this.getArmorInventoryList(), DamageSource.FIREWORKS);
+
+            this.armorToughness = (float) this
+                    .getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS)
+                    .getAttributeValue();
+
+            this.explosionModifier =
+                    EnchantmentUtil.getEnchantmentModifierDamage(
+                        this.getArmorInventoryList(), DamageSource.FIREWORKS);
         }
     }
 
-    @Inject(method={"isEntityInsideOpaqueBlock"}, at={@At(value="HEAD")}, cancellable=true)
-    private void isEntityInsideOpaqueBlockHook(CallbackInfoReturnable<Boolean> info) {
+    @Inject(
+        method = "isEntityInsideOpaqueBlock",
+        at = @At(value="HEAD"),
+        cancellable = true)
+    private void isEntityInsideOpaqueBlockHook(
+                                        CallbackInfoReturnable<Boolean> info)
+    {
         SuffocationEvent event = new SuffocationEvent();
         Bus.EVENT_BUS.post(event);
-        if (event.isCancelled()) {
+
+        if (event.isCancelled())
+        {
             info.cancel();
         }
     }
 
-    @Redirect(method={"attackTargetEntityWithCurrentItem"}, at=@At(value="INVOKE", target="net/minecraft/entity/player/EntityPlayer.setSprinting(Z)V"))
-    private void attackTargetEntityWithCurrentItemHook(EntityPlayer entity, boolean sprinting) {
+    /**
+     * target = {@link EntityPlayer#setSprinting(boolean)}
+     */
+    @Redirect(
+            method = "attackTargetEntityWithCurrentItem",
+            at = @At(
+                    value = "INVOKE",
+                    target = "net/minecraft/entity/player/EntityPlayer" +
+                            ".setSprinting(Z)V"))
+    private void attackTargetEntityWithCurrentItemHook(EntityPlayer entity,
+                                                       boolean sprinting)
+    {
         SprintEvent event = new SprintEvent(sprinting);
         Bus.EVENT_BUS.post(event);
-        if (event.isCancelled()) {
+
+        if (event.isCancelled())
+        {
             this.motionX /= 0.6;
             this.motionZ /= 0.6;
-        } else {
+        }
+        else
+        {
             entity.setSprinting(event.isSprinting());
         }
     }
 
-    @Inject(method={"getCooldownPeriod"}, at={@At(value="HEAD")}, cancellable=true)
-    private void getCooldownPeriodHook(CallbackInfoReturnable<Float> info) {
-        if (TPS_SYNC.isEnabled() && ATTACK.getValue().booleanValue()) {
-            info.setReturnValue(Float.valueOf((float)(1.0 / this.getEntityAttribute(SharedMonsterAttributes.ATTACK_SPEED).getAttributeValue() * (double)Managers.TPS.getTps())));
+    @Inject(
+        method = "getCooldownPeriod",
+        at = @At("HEAD"),
+        cancellable = true)
+    private void getCooldownPeriodHook(CallbackInfoReturnable<Float> info)
+    {
+        if (TPS_SYNC.isEnabled() && ATTACK.getValue())
+        {
+            info.setReturnValue((float) (
+                1.0f / this
+                    .getEntityAttribute(SharedMonsterAttributes.ATTACK_SPEED)
+                    .getAttributeValue()
+                * Managers.TPS.getTps()));
         }
     }
-}
 
+}

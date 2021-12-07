@@ -1,33 +1,27 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.Entity
- *  net.minecraft.util.math.BlockPos
- */
 package me.earth.earthhack.impl.util.math.path;
 
-import java.util.List;
-import me.earth.earthhack.impl.util.math.path.BlockingEntity;
 import me.earth.earthhack.impl.util.math.raytrace.Ray;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 
-public interface Pathable {
-    public BlockPos getPos();
+import java.util.List;
 
-    public Entity getFrom();
+public interface Pathable
+{
+    BlockPos getPos();
 
-    public Ray[] getPath();
+    Entity getFrom();
 
-    public void setPath(Ray ... var1);
+    Ray[] getPath();
 
-    public int getMaxLength();
+    void setPath(Ray...path);
 
-    public boolean isValid();
+    int getMaxLength();
 
-    public void setValid(boolean var1);
+    boolean isValid();
 
-    public List<BlockingEntity> getBlockingEntities();
+    void setValid(boolean valid);
+
+    List<BlockingEntity> getBlockingEntities();
+
 }
-

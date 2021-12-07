@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.client.pingbypass;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -14,11 +11,7 @@ import me.earth.earthhack.api.setting.settings.StringSetting;
 import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.client.media.Media;
-import me.earth.earthhack.impl.modules.client.pingbypass.ListenerCustomPayload;
-import me.earth.earthhack.impl.modules.client.pingbypass.ListenerKeepAlive;
-import me.earth.earthhack.impl.modules.client.pingbypass.ListenerLogin;
-import me.earth.earthhack.impl.modules.client.pingbypass.ListenerTick;
-import me.earth.earthhack.impl.modules.client.pingbypass.PingBypassData;
+import me.earth.earthhack.impl.modules.client.pingbypass.packets.PayloadIDs;
 import me.earth.earthhack.impl.modules.client.pingbypass.packets.PayloadManager;
 import me.earth.earthhack.impl.modules.client.pingbypass.serializer.friend.FriendSerializer;
 import me.earth.earthhack.impl.modules.client.pingbypass.serializer.setting.SettingSerializer;
@@ -31,14 +24,21 @@ import me.earth.earthhack.impl.modules.player.fakeplayer.FakePlayer;
 import me.earth.earthhack.impl.util.math.StopWatch;
 import me.earth.earthhack.impl.util.network.ServerUtil;
 
-public class PingBypass
-extends Module {
-    private static final ModuleCache<Media> MEDIA = Caches.getModule(Media.class);
+public class PingBypass extends Module
+{
+    private static final ModuleCache<Media> MEDIA =
+            Caches.getModule(Media.class);
+
     private final PayloadManager payloadManager = new PayloadManager();
-    protected final Setting<String> port = this.register(new StringSetting("Port", "0"));
-    protected final Setting<Integer> pings = this.register(new NumberSetting<Integer>("Pings", 5, 1, 30));
+
+    protected final Setting<String> port     =
+        register(new StringSetting("Port", "0"));
+    protected final Setting<Integer> pings   =
+        register(new NumberSetting<>("Pings", 5, 1, 30));
+
     protected SettingSerializer serializer;
     protected FriendSerializer friendSerializer;
+
     protected StopWatch timer = new StopWatch();
     protected String serverName;
     protected long startTime;
@@ -46,90 +46,122 @@ extends Module {
     protected long ping;
     protected boolean handled;
 
-    public PingBypass() {
+    public PingBypass()
+    {
         super("PingBypass", Category.Client);
-        this.register(new BooleanSetting("NoRender", false));
-        this.register(new StringSetting("IP", "Proxy-IP"));
+        register(new BooleanSetting("NoRender", false));
+        register(new StringSetting("IP", "Proxy-IP"));
+
         this.listeners.add(new ListenerTick(this));
         this.listeners.add(new ListenerKeepAlive(this));
         this.listeners.add(new ListenerLogin(this));
-        this.listeners.add(new ListenerCustomPayload(this.payloadManager));
+        this.listeners.add(new ListenerCustomPayload(payloadManager));
+
         ServerAutoTotem sAutoTotem = new ServerAutoTotem(this);
         ServerAutoCrystal sCrystal = new ServerAutoCrystal(this);
         ServerInventory sInventory = new ServerInventory(this);
         ServerSafety sSafety = new ServerSafety(this);
-        try {
+
+        try
+        {
             Managers.MODULES.register(sAutoTotem);
             Managers.MODULES.register(sCrystal);
             Managers.MODULES.register(sInventory);
             Managers.MODULES.register(sSafety);
         }
-        catch (AlreadyRegisteredException e) {
-            throw new IllegalStateException("Couldn't register PingBypass Submodules : " + e.getTrying().getName(), e);
+        catch (AlreadyRegisteredException e)
+        {
+            throw new IllegalStateException(
+                    "Couldn't register PingBypass Submodules : "
+                            + e.getTrying().getName(), e);
         }
-        this.serializer = new SettingSerializer(this, sAutoTotem, sCrystal, Managers.MODULES.getByClass(FakePlayer.class), sSafety, Managers.MODULES.getByClass(PingSpoof.class), sInventory);
-        this.listeners.addAll(this.serializer.getListeners());
+
+        serializer = new SettingSerializer(this,
+                                            sAutoTotem,
+                                            sCrystal,
+                                            Managers.MODULES.getByClass(FakePlayer.class),
+                                            sSafety,
+                                            Managers.MODULES.getByClass(PingSpoof.class),
+                                            sInventory);
+
+        this.listeners.addAll(serializer.getListeners());
         this.friendSerializer = new FriendSerializer();
-        this.listeners.addAll(this.friendSerializer.getListeners());
-        this.registerPayloadReaders();
+        this.listeners.addAll(friendSerializer.getListeners());
+        registerPayloadReaders();
         this.setData(new PingBypassData(this));
     }
 
     @Override
-    protected void onEnable() {
-        Managers.FRIENDS.addObserver(this.friendSerializer.getObserver());
+    protected void onEnable()
+    {
+        Managers.FRIENDS.addObserver(friendSerializer.getObserver());
         ServerUtil.disconnectFromMC("PingBypass enabled.");
-        this.serializer.clear();
-        this.friendSerializer.clear();
+        serializer.clear();
+        friendSerializer.clear();
     }
 
     @Override
-    protected void onDisable() {
-        Managers.FRIENDS.removeObserver(this.friendSerializer.getObserver());
+    protected void onDisable()
+    {
+        Managers.FRIENDS.removeObserver(friendSerializer.getObserver());
         ServerUtil.disconnectFromMC("PingBypass disabled.");
-        this.serializer.clear();
-        this.friendSerializer.clear();
+        serializer.clear();
+        friendSerializer.clear();
     }
 
     @Override
-    public String getDisplayInfo() {
-        return this.ping + "ms";
+    public String getDisplayInfo()
+    {
+        return ping + "ms";
     }
 
-    private void registerPayloadReaders() {
-        this.payloadManager.register((short)0, buffer -> {
-            String name = buffer.readString(32767);
-            mc.addScheduledTask(() -> {
-                this.setServerName(name);
-                MEDIA.computeIfPresent(media -> media.setPingBypassName(this.getServerName()));
+    private void registerPayloadReaders()
+    {
+        payloadManager.register(PayloadIDs.NAME, buffer ->
+        {
+            String name = buffer.readString(Short.MAX_VALUE);
+            mc.addScheduledTask(() ->
+            {
+                setServerName(name);
+                MEDIA.computeIfPresent(media ->
+                        media.setPingBypassName(getServerName()));
             });
         });
     }
 
-    public String getServerName() {
-        return this.serverName;
+    public String getServerName()
+    {
+        return serverName;
     }
 
-    public void setServerName(String name) {
+    public void setServerName(String name)
+    {
         this.serverName = name;
     }
 
-    public int getServerPing() {
-        return this.serverPing;
+    public int getServerPing()
+    {
+        return serverPing;
     }
 
-    public int getPort() {
-        try {
-            return Integer.parseInt(this.port.getValue());
+    public int getPort()
+    {
+        try
+        {
+            return Integer.parseInt(port.getValue());
         }
-        catch (NumberFormatException e) {
+        catch (NumberFormatException e)
+        {
             e.printStackTrace();
-            return 0;
         }
+
+        return 0;
     }
 
-    public PayloadManager getPayloadManager() {
-        return this.payloadManager;
+    @SuppressWarnings("unused")
+    public PayloadManager getPayloadManager()
+    {
+        return payloadManager;
     }
+
 }
-

@@ -1,9 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.client.gui.GuiScreen
- */
 package me.earth.earthhack.impl.util.helpers.gui;
 
 import me.earth.earthhack.api.event.bus.EventListener;
@@ -12,46 +6,55 @@ import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.impl.event.events.render.GuiScreenEvent;
 import net.minecraft.client.gui.GuiScreen;
 
-public abstract class GuiModule
-extends Module {
+public abstract class GuiModule extends Module
+{
     protected GuiScreen screen;
     protected boolean fromEvent;
 
-    public GuiModule(String name, Category category) {
+    public GuiModule(String name, Category category)
+    {
         super(name, category);
-        this.listeners.add(new EventListener<GuiScreenEvent<?>>(GuiScreenEvent.class){
-
+        this.listeners.add(new EventListener<GuiScreenEvent<?>>(
+                GuiScreenEvent.class)
+        {
             @Override
-            public void invoke(GuiScreenEvent<?> event) {
-                GuiModule.this.onOtherGuiDisplayed();
+            public void invoke(GuiScreenEvent<?> event)
+            {
+                onOtherGuiDisplayed();
             }
         });
     }
 
     @Override
-    protected void onEnable() {
-        this.screen = GuiModule.mc.currentScreen;
-        this.display();
+    protected void onEnable()
+    {
+        screen = mc.currentScreen;
+        display();
     }
 
     @Override
-    protected void onDisable() {
-        if (!this.fromEvent) {
-            mc.displayGuiScreen(this.screen);
+    protected void onDisable()
+    {
+        if (!fromEvent)
+        {
+            mc.displayGuiScreen(screen);
         }
-        this.screen = null;
-        this.fromEvent = false;
+
+        screen    = null;
+        fromEvent = false;
     }
 
-    protected void onOtherGuiDisplayed() {
-        this.fromEvent = true;
-        this.disable();
+    protected void onOtherGuiDisplayed()
+    {
+        fromEvent = true;
+        disable();
     }
 
-    protected void display() {
-        mc.displayGuiScreen(this.provideScreen());
+    protected void display()
+    {
+        mc.displayGuiScreen(provideScreen());
     }
 
     protected abstract GuiScreen provideScreen();
-}
 
+}

@@ -1,11 +1,16 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.core.ducks.entity;
 
-public interface IEntityRenderer {
-    public void invokeSetupCameraTransform(float var1, int var2);
+/**
+ * Duck interface for {@link net.minecraft.client.renderer.EntityRenderer}.
+ */
+public interface IEntityRenderer
+{
+    void invokeSetupCameraTransform(float partialTicks, int pass);
 
-    public void invokeOrientCamera(float var1);
+    void invokeOrientCamera(float partialTicks);
+
+    void invokeRenderHand(float partialTicks, int pass);
+
+    void setLightmapUpdateNeeded(boolean needed);
+
 }
-

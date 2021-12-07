@@ -1,13 +1,9 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.client.server.api;
 
-import me.earth.earthhack.impl.modules.client.server.api.IConnectionEntry;
+public interface IServerList
+{
+    IConnectionEntry[] get();
 
-public interface IServerList {
-    public IConnectionEntry[] get();
+    void set(IConnectionEntry[] entries);
 
-    public void set(IConnectionEntry[] var1);
 }
-

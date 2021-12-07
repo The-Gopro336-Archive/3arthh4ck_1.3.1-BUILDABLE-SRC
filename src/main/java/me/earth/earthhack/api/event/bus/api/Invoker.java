@@ -1,9 +1,17 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.api.event.bus.api;
 
-public interface Invoker<T> {
-    public void invoke(T var1);
-}
+/**
+ * Handles events.
+ *
+ * @param <T>
+ */
+public interface Invoker<T>
+{
+    /**
+     * Called when an event is posted on the bus.
+     *
+     * @param event the event.
+     */
+    void invoke(T event);
 
+}

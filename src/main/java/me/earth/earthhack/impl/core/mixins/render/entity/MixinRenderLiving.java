@@ -1,10 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.client.renderer.entity.RenderLiving
- *  net.minecraft.entity.Entity
- */
 package me.earth.earthhack.impl.core.mixins.render.entity;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -19,30 +12,52 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value={RenderLiving.class})
-public abstract class MixinRenderLiving {
-    private static final ModuleCache<NoInterp> NOINTERP = Caches.getModule(NoInterp.class);
+@Mixin(RenderLiving.class)
+public abstract class MixinRenderLiving
+{
+    private static final ModuleCache<NoInterp> NOINTERP =
+            Caches.getModule(NoInterp.class);
 
-    @Inject(method={"renderLeash"}, at={@At(value="HEAD")}, cancellable=true)
-    private void renderLeashHook(CallbackInfo info) {
-        if (ESP.isRendering) {
+    @Inject(
+        method = "renderLeash",
+        at = @At("HEAD"),
+        cancellable = true)
+    private void renderLeashHook(CallbackInfo info)
+    {
+        if (ESP.isRendering)
+        {
             info.cancel();
         }
     }
 
-    @Redirect(method={"renderLeash"}, at=@At(value="FIELD", target="Lnet/minecraft/entity/Entity;posX:D"))
-    private double posXHook(Entity entity) {
-        return NoInterp.noInterpX((NoInterp)NOINTERP.get(), entity);
+    @Redirect(
+        method = "renderLeash",
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/entity/Entity;posX:D"))
+    private double posXHook(Entity entity)
+    {
+        return NoInterp.noInterpX(NOINTERP.get(), entity);
     }
 
-    @Redirect(method={"renderLeash"}, at=@At(value="FIELD", target="Lnet/minecraft/entity/Entity;posY:D"))
-    private double posYHook(Entity entity) {
-        return NoInterp.noInterpY((NoInterp)NOINTERP.get(), entity);
+    @Redirect(
+        method = "renderLeash",
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/entity/Entity;posY:D"))
+    private double posYHook(Entity entity)
+    {
+        return NoInterp.noInterpY(NOINTERP.get(), entity);
     }
 
-    @Redirect(method={"renderLeash"}, at=@At(value="FIELD", target="Lnet/minecraft/entity/Entity;posZ:D"))
-    private double posZHook(Entity entity) {
-        return NoInterp.noInterpZ((NoInterp)NOINTERP.get(), entity);
+    @Redirect(
+        method = "renderLeash",
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/entity/Entity;posZ:D"))
+    private double posZHook(Entity entity)
+    {
+        return NoInterp.noInterpZ(NOINTERP.get(), entity);
     }
+
 }
-

@@ -1,58 +1,55 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.util.math.AxisAlignedBB
- */
 package me.earth.earthhack.impl.modules.player.speedmine.mode;
 
-import java.awt.Color;
 import me.earth.earthhack.impl.modules.player.speedmine.Speedmine;
 import me.earth.earthhack.impl.util.render.RenderUtil;
 import net.minecraft.util.math.AxisAlignedBB;
 
-public enum ESPMode {
-    None{
+import java.awt.*;
 
-        @Override
-        public void drawEsp(Speedmine module, AxisAlignedBB bb, float damage) {
-        }
-    }
-    ,
-    Outline{
+public enum ESPMode
+{
+    None()
+        {
+            @Override
+            public void drawEsp(Speedmine module, AxisAlignedBB bb, float damage)
+            {
+                /* None means no ESP. */
+            }
+        },
+    Outline()
+        {
+            @Override
+            public void drawEsp(Speedmine module, AxisAlignedBB bb, float damage)
+            {
+                RenderUtil.startRender();
+                float red   = 255 - 255 * damage;
+                float green = 255 * damage;
+                RenderUtil.drawOutline(bb, 1.5F, new Color((int) red, (int) green, 0, module.getOutlineAlpha()));
+                RenderUtil.endRender();
+            }
+        },
+    Block()
+        {
+            @Override
+            public void drawEsp(Speedmine module, AxisAlignedBB bb, float damage)
+            {
+                RenderUtil.startRender();
+                float red   = 255 - 255 * damage;
+                float green = 255 * damage;
+                RenderUtil.drawBox(bb, new Color((int) red, (int) green, 0, module.getBlockAlpha()));
+                RenderUtil.endRender();
+            }
+        },
+    Box()
+        {
+            @Override
+            public void drawEsp(Speedmine module, AxisAlignedBB bb, float damage)
+            {
+                Outline.drawEsp(module, bb, damage);
+                Block.drawEsp(module, bb, damage);
+            }
+        };
 
-        @Override
-        public void drawEsp(Speedmine module, AxisAlignedBB bb, float damage) {
-            RenderUtil.startRender();
-            float red = 255.0f - 255.0f * damage;
-            float green = 255.0f * damage;
-            RenderUtil.drawOutline(bb, 1.5f, new Color((int)red, (int)green, 0, module.getOutlineAlpha()));
-            RenderUtil.endRender();
-        }
-    }
-    ,
-    Block{
+    public abstract void drawEsp(Speedmine module, AxisAlignedBB bb, float damage);
 
-        @Override
-        public void drawEsp(Speedmine module, AxisAlignedBB bb, float damage) {
-            RenderUtil.startRender();
-            float red = 255.0f - 255.0f * damage;
-            float green = 255.0f * damage;
-            RenderUtil.drawBox(bb, new Color((int)red, (int)green, 0, module.getBlockAlpha()));
-            RenderUtil.endRender();
-        }
-    }
-    ,
-    Box{
-
-        @Override
-        public void drawEsp(Speedmine module, AxisAlignedBB bb, float damage) {
-            Outline.drawEsp(module, bb, damage);
-            Block.drawEsp(module, bb, damage);
-        }
-    };
-
-
-    public abstract void drawEsp(Speedmine var1, AxisAlignedBB var2, float var3);
 }
-

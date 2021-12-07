@@ -1,10 +1,8 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.util.network;
 
-public class PacketContext {
-    public static final int DEFAULT = 0;
-    public static final int AUTOCRYSTAL = 1;
+// TODO
+public class PacketContext
+{
+    public static final int DEFAULT     = 0x00;
+    public static final int AUTOCRYSTAL = 0x01;
 }
-

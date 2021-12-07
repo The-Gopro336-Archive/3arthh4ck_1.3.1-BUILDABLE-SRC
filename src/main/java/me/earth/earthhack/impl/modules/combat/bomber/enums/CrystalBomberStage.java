@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.combat.bomber.enums;
 
 public enum CrystalBomberStage {
@@ -8,7 +5,5 @@ public enum CrystalBomberStage {
     Crystal,
     Pickaxe,
     Explode,
-    PlaceObsidian;
-
+    PlaceObsidian
 }
-

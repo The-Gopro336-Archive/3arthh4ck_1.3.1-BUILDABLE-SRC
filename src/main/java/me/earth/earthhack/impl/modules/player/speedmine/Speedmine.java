@@ -1,15 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.network.Packet
- *  net.minecraft.network.play.client.CPacketPlayerDigging
- *  net.minecraft.network.play.client.CPacketPlayerDigging$Action
- *  net.minecraft.util.EnumFacing
- *  net.minecraft.util.EnumHand
- *  net.minecraft.util.math.AxisAlignedBB
- *  net.minecraft.util.math.BlockPos
- */
 package me.earth.earthhack.impl.modules.player.speedmine;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -25,19 +13,6 @@ import me.earth.earthhack.impl.core.ducks.network.ICPacketPlayerDigging;
 import me.earth.earthhack.impl.core.ducks.network.IPlayerControllerMP;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.player.automine.AutoMine;
-import me.earth.earthhack.impl.modules.player.speedmine.ListenerBlockChange;
-import me.earth.earthhack.impl.modules.player.speedmine.ListenerClick;
-import me.earth.earthhack.impl.modules.player.speedmine.ListenerDamage;
-import me.earth.earthhack.impl.modules.player.speedmine.ListenerDeath;
-import me.earth.earthhack.impl.modules.player.speedmine.ListenerDigging;
-import me.earth.earthhack.impl.modules.player.speedmine.ListenerKeyPress;
-import me.earth.earthhack.impl.modules.player.speedmine.ListenerLogout;
-import me.earth.earthhack.impl.modules.player.speedmine.ListenerMotion;
-import me.earth.earthhack.impl.modules.player.speedmine.ListenerMultiBlockChange;
-import me.earth.earthhack.impl.modules.player.speedmine.ListenerRender;
-import me.earth.earthhack.impl.modules.player.speedmine.ListenerReset;
-import me.earth.earthhack.impl.modules.player.speedmine.ListenerUpdate;
-import me.earth.earthhack.impl.modules.player.speedmine.SpeedMineData;
 import me.earth.earthhack.impl.modules.player.speedmine.mode.ESPMode;
 import me.earth.earthhack.impl.modules.player.speedmine.mode.MineMode;
 import me.earth.earthhack.impl.util.math.MathUtil;
@@ -46,6 +21,7 @@ import me.earth.earthhack.impl.util.math.rotation.RotationUtil;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
 import me.earth.earthhack.impl.util.minecraft.Swing;
 import me.earth.earthhack.impl.util.network.NetworkUtil;
+import me.earth.earthhack.impl.util.text.TextColor;
 import me.earth.earthhack.impl.util.thread.Locks;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
@@ -54,50 +30,100 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
-public class Speedmine
-extends Module {
-    private static final ModuleCache<AutoMine> AUTO_MINE = Caches.getModule(AutoMine.class);
-    protected final Setting<MineMode> mode = this.register(new EnumSetting<MineMode>("Mode", MineMode.Smart));
-    protected final Setting<Boolean> noReset = this.register(new BooleanSetting("Reset", true));
-    public final Setting<Float> limit = this.register(new NumberSetting<Float>("Damage", Float.valueOf(1.0f), Float.valueOf(0.0f), Float.valueOf(2.0f)));
-    protected final Setting<Float> range = this.register(new NumberSetting<Float>("Range", Float.valueOf(7.0f), Float.valueOf(0.1f), Float.valueOf(100.0f)));
-    protected final Setting<Boolean> multiTask = this.register(new BooleanSetting("MultiTask", false));
-    protected final Setting<Boolean> rotate = this.register(new BooleanSetting("Rotate", false));
-    protected final Setting<Boolean> event = this.register(new BooleanSetting("Event", false));
-    protected final Setting<Boolean> display = this.register(new BooleanSetting("DisplayDamage", false));
-    protected final Setting<Integer> delay = this.register(new NumberSetting<Integer>("ClickDelay", 100, 0, 500));
-    protected final Setting<ESPMode> esp = this.register(new EnumSetting<ESPMode>("ESP", ESPMode.Outline));
-    protected final Setting<Integer> alpha = this.register(new NumberSetting<Integer>("BlockAlpha", 100, 0, 255));
-    protected final Setting<Integer> outlineA = this.register(new NumberSetting<Integer>("OutlineAlpha", 100, 0, 255));
-    protected final Setting<Integer> realDelay = this.register(new NumberSetting<Integer>("Delay", 50, 0, 500));
-    public final Setting<Boolean> onGround = this.register(new BooleanSetting("OnGround", false));
-    protected final Setting<Boolean> toAir = this.register(new BooleanSetting("ToAir", false));
-    protected final Setting<Boolean> swap = this.register(new BooleanSetting("SilentSwitch", false));
-    protected final Setting<Boolean> requireBreakSlot = this.register(new BooleanSetting("RequireBreakSlot", false));
-    protected final Setting<Boolean> placeCrystal = this.register(new BooleanSetting("PlaceCrystal", false));
-    protected final BindSetting breakBind = this.register(new BindSetting("BreakBind", Bind.none()));
-    protected final Setting<Boolean> normal = this.register(new BooleanSetting("Normal", false));
-    protected final Setting<Boolean> resetAfterPacket = this.register(new BooleanSetting("ResetAfterPacket", false));
-    protected final Setting<Boolean> checkPacket = this.register(new BooleanSetting("CheckPacket", true));
-    protected final Setting<Boolean> swingStop = this.register(new BooleanSetting("Swing-Stop", true));
-    protected final Setting<Boolean> limitRotations = this.register(new BooleanSetting("Limit-Rotations", true));
-    protected final Setting<Integer> confirm = this.register(new NumberSetting<Integer>("Confirm", 500, 0, 1000));
-    public final float[] damages = new float[]{0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
+import static net.minecraft.network.play.client.CPacketPlayerDigging.Action.ABORT_DESTROY_BLOCK;
+import static net.minecraft.network.play.client.CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK;
+
+// TODO Tps Sync
+// TODO Test around with multiple blocks
+// TODO: Rewrite!
+public class Speedmine extends Module
+{
+    private static final ModuleCache<AutoMine> AUTO_MINE =
+            Caches.getModule(AutoMine.class);
+
+    protected final Setting<MineMode> mode     =
+            register(new EnumSetting<>("Mode", MineMode.Smart));
+    protected final Setting<Boolean> noReset   =
+            register(new BooleanSetting("Reset", true));
+    public final Setting<Float> limit       =
+            register(new NumberSetting<>("Damage", 1.0f, 0.0f, 2.0f));
+    protected final Setting<Float> range       =
+            register(new NumberSetting<>("Range", 7.0f, 0.1f, 100.0f));
+    protected final Setting<Boolean> multiTask =
+            register(new BooleanSetting("MultiTask", false));
+    protected final Setting<Boolean> rotate    =
+            register(new BooleanSetting("Rotate", false));
+    protected final Setting<Boolean> event     =
+            register(new BooleanSetting("Event", false));
+    protected final Setting<Boolean> display   =
+            register(new BooleanSetting("DisplayDamage", false));
+    protected final Setting<Integer> delay     =
+            register(new NumberSetting<>("ClickDelay", 100, 0, 500));
+    protected final Setting<ESPMode> esp       =
+            register(new EnumSetting<>("ESP", ESPMode.Outline));
+    protected final Setting<Integer> alpha     =
+            register(new NumberSetting<>("BlockAlpha", 100, 0, 255));
+    protected final Setting<Integer> outlineA  =
+            register(new NumberSetting<>("OutlineAlpha", 100, 0, 255));
+    protected final Setting<Integer> realDelay =
+            register(new NumberSetting<>("Delay", 50, 0, 500));
+    public final Setting<Boolean> onGround  =
+            register(new BooleanSetting("OnGround", false));
+    protected final Setting<Boolean> toAir     =
+            register(new BooleanSetting("ToAir", false));
+    protected final Setting<Boolean> swap      =
+            register(new BooleanSetting("SilentSwitch", false));
+    protected final Setting<Boolean> requireBreakSlot      =
+            register(new BooleanSetting("RequireBreakSlot", false));
+    protected final Setting<Boolean> placeCrystal =
+            register(new BooleanSetting("PlaceCrystal", false));
+    protected final BindSetting breakBind =
+            register(new BindSetting("BreakBind", Bind.none()));
+    protected final Setting<Boolean> normal     =
+            register(new BooleanSetting("Normal", false));
+    protected final Setting<Boolean> resetAfterPacket =
+            register(new BooleanSetting("ResetAfterPacket", false));
+    protected final Setting<Boolean> checkPacket =
+            register(new BooleanSetting("CheckPacket", true));
+    protected final Setting<Boolean> swingStop =
+            register(new BooleanSetting("Swing-Stop", true));
+    protected final Setting<Boolean> limitRotations =
+            register(new BooleanSetting("Limit-Rotations", true));
+    protected final Setting<Integer> confirm =
+            register(new NumberSetting<>("Confirm", 500, 0, 1000));
+
+    /** Damage dealt to block for each hotbarSlot. */
+    public final float[] damages =
+            new float[]{0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
+    /** A StopWatch to handle ClickDelay. */
     protected final StopWatch timer = new StopWatch();
+    /** A StopWatch to handle Resetting after sending a Packet. */
     protected final StopWatch resetTimer = new StopWatch();
+    /** The Pos we are currently mining. */
     protected BlockPos pos;
+    /** The facing we hit the current pos int. */
     protected EnumFacing facing;
+    /** Cached boundingBox for the currentPos. */
     protected AxisAlignedBB bb;
+    /** Rotations to the current pos. */
     protected float[] rotations;
+    /** Maximum damage dealt to the current Pos. */
     public float maxDamage;
+    /** <tt>true</tt> if we sent the STOP_DESTROY packet. */
     protected boolean sentPacket;
+    /** true if we should send an abort packet */
     protected boolean shouldAbort;
+    /** true if the module should not send destroy block packets right now */
     protected boolean pausing;
+    /** timer for delays */
     protected final StopWatch delayTimer = new StopWatch();
+    /** Packet to send after we limited our rotations. */
     protected Packet<?> limitRotationPacket;
+    /** Slot for LimitRotations. */
     protected int limitRotationSlot = -1;
 
-    public Speedmine() {
+    public Speedmine()
+    {
         super("Speedmine", Category.Player);
         this.listeners.add(new ListenerDamage(this));
         this.listeners.add(new ListenerReset(this));
@@ -115,162 +141,253 @@ extends Module {
     }
 
     @Override
-    protected void onEnable() {
-        this.reset();
+    protected void onEnable()
+    {
+        reset();
     }
 
     @Override
-    public String getDisplayInfo() {
-        if (this.display.getValue().booleanValue() && this.mode.getValue() == MineMode.Smart) {
-            return this.maxDamage >= this.limit.getValue().floatValue() ? "\u00a7a" + MathUtil.round(this.limit.getValue().floatValue(), 1) : "" + MathUtil.round(this.maxDamage, 1);
+    public String getDisplayInfo()
+    {
+        if (display.getValue() && mode.getValue() == MineMode.Smart)
+        {
+            return (maxDamage >= limit.getValue()
+                    ? TextColor.GREEN + MathUtil.round(limit.getValue(), 1)
+                    : "" + MathUtil.round(maxDamage, 1));
         }
-        return this.mode.getValue().toString();
+
+        return mode.getValue().toString();
     }
 
-    public void abortCurrentPos() {
-        AUTO_MINE.computeIfPresent(a -> a.addToBlackList(this.pos));
-        Speedmine.mc.player.connection.sendPacket((Packet)new CPacketPlayerDigging(CPacketPlayerDigging.Action.ABORT_DESTROY_BLOCK, this.pos, this.facing));
-        ((IPlayerControllerMP)Speedmine.mc.playerController).setIsHittingBlock(false);
-        ((IPlayerControllerMP)Speedmine.mc.playerController).setCurBlockDamageMP(0.0f);
-        Speedmine.mc.world.sendBlockBreakProgress(Speedmine.mc.player.getEntityId(), this.pos, -1);
-        Speedmine.mc.player.resetCooldown();
-        this.reset();
+    /**
+     * Sends an ABORT_DESTROY_BLOCK CPacketPlayerDigging for the
+     * current pos and resets the playerController.
+     */
+    public void abortCurrentPos()
+    {
+        AUTO_MINE.computeIfPresent(a -> a.addToBlackList(pos));
+        mc.player.connection.sendPacket(new CPacketPlayerDigging(
+                                CPacketPlayerDigging.Action.ABORT_DESTROY_BLOCK,
+                                pos,
+                                facing));
+
+        ((IPlayerControllerMP) mc.playerController).setIsHittingBlock(false);
+        ((IPlayerControllerMP) mc.playerController).setCurBlockDamageMP(0.0f);
+        mc.world.sendBlockBreakProgress(this.mc.player.getEntityId(), pos, -1);
+        mc.player.resetCooldown();
+        reset();
     }
 
-    public void reset() {
-        this.pos = null;
-        this.facing = null;
-        this.bb = null;
-        this.maxDamage = 0.0f;
-        this.sentPacket = false;
-        this.limitRotationSlot = -1;
-        this.limitRotationPacket = null;
+    /**
+     * Resets the current pos and all damages dealt to it.
+     */
+    public void reset()
+    {
+        pos    = null;
+        facing = null;
+        bb     = null;
+        maxDamage  = 0.0f;
+        sentPacket = false;
+        limitRotationSlot = -1;
+        limitRotationPacket = null;
         AUTO_MINE.computeIfPresent(AutoMine::reset);
-        for (int i = 0; i < 9; ++i) {
-            this.damages[i] = 0.0f;
+
+        for (int i = 0; i < 9; i++)
+        {
+            damages[i] = 0.0f;
         }
     }
 
-    public MineMode getMode() {
-        return this.mode.getValue();
+    /**
+     * Returns the current mode.
+     *
+     * @return a MineMode.
+     */
+    public MineMode getMode()
+    {
+        return mode.getValue();
     }
 
-    public BlockPos getPos() {
-        return this.pos;
+    public BlockPos getPos()
+    {
+        return pos;
     }
 
-    public StopWatch getTimer() {
-        return this.timer;
+    public StopWatch getTimer()
+    {
+        return timer;
     }
 
-    public float getRange() {
-        return this.range.getValue().floatValue();
+    public float getRange()
+    {
+        return range.getValue();
     }
 
     public int getBlockAlpha() {
-        return this.alpha.getValue();
+        return alpha.getValue();
     }
 
     public int getOutlineAlpha() {
-        return this.outlineA.getValue();
+        return outlineA.getValue();
     }
 
     public boolean isPausing() {
-        return this.pausing;
+        return pausing;
     }
 
     public void setPausing(boolean pausing) {
         this.pausing = pausing;
     }
 
-    protected boolean sendStopDestroy(BlockPos pos, EnumFacing facing, boolean toAir) {
-        CPacketPlayerDigging stop = new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, pos, facing);
-        if (toAir) {
-            ((ICPacketPlayerDigging)stop).setClientSideBreaking(true);
+    protected boolean sendStopDestroy(BlockPos pos,
+                                      EnumFacing facing,
+                                      boolean toAir)
+    {
+        CPacketPlayerDigging stop  =
+                new CPacketPlayerDigging(
+                        CPacketPlayerDigging
+                            .Action
+                            .STOP_DESTROY_BLOCK,
+                        pos,
+                        facing);
+
+        if (toAir)
+        {
+            //noinspection ConstantConditions
+            ((ICPacketPlayerDigging) stop).setClientSideBreaking(true);
         }
-        if (this.rotate.getValue().booleanValue() && this.limitRotations.getValue().booleanValue() && !RotationUtil.isLegit(pos, facing)) {
-            this.limitRotationPacket = stop;
-            this.limitRotationSlot = Speedmine.mc.player.inventory.currentItem;
+
+        if (rotate.getValue()
+                && limitRotations.getValue()
+                && !RotationUtil.isLegit(pos, facing))
+        {
+            limitRotationPacket = stop;
+            limitRotationSlot = mc.player.inventory.currentItem;
             return false;
         }
-        if (this.event.getValue().booleanValue()) {
-            Speedmine.mc.player.connection.sendPacket((Packet)stop);
-        } else {
+
+        if (event.getValue())
+        {
+            mc.player.connection.sendPacket(stop);
+        }
+        else
+        {
             NetworkUtil.sendPacketNoEvent(stop, false);
         }
-        this.onSendPacket();
+
+        onSendPacket();
         return true;
     }
 
-    protected void postSend(boolean toAir) {
-        if (this.swingStop.getValue().booleanValue()) {
+    protected void postSend(boolean toAir)
+    {
+        if (swingStop.getValue())
+        {
             Swing.Packet.swing(EnumHand.MAIN_HAND);
         }
-        if (toAir) {
-            Speedmine.mc.playerController.onPlayerDestroyBlock(this.pos);
+
+        if (toAir)
+        {
+            mc.playerController.onPlayerDestroyBlock(pos);
         }
-        if (this.resetAfterPacket.getValue().booleanValue()) {
-            this.reset();
+
+        if (resetAfterPacket.getValue())
+        {
+            reset();
         }
     }
 
-    public void forceSend() {
-        if (this.pos != null) {
-            if (this.mode.getValue() == MineMode.Instant) {
-                Speedmine.mc.player.connection.sendPacket((Packet)new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, this.pos, this.facing));
-                this.sendStopDestroy(this.pos, this.facing, false);
-                if (this.mode.getValue() == MineMode.Instant) {
-                    Speedmine.mc.player.connection.sendPacket((Packet)new CPacketPlayerDigging(CPacketPlayerDigging.Action.ABORT_DESTROY_BLOCK, this.pos, this.facing));
+    public void forceSend()
+    {
+        if (pos != null)
+        {
+            if (mode.getValue() == MineMode.Instant)
+            {
+                mc.player.connection.sendPacket(new CPacketPlayerDigging(
+                            STOP_DESTROY_BLOCK, pos, facing));
+                sendStopDestroy(pos, facing, false);
+                if (mode.getValue() == MineMode.Instant)
+                {
+                    mc.player.connection.sendPacket(new CPacketPlayerDigging(
+                            ABORT_DESTROY_BLOCK, pos, facing));
                 }
-            } else if (this.mode.getValue() == MineMode.Civ) {
-                this.sendStopDestroy(this.pos, this.facing, false);
+            }
+            else if (mode.getValue() == MineMode.Civ)
+            {
+                sendStopDestroy(pos, facing, false);
             }
         }
     }
 
     public void tryBreak() {
         int breakSlot;
-        if (!this.pausing && ((breakSlot = this.findBreakSlot()) != -1 || this.requireBreakSlot.getValue().booleanValue())) {
+        if (!pausing && ((breakSlot = findBreakSlot()) != -1 || requireBreakSlot.getValue())) {
             boolean toAir = this.toAir.getValue();
-            Locks.acquire(Locks.PLACE_SWITCH_LOCK, () -> {
-                int lastSlot = Speedmine.mc.player.inventory.currentItem;
+            Locks.acquire(Locks.PLACE_SWITCH_LOCK, () ->
+            {
+                int lastSlot = mc.player.inventory.currentItem;
                 if (breakSlot != -1) {
                     InventoryUtil.switchTo(breakSlot);
                 }
-                CPacketPlayerDigging packet = new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, this.pos, this.facing);
-                if (toAir) {
-                    ((ICPacketPlayerDigging)packet).setClientSideBreaking(true);
+
+                CPacketPlayerDigging packet =
+                    new CPacketPlayerDigging(
+                        CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK,
+                        pos,
+                        facing);
+
+                if (toAir)
+                {
+                    //noinspection ConstantConditions
+                    ((ICPacketPlayerDigging) packet)
+                            .setClientSideBreaking(true);
                 }
+
                 NetworkUtil.sendPacketNoEvent(packet, false);
                 if (breakSlot != -1) {
                     InventoryUtil.switchTo(lastSlot);
                 }
             });
-            if (toAir) {
-                Speedmine.mc.playerController.onPlayerDestroyBlock(this.pos);
+
+            if (toAir)
+            {
+                mc.playerController.onPlayerDestroyBlock(pos);
             }
-            this.onSendPacket();
+
+            onSendPacket();
         }
     }
 
-    private int findBreakSlot() {
+    private int findBreakSlot()
+    {
         int slot = -1;
-        for (int i = 0; i < this.damages.length; ++i) {
-            if (!(this.damages[i] >= this.limit.getValue().floatValue()) || (slot = i) < Speedmine.mc.player.inventory.currentItem) continue;
-            return slot;
+        for (int i = 0; i < damages.length; i++)
+        {
+            if (damages[i] >= limit.getValue()
+                    && (slot = i) >= mc.player.inventory.currentItem)
+            {
+                return slot;
+            }
         }
+
         return slot;
     }
 
-    public void checkReset() {
-        if (this.sentPacket && this.resetTimer.passed(this.confirm.getValue().intValue()) && (this.mode.getValue() == MineMode.Packet || this.mode.getValue() == MineMode.Smart)) {
-            this.reset();
+    public void checkReset()
+    {
+        if (sentPacket
+                && resetTimer.passed(confirm.getValue())
+                && (mode.getValue() == MineMode.Packet
+                    || mode.getValue() == MineMode.Smart))
+        {
+            reset();
         }
     }
 
-    public void onSendPacket() {
-        this.sentPacket = true;
-        this.resetTimer.reset();
+    public void onSendPacket()
+    {
+        sentPacket = true;
+        resetTimer.reset();
     }
-}
 
+}

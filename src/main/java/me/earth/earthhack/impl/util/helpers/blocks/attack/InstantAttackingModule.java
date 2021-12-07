@@ -1,26 +1,23 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.item.EntityEnderCrystal
- */
 package me.earth.earthhack.impl.util.helpers.blocks.attack;
 
-import me.earth.earthhack.impl.util.helpers.blocks.attack.AttackingModule;
 import me.earth.earthhack.impl.util.math.Passable;
 import net.minecraft.entity.item.EntityEnderCrystal;
 
-public interface InstantAttackingModule
-extends AttackingModule {
-    default public void postAttack(EntityEnderCrystal entity) {
+public interface InstantAttackingModule extends AttackingModule
+{
+    @SuppressWarnings("unused")
+    default void postAttack(EntityEnderCrystal entity)
+    {
+        // Reserved for actions that can happen
+        // after the crystal has been attacked.
     }
 
-    public boolean shouldAttack(EntityEnderCrystal var1);
+    boolean shouldAttack(EntityEnderCrystal entity);
 
-    public Passable getTimer();
+    Passable getTimer();
 
-    public int getBreakDelay();
+    int getBreakDelay();
 
-    public int getCooldown();
+    int getCooldown();
+
 }
-

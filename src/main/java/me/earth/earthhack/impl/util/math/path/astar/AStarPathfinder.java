@@ -1,8 +1,10 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.util.math.path.astar;
 
-public class AStarPathfinder {
-}
+// TODO: blockpositions in a sphere are nodes,
+//  remove those that are blocked by entities,
+//  heuristic could be distance, that way we can
+//  build around entities
+public class AStarPathfinder
+{
 
+}

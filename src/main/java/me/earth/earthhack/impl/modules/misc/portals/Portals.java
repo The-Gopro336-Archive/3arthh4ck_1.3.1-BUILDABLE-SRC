@@ -1,32 +1,33 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.misc.portals;
 
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
-import me.earth.earthhack.impl.modules.misc.portals.ListenerTeleport;
-import me.earth.earthhack.impl.modules.misc.portals.PortalsData;
+import me.earth.earthhack.impl.util.text.TextColor;
 
-public class Portals
-extends Module {
-    protected final Setting<Boolean> godMode = this.register(new BooleanSetting("GodMode", false));
+public class Portals extends Module
+{
+    protected final Setting<Boolean> godMode =
+            register(new BooleanSetting("GodMode", false));
 
-    public Portals() {
+    public Portals()
+    {
         super("Portals", Category.Misc);
         this.listeners.add(new ListenerTeleport(this));
-        this.register(new BooleanSetting("Chat", true));
+        register(new BooleanSetting("Chat", true));
         this.setData(new PortalsData(this));
     }
 
     @Override
-    public String getDisplayInfo() {
-        if (this.godMode.getValue().booleanValue()) {
-            return "\u00a7cGodMode";
+    public String getDisplayInfo()
+    {
+        if (godMode.getValue())
+        {
+            return TextColor.RED + "GodMode";
         }
+
         return null;
     }
-}
 
+}

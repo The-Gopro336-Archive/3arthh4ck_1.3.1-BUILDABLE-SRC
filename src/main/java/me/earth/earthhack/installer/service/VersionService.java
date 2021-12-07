@@ -1,10 +1,10 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.installer.service;
 
-public class VersionService {
-    public void add(String name) {
+// TODO: option to add versions
+public class VersionService
+{
+    public void add(String name)
+    {
+
     }
 }
-

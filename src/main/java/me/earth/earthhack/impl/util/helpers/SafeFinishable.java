@@ -1,39 +1,45 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.util.helpers;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-import me.earth.earthhack.impl.util.helpers.Finishable;
 import me.earth.earthhack.impl.util.thread.SafeRunnable;
 
-public abstract class SafeFinishable
-extends Finishable
-implements SafeRunnable {
-    public SafeFinishable() {
+import java.util.concurrent.atomic.AtomicBoolean;
+
+public abstract class SafeFinishable extends Finishable implements SafeRunnable
+{
+    public SafeFinishable()
+    {
         this(new AtomicBoolean());
     }
 
-    public SafeFinishable(AtomicBoolean finished) {
+    public SafeFinishable(AtomicBoolean finished)
+    {
         super(finished);
     }
 
     @Override
-    public void run() {
-        try {
-            this.runSafely();
+    public void run()
+    {
+        try
+        {
+            runSafely();
         }
-        catch (Throwable t) {
-            this.handle(t);
+        catch (Throwable t)
+        {
+            handle(t);
         }
-        finally {
-            this.setFinished(true);
+        finally
+        {
+            setFinished(true);
         }
     }
 
-    @Override
+    /**
+     * SafeFinishable uses {@link SafeRunnable#runSafely()} instead.
+     */
     @Deprecated
-    protected void execute() {
+    protected void execute()
+    {
+        // NOOP
     }
-}
 
+}

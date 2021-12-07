@@ -1,11 +1,10 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.core.ducks.util;
 
-public interface IHoverable {
-    default public boolean canBeHovered() {
+// This is cool but got kinda unnecessary...
+public interface IHoverable
+{
+    default boolean canBeHovered()
+    {
         return true;
     }
 }
-

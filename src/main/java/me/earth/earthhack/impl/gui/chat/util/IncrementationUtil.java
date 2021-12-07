@@ -1,84 +1,204 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  org.lwjgl.input.Keyboard
- */
 package me.earth.earthhack.impl.gui.chat.util;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import me.earth.earthhack.impl.util.math.MathUtil;
 import org.lwjgl.input.Keyboard;
 
-public class IncrementationUtil {
-    public static final int MAX = 157;
-    public static final int FASTER = 29;
-    public static final int FAST = 56;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
-    public static String crD(String d, String min, String max, boolean de) {
-        BigDecimal incr;
-        if (Keyboard.isKeyDown((int)157)) {
-            if (de) {
+/**
+ * Utility for Incrementing numbers for commands and gui.
+ */
+public class IncrementationUtil
+{
+    /** {@link Keyboard#KEY_RCONTROL} maxes out. */
+    public static final int MAX    = Keyboard.KEY_RCONTROL;
+    /** {@link Keyboard#KEY_LCONTROL} increments faster. */
+    public static final int FASTER = Keyboard.KEY_LCONTROL;
+    /** {@link Keyboard#KEY_LMENU} increments fast. */
+    public static final int FAST   = Keyboard.KEY_LMENU;
+
+    /**
+     * Uses Strings to prevent floating,
+     * since this is Utility for commands and gui.
+     * <p></p>
+     * <p> In/Decrements the given double by:
+     * <p>- 0.1 by default,
+     * <p>- 1.0 if {@link Keyboard#KEY_LCONTROL} is down,
+     * <p>- 10% if {@link Keyboard#KEY_LMENU} and {@link Keyboard#KEY_LCONTROL}
+     * are down,
+     * <p>- the given Max/Min Value if {@link Keyboard#KEY_RCONTROL} is down,
+     * <p>- 10.0 if {@link Keyboard#KEY_LMENU} is down.
+     *
+     * @param d String representing the number to in/decrement.
+     * @param min the minimum value to return.
+     * @param max the maximum value to return.
+     * @param de <tt>true</tt> if decrementing.
+     * @return a String representing the value de/incremented,
+     *         based on the keys pressed.
+     */
+    public static String crD(String d, String min, String max, boolean de)
+    {
+        //noinspection DuplicatedCode
+        if (Keyboard.isKeyDown(MAX))
+        {
+            if (de)
+            {
                 return min;
             }
-            return max;
+            else
+            {
+                return max;
+            }
         }
+
         BigDecimal v = new BigDecimal(d);
         BigDecimal n = new BigDecimal(min);
         BigDecimal m = new BigDecimal(max);
-        if (Keyboard.isKeyDown((int)29)) {
-            if (Keyboard.isKeyDown((int)56)) {
+        BigDecimal incr;
+
+        if (Keyboard.isKeyDown(FASTER))
+        {
+            if (Keyboard.isKeyDown(FAST))
+            {
                 BigDecimal diff = m.subtract(n);
-                incr = diff.divide(new BigDecimal(de ? "-10" : "10"), RoundingMode.FLOOR);
-            } else {
+                incr = diff.divide(new BigDecimal(de ? "-10" : "10"),
+                                    RoundingMode.FLOOR);
+            }
+            else
+            {
                 incr = new BigDecimal(de ? "-1.0" : "1.0");
             }
-        } else {
-            incr = Keyboard.isKeyDown((int)56) ? new BigDecimal(de ? "-10.0" : "10.0") : new BigDecimal(de ? "-0.1" : "0.1");
         }
+        else if (Keyboard.isKeyDown(FAST))
+        {
+            incr = new BigDecimal(de ? "-10.0" : "10.0");
+        }
+        else
+        {
+            incr = new BigDecimal(de ? "-0.1" : "0.1");
+        }
+
         return MathUtil.clamp(v.add(incr), n, m).toString();
     }
 
-    public static double crF(double d, double min, double max, boolean de) {
-        BigDecimal incr;
-        if (Keyboard.isKeyDown((int)157)) {
-            if (de) {
+    /**
+     * Same as {@link IncrementationUtil#crD(String, String, String, boolean)}
+     * but not rounded.
+     * <p></p>
+     * <p> In/Decrements the given double by:
+     * <p>- 0.1 by default,
+     * <p>- 1.0 if {@link Keyboard#KEY_LCONTROL} is down,
+     * <p>- 10% if {@link Keyboard#KEY_LMENU} and {@link Keyboard#KEY_LCONTROL}
+     * are down,
+     * <p>- the given Max/Min Value if {@link Keyboard#KEY_RCONTROL} is down,
+     * <p>- 10.0 if {@link Keyboard#KEY_LMENU} is down.
+     *
+     * @param d the number to in/decrement.
+     * @param min the minimum value to return.
+     * @param max the maximum value to return.
+     * @param de <tt>true</tt> if decrementing.
+     * @return a the number, in/decremented.
+     */
+    public static double crF(double d, double min, double max, boolean de)
+    {
+        //noinspection DuplicatedCode
+        if (Keyboard.isKeyDown(MAX))
+        {
+            if (de)
+            {
                 return min;
             }
-            return max;
+            else
+            {
+                return max;
+            }
         }
+
         BigDecimal v = new BigDecimal(d);
         BigDecimal n = new BigDecimal(min);
         BigDecimal m = new BigDecimal(max);
-        if (Keyboard.isKeyDown((int)29)) {
-            if (Keyboard.isKeyDown((int)56)) {
+        BigDecimal incr;
+
+        if (Keyboard.isKeyDown(FASTER))
+        {
+            if (Keyboard.isKeyDown(FAST))
+            {
                 BigDecimal diff = m.subtract(n);
-                incr = diff.divide(new BigDecimal(de ? "-10" : "10"), RoundingMode.FLOOR);
-            } else {
+                incr = diff.divide(new BigDecimal(de ? "-10" : "10"),
+                        RoundingMode.FLOOR);
+            }
+            else
+            {
                 incr = new BigDecimal(de ? "-1.0" : "1.0");
             }
-        } else {
-            incr = Keyboard.isKeyDown((int)56) ? new BigDecimal(de ? "-10.0" : "10.0") : new BigDecimal(de ? "-0.1" : "0.1");
         }
+        else if (Keyboard.isKeyDown(FAST))
+        {
+            incr = new BigDecimal(de ? "-10.0" : "10.0");
+        }
+        else
+        {
+            incr = new BigDecimal(de ? "-0.1" : "0.1");
+        }
+
         return MathUtil.clamp(v.add(incr), n, m).doubleValue();
     }
 
-    public static long crL(long l, long min, long max, boolean de) {
-        long incr;
-        if (Keyboard.isKeyDown((int)157)) {
-            if (de) {
+    /**
+     * In/Decrements the given double by:
+     * <p></p>
+     * <p>- 1 by default,
+     * <p>- 5% if {@link Keyboard#KEY_LCONTROL} is down,
+     * <p>- 10% if {@link Keyboard#KEY_LMENU} and {@link Keyboard#KEY_LCONTROL}
+     * are down,
+     * <p>- the given Max/Min Value if {@link Keyboard#KEY_RCONTROL} is down,
+     * <p>- 10 if {@link Keyboard#KEY_LMENU} is down.
+     *
+     * @param l the number to in/decrement.
+     * @param min the minimum value to return.
+     * @param max the maximum value to return.
+     * @param de <tt>true</tt> if decrementing.
+     * @return the value de/incremented, based on the keys pressed.
+     */
+    public static long crL(long l, long min, long max, boolean de)
+    {
+        if (Keyboard.isKeyDown(MAX))
+        {
+            if (de)
+            {
                 return min;
             }
-            return max;
+            else
+            {
+                return max;
+            }
         }
-        if (Keyboard.isKeyDown((int)29)) {
+
+        long incr;
+
+        if (Keyboard.isKeyDown(FASTER))
+        {
             long diff = max - min;
-            incr = Keyboard.isKeyDown((int)56) ? diff / 10L : diff / 5L;
-        } else {
-            incr = Keyboard.isKeyDown((int)56) ? 10L : 1L;
+            if (Keyboard.isKeyDown(FAST))
+            {
+                incr = (diff / 10);
+            }
+            else
+            {
+                incr = (diff / 5);
+            }
         }
+        else if (Keyboard.isKeyDown(FAST))
+        {
+            incr = 10;
+        }
+        else
+        {
+            incr = 1;
+        }
+
         return MathUtil.clamp(l + (de ? -incr : incr), min, max);
     }
-}
 
+}

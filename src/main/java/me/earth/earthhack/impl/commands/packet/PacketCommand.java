@@ -1,30 +1,34 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.network.Packet
- */
 package me.earth.earthhack.impl.commands.packet;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import me.earth.earthhack.impl.commands.packet.PacketArgument;
 import me.earth.earthhack.impl.commands.packet.factory.PacketFactory;
 import me.earth.earthhack.impl.commands.packet.generic.GenericArgument;
 import net.minecraft.network.Packet;
 
-public interface PacketCommand {
-    public Class<? extends Packet<?>> getPacket(String var1);
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-    public Map<Class<? extends Packet<?>>, List<GenericArgument<?>>> getGenerics();
+/**
+ * Represents the interface of a command that creates Packets.
+ */
+public interface PacketCommand
+{
+    /**
+     * Gets the class of a packet by its name.
+     *
+     * @param name the name of the packets class.
+     * @return the packets class or null.
+     */
+    Class<? extends Packet<?>> getPacket(String name);
 
-    public Map<Class<? extends Packet<?>>, PacketFactory> getCustom();
+    Map<Class<? extends Packet<?>>, List<GenericArgument<?>>> getGenerics();
 
-    public Set<Class<? extends Packet<?>>> getPackets();
+    Map<Class<? extends Packet<?>>, PacketFactory> getCustom();
 
-    public Map<Class<?>, PacketArgument<?>> getArguments();
+    Set<Class<? extends Packet<?>>> getPackets();
 
-    public String getName(Class<? extends Packet<?>> var1);
+    Map<Class<?>, PacketArgument<?>> getArguments();
+
+    String getName(Class<? extends Packet<?>> packet);
+
 }
-

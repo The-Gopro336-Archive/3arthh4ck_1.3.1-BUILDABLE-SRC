@@ -1,24 +1,20 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.world.border.WorldBorder
- */
 package me.earth.earthhack.impl.commands.packet.arguments;
 
 import me.earth.earthhack.impl.commands.packet.AbstractArgument;
 import me.earth.earthhack.impl.commands.packet.exception.ArgParseException;
 import net.minecraft.world.border.WorldBorder;
 
-public class WorldBorderArgument
-extends AbstractArgument<WorldBorder> {
-    public WorldBorderArgument() {
+public class WorldBorderArgument extends AbstractArgument<WorldBorder>
+{
+    public WorldBorderArgument()
+    {
         super(WorldBorder.class);
     }
 
     @Override
-    public WorldBorder fromString(String argument) throws ArgParseException {
+    public WorldBorder fromString(String argument) throws ArgParseException
+    {
         return new WorldBorder();
     }
-}
 
+}

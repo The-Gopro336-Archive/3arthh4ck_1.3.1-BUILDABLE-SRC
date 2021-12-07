@@ -1,29 +1,6 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.block.BlockChest$Type
- *  net.minecraft.client.entity.EntityPlayerSP
- *  net.minecraft.client.renderer.GlStateManager
- *  net.minecraft.client.renderer.GlStateManager$DestFactor
- *  net.minecraft.client.renderer.GlStateManager$SourceFactor
- *  net.minecraft.client.renderer.OpenGlHelper
- *  net.minecraft.client.renderer.culling.Frustum
- *  net.minecraft.client.shader.Framebuffer
- *  net.minecraft.entity.Entity
- *  net.minecraft.entity.item.EntityEnderCrystal
- *  net.minecraft.entity.item.EntityItem
- *  net.minecraft.entity.player.EntityPlayer
- *  net.minecraft.tileentity.TileEntity
- *  net.minecraft.tileentity.TileEntityChest
- *  net.minecraft.tileentity.TileEntityEnderChest
- *  net.minecraft.util.math.AxisAlignedBB
- *  org.lwjgl.opengl.EXTFramebufferObject
- *  org.lwjgl.opengl.GL11
- */
 package me.earth.earthhack.impl.modules.render.esp;
 
-import java.awt.Color;
+import me.earth.earthhack.api.cache.ModuleCache;
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
@@ -32,15 +9,15 @@ import me.earth.earthhack.api.setting.settings.ColorSetting;
 import me.earth.earthhack.api.setting.settings.EnumSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.managers.Managers;
-import me.earth.earthhack.impl.modules.render.esp.ESPData;
-import me.earth.earthhack.impl.modules.render.esp.ListenerModel;
-import me.earth.earthhack.impl.modules.render.esp.ListenerRender;
+import me.earth.earthhack.impl.modules.Caches;
+import me.earth.earthhack.impl.modules.render.chams.Chams;
+import me.earth.earthhack.impl.modules.render.chams.mode.ChamsMode;
 import me.earth.earthhack.impl.modules.render.esp.mode.EspMode;
+import me.earth.earthhack.impl.modules.render.fullbright.Fullbright;
 import me.earth.earthhack.impl.util.minecraft.EntityType;
 import me.earth.earthhack.impl.util.render.Interpolation;
 import me.earth.earthhack.impl.util.render.RenderUtil;
 import net.minecraft.block.BlockChest;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.culling.Frustum;
@@ -54,27 +31,46 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityEnderChest;
 import net.minecraft.util.math.AxisAlignedBB;
 import org.lwjgl.opengl.EXTFramebufferObject;
+import org.lwjgl.opengl.EXTPackedDepthStencil;
 import org.lwjgl.opengl.GL11;
 
-public class ESP
-extends Module {
+import java.awt.*;
+
+//TODO: Cleanup!
+public class ESP extends Module {
     public static boolean isRendering;
-    public final Setting<EspMode> mode = this.register(new EnumSetting<EspMode>("Mode", EspMode.Outline));
-    protected final Setting<Boolean> players = this.register(new BooleanSetting("Players", true));
-    protected final Setting<Boolean> monsters = this.register(new BooleanSetting("Monsters", false));
-    protected final Setting<Boolean> animals = this.register(new BooleanSetting("Animals", false));
-    protected final Setting<Boolean> vehicles = this.register(new BooleanSetting("Vehicles", false));
-    protected final Setting<Boolean> misc = this.register(new BooleanSetting("Other", false));
-    protected final Setting<Boolean> items = this.register(new BooleanSetting("Items", false));
-    protected final Setting<Boolean> storage = this.register(new BooleanSetting("Storage", false));
-    protected final Setting<Float> storageRange = this.register(new NumberSetting<Float>("Storage-Range", Float.valueOf(1000.0f), Float.valueOf(0.0f), Float.valueOf(1000.0f)));
-    protected final Setting<Float> lineWidth = this.register(new NumberSetting<Float>("LineWidth", Float.valueOf(3.0f), Float.valueOf(0.1f), Float.valueOf(10.0f)));
-    protected final Setting<Boolean> hurt = this.register(new BooleanSetting("Hurt", false));
-    public final Setting<Color> color = this.register(new ColorSetting("Color", new Color(255, 255, 255, 255)));
-    public final Setting<Color> invisibleColor = this.register(new ColorSetting("InvisibleColor", new Color(180, 180, 255, 255)));
-    public final Setting<Color> friendColor = this.register(new ColorSetting("FriendColor", new Color(50, 255, 50, 255)));
-    public final Setting<Color> targetColor = this.register(new ColorSetting("TargetColor", new Color(255, 0, 0, 255)));
-    protected final Setting<Float> scale = this.register(new NumberSetting<Float>("Scale", Float.valueOf(0.003f), Float.valueOf(0.001f), Float.valueOf(0.01f)));
+    public final Setting<EspMode> mode =
+            register(new EnumSetting<>("Mode", EspMode.Outline));
+    protected final Setting<Boolean> players =
+            register(new BooleanSetting("Players", true));
+    protected final Setting<Boolean> monsters =
+            register(new BooleanSetting("Monsters", false));
+    protected final Setting<Boolean> animals =
+            register(new BooleanSetting("Animals", false));
+    protected final Setting<Boolean> vehicles =
+            register(new BooleanSetting("Vehicles", false));
+    protected final Setting<Boolean> misc =
+            register(new BooleanSetting("Other", false));
+    protected final Setting<Boolean> items =
+            register(new BooleanSetting("Items", false));
+    protected final Setting<Boolean> storage =
+            register(new BooleanSetting("Storage", false));
+    protected final Setting<Float> storageRange =
+            register(new NumberSetting<>("Storage-Range", 1000.0f, 0.0f, 1000.0f));
+    protected final Setting<Float> lineWidth =
+            register(new NumberSetting<>("LineWidth", 3.0f, 0.1f, 10.0f));
+    protected final Setting<Boolean> hurt =
+            register(new BooleanSetting("Hurt", false));
+    public final Setting<Color> color =
+            register(new ColorSetting("Color", new Color(255, 255, 255, 255)));
+    public final Setting<Color> invisibleColor =
+            register(new ColorSetting("InvisibleColor", new Color(180, 180, 255, 255)));
+    public final Setting<Color> friendColor =
+            register(new ColorSetting("FriendColor", new Color(50, 255, 50, 255)));
+    public final Setting<Color> targetColor =
+            register(new ColorSetting("TargetColor", new Color(255, 0, 0, 255)));
+    protected final Setting<Float> scale =
+            register(new NumberSetting<>("Scale", 0.003f, 0.001f, 0.01f));
 
     public ESP() {
         super("ESP", Category.Render);
@@ -90,69 +86,75 @@ extends Module {
 
     protected boolean isValid(Entity entity) {
         Entity renderEntity = RenderUtil.getEntity();
-        return entity != null && !entity.isDead && !entity.equals((Object)renderEntity) && (EntityType.isAnimal(entity) && this.animals.getValue() != false || EntityType.isMonster(entity) && this.monsters.getValue() != false || entity instanceof EntityEnderCrystal && this.misc.getValue() != false || entity instanceof EntityPlayer && this.players.getValue() != false || EntityType.isVehicle(entity) && this.vehicles.getValue() != false);
+        return entity != null
+                && !entity.isDead
+                && !entity.equals(renderEntity)
+                && (EntityType.isAnimal(entity) && animals.getValue()
+                || EntityType.isMonster(entity) && monsters.getValue()
+                || entity instanceof EntityEnderCrystal && misc.getValue()
+                || entity instanceof EntityPlayer && players.getValue()
+                || EntityType.isVehicle(entity) && vehicles.getValue());
     }
 
     protected void drawTileEntities() {
         Frustum frustum = new Frustum();
-        EntityPlayerSP renderEntity = mc.getRenderViewEntity() == null ? ESP.mc.player : mc.getRenderViewEntity();
+        Entity renderEntity = mc.getRenderViewEntity() == null ? mc.player : mc.getRenderViewEntity();
+
         try {
             double x = renderEntity.posX;
             double y = renderEntity.posY;
             double z = renderEntity.posZ;
             frustum.setPosition(x, y, z);
-            for (TileEntity tileEntity : ESP.mc.world.loadedTileEntityList) {
-                if (!(tileEntity instanceof TileEntityChest) && !(tileEntity instanceof TileEntityEnderChest) || ESP.mc.player.getDistance((double)tileEntity.getPos().getX(), (double)tileEntity.getPos().getY(), (double)tileEntity.getPos().getZ()) > (double)this.storageRange.getValue().floatValue()) continue;
-                double posX = (double)tileEntity.getPos().getX() - Interpolation.getRenderPosX();
-                double posY = (double)tileEntity.getPos().getY() - Interpolation.getRenderPosY();
-                double posZ = (double)tileEntity.getPos().getZ() - Interpolation.getRenderPosZ();
-                AxisAlignedBB bb = new AxisAlignedBB(0.0625, 0.0, 0.0625, 0.94, 0.875, 0.94).offset(posX, posY, posZ);
-                if (tileEntity instanceof TileEntityChest) {
-                    TileEntityChest adjacent = null;
-                    if (((TileEntityChest)tileEntity).adjacentChestXNeg != null) {
-                        adjacent = ((TileEntityChest)tileEntity).adjacentChestXNeg;
+
+            for (TileEntity tileEntity : mc.world.loadedTileEntityList) {
+                if ((tileEntity instanceof TileEntityChest || tileEntity instanceof TileEntityEnderChest)) {
+                    if (mc.player.getDistance(tileEntity.getPos().getX(),tileEntity.getPos().getY(),tileEntity.getPos().getZ()) > storageRange.getValue())
+                        continue;
+                    final double posX = tileEntity.getPos().getX() - Interpolation.getRenderPosX();
+                    final double posY = tileEntity.getPos().getY() - Interpolation.getRenderPosY();
+                    final double posZ = tileEntity.getPos().getZ() - Interpolation.getRenderPosZ();
+                    AxisAlignedBB bb = new AxisAlignedBB(0.0625, 0.0, 0.0625, 0.94, 0.875, 0.94).offset(posX, posY, posZ);
+                    if (tileEntity instanceof TileEntityChest) {
+                        TileEntityChest adjacent = null;
+                        if (((TileEntityChest) tileEntity).adjacentChestXNeg != null)
+                            adjacent = ((TileEntityChest) tileEntity).adjacentChestXNeg;
+                        if (((TileEntityChest) tileEntity).adjacentChestXPos != null)
+                            adjacent = ((TileEntityChest) tileEntity).adjacentChestXPos;
+                        if (((TileEntityChest) tileEntity).adjacentChestZNeg != null)
+                            adjacent = ((TileEntityChest) tileEntity).adjacentChestZNeg;
+                        if (((TileEntityChest) tileEntity).adjacentChestZPos != null)
+                            adjacent = ((TileEntityChest) tileEntity).adjacentChestZPos;
+                        if (adjacent != null)
+                            bb = bb.union(new AxisAlignedBB(0.0625, 0.0, 0.0625, 0.94, 0.875, 0.94).offset(adjacent.getPos().getX() - Interpolation.getRenderPosX(), adjacent.getPos().getY() - Interpolation.getRenderPosY(), adjacent.getPos().getZ() - Interpolation.getRenderPosZ()));
                     }
-                    if (((TileEntityChest)tileEntity).adjacentChestXPos != null) {
-                        adjacent = ((TileEntityChest)tileEntity).adjacentChestXPos;
-                    }
-                    if (((TileEntityChest)tileEntity).adjacentChestZNeg != null) {
-                        adjacent = ((TileEntityChest)tileEntity).adjacentChestZNeg;
-                    }
-                    if (((TileEntityChest)tileEntity).adjacentChestZPos != null) {
-                        adjacent = ((TileEntityChest)tileEntity).adjacentChestZPos;
-                    }
-                    if (adjacent != null) {
-                        bb = bb.union(new AxisAlignedBB(0.0625, 0.0, 0.0625, 0.94, 0.875, 0.94).offset((double)adjacent.getPos().getX() - Interpolation.getRenderPosX(), (double)adjacent.getPos().getY() - Interpolation.getRenderPosY(), (double)adjacent.getPos().getZ() - Interpolation.getRenderPosZ()));
-                    }
+                    GL11.glPushMatrix();
+                    GL11.glEnable(3042);
+                    GL11.glBlendFunc(770, 771);
+                    GL11.glDisable(3553);
+                    GL11.glEnable(2848);
+                    GL11.glDisable(2929);
+                    GL11.glDepthMask(false);
+                    this.colorTileEntityInside(tileEntity);
+                    RenderUtil.drawBox(bb);
+                    this.colorTileEntity(tileEntity);
+                    RenderUtil.drawOutline(bb, lineWidth.getValue());
+                    GL11.glDisable(2848);
+                    GL11.glEnable(3553);
+                    GL11.glEnable(2929);
+                    GL11.glDepthMask(true);
+                    GL11.glDisable(3042);
+                    RenderUtil.color(1.0f, 1.0f, 1.0f, 1.0f);
+                    GL11.glPopMatrix();
                 }
-                GL11.glPushMatrix();
-                GL11.glEnable((int)3042);
-                GL11.glBlendFunc((int)770, (int)771);
-                GL11.glDisable((int)3553);
-                GL11.glEnable((int)2848);
-                GL11.glDisable((int)2929);
-                GL11.glDepthMask((boolean)false);
-                this.colorTileEntityInside(tileEntity);
-                RenderUtil.drawBox(bb);
-                this.colorTileEntity(tileEntity);
-                RenderUtil.drawOutline(bb, this.lineWidth.getValue().floatValue());
-                GL11.glDisable((int)2848);
-                GL11.glEnable((int)3553);
-                GL11.glEnable((int)2929);
-                GL11.glDepthMask((boolean)true);
-                GL11.glDisable((int)3042);
-                RenderUtil.color(1.0f, 1.0f, 1.0f, 1.0f);
-                GL11.glPopMatrix();
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     protected void colorTileEntityInside(TileEntity tileEntity) {
         if (tileEntity instanceof TileEntityChest) {
-            if (((TileEntityChest)tileEntity).getChestType() == BlockChest.Type.TRAP) {
+            if (((TileEntityChest) tileEntity).getChestType() == BlockChest.Type.TRAP) {
                 RenderUtil.color(new Color(250, 54, 0, 60));
             } else {
                 RenderUtil.color(new Color(234, 183, 88, 60));
@@ -164,7 +166,7 @@ extends Module {
 
     protected void colorTileEntity(TileEntity tileEntity) {
         if (tileEntity instanceof TileEntityChest) {
-            if (((TileEntityChest)tileEntity).getChestType() == BlockChest.Type.TRAP) {
+            if (((TileEntityChest) tileEntity).getChestType() == BlockChest.Type.TRAP) {
                 RenderUtil.color(new Color(250, 54, 0, 255));
             } else {
                 RenderUtil.color(new Color(234, 183, 88, 255));
@@ -178,117 +180,117 @@ extends Module {
         Entity target = Managers.TARGET.getKillAura();
         Entity target1 = Managers.TARGET.getCrystal();
         EntityPlayer target2 = Managers.TARGET.getAutoCrystal();
-        if (entity.equals((Object)target) || entity.equals((Object)target1) || entity.equals((Object)target2)) {
-            return this.targetColor.getValue();
+        if (entity.equals(target) || entity.equals(target1) || entity.equals(target2)) {
+            return targetColor.getValue();
         }
         if (entity instanceof EntityItem) {
             return new Color(255, 255, 255, 255);
-        }
-        if (EntityType.isVehicle(entity) && this.vehicles.getValue().booleanValue()) {
+        } else if (EntityType.isVehicle(entity) && vehicles.getValue()) {
             return new Color(200, 100, 0, 255);
-        }
-        if (EntityType.isAnimal(entity) && this.animals.getValue().booleanValue()) {
+        } else if (EntityType.isAnimal(entity)
+                && animals.getValue()) {
             return new Color(0, 200, 0, 255);
-        }
-        if (EntityType.isMonster(entity) || EntityType.isAngry(entity) && this.monsters.getValue().booleanValue()) {
+        } else if (EntityType.isMonster(entity)
+                || EntityType.isAngry(entity)
+                && monsters.getValue()) {
             return new Color(200, 60, 60, 255);
-        }
-        if (entity instanceof EntityEnderCrystal && this.misc.getValue().booleanValue()) {
+        } else if (entity instanceof EntityEnderCrystal && misc.getValue()) {
             return new Color(200, 100, 200, 255);
-        }
-        if (entity instanceof EntityPlayer && this.players.getValue().booleanValue()) {
-            EntityPlayer player = (EntityPlayer)entity;
+        } else if (entity instanceof EntityPlayer && players.getValue()) {
+            EntityPlayer player = (EntityPlayer) entity;
             if (player.isInvisible()) {
-                return this.invisibleColor.getValue();
+                return invisibleColor.getValue();
             }
             if (Managers.FRIENDS.contains(player)) {
-                return this.friendColor.getValue();
+                return friendColor.getValue();
             }
-            return this.color.getValue();
+            return color.getValue();
+        } else {
+            return color.getValue();
         }
-        return this.color.getValue();
     }
 
     protected void checkSetupFBO() {
         Framebuffer fbo = mc.getFramebuffer();
         if (fbo.depthBuffer > -1) {
-            this.setupFBO(fbo);
+            setupFBO(fbo);
             fbo.depthBuffer = -1;
         }
     }
 
     protected void setupFBO(Framebuffer fbo) {
-        EXTFramebufferObject.glDeleteRenderbuffersEXT((int)fbo.depthBuffer);
+        EXTFramebufferObject.glDeleteRenderbuffersEXT(fbo.depthBuffer);
         int stencilDepthBufferID = EXTFramebufferObject.glGenRenderbuffersEXT();
-        EXTFramebufferObject.glBindRenderbufferEXT((int)36161, (int)stencilDepthBufferID);
-        EXTFramebufferObject.glRenderbufferStorageEXT((int)36161, (int)34041, (int)ESP.mc.displayWidth, (int)ESP.mc.displayHeight);
-        EXTFramebufferObject.glFramebufferRenderbufferEXT((int)36160, (int)36128, (int)36161, (int)stencilDepthBufferID);
-        EXTFramebufferObject.glFramebufferRenderbufferEXT((int)36160, (int)36096, (int)36161, (int)stencilDepthBufferID);
+        EXTFramebufferObject.glBindRenderbufferEXT(EXTFramebufferObject.GL_RENDERBUFFER_EXT, stencilDepthBufferID);
+        EXTFramebufferObject.glRenderbufferStorageEXT(EXTFramebufferObject.GL_RENDERBUFFER_EXT, EXTPackedDepthStencil.GL_DEPTH_STENCIL_EXT, mc.displayWidth, mc.displayHeight);
+        EXTFramebufferObject.glFramebufferRenderbufferEXT(EXTFramebufferObject.GL_FRAMEBUFFER_EXT, EXTFramebufferObject.GL_STENCIL_ATTACHMENT_EXT, EXTFramebufferObject.GL_RENDERBUFFER_EXT, stencilDepthBufferID);
+        EXTFramebufferObject.glFramebufferRenderbufferEXT(EXTFramebufferObject.GL_FRAMEBUFFER_EXT, EXTFramebufferObject.GL_DEPTH_ATTACHMENT_EXT, EXTFramebufferObject.GL_RENDERBUFFER_EXT, stencilDepthBufferID);
     }
 
     public void renderOne(float lineWidth) {
-        this.checkSetupFBO();
+        checkSetupFBO();
         GL11.glPushMatrix();
-        GL11.glEnable((int)32823);
-        GL11.glPolygonOffset((float)1.0f, (float)-2000000.0f);
-        GL11.glPushAttrib((int)1048575);
-        GL11.glDisable((int)3008);
-        GL11.glDisable((int)3553);
-        GL11.glDisable((int)2896);
-        GL11.glEnable((int)3042);
-        GlStateManager.blendFunc((GlStateManager.SourceFactor)GlStateManager.SourceFactor.SRC_ALPHA, (GlStateManager.DestFactor)GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        GL11.glHint((int)3154, (int)4354);
-        GlStateManager.depthMask((boolean)false);
-        GL11.glLineWidth((float)lineWidth);
-        GL11.glEnable((int)2848);
-        GL11.glEnable((int)2960);
-        GL11.glClear((int)1024);
-        GL11.glClearStencil((int)15);
-        GL11.glStencilFunc((int)512, (int)1, (int)15);
-        GL11.glStencilOp((int)7681, (int)7681, (int)7681);
-        GL11.glPolygonMode((int)1032, (int)6913);
+        GL11.glEnable(GL11.GL_POLYGON_OFFSET_FILL);
+        GL11.glPolygonOffset(1.0F, -2000000F);
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL11.GL_BLEND);
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
+        GlStateManager.depthMask(false);
+        GL11.glLineWidth(lineWidth);
+        GL11.glEnable(GL11.GL_LINE_SMOOTH);
+        GL11.glEnable(GL11.GL_STENCIL_TEST);
+        GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
+        GL11.glClearStencil(0xF);
+        GL11.glStencilFunc(GL11.GL_NEVER, 1, 0xF);
+        GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
+        GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
     }
 
     public void renderTwo() {
-        GL11.glStencilFunc((int)512, (int)0, (int)15);
-        GL11.glStencilOp((int)7681, (int)7681, (int)7681);
-        GL11.glPolygonMode((int)1032, (int)6914);
+        GL11.glStencilFunc(GL11.GL_NEVER, 0, 0xF);
+        GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
+        GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
     }
 
     public void renderThree() {
-        GL11.glStencilFunc((int)514, (int)1, (int)15);
-        GL11.glStencilOp((int)7680, (int)7680, (int)7680);
-        GL11.glPolygonMode((int)1032, (int)6913);
+        GL11.glStencilFunc(GL11.GL_EQUAL, 1, 0xF);
+        GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+        GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
     }
 
     public void renderFour(Color color) {
         RenderUtil.color(color);
-        GL11.glDisable((int)2929);
-        GL11.glEnable((int)10754);
-        GL11.glPolygonOffset((float)1.0f, (float)-2000000.0f);
-        OpenGlHelper.setLightmapTextureCoords((int)OpenGlHelper.lightmapTexUnit, (float)240.0f, (float)240.0f);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glEnable(GL11.GL_POLYGON_OFFSET_LINE);
+        GL11.glPolygonOffset(1.0f, -2000000f);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0f, 240.0f);
     }
 
     public void renderFive() {
-        GL11.glPolygonOffset((float)1.0f, (float)2000000.0f);
-        GL11.glDisable((int)10754);
-        GL11.glEnable((int)2929);
-        GL11.glDepthMask((boolean)true);
-        GL11.glDisable((int)2960);
-        GL11.glDisable((int)2848);
-        GL11.glHint((int)3154, (int)4352);
-        GL11.glEnable((int)3042);
-        GL11.glEnable((int)2896);
-        GL11.glEnable((int)3553);
-        GL11.glEnable((int)3008);
+        GL11.glPolygonOffset(1.0f, 2000000f);
+        GL11.glDisable(GL11.GL_POLYGON_OFFSET_LINE);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glDepthMask(true);
+        GL11.glDisable(GL11.GL_STENCIL_TEST);
+        GL11.glDisable(GL11.GL_LINE_SMOOTH);
+        GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_DONT_CARE);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glPopAttrib();
-        GL11.glPolygonOffset((float)1.0f, (float)2000000.0f);
-        GL11.glDisable((int)32823);
+        GL11.glPolygonOffset(1.0F, 2000000F);
+        GL11.glDisable(GL11.GL_POLYGON_OFFSET_FILL);
         GL11.glPopMatrix();
     }
 
-    public boolean shouldHurt() {
-        return this.isEnabled() && isRendering && this.hurt.getValue() != false;
-    }
-}
 
+    public boolean shouldHurt() {
+        return this.isEnabled() && isRendering && hurt.getValue();
+    }
+
+}

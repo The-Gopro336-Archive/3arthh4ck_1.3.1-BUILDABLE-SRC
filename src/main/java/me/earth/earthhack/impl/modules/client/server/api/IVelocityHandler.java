@@ -1,15 +1,13 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.client.server.api;
 
-public interface IVelocityHandler {
-    public void onVelocity(double var1, double var3, double var5);
+public interface IVelocityHandler
+{
+    void onVelocity(double x, double y, double z);
 
-    public double getLastX();
+    double getLastX();
 
-    public double getLastY();
+    double getLastY();
 
-    public double getLastZ();
+    double getLastZ();
+
 }
-

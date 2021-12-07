@@ -1,16 +1,5 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.Entity
- *  net.minecraft.entity.player.EntityPlayer
- *  net.minecraft.network.Packet
- *  net.minecraft.network.play.client.CPacketPlayer$Position
- *  net.minecraft.util.math.AxisAlignedBB
- */
 package me.earth.earthhack.impl.modules.movement.longjump;
 
-import java.util.List;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BindSetting;
@@ -19,33 +8,35 @@ import me.earth.earthhack.api.setting.settings.EnumSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.api.util.bind.Bind;
 import me.earth.earthhack.impl.managers.Managers;
-import me.earth.earthhack.impl.modules.movement.longjump.ListenerMotion;
-import me.earth.earthhack.impl.modules.movement.longjump.ListenerMove;
-import me.earth.earthhack.impl.modules.movement.longjump.ListenerPosLook;
-import me.earth.earthhack.impl.modules.movement.longjump.ListenerTick;
-import me.earth.earthhack.impl.modules.movement.longjump.LongJumpData;
 import me.earth.earthhack.impl.modules.movement.longjump.mode.JumpMode;
 import me.earth.earthhack.impl.util.helpers.disabling.DisablingModule;
 import me.earth.earthhack.impl.util.minecraft.MovementUtil;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
+import org.lwjgl.input.Keyboard;
 
-public class LongJump
-extends DisablingModule {
-    protected final Setting<JumpMode> mode = this.register(new EnumSetting<JumpMode>("Mode", JumpMode.Normal));
-    protected final Setting<Double> boost = this.register(new NumberSetting<Double>("Boost", 4.5, 0.1, 20.0));
-    protected final Setting<Boolean> noKick = this.register(new BooleanSetting("AntiKick", true));
-    protected final Setting<Bind> invalidBind = this.register(new BindSetting("Invalid", Bind.fromKey(50)));
+import java.util.List;
+
+public class LongJump extends DisablingModule
+{
+    protected final Setting<JumpMode> mode     =
+            register(new EnumSetting<>("Mode", JumpMode.Normal));
+    protected final Setting<Double> boost      =
+            register(new NumberSetting<>("Boost", 4.5, 0.1, 20.0));
+    protected final Setting<Boolean> noKick    =
+            register(new BooleanSetting("AntiKick", true));
+    protected final Setting<Bind> invalidBind    =
+            register(new BindSetting("Invalid", Bind.fromKey(Keyboard.KEY_M)));
+
     protected int stage;
     protected int airTicks;
     protected int groundTicks;
     protected double speed;
     protected double distance;
 
-    public LongJump() {
+    public LongJump()
+    {
         super("LongJump", Category.Movement);
         this.listeners.add(new ListenerMove(this));
         this.listeners.add(new ListenerMotion(this));
@@ -55,40 +46,58 @@ extends DisablingModule {
     }
 
     @Override
-    protected void onEnable() {
-        if (LongJump.mc.player != null) {
-            this.distance = MovementUtil.getDistance2D();
-            this.speed = MovementUtil.getSpeed();
+    protected void onEnable()
+    {
+        if (mc.player != null)
+        {
+            distance = MovementUtil.getDistance2D();
+            speed    = MovementUtil.getSpeed();
         }
-        this.stage = 0;
-        this.airTicks = 0;
-        this.groundTicks = 0;
+
+        stage       = 0;
+        airTicks    = 0;
+        groundTicks = 0;
     }
 
     @Override
-    protected void onDisable() {
+    protected void onDisable()
+    {
         Managers.TIMER.reset();
     }
 
-    protected void invalidPacket() {
-        this.updatePosition(0.0, 2.147483647E9, 0.0);
+    protected void invalidPacket()
+    {
+        updatePosition(0.0, Integer.MAX_VALUE, 0.0);
     }
 
-    protected void updatePosition(double x, double y, double z) {
-        LongJump.mc.player.connection.sendPacket((Packet)new CPacketPlayer.Position(x, y, z, LongJump.mc.player.onGround));
+    protected void updatePosition(double x, double y, double z)
+    {
+        mc.player.connection.sendPacket(
+                new CPacketPlayer.Position(x, y, z, mc.player.onGround));
     }
 
-    protected double getDistance(EntityPlayer player, double distance) {
-        List boundingBoxes = player.world.getCollisionBoxes((Entity)player, player.getEntityBoundingBox().offset(0.0, -distance, 0.0));
-        if (boundingBoxes.isEmpty()) {
+    protected double getDistance(EntityPlayer player, double distance)
+    {
+        List<AxisAlignedBB> boundingBoxes = player.world
+                .getCollisionBoxes(player,
+                        player.getEntityBoundingBox().offset(0, -distance, 0));
+
+        if (boundingBoxes.isEmpty())
+        {
             return 0.0;
         }
+
         double y = 0.0;
-        for (AxisAlignedBB boundingBox : boundingBoxes) {
-            if (!(boundingBox.maxY > y)) continue;
-            y = boundingBox.maxY;
+        for (AxisAlignedBB boundingBox : boundingBoxes)
+        {
+            if (boundingBox.maxY > y)
+            {
+                y = boundingBox.maxY;
+            }
         }
+
         return player.posY - y;
     }
+
 }
 

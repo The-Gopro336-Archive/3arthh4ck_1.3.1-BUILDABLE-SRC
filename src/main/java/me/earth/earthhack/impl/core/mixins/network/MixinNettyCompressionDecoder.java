@@ -1,9 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.network.NettyCompressionDecoder
- */
 package me.earth.earthhack.impl.core.mixins.network;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -14,13 +8,20 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
-@Mixin(value={NettyCompressionDecoder.class})
-public abstract class MixinNettyCompressionDecoder {
-    private static final ModuleCache<Packets> PACKETS = Caches.getModule(Packets.class);
+@Mixin(NettyCompressionDecoder.class)
+public abstract class MixinNettyCompressionDecoder
+{
+    private static final ModuleCache<Packets> PACKETS =
+            Caches.getModule(Packets.class);
 
-    @ModifyConstant(method={"decode"}, constant={@Constant(intValue=0x200000)})
-    private int decodeHook(int threshold) {
-        return PACKETS.returnIfPresent(Packets::isNoBookBanActive, false) != false ? Integer.MAX_VALUE : threshold;
+    @ModifyConstant(
+        method = "decode",
+        constant = @Constant(intValue = 0x200000))
+    private int decodeHook(int threshold)
+    {
+        return PACKETS.returnIfPresent(Packets::isNoBookBanActive, false)
+                    ? Integer.MAX_VALUE
+                    : threshold;
     }
-}
 
+}

@@ -1,170 +1,217 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  com.google.gson.JsonObject
- */
 package me.earth.earthhack.impl.managers.config.helpers;
 
 import com.google.gson.JsonObject;
+import me.earth.earthhack.api.config.Config;
+import me.earth.earthhack.api.config.ConfigHelper;
+import me.earth.earthhack.impl.Earthhack;
+import me.earth.earthhack.impl.managers.config.util.ConfigDeleteException;
+import me.earth.earthhack.impl.managers.config.util.JsonPathWriter;
+import me.earth.earthhack.impl.util.misc.FileUtil;
+
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import me.earth.earthhack.api.config.Config;
-import me.earth.earthhack.api.config.ConfigHelper;
-import me.earth.earthhack.impl.Earthhack;
-import me.earth.earthhack.impl.managers.config.helpers.CurrentConfig;
-import me.earth.earthhack.impl.managers.config.util.ConfigDeleteException;
-import me.earth.earthhack.impl.managers.config.util.JsonPathWriter;
-import me.earth.earthhack.impl.util.misc.FileUtil;
 
 public abstract class AbstractConfigHelper<C extends Config>
-implements ConfigHelper<C> {
-    protected final Map<String, C> configs = new HashMap<String, C>();
+        implements ConfigHelper<C>
+{
+    protected final Map<String, C> configs = new HashMap<>();
     protected final String name;
     protected final String path;
 
-    public AbstractConfigHelper(String name, String path) {
+    public AbstractConfigHelper(String name,
+                                String path)
+    {
         this.name = name;
         this.path = "earthhack/" + path;
     }
 
-    protected abstract C create(String var1);
+    protected abstract C create(String name);
 
-    protected abstract JsonObject toJson(C var1);
+    protected abstract JsonObject toJson(C config);
 
-    protected abstract C readFile(InputStream var1, String var2) throws IOException;
+    protected abstract C readFile(InputStream stream, String name)
+            throws IOException;
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
     @Override
-    public void save() throws IOException {
-        this.ensureDir(this.path);
-        if (this.registerDefaultIfNotPresent()) {
-            C config = this.create("default");
-            this.configs.put("default", config);
+    public void save() throws IOException
+    {
+        ensureDir(path);
+        if (this.registerDefaultIfNotPresent())
+        {
+            C config = create("default");
+            configs.put("default", config);
         }
+
         String current = CurrentConfig.getInstance().get(this);
-        try {
-            for (String s : this.configs.keySet()) {
-                if (s.equalsIgnoreCase(current)) {
-                    this.ensureDir(this.path);
-                    C config = this.create(s);
-                    this.configs.put(s, config);
-                    JsonObject object = this.toJson(config);
-                    JsonPathWriter.write(Paths.get(this.path + "/" + s + ".json", new String[0]), object);
+
+        try
+        {
+            for (String s : configs.keySet())
+            {
+                if (s.equalsIgnoreCase(current))
+                {
+                    ensureDir(path);
+                    C config = create(s);
+                    configs.put(s, config);
+                    JsonObject object = toJson(config);
+                    JsonPathWriter.write(Paths.get(path + "/" + s + ".json"),
+                                         object);
                     continue;
                 }
-                this.save(s);
+
+                save(s);
             }
         }
-        finally {
+        finally
+        {
             CurrentConfig.getInstance().set(this, current);
         }
     }
 
     @Override
-    public void refresh() throws IOException {
-        this.ensureDir(this.path);
-        HashMap configMap = new HashMap();
-        Files.walk(Paths.get(this.path, new String[0]), new FileVisitOption[0]).forEach(p -> {
-            if (p.getFileName().toString().endsWith(".json")) {
-                try {
-                    Earthhack.getLogger().info(this.getName() + " config found : " + p);
-                    C config = this.read((Path)p);
+    public void refresh() throws IOException
+    {
+        ensureDir(path);
+        Map<String, C> configMap = new HashMap<>();
+        Files.walk(Paths.get(path)).forEach(p ->
+        {
+            if (p.getFileName().toString().endsWith(".json"))
+            {
+                try
+                {
+                    Earthhack.getLogger().info(this.getName()
+                                                + " config found : "
+                                                + p);
+                    C config = read(p);
                     configMap.put(config.getName().toLowerCase(), config);
                 }
-                catch (IOException e) {
+                catch (IOException e)
+                {
                     e.printStackTrace();
                 }
             }
         });
-        this.configs.clear();
-        this.configs.putAll(configMap);
+
+        configs.clear();
+        configs.putAll(configMap);
+
+        /*
+        (See ConfigManager refresh)
+
+        C currentConfig = configs.get(CurrentConfig.getInstance().get(this));
+        if (currentConfig != null)
+        {
+            currentConfig.apply();
+        }
+
+        */
     }
 
     @Override
-    public void save(String name) throws IOException {
+    public void save(String name) throws IOException
+    {
         name = name.toLowerCase();
-        this.ensureDir(this.path);
-        Config config = (Config)this.configs.get(name);
-        if (config == null || name.equalsIgnoreCase(CurrentConfig.getInstance().get(this))) {
-            config = this.create(name);
-            this.configs.put(name, config);
+        ensureDir(path);
+
+        C config = configs.get(name);
+        if (config == null
+                || name.equalsIgnoreCase(CurrentConfig.getInstance().get(this)))
+        {
+            config = create(name);
+            configs.put(name, config);
         }
-        JsonObject object = this.toJson(config);
-        JsonPathWriter.write(Paths.get(this.path + "/" + name + ".json", new String[0]), object);
+
+        JsonObject object = toJson(config);
+        JsonPathWriter.write(Paths.get(path + "/" + name + ".json"), object);
         CurrentConfig.getInstance().set(this, name);
     }
 
     @Override
-    public void load(String name) {
-        Config c = (Config)this.configs.get(name = name.toLowerCase());
-        if (c != null) {
+    public void load(String name)
+    {
+        name = name.toLowerCase();
+        C c = configs.get(name);
+        if (c != null)
+        {
             c.apply();
             CurrentConfig.getInstance().set(this, name);
         }
     }
 
     @Override
-    public void refresh(String name) throws IOException {
-        this.ensureDir(this.path);
+    public void refresh(String name) throws IOException
+    {
+        ensureDir(path);
         name = name.toLowerCase();
-        Path path = Paths.get(name, new String[0]);
-        C config = this.read(path);
-        this.configs.put(name, config);
+        Path path = Paths.get(name);
+        C config = read(path);
+        configs.put(name, config);
     }
 
     @Override
-    public void delete(String name) throws ConfigDeleteException, IOException {
-        if ("default".equalsIgnoreCase(name = name.toLowerCase())) {
+    public void delete(String name) throws ConfigDeleteException, IOException
+    {
+        name = name.toLowerCase();
+        if ("default".equalsIgnoreCase(name))
+        {
             throw new ConfigDeleteException("Can't delete the Default config!");
         }
-        if (name.equalsIgnoreCase(CurrentConfig.getInstance().get(this))) {
-            throw new ConfigDeleteException("This config is currently active. Please switch to another config before deleting this.");
+
+        if (name.equalsIgnoreCase(CurrentConfig.getInstance().get(this)))
+        {
+            throw new ConfigDeleteException("This config is currently active." +
+                    " Please switch to another config before deleting this.");
         }
-        this.configs.remove(name);
-        Path deletePath = Paths.get(this.path + "/" + name + ".json", new String[0]);
+
+        configs.remove(name);
+        Path deletePath = Paths.get(this.path + "/" + name + ".json");
         Files.delete(deletePath);
     }
 
     @Override
-    public Collection<C> getConfigs() {
-        return this.configs.values();
+    public Collection<C> getConfigs()
+    {
+        return configs.values();
     }
 
     @Override
-    public String getName() {
-        return this.name;
+    public String getName()
+    {
+        return name;
     }
 
-    protected C read(Path path) throws IOException {
+    protected C read(Path path) throws IOException
+    {
         String name = path.getFileName().toString();
-        try (InputStream stream = Files.newInputStream(path, new OpenOption[0]);){
-            C c = this.readFile(stream, name.substring(0, name.length() - 5));
-            return c;
+        try (InputStream stream = Files.newInputStream(path))
+        {
+            // JsonSyntaxException might be thrown here
+                             // remove .json;
+            return readFile(stream, name.substring(0, name.length() - 5));
         }
     }
 
-    protected boolean registerDefaultIfNotPresent() {
+    protected boolean registerDefaultIfNotPresent()
+    {
         String current = CurrentConfig.getInstance().get(this);
-        if (current == null || current.equals("default")) {
+        if (current == null || current.equals("default"))
+        {
             CurrentConfig.getInstance().set(this, "default");
             return true;
         }
+
         return false;
     }
 
-    protected void ensureDir(String path) {
-        FileUtil.createDirectory(Paths.get(path, new String[0]));
+    protected void ensureDir(String path)
+    {
+        FileUtil.createDirectory(Paths.get(path));
     }
-}
 
+}

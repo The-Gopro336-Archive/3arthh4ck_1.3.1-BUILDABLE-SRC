@@ -1,23 +1,5 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.client.entity.EntityOtherPlayerMP
- *  net.minecraft.entity.Entity
- *  net.minecraft.entity.player.EntityPlayer
- *  net.minecraft.init.Blocks
- *  net.minecraft.util.EnumFacing
- *  net.minecraft.util.math.BlockPos
- */
 package me.earth.earthhack.impl.modules.combat.surround;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import me.earth.earthhack.api.cache.ModuleCache;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
@@ -26,18 +8,12 @@ import me.earth.earthhack.api.setting.settings.EnumSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.modules.Caches;
-import me.earth.earthhack.impl.modules.combat.surround.ListenerBlockChange;
-import me.earth.earthhack.impl.modules.combat.surround.ListenerExplosion;
-import me.earth.earthhack.impl.modules.combat.surround.ListenerMotion;
-import me.earth.earthhack.impl.modules.combat.surround.ListenerMultiBlockChange;
-import me.earth.earthhack.impl.modules.combat.surround.ListenerSound;
-import me.earth.earthhack.impl.modules.combat.surround.ListenerSpawnObject;
-import me.earth.earthhack.impl.modules.combat.surround.SurroundData;
 import me.earth.earthhack.impl.modules.combat.surround.modes.Movement;
 import me.earth.earthhack.impl.modules.combat.surround.modes.SurroundFreecamMode;
 import me.earth.earthhack.impl.modules.movement.blocklag.BlockLag;
 import me.earth.earthhack.impl.modules.player.freecam.Freecam;
 import me.earth.earthhack.impl.util.client.ModuleUtil;
+import me.earth.earthhack.impl.util.helpers.blocks.BlockPlacingModule;
 import me.earth.earthhack.impl.util.helpers.blocks.ObbyModule;
 import me.earth.earthhack.impl.util.helpers.blocks.modes.Rotate;
 import me.earth.earthhack.impl.util.math.StopWatch;
@@ -45,54 +21,98 @@ import me.earth.earthhack.impl.util.math.position.PositionUtil;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
 import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
 import me.earth.earthhack.impl.util.minecraft.blocks.BlockUtil;
-import me.earth.earthhack.impl.util.minecraft.blocks.BlockingType;
 import me.earth.earthhack.impl.util.minecraft.blocks.HoleUtil;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
-import net.minecraft.client.entity.EntityOtherPlayerMP;
-import net.minecraft.entity.Entity;
+import me.earth.earthhack.impl.util.text.TextColor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
-public class Surround
-extends ObbyModule {
-    protected static final ModuleCache<Freecam> FREECAM = Caches.getModule(Freecam.class);
-    protected static final ModuleCache<BlockLag> BLOCKLAG = Caches.getModule(BlockLag.class);
-    protected final Setting<Boolean> center = this.register(new BooleanSetting("Center", true));
-    protected final Setting<Movement> movement = this.register(new EnumSetting<Movement>("Movement", Movement.Static));
-    protected final Setting<Float> speed = this.register(new NumberSetting<Float>("Speed", Float.valueOf(19.5f), Float.valueOf(0.0f), Float.valueOf(35.0f)));
-    protected final Setting<Boolean> noTrap = this.register(new BooleanSetting("NoTrap", false));
-    protected final Setting<Boolean> floor = this.register(new BooleanSetting("Floor", false));
-    protected final Setting<Integer> extend = this.register(new NumberSetting<Integer>("Extend", 1, 1, 3));
-    protected final Setting<Integer> eDelay = this.register(new NumberSetting<Integer>("E-Delay", 100, 0, 1000));
-    protected final Setting<Boolean> holeC = this.register(new BooleanSetting("Hole-C", false));
-    protected final Setting<Boolean> instant = this.register(new BooleanSetting("Instant", false));
-    protected final Setting<Boolean> sound = this.register(new BooleanSetting("Sound", false));
-    protected final Setting<Integer> playerExtend = this.register(new NumberSetting<Integer>("PlayerExtend", 0, 0, 4));
-    protected final Setting<Boolean> peNoTrap = this.register(new BooleanSetting("PE-NoTrap", false));
-    protected final Setting<Boolean> noTrapBlock = this.register(new BooleanSetting("NoTrapBlock", false));
-    protected final Setting<Boolean> multiTrap = this.register(new BooleanSetting("MultiTrap", false));
-    protected final Setting<Boolean> trapExtend = this.register(new BooleanSetting("TrapExtend", false));
-    protected final Setting<Boolean> newVer = this.register(new BooleanSetting("1.13+", false));
-    protected final Setting<Boolean> deltaY = this.register(new BooleanSetting("Delta-Y", true));
-    protected final Setting<Boolean> centerY = this.register(new BooleanSetting("Center-Y", false));
-    protected final Setting<Boolean> predict = this.register(new BooleanSetting("Predict", false));
-    protected final Setting<Boolean> async = this.register(new BooleanSetting("Async", false));
-    protected final Setting<Boolean> resync = this.register(new BooleanSetting("Resync", false));
-    protected final Setting<Boolean> crystalCheck = this.register(new BooleanSetting("Crystal-Check", true));
-    protected final Setting<Boolean> burrow = this.register(new BooleanSetting("Burrow", false));
-    protected final Setting<Boolean> noSelfExtend = this.register(new BooleanSetting("NoSelfExtend", false));
-    protected final Setting<SurroundFreecamMode> freecam = this.register(new EnumSetting<SurroundFreecamMode>("Freecam", SurroundFreecamMode.Off));
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+// TODO: Make City thing better
+public class Surround extends ObbyModule
+{
+    protected static final ModuleCache<Freecam> FREECAM =
+            Caches.getModule(Freecam.class);
+    protected static final ModuleCache<BlockLag> BLOCKLAG =
+            Caches.getModule(BlockLag.class);
+
+    protected final Setting<Boolean> center    =
+            register(new BooleanSetting("Center", true));
+    protected final Setting<Movement> movement =
+            register(new EnumSetting<>("Movement", Movement.Static));
+    protected final Setting<Float> speed       =
+            register(new NumberSetting<>("Speed", 19.5f, 0.0f, 35.0f));
+    protected final Setting<Boolean> noTrap    =
+            register(new BooleanSetting("NoTrap", false));
+    protected final Setting<Boolean> floor     =
+            register(new BooleanSetting("Floor", false));
+    protected final Setting<Integer> extend    =
+            register(new NumberSetting<>("Extend", 1, 1, 3));
+    protected final Setting<Integer> eDelay    =
+            register(new NumberSetting<>("E-Delay", 100, 0, 1000));
+    protected final Setting<Boolean> holeC     =
+            register(new BooleanSetting("Hole-C", false));
+    protected final Setting<Boolean> instant   =
+            register(new BooleanSetting("Instant", false));
+    protected final Setting<Boolean> sound =
+            register(new BooleanSetting("Sound", false));
+    protected final Setting<Integer> playerExtend =
+            register(new NumberSetting<>("PlayerExtend", 0, 0, 4));
+    protected final Setting<Boolean> peNoTrap =
+            register(new BooleanSetting("PE-NoTrap", false));
+    protected final Setting<Boolean> noTrapBlock =
+            register(new BooleanSetting("NoTrapBlock", false));
+    protected final Setting<Boolean> multiTrap =
+            register(new BooleanSetting("MultiTrap", false));
+    protected final Setting<Boolean> trapExtend =
+            register(new BooleanSetting("TrapExtend", false));
+    protected final Setting<Boolean> newVer =
+            register(new BooleanSetting("1.13+", false));
+    protected final Setting<Boolean> deltaY =
+            register(new BooleanSetting("Delta-Y", true));
+    protected final Setting<Boolean> centerY =
+            register(new BooleanSetting("Center-Y", false));
+    protected final Setting<Boolean> predict =
+            register(new BooleanSetting("Predict", false));
+    protected final Setting<Boolean> async =
+            register(new BooleanSetting("Async", false));
+    protected final Setting<Boolean> resync =
+            register(new BooleanSetting("Resync", false));
+    protected final Setting<Boolean> crystalCheck =
+            register(new BooleanSetting("Crystal-Check", true));
+    protected final Setting<Boolean> burrow =
+            register(new BooleanSetting("Burrow", false));
+    protected final Setting<Boolean> noSelfExtend =
+            register(new BooleanSetting("NoSelfExtend", false));
+    protected final Setting<SurroundFreecamMode> freecam =
+            register(new EnumSetting<>("Freecam", SurroundFreecamMode.Off));
+
+    /** A Listener for the SetDeadManager (Instant + Sound). */
     protected final ListenerSound soundObserver = new ListenerSound(this);
+    /** Handles the delay from enabling until we fully extend */
     protected final StopWatch extendingWatch = new StopWatch();
-    protected Set<BlockPos> targets = new HashSet<BlockPos>();
-    protected Set<BlockPos> placed = new HashSet<BlockPos>();
-    protected Set<BlockPos> confirmed = new HashSet<BlockPos>();
+    /** The Positions surrounding us. */
+    protected Set<BlockPos> targets = new HashSet<>();
+    /** Blocks that have been placed and await a SPacketBlockChange */
+    protected Set<BlockPos> placed = new HashSet<>();
+    /** Positions that have been confirmed by a SPacketBlockChange */
+    protected Set<BlockPos> confirmed = new HashSet<>();
+    /** The position we were at when we enabled the module */
     protected BlockPos startPos;
+    /** <tt>true</tt> if we are centered, or don't have to center */
     protected boolean setPosition;
 
-    public Surround() {
+    public Surround()
+    {
         super("Surround", Category.Combat);
         this.listeners.add(new ListenerMotion(this));
         this.listeners.add(new ListenerBlockChange(this));
@@ -103,224 +123,469 @@ extends ObbyModule {
     }
 
     @Override
-    protected void onEnable() {
-        Managers.SET_DEAD.addObserver(this.soundObserver);
+    protected void onEnable()
+    {
+        Managers.SET_DEAD.addObserver(soundObserver);
         super.onEnable();
-        if (super.checkNull()) {
-            this.confirmed.clear();
-            this.targets.clear();
-            this.placed.clear();
-            this.attacking = null;
-            this.setPosition = false;
-            this.startPos = this.getPlayerPos();
-            this.extendingWatch.reset();
-            if (this.burrow.getValue().booleanValue() && !BLOCKLAG.isEnabled()) {
+        if (super.checkNull())
+        {
+            confirmed.clear();
+            targets.clear();
+            placed.clear();
+            attacking    = null;
+            setPosition  = false;
+            startPos     = getPlayerPos();
+            extendingWatch.reset();
+
+            if (burrow.getValue() && !BLOCKLAG.isEnabled())
+            {
                 BLOCKLAG.toggle();
             }
         }
     }
 
     @Override
-    protected void onDisable() {
-        Managers.SET_DEAD.removeObserver(this.soundObserver);
+    protected void onDisable()
+    {
+        Managers.SET_DEAD.removeObserver(soundObserver);
     }
 
-    protected void center() {
-        if (this.center.getValue().booleanValue() && !this.setPosition && this.startPos != null && Surround.mc.world.getBlockState(this.startPos).getBlock() != Blocks.WEB && (this.holeC.getValue().booleanValue() || !HoleUtil.isHole(this.startPos, false)[0])) {
-            double x = (double)this.startPos.getX() + 0.5;
-            double y = this.centerY.getValue() != false ? (double)this.startPos.getY() : this.getPlayer().posY;
-            double z = (double)this.startPos.getZ() + 0.5;
-            this.getPlayer().setPosition(x, y, z);
-            this.getPlayer().setVelocity(0.0, this.getPlayer().motionY, 0.0);
-        } else {
-            this.setPosition = true;
+    /**
+     * Centers the player. To not produce
+     * any extra packets we need to wait until
+     * after onUpdateWalkingPlayer.Post, so that
+     * our position has been updated for the server,
+     * before we send any place packets.
+     */
+    protected void center()
+    {
+        if (center.getValue()
+                && !setPosition
+                && startPos != null
+                && mc.world.getBlockState(startPos).getBlock() != Blocks.WEB
+                && (holeC.getValue() || !HoleUtil.isHole(startPos, false)[0]))
+        {
+            double x = startPos.getX() + 0.5;
+            double y = centerY.getValue() ? startPos.getY() : getPlayer().posY;
+            double z = startPos.getZ() + 0.5;
+            getPlayer().setPosition(x, y, z);
+            getPlayer().setVelocity(0.0, getPlayer().motionY, 0.0);
+        }
+        else
+        {
+            setPosition = true;
         }
     }
 
-    protected boolean updatePosAndBlocks() {
-        if (this.check()) {
-            Set<BlockPos> blocked = this.createBlocked();
-            Set<BlockPos> surrounding = this.createSurrounding(blocked, Surround.mc.world.playerEntities);
-            this.placed.retainAll(surrounding);
+    /**
+     * Runs {@link Surround#check()} and if we can place,
+     * updates our surrounding blocks.
+     *
+     * @return <tt>true</tt> if we can proceed.
+     */
+    protected boolean updatePosAndBlocks()
+    {
+        if (check())
+        {
+            Set<BlockPos> blocked = createBlocked();
+            Set<BlockPos> surrounding = createSurrounding(blocked,
+                                                          mc.world
+                                                            .playerEntities);
+            placed.retainAll(surrounding);
             this.targets = surrounding;
             return true;
         }
+
         return false;
     }
 
-    private boolean check() {
-        if (FREECAM.isEnabled() && this.freecam.getValue() == SurroundFreecamMode.Off) {
+    /**
+     * Checks if FreeCam is enabled or we have no Obby/Echests,
+     * we move too fast, or the timer hasn't passed the delay yet.
+     * In all these cases return <tt>false</tt>.
+     *
+     * @return if we can proceed.
+     */
+    private boolean check()
+    {
+        if (FREECAM.isEnabled()
+                && freecam.getValue() == SurroundFreecamMode.Off)
+        {
             return false;
         }
-        this.slot = InventoryUtil.findHotbarBlock(Blocks.OBSIDIAN, Blocks.ENDER_CHEST);
-        if (this.slot == -1) {
-            ModuleUtil.disable(this, "\u00a7cDisabled, no Obsidian.");
+
+        slot = InventoryUtil.findHotbarBlock(Blocks.OBSIDIAN,
+                                             Blocks.ENDER_CHEST);
+        if (slot == -1)
+        {
+            ModuleUtil.disable(this, TextColor.RED + "Disabled, no Obsidian.");
             return false;
         }
-        if (FREECAM.isEnabled() && this.movement.getValue() != Movement.Static) {
-            return this.timer.passed(((Integer)this.delay.getValue()).intValue());
+
+        if (FREECAM.isEnabled() && movement.getValue() != Movement.Static)
+        {
+            return timer.passed(delay.getValue());
         }
-        switch (this.movement.getValue()) {
-            case None: {
+
+        switch (movement.getValue())
+        {
+            case None:
                 break;
-            }
-            case Static: {
-                BlockPos currentPos = this.getPlayerPos();
-                if (currentPos.equals((Object)this.startPos)) break;
-                this.disable();
-                return false;
-            }
-            case Limit: {
-                if (!(Managers.SPEED.getSpeed() > (double)this.speed.getValue().floatValue())) break;
-                return false;
-            }
-            case Disable: {
-                if (!(Managers.SPEED.getSpeed() > (double)this.speed.getValue().floatValue())) break;
-                this.disable();
-                return false;
-            }
+            case Static:
+                BlockPos currentPos = getPlayerPos();
+                if (!currentPos.equals(startPos))
+                {
+                    this.disable();
+                    return false;
+                }
+                break;
+            case Limit:
+                if (Managers.SPEED.getSpeed() > speed.getValue())
+                {
+                    return false;
+                }
+                break;
+            case Disable:
+                if (Managers.SPEED.getSpeed() > speed.getValue())
+                {
+                    this.disable();
+                    return false;
+                }
+                break;
         }
-        return this.timer.passed(((Integer)this.delay.getValue()).intValue());
+
+        return timer.passed(delay.getValue());
     }
 
+    /**
+     * Places a block on the given position.
+     * {@link BlockPlacingModule#placeBlock} will be called,
+     * for the position and if needed for a helping position.
+     * Returns <tt>true</tt> if the Block/Place limit has been
+     * reached.
+     *
+     * @param pos the position.
+     * @return if we cant place anymore.
+     */
     @Override
-    public boolean placeBlock(BlockPos pos) {
+    public boolean placeBlock(BlockPos pos)
+    {
         boolean hasPlaced = super.placeBlock(pos);
-        if (hasPlaced) {
-            this.placed.add(pos);
+        if (hasPlaced)
+        {
+            placed.add(pos);
         }
+
         return hasPlaced;
     }
 
-    protected Set<BlockPos> createBlocked() {
-        HashSet<BlockPos> blocked = new HashSet<BlockPos>();
-        BlockPos playerPos = this.getPlayerPos();
-        if (HoleUtil.isHole(playerPos, false)[0] || this.center.getValue().booleanValue() || this.extend.getValue() == 1 || !this.extendingWatch.passed(this.eDelay.getValue().intValue())) {
+    /**
+     * Very interesting code that returns all
+     * positions that have to be surrounded.
+     *
+     * @return positions to be surrounded.
+     */
+    protected Set<BlockPos> createBlocked()
+    {
+        Set<BlockPos> blocked = new HashSet<>();
+        BlockPos playerPos = getPlayerPos();
+        if (HoleUtil.isHole(playerPos, false)[0]
+                || center.getValue() // && !setPosition
+                || extend.getValue() == 1
+                || !extendingWatch.passed(eDelay.getValue()))
+        {
             blocked.add(playerPos);
-        } else {
-            List unfiltered = new ArrayList<BlockPos>(PositionUtil.getBlockedPositions((Entity)this.getPlayer())).stream().sorted(Comparator.comparingDouble(pos -> BlockUtil.getDistanceSq((Entity)this.getPlayer(), pos))).collect(Collectors.toList());
-            List filtered = new ArrayList(unfiltered).stream().filter(pos -> Surround.mc.world.getBlockState(pos).getMaterial().isReplaceable() && Surround.mc.world.getBlockState(pos.up()).getMaterial().isReplaceable()).collect(Collectors.toList());
-            if (this.extend.getValue() == 3 && filtered.size() == 2 && unfiltered.size() == 4 && ((BlockPos)unfiltered.get(0)).equals(filtered.get(0)) && ((BlockPos)unfiltered.get(3)).equals(filtered.get(1))) {
-                filtered.clear();
-                filtered.add(playerPos);
+        }
+        else
+        {
+            List<BlockPos> unfiltered =
+                new ArrayList<>(PositionUtil.getBlockedPositions(getPlayer()))
+                    .stream()
+                    .sorted(Comparator.comparingDouble(pos ->
+                            BlockUtil.getDistanceSq(getPlayer(), pos)))
+                    .collect(Collectors.toList());
+
+            List<BlockPos> filtered =
+                new ArrayList<>(unfiltered)
+                    .stream()
+                    .filter(pos ->
+                        mc.world
+                            .getBlockState(pos)
+                            .getMaterial()
+                            .isReplaceable()
+                        && mc.world
+                                .getBlockState(pos.up())
+                                .getMaterial()
+                                .isReplaceable())
+                    .collect(Collectors.toList());
+
+            if (extend.getValue() == 3
+                    && filtered.size() == 2
+                    && unfiltered.size() == 4)
+            {
+                // Prevents that a pos like this
+                // (x == block, o == air, i = player):
+                //
+                //  o x                              x
+                //  x i     can extend to this:    x o x
+                //                                   x i
+                //
+                if (unfiltered.get(0).equals(filtered.get(0))
+                        && unfiltered.get(3).equals(filtered.get(1)))
+                {
+                    filtered.clear();
+                    filtered.add(playerPos);
+                }
             }
-            if (this.extend.getValue() == 2 && filtered.size() > 2 || this.extend.getValue() == 3 && filtered.size() == 3) {
-                while (filtered.size() > 2) {
+
+            if (extend.getValue() == 2 && filtered.size() > 2
+                    || extend.getValue() == 3 && filtered.size() == 3)
+            {
+                // Prevents that a pos like this
+                // (x == block, o == air, i = player):
+                //
+                //  x  o                               x
+                //   i      can extend to this:    x   o  x
+                //                               x   i    x
+                //                                 x   x
+                //
+                // we should, unless we phased in, be able to place on o
+                while (filtered.size() > 2)
+                {
                     filtered.remove(filtered.size() - 1);
                 }
             }
+
             blocked.addAll(filtered);
         }
-        if (blocked.isEmpty()) {
+
+        if (blocked.isEmpty())
+        {
             blocked.add(playerPos);
         }
+
         return blocked;
     }
 
-    protected boolean shouldInstant(boolean sound) {
-        return this.instant.getValue() != false && this.rotate.getValue() != Rotate.Normal && (!sound || this.sound.getValue() != false);
+    protected boolean shouldInstant(boolean sound)
+    {
+        return instant.getValue()
+                && rotate.getValue() != Rotate.Normal
+                && (!sound || this.sound.getValue());
     }
 
-    protected boolean isBlockingTrap(BlockPos pos, List<EntityPlayer> players) {
-        if (Surround.mc.world.getBlockState(pos.up()).getMaterial().isReplaceable()) {
+    protected boolean isBlockingTrap(BlockPos pos, List<EntityPlayer> players)
+    {
+        if (mc.world.getBlockState(pos.up()).getMaterial().isReplaceable())
+        {
             return false;
         }
-        EnumFacing relative = this.getFacingRelativeToPlayer(pos, this.getPlayer());
-        if (relative != null && !this.trapExtend.getValue().booleanValue() && BlockUtil.canPlaceCrystal(this.getPlayerPos().down().offset(relative, 2), true, this.newVer.getValue())) {
+
+        EnumFacing relative = getFacingRelativeToPlayer(pos, getPlayer());
+        if (relative != null
+                && !trapExtend.getValue()
+                && BlockUtil.canPlaceCrystal(getPlayerPos()
+                                                     .down()
+                                                     .offset(relative, 2),
+                                             true,
+                                             newVer.getValue()))
+        {
             return false;
         }
-        for (EntityPlayer player : players) {
-            if (player == null || this.getPlayer().equals((Object)player) || EntityUtil.isDead((Entity)player) || Managers.FRIENDS.contains(player) || player.getDistanceSq(pos) > 9.0) continue;
-            BlockPos playerPos = PositionUtil.getPosition((Entity)player);
-            for (EnumFacing facing : EnumFacing.HORIZONTALS) {
-                if (facing == relative || facing.getOpposite() == relative || !pos.offset(facing).equals((Object)playerPos) || !BlockUtil.canPlaceCrystal(pos.offset(facing.getOpposite()).down(), true, this.newVer.getValue())) continue;
-                return true;
+
+        for (EntityPlayer player : players)
+        {
+            if (player == null
+                    || getPlayer().equals(player)
+                    || EntityUtil.isDead(player)
+                    || Managers.FRIENDS.contains(player)
+                    || player.getDistanceSq(pos) > 9)
+            {
+                continue;
+            }
+
+            BlockPos playerPos = PositionUtil.getPosition(player);
+            for (EnumFacing facing : EnumFacing.HORIZONTALS)
+            {
+                if (facing == relative
+                        || facing.getOpposite() == relative
+                        || !pos.offset(facing).equals(playerPos))
+                {
+                    continue;
+                }
+
+                if (BlockUtil.canPlaceCrystal(pos.offset(facing.getOpposite())
+                                                 .down(),
+                                              true,
+                                              newVer.getValue()))
+                {
+                    return true;
+                }
             }
         }
+
         return false;
     }
 
-    protected EnumFacing getFacingRelativeToPlayer(BlockPos pos, EntityPlayer player) {
-        double x = (double)pos.getX() + 0.5 - player.posX;
-        double z = (double)pos.getZ() + 0.5 - player.posZ;
+    protected EnumFacing getFacingRelativeToPlayer(BlockPos pos,
+                                                   EntityPlayer player)
+    {
+        double x = pos.getX() + 0.5 - player.posX;
+        double z = pos.getZ() + 0.5 - player.posZ;
         int compare = Double.compare(Math.abs(x), Math.abs(z));
-        if (compare == 0) {
+        if (compare == 0)
+        {
             return null;
         }
-        return compare < 0 ? (z < 0.0 ? EnumFacing.NORTH : EnumFacing.SOUTH) : (x < 0.0 ? EnumFacing.WEST : EnumFacing.EAST);
+
+        return compare < 0 ? z < 0
+                                ? EnumFacing.NORTH
+                                : EnumFacing.SOUTH
+                           : x < 0
+                                ? EnumFacing.WEST
+                                : EnumFacing.EAST;
     }
 
-    protected Set<BlockPos> createSurrounding(Set<BlockPos> blocked, List<EntityPlayer> players) {
-        HashSet<BlockPos> surrounding = new HashSet<BlockPos>();
-        for (BlockPos pos2 : blocked) {
-            for (EnumFacing facing : EnumFacing.HORIZONTALS) {
-                BlockPos offset = pos2.offset(facing);
-                if (blocked.contains((Object)offset)) continue;
-                surrounding.add(offset);
-                if (!this.noTrap.getValue().booleanValue()) continue;
-                surrounding.add(offset.down());
-            }
-            if (!this.floor.getValue().booleanValue()) continue;
-            surrounding.add(pos2.down());
-        }
-        for (int i = 0; i < this.playerExtend.getValue(); ++i) {
-            HashSet<BlockPos> extendedPositions = new HashSet<BlockPos>();
-            Iterator itr = surrounding.iterator();
-            while (itr.hasNext()) {
-                BlockPos pos3 = (BlockPos)itr.next();
-                boolean remove = false;
-                for (EntityPlayer player : players) {
-                    if (player == null || this.noSelfExtend.getValue().booleanValue() && player == Surround.mc.player || PlayerUtil.isFakePlayer((Entity)player) || EntityUtil.isDead((Entity)player) || !BlockUtil.isBlocking(pos3, player, (BlockingType)((Object)this.blockingType.getValue()))) continue;
-                    for (EnumFacing facing : EnumFacing.HORIZONTALS) {
-                        BlockPos offset = pos3.offset(facing);
-                        if (blocked.contains((Object)offset)) continue;
-                        remove = true;
-                        extendedPositions.add(offset);
-                        if (!this.peNoTrap.getValue().booleanValue()) continue;
-                        extendedPositions.add(offset.down());
+    protected Set<BlockPos> createSurrounding(Set<BlockPos> blocked,
+                                              List<EntityPlayer> players)
+    {
+        Set<BlockPos> surrounding = new HashSet<>();
+        for (BlockPos pos : blocked)
+        {
+            for (EnumFacing facing : EnumFacing.HORIZONTALS)
+            {
+                BlockPos offset = pos.offset(facing);
+                if (!blocked.contains(offset))
+                {
+                    surrounding.add(offset);
+                    if (noTrap.getValue())
+                    {
+                        surrounding.add(offset.down());
                     }
                 }
-                if (!remove) continue;
-                itr.remove();
             }
+
+            if (floor.getValue())
+            {
+                surrounding.add(pos.down());
+            }
+        }
+
+        // TODO: Extend around webs?
+        for (int i = 0; i < playerExtend.getValue(); i++)
+        {
+            Set<BlockPos> extendedPositions = new HashSet<>();
+            Iterator<BlockPos> itr = surrounding.iterator();
+            while (itr.hasNext())
+            {
+                BlockPos pos = itr.next();
+                boolean remove = false;
+                for (EntityPlayer player : players)
+                {
+                    if (player == null
+                            || (noSelfExtend.getValue() && player == mc.player)
+                            || PlayerUtil.isFakePlayer(player)
+                            || EntityUtil.isDead(player)
+                            || !BlockUtil.isBlocking(pos,
+                                                     player,
+                                                     blockingType.getValue()))
+                    {
+                        continue;
+                    }
+
+                    for (EnumFacing facing : EnumFacing.HORIZONTALS)
+                    {
+                        BlockPos offset = pos.offset(facing);
+                        if (blocked.contains(offset))
+                        {
+                            continue;
+                        }
+
+                        remove = true;
+                        extendedPositions.add(offset);
+                        if (peNoTrap.getValue())
+                        {
+                            extendedPositions.add(offset.down());
+                        }
+                    }
+                }
+
+                if (remove)
+                {
+                    itr.remove();
+                }
+            }
+
             surrounding.addAll(extendedPositions);
         }
-        if (this.noTrapBlock.getValue().booleanValue()) {
-            Set trapBlocks = surrounding.stream().filter(pos -> this.isBlockingTrap((BlockPos)pos, players)).collect(Collectors.toSet());
-            if (!this.multiTrap.getValue().booleanValue() && trapBlocks.size() > 1) {
+
+        if (noTrapBlock.getValue())
+        {
+            Set<BlockPos> trapBlocks =
+                    surrounding.stream()
+                               .filter(pos -> isBlockingTrap(pos, players))
+                               .collect(Collectors.toSet());
+
+            if (!multiTrap.getValue() && trapBlocks.size() > 1)
+            {
                 return surrounding;
             }
-            for (BlockPos trap : trapBlocks) {
-                EnumFacing r;
-                if (this.trapExtend.getValue().booleanValue() && (r = this.getFacingRelativeToPlayer(trap, this.getPlayer())) != null) {
-                    surrounding.add(this.getPlayerPos().offset(r, 2));
+
+            for (BlockPos trap : trapBlocks)
+            {
+                if (trapExtend.getValue())
+                {
+                    EnumFacing r = getFacingRelativeToPlayer(trap, getPlayer());
+                    if (r != null)
+                    {
+                        surrounding.add(getPlayerPos().offset(r, 2));
+                    }
                 }
-                surrounding.remove((Object)trap);
+
+                surrounding.remove(trap);
             }
         }
+
         return surrounding;
     }
 
-    protected BlockPos getPlayerPos() {
-        return this.deltaY.getValue() != false && Math.abs(this.getPlayer().motionY) > 0.1 ? new BlockPos((Entity)this.getPlayer()) : PositionUtil.getPosition((Entity)this.getPlayer());
+    protected BlockPos getPlayerPos()
+    {
+        return deltaY.getValue() && Math.abs(getPlayer().motionY) > 0.1
+                    ? new BlockPos(getPlayer())
+                    : PositionUtil.getPosition(getPlayer());
     }
 
     @Override
-    public EntityPlayer getPlayerForRotations() {
-        EntityOtherPlayerMP target;
-        if (FREECAM.isEnabled() && (target = ((Freecam)FREECAM.get()).getPlayer()) != null) {
-            return target;
+    public EntityPlayer getPlayerForRotations()
+    {
+        if (FREECAM.isEnabled())
+        {
+            EntityPlayer target = FREECAM.get().getPlayer();
+            if (target != null)
+            {
+                return target;
+            }
         }
-        return Surround.mc.player;
+
+        return mc.player;
     }
 
     @Override
-    public EntityPlayer getPlayer() {
-        EntityOtherPlayerMP target;
-        if (this.freecam.getValue() == SurroundFreecamMode.Origin && FREECAM.isEnabled() && (target = ((Freecam)FREECAM.get()).getPlayer()) != null) {
-            return target;
+    public EntityPlayer getPlayer()
+    {
+        if (freecam.getValue() == SurroundFreecamMode.Origin
+                && FREECAM.isEnabled())
+        {
+            EntityPlayer target = FREECAM.get().getPlayer();
+            if (target != null)
+            {
+                return target;
+            }
         }
-        return Surround.mc.player;
+
+        return mc.player;
     }
+
 }
 

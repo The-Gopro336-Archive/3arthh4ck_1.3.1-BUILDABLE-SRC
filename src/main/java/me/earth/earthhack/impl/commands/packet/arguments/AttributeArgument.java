@@ -1,12 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.Entity
- *  net.minecraft.entity.EntityLivingBase
- *  net.minecraft.entity.ai.attributes.IAttributeInstance
- *  net.minecraft.entity.player.EntityPlayer
- */
 package me.earth.earthhack.impl.commands.packet.arguments;
 
 import me.earth.earthhack.api.command.PossibleInputs;
@@ -19,96 +10,155 @@ import me.earth.earthhack.impl.util.thread.LookUpUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.entity.player.EntityPlayer;
 
-public class AttributeArgument
-extends AbstractArgument<IAttributeInstance>
-implements Globals {
-    public AttributeArgument() {
+public class AttributeArgument extends AbstractArgument<IAttributeInstance>
+        implements Globals
+{
+    public AttributeArgument()
+    {
         super(IAttributeInstance.class);
     }
 
     @Override
-    public IAttributeInstance fromString(String argument) throws ArgParseException {
-        if (AttributeArgument.mc.world == null) {
+    public IAttributeInstance fromString(String argument)
+            throws ArgParseException
+    {
+        if (mc.world == null)
+        {
             throw new ArgParseException("Minecraft.World was null!");
         }
+
         String[] split = argument.split(",");
-        if (split.length != 2) {
-            throw new ArgParseException("Expected 2 Arguments for IAttributeInstance, but found: " + split.length + "!");
+        if (split.length != 2)
+        {
+            throw new ArgParseException(
+                    "Expected 2 Arguments for IAttributeInstance, but found: "
+                            + split.length + "!");
         }
-        Entity entity = this.find(split[0]);
-        if (!(entity instanceof EntityLivingBase)) {
-            throw new ArgParseException("Couldn't parse Entity from " + split[0] + ", it either doesn't exist or is not an EntityLivingBase!");
+
+        Entity entity = find(split[0]);
+        if (!(entity instanceof EntityLivingBase))
+        {
+            throw new ArgParseException("Couldn't parse Entity from "
+                + split[0]
+                + ", it either doesn't exist or is not an EntityLivingBase!");
         }
-        IAttributeInstance attribute = this.find((EntityLivingBase)entity, split[1]);
-        if (attribute == null) {
-            throw new ArgParseException("Couldn't parse IAttributeInstance from " + split[1] + "!");
+
+        IAttributeInstance attribute =
+                find((EntityLivingBase) entity, split[1]);
+
+        if (attribute == null)
+        {
+            throw new ArgParseException(
+                "Couldn't parse IAttributeInstance from " + split[1] + "!");
         }
+
         return attribute;
     }
 
     @Override
-    public PossibleInputs getPossibleInputs(String argument) {
+    public PossibleInputs getPossibleInputs(String argument)
+    {
         PossibleInputs inputs = PossibleInputs.empty();
-        if (argument == null || argument.isEmpty() || AttributeArgument.mc.world == null) {
+        if (argument == null || argument.isEmpty() || mc.world == null)
+        {
             return inputs.setRest("<IAttributeInstance:Entity,Attribute>");
         }
+
         String[] split = argument.split(",");
-        if (split.length == 0 || split[0].isEmpty()) {
+        if (split.length == 0 || split[0].isEmpty())
+        {
             return inputs.setRest("<IAttributeInstance:Entity,Attribute>");
         }
-        if (split.length > 2) {
+
+        if (split.length > 2)
+        {
             return inputs;
         }
-        if ("$closest".startsWith(split[0].toLowerCase()) && split.length == 1) {
-            return inputs.setCompletion(TextUtil.substring("$closest", split[0].length()));
-        }
-        String s = LookUpUtil.findNextPlayerName(split[0]);
-        if (split.length == 1) {
-            if (s != null) {
-                return inputs.setCompletion(TextUtil.substring(s, split[0].length()));
+
+        if ("$closest".startsWith(split[0].toLowerCase()))
+        {
+            if (split.length == 1)
+            {
+                return inputs.setCompletion(
+                        TextUtil.substring("$closest", split[0].length()));
             }
+        }
+
+        String s = LookUpUtil.findNextPlayerName(split[0]);
+        if (split.length == 1)
+        {
+            if (s != null)
+            {
+                return inputs.setCompletion(
+                        TextUtil.substring(s, split[0].length()));
+            }
+            else
+            {
+                return inputs;
+            }
+        }
+
+        Entity entity = find(split[0]);
+        if (!(entity instanceof EntityLivingBase))
+        {
             return inputs;
         }
-        Entity entity = this.find(split[0]);
-        if (!(entity instanceof EntityLivingBase)) {
-            return inputs;
+
+        IAttributeInstance attribute =
+                find((EntityLivingBase) entity, split[1]);
+        if (attribute != null)
+        {
+            return inputs.setCompletion(
+                TextUtil.substring(
+                    attribute.getAttribute().getName(), split[1].length()));
         }
-        IAttributeInstance attribute = this.find((EntityLivingBase)entity, split[1]);
-        if (attribute != null) {
-            return inputs.setCompletion(TextUtil.substring(attribute.getAttribute().getName(), split[1].length()));
-        }
+
         return inputs;
     }
 
-    private Entity find(String name) {
-        if ("$closest".startsWith(name.toLowerCase())) {
+    private Entity find(String name)
+    {
+        if ("$closest".startsWith(name.toLowerCase()))
+        {
             return EntityUtil.getClosestEnemy();
         }
-        EntityPlayer entity = null;
+
+        Entity entity = null;
         String s = LookUpUtil.findNextPlayerName(name);
-        if (s != null) {
-            entity = AttributeArgument.mc.world.getPlayerEntityByName(s);
+        if (s != null)
+        {
+            entity = mc.world.getPlayerEntityByName(s);
         }
-        if (entity == null) {
-            try {
-                int id = (int)Long.parseLong(name);
-                entity = AttributeArgument.mc.world.getEntityByID(id);
+
+        if (entity == null)
+        {
+            try
+            {
+                int id = (int) Long.parseLong(name);
+                entity = mc.world.getEntityByID(id);
             }
-            catch (NumberFormatException e) {
+            catch (NumberFormatException e)
+            {
                 return null;
             }
         }
+
         return entity;
     }
 
-    private IAttributeInstance find(EntityLivingBase base, String name) {
-        for (IAttributeInstance instance : base.getAttributeMap().getAllAttributes()) {
-            if (!TextUtil.startsWith(instance.getAttribute().getName(), name)) continue;
-            return instance;
+    private IAttributeInstance find(EntityLivingBase base, String name)
+    {
+        for (IAttributeInstance instance :
+                base.getAttributeMap().getAllAttributes())
+        {
+            if (TextUtil.startsWith(instance.getAttribute().getName(), name))
+            {
+                return instance;
+            }
         }
+
         return null;
     }
-}
 
+}

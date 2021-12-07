@@ -1,8 +1,10 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.event.events.misc;
 
-public class AbortEatingEvent {
-}
+import net.minecraft.entity.player.EntityPlayer;
 
+/**
+ * Doesn't necessarily mean eating,
+ * you need to check via
+ * {@link EntityPlayer#getActiveItemStack()}.
+ */
+public class AbortEatingEvent { }

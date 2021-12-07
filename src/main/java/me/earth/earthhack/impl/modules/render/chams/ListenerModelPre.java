@@ -1,328 +1,414 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.block.material.Material
- *  net.minecraft.block.state.IBlockState
- *  net.minecraft.client.gui.ScaledResolution
- *  net.minecraft.client.renderer.ActiveRenderInfo
- *  net.minecraft.client.renderer.GlStateManager
- *  net.minecraft.client.renderer.OpenGlHelper
- *  net.minecraft.entity.Entity
- *  net.minecraft.entity.EntityLivingBase
- *  net.minecraft.entity.player.EntityPlayer
- *  net.minecraft.util.math.MathHelper
- *  net.minecraft.util.math.Vec2f
- *  net.minecraft.util.math.Vec3d
- *  net.minecraft.world.World
- *  org.lwjgl.opengl.GL11
- *  org.lwjgl.opengl.GL13
- *  org.lwjgl.util.vector.Vector4f
- */
 package me.earth.earthhack.impl.modules.render.chams;
 
-import java.awt.Color;
+import me.earth.earthhack.api.cache.ModuleCache;
 import me.earth.earthhack.impl.core.mixins.render.entity.IEntityRenderer;
 import me.earth.earthhack.impl.event.events.render.ModelRenderEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
-import me.earth.earthhack.impl.modules.render.chams.Chams;
+import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.render.chams.mode.ChamsMode;
 import me.earth.earthhack.impl.modules.render.esp.ESP;
 import me.earth.earthhack.impl.util.math.Vec2d;
+import me.earth.earthhack.impl.util.math.position.PositionUtil;
+import me.earth.earthhack.impl.util.render.Interpolation;
 import me.earth.earthhack.impl.util.render.Render2DUtil;
+import me.earth.earthhack.impl.util.render.RenderUtil;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec2f;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.init.MobEffects;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.*;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.EXTFramebufferObject;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.util.glu.Project;
 import org.lwjgl.util.vector.Vector4f;
 
-final class ListenerModelPre
-extends ModuleListener<Chams, ModelRenderEvent.Pre> {
+import java.awt.*;
+import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
+import java.util.Arrays;
+
+import static org.lwjgl.opengl.GL11.*;
+
+final class ListenerModelPre extends ModuleListener<Chams, ModelRenderEvent.Pre> {
+
     public ListenerModelPre(Chams module) {
         super(module, ModelRenderEvent.Pre.class);
     }
 
     @Override
     public void invoke(ModelRenderEvent.Pre event) {
-        Color color;
-        EntityLivingBase entity;
-        if (!ESP.isRendering && ((Chams)this.module).mode.getValue() == ChamsMode.CSGO) {
-            entity = event.getEntity();
-            if (((Chams)this.module).isValid((Entity)entity)) {
+        if (!ESP.isRendering && module.mode.getValue() == ChamsMode.CSGO) {
+            EntityLivingBase entity = event.getEntity();
+            if (module.isValid(entity)) {
                 event.setCancelled(true);
-                boolean lightning = GL11.glIsEnabled((int)2896);
-                boolean blend = GL11.glIsEnabled((int)3042);
-                GL11.glPushAttrib((int)1048575);
-                GL11.glDisable((int)3008);
-                if (!((Chams)this.module).texture.getValue().booleanValue()) {
-                    GL11.glDisable((int)3553);
+                boolean lightning = GL11.glIsEnabled(GL11.GL_LIGHTING);
+                boolean blend = GL11.glIsEnabled(GL11.GL_BLEND);
+                GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+                GL11.glDisable(GL11.GL_ALPHA_TEST);
+
+                if (!module.texture.getValue()) {
+                    GL11.glDisable(GL11.GL_TEXTURE_2D);
                 }
+
                 if (lightning) {
-                    GL11.glDisable((int)2896);
+                    GL11.glDisable(GL11.GL_LIGHTING);
                 }
+
                 if (!blend) {
-                    GL11.glEnable((int)3042);
+                    GL11.glEnable(GL11.GL_BLEND);
                 }
-                GL11.glBlendFunc((int)770, (int)771);
-                if (((Chams)this.module).xqz.getValue().booleanValue()) {
-                    GL11.glColor4f((float)1.0f, (float)0.0f, (float)0.0f, (float)1.0f);
-                    GL11.glDepthMask((boolean)false);
-                    GL11.glDisable((int)2929);
-                    OpenGlHelper.setLightmapTextureCoords((int)OpenGlHelper.lightmapTexUnit, (float)240.0f, (float)240.0f);
-                    this.render(event);
+
+                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+                if (module.xqz.getValue()) {
+                    GL11.glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
+                    GL11.glDepthMask(false);
+                    GL11.glDisable(GL11.GL_DEPTH_TEST);
+                    OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0f, 240.0f);
+
+                    render(event);
                 }
-                GL11.glDisable((int)3042);
-                GL11.glEnable((int)2929);
-                GL11.glDepthMask((boolean)true);
-                GL11.glEnable((int)2896);
-                if (!((Chams)this.module).texture.getValue().booleanValue()) {
-                    GL11.glEnable((int)3553);
+
+                GL11.glDisable(GL11.GL_BLEND);
+                GL11.glEnable(GL11.GL_DEPTH_TEST);
+                GL11.glDepthMask(true);
+                GL11.glEnable(GL11.GL_LIGHTING);
+
+                if (!module.texture.getValue()) {
+                    GL11.glEnable(GL11.GL_TEXTURE_2D);
                 }
-                GL11.glEnable((int)3008);
+
+                GL11.glEnable(GL11.GL_ALPHA_TEST);
                 GL11.glPopAttrib();
-                GL11.glPushAttrib((int)1048575);
-                GL11.glDisable((int)3008);
-                if (!((Chams)this.module).texture.getValue().booleanValue()) {
-                    GL11.glDisable((int)3553);
+                GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+                GL11.glDisable(GL11.GL_ALPHA_TEST);
+
+                if (!module.texture.getValue()) {
+                    GL11.glDisable(GL11.GL_TEXTURE_2D);
                 }
-                GL11.glDisable((int)2896);
-                GL11.glEnable((int)3042);
-                GL11.glBlendFunc((int)770, (int)771);
-                GL11.glColor4f((float)0.0f, (float)1.0f, (float)0.0f, (float)1.0f);
-                OpenGlHelper.setLightmapTextureCoords((int)OpenGlHelper.lightmapTexUnit, (float)240.0f, (float)240.0f);
-                this.render(event);
+
+                GL11.glDisable(GL11.GL_LIGHTING);
+                GL11.glEnable(GL11.GL_BLEND);
+                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+                GL11.glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
+                OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0f, 240.0f);
+
+                render(event);
+
                 if (!blend) {
-                    GL11.glDisable((int)3042);
+                    GL11.glDisable(GL11.GL_BLEND);
                 }
-                GL11.glEnable((int)2929);
-                GL11.glDepthMask((boolean)true);
+
+                GL11.glEnable(GL11.GL_DEPTH_TEST);
+                GL11.glDepthMask(true);
+
                 if (lightning) {
-                    GL11.glEnable((int)2896);
+                    GL11.glEnable(GL11.GL_LIGHTING);
                 }
-                if (!((Chams)this.module).texture.getValue().booleanValue()) {
-                    GL11.glEnable((int)3553);
+
+                if (!module.texture.getValue()) {
+                    GL11.glEnable(GL11.GL_TEXTURE_2D);
                 }
-                GL11.glEnable((int)3008);
+
+                GL11.glEnable(GL11.GL_ALPHA_TEST);
                 GL11.glPopAttrib();
             }
-        } else if (!ESP.isRendering && ((Chams)this.module).mode.getValue() == ChamsMode.Better && event.getEntity() instanceof EntityPlayer) {
+        } else if (!ESP.isRendering && module.mode.getValue() == ChamsMode.Better && event.getEntity() instanceof EntityPlayer) {
             event.setCancelled(true);
-            color = ((Chams)this.module).getVisibleColor((Entity)event.getEntity());
-            Color wallsColor = ((Chams)this.module).getWallsColor((Entity)event.getEntity());
-            GL11.glPushMatrix();
-            GL11.glPushAttrib((int)1048575);
-            GL11.glDisable((int)3008);
-            GL11.glDisable((int)3553);
-            GL11.glDisable((int)2896);
-            GL11.glEnable((int)3042);
-            GL11.glLineWidth((float)1.5f);
-            GL11.glBlendFunc((int)770, (int)771);
-            GL11.glEnable((int)2960);
-            GL11.glEnable((int)10754);
-            GL11.glDepthMask((boolean)false);
-            GL11.glDisable((int)2929);
-            GL11.glColor4f((float)((float)wallsColor.getRed() / 255.0f), (float)((float)wallsColor.getGreen() / 255.0f), (float)((float)wallsColor.getBlue() / 255.0f), (float)((float)wallsColor.getAlpha() / 255.0f));
-            this.render(event);
-            GL11.glDepthMask((boolean)true);
-            GL11.glEnable((int)2929);
-            if (((Chams)this.module).xqz.getValue().booleanValue()) {
-                GL11.glColor4f((float)((float)color.getRed() / 255.0f), (float)((float)color.getGreen() / 255.0f), (float)((float)color.getBlue() / 255.0f), (float)((float)color.getAlpha() / 255.0f));
-                this.render(event);
+            Color color = module.getVisibleColor(event.getEntity());
+            Color wallsColor = module.getWallsColor(event.getEntity());
+            glPushMatrix();
+            glPushAttrib(GL_ALL_ATTRIB_BITS);
+            glDisable(GL_ALPHA_TEST);
+            glDisable(GL_TEXTURE_2D);
+            glDisable(GL_LIGHTING);
+            glEnable(GL_BLEND);
+            glLineWidth(1.5f);
+            glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            glEnable(GL_STENCIL_TEST);
+            glEnable(GL_POLYGON_OFFSET_LINE);
+            glDepthMask(false);
+            glDisable(GL_DEPTH_TEST);
+            glColor4f(wallsColor.getRed() / 255.0f, wallsColor.getGreen() / 255.0f, wallsColor.getBlue() / 255.0f, wallsColor.getAlpha() / 255.0f);
+            render(event);
+            glDepthMask(true);
+            glEnable(GL_DEPTH_TEST);
+            if (module.xqz.getValue()) {
+                glColor4f(color.getRed() / 255.0f, color.getGreen() / 255.0f, color.getBlue() / 255.0f, color.getAlpha() / 255.0f);
+                render(event);
             }
-            GL11.glEnable((int)3553);
-            GL11.glEnable((int)2896);
-            GL11.glDisable((int)3042);
-            GL11.glEnable((int)3008);
-            GL11.glPopAttrib();
-            GL11.glPopMatrix();
-        } else if (!ESP.isRendering && ((Chams)this.module).isValid((Entity)(entity = event.getEntity())) && ((Chams)this.module).mode.getValue() == ChamsMode.JelloBottom) {
-            event.setCancelled(true);
-            this.render(event);
-            Color color2 = ((Chams)this.module).getVisibleColor((Entity)event.getEntity());
-            GL11.glPushMatrix();
-            GL11.glPushAttrib((int)1048575);
-            GL11.glDisable((int)3008);
-            GL11.glDisable((int)3553);
-            GL11.glDisable((int)2896);
-            GL11.glEnable((int)3042);
-            GL11.glLineWidth((float)1.5f);
-            GL11.glBlendFunc((int)770, (int)771);
-            GL11.glEnable((int)2960);
-            GL11.glEnable((int)10754);
-            GL11.glDepthMask((boolean)false);
-            GL11.glDisable((int)2929);
-            GL11.glColor4f((float)((float)color2.getRed() / 255.0f), (float)((float)color2.getGreen() / 255.0f), (float)((float)color2.getBlue() / 255.0f), (float)((float)color2.getAlpha() / 255.0f));
-            this.render(event);
-            GL11.glDepthMask((boolean)true);
-            GL11.glEnable((int)2929);
-            GL11.glEnable((int)3553);
-            GL11.glEnable((int)2896);
-            GL11.glDisable((int)3042);
-            GL11.glEnable((int)3008);
-            GL11.glPopAttrib();
-            GL11.glPopMatrix();
+            glEnable(GL_TEXTURE_2D);
+            glEnable(GL_LIGHTING);
+            glDisable(GL_BLEND);
+            glEnable(GL_ALPHA_TEST);
+            glPopAttrib();
+            glPopMatrix();
+        } else if (!ESP.isRendering) {
+            EntityLivingBase entity = event.getEntity();
+            if (module.isValid(entity)) {
+                if (module.mode.getValue() == ChamsMode.JelloBottom) {
+                    event.setCancelled(true);
+                    render(event);
+                    Color color = module.getVisibleColor(event.getEntity());
+                    glPushMatrix();
+                    glPushAttrib(GL_ALL_ATTRIB_BITS);
+                    glDisable(GL_ALPHA_TEST);
+                    glDisable(GL_TEXTURE_2D);
+                    glDisable(GL_LIGHTING);
+                    glEnable(GL_BLEND);
+                    glLineWidth(1.5f);
+                    glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+                    glEnable(GL_STENCIL_TEST);
+                    glEnable(GL_POLYGON_OFFSET_LINE);
+                    glDepthMask(false);
+                    glDisable(GL_DEPTH_TEST);
+                    glColor4f(color.getRed() / 255.0f, color.getGreen() / 255.0f, color.getBlue() / 255.0f, color.getAlpha() / 255.0f);
+                    render(event);
+                    glDepthMask(true);
+                    glEnable(GL_DEPTH_TEST);
+                    glEnable(GL_TEXTURE_2D);
+                    glEnable(GL_LIGHTING);
+                    glDisable(GL_BLEND);
+                    glEnable(GL_ALPHA_TEST);
+                    glPopAttrib();
+                    glPopMatrix();
+                }
+            }
         }
-        if (((Chams)this.module).mode.getValue() == ChamsMode.FireShader && !ESP.isRendering && ((Chams)this.module).fireShader != null) {
-            if (!((Chams)this.module).isValid((Entity)event.getEntity())) {
-                return;
-            }
+
+        if (module.mode.getValue() == ChamsMode.FireShader
+                && !ESP.isRendering
+                && module.fireShader != null)
+        {
+            if (!module.isValid(event.getEntity())) return;
             event.setCancelled(true);
-            GL11.glPushAttrib((int)1048575);
-            GL11.glPushMatrix();
-            color = ((Chams)this.module).getVisibleColor((Entity)event.getEntity());
-            ((Chams)this.module).fireShader.bind();
-            ((Chams)this.module).fireShader.set("time", (float)(System.currentTimeMillis() - ((Chams)this.module).initTime) / 2000.0f);
-            ((Chams)this.module).fireShader.set("resolution", new Vec2f((float)(ListenerModelPre.mc.displayWidth * 2), (float)(ListenerModelPre.mc.displayHeight * 2)));
-            ((Chams)this.module).fireShader.set("tex", 0);
+            glPushAttrib(GL_ALL_ATTRIB_BITS);
+            glPushMatrix();
+            Color color = module.getVisibleColor(event.getEntity());
+            module.fireShader.bind();
+            module.fireShader.set("time", (System.currentTimeMillis() - module.initTime) / 2000.0f);
+            module.fireShader.set("resolution", new Vec2f((mc.displayWidth * 2) /*/ 20.0f*/, (mc.displayHeight * 2) /*/ 20.0f*/));
+            module.fireShader.set("tex", 0);
+
             GlStateManager.pushMatrix();
-            GlStateManager.color((float)1.0f, (float)1.0f, (float)1.0f, (float)color.getAlpha());
-            ((Chams)this.module).fireShader.set("alpha", (float)color.getAlpha() / 255.0f);
-            GL11.glEnable((int)32823);
-            GL11.glPolygonOffset((float)1.0f, (float)-2000000.0f);
-            this.render(event);
-            GL11.glDisable((int)32823);
-            GL11.glPolygonOffset((float)1.0f, (float)2000000.0f);
+            GlStateManager.color(1.0f, 1.0f, 1.0f, color.getAlpha());
+            module.fireShader.set("alpha", color.getAlpha() / 255.0f);
+            glEnable(GL_POLYGON_OFFSET_FILL);
+            glPolygonOffset(1.0f, -2000000f);
+            render(event);
+            glDisable(GL_POLYGON_OFFSET_FILL);
+            glPolygonOffset(1.0f, 2000000f);
             GlStateManager.popMatrix();
-            ((Chams)this.module).fireShader.unbind();
-            GL11.glPopMatrix();
-            GL11.glPopAttrib();
+            module.fireShader.unbind();
+            glPopMatrix();
+            glPopAttrib();
         }
-        if (((Chams)this.module).mode.getValue() == ChamsMode.GalaxyShader && !ESP.isRendering && ((Chams)this.module).galaxyShader != null) {
-            if (!((Chams)this.module).isValid((Entity)event.getEntity())) {
-                return;
-            }
+
+        if (module.mode.getValue() == ChamsMode.GalaxyShader
+                && !ESP.isRendering
+                && module.galaxyShader != null)
+        {
+            if (!module.isValid(event.getEntity())) return;
             event.setCancelled(true);
-            GL11.glPushAttrib((int)1048575);
-            GL11.glPushMatrix();
-            color = ((Chams)this.module).getVisibleColor((Entity)event.getEntity());
-            ((Chams)this.module).galaxyShader.bind();
-            ((Chams)this.module).galaxyShader.set("time", (float)(System.currentTimeMillis() - ((Chams)this.module).initTime) / 2000.0f);
-            ((Chams)this.module).galaxyShader.set("resolution", new Vec2f((float)(ListenerModelPre.mc.displayWidth * 2), (float)(ListenerModelPre.mc.displayHeight * 2)));
-            ((Chams)this.module).galaxyShader.set("tex", 0);
+            glPushAttrib(GL_ALL_ATTRIB_BITS);
+            glPushMatrix();
+            Color color = module.getVisibleColor(event.getEntity());
+            module.galaxyShader.bind();
+            module.galaxyShader.set("time", (System.currentTimeMillis() - module.initTime) / 2000.0f);
+            module.galaxyShader.set("resolution", new Vec2f((mc.displayWidth * 2) /*/ 20.0f*/, (mc.displayHeight * 2) /*/ 20.0f*/));
+            module.galaxyShader.set("tex", 0);
+
             GlStateManager.pushMatrix();
-            GlStateManager.color((float)1.0f, (float)1.0f, (float)1.0f, (float)color.getAlpha());
-            ((Chams)this.module).galaxyShader.set("alpha", (float)color.getAlpha() / 255.0f);
-            GL11.glEnable((int)32823);
-            GL11.glPolygonOffset((float)1.0f, (float)-2000000.0f);
-            this.render(event);
-            GL11.glDisable((int)32823);
-            GL11.glPolygonOffset((float)1.0f, (float)2000000.0f);
+            GlStateManager.color(1.0f, 1.0f, 1.0f, color.getAlpha());
+            module.galaxyShader.set("alpha", color.getAlpha() / 255.0f);
+            glEnable(GL_POLYGON_OFFSET_FILL);
+            glPolygonOffset(1.0f, -2000000f);
+            render(event);
+            glDisable(GL_POLYGON_OFFSET_FILL);
+            glPolygonOffset(1.0f, 2000000f);
             GlStateManager.popMatrix();
-            ((Chams)this.module).galaxyShader.unbind();
-            GL11.glPopMatrix();
-            GL11.glPopAttrib();
+            module.galaxyShader.unbind();
+            glPopMatrix();
+            glPopAttrib();
         }
-        if (((Chams)this.module).mode.getValue() == ChamsMode.WaterShader && !ESP.isRendering && ((Chams)this.module).waterShader != null) {
-            if (!((Chams)this.module).isValid((Entity)event.getEntity())) {
-                return;
-            }
+
+        if (module.mode.getValue() == ChamsMode.WaterShader
+                && !ESP.isRendering
+                && module.waterShader != null)
+        {
+            if (!module.isValid(event.getEntity())) return;
             event.setCancelled(true);
-            GL11.glPushAttrib((int)1048575);
-            GL11.glPushMatrix();
-            color = ((Chams)this.module).getVisibleColor((Entity)event.getEntity());
-            ((Chams)this.module).waterShader.bind();
-            ((Chams)this.module).waterShader.set("time", (float)(System.currentTimeMillis() - ((Chams)this.module).initTime) / 2000.0f);
-            ((Chams)this.module).waterShader.set("resolution", new Vec2f((float)(ListenerModelPre.mc.displayWidth * 2), (float)(ListenerModelPre.mc.displayHeight * 2)));
-            ((Chams)this.module).waterShader.set("tex", 0);
+            glPushAttrib(GL_ALL_ATTRIB_BITS);
+            glPushMatrix();
+            Color color = module.getVisibleColor(event.getEntity());
+            module.waterShader.bind();
+            module.waterShader.set("time", (System.currentTimeMillis() - module.initTime) / 2000.0f);
+            module.waterShader.set("resolution", new Vec2f((mc.displayWidth * 2) /*/ 20.0f*/, (mc.displayHeight * 2) /*/ 20.0f*/));
+            module.waterShader.set("tex", 0);
+
             GlStateManager.pushMatrix();
-            GlStateManager.color((float)1.0f, (float)1.0f, (float)1.0f, (float)color.getAlpha());
-            ((Chams)this.module).waterShader.set("alpha", (float)color.getAlpha() / 255.0f);
-            GL11.glEnable((int)32823);
-            GL11.glPolygonOffset((float)1.0f, (float)-2000000.0f);
-            this.render(event);
-            GL11.glDisable((int)32823);
-            GL11.glPolygonOffset((float)1.0f, (float)2000000.0f);
+            // glDepthMask(false);
+            // glDisable(GL_DEPTH_TEST);
+            GlStateManager.color(1.0f, 1.0f, 1.0f, color.getAlpha());
+            module.waterShader.set("alpha", color.getAlpha() / 255.0f);
+            glEnable(GL_POLYGON_OFFSET_FILL);
+            glPolygonOffset(1.0f, -2000000f);
+            render(event);
+            glDisable(GL_POLYGON_OFFSET_FILL);
+            glPolygonOffset(1.0f, 2000000f);
+            // glDepthMask(true);
+            // glEnable(GL_DEPTH_TEST);
             GlStateManager.popMatrix();
-            ((Chams)this.module).waterShader.unbind();
-            GL11.glPopMatrix();
-            GL11.glPopAttrib();
+            module.waterShader.unbind();
+            glPopMatrix();
+            glPopAttrib();
         }
-        if (((Chams)this.module).mode.getValue() == ChamsMode.Image && ((Chams)this.module).isValid((Entity)event.getEntity()) && ((Chams)this.module).imageShader != null) {
+
+        if (false
+                && module.isValid(event.getEntity())
+                && !module.renderModels)
+        {
+            event.setCancelled(true); // TODO: maybe fix later for integrated graphics? this was the stenciling stuff btw
+        }
+
+        if (module.mode.getValue() == ChamsMode.Image
+                && module.isValid(event.getEntity())
+                && module.imageShader != null)
+        {
+
             ScaledResolution resolution = new ScaledResolution(mc);
-            float[] rect = Render2DUtil.getOnScreen2DHitBox((Entity)event.getEntity(), resolution.getScaledWidth(), resolution.getScaledHeight());
-            GL11.glPushMatrix();
-            GL11.glPushAttrib((int)1048575);
+            float[] rect = Render2DUtil.getOnScreen2DHitBox(event.getEntity(), resolution.getScaledWidth(), resolution.getScaledHeight());
+
+            glPushMatrix();
+            glPushAttrib(GL_ALL_ATTRIB_BITS);
             event.setCancelled(true);
-            ((Chams)this.module).imageShader.bind();
-            int currentTexture = GL11.glGetInteger((int)32873);
-            ((Chams)this.module).imageShader.set("sampler", 0);
-            GL13.glActiveTexture((int)33990);
-            if (((Chams)this.module).gif) {
-                if (((Chams)this.module).gifImage != null) {
-                    GL11.glBindTexture((int)3553, (int)((Chams)this.module).gifImage.getDynamicTexture().getGlTextureId());
+            module.imageShader.bind();
+            int currentTexture = glGetInteger(GL_TEXTURE_BINDING_2D);
+
+            // Chams.gif.updateNoDraw();
+            // Chams.gif.getCurrentFrame().getTexture().bind();
+            // module.gif.getCurrentFrame().bind();
+
+            // mc.getTextureManager().bindTexture(Chams.GALAXY_LOCATION);
+
+            // glBindTexture(GL_TEXTURE_2D, Chams.gif.getCurrentFrame()/*.getFlippedCopy(false, true)*/.getTexture().getTextureID());
+            // glBindTexture(GL_TEXTURE_2D, mc.getTextureManager().getTexture(Chams.GALAXY_LOCATION).getGlTextureId());
+
+            module.imageShader.set("sampler", 0);
+            GL13.glActiveTexture(GL13.GL_TEXTURE6);
+
+            if (module.gif)
+            {
+
+            }
+            else
+            {
+                if (module.dynamicTexture != null)
+                {
+                    glBindTexture(GL_TEXTURE_2D, module.dynamicTexture.getGlTextureId());
                 }
-            } else if (((Chams)this.module).dynamicTexture != null) {
-                GL11.glBindTexture((int)3553, (int)((Chams)this.module).dynamicTexture.getGlTextureId());
             }
-            ((Chams)this.module).imageShader.set("overlaySampler", 6);
-            GL13.glActiveTexture((int)33984);
-            ((Chams)this.module).imageShader.set("mixFactor", ((Chams)this.module).mixFactor.getValue().floatValue());
-            ((Chams)this.module).imageShader.set("alpha", (float)((Chams)this.module).color.getValue().getAlpha() / 255.0f);
-            Vec3d gl_FragCoord = new Vec3d(1920.0, 1080.0, 0.0);
-            Vector4f imageDimensions = new Vector4f(0.0f, 0.0f, 1920.0f, 1080.0f);
-            Vec2d d = new Vec2d((gl_FragCoord.x - (double)imageDimensions.x) / (double)imageDimensions.z, (gl_FragCoord.y - (double)imageDimensions.y) / (double)imageDimensions.w);
+            module.imageShader.set("overlaySampler", 6);
+            GL13.glActiveTexture(GL13.GL_TEXTURE0);
+            module.imageShader.set("mixFactor", module.mixFactor.getValue());
+            module.imageShader.set("alpha", module.color.getValue().getAlpha() / 255.0f);
+            // module.imageShader.set("dimensions", new Vec2f(mc.displayWidth, mc.displayHeight));
+            Vec3d gl_FragCoord = new Vec3d(1920, 1080, 0);
+            Vector4f imageDimensions = new Vector4f(0, 0, 1920, 1080);
+            Vec2d d = new Vec2d(((gl_FragCoord.x - imageDimensions.x) / imageDimensions.z), ((gl_FragCoord.y - imageDimensions.y) / imageDimensions.w));
+            // System.out.println(d.getX() + " " + d.getY());
+
             rect = null;
-            if (rect != null) {
-                rect[0] = MathHelper.clamp((float)rect[0], (float)0.0f, (float)ListenerModelPre.mc.displayWidth);
-                rect[1] = MathHelper.clamp((float)rect[1], (float)0.0f, (float)ListenerModelPre.mc.displayHeight);
-                rect[2] = MathHelper.clamp((float)rect[2], (float)0.0f, (float)ListenerModelPre.mc.displayWidth);
-                rect[3] = MathHelper.clamp((float)rect[3], (float)0.0f, (float)ListenerModelPre.mc.displayHeight);
-                ((Chams)this.module).imageShader.set("imageX", rect[2]);
-                ((Chams)this.module).imageShader.set("imageY", rect[3]);
-                ((Chams)this.module).imageShader.set("imageWidth", rect[0] - rect[2]);
-                ((Chams)this.module).imageShader.set("imageHeight", rect[1] - rect[3]);
-            } else {
-                ((Chams)this.module).imageShader.set("imageX", 0.0f);
-                ((Chams)this.module).imageShader.set("imageY", 0.0f);
-                ((Chams)this.module).imageShader.set("imageWidth", (float)ListenerModelPre.mc.displayWidth);
-                ((Chams)this.module).imageShader.set("imageHeight", (float)ListenerModelPre.mc.displayHeight);
+            if (rect != null)
+            {
+                // TODO: replace with scaled resolution
+                rect[0] = MathHelper.clamp(rect[0], 0, mc.displayWidth); // min and max frag coords x-wise
+                rect[1] = MathHelper.clamp(rect[1], 0, mc.displayHeight); // min and max frag coords y-wise
+                rect[2] = MathHelper.clamp(rect[2], 0, mc.displayWidth); // min and max frag coords x-wise
+                rect[3] = MathHelper.clamp(rect[3], 0, mc.displayHeight); // min and max frag coords y-wise
+                // module.imageShader.set("imageDimensions", new Vector4f(rect[0], rect[1], rect[2] - rect[0], rect[3] - rect[1]));
+                module.imageShader.set("imageX", rect[2]);
+                module.imageShader.set("imageY", rect[3]);
+                module.imageShader.set("imageWidth", (rect[0] - rect[2]));
+                module.imageShader.set("imageHeight", (rect[1] - rect[3]));
             }
-            boolean shadows = ListenerModelPre.mc.gameSettings.entityShadows;
-            ListenerModelPre.mc.gameSettings.entityShadows = false;
-            ((Chams)this.module).renderLayers = false;
-            this.render(event);
-            ((Chams)this.module).renderLayers = true;
-            ((Chams)this.module).imageShader.unbind();
-            ListenerModelPre.mc.gameSettings.entityShadows = shadows;
-            GL11.glPopAttrib();
-            GL11.glPopMatrix();
+            else
+            {
+                // module.imageShader.set("imageDimensions", new Vector4f(0.0f, 0.0f, mc.displayHeight, mc.displayWidth));
+                module.imageShader.set("imageX", 0.0f);
+                module.imageShader.set("imageY", 0.0f);
+                module.imageShader.set("imageWidth", (float) mc.displayWidth);
+                module.imageShader.set("imageHeight", (float) mc.displayHeight);
+            }
+            // GL13.glActiveTexture(GL13.GL_TEXTURE0);
+            // glBindTexture(GL_TEXTURE_2D, currentTexture);
+            boolean shadows = mc.gameSettings.entityShadows;
+            mc.gameSettings.entityShadows = false;
+            module.renderLayers = false;
+            // glDisable(GL_TEXTURE_2D);
+            render(event);
+            module.renderLayers = true;
+            module.imageShader.unbind();
+            mc.gameSettings.entityShadows = shadows;
+            glPopAttrib();
+            glPopMatrix();
         }
     }
 
     private void render(ModelRenderEvent.Pre event) {
-        event.getModel().render((Entity)event.getEntity(), event.getLimbSwing(), event.getLimbSwingAmount(), event.getAgeInTicks(), event.getNetHeadYaw(), event.getHeadPitch(), event.getScale());
+        event.getModel().render(event.getEntity(),
+                event.getLimbSwing(),
+                event.getLimbSwingAmount(),
+                event.getAgeInTicks(),
+                event.getNetHeadYaw(),
+                event.getHeadPitch(),
+                event.getScale());
     }
 
-    private float getFOVModifier(float partialTicks, boolean useFOVSetting) {
-        IBlockState iblockstate;
-        if (((IEntityRenderer)ListenerModelPre.mc.entityRenderer).isDebugView()) {
-            return 90.0f;
+    private float getFOVModifier(float partialTicks, boolean useFOVSetting)
+    {
+        if (((IEntityRenderer) mc.entityRenderer).isDebugView())
+        {
+            return 90.0F;
         }
-        Entity entity = mc.getRenderViewEntity();
-        float f = 70.0f;
-        if (useFOVSetting) {
-            f = ListenerModelPre.mc.gameSettings.fovSetting;
-            f *= ((IEntityRenderer)ListenerModelPre.mc.entityRenderer).getFovModifierHandPrev() + (((IEntityRenderer)ListenerModelPre.mc.entityRenderer).getFovModifierHand() - ((IEntityRenderer)ListenerModelPre.mc.entityRenderer).getFovModifierHandPrev()) * partialTicks;
+        else
+        {
+            Entity entity = this.mc.getRenderViewEntity();
+            float f = 70.0F;
+
+            if (useFOVSetting)
+            {
+                f = this.mc.gameSettings.fovSetting;
+                f = f * (((IEntityRenderer) mc.entityRenderer).getFovModifierHandPrev() + (((IEntityRenderer) mc.entityRenderer).getFovModifierHand() - ((IEntityRenderer) mc.entityRenderer).getFovModifierHandPrev()) * partialTicks);
+            }
+
+            if (entity instanceof EntityLivingBase && ((EntityLivingBase)entity).getHealth() <= 0.0F)
+            {
+                float f1 = (float)((EntityLivingBase)entity).deathTime + partialTicks;
+                f /= (1.0F - 500.0F / (f1 + 500.0F)) * 2.0F + 1.0F;
+            }
+
+            IBlockState iblockstate = ActiveRenderInfo.getBlockStateAtEntityViewpoint(this.mc.world, entity, partialTicks);
+
+            if (iblockstate.getMaterial() == Material.WATER)
+            {
+                f = f * 60.0F / 70.0F;
+            }
+
+            return f;
         }
-        if (entity instanceof EntityLivingBase && ((EntityLivingBase)entity).getHealth() <= 0.0f) {
-            float f1 = (float)((EntityLivingBase)entity).deathTime + partialTicks;
-            f /= (1.0f - 500.0f / (f1 + 500.0f)) * 2.0f + 1.0f;
-        }
-        if ((iblockstate = ActiveRenderInfo.getBlockStateAtEntityViewpoint((World)ListenerModelPre.mc.world, (Entity)entity, (float)partialTicks)).getMaterial() == Material.WATER) {
-            f = f * 60.0f / 70.0f;
-        }
-        return f;
     }
+
 }
-

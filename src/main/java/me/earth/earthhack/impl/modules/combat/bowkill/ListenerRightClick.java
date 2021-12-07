@@ -1,31 +1,27 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.init.Items
- */
 package me.earth.earthhack.impl.modules.combat.bowkill;
 
 import me.earth.earthhack.impl.event.events.misc.RightClickItemEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
-import me.earth.earthhack.impl.modules.combat.bowkill.BowKiller;
 import net.minecraft.init.Items;
 
-final class ListenerRightClick
-extends ModuleListener<BowKiller, RightClickItemEvent> {
-    public ListenerRightClick(BowKiller module) {
+final class ListenerRightClick extends ModuleListener<BowKiller, RightClickItemEvent>
+{
+
+    public ListenerRightClick(BowKiller module)
+    {
         super(module, RightClickItemEvent.class);
     }
 
     @Override
-    public void invoke(RightClickItemEvent event) {
-        if (!ListenerRightClick.mc.player.collidedVertically) {
+    public void invoke(RightClickItemEvent event)
+    {
+        if (!mc.player.collidedVertically)
             return;
-        }
-        if (ListenerRightClick.mc.player.getHeldItem(event.getHand()).getItem() == Items.BOW && ((BowKiller)this.module).blockUnder) {
-            ((BowKiller)this.module).cancelling = true;
-            ((BowKiller)this.module).needsMessage = true;
+        if (mc.player.getHeldItem(event.getHand()).getItem() == Items.BOW && module.blockUnder)
+        {
+            module.cancelling = true;
+            module.needsMessage = true;
         }
     }
-}
 
+}

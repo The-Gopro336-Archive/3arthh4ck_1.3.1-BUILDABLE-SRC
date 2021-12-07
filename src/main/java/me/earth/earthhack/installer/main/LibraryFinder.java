@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.installer.main;
 
 import java.io.File;
@@ -10,39 +7,46 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import me.earth.earthhack.installer.main.Library;
-import me.earth.earthhack.installer.main.MinecraftFiles;
 
-public class LibraryFinder {
-    private static final Map<String, URL> LIBRARIES = new HashMap<String, URL>(3);
+public class LibraryFinder
+{
+    private static final Map<String, URL> LIBRARIES = new HashMap<>(3);
 
-    public List<Library> findLibraries(MinecraftFiles files) {
-        ArrayList<Library> result = new ArrayList<Library>(LIBRARIES.size());
-        for (Map.Entry<String, URL> lib : LIBRARIES.entrySet()) {
+    static
+    {
+        String asm_lib  = "org/ow2/asm/asm-debug-all/5.2/asm-debug-all-5.2.jar";
+        URL asm_url     = toUrl("https://repo1.maven.org/maven2/"  + asm_lib);
+        LIBRARIES.put(asm_lib, asm_url);
+
+        String gson_lib = "com/google/code/gson/gson/2.8.0/gson-2.8.0.jar";
+        URL gson_url    = toUrl("https://libraries.minecraft.net/" + gson_lib);
+        LIBRARIES.put(gson_lib, gson_url);
+    }
+
+    public List<Library> findLibraries(MinecraftFiles files)
+    {
+        List<Library> result = new ArrayList<>(LIBRARIES.size());
+        for (Map.Entry<String, URL> lib : LIBRARIES.entrySet())
+        {
             String path = files.getLibraries() + lib.getKey();
             boolean exists = new File(path).exists();
-            URL url = LibraryFinder.toUrl("file:/" + path);
+            URL url = toUrl("file:/" + path);
             result.add(new Library(url, lib.getValue(), !exists));
         }
+
         return result;
     }
 
-    private static URL toUrl(String s) {
-        try {
+    private static URL toUrl(String s)
+    {
+        try
+        {
             return new URL(s);
         }
-        catch (MalformedURLException e) {
+        catch (MalformedURLException e)
+        {
             throw new RuntimeException(e);
         }
     }
 
-    static {
-        String asm_lib = "org/ow2/asm/asm-debug-all/5.2/asm-debug-all-5.2.jar";
-        URL asm_url = LibraryFinder.toUrl("https://repo1.maven.org/maven2/" + asm_lib);
-        LIBRARIES.put(asm_lib, asm_url);
-        String gson_lib = "com/google/code/gson/gson/2.8.0/gson-2.8.0.jar";
-        URL gson_url = LibraryFinder.toUrl("https://libraries.minecraft.net/" + gson_lib);
-        LIBRARIES.put(gson_lib, gson_url);
-    }
 }
-

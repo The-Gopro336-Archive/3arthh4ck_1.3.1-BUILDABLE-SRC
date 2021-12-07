@@ -1,151 +1,214 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.block.Block
- *  net.minecraft.entity.item.EntityEnderCrystal
- *  net.minecraft.init.Blocks
- *  net.minecraft.util.math.AxisAlignedBB
- *  net.minecraft.util.math.BlockPos
- */
 package me.earth.earthhack.impl.util.helpers.blocks;
+
+import me.earth.earthhack.api.event.events.Stage;
+import me.earth.earthhack.impl.event.events.network.MotionUpdateEvent;
+import me.earth.earthhack.impl.event.listeners.ModuleListener;
+import me.earth.earthhack.impl.managers.Managers;
+import me.earth.earthhack.impl.util.client.ModuleUtil;
+import me.earth.earthhack.impl.util.helpers.blocks.modes.Rotate;
+import me.earth.earthhack.impl.util.helpers.blocks.util.TargetResult;
+import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
+import me.earth.earthhack.impl.util.thread.Locks;
+import net.minecraft.entity.item.EntityEnderCrystal;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import me.earth.earthhack.api.event.events.Stage;
-import me.earth.earthhack.api.module.Module;
-import me.earth.earthhack.impl.event.events.network.MotionUpdateEvent;
-import me.earth.earthhack.impl.event.listeners.ModuleListener;
-import me.earth.earthhack.impl.managers.Managers;
-import me.earth.earthhack.impl.util.client.ModuleUtil;
-import me.earth.earthhack.impl.util.helpers.blocks.ObbyListenerModule;
-import me.earth.earthhack.impl.util.helpers.blocks.ObbyModule;
-import me.earth.earthhack.impl.util.helpers.blocks.modes.Rotate;
-import me.earth.earthhack.impl.util.helpers.blocks.util.TargetResult;
-import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
-import me.earth.earthhack.impl.util.thread.Locks;
-import net.minecraft.block.Block;
-import net.minecraft.entity.item.EntityEnderCrystal;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+
+import static me.earth.earthhack.impl.util.helpers.blocks.ObbyModule.HELPER;
+import static me.earth.earthhack.impl.util.helpers.disabling.DisablingModule.newDeathDisabler;
 
 public abstract class ObbyListener<T extends ObbyListenerModule<?>>
-extends ModuleListener<T, MotionUpdateEvent> {
-    public final Map<BlockPos, Long> placed = new HashMap<BlockPos, Long>();
-    public List<BlockPos> targets = new LinkedList<BlockPos>();
+        extends ModuleListener<T, MotionUpdateEvent>
+{
+    public final Map<BlockPos, Long> placed = new HashMap<>();
+    public List<BlockPos> targets = new LinkedList<>();
 
-    public ObbyListener(T module, int priority) {
+    public ObbyListener(T module, int priority)
+    {
         super(module, MotionUpdateEvent.class, priority);
     }
 
     @Override
-    public void invoke(MotionUpdateEvent event) {
-        if (event.getStage() == Stage.PRE) {
-            this.pre(event);
-        } else {
-            this.post(event);
+    public void invoke(MotionUpdateEvent event)
+    {
+        if (event.getStage() == Stage.PRE)
+        {
+            pre(event);
+        }
+        else
+        {
+            post(event);
         }
     }
 
-    protected abstract TargetResult getTargets(TargetResult var1);
+    protected abstract TargetResult getTargets(TargetResult result);
 
-    public void onModuleToggle() {
-        this.placed.clear();
-        this.targets = new LinkedList<BlockPos>();
+    public void onModuleToggle()
+    {
+        placed.clear();
+        targets = new LinkedList<>();
     }
 
-    protected void pre(MotionUpdateEvent event) {
-        ((ObbyListenerModule)this.module).rotations = null;
-        ((ObbyListenerModule)this.module).blocksPlaced = 0;
-        if (this.update() && !this.attackCrystalFirst()) {
-            this.placeTargets();
-        }
-        if (this.rotateCheck()) {
-            if (((ObbyListenerModule)this.module).rotations != null) {
-                this.setRotations(((ObbyListenerModule)this.module).rotations, event);
+    protected void pre(MotionUpdateEvent event)
+    {
+        module.rotations = null;
+        module.blocksPlaced = 0;
+
+        if (update())
+        {
+            if (!attackCrystalFirst())
+            {
+                placeTargets();
             }
-        } else {
-            this.execute();
+        }
+
+        if (rotateCheck())
+        {
+            if (module.rotations != null)
+            {
+                setRotations(module.rotations, event);
+            }
+        }
+        else
+        {
+            execute();
         }
     }
 
-    protected boolean rotateCheck() {
-        return ((ObbyListenerModule)this.module).rotate.getValue() != Rotate.None;
+    protected boolean rotateCheck()
+    {
+        return module.rotate.getValue() != Rotate.None;
     }
 
-    protected void placeTargets() {
-        for (BlockPos pos : this.targets) {
-            if (!this.placed.containsKey((Object)pos) && ObbyModule.HELPER.getBlockState(pos).getMaterial().isReplaceable() && ((ObbyListenerModule)this.module).placeBlock(pos)) break;
+    protected void placeTargets()
+    {
+        for (BlockPos pos : targets)
+        {
+            if (!placed.containsKey(pos)
+                    && HELPER.getBlockState(pos)
+                             .getMaterial()
+                             .isReplaceable())
+            {
+                if (module.placeBlock(pos))
+                {
+                    break;
+                }
+            }
         }
     }
 
-    protected boolean attackCrystalFirst() {
+    protected boolean attackCrystalFirst()
+    {
         boolean hasPlaced = false;
-        Optional<BlockPos> crystalPos = this.targets.stream().filter(pos -> !ObbyListener.mc.world.getEntitiesWithinAABB(EntityEnderCrystal.class, new AxisAlignedBB(pos)).isEmpty() && ObbyListener.mc.world.getBlockState(pos).getMaterial().isReplaceable()).findFirst();
-        if (crystalPos.isPresent()) {
-            hasPlaced = ((ObbyListenerModule)this.module).placeBlock(crystalPos.get());
+        // ensure that we attack the pos with the
+        // crystal first before the others,
+        // so we dont have to deal with switchcooldown.
+        Optional<BlockPos> crystalPos = targets
+                .stream()
+                .filter(pos ->
+                        !mc.world
+                           .getEntitiesWithinAABB(EntityEnderCrystal.class,
+                                                  new AxisAlignedBB(pos))
+                           .isEmpty()
+                                && mc.world.getBlockState(pos)
+                                           .getMaterial()
+                                           .isReplaceable())
+                .findFirst();
+
+        if (crystalPos.isPresent())
+        {
+            hasPlaced = module.placeBlock(crystalPos.get());
         }
+
         return hasPlaced;
     }
 
-    protected boolean update() {
-        if (this.updatePlaced()) {
+    protected boolean update()
+    {
+        if (updatePlaced())
+        {
             return false;
         }
-        ((ObbyListenerModule)this.module).slot = this.getSlot();
-        if (((ObbyListenerModule)this.module).slot == -1) {
-            this.disableModule();
+
+        module.slot = getSlot();
+        if (module.slot == -1)
+        {
+            disableModule();
             return false;
         }
-        if (this.hasTimerNotPassed()) {
+
+        if (hasTimerNotPassed())
+        {
             return false;
         }
-        TargetResult result = this.getTargets(new TargetResult());
-        this.targets = result.getTargets();
+
+        TargetResult result = getTargets(new TargetResult());
+        targets = result.getTargets();
         return result.isValid();
     }
 
-    protected boolean hasTimerNotPassed() {
-        return !((ObbyListenerModule)this.module).timer.passed(((ObbyListenerModule)this.module).getDelay());
+    protected boolean hasTimerNotPassed()
+    {
+        return !module.timer.passed(module.getDelay());
     }
 
-    public void addCallback(BlockPos pos) {
-        Managers.BLOCKS.addCallback(pos, s -> mc.addScheduledTask(() -> this.placed.remove((Object)pos)));
-        this.placed.put(pos, System.currentTimeMillis());
+    public void addCallback(BlockPos pos)
+    {
+        Managers.BLOCKS.addCallback(pos, s ->
+            mc.addScheduledTask(() -> placed.remove(pos)));
+        placed.put(pos, System.currentTimeMillis());
     }
 
-    protected void disableModule() {
-        ModuleUtil.disableRed((Module)this.module, this.getDisableString());
+    /**
+     * Disables the Module using the getDisableString.
+     */
+    protected void disableModule()
+    {
+        ModuleUtil.disableRed(module, getDisableString());
     }
 
-    protected boolean updatePlaced() {
-        this.placed.entrySet().removeIf(entry -> System.currentTimeMillis() - (Long)entry.getValue() >= (long)((ObbyListenerModule)this.module).confirm.getValue().intValue());
+    /**
+     * Confirmed blocks can now be checked for blockstate changes.
+     */
+    protected boolean updatePlaced()
+    {
+        placed.entrySet().removeIf(entry ->
+                System.currentTimeMillis() - entry.getValue()
+                        >= module.confirm.getValue());
         return false;
     }
 
-    protected int getSlot() {
-        return InventoryUtil.findHotbarBlock(Blocks.OBSIDIAN, new Block[0]);
+    protected int getSlot()
+    {
+        return InventoryUtil.findHotbarBlock(Blocks.OBSIDIAN);
     }
 
-    protected String getDisableString() {
+    protected String getDisableString()
+    {
         return "Disabled, no Obsidian.";
     }
 
-    protected void post(MotionUpdateEvent event) {
-        this.execute();
+    @SuppressWarnings("unused")
+    protected void post(MotionUpdateEvent event)
+    {
+        execute();
     }
 
-    protected void setRotations(float[] rotations, MotionUpdateEvent event) {
+    protected void setRotations(float[] rotations, MotionUpdateEvent event)
+    {
         event.setYaw(rotations[0]);
         event.setPitch(rotations[1]);
     }
 
-    protected void execute() {
-        Locks.acquire(Locks.PLACE_SWITCH_LOCK, ((ObbyListenerModule)this.module)::execute);
+    protected void execute()
+    {
+        Locks.acquire(Locks.PLACE_SWITCH_LOCK, module::execute);
     }
-}
 
+}

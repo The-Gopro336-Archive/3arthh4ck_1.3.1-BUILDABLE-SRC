@@ -1,9 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.network.play.client.CPacketPlayer
- */
 package me.earth.earthhack.impl.modules.combat.autocrystal.helpers;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -21,89 +15,147 @@ import me.earth.earthhack.impl.util.network.NetworkUtil;
 import me.earth.earthhack.impl.util.network.PacketUtil;
 import net.minecraft.network.play.client.CPacketPlayer;
 
-public class RotationCanceller
-implements Globals {
-    private static final ModuleCache<PacketFly> PACKETFLY = Caches.getModule(PacketFly.class);
+public class RotationCanceller implements Globals
+{
+    private static final ModuleCache<PacketFly> PACKETFLY =
+            Caches.getModule(PacketFly.class);
+
     private final StopWatch timer = new StopWatch();
     private final Setting<Integer> maxCancel;
     private final AutoCrystal module;
+
     private volatile CPacketPlayer last;
 
-    public RotationCanceller(AutoCrystal module, Setting<Integer> maxCancel) {
+    public RotationCanceller(AutoCrystal module, Setting<Integer> maxCancel)
+    {
         this.module = module;
         this.maxCancel = maxCancel;
     }
 
-    public void onGameLoop() {
-        if (this.last != null && this.timer.passed(this.maxCancel.getValue().intValue())) {
-            this.sendLast();
+    /**
+     * Sends the last cancelled packet if
+     * the timer passed the MaxCancel time.
+     */
+    public void onGameLoop()
+    {
+        if (last != null && timer.passed(maxCancel.getValue()))
+        {
+            sendLast();
         }
     }
 
-    public synchronized void onPacket(PacketEvent.Send<? extends CPacketPlayer> event) {
-        if (event.isCancelled() || PACKETFLY.isEnabled()) {
+    /**
+     * Cancels the Event and stores the packet if possible.
+     * Also sends the last cancelled Packet if it hasn't been
+     * sent yet.
+     *
+     * @param event the packetEvent.
+     */
+    public synchronized void onPacket(
+            PacketEvent.Send<? extends CPacketPlayer> event)
+    {
+        if (event.isCancelled() || PACKETFLY.isEnabled())
+        {
             return;
         }
-        this.reset();
-        if (Managers.ROTATION.isBlocking()) {
+
+        reset(); // Send last Packet if it hasn't been yet
+        if (Managers.ROTATION.isBlocking())
+        {
             return;
         }
+
         event.setCancelled(true);
-        this.last = (CPacketPlayer)event.getPacket();
-        this.timer.reset();
+        last = event.getPacket();
+        timer.reset();
     }
 
-    public synchronized boolean setRotations(RotationFunction function) {
-        if (this.last == null) {
+    /**
+     * Sets the Rotations of the last Packet and sends it,
+     * if it has been cancelled.
+     *
+     * @param function the RotationFunction setting the packet.
+     * @return <tt>true</tt> if Rotations have been set.
+     */
+    public synchronized boolean setRotations(RotationFunction function)
+    {
+        if (last == null)
+        {
             return false;
         }
-        double x = this.last.getX(Managers.POSITION.getX());
-        double y = this.last.getX(Managers.POSITION.getY());
-        double z = this.last.getX(Managers.POSITION.getZ());
-        float yaw = Managers.ROTATION.getServerYaw();
+
+        double x = last.getX(Managers.POSITION.getX());
+        double y = last.getX(Managers.POSITION.getY());
+        double z = last.getX(Managers.POSITION.getZ());
+        float yaw   = Managers.ROTATION.getServerYaw();
         float pitch = Managers.ROTATION.getServerPitch();
-        boolean onGround = this.last.isOnGround();
-        ICPacketPlayer accessor = (ICPacketPlayer)this.last;
+        boolean onGround = last.isOnGround();
+
+        ICPacketPlayer accessor = (ICPacketPlayer) last;
         float[] r = function.apply(x, y, z, yaw, pitch);
-        if ((double)(r[0] - yaw) == 0.0 || (double)(r[1] - pitch) == 0.0) {
-            if (!accessor.isRotating() && !accessor.isMoving() && onGround == Managers.POSITION.isOnGround()) {
-                this.last = null;
+        if (r[0] - yaw == 0.0 || r[1] - pitch == 0.0)
+        {
+            if (!accessor.isRotating()
+                && !accessor.isMoving()
+                && onGround == Managers.POSITION.isOnGround())
+            {
+                last = null;
                 return true;
             }
-            this.sendLast();
+
+            sendLast();
             return true;
         }
-        if (accessor.isRotating()) {
+
+        if (accessor.isRotating())
+        {
             accessor.setYaw(r[0]);
             accessor.setPitch(r[1]);
-            this.sendLast();
-        } else if (accessor.isMoving()) {
-            this.last = PacketUtil.positionRotation(x, y, z, r[0], r[1], onGround);
-            this.sendLast();
-        } else {
-            this.last = PacketUtil.rotation(r[0], r[1], onGround);
-            this.sendLast();
+            sendLast();
         }
+        else if (accessor.isMoving())
+        {
+            last = PacketUtil.positionRotation(x, y, z, r[0], r[1], onGround);
+            sendLast();
+        }
+        else
+        {
+            last = PacketUtil.rotation(r[0], r[1], onGround);
+            sendLast();
+        }
+
         return true;
     }
 
-    public void reset() {
-        if (this.last != null && RotationCanceller.mc.player != null) {
-            this.sendLast();
+    /**
+     * Sends the last Packet if it has been cancelled.
+     */
+    public void reset()
+    {
+        if (last != null && mc.player != null)
+        {
+            sendLast();
         }
     }
 
-    public synchronized void drop() {
-        this.last = null;
+    /**
+     * Drops the current packet. It won't be send.
+     */
+    public synchronized void drop()
+    {
+        last = null;
     }
 
-    private synchronized void sendLast() {
-        CPacketPlayer packet = this.last;
-        if (packet != null && RotationCanceller.mc.player != null) {
+    private synchronized void sendLast()
+    {
+        CPacketPlayer packet = last;
+        if (packet != null && mc.player != null)
+        {
             NetworkUtil.sendPacketNoEvent(packet);
-            this.module.runPost();
+            module.runPost();
         }
-        this.last = null;
-    }
-}
 
+        last = null;
+    }
+
+}

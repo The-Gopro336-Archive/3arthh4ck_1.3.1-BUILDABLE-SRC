@@ -1,26 +1,43 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.util.math.path;
 
 import java.util.Objects;
+import java.util.function.Predicate;
 
+/**
+ * {@link Predicate}
+ */
 @FunctionalInterface
-public interface TriPredicate<T, U, V> {
-    public boolean test(T var1, U var2, V var3);
+@SuppressWarnings("unused")
+public interface TriPredicate<T, U, V>
+{
+    /**
+     * {@link Predicate#test(Object)}
+     */
+    boolean test(T t, U u, V v);
 
-    default public TriPredicate<T, U, V> and(TriPredicate<? super T, ? super U, ? super V> other) {
+    /**
+     * {@link Predicate#and(Predicate)}
+     */
+    default TriPredicate<T, U, V> and(TriPredicate<? super T, ? super U, ? super V> other)
+    {
         Objects.requireNonNull(other);
-        return (t, u, v) -> this.test(t, u, v) && other.test(t, u, v);
+        return (T t, U u, V v) -> test(t, u, v) && other.test(t, u, v);
     }
 
-    default public TriPredicate<T, U, V> negate() {
-        return (t, u, v) -> !this.test(t, u, v);
+    /**
+     * {@link Predicate#negate()}
+     */
+    default TriPredicate<T, U, V> negate()
+    {
+        return (T t, U u, V v) -> !test(t, u, v);
     }
 
-    default public TriPredicate<T, U, V> or(TriPredicate<? super T, ? super U, ? super V> other) {
+    /**
+     * {@link Predicate#or(Predicate)}
+     */
+    default TriPredicate<T, U, V> or(TriPredicate<? super T, ? super U, ? super V> other)
+    {
         Objects.requireNonNull(other);
-        return (t, u, v) -> this.test(t, u, v) || other.test(t, u, v);
+        return (T t, U u, V v) -> test(t, u, v) || other.test(t, u, v);
     }
 }
-

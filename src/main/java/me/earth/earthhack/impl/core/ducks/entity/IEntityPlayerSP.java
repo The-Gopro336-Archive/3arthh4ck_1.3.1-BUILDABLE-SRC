@@ -1,31 +1,32 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.core.ducks.entity;
 
-public interface IEntityPlayerSP {
-    public double getLastReportedX();
+/**
+ * Duck interface for {@link net.minecraft.client.entity.EntityPlayerSP}.
+ */
+public interface IEntityPlayerSP
+{
+    double getLastReportedX();
 
-    public double getLastReportedY();
+    double getLastReportedY();
 
-    public double getLastReportedZ();
+    double getLastReportedZ();
 
-    public float getLastReportedYaw();
+    float getLastReportedYaw();
 
-    public float getLastReportedPitch();
+    float getLastReportedPitch();
 
-    public boolean getLastOnGround();
+    boolean getLastOnGround();
 
-    public void setLastReportedYaw(float var1);
+    void setLastReportedYaw(float yaw);
 
-    public void setLastReportedPitch(float var1);
+    void setLastReportedPitch(float pitch);
 
-    public int getPositionUpdateTicks();
+    int getPositionUpdateTicks();
 
-    public void superUpdate();
+    void superUpdate();
 
-    public void invokeUpdateWalkingPlayer();
+    void invokeUpdateWalkingPlayer();
 
-    public void setHorseJumpPower(float var1);
+    void setHorseJumpPower(float jumpPower);
+
 }
-

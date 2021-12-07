@@ -1,28 +1,27 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.misc.pingspoof;
 
 import me.earth.earthhack.api.module.data.DefaultData;
-import me.earth.earthhack.impl.modules.misc.pingspoof.PingSpoof;
 
-final class PingSpoofData
-extends DefaultData<PingSpoof> {
-    public PingSpoofData(PingSpoof module) {
+final class PingSpoofData extends DefaultData<PingSpoof>
+{
+    public PingSpoofData(PingSpoof module)
+    {
         super(module);
-        this.register(module.delay, "By how much you want to spoof your ping.");
-        this.register(module.keepAlive, "Default PingSpoof.");
-        this.register(module.transactions, "Crystalpvp.cc PingSpoof bypass.");
+        register(module.delay, "By how much you want to spoof your ping.");
+        register(module.keepAlive, "Default PingSpoof.");
+        register(module.transactions, "Crystalpvp.cc PingSpoof bypass.");
     }
 
     @Override
-    public int getColor() {
-        return -1;
+    public int getColor()
+    {
+        return 0xffffffff;
     }
 
     @Override
-    public String getDescription() {
+    public String getDescription()
+    {
         return "Allows you to spoof your ping.";
     }
-}
 
+}

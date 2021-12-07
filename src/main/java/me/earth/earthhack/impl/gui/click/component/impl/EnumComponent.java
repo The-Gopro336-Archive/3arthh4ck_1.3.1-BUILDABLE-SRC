@@ -1,10 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  com.mojang.realmsclient.gui.ChatFormatting
- *  net.minecraft.client.Minecraft
- */
 package me.earth.earthhack.impl.gui.click.component.impl;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
@@ -14,14 +7,14 @@ import me.earth.earthhack.impl.gui.click.component.Component;
 import me.earth.earthhack.impl.util.render.RenderUtil;
 import net.minecraft.client.Minecraft;
 
-public class EnumComponent<E extends Enum<E>>
-extends Component {
+public class EnumComponent<E extends Enum<E>> extends Component {
     private final EnumSetting<E> enumSetting;
 
     public EnumComponent(EnumSetting<E> enumSetting, float posX, float posY, float offsetX, float offsetY, float width, float height) {
         super(enumSetting.getName(), posX, posY, offsetX, offsetY, width, height);
         this.enumSetting = enumSetting;
     }
+
 
     @Override
     public void moved(float posX, float posY) {
@@ -31,18 +24,19 @@ extends Component {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
-        Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(this.getLabel() + ": " + (Object)ChatFormatting.GRAY + ((Enum)this.getEnumSetting().getValue()).name(), this.getFinishedX() + 5.0f, this.getFinishedY() + this.getHeight() / 2.0f - (float)(Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT >> 1), -1);
+        Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(getLabel() + ": " +ChatFormatting.GRAY + getEnumSetting().getValue().name(), getFinishedX() + 5, getFinishedY() + getHeight() / 2 - (Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT >> 1), 0xFFFFFFFF);
     }
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         super.mouseClicked(mouseX, mouseY, mouseButton);
-        boolean hovered = RenderUtil.mouseWithinBounds(mouseX, mouseY, this.getFinishedX() + 5.0f, this.getFinishedY() + 1.0f, this.getWidth() - 10.0f, this.getHeight() - 2.0f);
+        final boolean hovered = RenderUtil.mouseWithinBounds(mouseX, mouseY, getFinishedX() + 5, getFinishedY() + 1, getWidth() - 10, getHeight() - 2);
         if (hovered) {
             if (mouseButton == 0) {
-                this.getEnumSetting().setValue(EnumHelper.next((Enum)this.getEnumSetting().getValue()));
+                getEnumSetting().setValue((E) EnumHelper.next(getEnumSetting().getValue()));
             } else if (mouseButton == 1) {
-                this.getEnumSetting().setValue(EnumHelper.previous((Enum)this.getEnumSetting().getValue()));
+                getEnumSetting().setValue((E) EnumHelper.previous(getEnumSetting().getValue()));
+
             }
         }
     }
@@ -53,7 +47,7 @@ extends Component {
     }
 
     public EnumSetting<E> getEnumSetting() {
-        return this.enumSetting;
+        return enumSetting;
     }
-}
 
+}

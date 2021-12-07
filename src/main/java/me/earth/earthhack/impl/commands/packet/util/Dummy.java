@@ -1,11 +1,12 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.commands.packet.util;
 
-public interface Dummy {
-    default public boolean isDummy() {
+/**
+ * This interface groups Dummy Values.
+ */
+public interface Dummy
+{
+    default boolean isDummy()
+    {
         return true;
     }
 }
-

@@ -1,15 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.block.state.IBlockState
- *  net.minecraft.entity.player.EntityPlayer
- *  net.minecraft.item.ItemBlock
- *  net.minecraft.item.ItemStack
- *  net.minecraft.util.EnumFacing
- *  net.minecraft.util.math.BlockPos
- *  net.minecraft.world.World
- */
 package me.earth.earthhack.forge.mixins.item;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -28,18 +16,64 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(value={ItemBlock.class})
-public abstract class MixinItemBlock {
-    private static final ModuleCache<NoGlitchBlocks> NO_GLITCH_BLOCKS = Caches.getModule(NoGlitchBlocks.class);
+@Mixin(ItemBlock.class)
+public abstract class MixinItemBlock
+{
+    private static final ModuleCache<NoGlitchBlocks> NO_GLITCH_BLOCKS =
+            Caches.getModule(NoGlitchBlocks.class);
 
-    @Shadow(remap=false)
     @Dynamic
-    public abstract boolean placeBlockAt(ItemStack var1, EntityPlayer var2, World var3, BlockPos var4, EnumFacing var5, float var6, float var7, float var8, IBlockState var9);
+    @Shadow(remap = false)
+    public abstract boolean placeBlockAt(ItemStack stack,
+                                         EntityPlayer player,
+                                         World world,
+                                         BlockPos pos,
+                                         EnumFacing facing,
+                                         float hitX,
+                                         float hitY,
+                                         float hitZ,
+                                         IBlockState state);
 
-    @Redirect(method={"onItemUse"}, at=@At(value="INVOKE", target="net/minecraft/item/ItemBlock.placeBlockAt(Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/EnumFacing;FFFLnet/minecraft/block/state/IBlockState;)Z", remap=false))
+    /**
+     * {@link ItemBlock#placeBlockAt(ItemStack, EntityPlayer, World,
+     * BlockPos, EnumFacing, float, float, float, IBlockState)}
+     */
     @Dynamic
-    private boolean onItemUseHook(ItemBlock block, ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, IBlockState state) {
-        return world.isRemote && NO_GLITCH_BLOCKS.isPresent() && ((NoGlitchBlocks)NO_GLITCH_BLOCKS.get()).noPlace() || this.placeBlockAt(stack, player, world, pos, facing, hitX, hitY, hitZ, state);
+    @Redirect(
+        method = "onItemUse",
+        at = @At(
+            value = "INVOKE",
+            target = "net/minecraft/item/ItemBlock.placeBlockAt" +
+                    "(Lnet/minecraft/item/ItemStack;" +
+                    "Lnet/minecraft/entity/player/EntityPlayer;" +
+                    "Lnet/minecraft/world/World;" +
+                    "Lnet/minecraft/util/math/BlockPos;" +
+                    "Lnet/minecraft/util/EnumFacing;" +
+                    "FFF" +
+                    "Lnet/minecraft/block/state/IBlockState;)Z",
+            remap = false))
+    private boolean onItemUseHook(ItemBlock block,
+                                  ItemStack stack,
+                                  EntityPlayer player,
+                                  World world,
+                                  BlockPos pos,
+                                  EnumFacing facing,
+                                  float hitX,
+                                  float hitY,
+                                  float hitZ,
+                                  IBlockState state)
+    {
+        return world.isRemote
+                && NO_GLITCH_BLOCKS.isPresent()
+                && NO_GLITCH_BLOCKS.get().noPlace()
+                    || this.placeBlockAt(stack,
+                                         player,
+                                         world,
+                                         pos,
+                                         facing,
+                                         hitX,
+                                         hitY,
+                                         hitZ,
+                                         state);
     }
 }
-

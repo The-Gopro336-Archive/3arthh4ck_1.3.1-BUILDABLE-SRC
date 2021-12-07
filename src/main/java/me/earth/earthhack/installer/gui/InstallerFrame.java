@@ -1,44 +1,49 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.installer.gui;
+
+
 
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatLightLaf;
-import java.awt.Dimension;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
-public class InstallerFrame {
+import javax.swing.*;
+import java.awt.*;
+
+public class InstallerFrame
+{
     private final JFrame frame;
 
-    public InstallerFrame() {
+    public InstallerFrame()
+    {
         FlatLightLaf.setup(new FlatDarculaLaf());
-        this.frame = new JFrame("3arthh4ck-Installer");
-        this.frame.setDefaultCloseOperation(3);
+        frame = new JFrame("3arthh4ck-Installer");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         JPanel panel = new JPanel();
         panel.setSize(550, 400);
         panel.setPreferredSize(new Dimension(550, 400));
         panel.setLayout(null);
-        this.frame.setSize(550, 400);
-        this.frame.setResizable(false);
-        this.frame.getContentPane().add(panel);
-        this.frame.pack();
+
+        frame.setSize(550, 400);
+        frame.setResizable(false);
+        frame.getContentPane().add(panel);
+        frame.pack();
     }
 
-    public void display() {
-        this.frame.setVisible(true);
+    public void display()
+    {
+        frame.setVisible(true);
     }
 
-    public void schedule(JPanel panel) {
-        SwingUtilities.invokeLater(() -> this.setPanel(panel));
+    public void schedule(JPanel panel)
+    {
+        SwingUtilities.invokeLater(() -> setPanel(panel));
     }
 
-    public void setPanel(JPanel panel) {
-        this.frame.setContentPane(panel);
-        this.frame.invalidate();
-        this.frame.validate();
+    public void setPanel(JPanel panel)
+    {
+        frame.setContentPane(panel);
+        frame.invalidate();
+        frame.validate();
     }
+
 }
-

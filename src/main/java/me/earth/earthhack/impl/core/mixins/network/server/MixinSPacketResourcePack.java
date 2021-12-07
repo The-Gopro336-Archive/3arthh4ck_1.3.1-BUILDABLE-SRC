@@ -1,10 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.network.PacketBuffer
- *  net.minecraft.network.play.server.SPacketResourcePackSend
- */
 package me.earth.earthhack.impl.core.mixins.network.server;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -17,16 +10,22 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value={SPacketResourcePackSend.class})
-public abstract class MixinSPacketResourcePack {
-    private static final ModuleCache<Packets> PACKETS = Caches.getModule(Packets.class);
+@Mixin(SPacketResourcePackSend.class)
+public abstract class MixinSPacketResourcePack
+{
+    private static final ModuleCache<Packets> PACKETS =
+            Caches.getModule(Packets.class);
 
-    @Inject(method={"readPacketData"}, at={@At(value="HEAD")}, cancellable=true)
-    private void readPacketDataHook(PacketBuffer buf, CallbackInfo ci) {
-        if (PACKETS.returnIfPresent(Packets::areCCResourcesActive, false).booleanValue()) {
+    @Inject(method = "readPacketData", at = @At("HEAD"), cancellable = true)
+    private void readPacketDataHook(PacketBuffer buf, CallbackInfo ci)
+    {
+        if (PACKETS.returnIfPresent(Packets::areCCResourcesActive, false))
+        {
+            // We could carefully check the first bytes of the URL.
+            // But since this is only for CC it doesn't really matter.
             buf.readerIndex(buf.writerIndex());
             ci.cancel();
         }
     }
-}
 
+}

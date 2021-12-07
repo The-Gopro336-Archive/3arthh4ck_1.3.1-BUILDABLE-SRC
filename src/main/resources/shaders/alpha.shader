@@ -17,8 +17,9 @@ void main(void) {
     vec4 color = texture(sampler, gl_TexCoord[0].xy);
 
     if (color.a <= 0.1) {
-        discard; // discard fragments so that they are not written to the framebuffer, they wouldn't be visiable anyways!
+        discard;
     }
 
-    gl_FragColor = color;
+    vec3 color1 = mix(color.rgb, vec3(1, 0, 0), 0.75);
+    gl_FragColor = vec4(color1.r, color1.g, color1.b, 0.5);
 }

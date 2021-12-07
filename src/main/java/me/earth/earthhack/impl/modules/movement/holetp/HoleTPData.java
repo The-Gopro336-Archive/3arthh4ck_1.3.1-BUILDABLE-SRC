@@ -1,25 +1,24 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.movement.holetp;
 
 import me.earth.earthhack.api.module.data.DefaultData;
-import me.earth.earthhack.impl.modules.movement.holetp.HoleTP;
 
-final class HoleTPData
-extends DefaultData<HoleTP> {
-    public HoleTPData(HoleTP module) {
+final class HoleTPData extends DefaultData<HoleTP>
+{
+    public HoleTPData(HoleTP module)
+    {
         super(module);
     }
 
     @Override
-    public int getColor() {
-        return -1;
+    public int getColor()
+    {
+        return 0xffffffff;
     }
 
     @Override
-    public String getDescription() {
+    public String getDescription()
+    {
         return "";
     }
-}
 
+}

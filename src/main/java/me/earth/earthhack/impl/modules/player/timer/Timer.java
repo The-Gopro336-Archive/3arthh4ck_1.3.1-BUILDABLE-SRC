@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.player.timer;
 
 import me.earth.earthhack.api.module.util.Category;
@@ -8,37 +5,51 @@ import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.EnumSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.managers.Managers;
-import me.earth.earthhack.impl.modules.player.timer.ListenerMotion;
-import me.earth.earthhack.impl.modules.player.timer.ListenerPlayerPackets;
-import me.earth.earthhack.impl.modules.player.timer.ListenerPosLook;
-import me.earth.earthhack.impl.modules.player.timer.TimerData;
 import me.earth.earthhack.impl.modules.player.timer.mode.TimerMode;
 import me.earth.earthhack.impl.util.helpers.disabling.DisablingModule;
 import me.earth.earthhack.impl.util.math.StopWatch;
+import me.earth.earthhack.impl.util.text.TextColor;
 
-public class Timer
-extends DisablingModule {
-    protected final Setting<TimerMode> mode = this.register(new EnumSetting<TimerMode>("Mode", TimerMode.Normal));
-    protected final Setting<Integer> autoOff = this.register(new NumberSetting<Integer>("AutoOff", 0, 0, 1000));
-    protected final Setting<Integer> lagTime = this.register(new NumberSetting<Integer>("LagTime", 250, 0, 1000));
-    protected final Setting<Float> speed = this.register(new NumberSetting<Float>("Speed", Float.valueOf(1.0888f), Float.valueOf(0.1f), Float.valueOf(100.0f)));
-    protected final Setting<Integer> updates = this.register(new NumberSetting<Integer>("Updates", 2, 0, 100));
-    protected final Setting<Float> fast = this.register(new NumberSetting<Float>("Fast", Float.valueOf(20.0f), Float.valueOf(0.1f), Float.valueOf(100.0f)));
-    protected final Setting<Integer> fastTime = this.register(new NumberSetting<Integer>("FastTime", 100, 0, 5000));
-    protected final Setting<Float> slow = this.register(new NumberSetting<Float>("Slow", Float.valueOf(1.0f), Float.valueOf(0.1f), Float.valueOf(100.0f)));
-    protected final Setting<Integer> slowTime = this.register(new NumberSetting<Integer>("SlowTime", 250, 0, 5000));
-    protected final Setting<Integer> maxPackets = this.register(new NumberSetting<Integer>("Max-Packets", 100, 0, 1000));
-    protected final Setting<Integer> offset = this.register(new NumberSetting<Integer>("Offset", 10, 0, 100));
-    protected final Setting<Integer> letThrough = this.register(new NumberSetting<Integer>("Network-Ticks", 10, 0, 100));
-    protected final StopWatch offTimer = new StopWatch();
+//TODO: For Mode Blink: check the way network packets update, theres something
+// with like 20 ticks until it sets the position
+public class Timer extends DisablingModule
+{
+    protected final Setting<TimerMode> mode   =
+            register(new EnumSetting<>("Mode", TimerMode.Normal));
+    protected final Setting<Integer> autoOff  =
+            register(new NumberSetting<>("AutoOff", 0, 0, 1000));
+    protected final Setting<Integer> lagTime  =
+            register(new NumberSetting<>("LagTime", 250, 0, 1000));
+    protected final Setting<Float> speed      =
+            register(new NumberSetting<>("Speed", 1.0888f, 0.1f, 100.0f));
+    // TODO: make this like normal timer by checking every gameloop.
+    protected final Setting<Integer> updates  =
+            register(new NumberSetting<>("Updates", 2, 0, 100));
+    protected final Setting<Float> fast       =
+            register(new NumberSetting<>("Fast", 20.0f, 0.1f, 100.0f));
+    protected final Setting<Integer> fastTime =
+            register(new NumberSetting<>("FastTime", 100, 0, 5000));
+    protected final Setting<Float> slow       =
+            register(new NumberSetting<>("Slow", 1.0f, 0.1f, 100.0f));
+    protected final Setting<Integer> slowTime =
+            register(new NumberSetting<>("SlowTime", 250, 0, 5000));
+    protected final Setting<Integer> maxPackets =
+            register(new NumberSetting<>("Max-Packets", 100, 0, 1000));
+    protected final Setting<Integer> offset =
+            register(new NumberSetting<>("Offset", 10, 0, 100));
+    protected final Setting<Integer> letThrough =
+            register(new NumberSetting<>("Network-Ticks", 10, 0, 100));
+
+    protected final StopWatch offTimer    = new StopWatch();
     protected final StopWatch switchTimer = new StopWatch();
     protected float pSpeed = 1.0f;
-    protected int ticks = 0;
+    protected int ticks   = 0;
     protected int packets = 0;
-    protected int sent = 0;
+    protected int sent    = 0;
     protected boolean isSlow;
 
-    public Timer() {
+    public Timer()
+    {
         super("Timer", Category.Player);
         this.listeners.add(new ListenerPosLook(this));
         this.listeners.add(new ListenerMotion(this));
@@ -47,62 +58,80 @@ extends DisablingModule {
     }
 
     @Override
-    protected void onEnable() {
-        this.packets = 0;
-        this.sent = 0;
-        this.isSlow = false;
-        this.offTimer.reset();
+    protected void onEnable()
+    {
+        packets = 0;
+        sent    = 0;
+        isSlow = false;
+        offTimer.reset();
     }
 
     @Override
-    protected void onDisable() {
+    protected void onDisable()
+    {
         Managers.TIMER.reset();
     }
 
     @Override
-    public String getDisplayInfo() {
-        String color = !Managers.NCP.passed(this.lagTime.getValue()) ? "\u00a7c" : "";
-        switch (this.mode.getValue()) {
-            case Switch: {
-                return color + this.getSwitchSpeed();
-            }
-            case Physics: {
-                return color + "Physics";
-            }
-            case Blink: {
-                return (this.packets > 0 && this.pSpeed != 1.0f ? "\u00a7a" : color) + this.packets;
-            }
+    public String getDisplayInfo()
+    {
+        String color;
+
+        if (!Managers.NCP.passed(lagTime.getValue()))
+        {
+            color = TextColor.RED;
         }
-        return color + this.speed.getValue().toString();
+        else
+        {
+            color = "";
+        }
+
+        switch(mode.getValue())
+        {
+            case Switch:
+                return color + getSwitchSpeed();
+            case Physics:
+                return color + "Physics";
+            case Blink:
+                return (packets > 0 && pSpeed != 1.0f ? TextColor.GREEN : color)
+                        + packets;
+        }
+
+        return color + speed.getValue().toString();
     }
 
-    public float getSpeed() {
-        if (Managers.NCP.passed(this.lagTime.getValue())) {
-            switch (this.mode.getValue()) {
-                case Switch: {
-                    if (this.switchTimer.passed(this.getTime())) {
-                        this.isSlow = !this.isSlow;
-                        this.switchTimer.reset();
+    public float getSpeed()
+    {
+        if (Managers.NCP.passed(lagTime.getValue()))
+        {
+            switch(mode.getValue())
+            {
+                case Switch:
+                    if (switchTimer.passed(getTime()))
+                    {
+                        isSlow = !isSlow;
+                        switchTimer.reset();
                     }
-                    return this.getSwitchSpeed();
-                }
-                case Normal: {
-                    return this.speed.getValue().floatValue();
-                }
-                case Blink: {
-                    return this.pSpeed;
-                }
+                    return getSwitchSpeed();
+                case Normal:
+                    return speed.getValue();
+                case Blink:
+                    return pSpeed;
+                default:
             }
         }
+
         return 1.0f;
     }
 
-    private int getTime() {
-        return this.isSlow ? this.slowTime.getValue().intValue() : this.fastTime.getValue().intValue();
+    private int getTime()
+    {
+        return isSlow ? slowTime.getValue() : fastTime.getValue();
     }
 
-    private float getSwitchSpeed() {
-        return this.isSlow ? this.slow.getValue().floatValue() : this.fast.getValue().floatValue();
+    private float getSwitchSpeed()
+    {
+        return isSlow ? slow.getValue() : fast.getValue();
     }
+
 }
-

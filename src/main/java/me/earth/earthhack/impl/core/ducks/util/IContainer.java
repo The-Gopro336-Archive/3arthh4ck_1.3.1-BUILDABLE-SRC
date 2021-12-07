@@ -1,11 +1,13 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.core.ducks.util;
 
-public interface IContainer {
-    public void setTransactionID(short var1);
+/**
+ * Duck interface for {@link net.minecraft.inventory.Container}.
+ */
+public interface IContainer
+{
 
-    public short getTransactionID();
+    void setTransactionID(short id);
+
+    short getTransactionID();
+
 }
-

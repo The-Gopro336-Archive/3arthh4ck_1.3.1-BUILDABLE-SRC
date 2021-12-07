@@ -1,13 +1,16 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.api.util.interfaces;
 
 import me.earth.earthhack.api.module.util.Hidden;
 
-public interface Hideable {
-    public void setHidden(Hidden var1);
+/**
+ * An interface for Objects that can be {@link Hidden}.
+ */
+public interface Hideable
+{
+    /** Sets the {@link Hidden} state for this Object. */
+    void setHidden(Hidden hidden);
 
-    public Hidden isHidden();
+    /** @return the {@link Hidden} state for this Object. */
+    Hidden isHidden();
+
 }
-

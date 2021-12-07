@@ -1,28 +1,49 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.player.EntityPlayer
- *  net.minecraft.util.DamageSource
- */
 package me.earth.earthhack.impl.util.minecraft;
 
 import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
+import me.earth.earthhack.impl.util.thread.EnchantmentUtil;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 
-public interface ICachedDamage {
-    public static final Setting<Boolean> SHOULD_CACHE = new BooleanSetting("CacheAttributes", true);
+/**
+ * Caches
+ * {@link EntityLivingBase#getTotalArmorValue()},
+ * {@link SharedMonsterAttributes#ARMOR_TOUGHNESS} and
+ * {@link EnchantmentUtil#getEnchantmentModifierDamage(Iterable, DamageSource)}
+ * in order to prevent ConcurrentModificationExceptions when accessing
+ * these on a different Thread.
+ */
+public interface ICachedDamage
+{
+    /** {@link me.earth.earthhack.impl.modules.client.safety.Safety} */
+    Setting<Boolean> SHOULD_CACHE = new BooleanSetting("CacheAttributes", true);
 
-    public int getArmorValue();
+    /**
+     * @return {@link EntityLivingBase#getTotalArmorValue()}
+     */
+    int getArmorValue();
 
-    public float getArmorToughness();
+    /**
+     * @return {@link SharedMonsterAttributes#ARMOR_TOUGHNESS}
+     */
+    float getArmorToughness();
 
-    public int getExplosionModifier(DamageSource var1);
+    /**
+     * @param source the DamageSource (Should be an Explosion).
+     * @return {@link EnchantmentUtil#getEnchantmentModifierDamage(
+     * Iterable, DamageSource)}
+     */
+    int getExplosionModifier(DamageSource source);
 
-    default public boolean shouldCache() {
-        return SHOULD_CACHE.getValue() != false && this instanceof EntityPlayer;
+    /**
+     * @return <tt>true</tt> if this Object caches values.
+     */
+    default boolean shouldCache()
+    {
+        return SHOULD_CACHE.getValue() && this instanceof EntityPlayer;
     }
-}
 
+}

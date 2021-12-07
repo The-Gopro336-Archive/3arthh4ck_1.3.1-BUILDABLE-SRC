@@ -1,42 +1,37 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.block.state.IBlockState
- *  net.minecraft.util.math.BlockPos
- */
 package me.earth.earthhack.impl.modules.player.automine.util;
 
-import java.util.concurrent.Future;
-import me.earth.earthhack.impl.modules.player.automine.util.IConstellation;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 
-public interface IAutomine {
-    public boolean isValid(IBlockState var1);
+import java.util.concurrent.Future;
 
-    public void offer(IConstellation var1);
+public interface IAutomine
+{
+    // TODO: use for terrain calc?
+    boolean isValid(IBlockState state);
 
-    public void attackPos(BlockPos var1);
+    void offer(IConstellation constellation);
 
-    public void setCurrent(BlockPos var1);
+    void attackPos(BlockPos pos);
 
-    public BlockPos getCurrent();
+    void setCurrent(BlockPos pos);
 
-    public void setFuture(Future<?> var1);
+    BlockPos getCurrent();
 
-    public float getMinDmg();
+    void setFuture(Future<?> future);
 
-    public float getMaxSelfDmg();
+    float getMinDmg();
 
-    public double getBreakTrace();
+    float getMaxSelfDmg();
 
-    public boolean getNewVEntities();
+    double getBreakTrace();
 
-    public boolean shouldMineObby();
+    boolean getNewVEntities();
 
-    public boolean isSuicide();
+    boolean shouldMineObby();
 
-    public boolean canBigCalcsBeImproved();
+    boolean isSuicide();
+
+    boolean canBigCalcsBeImproved();
+
 }
-

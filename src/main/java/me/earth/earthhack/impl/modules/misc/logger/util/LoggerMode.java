@@ -1,11 +1,8 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.misc.logger.util;
 
-public enum LoggerMode {
+// TODO: could do mode buffer for incoming as well but kinda dumb
+public enum LoggerMode
+{
     Normal,
-    Buffer;
-
+    Buffer
 }
-

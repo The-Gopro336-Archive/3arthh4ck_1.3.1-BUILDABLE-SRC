@@ -1,11 +1,8 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.player.automine.mode;
 
-public enum AutoMineMode {
+public enum AutoMineMode
+{
     Combat,
-    AntiTrap;
-
+    AntiTrap
+    //TODO: Tunnel or something I guess
 }
-

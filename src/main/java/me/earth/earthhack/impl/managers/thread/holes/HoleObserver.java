@@ -1,23 +1,44 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.managers.thread.holes;
 
-public interface HoleObserver
-extends Comparable<HoleObserver> {
-    public double getRange();
+/**
+ * A HoleObserver that can be registered
+ * with {@link HoleManager#register(HoleObserver)}.
+ * HoleObservers are required for the HoleManager
+ * to run, so that it doesn't calculate holes when
+ * not needed.
+ */
+public interface HoleObserver extends Comparable<HoleObserver>
+{
+    /**
+     * @return the minimum range in which holes should
+     *         be checked while this HoleObserver is registered.
+     */
+    double getRange();
 
-    public int getSafeHoles();
+    /**
+     * @return the Amount of safe holes that should be calculated.
+     */
+    int getSafeHoles();
 
-    public int getUnsafeHoles();
+    /**
+     * @return the Amount of unsafe holes that should be calculated.
+     */
+    int getUnsafeHoles();
 
-    public int get2x1Holes();
+    /**
+     * @return the Amount of 2x1 holes that should be calculated.
+     */
+    int get2x1Holes();
 
-    public int get2x2Holes();
+    /**
+     * @return the Amount of 2x2 holes that should be calculated.
+     */
+    int get2x2Holes();
 
     @Override
-    default public int compareTo(HoleObserver o) {
+    default int compareTo(HoleObserver o)
+    {
         return Double.compare(this.getRange(), o.getRange());
     }
-}
 
+}

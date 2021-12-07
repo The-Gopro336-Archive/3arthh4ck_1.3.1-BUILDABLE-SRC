@@ -1,23 +1,26 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.core.ducks.entity;
 
-public interface IEntityLivingBase {
-    public int armSwingAnimationEnd();
+/**
+ * Duck interface for {@link net.minecraft.entity.EntityLivingBase}.
+ */
+public interface IEntityLivingBase
+{
+    /** @return the getArmSwingAnimationEnd field. */
+    int armSwingAnimationEnd();
 
-    public int getTicksSinceLastSwing();
+    /** @return the ticksSinceLastSwing field. */
+    int getTicksSinceLastSwing();
 
-    public int getActiveItemStackUseCount();
+    int getActiveItemStackUseCount();
 
-    public void setTicksSinceLastSwing(int var1);
+    void setTicksSinceLastSwing(int ticks);
 
-    public void setActiveItemStackUseCount(int var1);
+    void setActiveItemStackUseCount(int count);
 
-    public boolean getElytraFlag();
+    boolean getElytraFlag();
 
-    public void setLowestDura(float var1);
+    void setLowestDura(float lowest);
 
-    public float getLowestDurability();
+    float getLowestDurability();
+
 }
-

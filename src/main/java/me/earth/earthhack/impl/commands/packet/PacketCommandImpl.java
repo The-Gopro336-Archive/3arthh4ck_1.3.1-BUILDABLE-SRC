@@ -1,111 +1,13 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  com.mojang.authlib.GameProfile
- *  io.netty.buffer.Unpooled
- *  io.netty.util.ReferenceCounted
- *  net.minecraft.advancements.Advancement
- *  net.minecraft.advancements.AdvancementProgress
- *  net.minecraft.block.Block
- *  net.minecraft.entity.Entity
- *  net.minecraft.entity.EntityLivingBase
- *  net.minecraft.entity.ai.attributes.IAttributeInstance
- *  net.minecraft.entity.item.EntityPainting
- *  net.minecraft.entity.item.EntityXPOrb
- *  net.minecraft.entity.player.EntityPlayer
- *  net.minecraft.entity.player.EntityPlayer$EnumChatVisibility
- *  net.minecraft.entity.player.PlayerCapabilities
- *  net.minecraft.inventory.ClickType
- *  net.minecraft.inventory.EntityEquipmentSlot
- *  net.minecraft.item.Item
- *  net.minecraft.item.ItemStack
- *  net.minecraft.item.crafting.IRecipe
- *  net.minecraft.nbt.NBTTagCompound
- *  net.minecraft.network.EnumConnectionState
- *  net.minecraft.network.Packet
- *  net.minecraft.network.PacketBuffer
- *  net.minecraft.network.ServerStatusResponse
- *  net.minecraft.network.datasync.EntityDataManager
- *  net.minecraft.network.play.INetHandlerPlayClient
- *  net.minecraft.network.play.INetHandlerPlayServer
- *  net.minecraft.network.play.client.CPacketClientStatus$State
- *  net.minecraft.network.play.client.CPacketEntityAction$Action
- *  net.minecraft.network.play.client.CPacketPlayerDigging$Action
- *  net.minecraft.network.play.client.CPacketResourcePackStatus$Action
- *  net.minecraft.network.play.client.CPacketSeenAdvancements$Action
- *  net.minecraft.network.play.server.SPacketAdvancementInfo
- *  net.minecraft.network.play.server.SPacketCombatEvent$Event
- *  net.minecraft.network.play.server.SPacketEntityProperties
- *  net.minecraft.network.play.server.SPacketExplosion
- *  net.minecraft.network.play.server.SPacketMaps
- *  net.minecraft.network.play.server.SPacketPlayerListHeaderFooter
- *  net.minecraft.network.play.server.SPacketPlayerListItem
- *  net.minecraft.network.play.server.SPacketPlayerListItem$Action
- *  net.minecraft.network.play.server.SPacketPlayerPosLook
- *  net.minecraft.network.play.server.SPacketPlayerPosLook$EnumFlags
- *  net.minecraft.network.play.server.SPacketRecipeBook
- *  net.minecraft.network.play.server.SPacketRecipeBook$State
- *  net.minecraft.network.play.server.SPacketStatistics
- *  net.minecraft.network.play.server.SPacketTeams
- *  net.minecraft.network.play.server.SPacketTitle$Type
- *  net.minecraft.network.play.server.SPacketUpdateBossInfo$Operation
- *  net.minecraft.network.play.server.SPacketWindowItems
- *  net.minecraft.network.play.server.SPacketWorldBorder$Action
- *  net.minecraft.potion.Potion
- *  net.minecraft.potion.PotionEffect
- *  net.minecraft.scoreboard.Score
- *  net.minecraft.scoreboard.ScoreObjective
- *  net.minecraft.scoreboard.ScorePlayerTeam
- *  net.minecraft.stats.StatBase
- *  net.minecraft.util.CombatTracker
- *  net.minecraft.util.EnumFacing
- *  net.minecraft.util.EnumHand
- *  net.minecraft.util.EnumHandSide
- *  net.minecraft.util.EnumParticleTypes
- *  net.minecraft.util.NonNullList
- *  net.minecraft.util.ResourceLocation
- *  net.minecraft.util.SoundCategory
- *  net.minecraft.util.SoundEvent
- *  net.minecraft.util.math.BlockPos
- *  net.minecraft.util.math.Vec3d
- *  net.minecraft.util.text.ChatType
- *  net.minecraft.util.text.ITextComponent
- *  net.minecraft.world.BossInfo
- *  net.minecraft.world.EnumDifficulty
- *  net.minecraft.world.GameType
- *  net.minecraft.world.World
- *  net.minecraft.world.WorldType
- *  net.minecraft.world.border.WorldBorder
- *  net.minecraft.world.chunk.Chunk
- *  net.minecraft.world.storage.MapDecoration
- */
 package me.earth.earthhack.impl.commands.packet;
 
 import com.mojang.authlib.GameProfile;
 import io.netty.buffer.Unpooled;
-import io.netty.util.ReferenceCounted;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.security.PublicKey;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import javax.crypto.SecretKey;
 import me.earth.earthhack.api.command.Command;
 import me.earth.earthhack.api.command.Completer;
 import me.earth.earthhack.api.command.PossibleInputs;
 import me.earth.earthhack.api.util.TextUtil;
 import me.earth.earthhack.api.util.interfaces.Globals;
 import me.earth.earthhack.impl.Earthhack;
-import me.earth.earthhack.impl.commands.packet.PacketArgument;
-import me.earth.earthhack.impl.commands.packet.PacketCommand;
 import me.earth.earthhack.impl.commands.packet.arguments.AdvancementArgument;
 import me.earth.earthhack.impl.commands.packet.arguments.AdvancementProgressArgument;
 import me.earth.earthhack.impl.commands.packet.arguments.AttributeArgument;
@@ -181,6 +83,8 @@ import me.earth.earthhack.impl.util.mcp.MappingProvider;
 import me.earth.earthhack.impl.util.network.NetworkUtil;
 import me.earth.earthhack.impl.util.network.PacketUtil;
 import me.earth.earthhack.impl.util.text.ChatUtil;
+import me.earth.earthhack.impl.util.text.TextColor;
+import me.earth.earthhack.installer.srg2notch.MappingUtil;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.block.Block;
@@ -252,339 +156,600 @@ import net.minecraft.world.border.WorldBorder;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.storage.MapDecoration;
 
-public class PacketCommandImpl
-extends Command
-implements Globals,
-PacketCommand {
-    private final Map<Class<? extends Packet<?>>, List<GenericArgument<?>>> generics;
-    private final Map<Class<? extends Packet<?>>, PacketFactory> custom;
-    private final Set<Class<? extends Packet<?>>> packets;
-    private final Map<Class<?>, PacketArgument<?>> arguments;
-    private final PacketFactory default_factory;
+import javax.crypto.SecretKey;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.security.PublicKey;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
-    public PacketCommandImpl() {
+// TODO: Deobfuscate in VANILLA!!!
+public class PacketCommandImpl extends Command implements Globals, PacketCommand
+{
+    private final Map<Class<? extends Packet<?>>, List<GenericArgument<?>>>
+            generics;
+    private final Map<Class<? extends Packet<?>>, PacketFactory>
+            custom;
+    private final Set<Class<? extends Packet<?>>>
+            packets;
+    private final Map<Class<?>, PacketArgument<?>>
+            arguments;
+    private final PacketFactory
+            default_factory;
+
+    public PacketCommandImpl()
+    {
         super(new String[][]{{"packet"}, {"packet"}, {"index"}, {"arguments"}});
         CommandDescriptions.register(this, "Send/receive packets.");
-        this.custom = new HashMap();
-        this.generics = new HashMap();
-        this.arguments = new HashMap();
-        this.packets = new HashSet();
-        this.default_factory = new DefaultFactory(this);
-        this.setup();
+        custom    = new HashMap<>();
+        generics  = new HashMap<>();
+        arguments = new HashMap<>();
+        packets   = new HashSet<>();
+        default_factory = new DefaultFactory(this);
+        setup();
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
     @Override
-    public void execute(String[] args) {
+    @SuppressWarnings("unchecked")
+    public void execute(String[] args)
+    {
+        if (args == null || args.length == 1)
+        {
+            ChatUtil.sendMessage("<PacketCommand> Use this command to" +
+                    " send/receive a Packet. Remember to maybe escape your " +
+                    "arguments with \", Arrays and Collection arguments are" +
+                    " seperated by ], Map.Entries by ). This command should" +
+                    " only be used if you know what you are doing!");
+            return;
+        }
+
+        if (mc.player == null || mc.world == null)
+        {
+            ChatUtil.sendMessage(TextColor.RED
+                    + "This command can only be used while ingame!");
+            return;
+        }
+
+        Class<? extends Packet<?>> packetType = getPacket(args[1]);
+        if (packetType == null)
+        {
+            ChatUtil.sendMessage(TextColor.RED
+                    + "Couldn't find packet: "
+                    + TextColor.WHITE
+                    + args[1]
+                    + TextColor.RED + "!");
+            return;
+        }
+
+        Type type = getNetHandlerType(packetType);
+        if (type != INetHandlerPlayClient.class
+                && type != INetHandlerPlayServer.class)
+        {
+            ChatUtil.sendMessage(TextColor.RED + "Packet "
+                    + TextColor.WHITE + packetType.getName()
+                    + TextColor.RED + " has unknown NetHandler type: "
+                    + TextColor.WHITE + type + TextColor.RED + "!");
+            return;
+        }
+
+        if (args.length == 2)
+        {
+            ChatUtil.sendMessage(
+                    TextColor.RED + "Please specify a constructor index!");
+            return;
+        }
+
+        PacketFactory gen = custom.getOrDefault(packetType, default_factory);
         Packet<?> packet;
-        if (args == null || args.length == 1) {
-            ChatUtil.sendMessage("<PacketCommand> Use this command to send/receive a Packet. Remember to maybe escape your arguments with \", Arrays and Collection arguments are seperated by ], Map.Entries by ). This command should only be used if you know what you are doing!");
-            return;
-        }
-        if (PacketCommandImpl.mc.player == null || PacketCommandImpl.mc.world == null) {
-            ChatUtil.sendMessage("\u00a7cThis command can only be used while ingame!");
-            return;
-        }
-        Class<Packet<?>> packetType = this.getPacket(args[1]);
-        if (packetType == null) {
-            ChatUtil.sendMessage("\u00a7cCouldn't find packet: \u00a7f" + args[1] + "\u00a7c" + "!");
-            return;
-        }
-        Type type = this.getNetHandlerType(packetType);
-        if (type != INetHandlerPlayClient.class && type != INetHandlerPlayServer.class) {
-            ChatUtil.sendMessage("\u00a7cPacket \u00a7f" + packetType.getName() + "\u00a7c" + " has unknown NetHandler type: " + "\u00a7f" + type + "\u00a7c" + "!");
-            return;
-        }
-        if (args.length == 2) {
-            ChatUtil.sendMessage("\u00a7cPlease specify a constructor index!");
-            return;
-        }
-        PacketFactory gen = this.custom.getOrDefault(packetType, this.default_factory);
-        try {
+
+        try
+        {
             packet = gen.create(packetType, args);
         }
-        catch (ArgParseException e) {
-            ChatUtil.sendMessage("\u00a7c" + e.getMessage());
+        catch (ArgParseException e)
+        {
+            ChatUtil.sendMessage(TextColor.RED + e.getMessage());
             return;
         }
-        if (packet == null) {
-            ChatUtil.sendMessage("\u00a7cPacket for \u00a7f" + MappingProvider.simpleName(packetType) + "\u00a7c" + " was null?!");
+
+        if (packet == null)
+        {
+            ChatUtil.sendMessage(TextColor.RED + "Packet for "
+                    + TextColor.WHITE + MappingProvider.simpleName(packetType)
+                    + TextColor.RED + " was null?!");
             return;
         }
-        if (type == INetHandlerPlayServer.class) {
-            ChatUtil.sendMessage("\u00a7aSending packet \u00a7f" + MappingProvider.simpleName(packetType) + "\u00a7a" + " to server!");
-            try {
-                PacketCommandImpl.mc.player.connection.sendPacket(packet);
+
+        if (type == INetHandlerPlayServer.class)
+        {
+            ChatUtil.sendMessage(TextColor.GREEN + "Sending packet "
+                    + TextColor.WHITE + MappingProvider.simpleName(packetType)
+                    + TextColor.GREEN + " to server!");
+            try
+            {
+                mc.player.connection.sendPacket(packet);
             }
-            catch (Throwable t) {
-                ChatUtil.sendMessage("\u00a7cAn error occurred while sending packet \u00a7f" + MappingProvider.simpleName(packetType) + "\u00a7c" + ": " + t.getMessage());
+            catch (Throwable t)
+            {
+                ChatUtil.sendMessage(TextColor.RED
+                        + "An error occurred while sending packet "
+                        + TextColor.WHITE
+                        + MappingProvider.simpleName(packetType)
+                        + TextColor.RED + ": " + t.getMessage());
                 t.printStackTrace();
             }
-        } else {
-            ChatUtil.sendMessage("\u00a7aAttempting to receive packet \u00a7f" + MappingProvider.simpleName(packetType) + "\u00a7a" + "!");
+        }
+        else
+        {
+            ChatUtil.sendMessage(TextColor.GREEN
+                    + "Attempting to receive packet "
+                    + TextColor.WHITE + MappingProvider.simpleName(packetType)
+                    + TextColor.GREEN + "!");
+
             PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
             List<Object> rs = BufferUtil.saveReleasableFields(packet);
-            try {
+
+            try
+            {
+                // this is required because some packets have
+                // their fields initialized differently depending
+                // on if they were constructed by ctr or buffer
                 packet.writePacketData(buffer);
                 packet.readPacketData(buffer);
-                if (!NetworkUtil.receive(packet)) {
-                    ChatUtil.sendMessage("\u00a7cThe packet \u00a7f" + MappingProvider.simpleName(packetType) + "\u00a7c" + " got cancelled!");
+
+                if (!NetworkUtil.receive(
+                        (Packet<INetHandlerPlayClient>) packet))
+                {
+                    ChatUtil.sendMessage(
+                        TextColor.RED + "The packet "
+                            + TextColor.WHITE
+                            + MappingProvider.simpleName(packetType)
+                            + TextColor.RED + " got cancelled!");
                 }
             }
-            catch (Throwable t) {
-                ChatUtil.sendMessage("\u00a7cAn error occurred while receiving packet \u00a7f" + MappingProvider.simpleName(packetType) + "\u00a7c" + ": " + t.getMessage());
+            catch (Throwable t)
+            {
+                ChatUtil.sendMessage(TextColor.RED
+                        + "An error occurred while receiving packet "
+                        + TextColor.WHITE
+                        + MappingProvider.simpleName(packetType)
+                        + TextColor.RED + ": " + t.getMessage());
                 t.printStackTrace();
             }
-            finally {
+            finally
+            {
                 BufferUtil.release(rs);
                 BufferUtil.releaseFields(packet);
-                BufferUtil.releaseBuffer((ReferenceCounted)buffer);
+                BufferUtil.releaseBuffer(buffer);
             }
         }
     }
 
     @Override
-    public PossibleInputs getPossibleInputs(String[] args) {
+    public PossibleInputs getPossibleInputs(String[] args)
+    {
         PossibleInputs inputs = PossibleInputs.empty();
-        if (PacketCommandImpl.mc.world == null || PacketCommandImpl.mc.player == null) {
-            return inputs.setRest("\u00a7c <This command can only be used while ingame!>");
+        if (mc.world == null || mc.player == null)
+        {
+            return inputs.setRest(TextColor.RED
+                    + " <This command can only be used while ingame!>");
         }
-        if (args.length <= 1 || args[1].isEmpty()) {
+
+        if (args.length <= 1 || args[1].isEmpty())
+        {
             return super.getPossibleInputs(args);
         }
-        Class<? extends Packet<?>> packet = this.getPacket(args[1]);
-        if (packet == null) {
-            return inputs.setRest("\u00a7c not found!");
+
+        Class<? extends Packet<?>> packet = getPacket(args[1]);
+        if (packet == null)
+        {
+            return inputs.setRest(TextColor.RED + " not found!");
         }
-        PacketFactory factory = this.custom.getOrDefault(packet, this.default_factory);
+
+        PacketFactory factory = custom.getOrDefault(packet, default_factory);
         return factory.getInputs(packet, args);
     }
 
     @Override
-    public Completer onTabComplete(Completer completer) {
+    public Completer onTabComplete(Completer completer)
+    {
         String[] args = completer.getArgs();
-        if (args != null && args.length >= 2) {
-            Class<? extends Packet<?>> p = this.getPacket(args[1]);
-            PacketFactory factory = this.custom.getOrDefault(p, this.default_factory);
-            switch (factory.onTabComplete(completer)) {
-                case PASS: {
+        if (args != null && args.length >= 2)
+        {
+            Class<? extends Packet<?>> p = getPacket(args[1]);
+            PacketFactory factory = custom.getOrDefault(p, default_factory);
+            switch (factory.onTabComplete(completer))
+            {
+                case PASS:
                     break;
-                }
-                case RETURN: {
+                case RETURN:
                     return completer;
-                }
-                case SUPER: {
+                case SUPER:
                     return super.onTabComplete(completer);
-                }
             }
         }
-        if (completer.isSame()) {
+
+        if (completer.isSame())
+        {
             return completer;
         }
+
         return super.onTabComplete(completer);
     }
 
-    public void addGeneric(Class<? extends Packet<?>> type, GenericArgument<?> argument) {
-        this.generics.computeIfAbsent(type, v -> new ArrayList()).add(argument);
+    public void addGeneric(Class<? extends Packet<?>> type,
+                           GenericArgument<?> argument)
+    {
+        generics.computeIfAbsent(type, v -> new ArrayList<>()).add(argument);
     }
 
-    public <T extends Packet<?>> void addCustom(Class<T> type, PacketFactory factory) {
-        this.custom.put(type, factory);
+    public <T extends Packet<?>> void addCustom(Class<T> type,
+                                                PacketFactory factory)
+    {
+        custom.put(type, factory);
     }
 
-    public <T> void addArgument(Class<T> type, PacketArgument<T> argument) {
-        this.arguments.put(type, argument);
+    public <T> void addArgument(Class<T> type, PacketArgument<T> argument)
+    {
+        arguments.put(type, argument);
     }
 
-    public void addPacket(Class<? extends Packet<?>> packet) {
-        this.packets.add(packet);
+    public void addPacket(Class<? extends Packet<?>> packet)
+    {
+        packets.add(packet);
     }
 
     @Override
-    public Class<? extends Packet<?>> getPacket(String name) {
-        for (Class<? extends Packet<?>> class_ : this.packets) {
-            if (!TextUtil.startsWith(this.getName(class_), name)) continue;
-            return class_;
+    public Class<? extends Packet<?>> getPacket(String name)
+    {
+        for (Class<? extends Packet<?>> packet : packets)
+        {
+            if (TextUtil.startsWith(getName(packet), name))
+            {
+                return packet;
+            }
         }
+
         return null;
     }
 
     @Override
-    public Map<Class<? extends Packet<?>>, List<GenericArgument<?>>> getGenerics() {
-        return this.generics;
+    public Map<Class<? extends Packet<?>>,List<GenericArgument<?>>> getGenerics()
+    {
+        return generics;
     }
 
     @Override
-    public Map<Class<? extends Packet<?>>, PacketFactory> getCustom() {
-        return this.custom;
+    public Map<Class<? extends Packet<?>>, PacketFactory> getCustom()
+    {
+        return custom;
     }
 
     @Override
-    public Set<Class<? extends Packet<?>>> getPackets() {
-        return this.packets;
+    public Set<Class<? extends Packet<?>>> getPackets()
+    {
+        return packets;
     }
 
     @Override
-    public Map<Class<?>, PacketArgument<?>> getArguments() {
-        return this.arguments;
+    public Map<Class<?>, PacketArgument<?>> getArguments()
+    {
+        return arguments;
     }
 
     @Override
-    public String getName(Class<? extends Packet<?>> packet) {
+    public String getName(Class<? extends Packet<?>> packet)
+    {
         String simpleName = MappingProvider.simpleName(packet);
-        if (packet.getSuperclass() != Object.class) {
-            simpleName = MappingProvider.simpleName(packet.getSuperclass()) + "-" + simpleName;
+        if (packet.getSuperclass() != Object.class)
+        {
+            simpleName = MappingProvider.simpleName(packet.getSuperclass())
+                    + "-" + simpleName;
         }
+
         return simpleName;
     }
 
-    private void setup() {
-        this.addCustom(SPacketPlayerListHeaderFooter.class, new SPacketPlayerListHeaderFooterFactory(this));
-        this.addCustom(SPacketPlayerListItem.class, new SPacketPlayerListItemFactory(this));
-        this.addArgument(Boolean.TYPE, new BooleanArgument());
-        this.addArgument(Integer.TYPE, new IntArgument());
-        this.addArgument(Float.TYPE, new FloatArgument());
-        this.addArgument(Short.TYPE, new ShortArgument());
-        this.addArgument(Long.TYPE, new LongArgument());
-        this.addArgument(Double.TYPE, new DoubleArgument());
-        this.addArgument(Byte.TYPE, new ByteArgument());
-        this.addArgument(String.class, new StringArgument());
-        this.addArgument(BlockPos.class, new BlockPosArgument());
-        this.addArgument(Vec3d.class, new Vec3dArgument());
-        this.addArgument(Chunk.class, new ChunkArgument());
-        this.addArgument(UUID.class, new UUIDArgument());
-        this.addArgument(GameProfile.class, new GameProfileArgument());
-        this.addArgument(ResourceLocation.class, new ResourceLocationArgument());
-        this.addArgument(NBTTagCompound.class, new NBTTagCompoundArgument());
-        this.addArgument(World.class, new WorldArgument());
-        this.addArgument(ITextComponent.class, new TextComponentArgument());
-        this.addArgument(PacketBuffer.class, new PacketBufferArgument());
-        this.addArgument(Item.class, new ItemArgument());
-        this.addArgument(ItemStack.class, new ItemStackArgument());
-        this.addArgument(Block.class, new BlockArgument());
-        this.addArgument(Potion.class, new PotionArgument());
-        this.addArgument(PotionEffect.class, new PotionEffectArgument());
-        this.addArgument(WorldType.class, new WorldTypeArgument());
-        this.addArgument(SoundEvent.class, new SoundEventArgument());
-        this.addArgument(PlayerCapabilities.class, new PlayerCapabilitiesArgument());
-        this.addArgument(IRecipe.class, new RecipeArgument());
-        this.addArgument(Entity.class, new EntityArgument());
-        this.addArgument(EntityXPOrb.class, new EntityXPOrbArgument());
-        this.addArgument(EntityPlayer.class, new EntityPlayerArgument());
-        this.addArgument(EntityPainting.class, new EntityPaintingArgument());
-        this.addArgument(EntityLivingBase.class, new EntityLivingBaseArgument());
-        this.addArgument(IAttributeInstance.class, new AttributeArgument());
-        this.addArgument(SPacketPlayerListItem.Action.class, new EnumArgument<SPacketPlayerListItem.Action>(SPacketPlayerListItem.Action.class));
-        this.addArgument(SPacketWorldBorder.Action.class, new EnumArgument<SPacketWorldBorder.Action>(SPacketWorldBorder.Action.class));
-        this.addArgument(SPacketUpdateBossInfo.Operation.class, new EnumArgument<SPacketUpdateBossInfo.Operation>(SPacketUpdateBossInfo.Operation.class));
-        this.addArgument(SPacketCombatEvent.Event.class, new EnumArgument<SPacketCombatEvent.Event>(SPacketCombatEvent.Event.class));
-        this.addArgument(SPacketRecipeBook.State.class, new EnumArgument<SPacketRecipeBook.State>(SPacketRecipeBook.State.class));
-        this.addArgument(SPacketTitle.Type.class, new EnumArgument<SPacketTitle.Type>(SPacketTitle.Type.class));
-        this.addArgument(EntityEquipmentSlot.class, new EnumArgument<EntityEquipmentSlot>(EntityEquipmentSlot.class));
-        this.addArgument(EnumDifficulty.class, new EnumArgument<EnumDifficulty>(EnumDifficulty.class));
-        this.addArgument(EnumParticleTypes.class, new EnumArgument<EnumParticleTypes>(EnumParticleTypes.class));
-        this.addArgument(SoundCategory.class, new EnumArgument<SoundCategory>(SoundCategory.class));
-        this.addArgument(EnumConnectionState.class, new EnumArgument<EnumConnectionState>(EnumConnectionState.class));
-        this.addArgument(CPacketClientStatus.State.class, new EnumArgument<CPacketClientStatus.State>(CPacketClientStatus.State.class));
-        this.addArgument(CPacketEntityAction.Action.class, new EnumArgument<CPacketEntityAction.Action>(CPacketEntityAction.Action.class));
-        this.addArgument(CPacketPlayerDigging.Action.class, new EnumArgument<CPacketPlayerDigging.Action>(CPacketPlayerDigging.Action.class));
-        this.addArgument(CPacketResourcePackStatus.Action.class, new EnumArgument<CPacketResourcePackStatus.Action>(CPacketResourcePackStatus.Action.class));
-        this.addArgument(CPacketSeenAdvancements.Action.class, new EnumArgument<CPacketSeenAdvancements.Action>(CPacketSeenAdvancements.Action.class));
-        this.addArgument(EnumFacing.class, new EnumArgument<EnumFacing>(EnumFacing.class));
-        this.addArgument(ClickType.class, new EnumArgument<ClickType>(ClickType.class));
-        this.addArgument(EnumHandSide.class, new EnumArgument<EnumHandSide>(EnumHandSide.class));
-        this.addArgument(EntityPlayer.EnumChatVisibility.class, new EnumArgument<EntityPlayer.EnumChatVisibility>(EntityPlayer.EnumChatVisibility.class));
-        this.addArgument(EnumHand.class, new EnumArgument<EnumHand>(EnumHand.class));
-        this.addArgument(ChatType.class, new EnumArgument<ChatType>(ChatType.class));
-        this.addArgument(GameType.class, new EnumArgument<GameType>(GameType.class));
-        this.addArgument(MapDecoration.class, new MapDecorationArgument());
-        this.addArgument(Advancement.class, new AdvancementArgument());
-        this.addArgument(NonNullList.class, new NonNullListArgument());
-        this.addArgument(Map.class, new MapArgument());
-        this.addArgument(List.class, new ListArgument());
-        this.addArgument(Collection.class, new CollectionArgument());
-        this.addArgument(Set.class, new SetArgument());
-        this.addArgument(Iterable.class, new IterableArgument());
-        this.addArgument(SecretKey.class, new SecretKeyArgument());
-        this.addArgument(PublicKey.class, new PublicKeyArgument());
-        this.addArgument(WorldBorder.class, new WorldBorderArgument());
-        this.addArgument(BossInfo.class, new BossInfoArgument());
-        this.addArgument(ScoreObjective.class, new ScoreObjectiveArgument());
-        this.addArgument(CombatTracker.class, new CombatTrackerArgument());
-        this.addArgument(EntityDataManager.class, new EntityDataMangerArgument());
-        this.addArgument(Score.class, new ScoreArgument());
-        this.addArgument(ScorePlayerTeam.class, new ScorePlayerTeamArgument());
-        this.addArgument(ServerStatusResponse.class, new ServerStatusResponseArgument());
-        this.arguments.put(int[].class, new IntArrayArgument());
-        this.arguments.put(byte[].class, new ByteArrayArgument());
-        this.arguments.put(short[].class, new ShortArrayArgument());
-        this.arguments.put(String[].class, new FunctionArrayArgument<String>(String[].class, this.getArgument(String.class), String[]::new));
-        this.arguments.put(ITextComponent[].class, new FunctionArrayArgument<ITextComponent>(ITextComponent[].class, this.getArgument(ITextComponent.class), ITextComponent[]::new));
-        try {
-            Constructor recipe = SPacketRecipeBook.class.getDeclaredConstructor(SPacketRecipeBook.State.class, List.class, List.class, Boolean.TYPE, Boolean.TYPE);
-            this.addGeneric(SPacketRecipeBook.class, new GenericListArgument(recipe, 1, this.arguments.get(IRecipe.class)));
-            this.addGeneric(SPacketRecipeBook.class, new GenericListArgument(recipe, 2, this.arguments.get(IRecipe.class)));
-            Constructor teams = SPacketTeams.class.getDeclaredConstructor(ScorePlayerTeam.class, Collection.class, Integer.TYPE);
-            this.addGeneric(SPacketTeams.class, new GenericCollectionArgument(teams, 1, this.arguments.get(String.class)));
-            Constructor advancement = SPacketAdvancementInfo.class.getDeclaredConstructor(Boolean.TYPE, Collection.class, Set.class, Map.class);
-            this.addGeneric(SPacketAdvancementInfo.class, new GenericCollectionArgument(advancement, 1, this.arguments.get(Advancement.class)));
-            this.addGeneric(SPacketAdvancementInfo.class, new GenericSetArgument(advancement, 2, this.arguments.get(ResourceLocation.class)));
-            this.addGeneric(SPacketAdvancementInfo.class, new GenericMapArgument<ResourceLocation, AdvancementProgress, HashMap>(HashMap.class, advancement, 3, new ResourceLocationArgument(), new AdvancementProgressArgument()));
-            Constructor properties = SPacketEntityProperties.class.getDeclaredConstructor(Integer.TYPE, Collection.class);
-            this.addGeneric(SPacketEntityProperties.class, new GenericCollectionArgument(properties, 1, this.arguments.get(IAttributeInstance.class)));
-            Constructor constructor = SPacketExplosion.class.getDeclaredConstructor(Double.TYPE, Double.TYPE, Double.TYPE, Float.TYPE, List.class, Vec3d.class);
-            this.addGeneric(SPacketExplosion.class, new GenericListArgument(constructor, 4, this.arguments.get(BlockPos.class)));
-            Constructor posLook = SPacketPlayerPosLook.class.getDeclaredConstructor(Double.TYPE, Double.TYPE, Double.TYPE, Float.TYPE, Float.TYPE, Set.class, Integer.TYPE);
-            this.addGeneric(SPacketPlayerPosLook.class, new GenericSetArgument<SPacketPlayerPosLook.EnumFlags>(posLook, 5, new EnumArgument<SPacketPlayerPosLook.EnumFlags>(SPacketPlayerPosLook.EnumFlags.class)));
-            Constructor windowItems = SPacketWindowItems.class.getDeclaredConstructor(Integer.TYPE, NonNullList.class);
-            this.addGeneric(SPacketWindowItems.class, new GenericNonNullListArgument(windowItems, 1, this.arguments.get(ItemStack.class)));
-            Constructor maps = SPacketMaps.class.getDeclaredConstructor(Integer.TYPE, Byte.TYPE, Boolean.TYPE, Collection.class, byte[].class, Integer.TYPE, Integer.TYPE, Integer.TYPE, Integer.TYPE);
-            this.addGeneric(SPacketMaps.class, new GenericCollectionArgument(maps, 3, this.arguments.get(MapDecoration.class)));
-            Constructor statistics = SPacketStatistics.class.getDeclaredConstructor(Map.class);
-            this.addGeneric(SPacketStatistics.class, new GenericMapArgument<StatBase, Integer, HashMap>(HashMap.class, statistics, 0, new StatBaseArgument(), new IntArgument()));
+    private void setup()
+    {
+        addCustom(SPacketPlayerListHeaderFooter.class,
+                new SPacketPlayerListHeaderFooterFactory(this));
+        addCustom(SPacketPlayerListItem.class,
+                new SPacketPlayerListItemFactory(this));
+
+        addArgument(boolean.class, new BooleanArgument());
+        addArgument(int.class, new IntArgument());
+        addArgument(float.class, new FloatArgument());
+        addArgument(short.class, new ShortArgument());
+        addArgument(long.class, new LongArgument());
+        addArgument(double.class, new DoubleArgument());
+        addArgument(byte.class, new ByteArgument());
+
+        addArgument(String.class, new StringArgument());
+        addArgument(BlockPos.class, new BlockPosArgument());
+        addArgument(Vec3d.class, new Vec3dArgument());
+        addArgument(Chunk.class, new ChunkArgument());
+
+        addArgument(UUID.class, new UUIDArgument());
+        addArgument(GameProfile.class, new GameProfileArgument());
+        addArgument(ResourceLocation.class, new ResourceLocationArgument());
+
+        addArgument(NBTTagCompound.class, new NBTTagCompoundArgument());
+        addArgument(World.class, new WorldArgument());
+        addArgument(ITextComponent.class, new TextComponentArgument());
+        addArgument(PacketBuffer.class, new PacketBufferArgument());
+        addArgument(Item.class, new ItemArgument());
+        addArgument(ItemStack.class, new ItemStackArgument());
+        addArgument(Block.class, new BlockArgument());
+        addArgument(Potion.class, new PotionArgument());
+        addArgument(PotionEffect.class, new PotionEffectArgument());
+        addArgument(WorldType.class, new WorldTypeArgument());
+        addArgument(SoundEvent.class, new SoundEventArgument());
+        addArgument(PlayerCapabilities.class, new PlayerCapabilitiesArgument());
+        addArgument(IRecipe.class, new RecipeArgument());
+
+        addArgument(Entity.class, new EntityArgument());
+        addArgument(EntityXPOrb.class, new EntityXPOrbArgument());
+        addArgument(EntityPlayer.class, new EntityPlayerArgument());
+        addArgument(EntityPainting.class, new EntityPaintingArgument());
+        addArgument(EntityLivingBase.class, new EntityLivingBaseArgument());
+        addArgument(IAttributeInstance.class, new AttributeArgument());
+
+        addArgument(SPacketPlayerListItem.Action.class,
+                new EnumArgument<>(SPacketPlayerListItem.Action.class));
+        addArgument(SPacketWorldBorder.Action.class,
+                new EnumArgument<>(SPacketWorldBorder.Action.class));
+        addArgument(SPacketUpdateBossInfo.Operation.class,
+                new EnumArgument<>(SPacketUpdateBossInfo.Operation.class));
+        addArgument(SPacketCombatEvent.Event.class,
+                new EnumArgument<>(SPacketCombatEvent.Event.class));
+        addArgument(SPacketRecipeBook.State.class,
+                new EnumArgument<>(SPacketRecipeBook.State.class));
+        addArgument(SPacketTitle.Type.class,
+                new EnumArgument<>(SPacketTitle.Type.class));
+
+        addArgument(EntityEquipmentSlot.class,
+                new EnumArgument<>(EntityEquipmentSlot.class));
+        addArgument(EnumDifficulty.class,
+                new EnumArgument<>(EnumDifficulty.class));
+        addArgument(EnumParticleTypes.class,
+                new EnumArgument<>(EnumParticleTypes.class));
+        addArgument(SoundCategory.class,
+                new EnumArgument<>(SoundCategory.class));
+        addArgument(EnumConnectionState.class,
+                new EnumArgument<>(EnumConnectionState.class));
+
+        addArgument(CPacketClientStatus.State.class,
+                new EnumArgument<>(CPacketClientStatus.State.class));
+        addArgument(CPacketEntityAction.Action.class,
+                new EnumArgument<>(CPacketEntityAction.Action.class));
+        addArgument(CPacketPlayerDigging.Action.class,
+                new EnumArgument<>(CPacketPlayerDigging.Action.class));
+        addArgument(CPacketResourcePackStatus.Action.class,
+                new EnumArgument<>(CPacketResourcePackStatus.Action.class));
+        addArgument(CPacketSeenAdvancements.Action.class,
+                new EnumArgument<>(CPacketSeenAdvancements.Action.class));
+
+        addArgument(EnumFacing.class,
+                new EnumArgument<>(EnumFacing.class));
+        addArgument(ClickType.class,
+                new EnumArgument<>(ClickType.class));
+        addArgument(EnumHandSide.class,
+                new EnumArgument<>(EnumHandSide.class));
+        addArgument(EntityPlayer.EnumChatVisibility.class,
+                new EnumArgument<>(EntityPlayer.EnumChatVisibility.class));
+        addArgument(EnumHand.class,
+                new EnumArgument<>(EnumHand.class));
+        addArgument(ChatType.class,
+                new EnumArgument<>(ChatType.class));
+        addArgument(GameType.class,
+                new EnumArgument<>(GameType.class));
+        addArgument(MapDecoration.class, new MapDecorationArgument());
+        addArgument(Advancement.class, new AdvancementArgument());
+
+        // Useless Arguments
+        addArgument(NonNullList.class, new NonNullListArgument());
+        addArgument(Map.class, new MapArgument());
+        addArgument(List.class, new ListArgument());
+        addArgument(Collection.class, new CollectionArgument());
+        addArgument(Set.class, new SetArgument());
+        addArgument(Iterable.class, new IterableArgument());
+        addArgument(SecretKey.class, new SecretKeyArgument());
+        addArgument(PublicKey.class, new PublicKeyArgument());
+
+        addArgument(WorldBorder.class, new WorldBorderArgument());
+        addArgument(BossInfo.class, new BossInfoArgument());
+        addArgument(ScoreObjective.class, new ScoreObjectiveArgument());
+        addArgument(CombatTracker.class, new CombatTrackerArgument());
+        addArgument(EntityDataManager.class, new EntityDataMangerArgument());
+        addArgument(Score.class, new ScoreArgument());
+        addArgument(ScorePlayerTeam.class, new ScorePlayerTeamArgument());
+
+        addArgument(ServerStatusResponse.class,
+                new ServerStatusResponseArgument());
+
+        arguments.put(int[].class, new IntArrayArgument());
+        arguments.put(byte[].class, new ByteArrayArgument());
+        arguments.put(short[].class, new ShortArrayArgument());
+        arguments.put(String[].class,
+            new FunctionArrayArgument<>(
+                String[].class, getArgument(String.class), String[]::new));
+        arguments.put(ITextComponent[].class,
+            new FunctionArrayArgument<>(
+                ITextComponent[].class, getArgument(ITextComponent.class),
+                    ITextComponent[]::new));
+        try
+        {
+            Constructor<?> recipe = SPacketRecipeBook.class
+                    .getDeclaredConstructor(SPacketRecipeBook.State.class,
+                            List.class, List.class,
+                            boolean.class, boolean.class);
+            addGeneric(SPacketRecipeBook.class, new GenericListArgument<>(
+                    recipe, 1, arguments.get(IRecipe.class)));
+            addGeneric(SPacketRecipeBook.class, new GenericListArgument<>(
+                    recipe, 2, arguments.get(IRecipe.class)));
+
+
+            Constructor<?> teams = SPacketTeams.class
+                    .getDeclaredConstructor(ScorePlayerTeam.class,
+                            Collection.class, int.class);
+            addGeneric(SPacketTeams.class, new GenericCollectionArgument<>(
+                    teams, 1, arguments.get(String.class)));
+
+
+            Constructor<?> advancement = SPacketAdvancementInfo.class
+                    .getDeclaredConstructor(boolean.class,
+                            Collection.class, Set.class,
+                            Map.class);
+            addGeneric(SPacketAdvancementInfo.class,
+                new GenericCollectionArgument<>(
+                        advancement, 1, arguments.get(Advancement.class)));
+            addGeneric(SPacketAdvancementInfo.class,
+                new GenericSetArgument<>(
+                        advancement, 2, arguments.get(ResourceLocation.class)));
+            addGeneric(SPacketAdvancementInfo.class,
+                new GenericMapArgument<ResourceLocation, AdvancementProgress,
+                    HashMap<ResourceLocation, AdvancementProgress>>(
+                        HashMap.class, advancement, 3,
+                        new ResourceLocationArgument(),
+                        new AdvancementProgressArgument()));
+
+            Constructor<?> properties = SPacketEntityProperties.class
+                    .getDeclaredConstructor(int.class, Collection.class);
+            addGeneric(SPacketEntityProperties.class,
+                new GenericCollectionArgument<>(
+                    properties, 1, arguments.get(IAttributeInstance.class)));
+
+
+            Constructor<?> explosion = SPacketExplosion.class
+                    .getDeclaredConstructor(double.class, double.class,
+                            double.class, float.class, List.class, Vec3d.class);
+            addGeneric(SPacketExplosion.class, new GenericListArgument<>(
+                    explosion, 4, arguments.get(BlockPos.class)));
+
+
+            Constructor<?> posLook = SPacketPlayerPosLook.class
+                    .getDeclaredConstructor(double.class, double.class,
+                            double.class, float.class, float.class, Set.class,
+                            int.class);
+            addGeneric(SPacketPlayerPosLook.class,
+                new GenericSetArgument<>(posLook, 5,
+                    new EnumArgument<>(SPacketPlayerPosLook.EnumFlags.class)));
+
+
+            Constructor<?> windowItems = SPacketWindowItems.class
+                    .getDeclaredConstructor(int.class, NonNullList.class);
+            addGeneric(SPacketWindowItems.class,
+                    new GenericNonNullListArgument<>(
+                            windowItems, 1, arguments.get(ItemStack.class)));
+
+
+            Constructor<?> maps = SPacketMaps.class.getDeclaredConstructor(
+                    int.class, byte.class, boolean.class,
+                    Collection.class, byte[].class, int.class,
+                    int.class, int.class, int.class);
+            addGeneric(SPacketMaps.class,
+                    new GenericCollectionArgument<>(
+                            maps, 3, arguments.get(MapDecoration.class)));
+
+
+            Constructor<?> statistics = SPacketStatistics.class
+                    .getDeclaredConstructor(Map.class);
+            addGeneric(SPacketStatistics.class,
+                    new GenericMapArgument<StatBase, Integer,
+                            HashMap<StatBase, Integer>>(
+                            HashMap.class, statistics, 0,
+                            new StatBaseArgument(),
+                            new IntArgument()));
         }
-        catch (NoSuchMethodException e) {
-            throw new IllegalStateException("Constructor of a packet missing: " + e.getMessage());
+        catch (NoSuchMethodException e)
+        {
+            throw new IllegalStateException(
+                    "Constructor of a packet missing: " + e.getMessage());
         }
-        for (Class<Packet<?>> packet : PacketUtil.getAllPackets()) {
-            Type netHandler = this.getNetHandlerType(packet);
-            if (netHandler != INetHandlerPlayClient.class && netHandler != INetHandlerPlayServer.class) continue;
-            if (!this.custom.containsKey(packet)) {
-                for (Constructor<?> ctr : packet.getDeclaredConstructors()) {
-                    for (Class<?> type : ctr.getParameterTypes()) {
-                        if (this.arguments.containsKey(type)) continue;
-                        Earthhack.getLogger().error("<PacketCommand> No Argument found for: " + type.getName() + " in " + packet.getName());
+
+        for (Class<? extends Packet<?>> packet : PacketUtil.getAllPackets())
+        {
+            Type netHandler = getNetHandlerType(packet);
+            if (netHandler != INetHandlerPlayClient.class
+                    && netHandler != INetHandlerPlayServer.class)
+            {
+                continue;
+            }
+
+            if (!custom.containsKey(packet))
+            {
+                for (Constructor<?> ctr : packet.getDeclaredConstructors())
+                {
+                    for (Class<?> type : ctr.getParameterTypes())
+                    {
+                        if (!arguments.containsKey(type))
+                        {
+                            Earthhack.getLogger().error(
+                                    "<PacketCommand>" +
+                                            " No Argument found for: "
+                                            + type.getName()
+                                            + " in "
+                                            + packet.getName());
+                        }
                     }
                 }
             }
-            for (Class class_ : this.packets) {
-                if (!class_.getSimpleName().equals(packet.getSimpleName()) || class_.equals(packet)) continue;
-                Earthhack.getLogger().warn(class_.getName() + " SimpleName clashes with: " + packet.getName());
+
+            for (Class<? extends Packet<?>> alreadyExisting : packets)
+            {
+                if (alreadyExisting.getSimpleName()
+                                   .equals(packet.getSimpleName())
+                        && !alreadyExisting.equals(packet))
+                {
+                    Earthhack.getLogger().warn(alreadyExisting.getName()
+                            + " SimpleName clashes with: " + packet.getName());
+                }
             }
-            this.addPacket(packet);
+
+            addPacket(packet);
         }
     }
 
-    private <T> PacketArgument<T> getArgument(Class<T> clazz) {
-        return this.arguments.get(clazz);
+    @SuppressWarnings("unchecked")
+    private <T> PacketArgument<T> getArgument(Class<T> clazz)
+    {
+        return (PacketArgument<T>) arguments.get(clazz);
     }
 
-    private Type getNetHandlerType(Class<? extends Packet<?>> packet) {
-        Class<Packet<?>> clazz = packet;
-        do {
-            Type[] types;
-            for (Type genericInterface : types = clazz.getGenericInterfaces()) {
-                Type[] arrtype;
-                int n;
-                int n2;
-                if (!(genericInterface instanceof ParameterizedType) || ((ParameterizedType)genericInterface).getRawType() != Packet.class || (n2 = 0) >= (n = (arrtype = ((ParameterizedType)genericInterface).getActualTypeArguments()).length)) continue;
-                Type type = arrtype[n2];
-                return type;
+    private Type getNetHandlerType(Class<? extends Packet<?>> packet)
+    {
+        Class<?> clazz = packet;
+
+        do
+        {
+            Type[] types = clazz.getGenericInterfaces();
+            for (Type genericInterface : types)
+            {
+                if (genericInterface instanceof ParameterizedType
+                        && ((ParameterizedType) genericInterface)
+                                        .getRawType() == Packet.class)
+                {
+                    for (Type type : ((ParameterizedType) genericInterface)
+                                                .getActualTypeArguments())
+                    {
+                        return type;
+                    }
+                }
             }
-        } while ((clazz = clazz.getSuperclass()) != Object.class);
+
+            clazz = clazz.getSuperclass();
+        }
+        while (clazz != Object.class);
+
         return null;
     }
-}
 
+}

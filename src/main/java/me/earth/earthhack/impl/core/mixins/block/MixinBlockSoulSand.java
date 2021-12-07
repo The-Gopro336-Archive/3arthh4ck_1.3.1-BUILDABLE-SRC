@@ -1,9 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.block.BlockSoulSand
- */
 package me.earth.earthhack.impl.core.mixins.block;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -17,16 +11,25 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value={BlockSoulSand.class})
-public abstract class MixinBlockSoulSand {
-    private static final ModuleCache<NoSlowDown> NO_SLOW_DOWN = Caches.getModule(NoSlowDown.class);
-    private static final SettingCache<Boolean, BooleanSetting, NoSlowDown> SOUL_SAND = Caches.getSetting(NoSlowDown.class, BooleanSetting.class, "SoulSand", true);
+@Mixin(BlockSoulSand.class)
+public abstract class MixinBlockSoulSand
+{
+    private static final ModuleCache<NoSlowDown>
+        NO_SLOW_DOWN = Caches.getModule(NoSlowDown.class);
+    private static final SettingCache<Boolean, BooleanSetting, NoSlowDown>
+        SOUL_SAND = Caches.getSetting
+            (NoSlowDown.class, BooleanSetting.class, "SoulSand", true);
 
-    @Inject(method={"onEntityCollision"}, at={@At(value="HEAD")}, cancellable=true)
-    private void onEntityCollisionHook(CallbackInfo info) {
-        if (NO_SLOW_DOWN.isEnabled() && SOUL_SAND.getValue().booleanValue()) {
+    @Inject(
+        method = "onEntityCollision",
+        at = @At("HEAD"),
+        cancellable = true)
+    private void onEntityCollisionHook(CallbackInfo info)
+    {
+        if (NO_SLOW_DOWN.isEnabled() && SOUL_SAND.getValue())
+        {
             info.cancel();
         }
     }
-}
 
+}

@@ -1,10 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  com.mojang.realmsclient.gui.ChatFormatting
- *  net.minecraft.client.Minecraft
- */
 package me.earth.earthhack.impl.gui.click.component.impl;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
@@ -14,9 +7,9 @@ import me.earth.earthhack.impl.gui.click.component.Component;
 import me.earth.earthhack.impl.util.render.Render2DUtil;
 import me.earth.earthhack.impl.util.render.RenderUtil;
 import net.minecraft.client.Minecraft;
+import org.lwjgl.input.Keyboard;
 
-public class KeybindComponent
-extends Component {
+public class KeybindComponent extends Component {
     private final BindSetting bindSetting;
     private boolean binding;
 
@@ -33,28 +26,27 @@ extends Component {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
-        boolean hovered = RenderUtil.mouseWithinBounds(mouseX, mouseY, this.getFinishedX() + 5.0f, this.getFinishedY() + 1.0f, this.getWidth() - 10.0f, this.getHeight() - 2.0f);
-        Render2DUtil.drawBorderedRect(this.getFinishedX() + 4.5f, this.getFinishedY() + 1.0f, this.getFinishedX() + this.getWidth() - 4.5f, this.getFinishedY() + this.getHeight() - 0.5f, 0.5f, hovered ? 0x66333333 : 0, -16777216);
-        Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(this.isBinding() ? "Press a key..." : this.getBindSetting().getName() + ": " + (Object)ChatFormatting.GRAY + this.getBindSetting().getValue(), this.getFinishedX() + 6.5f, this.getFinishedY() + this.getHeight() - (float)Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT - 1.0f, -1);
+        final boolean hovered = RenderUtil.mouseWithinBounds(mouseX, mouseY, getFinishedX() + 5, getFinishedY() + 1, getWidth() - 10, getHeight() - 2);
+        Render2DUtil.drawBorderedRect(getFinishedX() + 4.5f, getFinishedY() + 1.0f, getFinishedX() + getWidth() - 4.5f, getFinishedY() + getHeight() - 0.5f, 0.5f, hovered ? 0x66333333:0, 0xff000000);
+        Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(isBinding() ? "Press a key..." : getBindSetting().getName() + ": " + ChatFormatting.GRAY+ getBindSetting().getValue(), getFinishedX() + 6.5f, getFinishedY() + getHeight() - Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT - 1f, 0xFFFFFFFF);
     }
 
     @Override
     public void keyTyped(char character, int keyCode) {
         super.keyTyped(character, keyCode);
-        if (this.isBinding()) {
-            Bind bind = Bind.fromKey(keyCode == 1 || keyCode == 57 || keyCode == 211 ? 0 : keyCode);
-            this.getBindSetting().setValue(bind);
-            this.setBinding(false);
+        if (isBinding()) {
+            final Bind bind = Bind.fromKey(keyCode == Keyboard.KEY_ESCAPE || keyCode == Keyboard.KEY_SPACE || keyCode == Keyboard.KEY_DELETE ? Keyboard.KEY_NONE : keyCode);
+            getBindSetting().setValue(bind);
+            setBinding(false);
         }
     }
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         super.mouseClicked(mouseX, mouseY, mouseButton);
-        boolean hovered = RenderUtil.mouseWithinBounds(mouseX, mouseY, this.getFinishedX() + 5.0f, this.getFinishedY() + 1.0f, this.getWidth() - 10.0f, this.getHeight() - 2.0f);
-        if (hovered && mouseButton == 0) {
-            this.setBinding(!this.isBinding());
-        }
+        final boolean hovered = RenderUtil.mouseWithinBounds(mouseX, mouseY, getFinishedX() + 5, getFinishedY() + 1, getWidth() - 10, getHeight() - 2);
+        if (hovered && mouseButton == 0)
+            setBinding(!isBinding());
     }
 
     @Override
@@ -63,15 +55,14 @@ extends Component {
     }
 
     public BindSetting getBindSetting() {
-        return this.bindSetting;
+        return bindSetting;
     }
 
     public boolean isBinding() {
-        return this.binding;
+        return binding;
     }
 
     public void setBinding(boolean binding) {
         this.binding = binding;
     }
 }
-

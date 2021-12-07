@@ -1,44 +1,54 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.util.math.BlockPos
- */
 package me.earth.earthhack.impl.modules.combat.autocrystal.helpers;
 
 import me.earth.earthhack.api.event.bus.api.EventBus;
 import me.earth.earthhack.api.setting.Setting;
-import me.earth.earthhack.impl.modules.combat.autocrystal.helpers.Confirmer;
-import me.earth.earthhack.impl.modules.combat.autocrystal.helpers.DamageSyncHelper;
 import net.minecraft.util.math.BlockPos;
 
-public class ForceAntiTotemHelper {
+public class ForceAntiTotemHelper
+{
     private final DamageSyncHelper damageSyncHelper;
     private final Setting<Integer> placeConfirm;
     private final Setting<Integer> breakConfirm;
     private BlockPos pos;
 
-    public ForceAntiTotemHelper(EventBus eventBus, Setting<Boolean> discrete, Setting<Integer> syncDelay, Setting<Integer> placeConfirm, Setting<Integer> breakConfirm, Setting<Boolean> dangerForce) {
-        this.damageSyncHelper = new DamageSyncHelper(eventBus, discrete, syncDelay, dangerForce);
+    public ForceAntiTotemHelper(EventBus eventBus,
+                                Setting<Boolean> discrete,
+                                Setting<Integer> syncDelay,
+                                Setting<Integer> placeConfirm,
+                                Setting<Integer> breakConfirm,
+                                Setting<Boolean> dangerForce)
+    {
+        this.damageSyncHelper = new DamageSyncHelper(eventBus,
+                                                     discrete,
+                                                     syncDelay,
+                                                     dangerForce);
         this.placeConfirm = placeConfirm;
         this.breakConfirm = breakConfirm;
     }
 
-    public void setSync(BlockPos pos, boolean newVer) {
-        this.damageSyncHelper.setSync(pos, Float.MAX_VALUE, newVer);
+    public void setSync(BlockPos pos, boolean newVer)
+    {
+        damageSyncHelper.setSync(pos, Float.MAX_VALUE, newVer);
         this.pos = pos;
     }
 
-    public boolean isForcing(boolean damageSync) {
-        Confirmer c = this.damageSyncHelper.getConfirmer();
-        if (!(!c.isValid() || c.isPlaceConfirmed(this.placeConfirm.getValue()) && c.isBreakConfirmed(this.breakConfirm.getValue()))) {
+    public boolean isForcing(boolean damageSync)
+    {
+        Confirmer c = damageSyncHelper.getConfirmer();
+        if (c.isValid() // This is mostly to confirm place/break
+                && !(c.isPlaceConfirmed(placeConfirm.getValue())
+                    && c.isBreakConfirmed(breakConfirm.getValue())))
+        {
+            // Could've been set to not valid
             return c.isValid();
         }
-        return this.damageSyncHelper.isSyncing(0.0f, damageSync);
+
+        return damageSyncHelper.isSyncing(0.0f, damageSync);
     }
 
-    public BlockPos getPos() {
-        return this.pos;
+    public BlockPos getPos()
+    {
+        return pos;
     }
+
 }
-

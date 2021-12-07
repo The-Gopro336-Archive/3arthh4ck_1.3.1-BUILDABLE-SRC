@@ -1,45 +1,51 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.client.resources.IResource
- *  net.minecraft.client.resources.data.MetadataSerializer
- */
 package me.earth.earthhack.impl.managers.client.resource;
 
-import java.io.InputStream;
-import java.util.Objects;
-import me.earth.earthhack.impl.managers.client.resource.PluginResourceLocation;
-import me.earth.earthhack.impl.managers.client.resource.ResourceException;
-import me.earth.earthhack.impl.managers.client.resource.ResourceSupplier;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.data.MetadataSerializer;
 
-public class PluginResourceSupplier
-implements ResourceSupplier {
+import java.io.InputStream;
+import java.util.Objects;
+
+public class PluginResourceSupplier implements ResourceSupplier
+{
     private final PluginResourceLocation location;
     private final MetadataSerializer metadataSerializer;
     private final ClassLoader classLoader;
 
-    public PluginResourceSupplier(PluginResourceLocation location, MetadataSerializer metadataSerializer, ClassLoader classLoader) {
+    public PluginResourceSupplier(PluginResourceLocation location,
+                                  MetadataSerializer metadataSerializer,
+                                  ClassLoader classLoader)
+    {
         this.classLoader = Objects.requireNonNull(classLoader);
         this.metadataSerializer = Objects.requireNonNull(metadataSerializer);
         this.location = location;
     }
 
     @Override
-    public IResource get() throws ResourceException {
-        String target = String.format("%s/%s/%s", "assets", this.location.getNamespace(), this.location.getPath());
-        try {
-            InputStream stream = this.classLoader.getResourceAsStream(target);
-            if (stream == null) {
-                throw new ResourceException("PluginResource: " + (Object)((Object)this.location) + " had no InputStream!");
+    public IResource get() throws ResourceException
+    {
+        String target = String.format("%s/%s/%s",
+                "assets", location.getNamespace(), location.getPath());
+        try
+        {
+            InputStream stream = classLoader.getResourceAsStream(target);
+            if (stream == null)
+            {
+                throw new ResourceException(
+                    "PluginResource: " + location + " had no InputStream!");
             }
-            return this.location.toResource(this.location.getResourcePack(), this.location, stream, stream, this.metadataSerializer);
+
+            // TODO: no mc_meta Stream is rn!!!
+            return location.toResource(location.getResourcePack(),
+                                       location,
+                                       stream,
+                                       stream,
+                                       metadataSerializer);
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             throw new ResourceException(e);
         }
     }
-}
 
+}

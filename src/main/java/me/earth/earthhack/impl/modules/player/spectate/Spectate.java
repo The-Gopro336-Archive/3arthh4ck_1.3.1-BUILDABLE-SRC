@@ -1,14 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.client.entity.EntityPlayerSP
- *  net.minecraft.entity.Entity
- *  net.minecraft.entity.player.EntityPlayer
- *  net.minecraft.util.MovementInput
- *  net.minecraft.util.MovementInputFromOptions
- *  net.minecraft.world.World
- */
 package me.earth.earthhack.impl.modules.player.spectate;
 
 import me.earth.earthhack.api.command.Completer;
@@ -18,40 +7,37 @@ import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.api.util.TextUtil;
 import me.earth.earthhack.impl.core.ducks.entity.IEntityNoInterp;
-import me.earth.earthhack.impl.modules.player.spectate.EntityPlayerNoInterp;
-import me.earth.earthhack.impl.modules.player.spectate.ListenerAnimation;
-import me.earth.earthhack.impl.modules.player.spectate.ListenerAttack;
-import me.earth.earthhack.impl.modules.player.spectate.ListenerMotion;
-import me.earth.earthhack.impl.modules.player.spectate.ListenerMove;
-import me.earth.earthhack.impl.modules.player.spectate.ListenerRemove;
-import me.earth.earthhack.impl.modules.player.spectate.ListenerUpdate;
 import me.earth.earthhack.impl.util.client.ModuleUtil;
 import me.earth.earthhack.impl.util.client.SimpleData;
 import me.earth.earthhack.impl.util.helpers.command.CustomCommandModule;
 import me.earth.earthhack.impl.util.helpers.command.CustomCompleterResult;
 import me.earth.earthhack.impl.util.helpers.disabling.DisablingModule;
 import me.earth.earthhack.impl.util.text.ChatUtil;
+import me.earth.earthhack.impl.util.text.TextColor;
 import me.earth.earthhack.impl.util.thread.LookUpUtil;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MovementInput;
 import net.minecraft.util.MovementInputFromOptions;
-import net.minecraft.world.World;
 
-public class Spectate
-extends DisablingModule
-implements CustomCommandModule {
-    protected final Setting<Boolean> stopMove = this.register(new BooleanSetting("NoMove", true));
-    protected final Setting<Boolean> rotate = this.register(new BooleanSetting("Rotate", true));
-    protected final Setting<Boolean> playerRotations = this.register(new BooleanSetting("Spectator-Rotate", false));
+public class Spectate extends DisablingModule implements CustomCommandModule
+{
+    protected final Setting<Boolean> stopMove =
+        register(new BooleanSetting("NoMove", true));
+    protected final Setting<Boolean> rotate =
+        register(new BooleanSetting("Rotate", true));
+    protected final Setting<Boolean> playerRotations =
+        register(new BooleanSetting("Spectator-Rotate", false));
+
     protected EntityPlayerNoInterp fakePlayer;
     protected EntityPlayerNoInterp render;
     protected MovementInput input;
+
     protected EntityPlayer player;
     protected boolean spectating;
 
-    public Spectate() {
+    public Spectate()
+    {
         super("Spectate", Category.Player);
         this.listeners.add(new ListenerUpdate(this));
         this.listeners.add(new ListenerAttack(this));
@@ -63,138 +49,211 @@ implements CustomCommandModule {
     }
 
     @Override
-    public String getDisplayInfo() {
-        if (this.spectating) {
-            EntityPlayer thePlayer = this.player;
+    public String getDisplayInfo()
+    {
+        if (spectating)
+        {
+            EntityPlayer thePlayer = player;
             return thePlayer != null ? thePlayer.getName() : null;
         }
+
         return null;
     }
 
     @Override
-    public boolean execute(String[] args) {
-        if (args.length == 2 && Spectate.mc.world != null && Spectate.mc.player != null) {
+    public boolean execute(String[] args)
+    {
+        if (args.length == 2 && mc.world != null && mc.player != null)
+        {
             EntityPlayer player = null;
-            for (EntityPlayer p : Spectate.mc.world.playerEntities) {
-                if (p == null || !args[1].equalsIgnoreCase(p.getName())) continue;
-                player = p;
-                break;
+            for (EntityPlayer p : mc.world.playerEntities)
+            {
+                if (p != null && args[1].equalsIgnoreCase(p.getName()))
+                {
+                    player = p;
+                    break;
+                }
             }
-            if (player != null) {
-                this.specate(player);
-                ModuleUtil.sendMessage(this, "\u00a7aNow spectating: " + player.getName());
+
+            if (player != null)
+            {
+                specate(player);
+                ModuleUtil.sendMessage(this,
+                    TextColor.GREEN + "Now spectating: " + player.getName());
                 return true;
             }
-            Setting<?> setting = this.getSetting(args[1]);
-            if (setting == null) {
-                ChatUtil.sendMessage("\u00a7cCould not find setting or player \u00a7f" + args[1] + "\u00a7c" + " in the Spectate module.");
-                return true;
+            else
+            {
+                Setting<?> setting = this.getSetting(args[1]);
+                if (setting == null)
+                {
+                    ChatUtil.sendMessage(TextColor.RED
+                            + "Could not find setting or player "
+                            + TextColor.WHITE
+                            + args[1]
+                            + TextColor.RED
+                            + " in the Spectate module.");
+                    return true;
+                }
             }
         }
+
         return false;
     }
 
     @Override
-    public boolean getInput(String[] args, PossibleInputs inputs) {
-        if (args.length == 1) {
-            inputs.setCompletion(TextUtil.substring(this.getName(), args[0].length())).setRest(" <setting/player> <value>");
+    public boolean getInput(String[] args, PossibleInputs inputs)
+    {
+        if (args.length == 1)
+        {
+            inputs.setCompletion(
+                        TextUtil.substring(this.getName(), args[0].length()))
+                  .setRest(" <setting/player> <value>");
             return true;
         }
-        if (args.length != 2) {
+
+        if (args.length != 2)
+        {
             return false;
         }
+
         String next = LookUpUtil.findNextPlayerName(args[1]);
-        if (next != null) {
+        if (next != null)
+        {
             inputs.setCompletion(TextUtil.substring(next, args[1].length()));
             return true;
         }
+
         return false;
     }
 
     @Override
-    public CustomCompleterResult complete(Completer completer) {
-        String player;
-        if (!completer.isSame() && completer.getArgs().length == 2 && (player = LookUpUtil.findNextPlayerName(completer.getArgs()[1])) != null) {
-            return CustomCompleterResult.SUPER;
+    public CustomCompleterResult complete(Completer completer)
+    {
+        if (!completer.isSame() && completer.getArgs().length == 2)
+        {
+            String player =
+                LookUpUtil.findNextPlayerName(completer.getArgs()[1]);
+
+            if (player != null)
+            {
+                return CustomCompleterResult.SUPER;
+            }
         }
+
         return CustomCompleterResult.PASS;
     }
 
     @Override
-    protected void onEnable() {
-        if (Spectate.mc.player == null || Spectate.mc.world == null) {
+    protected void onEnable()
+    {
+        if (mc.player == null || mc.world == null)
+        {
             this.disable();
             return;
         }
-        if (Spectate.mc.player.movementInput instanceof MovementInputFromOptions) {
-            Spectate.mc.player.movementInput = new MovementInput();
+
+        // baritone could set this to its PlayerMovementInput
+        if (mc.player.movementInput instanceof MovementInputFromOptions)
+        {
+            mc.player.movementInput = new MovementInput();
         }
-        this.input = new MovementInputFromOptions(Spectate.mc.gameSettings);
-        this.render = new EntityPlayerNoInterp((World)Spectate.mc.world);
-        this.render.copyLocationAndAnglesFrom((Entity)Spectate.mc.player);
-        this.render.inventory = Spectate.mc.player.inventory;
-        this.render.inventoryContainer = Spectate.mc.player.inventoryContainer;
-        this.render.inventory.copyInventory(Spectate.mc.player.inventory);
-        this.render.setEntityBoundingBox(Spectate.mc.player.getEntityBoundingBox());
-        this.render.resetPositionToBB();
-        this.fakePlayer = new EntityPlayerNoInterp((World)Spectate.mc.world);
-        this.fakePlayer.copyLocationAndAnglesFrom((Entity)Spectate.mc.player);
-        this.fakePlayer.inventory.copyInventory(Spectate.mc.player.inventory);
-        this.fakePlayer.inventory = Spectate.mc.player.inventory;
-        this.fakePlayer.inventoryContainer = Spectate.mc.player.inventoryContainer;
-        Spectate.mc.world.addEntityToWorld(-10000, (Entity)this.fakePlayer);
-        Spectate.mc.entityRenderer.loadEntityShader(null);
+
+        input = new MovementInputFromOptions(mc.gameSettings);
+
+        render = new EntityPlayerNoInterp(mc.world);
+        render.copyLocationAndAnglesFrom(mc.player);
+        render.inventory = mc.player.inventory;
+        render.inventoryContainer = mc.player.inventoryContainer;
+        render.inventory.copyInventory(mc.player.inventory);
+        render.setEntityBoundingBox(mc.player.getEntityBoundingBox());
+        render.resetPositionToBB();
+
+        fakePlayer = new EntityPlayerNoInterp(mc.world);
+        fakePlayer.copyLocationAndAnglesFrom(mc.player);
+        fakePlayer.inventory.copyInventory(mc.player.inventory);
+        fakePlayer.inventory = mc.player.inventory;
+        fakePlayer.inventoryContainer = mc.player.inventoryContainer;
+
+        mc.world.addEntityToWorld(-10000, fakePlayer);
+        mc.entityRenderer.loadEntityShader(null);
     }
 
     @Override
-    protected void onDisable() {
-        MovementInput input;
-        EntityPlayerSP playerSP = Spectate.mc.player;
-        if (playerSP != null && (input = playerSP.movementInput) != null && input.getClass() == MovementInput.class) {
-            mc.addScheduledTask(() -> {
-                playerSP.movementInput = new MovementInputFromOptions(Spectate.mc.gameSettings);
-            });
-        }
-        EntityPlayer specPlayer = this.player;
-        if (this.spectating) {
-            if (specPlayer != null) {
-                ((IEntityNoInterp)specPlayer).setNoInterping(true);
+    protected void onDisable()
+    {
+        EntityPlayerSP playerSP = mc.player;
+        if (playerSP != null)
+        {
+            // baritone
+            MovementInput input = playerSP.movementInput;
+            if (input != null && input.getClass() == MovementInput.class)
+            {
+                mc.addScheduledTask(() ->
+                {
+                    playerSP.movementInput =
+                            new MovementInputFromOptions(mc.gameSettings);
+                });
             }
+        }
+
+        EntityPlayer specPlayer = player;
+        if (spectating)
+        {
+            if (specPlayer != null)
+            {
+                ((IEntityNoInterp) specPlayer).setNoInterping(true);
+            }
+
             this.spectating = false;
         }
-        mc.addScheduledTask(() -> {
-            this.player = null;
+
+        mc.addScheduledTask(() ->
+        {
+            player = null;
         });
-        if (Spectate.mc.world != null) {
-            mc.addScheduledTask(() -> {
-                if (Spectate.mc.world != null) {
+
+        if (mc.world != null)
+        {
+            mc.addScheduledTask(() ->
+            {
+                if (mc.world != null)
+                {
                     this.player = null;
-                    Spectate.mc.world.removeEntity((Entity)this.fakePlayer);
+                    mc.world.removeEntity(fakePlayer);
                 }
             });
         }
     }
 
-    public boolean shouldTurn() {
-        return !this.spectating || this.player == null || this.playerRotations.getValue() != false;
+    public boolean shouldTurn()
+    {
+        return !spectating || player == null || playerRotations.getValue();
     }
 
-    public void specate(EntityPlayer player) {
-        if (this.isEnabled()) {
+    public void specate(EntityPlayer player)
+    {
+        if (this.isEnabled())
+        {
             this.disable();
         }
+
         this.spectating = true;
         this.player = player;
-        ((IEntityNoInterp)player).setNoInterping(false);
+
+        ((IEntityNoInterp) player).setNoInterping(false);
+
         this.enable();
     }
 
-    public EntityPlayer getRender() {
-        return this.spectating ? (this.player == null ? Spectate.mc.player : this.player) : this.render;
+    public EntityPlayer getRender()
+    {
+        return spectating ? (player == null ? mc.player : player) : render;
     }
 
-    public EntityPlayer getFake() {
-        return this.fakePlayer;
+    public EntityPlayer getFake()
+    {
+        return fakePlayer;
     }
+
 }
-

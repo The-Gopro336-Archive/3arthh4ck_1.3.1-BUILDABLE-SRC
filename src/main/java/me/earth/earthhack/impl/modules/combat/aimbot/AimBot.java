@@ -1,20 +1,9 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.Entity
- *  net.minecraft.entity.EntityLivingBase
- *  net.minecraft.util.math.Vec3d
- */
 package me.earth.earthhack.impl.modules.combat.aimbot;
 
-import java.util.LinkedList;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
-import me.earth.earthhack.impl.modules.combat.aimbot.ListenerGameLoop;
-import me.earth.earthhack.impl.modules.combat.aimbot.ListenerMotion;
 import me.earth.earthhack.impl.util.math.RayTraceUtil;
 import me.earth.earthhack.impl.util.math.rotation.RotationUtil;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
@@ -23,17 +12,28 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.Vec3d;
 
-public class AimBot
-extends EntityTypeModule {
-    protected final Setting<Boolean> silent = this.register(new BooleanSetting("Silent", true));
-    protected final Setting<Boolean> fov = this.register(new BooleanSetting("Fov", false));
-    protected final Setting<Integer> extrapolate = this.register(new NumberSetting<Integer>("Extrapolate", 0, 0, 10));
-    protected final Setting<Double> maxRange = this.register(new NumberSetting<Double>("MaxRange", 100.0, 0.0, 500.0));
+import java.util.LinkedList;
+import java.util.List;
+
+// TODO: Best AimBot ever, use an EntityArrow
+//  to check if the arrow would hit any blocks
+public class AimBot extends EntityTypeModule
+{
+    protected final Setting<Boolean> silent =
+        register(new BooleanSetting("Silent", true));
+    protected final Setting<Boolean> fov =
+        register(new BooleanSetting("Fov", false));
+    protected final Setting<Integer> extrapolate =
+        register(new NumberSetting<>("Extrapolate", 0, 0, 10));
+    protected final Setting<Double> maxRange =
+        register(new NumberSetting<>("MaxRange", 100.0, 0.0, 500.0));
+
     protected Entity target;
     protected float yaw;
     protected float pitch;
 
-    public AimBot() {
+    public AimBot()
+    {
         super("AimBot", Category.Combat);
         this.listeners.add(new ListenerMotion(this));
         this.listeners.add(new ListenerGameLoop(this));
@@ -42,26 +42,67 @@ extends EntityTypeModule {
     }
 
     @Override
-    public String getDisplayInfo() {
-        return this.target != null ? this.target.getName() : null;
+    public String getDisplayInfo()
+    {
+        return target != null ? target.getName() : null;
     }
 
-    public Entity getTarget() {
-        LinkedList entites = new LinkedList();
+    public Entity getTarget()
+    {
+        List<Entity> entites = new LinkedList<>();
         Entity closest = null;
-        double closestAngle = 360.0;
+        double closestAngle  = 360.0;
         double x = RotationUtil.getRotationPlayer().posX;
         double y = RotationUtil.getRotationPlayer().posY;
         double z = RotationUtil.getRotationPlayer().posZ;
-        float h = AimBot.mc.player.getEyeHeight();
-        for (Entity entity : AimBot.mc.world.loadedEntityList) {
-            if (!(entity instanceof EntityLivingBase) || entity.equals((Object)AimBot.mc.player) || entity.equals((Object)RotationUtil.getRotationPlayer()) || !EntityUtil.isValid(entity, this.maxRange.getValue()) || !this.isValid(entity) || !RayTraceUtil.canBeSeen(new Vec3d(entity.posX, entity.posY + (double)entity.getEyeHeight(), entity.posZ), x, y, z, h) && !RayTraceUtil.canBeSeen(new Vec3d(entity.posX, entity.posY + (double)entity.getEyeHeight() / 2.0, entity.posZ), x, y, z, h) && !RayTraceUtil.canBeSeen(new Vec3d(entity.posX, entity.posY, entity.posZ), x, y, z, h)) continue;
+        float  h = mc.player.getEyeHeight();
+        for (Entity entity : mc.world.loadedEntityList)
+        {
+            if (!(entity instanceof EntityLivingBase)
+                || entity.equals(mc.player)
+                || entity.equals(RotationUtil.getRotationPlayer())
+                || !EntityUtil.isValid(entity, maxRange.getValue())
+                || !this.isValid(entity)
+                || (!RayTraceUtil.canBeSeen(
+                        new Vec3d(entity.posX,
+                                  entity.posY + entity.getEyeHeight(),
+                                  entity.posZ),
+                        x, y, z, h)
+                    && !RayTraceUtil.canBeSeen(
+                        new Vec3d(entity.posX,
+                                  entity.posY + entity.getEyeHeight() / 2.0,
+                                  entity.posZ),
+                        x, y, z, h)
+                    && !RayTraceUtil.canBeSeen(
+                        new Vec3d(entity.posX, entity.posY, entity.posZ),
+                        x, y, z, h)))
+            {
+                continue;
+            }
+
             double angle = RotationUtil.getAngle(entity, 1.4);
-            if (this.fov.getValue().booleanValue() && angle > (double)(AimBot.mc.gameSettings.fovSetting / 2.0f) || !(angle < closestAngle) || this.fov.getValue().booleanValue() && !(angle < (double)(AimBot.mc.gameSettings.fovSetting / 2.0f))) continue;
-            closest = entity;
-            closestAngle = angle;
+            if (fov.getValue() && angle > mc.gameSettings.fovSetting / 2)
+            {
+                continue;
+            }
+
+
+
+
+
+
+
+
+            if (angle < closestAngle
+                && (!fov.getValue()
+                    || angle < mc.gameSettings.fovSetting / 2))
+            {
+                closest = entity;
+                closestAngle = angle;
+            }
         }
+
         return closest;
     }
-}
 
+}

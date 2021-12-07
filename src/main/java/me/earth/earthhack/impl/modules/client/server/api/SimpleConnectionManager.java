@@ -1,86 +1,103 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.client.server.api;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import me.earth.earthhack.impl.modules.client.server.api.IConnection;
-import me.earth.earthhack.impl.modules.client.server.api.IConnectionListener;
-import me.earth.earthhack.impl.modules.client.server.api.IConnectionManager;
-import me.earth.earthhack.impl.modules.client.server.api.IPacketManager;
 
-public class SimpleConnectionManager
-implements IConnectionManager {
+public class SimpleConnectionManager implements IConnectionManager
+{
     private final IPacketManager packetManager;
     private final List<IConnectionListener> listeners;
     private final List<IConnection> connections;
     private final int maxConnections;
 
-    public SimpleConnectionManager(IPacketManager packetManager, int maxConnections) {
-        this.packetManager = packetManager;
+    public SimpleConnectionManager(IPacketManager packetManager,
+                                   int maxConnections)
+    {
+        this.packetManager  = packetManager;
         this.maxConnections = maxConnections;
-        this.connections = new CopyOnWriteArrayList<IConnection>();
-        this.listeners = new CopyOnWriteArrayList<IConnectionListener>();
+        this.connections    = new CopyOnWriteArrayList<>();
+        this.listeners = new CopyOnWriteArrayList<>();
     }
 
     @Override
-    public IPacketManager getHandler() {
-        return this.packetManager;
+    public IPacketManager getHandler()
+    {
+        return packetManager;
     }
 
     @Override
-    public boolean accept(IConnection client) {
-        if (this.connections.size() >= this.maxConnections) {
+    public boolean accept(IConnection client)
+    {
+        if (connections.size() >= maxConnections)
+        {
             return false;
         }
-        this.connections.add(client);
-        for (IConnectionListener listener : this.listeners) {
-            if (listener == null) continue;
-            listener.onJoin(this, client);
+
+        connections.add(client);
+        for (IConnectionListener listener : listeners)
+        {
+            if (listener != null)
+            {
+                listener.onJoin(this, client);
+            }
         }
         return true;
     }
 
     @Override
-    public void remove(IConnection connection) {
-        if (connection.isOpen()) {
+    public void remove(IConnection connection)
+    {
+        if (connection.isOpen())
+        {
             connection.close();
         }
-        this.connections.remove(connection);
-        for (IConnectionListener listener : this.listeners) {
-            if (listener == null) continue;
-            listener.onLeave(this, connection);
+
+        connections.remove(connection);
+        for (IConnectionListener listener : listeners)
+        {
+            if (listener != null)
+            {
+                listener.onLeave(this, connection);
+            }
         }
     }
 
     @Override
-    public List<IConnection> getConnections() {
-        return this.connections;
+    public List<IConnection> getConnections()
+    {
+        return connections;
     }
 
     @Override
-    public void addListener(IConnectionListener listener) {
-        this.listeners.add(listener);
+    public void addListener(IConnectionListener listener)
+    {
+        listeners.add(listener);
     }
 
     @Override
-    public void removeListener(IConnectionListener listener) {
-        this.listeners.remove(listener);
+    public void removeListener(IConnectionListener listener)
+    {
+        listeners.remove(listener);
     }
 
     @Override
-    public void send(byte[] packet) throws IOException {
-        for (IConnection connection : this.connections) {
-            try {
+    public void send(byte[] packet) throws IOException
+    {
+        for (IConnection connection : connections)
+        {
+            try
+            {
                 connection.send(packet);
             }
-            catch (IOException e) {
-                this.remove(connection);
+            catch (IOException e)
+            {
+                // TODO: log connection id.
+                remove(connection);
                 e.printStackTrace();
+                // throw e;
             }
         }
     }
-}
 
+}

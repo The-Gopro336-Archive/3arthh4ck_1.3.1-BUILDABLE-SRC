@@ -1,26 +1,19 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.client.server.api;
 
 import java.util.List;
-import me.earth.earthhack.impl.modules.client.server.api.IConnection;
-import me.earth.earthhack.impl.modules.client.server.api.IConnectionListener;
-import me.earth.earthhack.impl.modules.client.server.api.IPacketManager;
-import me.earth.earthhack.impl.modules.client.server.api.ISender;
 
-public interface IConnectionManager
-extends ISender {
-    public IPacketManager getHandler();
+public interface IConnectionManager extends ISender
+{
+    IPacketManager getHandler();
 
-    public boolean accept(IConnection var1);
+    boolean accept(IConnection client);
 
-    public void remove(IConnection var1);
+    void remove(IConnection connection);
 
-    public List<IConnection> getConnections();
+    List<IConnection> getConnections();
 
-    public void addListener(IConnectionListener var1);
+    void addListener(IConnectionListener listener);
 
-    public void removeListener(IConnectionListener var1);
+    void removeListener(IConnectionListener listener);
+
 }
-

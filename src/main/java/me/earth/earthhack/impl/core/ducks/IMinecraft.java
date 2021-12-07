@@ -1,37 +1,63 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.client.resources.data.MetadataSerializer
- *  net.minecraft.util.Timer
- */
 package me.earth.earthhack.impl.core.ducks;
 
 import net.minecraft.client.resources.data.MetadataSerializer;
 import net.minecraft.util.Timer;
 
-public interface IMinecraft {
-    public int getRightClickDelay();
+/**
+ * Duck interface for {@link net.minecraft.client.Minecraft}.
+ */
+public interface IMinecraft
+{
+    /**
+     * Accessor for mc.rightClickDelayTimer.
+     *
+     * @return mc.rightClickDelayTimer.
+     */
+    int getRightClickDelay();
 
-    public void setRightClickDelay(int var1);
+    /**
+     * Accessor for mc.rightClickDelayTimer.
+     *
+     * @param delay the value to set the timer to.
+     */
+    void setRightClickDelay(int delay);
 
-    public Timer getTimer();
+    /**
+     * Accesses Minecraft's timer.
+     *
+     * @return minecraft's timer.
+     */
+    Timer getTimer();
 
-    public void click(Click var1);
+    /**
+     * Allows you to invoke
+     * -rightClickMouse,
+     * -clickMouse,
+     * -middleClickMouse
+     * based on the given ClickType.
+     *
+     * @param type the type of click.
+     */
+    void click(Click type);
 
-    public int getGameLoop();
+    /** @return the current gameloop, will be incremented every gameloop. */
+    int getGameLoop();
 
-    public boolean isEarthhackRunning();
+    /** @return <tt>true</tt> if 3arthh4ck is running. */
+    boolean isEarthhackRunning();
 
-    public void runScheduledTasks();
+    /** Polls all scheduled tasks and runs them. */
+    void runScheduledTasks();
 
-    public MetadataSerializer getMetadataSerializer();
+    /** @return Minecrafts MetadataSerializer. */
+    MetadataSerializer getMetadataSerializer();
 
-    public static enum Click {
+    /** Mouse Button to click with. */
+    enum Click
+    {
         RIGHT,
         LEFT,
-        MIDDLE;
-
+        MIDDLE
     }
-}
 
+}

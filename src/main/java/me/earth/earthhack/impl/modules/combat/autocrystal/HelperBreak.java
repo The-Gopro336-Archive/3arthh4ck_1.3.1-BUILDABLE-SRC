@@ -1,102 +1,136 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.Entity
- *  net.minecraft.entity.EntityLivingBase
- *  net.minecraft.entity.player.EntityPlayer
- */
 package me.earth.earthhack.impl.modules.combat.autocrystal;
 
-import java.util.Collection;
-import java.util.List;
 import me.earth.earthhack.api.cache.SettingCache;
 import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.client.safety.Safety;
-import me.earth.earthhack.impl.modules.combat.autocrystal.AbstractBreakHelper;
-import me.earth.earthhack.impl.modules.combat.autocrystal.AutoCrystal;
 import me.earth.earthhack.impl.modules.combat.autocrystal.util.BreakData;
 import me.earth.earthhack.impl.modules.combat.autocrystal.util.CrystalData;
 import me.earth.earthhack.impl.util.math.MathUtil;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 
-public class HelperBreak
-extends AbstractBreakHelper<CrystalData> {
-    private static final SettingCache<Float, NumberSetting<Float>, Safety> MD = Caches.getSetting(Safety.class, Setting.class, "MaxDamage", Float.valueOf(4.0f));
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
-    public HelperBreak(AutoCrystal module) {
+public class HelperBreak extends AbstractBreakHelper<CrystalData>
+{
+    private static final SettingCache<Float, NumberSetting<Float>, Safety> MD =
+        Caches.getSetting(Safety.class, Setting.class, "MaxDamage", 4.0f);
+
+    public HelperBreak(AutoCrystal module)
+    {
         super(module);
     }
 
     @Override
-    public BreakData<CrystalData> newData(Collection<CrystalData> data) {
-        return new BreakData<CrystalData>(data);
+    public BreakData<CrystalData> newData(Collection<CrystalData> data)
+    {
+        return new BreakData<>(data);
     }
 
     @Override
-    protected CrystalData newCrystalData(Entity crystal) {
+    protected CrystalData newCrystalData(Entity crystal)
+    {
         return new CrystalData(crystal);
     }
 
     @Override
-    protected boolean isValid(Entity crystal, CrystalData data) {
+    protected boolean isValid(Entity crystal, CrystalData data)
+    {
         double distance = Managers.POSITION.getDistanceSq(crystal);
-        if (distance > (double)MathUtil.square(this.module.breakTrace.getValue().floatValue()) && !Managers.POSITION.canEntityBeSeen(crystal)) {
+        if (distance > MathUtil.square(module.breakTrace.getValue())
+                && !Managers.POSITION.canEntityBeSeen(crystal))
+        {
             return false;
         }
-        return distance <= (double)MathUtil.square(this.module.breakRange.getValue().floatValue());
+
+        return distance <= MathUtil.square(module.breakRange.getValue());
     }
 
     @Override
-    protected boolean calcSelf(Entity crystal, CrystalData data) {
-        float selfDamage = this.module.damageHelper.getDamage(crystal);
+    protected boolean calcSelf(Entity crystal, CrystalData data)
+    {
+        float selfDamage = module.damageHelper.getDamage(crystal);
         data.setSelfDmg(selfDamage);
-        if (selfDamage > EntityUtil.getHealth((EntityLivingBase)HelperBreak.mc.player) - 1.0f) {
+        if (selfDamage > EntityUtil.getHealth(mc.player) - 1.0f)
+        {
             Managers.SAFETY.setSafe(false);
-            if (!this.module.suicide.getValue().booleanValue()) {
+            if (!module.suicide.getValue())
+            {
                 return true;
             }
         }
-        if (selfDamage > MD.getValue().floatValue()) {
+
+        if (selfDamage > MD.getValue())
+        {
             Managers.SAFETY.setSafe(false);
         }
+
         return false;
     }
 
     @Override
-    protected void calcCrystal(BreakData<CrystalData> data, CrystalData crystalData, Entity crystal, List<EntityPlayer> players) {
-        boolean highSelf;
-        boolean bl = highSelf = crystalData.getSelfDmg() > this.module.maxSelfBreak.getValue().floatValue();
-        if (!this.module.suicide.getValue().booleanValue() && !this.module.overrideBreak.getValue().booleanValue() && highSelf) {
+    protected void calcCrystal(BreakData<CrystalData> data,
+                               CrystalData crystalData,
+                               Entity crystal,
+                               List<EntityPlayer> players)
+    {
+        boolean highSelf = crystalData.getSelfDmg()
+                                > module.maxSelfBreak.getValue();
+
+        if (!module.suicide.getValue()
+                && !module.overrideBreak.getValue()
+                && highSelf)
+        {
             return;
         }
+
         float damage = 0.0f;
         boolean killing = false;
-        for (EntityPlayer player : players) {
-            if (player.getDistanceSq(crystal) > 144.0) continue;
-            float playerDamage = this.module.damageHelper.getDamage(crystal, (EntityLivingBase)player);
-            if (playerDamage > crystalData.getDamage()) {
+        for (EntityPlayer player : players)
+        {
+            if (player.getDistanceSq(crystal) > 144)
+            {
+                continue;
+            }
+
+            float playerDamage = module.damageHelper.getDamage(crystal, player);
+            if (playerDamage > crystalData.getDamage())
+            {
                 crystalData.setDamage(playerDamage);
             }
-            if (playerDamage > EntityUtil.getHealth((EntityLivingBase)player) + 1.0f) {
+
+            if (playerDamage > EntityUtil.getHealth(player) + 1.0f)
+            {
                 killing = true;
                 highSelf = false;
             }
-            if (!(playerDamage > damage)) continue;
-            damage = playerDamage;
+
+            if (playerDamage > damage)
+            {
+                damage = playerDamage;
+            }
         }
-        if (this.module.antiTotem.getValue().booleanValue() && crystal.getPosition().down().equals((Object)this.module.antiTotemHelper.getTargetPos())) {
+
+        if (module.antiTotem.getValue()
+                && crystal.getPosition()
+                          .down()
+                          .equals(module.antiTotemHelper.getTargetPos()))
+        {
             data.setAntiTotem(crystal);
         }
-        if (!highSelf && (!this.module.efficient.getValue().booleanValue() || damage > crystalData.getSelfDmg() || killing)) {
+
+        if (!highSelf && (!module.efficient.getValue()
+                            || damage > crystalData.getSelfDmg()
+                            || killing))
+        {
             data.register(crystalData);
         }
     }
-}
 
+}

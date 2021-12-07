@@ -1,20 +1,14 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  com.google.gson.JsonElement
- */
 package me.earth.earthhack.api.setting.settings;
 
 import com.google.gson.JsonElement;
-import java.awt.Color;
 import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.event.SettingEvent;
 import me.earth.earthhack.api.setting.event.SettingResult;
 import me.earth.earthhack.api.util.TextUtil;
 
-public class ColorSetting
-extends Setting<Color> {
+import java.awt.*;
+
+public class ColorSetting extends Setting<Color> {
     private int red;
     private int green;
     private int blue;
@@ -22,14 +16,16 @@ extends Setting<Color> {
     private boolean sync;
     private boolean rainbow;
     private boolean staticRainbow;
-    private float rainbowSpeed = 100.0f;
-    private float rainbowSaturation = 100.0f;
-    private float rainbowBrightness = 100.0f;
+    private Color staticColor;
+    private float rainbowSpeed = 100.f;
+    private float rainbowSaturation = 100.f;
+    private float rainbowBrightness = 100.f;
     private Color mutableInitial;
 
     public ColorSetting(String nameIn, Color initialValue) {
         super(nameIn, initialValue);
         this.mutableInitial = initialValue;
+        this.staticColor = initialValue;
         this.red = initialValue.getRed();
         this.green = initialValue.getGreen();
         this.blue = initialValue.getBlue();
@@ -42,190 +38,220 @@ extends Setting<Color> {
 
     @Override
     public Color getInitial() {
-        return this.mutableInitial;
+        return mutableInitial;
     }
 
     @Override
     public void reset() {
-        this.value = this.mutableInitial;
+        value = mutableInitial;
+    }
+
+
+    public void setValueNoStatic(Color value) {
+        setValue(value, true);
+    }
+
+    @Override
+    public void setValue(Color value) {
+        super.setValue(value);
+        staticColor = value;
     }
 
     @Override
     public void setValue(Color value, boolean withEvent) {
         if (withEvent) {
-            SettingEvent<Color> event = this.onChange(new SettingEvent<Color>(this, value));
+            SettingEvent<Color> event = onChange(new SettingEvent<>(this, value));
             if (!event.isCancelled()) {
-                this.setValueRGBA(event.getValue());
+                setValueRGBA(event.getValue());
             }
         } else {
-            this.setValueRGBA(value);
+            setValueRGBA(value);
         }
     }
 
     public void setValueAlpha(Color value) {
-        Color newColor = new Color(value.getRed(), value.getGreen(), value.getBlue(), ((Color)this.getValue()).getAlpha());
-        this.setValueRGBA(newColor);
+        final Color newColor = new Color(value.getRed(), value.getGreen(), value.getBlue(), getValue().getAlpha());
+        setValueRGBANoStatic(newColor);
     }
 
     @Override
     public void fromJson(JsonElement element) {
         String parse = element.getAsString();
+
         if (parse.contains("-")) {
-            String[] values = parse.split("-");
+            final String[] values = parse.split("-");
             if (values.length > 6) {
                 int color = 0;
+
                 try {
-                    color = (int)Long.parseLong(values[0], 16);
-                }
-                catch (Exception e) {
+                    color = (int) Long.parseLong(values[0], 16);
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-                this.setValue(new Color(color, values[0].length() > 6));
+
+                setValue(new Color(color, values[0].length() > 6));
+
                 boolean syncBuf = false;
                 try {
                     syncBuf = Boolean.parseBoolean(values[1]);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-                this.setSync(syncBuf);
+                setSync(syncBuf);
+
                 boolean rainbowBuf = false;
                 try {
                     rainbowBuf = Boolean.parseBoolean(values[2]);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-                this.setRainbow(rainbowBuf);
+                setRainbow(rainbowBuf);
+
                 boolean rainbowStaticBuf = false;
                 try {
                     rainbowStaticBuf = Boolean.parseBoolean(values[3]);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-                this.setStaticRainbow(rainbowStaticBuf);
-                float speed = 0.0f;
+                setStaticRainbow(rainbowStaticBuf);
+
+                float speed = 0.f;
+
                 try {
-                    speed = (int)Float.parseFloat(values[4]);
-                }
-                catch (Exception e) {
+                    speed = (int) Float.parseFloat(values[4]);
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-                this.setRainbowSpeed(speed);
-                float saturation = 0.0f;
+
+                setRainbowSpeed(speed);
+
+                float saturation = 0.f;
+
                 try {
-                    saturation = (int)Float.parseFloat(values[5]);
-                }
-                catch (Exception e) {
+                    saturation = (int) Float.parseFloat(values[5]);
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-                this.setRainbowSaturation(saturation);
-                float brightness = 0.0f;
+
+                setRainbowSaturation(saturation);
+
+                float brightness = 0.f;
+
                 try {
-                    brightness = (int)Float.parseFloat(values[6]);
-                }
-                catch (Exception e) {
+                    brightness = (int) Float.parseFloat(values[6]);
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-                this.setRainbowBrightness(brightness);
+
+                setRainbowBrightness(brightness);
+
             }
         } else {
             int color = 0;
+
             try {
-                color = (int)Long.parseLong(parse, 16);
-            }
-            catch (Exception e) {
+                color = (int) Long.parseLong(parse, 16);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-            this.setValue(new Color(color, parse.length() > 6));
+
+            setValue(new Color(color, parse.length() > 6));
         }
     }
 
     @Override
     public String toJson() {
-        return TextUtil.get32BitString(((Color)this.value).getRGB()) + "-" + this.isSync() + "-" + this.isRainbow() + "-" + this.isStaticRainbow() + "-" + this.getRainbowSpeed() + "-" + this.getRainbowSaturation() + "-" + this.getRainbowBrightness();
+        return TextUtil.get32BitString(value.getRGB()) + "-" + isSync() + "-" + isRainbow() + "-" + isStaticRainbow() + "-" + getRainbowSpeed() + "-" + getRainbowSaturation() + "-" + getRainbowBrightness();
     }
 
     @Override
     public SettingResult fromString(String string) {
         if (string.contains("-")) {
-            String[] values = string.split("-");
+            final String[] values = string.split("-");
             if (values.length > 6) {
-                float brightness;
-                float saturation;
-                float speed;
-                boolean rainbowStaticBuf;
-                boolean rainbowBuf;
-                boolean syncBuf;
+
                 int color;
+
                 try {
-                    color = (int)Long.parseLong(values[0], 16);
-                }
-                catch (Exception e) {
+                    color = (int) Long.parseLong(values[0], 16);
+                } catch (Exception e) {
                     e.printStackTrace();
                     return new SettingResult(false, e.getMessage());
                 }
-                this.setValue(new Color(color, values[0].length() > 6));
+
+                setValue(new Color(color, values[0].length() > 6));
+
+                boolean syncBuf;
                 try {
                     syncBuf = Boolean.parseBoolean(values[1]);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     return new SettingResult(false, e.getMessage());
                 }
-                this.setSync(syncBuf);
+                setSync(syncBuf);
+
+                boolean rainbowBuf;
                 try {
                     rainbowBuf = Boolean.parseBoolean(values[2]);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     return new SettingResult(false, e.getMessage());
                 }
-                this.setRainbow(rainbowBuf);
+                setRainbow(rainbowBuf);
+
+                boolean rainbowStaticBuf;
                 try {
                     rainbowStaticBuf = Boolean.parseBoolean(values[3]);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     return new SettingResult(false, e.getMessage());
                 }
-                this.setStaticRainbow(rainbowStaticBuf);
+                setStaticRainbow(rainbowStaticBuf);
+
+                float speed;
+
                 try {
-                    speed = (int)Float.parseFloat(values[4]);
-                }
-                catch (Exception e) {
+                    speed = (int) Float.parseFloat(values[4]);
+                } catch (Exception e) {
                     e.printStackTrace();
                     return new SettingResult(false, e.getMessage());
                 }
-                this.setRainbowSpeed(speed);
+
+                setRainbowSpeed(speed);
+
+                float saturation;
+
                 try {
-                    saturation = (int)Float.parseFloat(values[5]);
-                }
-                catch (Exception e) {
+                    saturation = (int) Float.parseFloat(values[5]);
+                } catch (Exception e) {
                     e.printStackTrace();
                     return new SettingResult(false, e.getMessage());
                 }
-                this.setRainbowSaturation(saturation);
+
+                setRainbowSaturation(saturation);
+
+                float brightness;
+
                 try {
-                    brightness = (int)Float.parseFloat(values[6]);
-                }
-                catch (Exception e) {
+                    brightness = (int) Float.parseFloat(values[6]);
+                } catch (Exception e) {
                     e.printStackTrace();
                     return new SettingResult(false, e.getMessage());
                 }
-                this.setRainbowBrightness(brightness);
+
+                setRainbowBrightness(brightness);
             }
         } else {
             int color;
+
             try {
-                color = (int)Long.parseLong(string, 16);
-            }
-            catch (Exception e) {
+                color = (int) Long.parseLong(string, 16);
+            } catch (Exception e) {
                 e.printStackTrace();
                 return new SettingResult(false, e.getMessage());
             }
-            this.setValue(new Color(color, string.length() > 6));
+
+            setValue(new Color(color, string.length() > 6));
         }
         return SettingResult.SUCCESSFUL;
     }
@@ -235,67 +261,68 @@ extends Setting<Color> {
         if (string == null || string.isEmpty()) {
             return "<hex-string>";
         }
+
         return "";
     }
 
     public int getRed() {
-        return this.red;
+        return red;
     }
 
     public float getR() {
-        return (float)this.red / 255.0f;
+        return red / 255.0f;
     }
 
     public void setRed(int red) {
         this.red = red;
-        this.setValue(new Color(red, this.blue, this.green, this.alpha));
+        this.setValue(new Color(red, blue, green, alpha));
     }
 
     public int getGreen() {
-        return this.green;
+        return green;
     }
 
     public float getG() {
-        return (float)this.green / 255.0f;
+        return green / 255.0f;
     }
 
     public void setGreen(int green) {
         this.green = green;
-        this.setValue(new Color(this.red, this.blue, green, this.alpha));
+        this.setValue(new Color(red, blue, green, alpha));
     }
 
     public int getBlue() {
-        return this.blue;
+        return blue;
     }
 
     public float getB() {
-        return (float)this.blue / 255.0f;
+        return blue / 255.0f;
     }
 
     public void setBlue(int blue) {
         this.blue = blue;
-        this.setValue(new Color(this.red, blue, this.green, this.alpha));
+        this.setValue(new Color(red, blue, green, alpha));
     }
 
     public int getAlpha() {
-        return this.alpha;
+        return alpha;
     }
 
     public float getA() {
-        return (float)this.alpha / 255.0f;
+        return alpha / 255.0f;
     }
 
     public void setAlpha(int alpha) {
         this.alpha = alpha;
-        this.setValue(new Color(this.red, this.blue, this.green, alpha));
+        this.setValue(new Color(red, blue, green, alpha));
     }
 
     public int getRGB() {
-        return ((Color)this.value).getRGB();
+        return this.value.getRGB();
     }
 
     public boolean isSync() {
-        return this.sync;
+        return sync;
     }
 
     public void setSync(boolean sync) {
@@ -303,7 +330,7 @@ extends Setting<Color> {
     }
 
     public boolean isRainbow() {
-        return this.rainbow;
+        return rainbow;
     }
 
     public void setRainbow(boolean rainbow) {
@@ -311,7 +338,7 @@ extends Setting<Color> {
     }
 
     public float getRainbowSpeed() {
-        return this.rainbowSpeed;
+        return rainbowSpeed;
     }
 
     public void setRainbowSpeed(float rainbowSpeed) {
@@ -319,7 +346,7 @@ extends Setting<Color> {
     }
 
     public float getRainbowSaturation() {
-        return this.rainbowSaturation;
+        return rainbowSaturation;
     }
 
     public void setRainbowSaturation(float rainbowSaturation) {
@@ -327,7 +354,7 @@ extends Setting<Color> {
     }
 
     public float getRainbowBrightness() {
-        return this.rainbowBrightness;
+        return rainbowBrightness;
     }
 
     public void setRainbowBrightness(float rainbowBrightness) {
@@ -335,7 +362,7 @@ extends Setting<Color> {
     }
 
     public boolean isStaticRainbow() {
-        return this.staticRainbow;
+        return staticRainbow;
     }
 
     public void setStaticRainbow(boolean staticRainbow) {
@@ -348,6 +375,17 @@ extends Setting<Color> {
         this.blue = value.getBlue();
         this.green = value.getGreen();
         this.alpha = value.getAlpha();
+        this.staticColor = value;
+    }
+    private void setValueRGBANoStatic(Color value) {
+        this.value = value;
+        this.red = value.getRed();
+        this.blue = value.getBlue();
+        this.green = value.getGreen();
+        this.alpha = value.getAlpha();
+    }
+
+    public Color getStaticColor() {
+        return staticColor;
     }
 }
-

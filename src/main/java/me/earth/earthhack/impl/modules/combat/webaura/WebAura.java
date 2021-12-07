@@ -1,12 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.client.entity.EntityOtherPlayerMP
- *  net.minecraft.entity.player.EntityPlayer
- *  net.minecraft.util.math.AxisAlignedBB
- *  net.minecraft.util.math.BlockPos
- */
 package me.earth.earthhack.impl.modules.combat.webaura;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -17,63 +8,87 @@ import me.earth.earthhack.api.setting.settings.EnumSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.combat.autotrap.modes.TrapTarget;
-import me.earth.earthhack.impl.modules.combat.webaura.ListenerWebAura;
-import me.earth.earthhack.impl.modules.combat.webaura.WebAuraData;
 import me.earth.earthhack.impl.modules.player.freecam.Freecam;
 import me.earth.earthhack.impl.util.helpers.blocks.noattack.NoAttackObbyListenerModule;
 import me.earth.earthhack.impl.util.math.MathUtil;
 import me.earth.earthhack.impl.util.minecraft.blocks.BlockUtil;
-import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
-public class WebAura
-extends NoAttackObbyListenerModule<ListenerWebAura> {
-    protected static final ModuleCache<Freecam> FREECAM = Caches.getModule(Freecam.class);
-    protected final Setting<Double> placeRange = this.register(new NumberSetting<Double>("PlaceRange", 6.0, 0.1, 7.5));
-    protected final Setting<TrapTarget> target = this.register(new EnumSetting<TrapTarget>("Target", TrapTarget.Closest));
-    protected final Setting<Boolean> antiSelfWeb = this.register(new BooleanSetting("AntiSelfWeb", true));
-    protected final Setting<Double> targetRange = this.register(new NumberSetting<Double>("Target-Range", 6.0, 0.1, 10.0));
+public class WebAura extends NoAttackObbyListenerModule<ListenerWebAura>
+{
+    protected static final ModuleCache<Freecam> FREECAM =
+            Caches.getModule(Freecam.class);
+
+    protected final Setting<Double> placeRange =
+            register(new NumberSetting<>("PlaceRange", 6.0, 0.1, 7.5));
+    protected final Setting<TrapTarget> target =
+            register(new EnumSetting<>("Target", TrapTarget.Closest));
+    protected final Setting<Boolean> antiSelfWeb =
+            register(new BooleanSetting("AntiSelfWeb", true));
+    protected final Setting<Double> targetRange =
+            register(new NumberSetting<>("Target-Range", 6.0, 0.1, 10.0));
+
     protected EntityPlayer currentTarget;
 
-    public WebAura() {
+    public WebAura()
+    {
         super("WebAura", Category.Combat);
         this.unregister(this.blockingType);
         this.setData(new WebAuraData(this));
     }
 
     @Override
-    public String getDisplayInfo() {
-        return this.target.getValue() == TrapTarget.Closest && this.currentTarget != null ? this.currentTarget.getName() : null;
+    public String getDisplayInfo()
+    {
+        return target.getValue() == TrapTarget.Closest
+                && currentTarget != null
+                ? currentTarget.getName()
+                : null;
     }
 
     @Override
-    protected ListenerWebAura createListener() {
+    protected ListenerWebAura createListener()
+    {
         return new ListenerWebAura(this);
     }
 
     @Override
-    public boolean entityCheck(BlockPos pos) {
-        return this.selfWebCheck(pos);
+    public boolean entityCheck(BlockPos pos)
+    {
+        return selfWebCheck(pos);
     }
 
     @Override
-    protected boolean quickEntityCheck(BlockPos pos) {
-        return !this.selfWebCheck(pos);
+    protected boolean quickEntityCheck(BlockPos pos)
+    {
+        return !selfWebCheck(pos);
     }
 
     @Override
-    public EntityPlayer getPlayerForRotations() {
-        EntityOtherPlayerMP target;
-        if (FREECAM.isEnabled() && (target = ((Freecam)FREECAM.get()).getPlayer()) != null) {
-            return target;
+    public EntityPlayer getPlayerForRotations()
+    {
+        if (FREECAM.isEnabled())
+        {
+            EntityPlayer target = FREECAM.get().getPlayer();
+            if (target != null)
+            {
+                return target;
+            }
         }
-        return WebAura.mc.player;
+
+        return mc.player;
     }
 
-    protected boolean selfWebCheck(BlockPos pos) {
-        return BlockUtil.getDistanceSq(pos) <= MathUtil.square(this.placeRange.getValue()) && (this.antiSelfWeb.getValue() == false || !this.getPlayerForRotations().getEntityBoundingBox().intersects(new AxisAlignedBB(pos)));
+    protected boolean selfWebCheck(BlockPos pos)
+    {
+        return BlockUtil.getDistanceSq(pos)
+                <= MathUtil.square(placeRange.getValue())
+                    && (!antiSelfWeb.getValue()
+                        || !getPlayerForRotations()
+                                .getEntityBoundingBox()
+                                .intersects(new AxisAlignedBB(pos)));
     }
+
 }
-

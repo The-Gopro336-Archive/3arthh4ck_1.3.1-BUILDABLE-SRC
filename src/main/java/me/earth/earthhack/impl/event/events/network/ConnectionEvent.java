@@ -1,52 +1,56 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.player.EntityPlayer
- */
 package me.earth.earthhack.impl.event.events.network;
 
-import java.util.UUID;
 import net.minecraft.entity.player.EntityPlayer;
 
-public class ConnectionEvent {
+import java.util.UUID;
+
+public class ConnectionEvent
+{
     private final EntityPlayer player;
     private final String name;
     private final UUID uuid;
 
-    private ConnectionEvent(String name, UUID uuid, EntityPlayer player) {
+    private ConnectionEvent(String name, UUID uuid, EntityPlayer player)
+    {
         this.player = player;
-        this.name = name;
-        this.uuid = uuid;
+        this.name   = name;
+        this.uuid   = uuid;
     }
 
-    public EntityPlayer getPlayer() {
-        return this.player;
+    public EntityPlayer getPlayer()
+    {
+        return player;
     }
 
-    public String getName() {
-        if (this.name == null && this.player != null) {
-            return this.player.getName();
+    public String getName()
+    {
+        if (name == null && player != null)
+        {
+            return player.getName();
         }
-        return this.name;
+
+        return name;
     }
 
-    public UUID getUuid() {
-        return this.uuid;
+    public UUID getUuid()
+    {
+        return uuid;
     }
 
-    public static class Leave
-    extends ConnectionEvent {
-        public Leave(String name, UUID uuid, EntityPlayer player) {
+    public static class Join extends ConnectionEvent
+    {
+        public Join(String name, UUID uuid, EntityPlayer player)
+        {
             super(name, uuid, player);
         }
     }
 
-    public static class Join
-    extends ConnectionEvent {
-        public Join(String name, UUID uuid, EntityPlayer player) {
+    public static class Leave extends ConnectionEvent
+    {
+        public Leave(String name, UUID uuid, EntityPlayer player)
+        {
             super(name, uuid, player);
         }
     }
+
 }
-

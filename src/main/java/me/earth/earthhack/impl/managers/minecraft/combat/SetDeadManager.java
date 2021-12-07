@@ -1,23 +1,6 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  io.netty.util.internal.ConcurrentSet
- *  net.minecraft.entity.Entity
- *  net.minecraft.entity.item.EntityEnderCrystal
- *  net.minecraft.init.SoundEvents
- *  net.minecraft.network.play.server.SPacketDestroyEntities
- *  net.minecraft.network.play.server.SPacketSoundEffect
- *  net.minecraft.util.SoundCategory
- *  net.minecraft.util.math.Vec3d
- */
 package me.earth.earthhack.impl.managers.minecraft.combat;
 
 import io.netty.util.internal.ConcurrentSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import me.earth.earthhack.api.cache.SettingCache;
 import me.earth.earthhack.api.event.bus.EventListener;
 import me.earth.earthhack.api.event.bus.SubscriberImpl;
@@ -42,175 +25,307 @@ import net.minecraft.network.play.server.SPacketSoundEffect;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 
-public class SetDeadManager
-extends SubscriberImpl
-implements Globals {
-    private static final SettingCache<Integer, NumberSetting<Integer>, Management> DEATH_TIME = Caches.getSetting(Management.class, Setting.class, "DeathTime", 500);
-    private static final SettingCache<Boolean, BooleanSetting, Management> SOUND_REMOVE = Caches.getSetting(Management.class, BooleanSetting.class, "SoundRemove", true);
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
+/**
+ * Manages entities that have been set dead manually.
+ */
+public class SetDeadManager extends SubscriberImpl implements Globals
+{
+    private static final SettingCache
+        <Integer, NumberSetting<Integer>, Management> DEATH_TIME =
+        Caches.getSetting(Management.class, Setting.class, "DeathTime", 500);
+    private static final SettingCache
+        <Boolean, BooleanSetting, Management> SOUND_REMOVE =
+        Caches.getSetting(Management.class, BooleanSetting.class, "SoundRemove", true);
+
     private final Map<Integer, EntityTime> killed;
-    private final Set<SoundObserver> observers = new ConcurrentSet();
+    private final Set<SoundObserver> observers;
 
-    public SetDeadManager() {
-        this.killed = new ConcurrentHashMap<Integer, EntityTime>();
-        this.listeners.add(new EventListener<PacketEvent.Receive<SPacketSoundEffect>>(PacketEvent.Receive.class, Integer.MAX_VALUE, SPacketSoundEffect.class){
+    public SetDeadManager()
+    {
+        this.observers = new ConcurrentSet<>();
+        this.killed    = new ConcurrentHashMap<>();
 
+        this.listeners.add(
+            new EventListener<PacketEvent.Receive<SPacketSoundEffect>>
+                (PacketEvent.Receive.class,
+                        Integer.MAX_VALUE,
+                        SPacketSoundEffect.class)
+        {
             @Override
-            public void invoke(PacketEvent.Receive<SPacketSoundEffect> event) {
-                SPacketSoundEffect p = (SPacketSoundEffect)event.getPacket();
-                if (p.getCategory() == SoundCategory.BLOCKS && p.getSound() == SoundEvents.ENTITY_GENERIC_EXPLODE && SetDeadManager.this.shouldRemove()) {
+            public void invoke
+                    (PacketEvent.Receive<SPacketSoundEffect> event)
+            {
+                SPacketSoundEffect p = event.getPacket();
+                if (p.getCategory() == SoundCategory.BLOCKS
+                        && p.getSound() == SoundEvents.ENTITY_GENERIC_EXPLODE
+                        && shouldRemove())
+                {
                     Vec3d pos = new Vec3d(p.getX(), p.getY(), p.getZ());
-                    Globals.mc.addScheduledTask(() -> {
-                        SetDeadManager.this.removeCrystals(pos, 11.0f, Globals.mc.world.loadedEntityList);
-                        for (SoundObserver observer : SetDeadManager.this.observers) {
-                            if (!observer.shouldBeNotified()) continue;
-                            observer.onChange(p);
+                    mc.addScheduledTask(() ->
+                    {
+                        //11.0f and not 12.0f, because distance inaccuracies (?)
+                        removeCrystals(pos, 11.0f, mc.world.loadedEntityList);
+                        for (SoundObserver observer : observers)
+                        {
+                            // TODO: async observers
+                            if (observer.shouldBeNotified())
+                            {
+                                observer.onChange(p);
+                            }
                         }
                     });
                 }
             }
         });
-        this.listeners.add(new EventListener<PacketEvent.Receive<SPacketDestroyEntities>>(PacketEvent.Receive.class, Integer.MAX_VALUE, SPacketDestroyEntities.class){
-
+        this.listeners.add(
+            new EventListener<PacketEvent.Receive<SPacketDestroyEntities>>
+                (PacketEvent.Receive.class,
+                        Integer.MAX_VALUE,
+                        SPacketDestroyEntities.class)
+        {
             @Override
-            public void invoke(PacketEvent.Receive<SPacketDestroyEntities> event) {
-                Globals.mc.addScheduledTask(() -> {
-                    for (int id : ((SPacketDestroyEntities)event.getPacket()).getEntityIDs()) {
-                        SetDeadManager.this.confirmKill(id);
+            public void invoke
+                    (PacketEvent.Receive<SPacketDestroyEntities> event)
+            {
+                // With this on the main thread there's no reason
+                // why we need all the concurrency stuff...?
+                mc.addScheduledTask(() ->
+                {
+                    for (int id : event.getPacket().getEntityIDs())
+                    {
+                        confirmKill(id);
                     }
                 });
             }
         });
-        this.listeners.add(new EventListener<UpdateEvent>(UpdateEvent.class){
-
+        this.listeners.add(
+            new EventListener<UpdateEvent>(UpdateEvent.class)
+        {
             @Override
-            public void invoke(UpdateEvent event) {
-                SetDeadManager.this.updateKilled();
+            public void invoke(UpdateEvent event)
+            {
+                updateKilled();
             }
         });
-        this.listeners.add(new EventListener<WorldClientEvent.Load>(WorldClientEvent.Load.class){
-
+        this.listeners.add(new EventListener<WorldClientEvent.Load>
+                (WorldClientEvent.Load.class)
+        {
             @Override
-            public void invoke(WorldClientEvent.Load event) {
-                SetDeadManager.this.clear();
+            public void invoke(WorldClientEvent.Load event)
+            {
+                clear();
             }
         });
-        this.listeners.add(new EventListener<WorldClientEvent.Unload>(WorldClientEvent.Unload.class){
-
+        this.listeners.add(new EventListener<WorldClientEvent.Unload>
+                (WorldClientEvent.Unload.class)
+        {
             @Override
-            public void invoke(WorldClientEvent.Unload event) {
-                SetDeadManager.this.clear();
+            public void invoke(WorldClientEvent.Unload event)
+            {
+                clear();
             }
         });
     }
 
-    public Entity getEntity(int id) {
-        EntityTime time = this.killed.get(id);
-        if (time != null) {
+    public Entity getEntity(int id)
+    {
+        EntityTime time = killed.get(id);
+        if (time != null)
+        {
             return time.getEntity();
         }
+
         return null;
     }
 
-    public void setDeadCustom(Entity entity, long t) {
-        EntityTime time = this.killed.get(entity.getEntityId());
-        if (time instanceof CustomEntityTime) {
+    public void setDeadCustom(Entity entity, long t)
+    {
+        EntityTime time = killed.get(entity.getEntityId());
+        if (time instanceof CustomEntityTime)
+        {
             time.getEntity().setDead();
             time.reset();
-        } else {
+        }
+        else
+        {
             entity.setDead();
-            this.killed.put(entity.getEntityId(), new CustomEntityTime(entity, t));
+            killed.put(entity.getEntityId(), new CustomEntityTime(entity, t));
         }
     }
 
-    public void revive(int id) {
-        EntityTime time = this.killed.remove(id);
-        if (time != null && time.isValid()) {
+    public void revive(int id)
+    {
+        EntityTime time = killed.remove(id);
+        if (time != null && time.isValid())
+        {
             Entity entity = time.getEntity();
             entity.isDead = false;
-            SetDeadManager.mc.world.addEntityToWorld(entity.getEntityId(), entity);
+            mc.world.addEntityToWorld(entity.getEntityId(), entity);
             entity.isDead = false;
         }
     }
 
-    public void updateKilled() {
-        for (Map.Entry<Integer, EntityTime> entry : this.killed.entrySet()) {
-            if (!entry.getValue().isValid()) {
+    /**
+     * Checks all killed entities. If they have been killed
+     * for longer than the value of the given deathTime setting
+     * and the kill hasn't been confirmed yet they will be added back
+     * to the world.
+     */
+    public void updateKilled()
+    {
+        for (Map.Entry<Integer, EntityTime> entry : killed.entrySet())
+        {
+            if (!entry.getValue().isValid())
+            {
                 entry.getValue().getEntity().setDead();
-                this.killed.remove(entry.getKey());
-                continue;
+                killed.remove(entry.getKey());
             }
-            if (!entry.getValue().passed(DEATH_TIME.getValue().intValue())) continue;
-            Entity entity = entry.getValue().getEntity();
-            entity.isDead = false;
-            if (SetDeadManager.mc.world.loadedEntityList.contains((Object)entity)) continue;
-            SetDeadManager.mc.world.addEntityToWorld(entry.getKey().intValue(), entity);
-            entity.isDead = false;
-            this.killed.remove(entry.getKey());
+            else if (entry.getValue().passed(DEATH_TIME.getValue()))
+            {
+                Entity entity = entry.getValue().getEntity();
+                entity.isDead = false;
+                if (!mc.world.loadedEntityList.contains(entity))
+                {
+                    mc.world.addEntityToWorld(entry.getKey(), entity);
+                    entity.isDead = false;
+                    killed.remove(entry.getKey());
+                }
+            }
         }
     }
 
-    public void removeCrystals(Vec3d pos, float range, List<Entity> entities) {
-        for (Entity entity : entities) {
-            if (!(entity instanceof EntityEnderCrystal) || !(entity.getDistanceSq(pos.x, pos.y, pos.z) <= (double)MathUtil.square(range))) continue;
-            this.setDead(entity);
+    /**
+     * Kills all EndCrystals in the given EntityList that
+     * lie within the given range (radius) around the BlockPos.
+     *
+     * @param pos the center.
+     * @param range maxDistance to the center.
+     * @param entities the Entities to check.
+     */
+    public void removeCrystals(Vec3d pos, float range, List<Entity> entities)
+    {
+        for (Entity entity : entities)
+        {
+            if (entity instanceof EntityEnderCrystal
+                    && entity.getDistanceSq(pos.x, pos.y, pos.z)
+                            <= MathUtil.square(range))
+            {
+                setDead(entity);
+            }
         }
     }
 
-    public void setDead(Entity entity) {
-        EntityTime time = this.killed.get(entity.getEntityId());
-        if (time != null) {
+    /**
+     * Calls {@link Entity#setDead()} for the given entity and
+     * adds it to the killed list. If the kill isn't confirmed
+     * within the deathTime by {@link SetDeadManager#confirmKill(int)}
+     * the entity will be added back to the world.
+     *
+     * @param entity the entity to kill.
+     */
+    public void setDead(Entity entity)
+    {
+        EntityTime time = killed.get(entity.getEntityId());
+        if (time != null)
+        {
             time.getEntity().setDead();
             time.reset();
-        } else if (!entity.isDead) {
+        }
+        else if (!entity.isDead)
+        {
             entity.setDead();
-            this.killed.put(entity.getEntityId(), new EntityTime(entity));
+            killed.put(entity.getEntityId(), new EntityTime(entity));
         }
     }
 
-    public void confirmKill(int id) {
-        EntityTime time = this.killed.get(id);
-        if (time != null) {
+    /**
+     * Confirms that the entity belonging to the given
+     * EntityID has indeed been killed.
+     *
+     * @param id the id to confirm.
+     */
+    public void confirmKill(int id)
+    {
+        EntityTime time = killed.get(id);
+        if (time != null)
+        {
             time.setValid(false);
             time.getEntity().setDead();
         }
     }
 
-    public boolean passedDeathTime(Entity entity, long deathTime) {
-        return this.passedDeathTime(entity.getEntityId(), deathTime);
+    public boolean passedDeathTime(Entity entity, long deathTime)
+    {
+        return passedDeathTime(entity.getEntityId(), deathTime);
     }
 
-    public boolean passedDeathTime(int id, long deathTime) {
-        if (deathTime <= 0L) {
+    public boolean passedDeathTime(int id, long deathTime)
+    {
+        if (deathTime <= 0)
+        {
             return true;
         }
-        EntityTime time = this.killed.get(id);
-        if (time != null && time.isValid()) {
+
+        EntityTime time = killed.get(id);
+        if (time != null && time.isValid())
+        {
             return time.passed(deathTime);
         }
+
         return true;
     }
 
-    public void clear() {
-        this.killed.clear();
+    /**
+     * Clears all killed entities.
+     */
+    public void clear()
+    {
+        killed.clear();
     }
 
-    public void addObserver(SoundObserver observer) {
+    /**
+     * Adds a SoundObserver. If any of the added SoundObservers
+     * {@link SoundObserver#shouldRemove()} methods returns
+     * <tt>true</tt> crystals will be removed when SPacketSoundEffects
+     * arrive. The SoundRemover then will be notified.
+     *
+     * @param observer the observer to add.
+     */
+    public void addObserver(SoundObserver observer)
+    {
         this.observers.add(observer);
     }
 
-    public void removeObserver(SoundObserver observer) {
+    /**
+     * {@see SetDeadManager#addObserver(SoundObserver)}.
+     * @param observer the observer to remove.
+     */
+    public void removeObserver(SoundObserver observer)
+    {
         this.observers.remove(observer);
     }
 
-    private boolean shouldRemove() {
-        if (!SOUND_REMOVE.getValue().booleanValue()) {
+    private boolean shouldRemove()
+    {
+        if (!SOUND_REMOVE.getValue())
+        {
             return false;
         }
-        for (SoundObserver soundObserver : this.observers) {
-            if (!soundObserver.shouldRemove()) continue;
-            return true;
+
+        for (SoundObserver soundObserver : observers)
+        {
+            if (soundObserver.shouldRemove())
+            {
+                return true;
+            }
         }
+
         return false;
     }
-}
 
+}

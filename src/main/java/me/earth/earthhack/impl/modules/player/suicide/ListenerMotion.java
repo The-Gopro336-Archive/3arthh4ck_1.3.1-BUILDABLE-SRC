@@ -1,32 +1,8 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.Entity
- *  net.minecraft.entity.item.EntityEnderCrystal
- *  net.minecraft.entity.player.EntityPlayer
- *  net.minecraft.init.Items
- *  net.minecraft.inventory.ClickType
- *  net.minecraft.item.Item
- *  net.minecraft.network.Packet
- *  net.minecraft.network.play.client.CPacketAnimation
- *  net.minecraft.network.play.client.CPacketChatMessage
- *  net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock
- *  net.minecraft.network.play.client.CPacketUseEntity
- *  net.minecraft.util.EnumHand
- *  net.minecraft.util.math.BlockPos
- *  net.minecraft.util.math.BlockPos$MutableBlockPos
- *  net.minecraft.util.math.Vec3i
- *  net.minecraft.world.IBlockAccess
- */
 package me.earth.earthhack.impl.modules.player.suicide;
 
 import me.earth.earthhack.api.event.events.Stage;
-import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.impl.event.events.network.MotionUpdateEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
-import me.earth.earthhack.impl.modules.player.suicide.Suicide;
-import me.earth.earthhack.impl.modules.player.suicide.SuicideMode;
 import me.earth.earthhack.impl.util.client.ModuleUtil;
 import me.earth.earthhack.impl.util.math.MathUtil;
 import me.earth.earthhack.impl.util.math.RayTraceUtil;
@@ -42,11 +18,8 @@ import me.earth.earthhack.impl.util.network.NetworkUtil;
 import me.earth.earthhack.impl.util.thread.Locks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
-import net.minecraft.item.Item;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketAnimation;
 import net.minecraft.network.play.client.CPacketChatMessage;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
@@ -54,63 +27,104 @@ import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.IBlockAccess;
 
-final class ListenerMotion
-extends ModuleListener<Suicide, MotionUpdateEvent> {
-    public ListenerMotion(Suicide module) {
+final class ListenerMotion extends ModuleListener<Suicide, MotionUpdateEvent>
+{
+    public ListenerMotion(Suicide module)
+    {
         super(module, MotionUpdateEvent.class);
     }
 
     @Override
-    public void invoke(MotionUpdateEvent event) {
-        int slot;
-        if (((Suicide)this.module).displaying) {
+    public void invoke(MotionUpdateEvent event)
+    {
+        if (module.displaying)
+        {
             return;
         }
-        if (ListenerMotion.mc.player.getHealth() <= 0.0f) {
-            ((Suicide)this.module).disable();
+
+        if (mc.player.getHealth() <= 0.0f)
+        {
+            module.disable();
             return;
         }
-        if (((Suicide)this.module).mode.getValue() == SuicideMode.Command) {
+
+        if (module.mode.getValue() == SuicideMode.Command)
+        {
             NetworkUtil.sendPacketNoEvent(new CPacketChatMessage("/kill"));
-            ((Suicide)this.module).disable();
+            module.disable();
             return;
         }
-        if (((Suicide)this.module).throwAwayTotem.getValue().booleanValue() && InventoryUtil.validScreen() && ((Suicide)this.module).timer.passed(((Suicide)this.module).throwDelay.getValue().intValue()) && ListenerMotion.mc.player.getHeldItemOffhand().getItem() == Items.TOTEM_OF_UNDYING) {
-            Locks.acquire(Locks.WINDOW_CLICK_LOCK, () -> ListenerMotion.mc.playerController.windowClick(0, 45, 1, ClickType.THROW, (EntityPlayer)ListenerMotion.mc.player));
-            ((Suicide)this.module).timer.reset();
+
+        if (module.throwAwayTotem.getValue()
+            && InventoryUtil.validScreen()
+            && module.timer.passed(module.throwDelay.getValue())
+            && mc.player.getHeldItemOffhand().getItem()
+                == Items.TOTEM_OF_UNDYING)
+        {
+            Locks.acquire(Locks.WINDOW_CLICK_LOCK, () ->
+                mc.playerController.windowClick(
+                    0, 45, 1, ClickType.THROW, mc.player));
+            module.timer.reset();
         }
-        if ((slot = InventoryUtil.findHotbarItem(Items.END_CRYSTAL, new Item[0])) == -1) {
-            ModuleUtil.disableRed((Module)this.module, "No Crystals found!");
+
+        int slot = InventoryUtil.findHotbarItem(Items.END_CRYSTAL);
+        if (slot == -1)
+        {
+            ModuleUtil.disableRed(module, "No Crystals found!");
             return;
         }
-        if (event.getStage() == Stage.PRE) {
-            ((Suicide)this.module).result = null;
-            ((Suicide)this.module).pos = null;
-            ((Suicide)this.module).crystal = null;
-            if (((Suicide)this.module).breakTimer.passed(((Suicide)this.module).breakDelay.getValue().intValue())) {
+
+        if (event.getStage() == Stage.PRE)
+        {
+            module.result  = null;
+            module.pos     = null;
+            module.crystal = null;
+            if (module.breakTimer.passed(module.breakDelay.getValue()))
+            {
                 Entity crystal = null;
                 float maxDamage = Float.MIN_VALUE;
-                for (Entity entity : ListenerMotion.mc.world.loadedEntityList) {
-                    float damage;
-                    if (entity.isDead || !(entity instanceof EntityEnderCrystal) || !(RotationUtil.getRotationPlayer().getDistanceSq(entity) < (double)MathUtil.square(((Suicide)this.module).breakRange.getValue().floatValue())) || !RotationUtil.getRotationPlayer().canEntityBeSeen(entity) && !(RotationUtil.getRotationPlayer().getDistanceSq(entity) < (double)MathUtil.square(((Suicide)this.module).trace.getValue().floatValue())) || !((damage = DamageUtil.calculate(entity)) > maxDamage)) continue;
-                    maxDamage = damage;
-                    crystal = entity;
+                for (Entity entity : mc.world.loadedEntityList)
+                {
+                    if (!entity.isDead
+                        && entity instanceof EntityEnderCrystal
+                        && RotationUtil.getRotationPlayer()
+                                       .getDistanceSq(entity)
+                            < MathUtil.square(module.breakRange.getValue())
+                        && (RotationUtil.getRotationPlayer()
+                                        .canEntityBeSeen(entity)
+                            || RotationUtil.getRotationPlayer()
+                                           .getDistanceSq(entity)
+                                < MathUtil.square(module.trace.getValue())))
+                    {
+                        float damage = DamageUtil.calculate(entity);
+                        if (damage > maxDamage)
+                        {
+                            maxDamage = damage;
+                            crystal = entity;
+                        }
+                    }
                 }
-                if (crystal != null) {
-                    ((Suicide)this.module).crystal = crystal;
-                    if (((Suicide)this.module).rotate.getValue().booleanValue()) {
+
+                if (crystal != null)
+                {
+                    module.crystal = crystal;
+                    if (module.rotate.getValue())
+                    {
                         float[] rotations = RotationUtil.getRotations(crystal);
                         event.setYaw(rotations[0]);
                         event.setPitch(rotations[1]);
                     }
+
                     return;
                 }
             }
-            if (!((Suicide)this.module).placeTimer.passed(((Suicide)this.module).placeDelay.getValue().intValue())) {
+
+            if (!module.placeTimer.passed(module.placeDelay.getValue()))
+            {
                 return;
             }
+
             float maxDamage = Float.MIN_VALUE;
             BlockPos middle = PositionUtil.getPosition();
             int x = middle.getX();
@@ -119,48 +133,90 @@ extends ModuleListener<Suicide, MotionUpdateEvent> {
             int maxRadius = Sphere.getRadius(6.0);
             BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
             BlockPos bestPos = null;
-            for (int i = 1; i < maxRadius; ++i) {
-                float damage;
+            for (int i = 1; i < maxRadius; i++)
+            {
                 Vec3i v = Sphere.get(i);
                 pos.setPos(x + v.getX(), y + v.getY(), z + v.getZ());
-                if (!BlockUtil.canPlaceCrystal((BlockPos)pos, false, ((Suicide)this.module).newVer.getValue(), ListenerMotion.mc.world.loadedEntityList, ((Suicide)this.module).newVerEntities.getValue(), 0L) || !BlockUtil.isCrystalPosInRange((BlockPos)pos, ((Suicide)this.module).placeRange.getValue().floatValue(), ((Suicide)this.module).placeRange.getValue().floatValue(), ((Suicide)this.module).trace.getValue().floatValue()) || !((damage = DamageUtil.calculate((BlockPos)pos)) > maxDamage)) continue;
-                maxDamage = damage;
-                bestPos = pos.toImmutable();
+                if (!BlockUtil.canPlaceCrystal(
+                        pos, false, module.newVer.getValue(),
+                        mc.world.loadedEntityList,
+                        module.newVerEntities.getValue(), 0)
+                    || !BlockUtil.isCrystalPosInRange(pos,
+                        module.placeRange.getValue(),
+                        module.placeRange.getValue(),
+                        module.trace.getValue()))
+                {
+                    continue;
+                }
+
+                float damage = DamageUtil.calculate(pos);
+                if (damage > maxDamage)
+                {
+                    maxDamage = damage;
+                    bestPos = pos.toImmutable();
+                }
             }
-            if (bestPos != null) {
-                Ray result = RayTraceFactory.fullTrace((Entity)RotationUtil.getRotationPlayer(), (IBlockAccess)ListenerMotion.mc.world, bestPos, -1.0);
-                if (result == null) {
+
+            if (bestPos != null)
+            {
+                Ray result = RayTraceFactory.fullTrace(
+                    RotationUtil.getRotationPlayer(), mc.world, bestPos, -1.0);
+                if (result == null)
+                {
                     return;
                 }
-                if (((Suicide)this.module).rotate.getValue().booleanValue()) {
+
+                if (module.rotate.getValue())
+                {
                     event.setYaw(result.getRotations()[0]);
                     event.setPitch(result.getRotations()[1]);
                 }
-                ((Suicide)this.module).pos = bestPos;
-                ((Suicide)this.module).result = result.getResult();
+
+                module.pos = bestPos;
+                module.result = result.getResult();
             }
-        } else if (event.getStage() == Stage.POST) {
-            if (((Suicide)this.module).crystal != null) {
-                ListenerMotion.mc.player.connection.sendPacket((Packet)new CPacketUseEntity(((Suicide)this.module).crystal));
-                ListenerMotion.mc.player.connection.sendPacket((Packet)new CPacketAnimation(EnumHand.MAIN_HAND));
-                ((Suicide)this.module).breakTimer.reset();
+        }
+        else if (event.getStage() == Stage.POST)
+        {
+            if (module.crystal != null)
+            {
+                mc.player.connection.sendPacket(
+                    new CPacketUseEntity(module.crystal));
+                mc.player.connection.sendPacket(
+                    new CPacketAnimation(EnumHand.MAIN_HAND));
+                module.breakTimer.reset();
                 return;
             }
-            if (((Suicide)this.module).pos != null && ((Suicide)this.module).result != null) {
-                float[] r = RayTraceUtil.hitVecToPlaceVec(((Suicide)this.module).pos, ((Suicide)this.module).result.hitVec);
-                Locks.acquire(Locks.PLACE_SWITCH_LOCK, () -> {
-                    int last = ListenerMotion.mc.player.inventory.currentItem;
+
+            if (module.pos != null && module.result != null)
+            {
+                float[] r = RayTraceUtil.hitVecToPlaceVec(module.pos,
+                                                          module.result.hitVec);
+                Locks.acquire(Locks.PLACE_SWITCH_LOCK, () ->
+                {
+                    int last = mc.player.inventory.currentItem;
                     InventoryUtil.switchTo(slot);
-                    ListenerMotion.mc.player.connection.sendPacket((Packet)new CPacketPlayerTryUseItemOnBlock(((Suicide)this.module).pos, ((Suicide)this.module).result.sideHit, InventoryUtil.getHand(slot), r[0], r[1], r[2]));
-                    ListenerMotion.mc.player.connection.sendPacket((Packet)new CPacketAnimation(InventoryUtil.getHand(slot)));
-                    if (((Suicide)this.module).silent.getValue().booleanValue()) {
+
+                    mc.player.connection.sendPacket(
+                        new CPacketPlayerTryUseItemOnBlock(
+                            module.pos,
+                            module.result.sideHit,
+                            InventoryUtil.getHand(slot),
+                            r[0], r[1], r[2]));
+
+                    mc.player.connection.sendPacket(
+                        new CPacketAnimation(InventoryUtil.getHand(slot)));
+
+                    if (module.silent.getValue())
+                    {
                         InventoryUtil.switchTo(last);
                     }
                 });
-                ((Suicide)this.module).placed.add(((Suicide)this.module).pos);
-                ((Suicide)this.module).placeTimer.reset();
+
+                module.placed.add(module.pos);
+                module.placeTimer.reset();
             }
         }
     }
-}
 
+}

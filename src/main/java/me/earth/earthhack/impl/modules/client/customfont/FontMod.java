@@ -1,19 +1,5 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.util.text.ITextComponent
- *  net.minecraft.util.text.Style
- *  net.minecraft.util.text.event.ClickEvent
- *  net.minecraft.util.text.event.ClickEvent$Action
- */
 package me.earth.earthhack.impl.modules.client.customfont;
 
-import java.awt.Font;
-import java.awt.GraphicsEnvironment;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
@@ -27,63 +13,116 @@ import me.earth.earthhack.impl.gui.chat.components.SuppliedComponent;
 import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.managers.thread.scheduler.Scheduler;
 import me.earth.earthhack.impl.modules.client.commands.Commands;
-import me.earth.earthhack.impl.modules.client.customfont.FontData;
 import me.earth.earthhack.impl.modules.client.customfont.mode.FontStyle;
-import net.minecraft.util.text.ITextComponent;
+import me.earth.earthhack.impl.util.text.ChatIDs;
+import me.earth.earthhack.impl.util.text.TextColor;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.event.ClickEvent;
 
-public class FontMod
-extends Module {
-    protected final Setting<String> fontName = this.register(new StringSetting("Font", "Verdana"));
-    protected final Setting<FontStyle> fontStyle = this.register(new EnumSetting<FontStyle>("FontStyle", FontStyle.Plain));
-    protected final Setting<Integer> fontSize = this.register(new NumberSetting<Integer>("FontSize", 18, 15, 25));
-    protected final Setting<Boolean> antiAlias = this.register(new BooleanSetting("AntiAlias", true));
-    protected final Setting<Boolean> metrics = this.register(new BooleanSetting("Metrics", true));
-    protected final Setting<Boolean> shadow = this.register(new BooleanSetting("Shadow", true));
-    protected final Setting<Boolean> showFonts = this.register(new BooleanSetting("Fonts", false));
-    protected final List<String> fonts = new ArrayList<String>();
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-    public FontMod() {
+public class FontMod extends Module
+{
+    protected final Setting<String> fontName     =
+            register(new StringSetting("Font", "Verdana"));
+    protected final Setting<FontStyle> fontStyle =
+            register(new EnumSetting<>("FontStyle", FontStyle.Plain));
+    protected final Setting<Integer> fontSize    =
+            register(new NumberSetting<>("FontSize", 18, 15, 25));
+    protected final Setting<Boolean> antiAlias   =
+            register(new BooleanSetting("AntiAlias", true));
+    protected final Setting<Boolean> metrics     =
+            register(new BooleanSetting("Metrics", true));
+    protected final Setting<Boolean> shadow      =
+            register(new BooleanSetting("Shadow", true));
+    protected final Setting<Boolean> showFonts   =
+            register(new BooleanSetting("Fonts", false));
+
+    protected final List<String> fonts = new ArrayList<>();
+
+    public FontMod()
+    {
         super("CustomFont", Category.Client);
-        Collections.addAll(this.fonts, GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
-        this.registerObservers();
+
+        Collections.addAll(fonts,
+                           GraphicsEnvironment.getLocalGraphicsEnvironment()
+                                              .getAvailableFontFamilyNames());
+        registerObservers();
         this.setData(new FontData(this));
     }
 
-    private void registerObservers() {
-        for (Setting<?> setting : this.getSettings()) {
-            if (setting.equals(this.showFonts)) {
-                setting.addObserver(event -> {
+    private void registerObservers()
+    {
+        for (Setting<?> setting : this.getSettings())
+        {
+            if (setting.equals(showFonts))
+            {
+                setting.addObserver(event ->
+                {
                     event.setCancelled(true);
-                    this.sendFonts();
+                    sendFonts();
                 });
-                continue;
             }
-            setting.addObserver(e -> Scheduler.getInstance().schedule(this::setFont));
+            else
+            {
+                setting.addObserver(e ->
+                        Scheduler.getInstance().schedule(this::setFont));
+            }
         }
     }
 
-    public void sendFonts() {
-        SimpleComponent component = new SimpleComponent("Available Fonts: ");
+    public void sendFonts()
+    {
+        SimpleComponent component =
+                new SimpleComponent("Available Fonts: ");
         component.setWrap(true);
-        for (int i = 0; i < this.fonts.size(); ++i) {
-            final String font = this.fonts.get(i);
-            if (font == null) continue;
-            int finalI = i;
-            component.appendSibling(new SuppliedComponent(() -> (font.equals(this.fontName.getValue()) ? "\u00a7a" : "\u00a7c") + font + (finalI == this.fonts.size() - 1 ? "" : ", ")).setStyle(new Style().setClickEvent((ClickEvent)new SmartClickEvent(ClickEvent.Action.RUN_COMMAND){
 
-                @Override
-                public String getValue() {
-                    return Commands.getPrefix() + "CustomFont Font \"" + font + "\"";
-                }
-            })));
+        for (int i = 0; i < fonts.size(); i++)
+        {
+            String font = fonts.get(i);
+            if (font != null)
+            {
+                int finalI = i;
+                component.appendSibling(
+                        new SuppliedComponent(() ->
+                                (font.equals(fontName.getValue())
+                                        ? TextColor.GREEN
+                                        : TextColor.RED)
+                                        + font
+                                        + (finalI == fonts.size() - 1
+                                        ? ""
+                                        : ", "))
+                                .setStyle(new Style()
+                                        .setClickEvent(new SmartClickEvent
+                                                (ClickEvent.Action.RUN_COMMAND)
+                                        {
+                                            @Override
+                                            public String getValue()
+                                            {
+                                                return Commands.getPrefix()
+                                                        + "CustomFont Font "
+                                                        + "\"" + font + "\"";
+                                            }
+                                        })));
+            }
         }
-        Managers.CHAT.sendDeleteComponent((ITextComponent)component, "Fonts", 2000);
+
+        Managers.CHAT.sendDeleteComponent(
+                component, "Fonts", ChatIDs.MODULE);
     }
 
-    private void setFont() {
-        Managers.TEXT.setFontRenderer(new Font(this.fontName.getValue(), this.fontStyle.getValue().getFontStyle(), this.fontSize.getValue()), this.antiAlias.getValue(), this.metrics.getValue());
+    private void setFont()
+    {
+        //noinspection MagicConstant
+        Managers.TEXT.setFontRenderer(
+                new Font(fontName.getValue(),
+                         fontStyle.getValue().getFontStyle(),
+                         fontSize.getValue()),
+                antiAlias.getValue(),
+                metrics.getValue());
     }
+
 }
-

@@ -1,9 +1,7 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.combat.autocrystal.modes;
 
-public enum ACPages {
+public enum ACPages
+{
     Place,
     Break,
     Rotate,
@@ -19,7 +17,5 @@ public enum ACPages {
     Extrapolation,
     GodModule,
     MultiThread,
-    Development;
-
+    Development
 }
-

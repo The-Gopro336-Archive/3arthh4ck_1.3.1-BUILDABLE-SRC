@@ -1,240 +1,401 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.enchantment.Enchantment
- *  net.minecraft.enchantment.EnchantmentHelper
- *  net.minecraft.init.Enchantments
- *  net.minecraft.inventory.EntityEquipmentSlot
- *  net.minecraft.item.ItemArmor
- *  net.minecraft.item.ItemElytra
- *  net.minecraft.item.ItemStack
- */
 package me.earth.earthhack.impl.modules.combat.autoarmor.modes;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
 import me.earth.earthhack.api.util.interfaces.Globals;
 import me.earth.earthhack.impl.modules.combat.autoarmor.AutoArmor;
 import me.earth.earthhack.impl.modules.combat.autoarmor.util.LevelStack;
 import me.earth.earthhack.impl.util.minecraft.DamageUtil;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Enchantments;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemElytra;
 import net.minecraft.item.ItemStack;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
 public enum ArmorMode implements Globals
 {
-    Blast{
-
+    Blast
+    {
         @Override
-        public Map<EntityEquipmentSlot, Integer> setup(boolean xCarry, boolean curse, boolean prio, float threshold) {
+        public Map<EntityEquipmentSlot, Integer> setup(boolean xCarry,
+                                                       boolean curse,
+                                                       boolean prio,
+                                                       float threshold)
+        {
             boolean wearingBlast = false;
-            HashSet<EntityEquipmentSlot> cursed = new HashSet<EntityEquipmentSlot>(6);
-            ArrayList<EntityEquipmentSlot> empty = new ArrayList<EntityEquipmentSlot>(4);
-            for (int i = 5; i < 9; ++i) {
+            Set<EntityEquipmentSlot> cursed = new HashSet<>(6);
+            List<EntityEquipmentSlot> empty = new ArrayList<>(4);
+            for (int i = 5; i < 9; i++)
+            {
                 ItemStack stack = InventoryUtil.get(i);
-                if (!stack.isEmpty()) {
-                    if (stack.getItem() instanceof ItemArmor) {
-                        int lvl = EnchantmentHelper.getEnchantmentLevel((Enchantment)Enchantments.BLAST_PROTECTION, (ItemStack)stack);
-                        if (lvl > 0) {
+                if (!stack.isEmpty())
+                {
+                    if (stack.getItem() instanceof ItemArmor)
+                    {
+                        int lvl = EnchantmentHelper.getEnchantmentLevel(
+                                Enchantments.BLAST_PROTECTION, stack);
+
+                        if (lvl > 0)
+                        {
                             wearingBlast = true;
                         }
-                    } else {
+                    }
+                    else
+                    {
                         empty.add(AutoArmor.fromSlot(i));
                     }
-                    if (!EnchantmentHelper.hasBindingCurse((ItemStack)stack)) continue;
-                    cursed.add(AutoArmor.fromSlot(i));
-                    continue;
+
+                    if (EnchantmentHelper.hasBindingCurse(stack))
+                    {
+                        cursed.add(AutoArmor.fromSlot(i));
+                    }
                 }
-                empty.add(AutoArmor.fromSlot(i));
+                else
+                {
+                    empty.add(AutoArmor.fromSlot(i));
+                }
             }
-            if (wearingBlast && empty.isEmpty()) {
-                return new HashMap<EntityEquipmentSlot, Integer>(1, 1.0f);
+
+            if (wearingBlast && empty.isEmpty())
+            {
+                return new HashMap<>(1, 1.0f); // 2 for elytra
             }
-            HashMap<EntityEquipmentSlot, Object> map = new HashMap<EntityEquipmentSlot, Object>(6);
-            HashMap blast = new HashMap(6);
-            for (int i = 8; i < 45; ++i) {
-                Object stack;
-                if (i == 5) {
+
+            Map<EntityEquipmentSlot, LevelStack> map =
+                    new HashMap<>(6);
+            Map<EntityEquipmentSlot, LevelStack> blast =
+                    new HashMap<>(6);
+
+            for (int i = 8; i < 45; i++)
+            {
+                if (i == 5)
+                {
                     i = 9;
                 }
-                if (!(stack = 1.getStack(i)).isEmpty() && stack.getItem() instanceof ItemArmor && AutoArmor.curseCheck((ItemStack)stack, curse)) {
-                    float d = DamageUtil.getDamage((ItemStack)stack);
-                    ItemArmor armor = (ItemArmor)stack.getItem();
+
+                ItemStack stack = getStack(i);
+                if (!stack.isEmpty()
+                        && stack.getItem() instanceof ItemArmor
+                        && AutoArmor.curseCheck(stack, curse))
+                {
+                    float d = DamageUtil.getDamage(stack);
+                    ItemArmor armor = (ItemArmor) stack.getItem();
                     EntityEquipmentSlot type = armor.getEquipmentSlot();
-                    int blastLvL = EnchantmentHelper.getEnchantmentLevel((Enchantment)Enchantments.BLAST_PROTECTION, (ItemStack)stack);
-                    if (blastLvL != 0) {
-                        ArmorMode.compute((ItemStack)stack, blast, type, i, blastLvL, d, prio, threshold);
+                    int blastLvL = EnchantmentHelper.getEnchantmentLevel(
+                            Enchantments.BLAST_PROTECTION, stack);
+
+                    if (blastLvL != 0)
+                    {
+                        compute(
+                           stack, blast, type, i, blastLvL, d, prio, threshold);
                     }
-                    int lvl = EnchantmentHelper.getEnchantmentLevel((Enchantment)Enchantments.PROTECTION, (ItemStack)stack);
-                    if (blastLvL != 0) {
-                        if (lvl < 4) continue;
-                        lvl += blastLvL;
+
+                    int lvl = EnchantmentHelper.getEnchantmentLevel(
+                            Enchantments.PROTECTION, stack);
+
+                    if (blastLvL != 0)
+                    {
+                        if (lvl >= 4)
+                        {
+                            lvl += blastLvL;
+                        }
+                        else
+                        {
+                            continue;
+                        }
                     }
-                    ArmorMode.compute((ItemStack)stack, map, type, i, lvl, d, prio, threshold);
+
+                    compute(stack, map, type, i, lvl, d, prio, threshold);
                 }
-                if (i != 8 || !xCarry) continue;
-                i = 0;
+
+                if (i == 8 && xCarry)
+                {
+                    i = 0;
+                }
             }
-            HashMap<EntityEquipmentSlot, Integer> result = new HashMap<EntityEquipmentSlot, Integer>(6);
-            if (wearingBlast) {
-                for (EntityEquipmentSlot slot : empty) {
-                    Object e2;
-                    if (map.get((Object)slot) != null || (e2 = (LevelStack)blast.get((Object)slot)) == null) continue;
-                    map.put(slot, e2);
-                }
-                map.keySet().retainAll(empty);
-                map.forEach((key, value) -> result.put((EntityEquipmentSlot)key, value.getSlot()));
-            } else {
-                boolean foundBlast = false;
-                ArrayList<EntityEquipmentSlot> both = new ArrayList<EntityEquipmentSlot>(4);
-                for (EntityEquipmentSlot slot : empty) {
-                    LevelStack b = (LevelStack)blast.get((Object)slot);
-                    LevelStack p = (LevelStack)map.get((Object)slot);
-                    if (b == null && p != null) {
-                        result.put(slot, p.getSlot());
-                        continue;
+
+            Map<EntityEquipmentSlot, Integer> result = new HashMap<>(6);
+            if (wearingBlast)
+            {
+                for (EntityEquipmentSlot slot : empty)
+                {
+                    if (map.get(slot) == null)
+                    {
+                        LevelStack e = blast.get(slot);
+                        if (e != null)
+                        {
+                            map.put(slot, e);
+                        }
                     }
-                    if (b != null && p == null) {
+                }
+
+                map.keySet().retainAll(empty);
+                map.forEach((key, value) -> result.put(key, value.getSlot()));
+            }
+            else
+            {
+                // TODO: Option to solve unlucky states where we are wearing
+                //  blast but we have prot for that, while theres a blast piece
+                //  where we dont have prot that we arent wearing
+                boolean foundBlast = false;
+                List<EntityEquipmentSlot> both = new ArrayList<>(4);
+                for (EntityEquipmentSlot slot : empty)
+                {
+                    LevelStack b = blast.get(slot);
+                    LevelStack p = map.get(slot);
+
+                    if (b == null && p != null)
+                    {
+                        result.put(slot, p.getSlot());
+                    }
+                    else if (b != null && p == null)
+                    {
                         foundBlast = true;
                         result.put(slot, b.getSlot());
-                        continue;
                     }
-                    if (b == null) continue;
-                    both.add(slot);
-                }
-                for (EntityEquipmentSlot b : both) {
-                    if (foundBlast) {
-                        result.put(b, ((LevelStack)map.get((Object)b)).getSlot());
-                        continue;
+                    else if (b != null)
+                    {
+                        both.add(slot);
                     }
-                    foundBlast = true;
-                    result.put(b, ((LevelStack)blast.get((Object)b)).getSlot());
                 }
-                if (!foundBlast && !blast.isEmpty()) {
-                    Optional<Map.Entry> first = blast.entrySet().stream().filter(e -> !cursed.contains(e.getKey())).findFirst();
-                    first.ifPresent(e -> result.put((EntityEquipmentSlot)e.getKey(), ((LevelStack)e.getValue()).getSlot()));
+
+                for (EntityEquipmentSlot b : both)
+                {
+                    if (foundBlast)
+                    {
+                        result.put(b, map.get(b).getSlot());
+                    }
+                    else
+                    {
+                        foundBlast = true;
+                        result.put(b, blast.get(b).getSlot());
+                    }
+                }
+
+                if (!foundBlast && !blast.isEmpty())
+                {
+                    Optional<Map.Entry<EntityEquipmentSlot, LevelStack>> first =
+                        blast.entrySet()
+                             .stream()
+                             .filter(e -> !cursed.contains(e.getKey()))
+                             .findFirst();
+
+                    first.ifPresent(e ->
+                        result.put(e.getKey(), e.getValue().getSlot()));
                 }
             }
+
             return result;
         }
-    }
-    ,
-    Protection{
-
+    },
+    Protection()
+    {
         @Override
-        public Map<EntityEquipmentSlot, Integer> setup(boolean xCarry, boolean curse, boolean prio, float threshold) {
-            ArrayList<EntityEquipmentSlot> semi = new ArrayList<EntityEquipmentSlot>(4);
-            ArrayList<EntityEquipmentSlot> empty = new ArrayList<EntityEquipmentSlot>(4);
-            for (int i = 4; i < 9; ++i) {
+        public Map<EntityEquipmentSlot, Integer> setup(boolean xCarry,
+                                                       boolean curse,
+                                                       boolean prio,
+                                                       float threshold)
+        {
+            List<EntityEquipmentSlot> semi  = new ArrayList<>(4);
+            List<EntityEquipmentSlot> empty = new ArrayList<>(4);
+            for (int i = 4; i < 9; i++)
+            {
                 ItemStack stack = InventoryUtil.get(i);
                 EntityEquipmentSlot slot = AutoArmor.fromSlot(i);
-                if (!stack.isEmpty()) {
-                    if (EnchantmentHelper.hasBindingCurse((ItemStack)stack)) continue;
-                    if (stack.getItem() instanceof ItemArmor) {
-                        if (EnchantmentHelper.getEnchantmentLevel((Enchantment)Enchantments.PROTECTION, (ItemStack)stack) != 0) continue;
-                        semi.add(slot);
+                if (!stack.isEmpty())
+                {
+                    if (EnchantmentHelper.hasBindingCurse(stack))
+                    {
                         continue;
                     }
-                    empty.add(slot);
-                    continue;
+
+                    if (stack.getItem() instanceof ItemArmor)
+                    {
+                        if (EnchantmentHelper.getEnchantmentLevel(
+                                Enchantments.PROTECTION, stack) == 0)
+                        {
+                            semi.add(slot);
+                        }
+                    }
+                    else
+                    {
+                        empty.add(slot);
+                    }
                 }
-                empty.add(slot);
+                else
+                {
+                    empty.add(slot);
+                }
             }
-            if (empty.isEmpty()) {
-                return new HashMap<EntityEquipmentSlot, Integer>(0);
+
+            if (empty.isEmpty())
+            {
+                return new HashMap<>(0); // 1 for Elytra
             }
-            HashMap<EntityEquipmentSlot, LevelStack> map = new HashMap<EntityEquipmentSlot, LevelStack>(6);
-            for (int i = 8; i < 45; ++i) {
-                ItemStack stack;
-                if (i == 5) {
+
+            Map<EntityEquipmentSlot, LevelStack> map =
+                    new HashMap<>(6);
+
+            for (int i = 8; i < 45; i++)
+            {
+                if (i == 5)
+                {
                     i = 9;
                 }
-                if (!(stack = 2.getStack(i)).isEmpty() && stack.getItem() instanceof ItemArmor && AutoArmor.curseCheck(stack, curse)) {
+
+                ItemStack stack = getStack(i);
+                if (!stack.isEmpty()
+                        && stack.getItem() instanceof ItemArmor
+                        && AutoArmor.curseCheck(stack, curse))
+                {
                     float d = DamageUtil.getDamage(stack);
-                    ItemArmor armor = (ItemArmor)stack.getItem();
+                    ItemArmor armor = (ItemArmor) stack.getItem();
                     EntityEquipmentSlot type = armor.getEquipmentSlot();
-                    int lvl = EnchantmentHelper.getEnchantmentLevel((Enchantment)Enchantments.PROTECTION, (ItemStack)stack);
-                    if (lvl >= 4) {
-                        lvl += EnchantmentHelper.getEnchantmentLevel((Enchantment)Enchantments.BLAST_PROTECTION, (ItemStack)stack);
+                    int lvl = EnchantmentHelper.getEnchantmentLevel(
+                            Enchantments.PROTECTION, stack);
+
+                    if (lvl >= 4)
+                    {
+                        lvl += EnchantmentHelper.getEnchantmentLevel(
+                                Enchantments.BLAST_PROTECTION, stack);
                     }
-                    ArmorMode.compute(stack, map, type, i, lvl, d, prio, threshold);
+
+                    compute(stack, map, type, i, lvl, d, prio, threshold);
                 }
-                if (i != 8 || !xCarry) continue;
-                i = 0;
+
+                if (i == 8 && xCarry)
+                {
+                    i = 0;
+                }
             }
-            for (EntityEquipmentSlot s : semi) {
-                LevelStack entry = (LevelStack)map.get((Object)s);
-                if (entry == null || entry.getLevel() <= 0) continue;
-                empty.add(s);
+
+            for (EntityEquipmentSlot s : semi)
+            {
+                LevelStack entry = map.get(s);
+                if (entry != null && entry.getLevel() > 0)
+                {
+                    empty.add(s);
+                }
             }
+
             map.keySet().retainAll(empty);
-            HashMap<EntityEquipmentSlot, Integer> result = new HashMap<EntityEquipmentSlot, Integer>(6);
-            map.forEach((key, value) -> result.put((EntityEquipmentSlot)key, value.getSlot()));
+            Map<EntityEquipmentSlot, Integer> result = new HashMap<>(6);
+            map.forEach((key,value) -> result.put(key, value.getSlot()));
             return result;
         }
-    }
-    ,
-    Elytra{
-
+    },
+    Elytra()
+    {
         @Override
-        public Map<EntityEquipmentSlot, Integer> setup(boolean xCarry, boolean curse, boolean prio, float threshold) {
-            Map<EntityEquipmentSlot, Integer> map = Blast.setup(xCarry, curse, prio, threshold);
-            int bestDura = 0;
+        public Map<EntityEquipmentSlot, Integer> setup(boolean xCarry,
+                                                       boolean curse,
+                                                       boolean prio,
+                                                       float threshold)
+        {
+            Map<EntityEquipmentSlot, Integer> map =
+                    Blast.setup(xCarry, curse, prio, threshold);
+
+            int bestDura   = 0;
             int bestElytra = -1;
             ItemStack elytra = InventoryUtil.get(6);
-            if (!elytra.isEmpty() && (elytra.getItem() instanceof ItemElytra || EnchantmentHelper.hasBindingCurse((ItemStack)elytra))) {
-                map.remove((Object)EntityEquipmentSlot.CHEST);
+            if (!elytra.isEmpty()
+                && (elytra.getItem() instanceof ItemElytra
+                    || EnchantmentHelper.hasBindingCurse(elytra)))
+            {
+                // handling of taking off the
+                // armor should be done somewhere else
+                map.remove(EntityEquipmentSlot.CHEST);
                 return map;
             }
-            for (int i = 8; i < 45; ++i) {
-                ItemStack stack;
-                if (i == 5) {
+
+            for (int i = 8; i < 45; i++)
+            {
+                if (i == 5)
+                {
                     i = 9;
                 }
-                if (!(stack = 3.getStack(i)).isEmpty() && stack.getItem() instanceof ItemElytra && AutoArmor.curseCheck(stack, curse)) {
-                    int lvl = EnchantmentHelper.getEnchantmentLevel((Enchantment)Enchantments.UNBREAKING, (ItemStack)stack) + 1;
+
+                ItemStack stack = getStack(i);
+                if (!stack.isEmpty()
+                        && stack.getItem() instanceof ItemElytra
+                        && AutoArmor.curseCheck(stack, curse))
+                {
+                    int lvl = EnchantmentHelper.getEnchantmentLevel(
+                            Enchantments.UNBREAKING, stack) + 1;
+
                     int dura = DamageUtil.getDamage(stack) * lvl;
-                    if (bestElytra == -1 || !prio && dura > bestDura || prio && (float)dura > threshold && dura < bestDura) {
+
+                    if (bestElytra == -1
+                        || !prio && dura > bestDura
+                        || prio && dura > threshold && dura < bestDura)
+                    {
                         bestElytra = i;
                         bestDura = dura;
                     }
                 }
-                if (i != 8 || !xCarry) continue;
-                i = 0;
+
+                if (i == 8 && xCarry)
+                {
+                    i = 0;
+                }
             }
-            if (bestElytra != -1) {
+
+            if (bestElytra != -1)
+            {
                 map.put(EntityEquipmentSlot.CHEST, bestElytra);
             }
+
             return map;
         }
     };
 
-
-    public abstract Map<EntityEquipmentSlot, Integer> setup(boolean var1, boolean var2, boolean var3, float var4);
-
-    public static ItemStack getStack(int slot) {
-        if (slot == 8) {
-            return ArmorMode.mc.player.inventory.getItemStack();
+    public abstract Map<EntityEquipmentSlot, Integer> setup(boolean xCarry,
+                                                            boolean curse,
+                                                            boolean prio,
+                                                            float threshold);
+    /**
+     * @param slot the slot to get a stack from.
+     * @return {@link InventoryPlayer#getItemStack()} if the slot is 8,
+     *         {@link InventoryUtil#get(int)} otherwise.
+     */
+    public static ItemStack getStack(int slot)
+    {
+        if (slot == 8)
+        {
+            return mc.player.inventory.getItemStack();
         }
+
         return InventoryUtil.get(slot);
     }
 
-    private static void compute(ItemStack stack, Map<EntityEquipmentSlot, LevelStack> map, EntityEquipmentSlot type, int slot, int level, float damage, boolean prio, float threshold) {
-        map.compute(type, (k, v) -> {
-            if (v == null || !v.isBetter(damage, threshold, level, prio)) {
+    private static void compute(
+            ItemStack stack,
+            Map<EntityEquipmentSlot, LevelStack> map,
+            EntityEquipmentSlot type,
+            int slot,
+            int level,
+            float damage,
+            boolean prio,
+            float threshold)
+    {
+        map.compute(type, (k, v) ->
+        {
+            if (v == null || !v.isBetter(damage, threshold, level, prio))
+            {
                 return new LevelStack(stack, damage, slot, level);
             }
+
             return v;
         });
     }
-}
 
+}

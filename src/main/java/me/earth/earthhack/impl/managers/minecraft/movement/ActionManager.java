@@ -1,9 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.network.play.client.CPacketEntityAction
- */
 package me.earth.earthhack.impl.managers.minecraft.movement;
 
 import me.earth.earthhack.api.event.bus.EventListener;
@@ -11,44 +5,58 @@ import me.earth.earthhack.api.event.bus.SubscriberImpl;
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
 import net.minecraft.network.play.client.CPacketEntityAction;
 
-public class ActionManager
-extends SubscriberImpl {
+/**
+ * Manages the last {@link CPacketEntityAction} packets sent to the server.
+ * TODO: serverSneakState and serverSprintState in UpdateWalkingPlayer?
+ */
+public class ActionManager extends SubscriberImpl
+{
     private volatile boolean sneaking;
     private volatile boolean sprinting;
 
-    public ActionManager() {
-        this.listeners.add(new EventListener<PacketEvent.Post<CPacketEntityAction>>(PacketEvent.Post.class, CPacketEntityAction.class){
-
+    public ActionManager()
+    {
+        this.listeners.add(
+            new EventListener<PacketEvent.Post<CPacketEntityAction>>
+                    (PacketEvent.Post.class, CPacketEntityAction.class)
+        {
             @Override
-            public void invoke(PacketEvent.Post<CPacketEntityAction> event) {
-                switch (((CPacketEntityAction)event.getPacket()).getAction()) {
-                    case START_SPRINTING: {
-                        ActionManager.this.sprinting = true;
+            public void invoke(PacketEvent.Post<CPacketEntityAction> event)
+            {
+                switch (event.getPacket().getAction())
+                {
+                    case START_SPRINTING:
+                        sprinting = true;
                         break;
-                    }
-                    case STOP_SPRINTING: {
-                        ActionManager.this.sprinting = false;
+                    case STOP_SPRINTING:
+                        sprinting = false;
                         break;
-                    }
-                    case START_SNEAKING: {
-                        ActionManager.this.sneaking = true;
+                    case START_SNEAKING:
+                        sneaking = true;
                         break;
-                    }
-                    case STOP_SNEAKING: {
-                        ActionManager.this.sneaking = false;
+                    case STOP_SNEAKING:
+                        sneaking = false;
                         break;
-                    }
+                    default:
                 }
             }
         });
     }
 
-    public boolean isSprinting() {
-        return this.sprinting;
+    /**
+     * @return <tt>true</tt> if we are sprinting on the server.
+     */
+    public boolean isSprinting()
+    {
+        return sprinting;
     }
 
-    public boolean isSneaking() {
-        return this.sneaking;
+    /**
+     * @return <tt>true</tt> if we are sneaking on the server.
+     */
+    public boolean isSneaking()
+    {
+        return sneaking;
     }
+
 }
-

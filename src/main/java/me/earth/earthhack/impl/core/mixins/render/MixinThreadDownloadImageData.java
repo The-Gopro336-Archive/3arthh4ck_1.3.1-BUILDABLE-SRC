@@ -1,9 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.client.renderer.ThreadDownloadImageData
- */
 package me.earth.earthhack.impl.core.mixins.render;
 
 import me.earth.earthhack.api.cache.SettingCache;
@@ -16,18 +10,29 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(value={ThreadDownloadImageData.class})
-public abstract class MixinThreadDownloadImageData
-implements GlobalExecutor {
-    private static final SettingCache<Boolean, BooleanSetting, ExtraTab> DOWNLOAD_THREADS = Caches.getSetting(ExtraTab.class, BooleanSetting.class, "Download-Threads", false);
-
-    @Redirect(method={"loadTextureFromServer"}, at=@At(value="INVOKE", target="Ljava/lang/Thread;start()V"))
-    private void onStart(Thread thread) {
-        if (DOWNLOAD_THREADS.getValue().booleanValue()) {
+@Mixin(ThreadDownloadImageData.class)
+public abstract class MixinThreadDownloadImageData implements GlobalExecutor
+{
+    private static final SettingCache<Boolean, BooleanSetting, ExtraTab>
+            DOWNLOAD_THREADS = Caches.getSetting(ExtraTab.class,
+                                                 BooleanSetting.class,
+                                                 "Download-Threads",
+                                                 false);
+    @Redirect(
+        method = "loadTextureFromServer",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/lang/Thread;start()V"))
+    private void onStart(Thread thread)
+    {
+        if (DOWNLOAD_THREADS.getValue())
+        {
             GlobalExecutor.FIXED_EXECUTOR.submit(thread);
-        } else {
+        }
+        else
+        {
             thread.start();
         }
     }
-}
 
+}

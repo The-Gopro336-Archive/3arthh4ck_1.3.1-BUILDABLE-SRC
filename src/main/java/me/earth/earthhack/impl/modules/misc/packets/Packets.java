@@ -1,63 +1,27 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.block.state.IBlockState
- *  net.minecraft.init.Items
- *  net.minecraft.inventory.ClickType
- *  net.minecraft.item.ItemStack
- *  net.minecraft.nbt.NBTBase
- *  net.minecraft.nbt.NBTTagCompound
- *  net.minecraft.nbt.NBTTagList
- *  net.minecraft.nbt.NBTTagString
- *  net.minecraft.network.Packet
- *  net.minecraft.network.play.client.CPacketClickWindow
- *  net.minecraft.network.play.client.CPacketCreativeInventoryAction
- *  net.minecraft.util.math.BlockPos
- */
 package me.earth.earthhack.impl.modules.misc.packets;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.api.setting.settings.EnumSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
+import me.earth.earthhack.impl.core.mixins.network.MixinNetHandlerPlayClient;
+import me.earth.earthhack.impl.core.mixins.network.MixinNettyCompressionDecoder;
+import me.earth.earthhack.impl.core.mixins.network.MixinNettyPacketDecoder;
+import me.earth.earthhack.impl.core.mixins.network.server.MixinSPacketResourcePack;
 import me.earth.earthhack.impl.gui.visibility.PageBuilder;
 import me.earth.earthhack.impl.gui.visibility.Visibilities;
 import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.managers.thread.scheduler.Scheduler;
-import me.earth.earthhack.impl.modules.misc.packets.ListenerBlockMulti;
-import me.earth.earthhack.impl.modules.misc.packets.ListenerBlockState;
-import me.earth.earthhack.impl.modules.misc.packets.ListenerCollect;
-import me.earth.earthhack.impl.modules.misc.packets.ListenerConfirmTransaction;
-import me.earth.earthhack.impl.modules.misc.packets.ListenerDeath;
-import me.earth.earthhack.impl.modules.misc.packets.ListenerDestroyEntities;
-import me.earth.earthhack.impl.modules.misc.packets.ListenerDisconnect;
-import me.earth.earthhack.impl.modules.misc.packets.ListenerEntity;
-import me.earth.earthhack.impl.modules.misc.packets.ListenerEntityTeleport;
-import me.earth.earthhack.impl.modules.misc.packets.ListenerHeadLook;
-import me.earth.earthhack.impl.modules.misc.packets.ListenerHeldItemChange;
-import me.earth.earthhack.impl.modules.misc.packets.ListenerPlayerListHeader;
-import me.earth.earthhack.impl.modules.misc.packets.ListenerPosLook;
-import me.earth.earthhack.impl.modules.misc.packets.ListenerSetSlot;
-import me.earth.earthhack.impl.modules.misc.packets.ListenerSound;
-import me.earth.earthhack.impl.modules.misc.packets.ListenerTick;
-import me.earth.earthhack.impl.modules.misc.packets.ListenerVelocity;
-import me.earth.earthhack.impl.modules.misc.packets.ListenerWorldClient;
 import me.earth.earthhack.impl.modules.misc.packets.util.BookCrashMode;
 import me.earth.earthhack.impl.modules.misc.packets.util.PacketPages;
 import me.earth.earthhack.impl.util.client.SimpleData;
+import me.earth.earthhack.impl.util.text.TextColor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
@@ -66,43 +30,87 @@ import net.minecraft.network.play.client.CPacketClickWindow;
 import net.minecraft.network.play.client.CPacketCreativeInventoryAction;
 import net.minecraft.util.math.BlockPos;
 
-public class Packets
-extends Module {
+import java.util.Collections;
+import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+public class Packets extends Module
+{
     protected static final Random RANDOM = new Random();
-    protected static final String SALT = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-    protected final Setting<PacketPages> page = this.register(new EnumSetting<PacketPages>("Page", PacketPages.Safe));
-    protected final Setting<Boolean> fastTransactions = this.register(new BooleanSetting("Transactions", true));
-    protected final Setting<Boolean> fastTeleports = this.register(new BooleanSetting("Teleports", true));
-    protected final Setting<Boolean> asyncTeleports = this.register(new BooleanSetting("Async-Teleports", false));
-    protected final Setting<Boolean> fastDestroyEntities = this.register(new BooleanSetting("Fast-Destroy", true));
-    protected final Setting<Boolean> fastSetDead = this.register(new BooleanSetting("SoundRemove", true));
-    protected final Setting<Boolean> fastDeath = this.register(new BooleanSetting("Fast-Death", true));
-    protected final Setting<Boolean> fastHeadLook = this.register(new BooleanSetting("Fast-HeadLook", false));
-    protected final Setting<Boolean> fastEntities = this.register(new BooleanSetting("Fast-Entity", true));
-    protected final Setting<Boolean> fastEntityTeleport = this.register(new BooleanSetting("Fast-EntityTeleport", true));
-    protected final Setting<Boolean> cancelEntityTeleport = this.register(new BooleanSetting("Cancel-EntityTeleport", true));
-    protected final Setting<Boolean> fastVelocity = this.register(new BooleanSetting("Fast-Velocity", true));
-    protected final Setting<Boolean> cancelVelocity = this.register(new BooleanSetting("Cancel-Velocity", true));
-    protected final Setting<Boolean> safeHeaders = this.register(new BooleanSetting("Safe-Headers", true));
-    protected final Setting<Boolean> noHandChange = this.register(new BooleanSetting("NoHandChange", false));
-    protected final Setting<Boolean> fastCollect = this.register(new BooleanSetting("Fast-Collect", false));
-    protected final Setting<Boolean> miniTeleports = this.register(new BooleanSetting("Mini-Teleports", true));
-    protected final Setting<Boolean> noBookBan = this.register(new BooleanSetting("AntiBookBan", false));
-    protected final Setting<Boolean> fastBlockStates = this.register(new BooleanSetting("Fast-BlockStates", false));
-    protected final Setting<Boolean> fastSetSlot = this.register(new BooleanSetting("Fast-SetSlot", false));
-    protected final Setting<Boolean> ccResources = this.register(new BooleanSetting("CC-Resources", false));
-    protected final Setting<Boolean> noSizeKick = this.register(new BooleanSetting("No-SizeKick", false));
-    protected final Setting<BookCrashMode> bookCrash = this.register(new EnumSetting<BookCrashMode>("BookCrash", BookCrashMode.None));
-    protected final Setting<Integer> bookDelay = this.register(new NumberSetting<Integer>("Book-Delay", 5, 0, 500));
-    public Setting<Integer> bookLength = this.register(new NumberSetting<Integer>("Book-Length", 600, 100, 8192));
-    protected final Setting<Integer> offhandCrashes = this.register(new NumberSetting<Integer>("Offhand-Crash", 0, 0, 5000));
+    protected static final String SALT;
+
+    static
+    {
+        SALT = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    }
+
+    protected final Setting<PacketPages> page =
+            register(new EnumSetting<>("Page", PacketPages.Safe));
+
+    protected final Setting<Boolean> fastTransactions =
+            register(new BooleanSetting("Transactions", true));
+    protected final Setting<Boolean> fastTeleports =
+            register(new BooleanSetting("Teleports", true));
+    protected final Setting<Boolean> asyncTeleports =
+            register(new BooleanSetting("Async-Teleports", false));
+    protected final Setting<Boolean> fastDestroyEntities =
+            register(new BooleanSetting("Fast-Destroy", true));
+    protected final Setting<Boolean> fastSetDead =
+            register(new BooleanSetting("SoundRemove", true));
+    protected final Setting<Boolean> fastDeath =
+            register(new BooleanSetting("Fast-Death", true));
+    protected final Setting<Boolean> fastHeadLook =
+            register(new BooleanSetting("Fast-HeadLook", false));
+    protected final Setting<Boolean> fastEntities =
+            register(new BooleanSetting("Fast-Entity", true));
+    protected final Setting<Boolean> fastEntityTeleport =
+            register(new BooleanSetting("Fast-EntityTeleport", true));
+    protected final Setting<Boolean> cancelEntityTeleport =
+            register(new BooleanSetting("Cancel-EntityTeleport", true));
+    protected final Setting<Boolean> fastVelocity =
+            register(new BooleanSetting("Fast-Velocity", true));
+    protected final Setting<Boolean> cancelVelocity =
+            register(new BooleanSetting("Cancel-Velocity", true));
+    protected final Setting<Boolean> safeHeaders =
+            register(new BooleanSetting("Safe-Headers", true));
+    protected final Setting<Boolean> noHandChange =
+            register(new BooleanSetting("NoHandChange", false));
+    protected final Setting<Boolean> fastCollect =
+            register(new BooleanSetting("Fast-Collect", false));
+    protected final Setting<Boolean> miniTeleports =
+            register(new BooleanSetting("Mini-Teleports", true));
+
+    protected final Setting<Boolean> noBookBan =
+            register(new BooleanSetting("AntiBookBan", false));
+    protected final Setting<Boolean> fastBlockStates =
+            register(new BooleanSetting("Fast-BlockStates", false));
+    protected final Setting<Boolean> fastSetSlot =
+            register(new BooleanSetting("Fast-SetSlot", false));
+    protected final Setting<Boolean> ccResources =
+            register(new BooleanSetting("CC-Resources", false));
+    protected final Setting<Boolean> noSizeKick =
+            register(new BooleanSetting("No-SizeKick", false));
+    protected final Setting<BookCrashMode> bookCrash =
+            register(new EnumSetting<>("BookCrash", BookCrashMode.None));
+    protected final Setting<Integer> bookDelay =
+            register(new NumberSetting<>("Book-Delay", 5, 0, 500));
+    public Setting<Integer> bookLength =
+            register(new NumberSetting<>("Book-Length", 600, 100, 8192));
+    protected final Setting<Integer> offhandCrashes =
+            register(new NumberSetting<>("Offhand-Crash", 0, 0, 5000));
+
     protected final Map<BlockPos, IBlockState> stateMap;
     protected final AtomicBoolean crashing = new AtomicBoolean();
     protected String pages;
 
-    public Packets() {
+    public Packets()
+    {
         super("Packets", Category.Misc);
-        this.stateMap = new ConcurrentHashMap<BlockPos, IBlockState>();
+
+        stateMap = new ConcurrentHashMap<>();
+
         this.listeners.add(new ListenerCollect(this));
         this.listeners.add(new ListenerConfirmTransaction(this));
         this.listeners.add(new ListenerBlockState(this));
@@ -121,35 +129,59 @@ extends Module {
         this.listeners.add(new ListenerSetSlot(this));
         this.listeners.add(new ListenerHeadLook(this));
         this.listeners.addAll(new ListenerEntity(this).getListeners());
-        new PageBuilder<PacketPages>(this, this.page).addPage(v -> v == PacketPages.Safe, (Setting<?>)this.fastTransactions, (Setting<?>)this.miniTeleports).addPage(v -> v == PacketPages.Danger, (Setting<?>)this.noBookBan, (Setting<?>)this.offhandCrashes).register(Visibilities.VISIBILITY_MANAGER);
+
+        new PageBuilder<>(this, page)
+           .addPage(v -> v == PacketPages.Safe, fastTransactions, miniTeleports)
+           .addPage(v -> v == PacketPages.Danger, noBookBan, offhandCrashes)
+           .register(Visibilities.VISIBILITY_MANAGER);
+
         SimpleData data = new SimpleData(this, "Exploits with packets.");
-        data.register(this.page, "-Safe all Settings that are safe to use.\n-Danger all settings that might kick.");
-        data.register(this.bookCrash, "Crashes the server with \"Book-Packets\".");
-        data.register(this.fastTransactions, "Speeds up ConfirmTransaction packets a tiny bit.");
-        data.register(this.fastTeleports, "Speeds up ConfirmTeleport packets a tiny bit.");
-        data.register(this.asyncTeleports, "Might cause issues with movement and other modules.");
-        data.register(this.fastDestroyEntities, "Makes Entities die faster.");
-        data.register(this.fastDeath, "Makes Entities die faster.");
-        data.register(this.fastEntities, "Makes Entities update faster.");
-        data.register(this.fastEntityTeleport, "Makes Entities update faster.");
-        data.register(this.cancelEntityTeleport, "Should be on. For Debugging.");
-        data.register(this.fastVelocity, "Applies Velocity faster.");
-        data.register(this.cancelVelocity, "Same as Cancel-EntityTeleport.");
-        data.register(this.noHandChange, "Prevents the server from changing your hand");
-        data.register(this.ccResources, "Only for Crystalpvp.cc and their current ResourcePack patch. not recommended on other servers.");
-        data.register(this.safeHeaders, "Fixes a bug in Mojangs code that could crash you.");
-        data.register(this.miniTeleports, "Allows you to see when Entities move minimally.");
-        data.register(this.fastSetDead, "Speeds up SoundRemove a bit.");
-        data.register(this.noBookBan, "Only turn on if you are bookbanned. Can cause issues otherwise.");
-        data.register(this.bookDelay, "Delay between 2 \"Book-Packets\".");
-        data.register(this.offhandCrashes, "Packets to send per tick. A value of 0 means Offhand-Crash is off.");
-        data.register(this.noSizeKick, "Won't kick you for badly sized packets. This can cause weird stuff to happen.");
+        data.register(page, "-Safe all Settings that are safe to use." +
+                "\n-Danger all settings that might kick.");
+        data.register(bookCrash,
+                "Crashes the server with \"Book-Packets\".");
+        data.register(fastTransactions,
+                "Speeds up ConfirmTransaction packets a tiny bit.");
+        data.register(fastTeleports,
+                "Speeds up ConfirmTeleport packets a tiny bit.");
+        data.register(asyncTeleports,
+                "Might cause issues with movement and other modules.");
+        data.register(fastDestroyEntities, "Makes Entities die faster.");
+        data.register(fastDeath, "Makes Entities die faster.");
+        data.register(fastEntities, "Makes Entities update faster.");
+        data.register(fastEntityTeleport, "Makes Entities update faster.");
+        data.register(cancelEntityTeleport, "Should be on. For Debugging.");
+        data.register(fastVelocity, "Applies Velocity faster.");
+        data.register(cancelVelocity, "Same as Cancel-EntityTeleport.");
+        data.register(noHandChange,
+                "Prevents the server from changing your hand");
+        data.register(ccResources, "Only for Crystalpvp.cc and their current"
+                + " ResourcePack patch. not recommended on other servers.");
+        data.register(safeHeaders,
+                "Fixes a bug in Mojangs code that could crash you.");
+        data.register(miniTeleports,
+                "Allows you to see when Entities move minimally.");
+        data.register(fastSetDead,
+                "Speeds up SoundRemove a bit.");
+        data.register(noBookBan, "Only turn on if you are bookbanned." +
+                " Can cause issues otherwise.");
+        data.register(bookDelay,
+                "Delay between 2 \"Book-Packets\".");
+        data.register(offhandCrashes, "Packets to send per tick. " +
+                "A value of 0 means Offhand-Crash is off.");
+        data.register(noSizeKick, "Won't kick you for badly sized packets." +
+                " This can cause weird stuff to happen.");
         this.setData(data);
-        this.fastBlockStates.addObserver(e -> {
-            if (!((Boolean)e.getValue()).booleanValue()) {
-                Scheduler.getInstance().schedule(() -> {
-                    if (!this.fastBlockStates.getValue().booleanValue()) {
-                        this.stateMap.clear();
+
+        fastBlockStates.addObserver(e ->
+        {
+            if (!e.getValue())
+            {
+                Scheduler.getInstance().schedule(() ->
+                {
+                    if (!fastBlockStates.getValue())
+                    {
+                        stateMap.clear();
                     }
                 });
             }
@@ -157,117 +189,170 @@ extends Module {
     }
 
     @Override
-    protected void onLoad() {
-        this.bookCrash.setValue(BookCrashMode.None);
-        this.offhandCrashes.setValue(0);
-        this.pages = this.genRandomString(this.bookLength.getValue());
+    protected void onLoad()
+    {
+        bookCrash.setValue(BookCrashMode.None);
+        offhandCrashes.setValue(0);
+        pages = genRandomString(bookLength.getValue());
     }
 
     @Override
-    public String getDisplayInfo() {
+    public String getDisplayInfo()
+    {
         String result = null;
-        if (this.bookCrash.getValue() != BookCrashMode.None) {
-            result = "\u00a7cBookCrash";
-            if (this.offhandCrashes.getValue() != 0) {
-                result = result + ", Offhand";
+
+        if (bookCrash.getValue() != BookCrashMode.None)
+        {
+            result = TextColor.RED + "BookCrash";
+            if (offhandCrashes.getValue() != 0)
+            {
+                result += ", Offhand";
             }
-        } else if (this.offhandCrashes.getValue() != 0) {
-            result = "\u00a7cOffhand";
         }
+        else if (offhandCrashes.getValue() != 0)
+        {
+            result = TextColor.RED + "Offhand";
+        }
+
         return result;
     }
 
-    public boolean isNoKickActive() {
-        return this.isEnabled() && this.noSizeKick.getValue() != false;
+    /**
+     * {@link MixinNettyPacketDecoder}
+     */
+    public boolean isNoKickActive()
+    {
+        return this.isEnabled() && noSizeKick.getValue();
     }
 
-    public boolean areCCResourcesActive() {
-        return this.isEnabled() && this.ccResources.getValue() != false;
+    /**
+     * {@link MixinSPacketResourcePack}
+     */
+    public boolean areCCResourcesActive()
+    {
+        return this.isEnabled() && ccResources.getValue();
     }
 
-    public boolean areMiniTeleportsActive() {
-        return this.isEnabled() && this.miniTeleports.getValue() != false;
+    /**
+     * {@link MixinNetHandlerPlayClient}
+     */
+    public boolean areMiniTeleportsActive()
+    {
+        return this.isEnabled() && miniTeleports.getValue();
     }
 
-    public boolean isNoBookBanActive() {
-        return this.isEnabled() && this.noBookBan.getValue() != false;
+    /**
+     * {@link MixinNettyCompressionDecoder}
+     */
+    public boolean isNoBookBanActive()
+    {
+        return this.isEnabled() && noBookBan.getValue();
     }
 
-    public void startCrash() {
-        this.crashing.set(true);
-        Managers.THREAD.submit(() -> {
-            try {
-                ItemStack stack = this.createStack();
-                while (this.isEnabled() && this.bookCrash.getValue() != BookCrashMode.None && Packets.mc.player != null) {
-                    CPacketCreativeInventoryAction packet = null;
-                    switch (this.bookCrash.getValue()) {
-                        case None: {
-                            this.crashing.set(false);
+    public void startCrash()
+    {
+        crashing.set(true);
+        Managers.THREAD.submit(() ->
+        {
+            try
+            {
+                ItemStack stack = createStack();
+                while (this.isEnabled()
+                        && this.bookCrash.getValue() != BookCrashMode.None
+                        && mc.player != null)
+                {
+                    Packet<?> packet = null;
+                    switch (this.bookCrash.getValue())
+                    {
+                        case None:
+                            crashing.set(false);
                             return;
-                        }
-                        case Creative: {
-                            packet = new CPacketCreativeInventoryAction(0, stack);
+                        case Creative:
+                            packet = new CPacketCreativeInventoryAction(
+                                0, stack);
                             break;
-                        }
-                        case ClickWindow: 
-                        case Console: {
-                            packet = new CPacketClickWindow(0, 0, 0, ClickType.PICKUP, stack, 0);
+                        case ClickWindow:
+                        case Console:
+                            packet = new CPacketClickWindow(
+                                0, 0, 0, ClickType.PICKUP, stack, (short) 0);
                             break;
-                        }
+                        default:
                     }
-                    if (packet != null) {
-                        Packets.mc.player.connection.sendPacket((Packet)packet);
+
+                    if (packet != null)
+                    {
+                        mc.player.connection.sendPacket(packet);
                     }
-                    Thread.sleep(this.bookDelay.getValue().intValue());
+
+                    //noinspection BusyWait
+                    Thread.sleep(bookDelay.getValue());
                 }
             }
-            catch (InterruptedException e) {
+            catch (InterruptedException e)
+            {
                 Thread.currentThread().interrupt();
             }
-            finally {
-                this.crashing.set(false);
+            finally
+            {
+                crashing.set(false);
             }
         });
     }
 
-    protected ItemStack createStack() {
+    protected ItemStack createStack()
+    {
         ItemStack stack = new ItemStack(Items.WRITABLE_BOOK);
         NBTTagList list = new NBTTagList();
         NBTTagCompound tag = new NBTTagCompound();
-        if (this.bookCrash.getValue() == BookCrashMode.Console) {
-            if (this.pages.length() != 8192) {
-                this.pages = this.genRandomString(8192);
-                this.bookLength.setValue(8192);
-                this.bookDelay.setValue(225);
+
+        if (bookCrash.getValue() == BookCrashMode.Console)
+        {
+            if (pages.length() != 0x2000)
+            {
+                pages = genRandomString(0x2000);
+                bookLength.setValue(0x2000);
+                bookDelay.setValue(225);
             }
-        } else if (this.pages.length() != this.bookLength.getValue().intValue()) {
-            this.pages = this.genRandomString(this.bookLength.getValue());
         }
-        for (int i = 0; i < 50; ++i) {
-            list.appendTag((NBTBase)new NBTTagString(this.pages));
+        else if (pages.length() != bookLength.getValue())
+        {
+            pages = genRandomString(bookLength.getValue());
         }
+
+        for (int i = 0; i < 50; i++)
+        {
+            list.appendTag(new NBTTagString(pages));
+        }
+
         tag.setString("author", mc.getSession().getUsername());
         tag.setString("title", "\n CrashBook \n");
-        tag.setTag("pages", (NBTBase)list);
-        stack.setTagInfo("pages", (NBTBase)list);
+        tag.setTag("pages", list);
+        stack.setTagInfo("pages", list);
         stack.setTagCompound(tag);
+
         return stack;
     }
 
-    private String genRandomString(Integer length) {
+    private String genRandomString(Integer length)
+    {
         StringBuilder salt = new StringBuilder();
-        while (salt.length() < length) {
-            int index = (int)(RANDOM.nextFloat() * (float)SALT.length());
+        while (salt.length() < length)
+        {
+            int index = (int) (RANDOM.nextFloat() * SALT.length());
             salt.append(SALT.charAt(index));
         }
+
         return salt.toString();
     }
 
-    public Map<BlockPos, IBlockState> getStateMap() {
-        if (this.fastBlockStates.getValue().booleanValue()) {
-            return this.stateMap;
+    public Map<BlockPos, IBlockState> getStateMap()
+    {
+        if (fastBlockStates.getValue())
+        {
+            return stateMap;
         }
+
         return Collections.emptyMap();
     }
-}
 
+}

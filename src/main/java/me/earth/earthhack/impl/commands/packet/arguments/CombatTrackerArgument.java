@@ -1,36 +1,36 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.EntityLivingBase
- *  net.minecraft.util.CombatTracker
- */
 package me.earth.earthhack.impl.commands.packet.arguments;
 
 import me.earth.earthhack.api.util.interfaces.Globals;
 import me.earth.earthhack.impl.commands.packet.AbstractArgument;
-import me.earth.earthhack.impl.commands.packet.arguments.AbstractEntityArgument;
 import me.earth.earthhack.impl.commands.packet.exception.ArgParseException;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.CombatTracker;
 
-public class CombatTrackerArgument
-extends AbstractArgument<CombatTracker>
-implements Globals {
-    public CombatTrackerArgument() {
+public class CombatTrackerArgument extends AbstractArgument<CombatTracker>
+        implements Globals
+{
+    public CombatTrackerArgument()
+    {
         super(CombatTracker.class);
     }
 
     @Override
-    public CombatTracker fromString(String argument) throws ArgParseException {
-        if (CombatTrackerArgument.mc.world == null) {
+    public CombatTracker fromString(String argument) throws ArgParseException
+    {
+        if (mc.world == null)
+        {
             throw new ArgParseException("Minecraft.World was null!");
         }
-        EntityLivingBase entity = AbstractEntityArgument.getEntity(argument, EntityLivingBase.class);
-        if (entity == null) {
-            throw new ArgParseException("Could not parse " + argument + " to EntityLivingBase!");
+
+        EntityLivingBase entity = AbstractEntityArgument.getEntity(argument,
+                                                        EntityLivingBase.class);
+        if (entity == null)
+        {
+            throw new ArgParseException(
+                    "Could not parse " + argument + " to EntityLivingBase!");
         }
+
         return entity.getCombatTracker();
     }
-}
 
+}

@@ -1,132 +1,193 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.enchantment.Enchantment
- *  net.minecraft.entity.player.EntityPlayerMP
- *  net.minecraft.item.ItemStack
- *  net.minecraft.network.Packet
- *  net.minecraft.network.play.client.CPacketCreativeInventoryAction
- *  net.minecraft.util.text.translation.I18n
- */
 package me.earth.earthhack.impl.commands;
 
-import java.util.Objects;
 import me.earth.earthhack.api.command.Command;
 import me.earth.earthhack.api.command.PossibleInputs;
 import me.earth.earthhack.api.util.TextUtil;
 import me.earth.earthhack.api.util.interfaces.Globals;
 import me.earth.earthhack.impl.commands.util.CommandUtil;
 import me.earth.earthhack.impl.util.text.ChatUtil;
+import me.earth.earthhack.impl.util.text.TextColor;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketCreativeInventoryAction;
 import net.minecraft.util.text.translation.I18n;
 
-public class EnchantCommand
-extends Command
-implements Globals {
-    public EnchantCommand() {
+import java.util.Objects;
+
+public class EnchantCommand extends Command implements Globals
+{
+    public EnchantCommand()
+    {
         super(new String[][]{{"enchant"}, {"level"}, {"enchantment"}});
     }
 
     @Override
-    public void execute(String[] args) {
+    public void execute(String[] args)
+    {
+        if (args.length == 1)
+        {
+            ChatUtil.sendMessage(TextColor.RED
+                    + "Please specify a level!");
+            return;
+        }
+
+        if (mc.player == null)
+        {
+            ChatUtil.sendMessage(TextColor.RED
+                    + "You need to be ingame to use this command!");
+            return;
+        }
+
         short level;
-        if (args.length == 1) {
-            ChatUtil.sendMessage("\u00a7cPlease specify a level!");
+
+        try
+        {
+            level = (short) Integer.parseInt(args[1]);
+        }
+        catch (Exception e)
+        {
+            ChatUtil.sendMessage(TextColor.RED
+                    + "Could not parse level "
+                    + TextColor.WHITE
+                    + args[1]
+                    + TextColor.RED
+                    + "!");
             return;
         }
-        if (EnchantCommand.mc.player == null) {
-            ChatUtil.sendMessage("\u00a7cYou need to be ingame to use this command!");
+
+        ItemStack stack = mc.player.inventory.getCurrentItem();
+        if (stack.isEmpty())
+        {
+            ChatUtil.sendMessage(TextColor.RED
+                    + "You need to be holding an item for this command!");
             return;
         }
-        try {
-            level = (short)Integer.parseInt(args[1]);
-        }
-        catch (Exception e) {
-            ChatUtil.sendMessage("\u00a7cCould not parse level \u00a7f" + args[1] + "\u00a7c" + "!");
-            return;
-        }
-        ItemStack stack = EnchantCommand.mc.player.inventory.getCurrentItem();
-        if (stack.isEmpty()) {
-            ChatUtil.sendMessage("\u00a7cYou need to be holding an item for this command!");
-            return;
-        }
-        if (args.length > 2) {
+
+        if (args.length > 2)
+        {
             String conc = CommandUtil.concatenate(args, 2);
-            Enchantment enchantment = EnchantCommand.getEnchantment(conc);
-            if (enchantment == null) {
-                ChatUtil.sendMessage("\u00a7cCould find Enchantment \u00a7f" + conc + "\u00a7c" + "!");
+            Enchantment enchantment = getEnchantment(conc);
+            if (enchantment == null)
+            {
+                ChatUtil.sendMessage(TextColor.RED
+                        + "Could find Enchantment "
+                        + TextColor.WHITE
+                        + conc
+                        + TextColor.RED
+                        + "!");
                 return;
             }
-            stack.addEnchantment(enchantment, (int)level);
-            this.setStack(stack);
+
+            stack.addEnchantment(enchantment, level);
+            setStack(stack);
             return;
         }
-        for (Enchantment enchantment : Enchantment.REGISTRY) {
-            if (enchantment.isCurse()) continue;
-            stack.addEnchantment(enchantment, (int)level);
+
+        for (Enchantment enchantment : Enchantment.REGISTRY)
+        {
+            if (!enchantment.isCurse())
+            {
+                stack.addEnchantment(enchantment, level);
+            }
         }
-        this.setStack(stack);
+
+        setStack(stack);
     }
 
-    private void setStack(ItemStack stack) {
-        int slot = EnchantCommand.mc.player.inventory.currentItem + 36;
-        if (EnchantCommand.mc.player.isCreative()) {
-            EnchantCommand.mc.player.connection.sendPacket((Packet)new CPacketCreativeInventoryAction(slot, stack));
-        } else if (mc.isSingleplayer()) {
-            EntityPlayerMP player = Objects.requireNonNull(mc.getIntegratedServer()).getPlayerList().getPlayerByUUID(EnchantCommand.mc.player.getUniqueID());
-            if (player != null) {
+    private void setStack(ItemStack stack)
+    {
+        int slot = mc.player.inventory.currentItem + 36;
+        if (mc.player.isCreative())
+        {
+            mc.player.connection.sendPacket(
+                    new CPacketCreativeInventoryAction(slot, stack));
+        }
+        else if (mc.isSingleplayer())
+        {
+            EntityPlayerMP player = Objects.requireNonNull(
+                    mc.getIntegratedServer())
+                    .getPlayerList()
+                    .getPlayerByUUID(mc.player.getUniqueID());
+            //noinspection ConstantConditions
+            if (player != null)
+            {
                 player.inventoryContainer.putStackInSlot(slot, stack);
             }
-        } else {
-            ChatUtil.sendMessage("\u00a7cNot Creative and not Singleplayer: Enchantments are \u00a7bghost \u00a7cenchantments!");
+        }
+        else
+        {
+            ChatUtil.sendMessage(TextColor.RED
+                    + "Not Creative and not Singleplayer: "
+                    + "Enchantments are "
+                    + TextColor.AQUA
+                    + "ghost "
+                    + TextColor.RED
+                    + "enchantments!");
         }
     }
 
     @Override
-    public PossibleInputs getPossibleInputs(String[] args) {
-        if (args.length > 1) {
+    public PossibleInputs getPossibleInputs(String[] args)
+    {
+        if (args.length > 1)
+        {
             PossibleInputs inputs = PossibleInputs.empty();
-            if (args.length == 2) {
+            if (args.length == 2)
+            {
                 inputs.setRest(" <enchantment>");
-                if (args[1].isEmpty()) {
+                if (args[1].isEmpty())
+                {
                     return inputs.setRest("<level>");
                 }
+
                 return inputs;
             }
-            if (args[2].isEmpty()) {
+
+            if (args[2].isEmpty())
+            {
                 return inputs.setRest("<enchantment>");
             }
+
             String conc = CommandUtil.concatenate(args, 2);
-            String s = EnchantCommand.getEnchantmentStartingWith(conc);
-            if (s != null) {
+            String s = getEnchantmentStartingWith(conc);
+            if (s != null)
+            {
                 inputs.setCompletion(TextUtil.substring(s, conc.length()));
             }
+
             return inputs;
         }
+
         return super.getPossibleInputs(args);
     }
 
-    public static String getEnchantmentStartingWith(String prefix) {
-        Enchantment enchantment = EnchantCommand.getEnchantment(prefix);
-        if (enchantment != null) {
-            return I18n.translateToLocal((String)enchantment.getName());
+    @SuppressWarnings("deprecation")
+    public static String getEnchantmentStartingWith(String prefix)
+    {
+        Enchantment enchantment = getEnchantment(prefix);
+        if (enchantment != null)
+        {
+            return I18n.translateToLocal(enchantment.getName());
         }
+
         return null;
     }
 
-    public static Enchantment getEnchantment(String prefix) {
+    @SuppressWarnings("deprecation")
+    public static Enchantment getEnchantment(String prefix)
+    {
         prefix = prefix.toLowerCase();
-        for (Enchantment enchantment : Enchantment.REGISTRY) {
-            String s = I18n.translateToLocal((String)enchantment.getName());
-            if (!s.toLowerCase().startsWith(prefix)) continue;
-            return enchantment;
+        for (Enchantment enchantment : Enchantment.REGISTRY)
+        {
+            String s = I18n.translateToLocal(enchantment.getName());
+            if (s.toLowerCase().startsWith(prefix))
+            {
+                return enchantment;
+            }
         }
+
         return null;
     }
-}
 
+}

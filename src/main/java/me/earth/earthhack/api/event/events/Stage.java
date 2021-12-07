@@ -1,11 +1,10 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.api.event.events;
 
-public enum Stage {
+/**
+ * {@link StageEvent}.
+ */
+public enum Stage
+{
     PRE,
-    POST;
-
+    POST
 }
-

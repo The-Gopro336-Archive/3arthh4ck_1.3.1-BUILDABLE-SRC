@@ -1,65 +1,72 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.client.server.api;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import me.earth.earthhack.impl.modules.client.server.api.IConnection;
 
-public abstract class AbstractConnection
-implements IConnection {
+public abstract class AbstractConnection implements IConnection
+{
     protected final Socket socket;
     protected String name;
 
-    public AbstractConnection(String ip, int port) throws IOException {
+    public AbstractConnection(String ip, int port) throws IOException
+    {
         this(new Socket(ip, port));
     }
 
-    public AbstractConnection(Socket socket) {
+    public AbstractConnection(Socket socket)
+    {
         this.socket = socket;
     }
 
     @Override
-    public String getName() {
-        return this.name;
+    public String getName()
+    {
+        return name;
     }
 
     @Override
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
     @Override
-    public void send(byte[] packet) throws IOException {
-        this.socket.getOutputStream().write(packet);
+    public void send(byte[] packet) throws IOException
+    {
+        socket.getOutputStream().write(packet);
     }
 
     @Override
-    public void close() {
-        try {
-            this.socket.close();
+    public void close()
+    {
+        try
+        {
+            socket.close();
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
     }
 
     @Override
-    public InputStream getInputStream() throws IOException {
-        return this.socket.getInputStream();
+    public InputStream getInputStream() throws IOException
+    {
+        return socket.getInputStream();
     }
 
     @Override
-    public OutputStream getOutputStream() throws IOException {
-        return this.socket.getOutputStream();
+    public OutputStream getOutputStream() throws IOException
+    {
+        return socket.getOutputStream();
     }
 
     @Override
-    public boolean isOpen() {
-        return !this.socket.isClosed();
+    public boolean isOpen()
+    {
+        return !socket.isClosed();
     }
+
 }
-

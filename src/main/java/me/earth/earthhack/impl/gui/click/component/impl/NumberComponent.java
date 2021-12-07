@@ -1,25 +1,15 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  com.mojang.realmsclient.gui.ChatFormatting
- *  net.minecraft.client.Minecraft
- *  net.minecraft.util.math.MathHelper
- */
 package me.earth.earthhack.impl.gui.click.component.impl;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.gui.click.component.Component;
-import me.earth.earthhack.impl.modules.client.clickgui.ClickGui;
 import me.earth.earthhack.impl.util.math.MathUtil;
 import me.earth.earthhack.impl.util.render.Render2DUtil;
 import me.earth.earthhack.impl.util.render.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
 
-public class NumberComponent
-extends Component {
+public class NumberComponent extends Component {
     private final NumberSetting<Number> numberSetting;
     private boolean sliding;
 
@@ -36,13 +26,13 @@ extends Component {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
-        boolean hovered = RenderUtil.mouseWithinBounds(mouseX, mouseY, this.getFinishedX(), this.getFinishedY(), this.getWidth(), this.getHeight());
-        Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(this.getLabel() + ": " + (Object)ChatFormatting.GRAY + this.getNumberSetting().getValue(), this.getFinishedX() + 5.0f, this.getFinishedY() + this.getHeight() / 2.0f - (float)(Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT >> 1), -1);
-        float length = MathHelper.floor((float)((((Number)this.getNumberSetting().getValue()).floatValue() - this.getNumberSetting().getMin().floatValue()) / (this.getNumberSetting().getMax().floatValue() - this.getNumberSetting().getMin().floatValue()) * (this.getWidth() - 10.0f)));
-        Render2DUtil.drawBorderedRect(this.getFinishedX() + 5.0f, this.getFinishedY() + this.getHeight() - 2.5f, this.getFinishedX() + 5.0f + length, this.getFinishedY() + this.getHeight() - 0.5f, 0.5f, hovered ? ((ClickGui)NumberComponent.getClickGui().get()).color.getValue().brighter().getRGB() : ((ClickGui)NumberComponent.getClickGui().get()).color.getValue().getRGB(), -16777216);
-        if (this.sliding) {
-            double val = (double)((float)mouseX - (this.getFinishedX() + 5.0f)) * (this.getNumberSetting().getMax().doubleValue() - this.getNumberSetting().getMin().doubleValue()) / (double)(this.getWidth() - 10.0f) + this.getNumberSetting().getMin().doubleValue();
-            this.getNumberSetting().setValue(this.getNumberSetting().numberToValue(MathUtil.round(val, 2)));
+        final boolean hovered = RenderUtil.mouseWithinBounds(mouseX, mouseY, getFinishedX(), getFinishedY(), getWidth(), getHeight());
+        Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(getLabel() + ": " + ChatFormatting.GRAY + getNumberSetting().getValue(), getFinishedX() + 5, getFinishedY() + getHeight() / 2 - (Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT >> 1), 0xFFFFFFFF);
+        float length = MathHelper.floor(((getNumberSetting().getValue()).floatValue() - getNumberSetting().getMin().floatValue()) / (getNumberSetting().getMax().floatValue() - getNumberSetting().getMin().floatValue()) * (getWidth() - 10));
+        Render2DUtil.drawBorderedRect(getFinishedX() + 5, getFinishedY() + getHeight() - 2.5f, getFinishedX() + 5 + length, getFinishedY() + getHeight() - 0.5f, 0.5f, hovered ? getClickGui().get().color.getValue().brighter().getRGB() : getClickGui().get().color.getValue().getRGB(), 0xff000000);
+        if (sliding) {
+            double val = ((mouseX - (getFinishedX() + 5)) * (getNumberSetting().getMax().doubleValue() - getNumberSetting().getMin().doubleValue()) / (getWidth() - 10) + getNumberSetting().getMin().doubleValue());
+            getNumberSetting().setValue(getNumberSetting().numberToValue(MathUtil.round(val, 2)));
         }
     }
 
@@ -54,30 +44,27 @@ extends Component {
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         super.mouseClicked(mouseX, mouseY, mouseButton);
-        boolean hovered = RenderUtil.mouseWithinBounds(mouseX, mouseY, this.getFinishedX(), this.getFinishedY(), this.getWidth(), this.getHeight());
-        if (hovered && mouseButton == 0) {
-            this.setSliding(true);
-        }
+        final boolean hovered = RenderUtil.mouseWithinBounds(mouseX, mouseY, getFinishedX(), getFinishedY(), getWidth(), getHeight());
+        if (hovered && mouseButton == 0)
+            setSliding(true);
     }
 
     @Override
     public void mouseReleased(int mouseX, int mouseY, int mouseButton) {
         super.mouseReleased(mouseX, mouseY, mouseButton);
-        if (this.isSliding()) {
-            this.setSliding(false);
-        }
+        if (isSliding())
+            setSliding(false);
     }
 
     public NumberSetting<Number> getNumberSetting() {
-        return this.numberSetting;
+        return numberSetting;
     }
 
     public boolean isSliding() {
-        return this.sliding;
+        return sliding;
     }
 
     public void setSliding(boolean sliding) {
         this.sliding = sliding;
     }
 }
-

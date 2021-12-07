@@ -1,13 +1,5 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.util.ResourceLocation
- *  net.minecraftforge.registries.GameData
- */
 package me.earth.earthhack.forge.mixins.minecraftforge;
 
-import java.util.List;
 import me.earth.earthhack.api.cache.SettingCache;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.impl.Earthhack;
@@ -19,17 +11,32 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(value={GameData.class}, remap=false)
-public class MixinGameData {
-    private static final SettingCache<Boolean, BooleanSetting, Management> IGNORE = Caches.getSetting(Management.class, BooleanSetting.class, "IgnoreForgeRegistries", false);
+import java.util.List;
 
-    @Redirect(method={"injectSnapshot"}, at=@At(value="INVOKE", target="Ljava/util/List;size()I", ordinal=0))
-    private static int injectSnapshotHook(List<ResourceLocation> list) {
-        if (IGNORE.getValue().booleanValue() && list.size() != 0) {
-            Earthhack.getLogger().info("Ignored " + list.size() + " missing forge registries.");
+@Mixin(value = GameData.class, remap = false)
+public class MixinGameData
+{
+    private static final SettingCache
+     <Boolean, BooleanSetting, Management> IGNORE =
+     Caches.getSetting(Management.class, BooleanSetting.class, "IgnoreForgeRegistries", false);
+
+    @Redirect(
+        method = "injectSnapshot",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/util/List;size()I",
+            ordinal = 0))
+    private static int injectSnapshotHook(List<ResourceLocation> list)
+    {
+        if (IGNORE.getValue() && list.size() != 0)
+        {
+            Earthhack
+              .getLogger()
+              .info("Ignored " + list.size() + " missing forge registries.");
             return 0;
         }
+
         return list.size();
     }
-}
 
+}

@@ -1,10 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.network.PacketBuffer
- *  net.minecraft.network.handshake.client.C00Handshake
- */
 package me.earth.earthhack.impl.core.mixins.network.client;
 
 import me.earth.earthhack.impl.core.ducks.network.IC00Handshake;
@@ -16,34 +9,51 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(value={C00Handshake.class})
-public abstract class MixinC00Handshake
-implements IC00Handshake {
+@Mixin(C00Handshake.class)
+public abstract class MixinC00Handshake implements IC00Handshake
+{
     @Shadow
     private String ip;
+
     private boolean cancel;
 
     @Override
-    @Accessor(value="ip")
-    public abstract void setIP(String var1);
+    @Accessor(value = "ip")
+    public abstract void setIP(String ip);
 
     @Override
-    @Accessor(value="port")
-    public abstract void setPort(int var1);
+    @Accessor(value = "port")
+    public abstract void setPort(int port);
 
     @Override
-    public void cancelFML(boolean cancel) {
+    public void cancelFML(boolean cancel)
+    {
         this.cancel = cancel;
     }
 
-    @Redirect(method={"writePacketData"}, at=@At(value="INVOKE", target="Lnet/minecraft/network/PacketBuffer;writeString(Ljava/lang/String;)Lnet/minecraft/network/PacketBuffer;"))
-    public PacketBuffer writePacketDataHook(PacketBuffer buffer, String string) {
-        if (this.cancel) {
+    /**
+     * {@link PacketBuffer#writeString(String)}
+     */
+    @Redirect(
+        method = "writePacketData",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/network/PacketBuffer;writeString" +
+                    "(Ljava/lang/String;)" +
+                    "Lnet/minecraft/network/PacketBuffer;"))
+    public PacketBuffer writePacketDataHook(PacketBuffer buffer, String string)
+    {
+        if (cancel)
+        {
             buffer.writeString(this.ip);
-        } else {
+        }
+        else
+        {
             buffer.writeString(string);
         }
+
         return buffer;
     }
+
 }
 

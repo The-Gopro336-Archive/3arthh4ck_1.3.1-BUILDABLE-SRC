@@ -1,9 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.client.gui.GuiBossOverlay
- */
 package me.earth.earthhack.impl.core.mixins.gui;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -15,15 +9,19 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value={GuiBossOverlay.class})
+@Mixin(GuiBossOverlay.class)
 public abstract class MixinGuiBossOverlay {
-    private static final ModuleCache<NoRender> NO_RENDER = Caches.getModule(NoRender.class);
 
-    @Inject(method={"renderBossHealth"}, at={@At(value="HEAD")}, cancellable=true)
-    public void renderHook(CallbackInfo ci) {
-        if (((NoRender)MixinGuiBossOverlay.NO_RENDER.get()).boss.getValue().booleanValue()) {
+    private static final ModuleCache<NoRender> NO_RENDER =
+            Caches.getModule(NoRender.class);
+
+    @Inject(method = "renderBossHealth", at = @At("HEAD"), cancellable = true)
+    public void renderHook(CallbackInfo ci)
+    {
+        if (NO_RENDER.get().boss.getValue())
+        {
             ci.cancel();
         }
     }
-}
 
+}

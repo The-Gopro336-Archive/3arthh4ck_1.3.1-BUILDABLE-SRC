@@ -1,22 +1,25 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.client.customfont.mode;
 
-public enum FontStyle {
-    Plain(0),
-    Bold(1),
-    Italic(2),
-    All(3);
+import java.awt.*;
+
+public enum FontStyle
+{
+    Plain(Font.PLAIN),
+    Bold(Font.BOLD),
+    Italic(Font.ITALIC),
+    All(Font.BOLD | Font.ITALIC);
 
     int style;
 
-    private FontStyle(int style) {
+    FontStyle(int style)
+    {
         this.style = style;
     }
 
-    public int getFontStyle() {
-        return this.style;
+    public int getFontStyle()
+    {
+        return style;
     }
+
 }
 

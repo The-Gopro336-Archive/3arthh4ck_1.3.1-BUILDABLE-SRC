@@ -1,25 +1,26 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.util.thread;
 
 @FunctionalInterface
-public interface SafeRunnable
-extends Runnable {
-    public void runSafely() throws Throwable;
+public interface SafeRunnable extends Runnable
+{
+    void runSafely() throws Throwable;
 
     @Override
-    default public void run() {
-        try {
-            this.runSafely();
+    default void run()
+    {
+        try
+        {
+            runSafely();
         }
-        catch (Throwable t) {
-            this.handle(t);
+        catch (Throwable t)
+        {
+            handle(t);
         }
     }
 
-    default public void handle(Throwable t) {
+    default void handle(Throwable t)
+    {
         t.printStackTrace();
     }
-}
 
+}

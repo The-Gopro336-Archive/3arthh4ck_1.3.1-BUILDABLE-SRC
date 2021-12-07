@@ -1,20 +1,8 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.client.entity.EntityPlayerSP
- *  net.minecraft.client.model.ModelBase
- *  net.minecraft.client.renderer.entity.RenderLivingBase
- *  net.minecraft.entity.Entity
- *  net.minecraft.entity.EntityLivingBase
- *  org.lwjgl.opengl.GL11
- */
 package me.earth.earthhack.impl.core.mixins.render.entity;
 
 import me.earth.earthhack.api.cache.ModuleCache;
 import me.earth.earthhack.api.event.bus.instance.Bus;
 import me.earth.earthhack.impl.event.events.render.ModelRenderEvent;
-import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.player.spectate.Spectate;
 import me.earth.earthhack.impl.modules.render.chams.Chams;
@@ -32,11 +20,19 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value={RenderLivingBase.class})
+import static me.earth.earthhack.impl.managers.Managers.ROTATION;
+
+@Mixin(RenderLivingBase.class)
 public abstract class MixinRenderLivingBase {
-    private static final ModuleCache<Spectate> SPECTATE = Caches.getModule(Spectate.class);
-    private static final ModuleCache<Chams> CHAMS = Caches.getModule(Chams.class);
-    private static final ModuleCache<ESP> ESP_MODULE = Caches.getModule(ESP.class);
+    private static final ModuleCache<Spectate> SPECTATE =
+            Caches.getModule(Spectate.class);
+    private static final ModuleCache<Chams> CHAMS =
+            Caches.getModule(Chams.class);
+    private static final ModuleCache<me.earth.earthhack.impl.modules.render.rechams.Chams> RE_CHAMS =
+            Caches.getModule(me.earth.earthhack.impl.modules.render.rechams.Chams.class);
+    private static final ModuleCache<ESP> ESP_MODULE =
+            Caches.getModule(ESP.class);
+
     private float prevRenderYawOffset;
     private float renderYawOffset;
     private float prevRotationYawHead;
@@ -44,84 +40,158 @@ public abstract class MixinRenderLivingBase {
     private float prevRotationPitch;
     private float rotationPitch;
 
-    @Inject(method={"doRender"}, at={@At(value="HEAD")})
+    @Inject(method = "doRender", at = @At("HEAD"))
     private void doRenderHookHead(EntityLivingBase entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo info) {
-        if (entity instanceof EntityPlayerSP || SPECTATE.isEnabled() && entity.equals((Object)((Spectate)SPECTATE.get()).getFake())) {
-            this.prevRenderYawOffset = entity.prevRenderYawOffset;
-            this.renderYawOffset = entity.renderYawOffset;
-            this.prevRotationYawHead = entity.prevRotationYawHead;
-            this.rotationYawHead = entity.rotationYawHead;
-            this.prevRotationPitch = entity.prevRotationPitch;
-            this.rotationPitch = entity.rotationPitch;
-            entity.prevRenderYawOffset = Managers.ROTATION.getPrevRenderYawOffset();
-            entity.renderYawOffset = Managers.ROTATION.getRenderYawOffset();
-            entity.prevRotationYawHead = Managers.ROTATION.getPrevRotationYawHead();
-            entity.rotationYawHead = Managers.ROTATION.getRotationYawHead();
-            entity.prevRotationPitch = Managers.ROTATION.getPrevPitch();
-            entity.rotationPitch = Managers.ROTATION.getRenderPitch();
+        if (entity instanceof EntityPlayerSP ||
+                SPECTATE.isEnabled() && entity.equals(SPECTATE.get().getFake())) {
+            prevRenderYawOffset = entity.prevRenderYawOffset;
+            renderYawOffset = entity.renderYawOffset;
+            prevRotationYawHead = entity.prevRotationYawHead;
+            rotationYawHead = entity.rotationYawHead;
+            prevRotationPitch = entity.prevRotationPitch;
+            rotationPitch = entity.rotationPitch;
+
+            entity.prevRenderYawOffset = ROTATION.getPrevRenderYawOffset();
+            entity.renderYawOffset = ROTATION.getRenderYawOffset();
+            entity.prevRotationYawHead = ROTATION.getPrevRotationYawHead();
+            entity.rotationYawHead = ROTATION.getRotationYawHead();
+            entity.prevRotationPitch = ROTATION.getPrevPitch();
+            entity.rotationPitch = ROTATION.getRenderPitch();
         }
     }
 
-    @Inject(method={"doRender"}, at={@At(value="RETURN")})
-    private void doRenderHookReturn(EntityLivingBase entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo info) {
-        if (entity instanceof EntityPlayerSP || SPECTATE.isEnabled() && entity.equals((Object)((Spectate)SPECTATE.get()).getFake())) {
-            entity.prevRenderYawOffset = this.prevRenderYawOffset;
-            entity.renderYawOffset = this.renderYawOffset;
-            entity.prevRotationYawHead = this.prevRotationYawHead;
-            entity.rotationYawHead = this.rotationYawHead;
-            entity.prevRotationPitch = this.prevRotationPitch;
-            entity.rotationPitch = this.rotationPitch;
+    @Inject(method = "doRender", at = @At("RETURN"))
+    private void doRenderHookReturn(EntityLivingBase entity, double x, double y,
+                                    double z, float entityYaw, float partialTicks,
+                                    CallbackInfo info) {
+        if (entity instanceof EntityPlayerSP ||
+                SPECTATE.isEnabled() && entity.equals(SPECTATE.get().getFake())) {
+            entity.prevRenderYawOffset = prevRenderYawOffset;
+            entity.renderYawOffset = renderYawOffset;
+            entity.prevRotationYawHead = prevRotationYawHead;
+            entity.rotationYawHead = rotationYawHead;
+            entity.prevRotationPitch = prevRotationPitch;
+            entity.rotationPitch = rotationPitch;
         }
     }
 
-    @Inject(method={"renderLayers"}, at={@At(value="HEAD")}, cancellable=true)
+    @Inject(
+            method = "renderLayers",
+            at = @At("HEAD"),
+            cancellable = true)
     private void renderLayersHook(CallbackInfo info) {
         if (ESP.isRendering) {
             info.cancel();
         }
     }
 
-    @Inject(method={"renderName"}, at={@At(value="HEAD")}, cancellable=true)
-    private void renderNameHook(EntityLivingBase entity, double x, double y, double z, CallbackInfo info) {
+    @Inject(
+            method = "renderName",
+            at = @At("HEAD"),
+            cancellable = true)
+    private void renderNameHook(EntityLivingBase entity,
+                                double x,
+                                double y,
+                                double z,
+                                CallbackInfo info) {
         if (ESP.isRendering) {
             info.cancel();
         }
     }
 
-    @Redirect(method={"setBrightness"}, at=@At(value="FIELD", target="Lnet/minecraft/entity/EntityLivingBase;hurtTime:I"))
+    @SuppressWarnings("UnresolvedMixinReference")
+    @Redirect(
+            method = "setBrightness",
+            at = @At(
+                    value = "FIELD",
+                    target = "Lnet/minecraft/entity/EntityLivingBase;hurtTime:I"))
     public int hurtTimeHook(EntityLivingBase base) {
-        if (!ESP_MODULE.returnIfPresent(ESP::shouldHurt, false).booleanValue()) {
+        if (!ESP_MODULE.returnIfPresent(ESP::shouldHurt, false)) {
             return 0;
         }
+
         return base.hurtTime;
     }
 
-    @Inject(method={"doRender"}, at={@At(value="HEAD")})
-    public void doRender_Pre(EntityLivingBase entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo info) {
-        if (CHAMS.returnIfPresent(c -> c.isValid((Entity)entity, ChamsMode.Normal), false).booleanValue()) {
-            GL11.glEnable((int)32823);
-            GL11.glPolygonOffset((float)1.0f, (float)-1100000.0f);
+    @Inject(
+            method = "doRender",
+            at = @At("HEAD"))
+    public void doRender_Pre(EntityLivingBase entity,
+                             double x,
+                             double y,
+                             double z,
+                             float entityYaw,
+                             float partialTicks,
+                             CallbackInfo info) {
+        if (CHAMS.returnIfPresent(c ->
+                c.isValid(entity, ChamsMode.Normal), false)) {
+            GL11.glEnable(GL11.GL_POLYGON_OFFSET_FILL);
+            GL11.glPolygonOffset(1.0f, -1100000.0f);
         }
     }
 
-    @Inject(method={"doRender"}, at={@At(value="RETURN")})
-    public void doRender_Post(EntityLivingBase entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo info) {
-        if (CHAMS.returnIfPresent(c -> c.isValid((Entity)entity, ChamsMode.Normal), false).booleanValue()) {
-            GL11.glDisable((int)32823);
-            GL11.glPolygonOffset((float)1.0f, (float)1100000.0f);
+    @Inject(method = "doRender", at = @At("RETURN"))
+    public void doRender_Post(EntityLivingBase entity,
+                              double x,
+                              double y,
+                              double z,
+                              float entityYaw,
+                              float partialTicks,
+                              CallbackInfo info) {
+        if (CHAMS.returnIfPresent(c ->
+                c.isValid(entity, ChamsMode.Normal), false)) {
+            GL11.glDisable(GL11.GL_POLYGON_OFFSET_FILL);
+            GL11.glPolygonOffset(1.0f, 1100000.0f);
         }
     }
 
-    @Redirect(method={"renderModel"}, at=@At(value="INVOKE", target="net/minecraft/client/model/ModelBase.render(Lnet/minecraft/entity/Entity;FFFFFF)V"))
-    private void renderHook(ModelBase model, Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        RenderLivingBase renderLiving = (RenderLivingBase)RenderLivingBase.class.cast(this);
-        EntityLivingBase entity = (EntityLivingBase)entityIn;
-        ModelRenderEvent.Pre event = new ModelRenderEvent.Pre(renderLiving, entity, model, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+    @Redirect(
+            method = "renderModel",
+            at = @At(
+                    value = "INVOKE",
+                    target = "net/minecraft/client/model/ModelBase." +
+                            "render(Lnet/minecraft/entity/Entity;FFFFFF)V"))
+    private void renderHook(ModelBase model,
+                            Entity entityIn,
+                            float limbSwing,
+                            float limbSwingAmount,
+                            float ageInTicks,
+                            float netHeadYaw,
+                            float headPitch,
+                            float scale) {
+        RenderLivingBase<?> renderLiving = RenderLivingBase.class.cast(this);
+        EntityLivingBase entity = (EntityLivingBase) entityIn;
+
+        ModelRenderEvent event = new ModelRenderEvent.Pre(renderLiving,
+                entity,
+                model,
+                limbSwing,
+                limbSwingAmount,
+                ageInTicks,
+                netHeadYaw,
+                headPitch,
+                scale);
         Bus.EVENT_BUS.post(event);
-        if (!event.isCancelled()) {
-            model.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-        }
-        Bus.EVENT_BUS.post(new ModelRenderEvent.Post(renderLiving, entity, model, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale));
-    }
-}
 
+        if (!event.isCancelled()) {
+            model.render(entityIn,
+                    limbSwing,
+                    limbSwingAmount,
+                    ageInTicks,
+                    netHeadYaw,
+                    headPitch,
+                    scale);
+        }
+
+        Bus.EVENT_BUS.post(new ModelRenderEvent.Post(renderLiving,
+                entity,
+                model,
+                limbSwing,
+                limbSwingAmount,
+                ageInTicks,
+                netHeadYaw,
+                headPitch,
+                scale));
+    }
+
+}

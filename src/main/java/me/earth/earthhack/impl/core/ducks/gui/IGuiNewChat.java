@@ -1,26 +1,30 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.util.text.ITextComponent
- */
 package me.earth.earthhack.impl.core.ducks.gui;
 
 import net.minecraft.util.text.ITextComponent;
 
-public interface IGuiNewChat {
-    public boolean replace(ITextComponent var1, int var2, boolean var3, boolean var4);
+/**
+ * Duck interface for {@link net.minecraft.client.gui.GuiNewChat}.
+ */
+public interface IGuiNewChat
+{
+    boolean replace(ITextComponent component,
+                    int id,
+                    boolean wrap,
+                    boolean returnFirst);
 
-    public int getScrollPos();
+    int getScrollPos();
 
-    public void setScrollPos(int var1);
+    void setScrollPos(int pos);
 
-    public boolean getScrolled();
+    boolean getScrolled();
 
-    public void setScrolled(boolean var1);
+    void setScrolled(boolean scrolled);
 
-    public void invokeSetChatLine(ITextComponent var1, int var2, int var3, boolean var4);
+    void invokeSetChatLine(ITextComponent chatComponent,
+                           int chatLineId,
+                           int updateCounter,
+                           boolean displayOnly);
 
-    public void invokeClearChat(boolean var1);
+    void invokeClearChat(boolean sent);
+
 }
-

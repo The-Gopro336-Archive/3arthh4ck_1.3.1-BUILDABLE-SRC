@@ -1,40 +1,43 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.block.material.Material
- *  net.minecraft.network.play.server.SPacketMultiBlockChange
- *  net.minecraft.network.play.server.SPacketMultiBlockChange$BlockUpdateData
- *  net.minecraft.util.math.BlockPos
- */
 package me.earth.earthhack.impl.modules.combat.autocrystal;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
-import me.earth.earthhack.impl.modules.combat.autocrystal.AutoCrystal;
-import me.earth.earthhack.impl.modules.combat.autocrystal.HelperUtil;
 import net.minecraft.block.material.Material;
 import net.minecraft.network.play.server.SPacketMultiBlockChange;
-import net.minecraft.util.math.BlockPos;
 
-final class ListenerBlockMulti
-extends ModuleListener<AutoCrystal, PacketEvent.Receive<SPacketMultiBlockChange>> {
-    public ListenerBlockMulti(AutoCrystal module) {
-        super(module, PacketEvent.Receive.class, Integer.MIN_VALUE, SPacketMultiBlockChange.class);
+final class ListenerBlockMulti extends ModuleListener<AutoCrystal,
+        PacketEvent.Receive<SPacketMultiBlockChange>>
+{
+    public ListenerBlockMulti(AutoCrystal module)
+    {
+        super(module,
+                PacketEvent.Receive.class,
+                Integer.MIN_VALUE,
+                SPacketMultiBlockChange.class);
     }
 
     @Override
-    public void invoke(PacketEvent.Receive<SPacketMultiBlockChange> event) {
-        if (((AutoCrystal)this.module).multiThread.getValue().booleanValue() && ((AutoCrystal)this.module).blockChangeThread.getValue().booleanValue()) {
-            SPacketMultiBlockChange packet = (SPacketMultiBlockChange)event.getPacket();
-            event.addPostEvent(() -> {
-                for (SPacketMultiBlockChange.BlockUpdateData data : packet.getChangedBlocks()) {
-                    if (data.getBlockState().getMaterial() != Material.AIR || !HelperUtil.validChange(data.getPos(), ListenerBlockMulti.mc.world.playerEntities)) continue;
-                    ((AutoCrystal)this.module).threadHelper.startThread(new BlockPos[0]);
-                    break;
+    public void invoke(PacketEvent.Receive<SPacketMultiBlockChange> event)
+    {
+        if (module.multiThread.getValue()
+                && module.blockChangeThread.getValue())
+        {
+            SPacketMultiBlockChange packet = event.getPacket();
+            event.addPostEvent(() ->
+            {
+                for (SPacketMultiBlockChange.BlockUpdateData data :
+                        packet.getChangedBlocks())
+                {
+                    if (data.getBlockState().getMaterial() == Material.AIR
+                            && HelperUtil.validChange(data.getPos(),
+                                                      mc.world.playerEntities))
+                    {
+                        module.threadHelper.startThread();
+                        break;
+                    }
                 }
             });
         }
     }
-}
 
+}

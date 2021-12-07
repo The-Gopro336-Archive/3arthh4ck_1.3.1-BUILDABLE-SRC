@@ -1,12 +1,5 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.block.Block
- */
 package me.earth.earthhack.impl.modules.render.xray;
 
-import java.lang.reflect.Field;
 import me.earth.earthhack.api.cache.ModuleCache;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
@@ -16,9 +9,6 @@ import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.managers.thread.scheduler.Scheduler;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.render.fullbright.Fullbright;
-import me.earth.earthhack.impl.modules.render.xray.ListenerBlockLayer;
-import me.earth.earthhack.impl.modules.render.xray.ListenerTick;
-import me.earth.earthhack.impl.modules.render.xray.XRayData;
 import me.earth.earthhack.impl.modules.render.xray.mode.XrayMode;
 import me.earth.earthhack.impl.util.helpers.addable.BlockAddingModule;
 import me.earth.earthhack.impl.util.helpers.addable.setting.SimpleRemovingSetting;
@@ -26,118 +16,175 @@ import me.earth.earthhack.impl.util.render.WorldRenderUtil;
 import me.earth.earthhack.vanilla.Environment;
 import net.minecraft.block.Block;
 
-public class XRay
-extends BlockAddingModule {
-    private static final ModuleCache<Fullbright> FULL_BRIGHT = Caches.getModule(Fullbright.class);
-    protected final Setting<XrayMode> mode = this.register(new EnumSetting<XrayMode>("Mode", XrayMode.Simple));
-    protected final Setting<Boolean> soft = this.register(new BooleanSetting("Soft-Reload", false));
-    protected final Setting<Integer> opacity = this.register(new NumberSetting<Integer>("Opacity", 120, 0, 255));
+import java.lang.reflect.Field;
+
+public class XRay extends BlockAddingModule
+{
+    private static final ModuleCache<Fullbright> FULL_BRIGHT =
+            Caches.getModule(Fullbright.class);
+
+    protected final Setting<XrayMode> mode =
+            register(new EnumSetting<>("Mode", XrayMode.Simple));
+    protected final Setting<Boolean> soft =
+            register(new BooleanSetting("Soft-Reload", false));
+    protected final Setting<Integer> opacity =
+            register(new NumberSetting<>("Opacity", 120, 0, 255));
+
     protected boolean lightPipeLine;
 
-    public XRay() {
-        super("XRay", Category.Render, s -> "Black/Whitelist " + s.getName() + " from being displayed.");
+    public XRay()
+    {
+        super("XRay",
+              Category.Render,
+              s -> "Black/Whitelist " + s.getName() + " from being displayed.");
         this.listeners.add(new ListenerBlockLayer(this));
         this.listeners.add(new ListenerTick(this));
-        this.mode.addObserver(event -> {
-            if (this.isEnabled() && !event.isCancelled()) {
+        mode.addObserver(event ->
+        {
+            if (this.isEnabled() && !event.isCancelled())
+            {
                 this.toggle();
                 Scheduler.getInstance().schedule(this::toggle);
             }
         });
-        this.listType.addObserver(event -> {
-            if (this.isEnabled()) {
-                this.loadRenderers();
+        this.listType.addObserver(event ->
+        {
+            if (this.isEnabled())
+            {
+                loadRenderers();
             }
         });
+
         this.setData(new XRayData(this));
     }
 
     @Override
-    public String getDisplayInfo() {
-        return this.mode.getValue().name();
+    public String getDisplayInfo()
+    {
+        return mode.getValue().name();
     }
 
     @Override
-    public void onEnable() {
-        if (this.mode.getValue() == XrayMode.Opacity) {
-            if (Environment.hasForge()) {
-                try {
-                    Field field = Class.forName("net.minecraftforge.common.ForgeModContainer", true, this.getClass().getClassLoader()).getDeclaredField("forgeLightPipelineEnabled");
+    public void onEnable()
+    {
+        if (mode.getValue() == XrayMode.Opacity)
+        {
+            if (Environment.hasForge())
+            {
+                try
+                {
+                    Field field = Class
+                        .forName("net.minecraftforge.common.ForgeModContainer",
+                                    true, this.getClass().getClassLoader())
+                        .getDeclaredField("forgeLightPipelineEnabled");
+
                     boolean accessible = field.isAccessible();
                     field.setAccessible(true);
                     this.lightPipeLine = field.getBoolean(null);
                     field.set(null, false);
                     field.setAccessible(accessible);
                 }
-                catch (Exception e) {
+                catch (Exception e)
+                {
                     e.printStackTrace();
                 }
             }
-            if (!FULL_BRIGHT.isEnabled()) {
-                XRay.mc.gameSettings.gammaSetting = 1.0f;
+
+            if (!FULL_BRIGHT.isEnabled())
+            {
+                mc.gameSettings.gammaSetting = 1.0F;
             }
-            XRay.mc.renderChunksMany = false;
+
+            mc.renderChunksMany = false;
         }
+
         Scheduler.getInstance().schedule(this::loadRenderers);
     }
 
     @Override
-    public void onDisable() {
-        if (this.mode.getValue() == XrayMode.Opacity) {
-            if (Environment.hasForge()) {
-                try {
-                    Field field = Class.forName("net.minecraftforge.common.ForgeModContainer", true, this.getClass().getClassLoader()).getDeclaredField("forgeLightPipelineEnabled");
+    public void onDisable()
+    {
+        if (mode.getValue() == XrayMode.Opacity)
+        {
+            if (Environment.hasForge())
+            {
+                try
+                {
+                    Field field = Class
+                        .forName("net.minecraftforge.common.ForgeModContainer",
+                                    true, this.getClass().getClassLoader())
+                        .getDeclaredField("forgeLightPipelineEnabled");
+
                     boolean accessible = field.isAccessible();
                     field.setAccessible(true);
                     field.set(null, this.lightPipeLine);
                     field.setAccessible(accessible);
                 }
-                catch (Exception e) {
+                catch (Exception e)
+                {
                     e.printStackTrace();
                 }
             }
-            if (!FULL_BRIGHT.isEnabled()) {
-                XRay.mc.gameSettings.gammaSetting = 1.0f;
+
+            if (!FULL_BRIGHT.isEnabled())
+            {
+                mc.gameSettings.gammaSetting = 1.0F;
             }
-            XRay.mc.renderChunksMany = true;
+
+            mc.renderChunksMany = true;
         }
-        this.loadRenderers();
+
+        loadRenderers();
     }
 
     @Override
-    protected SimpleRemovingSetting addSetting(String string) {
-        SimpleRemovingSetting s = (SimpleRemovingSetting)super.addSetting(string);
-        if (s != null) {
-            this.loadRenderers();
+    protected SimpleRemovingSetting addSetting(String string)
+    {
+        SimpleRemovingSetting s = super.addSetting(string);
+        if (s != null)
+        {
+            loadRenderers();
         }
+
         return s;
     }
 
     @Override
-    public Setting<?> unregister(Setting<?> setting) {
+    public Setting<?> unregister(Setting<?> setting)
+    {
         Setting<?> s = super.unregister(setting);
-        if (s != null) {
-            this.loadRenderers();
+        if (s != null)
+        {
+            loadRenderers();
         }
+
         return s;
     }
 
-    public boolean shouldRender(Block block) {
-        return this.isValid(block.getLocalizedName());
+    public boolean shouldRender(Block block)
+    {
+        return isValid(block.getLocalizedName());
     }
 
-    public XrayMode getMode() {
-        return this.mode.getValue();
+    public XrayMode getMode()
+    {
+        return mode.getValue();
     }
 
-    public int getOpacity() {
-        return this.opacity.getValue();
+    public int getOpacity()
+    {
+        return opacity.getValue();
     }
 
-    public void loadRenderers() {
-        if (XRay.mc.world != null && XRay.mc.player != null && XRay.mc.renderGlobal != null && XRay.mc.gameSettings != null) {
-            WorldRenderUtil.reload(this.soft.getValue());
+    public void loadRenderers()
+    {
+        if (mc.world != null
+                && mc.player != null
+                && mc.renderGlobal != null
+                && mc.gameSettings != null)
+        {
+            WorldRenderUtil.reload(soft.getValue());
         }
     }
-}
 
+}

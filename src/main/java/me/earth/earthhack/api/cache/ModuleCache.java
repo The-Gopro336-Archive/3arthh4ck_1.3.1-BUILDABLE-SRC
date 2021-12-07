@@ -1,10 +1,5 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.api.cache;
 
-import java.util.function.Supplier;
-import me.earth.earthhack.api.cache.Cache;
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.data.ModuleData;
 import me.earth.earthhack.api.module.util.Category;
@@ -12,122 +7,237 @@ import me.earth.earthhack.api.register.Register;
 import me.earth.earthhack.api.util.bind.Bind;
 import me.earth.earthhack.api.util.bind.Toggle;
 
-public class ModuleCache<T extends Module>
-extends Cache<T> {
+import java.util.function.Supplier;
+
+/**
+ * Cache/Proxy for a {@link Module}.
+ *
+ * The main idea behind this Cache is to call
+ * {@link Register#getByClass(Class)} the least
+ * amount of times possible.
+ *
+ * @param <T> the type of module being cached.
+ */
+@SuppressWarnings("unused")
+public class ModuleCache<T extends Module> extends Cache<T>
+{
     protected Class<T> type;
 
-    private ModuleCache() {
-    }
+    /** Private Ctr. */
+    private ModuleCache() { }
 
-    public ModuleCache(Register<Module> moduleManager, Class<T> type) {
-        this(() -> {
-            if (moduleManager != null && type != null) {
-                return (Module)moduleManager.getByClass(type);
+    /**
+     * Constructs a ModuleCache whose supplier calls
+     * {@link Register#getByClass(Class)} for the
+     * given type. The given ModuleManager is Nullable.
+     *
+     * @param moduleManager the moduleManager to get the Module from.
+     * @param type the type of the Module.
+     */
+    public ModuleCache(Register<Module> moduleManager, Class<T> type)
+    {
+        this(() ->
+        {
+            if (moduleManager != null && type != null)
+            {
+                return moduleManager.getByClass(type);
             }
+
             return null;
         }, type);
     }
 
-    public ModuleCache(Supplier<T> getter, Class<T> type) {
+    public ModuleCache(Supplier<T> getter, Class<T> type)
+    {
         super(getter);
         this.type = type;
     }
 
-    public void setModuleManager(Register<Module> moduleManager) {
-        this.getter = () -> {
-            if (moduleManager != null && this.type != null) {
-                return (Module)moduleManager.getByClass(this.type);
+    /**
+     * Sets the ModuleManager this Cache gets its value from.
+     * Note that the supplier will then call {@link Register#getByClass(Class)}.
+     *
+     * @param moduleManager the moduleManager.
+     */
+    public void setModuleManager(Register<Module> moduleManager)
+    {
+        this.getter = () ->
+        {
+            if (moduleManager != null && type != null)
+            {
+                return moduleManager.getByClass(type);
             }
+
             return null;
         };
     }
 
-    public boolean enable() {
-        return this.computeIfPresent(Module::enable);
+    /**
+     * Calls {@link Module#enable()}, if it's present.
+     *
+     * @return <tt>true</tt> if present.
+     */
+    public boolean enable()
+    {
+        return computeIfPresent(Module::enable);
     }
 
-    public boolean disable() {
-        return this.computeIfPresent(Module::disable);
+    /**
+     * Calls {@link Module#disable()}, if it's present.
+     *
+     * @return <tt>true</tt> if present.
+     */
+    public boolean disable()
+    {
+        return computeIfPresent(Module::disable);
     }
 
-    public boolean toggle() {
-        return this.computeIfPresent(Module::toggle);
+    /**
+     * Calls {@link Module#toggle()}, if it's present.
+     *
+     * @return <tt>true</tt> if present.
+     */
+    public boolean toggle()
+    {
+        return computeIfPresent(Module::toggle);
     }
 
-    public boolean isEnabled() {
-        if (this.isPresent()) {
-            return ((Module)this.get()).isEnabled();
+    /**
+     * Returns <tt>true</tt>, only if the module
+     * isPresent and {@link Module#isEnabled()}.
+     *
+     * @return <tt>false</tt> if not present or disabled.
+     */
+    public boolean isEnabled()
+    {
+        if (isPresent())
+        {
+            return get().isEnabled();
         }
+
         return false;
     }
 
-    public String getDisplayInfo() {
-        if (this.isPresent()) {
-            return ((Module)this.get()).getDisplayInfo();
+    /**
+     * @return {@link Module#getDisplayInfo()}, if present.
+     */
+    public String getDisplayInfo()
+    {
+        if (isPresent())
+        {
+            return get().getDisplayInfo();
         }
+
         return null;
     }
 
-    public Category getCategory() {
-        if (this.isPresent()) {
-            return ((Module)this.get()).getCategory();
+    /**
+     * @return {@link Module#getCategory()}, if present.
+     */
+    public Category getCategory()
+    {
+        if (isPresent())
+        {
+            return get().getCategory();
         }
+
         return null;
     }
 
-    public ModuleData getData() {
-        if (this.isPresent()) {
-            return ((Module)this.get()).getData();
+    /**
+     * @return {@link Module#getData()}, if present.
+     */
+    public ModuleData getData()
+    {
+        if (isPresent())
+        {
+            return get().getData();
         }
+
         return null;
     }
 
-    public boolean setData(ModuleData data) {
-        if (this.isPresent()) {
-            ((Module)this.get()).setData(data);
+    /**
+     * Calls {@link Module#setData(ModuleData)}, if present.
+     *
+     * @return <tt>true</tt>, if present.
+     */
+    public boolean setData(ModuleData data)
+    {
+        if (isPresent())
+        {
+            get().setData(data);
             return true;
         }
+
         return false;
     }
 
-    public Bind getBind() {
-        if (this.isPresent()) {
-            return ((Module)this.get()).getBind();
+    /**
+     * @return {@link Module#getBind()}, if present.
+     */
+    public Bind getBind()
+    {
+        if (isPresent())
+        {
+            return get().getBind();
         }
+
         return null;
     }
 
-    public Toggle getBindMode() {
-        if (this.isPresent()) {
-            return ((Module)this.get()).getBindMode();
+    /**
+     * @return {@link Module#getBindMode()}, if present.
+     */
+    public Toggle getBindMode()
+    {
+        if (isPresent())
+        {
+            return get().getBindMode();
         }
+
         return null;
     }
 
-    public static ModuleCache<Module> forName(String name, Register<Module> manager) {
+    /**
+     * Constructs a ModuleCache whose Supplier
+     * calls {@link Register#getObject(String)}.
+     *
+     * @param name the name for the Module.
+     * @param manager the Register to get the Module from.
+     * @return a ModuleCache for Modules of the given Name.
+     */
+    public static ModuleCache<Module> forName(String name,
+                                              Register<Module> manager)
+    {
         NameCache cache = new NameCache(name);
         cache.setModuleManager(manager);
         return cache;
     }
 
-    private static final class NameCache
-    extends ModuleCache<Module> {
+    private static final class NameCache extends ModuleCache<Module>
+    {
         private final String name;
 
-        public NameCache(String name) {
+        public NameCache(String name)
+        {
             this.name = name;
             this.type = Module.class;
         }
 
         @Override
-        public void setModuleManager(Register<Module> moduleManager) {
-            this.getter = () -> {
-                if (moduleManager != null) {
-                    return (Module)moduleManager.getObject(this.name);
+        public void setModuleManager(Register<Module> moduleManager)
+        {
+            this.getter = () ->
+            {
+                if (moduleManager != null)
+                {
+                    return moduleManager.getObject(name);
                 }
+
                 return null;
             };
         }
     }
-}
 
+}

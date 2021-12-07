@@ -1,9 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.client.renderer.entity.Render
- */
 package me.earth.earthhack.impl.core.mixins.render;
 
 import me.earth.earthhack.impl.modules.render.esp.ESP;
@@ -13,20 +7,31 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value={Render.class})
-public abstract class MixinRender {
-    @Inject(method={"doRenderShadowAndFire"}, at={@At(value="HEAD")}, cancellable=true)
-    private void doRenderShadowAndFireHook(CallbackInfo info) {
-        if (ESP.isRendering) {
+@Mixin(Render.class)
+public abstract class MixinRender
+{
+    @Inject(
+        method = "doRenderShadowAndFire",
+        at = @At("HEAD"),
+        cancellable = true)
+    private void doRenderShadowAndFireHook(CallbackInfo info)
+    {
+        if (ESP.isRendering)
+        {
             info.cancel();
         }
     }
 
-    @Inject(method={"renderLivingLabel"}, at={@At(value="HEAD")}, cancellable=true)
-    private void renderLivingLabelHook(CallbackInfo info) {
-        if (ESP.isRendering) {
+    @Inject(
+        method = "renderLivingLabel",
+        at = @At("HEAD"),
+        cancellable = true)
+    private void renderLivingLabelHook(CallbackInfo info)
+    {
+        if (ESP.isRendering)
+        {
             info.cancel();
         }
     }
+
 }
-

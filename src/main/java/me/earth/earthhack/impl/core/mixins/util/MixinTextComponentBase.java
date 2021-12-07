@@ -1,13 +1,5 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.util.text.ITextComponent
- *  net.minecraft.util.text.TextComponentBase
- */
 package me.earth.earthhack.impl.core.mixins.util;
 
-import java.util.function.Supplier;
 import me.earth.earthhack.impl.core.ducks.util.ITextComponentBase;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentBase;
@@ -16,42 +8,58 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(value={TextComponentBase.class})
+import java.util.function.Supplier;
+
+@Mixin(TextComponentBase.class)
 public abstract class MixinTextComponentBase
-implements ITextComponentBase,
-ITextComponent {
+        implements ITextComponentBase, ITextComponent
+{
     private Supplier<String> hookFormat;
     private Supplier<String> hookUnFormat;
 
     @Override
-    public void setFormattingHook(Supplier<String> hook) {
+    public void setFormattingHook(Supplier<String> hook)
+    {
         this.hookFormat = hook;
     }
 
     @Override
-    public void setUnFormattedHook(Supplier<String> hook) {
+    public void setUnFormattedHook(Supplier<String> hook)
+    {
         this.hookUnFormat = hook;
     }
 
     @Override
-    public ITextComponent copyNoSiblings() {
+    public ITextComponent copyNoSiblings()
+    {
         ITextComponent copy = this.createCopy();
         copy.getSiblings().clear();
+
         return copy;
     }
 
-    @Inject(method={"getFormattedText"}, at={@At(value="HEAD")}, cancellable=true)
-    public void getFormattedTextHook(CallbackInfoReturnable<String> info) {
-        if (this.hookFormat != null) {
-            info.setReturnValue(this.hookFormat.get());
+    @Inject(
+        method = "getFormattedText",
+        at = @At("HEAD"),
+        cancellable = true)
+    public void getFormattedTextHook(CallbackInfoReturnable<String> info)
+    {
+        if (hookFormat != null)
+        {
+            info.setReturnValue(hookFormat.get());
         }
     }
 
-    @Inject(method={"getUnformattedText"}, at={@At(value="HEAD")}, cancellable=true)
-    public void getUnformattedTextHook(CallbackInfoReturnable<String> info) {
-        if (this.hookUnFormat != null) {
-            info.setReturnValue(this.hookUnFormat.get());
+    @Inject(
+        method = "getUnformattedText",
+        at = @At("HEAD"),
+        cancellable = true)
+    public void getUnformattedTextHook(CallbackInfoReturnable<String> info)
+    {
+        if (hookUnFormat != null)
+        {
+            info.setReturnValue(hookUnFormat.get());
         }
     }
+
 }
-

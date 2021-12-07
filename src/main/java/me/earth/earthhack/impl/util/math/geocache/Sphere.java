@@ -1,95 +1,161 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.util.math.BlockPos
- *  net.minecraft.util.math.Vec3i
- *  org.apache.logging.log4j.Logger
- */
 package me.earth.earthhack.impl.util.math.geocache;
 
-import java.util.TreeSet;
+import me.earth.earthhack.impl.managers.thread.safety.SafetyManager;
 import me.earth.earthhack.impl.util.math.MathUtil;
+import me.earth.earthhack.impl.util.math.path.PathFinder;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import org.apache.logging.log4j.Logger;
 
-public class Sphere {
+import java.util.Set;
+import java.util.TreeSet;
+
+/**
+ * Caches a Sphere of radius 100 and indices required
+ * to get Sub-Spheres with smaller radii. The sphere is
+ * sorted by distance to the middle.
+ *
+ * This is much faster than the older methods,
+ * especially in situations where we'd need to sort the positions or
+ * where closer positions might get fast results first
+ * ({@link PathFinder}, {@link SafetyManager}, etc.).
+ */
+public class Sphere
+{
     private static final Vec3i[] SPHERE = new Vec3i[4187707];
     private static final int[] INDICES = new int[101];
 
-    private Sphere() {
-        throw new AssertionError();
+    static
+    {
+        // Setting the last byte to a dummy value.
+        // That way we can check if the sphere has been fully initialized.
+        SPHERE[SPHERE.length - 1] = new Vec3i(Integer.MAX_VALUE, 0, 0);
     }
 
-    public static int getRadius(double radius) {
-        return INDICES[MathUtil.clamp((int)Math.ceil(radius), 0, INDICES.length)];
+    /** This class is a Utility class and shouldn't be instantiated. */
+    private Sphere() { throw new AssertionError(); }
+
+    /**
+     * Gives you an Index for the Sphere.
+     * All Positions up to the returned index will lie within
+     * the given radius. Since the radius is rounded up you will
+     * have to check if the last indices really lie within your
+     * radius. radii > 100 will always return {@link Sphere#getLength()}.
+     *
+     * @param radius the radius to get the max index for.
+     * @return the maximum index for the given radius.
+     */
+    public static int getRadius(double radius)
+    {
+        return INDICES[MathUtil.clamp((int) Math.ceil(radius), 0, INDICES.length)];
     }
 
-    public static Vec3i get(int index) {
+    /**
+     * Gets the Vec3i from the sphere at the given index.
+     *
+     * @param index the index of the Vector.
+     * @return Vec3i at the given index.
+     * @throws IndexOutOfBoundsException if the given index
+     *         lies outside 0 and {@link Sphere#getLength()}-1.
+     */
+    public static Vec3i get(int index)
+    {
         return SPHERE[index];
     }
 
-    public static int getLength() {
+    /**
+     * @return the length of the sphere array.
+     */
+    public static int getLength()
+    {
         return SPHERE.length;
     }
 
-    public static void cacheSphere(Logger logger) {
+    /**
+     * Initializes the Sphere.
+     * With Forge this is called on PreInit, as soon as possible.
+     */
+    public static void cacheSphere(Logger logger)
+    {
         logger.info("Caching Sphere...");
         long time = System.currentTimeMillis();
+
         BlockPos pos = BlockPos.ORIGIN;
-        TreeSet<BlockPos> positions = new TreeSet<BlockPos>((o, p) -> {
-            if (o.equals(p)) {
+        Set<BlockPos> positions = new TreeSet<>((o, p) ->
+        {
+            if (o.equals(p))
+            {
                 return 0;
             }
-            int compare = Double.compare(pos.distanceSq((Vec3i)o), pos.distanceSq((Vec3i)p));
-            if (compare == 0) {
-                compare = Integer.compare(Math.abs(o.getX()) + Math.abs(o.getY()) + Math.abs(o.getZ()), Math.abs(p.getX()) + Math.abs(p.getY()) + Math.abs(p.getZ()));
+
+            int compare = Double.compare(pos.distanceSq(o), pos.distanceSq(p));
+            if (compare == 0)
+            {
+                // This prioritizes positions closer to an axis
+                compare = Integer.compare(Math.abs(o.getX())
+                                + Math.abs(o.getY())
+                                + Math.abs(o.getZ()),
+                        Math.abs(p.getX())
+                                + Math.abs(p.getY())
+                                + Math.abs(p.getZ()));
             }
+
             return compare == 0 ? 1 : compare;
         });
+
         double r = 100.0;
         double rSquare = r * r;
-        int x = pos.getX() - (int)r;
-        while ((double)x <= (double)pos.getX() + r) {
-            int z = pos.getZ() - (int)r;
-            while ((double)z <= (double)pos.getZ() + r) {
-                int y = pos.getY() - (int)r;
-                while ((double)y < (double)pos.getY() + r) {
-                    double dist = (pos.getX() - x) * (pos.getX() - x) + (pos.getZ() - z) * (pos.getZ() - z) + (pos.getY() - y) * (pos.getY() - y);
-                    if (dist < rSquare) {
+        for (int x = pos.getX() - (int) r; x <= pos.getX() + r; x++)
+        {
+            for (int z = pos.getZ() - (int) r; z <= pos.getZ() + r; z++)
+            {
+                for (int y = pos.getY() - (int) r; y < pos.getY() + r; y++)
+                {
+                    double dist = (pos.getX() - x) * (pos.getX() - x)
+                            + (pos.getZ() - z) * (pos.getZ() - z)
+                            + (pos.getY() - y) * (pos.getY() - y);
+                    if (dist < rSquare)
+                    {
                         positions.add(new BlockPos(x, y, z));
                     }
-                    ++y;
                 }
-                ++z;
             }
-            ++x;
         }
-        if (positions.size() != SPHERE.length) {
-            throw new IllegalStateException("Unexpected Size for Sphere: " + positions.size() + ", expected " + SPHERE.length + "!");
+
+        if (positions.size() != SPHERE.length)
+        {
+            throw new IllegalStateException("Unexpected Size for Sphere: "
+                    + positions.size()
+                    + ", expected "
+                    + SPHERE.length
+                    + "!");
         }
+
         int i = 0;
         int currentDistance = 0;
-        for (BlockPos off : positions) {
-            if (Math.sqrt(pos.distanceSq((Vec3i)off)) > (double)currentDistance) {
-                Sphere.INDICES[currentDistance++] = i;
+        for (BlockPos off : positions)
+        {
+            if (Math.sqrt(pos.distanceSq(off)) > currentDistance)
+            {
+                INDICES[currentDistance++] = i;
             }
-            Sphere.SPHERE[i++] = off;
+
+            SPHERE[i++] = off;
         }
-        if (currentDistance != INDICES.length - 1) {
+
+        if (currentDistance != INDICES.length - 1)
+        {
             throw new IllegalStateException("Sphere Indices not initialized!");
         }
-        Sphere.INDICES[Sphere.INDICES.length - 1] = SPHERE.length;
-        if (SPHERE[SPHERE.length - 1].getX() == Integer.MAX_VALUE) {
+
+        INDICES[INDICES.length - 1] = SPHERE.length;
+        if (SPHERE[SPHERE.length - 1].getX() == Integer.MAX_VALUE)
+        {
             throw new IllegalStateException("Sphere wasn't filled!");
         }
+
         time = System.currentTimeMillis() - time;
         logger.info("Cached sphere in " + time + "ms.");
     }
 
-    static {
-        Sphere.SPHERE[Sphere.SPHERE.length - 1] = new Vec3i(Integer.MAX_VALUE, 0, 0);
-    }
 }
-

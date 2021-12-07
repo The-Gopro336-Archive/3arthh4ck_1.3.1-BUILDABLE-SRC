@@ -1,33 +1,61 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.core.ducks.entity;
 
 import me.earth.earthhack.impl.commands.packet.util.Dummy;
 import me.earth.earthhack.impl.util.math.StopWatch;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityType;
 
-public interface IEntity
-extends Dummy {
-    public boolean inWeb();
+/**
+ * Duck interface for {@link net.minecraft.entity.Entity}.
+ */
+public interface IEntity extends Dummy
+{
+    /**
+     * @return the isInWeb field.
+     */
+    boolean inWeb();
 
-    public EntityType getType();
+    /**
+     * @return the EntityType of this Entity.
+     */
+    EntityType getType();
 
-    public long getDeathTime();
+    /**
+     * @return time since this Entity has been set dead.
+     */
+    long getDeathTime();
 
-    public boolean isPseudoDead();
+    /**
+     * Alternative to {@link net.minecraft.entity.Entity#isDead}.
+     *
+     * @return <tt>true</tt> if this Entity is Pseudo Dead.
+     */
+    boolean isPseudoDead();
 
-    public void setPseudoDead(boolean var1);
+    /**
+     * Makes {@link IEntity#isPseudoDead()} return the given value.
+     *
+     * @param pseudoDead the pseudoDeadState
+     */
+    void setPseudoDead(boolean pseudoDead);
 
-    public StopWatch getPseudoTime();
+    /**
+     * @return the StopWatch used to Un-PseudoDead
+     *         an Entity if it hasn't died after a time.
+     */
+    StopWatch getPseudoTime();
 
-    public long getTimeStamp();
+    /**
+     * @return the {@link System#currentTimeMillis()}
+     *         this Entity has been created on.
+     */
+    long getTimeStamp();
 
     @Override
-    default public boolean isDummy() {
+    default boolean isDummy()
+    {
         return false;
     }
 
-    public void setDummy(boolean var1);
-}
+    void setDummy(boolean dummy);
 
+}

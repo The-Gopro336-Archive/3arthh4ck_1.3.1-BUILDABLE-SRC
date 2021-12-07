@@ -1,23 +1,14 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.gui.hud;
 
 public interface ICoordinate {
-    public float getX();
 
-    public void setX(float var1);
+    float getX();
+    void setX(float x);
+    float getY();
+    void setY(float y);
+    float getWidth();
+    void setWidth(float width);
+    float getHeight();
+    void setHeight(float height);
 
-    public float getY();
-
-    public void setY(float var1);
-
-    public float getWidth();
-
-    public void setWidth(float var1);
-
-    public float getHeight();
-
-    public void setHeight(float var1);
 }
-

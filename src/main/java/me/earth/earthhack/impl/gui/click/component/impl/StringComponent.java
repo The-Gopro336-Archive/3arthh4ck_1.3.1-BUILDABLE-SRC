@@ -1,15 +1,5 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.client.Minecraft
- *  net.minecraft.util.ChatAllowedCharacters
- *  org.lwjgl.input.Keyboard
- */
 package me.earth.earthhack.impl.gui.click.component.impl;
 
-import java.awt.Toolkit;
-import java.awt.datatransfer.DataFlavor;
 import me.earth.earthhack.api.setting.settings.StringSetting;
 import me.earth.earthhack.impl.gui.click.component.Component;
 import me.earth.earthhack.impl.util.math.StopWatch;
@@ -19,8 +9,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatAllowedCharacters;
 import org.lwjgl.input.Keyboard;
 
-public class StringComponent
-extends Component {
+import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+
+public class StringComponent extends Component {
     private final StringSetting stringSetting;
     public boolean isListening;
     private CurrentString currentString = new CurrentString("");
@@ -40,39 +32,38 @@ extends Component {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
-        boolean hovered = RenderUtil.mouseWithinBounds(mouseX, mouseY, this.getFinishedX() + 5.0f, this.getFinishedY() + 1.0f, this.getWidth() - 10.0f, this.getHeight() - 2.0f);
-        Render2DUtil.drawBorderedRect(this.getFinishedX() + 4.5f, this.getFinishedY() + 1.0f, this.getFinishedX() + this.getWidth() - 4.5f, this.getFinishedY() + this.getHeight() - 0.5f, 0.5f, hovered ? 0x66333333 : 0, -16777216);
-        if (this.isListening) {
-            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(this.currentString.getString() + this.getIdleSign(), this.getFinishedX() + 6.5f, this.getFinishedY() + this.getHeight() - (float)Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT - 1.0f, this.getState() ? -1 : -5592406);
+        final boolean hovered = RenderUtil.mouseWithinBounds(mouseX, mouseY, getFinishedX() + 5, getFinishedY() + 1, getWidth() - 10, getHeight() - 2);
+        Render2DUtil.drawBorderedRect(getFinishedX() + 4.5f, getFinishedY() + 1.0f, getFinishedX() + getWidth() - 4.5f, getFinishedY() + getHeight() - 0.5f, 0.5f, hovered ? 0x66333333 : 0, 0xff000000);
+        if (isListening) {
+            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(currentString.getString() + getIdleSign(), getFinishedX() + 6.5f, getFinishedY() + getHeight() - Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT - 1f, getState() ? 0xFFFFFFFF : 0xFFAAAAAA);
         } else {
-            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow((String)this.getStringSetting().getValue(), this.getFinishedX() + 6.5f, this.getFinishedY() + this.getHeight() - (float)Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT - 1.0f, this.getState() ? -1 : -5592406);
+            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(getStringSetting().getValue(), getFinishedX() + 6.5f, getFinishedY() + getHeight() - Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT - 1f, getState() ? 0xFFFFFFFF : 0xFFAAAAAA);
         }
     }
 
     @Override
     public void keyTyped(char character, int keyCode) {
         super.keyTyped(character, keyCode);
-        if (this.isListening) {
+        if (isListening) {
             if (keyCode == 1) {
                 return;
             }
             if (keyCode == 28) {
-                this.enterString();
-                this.setListening(false);
+                enterString();
+                setListening(false);
             } else if (keyCode == 14) {
-                this.setString(StringComponent.removeLastChar(this.currentString.getString()));
+                setString(removeLastChar(currentString.getString()));
             } else {
-                if (keyCode == 47 && (Keyboard.isKeyDown((int)157) || Keyboard.isKeyDown((int)29))) {
+                if (keyCode == Keyboard.KEY_V && (Keyboard.isKeyDown(Keyboard.KEY_RCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_LCONTROL))) {
                     try {
-                        this.setString(this.currentString.getString() + Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor));
-                    }
-                    catch (Exception e) {
+                        setString(currentString.getString() + Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor));
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     return;
                 }
-                if (ChatAllowedCharacters.isAllowedCharacter((char)character)) {
-                    this.setString(this.currentString.getString() + character);
+                if (ChatAllowedCharacters.isAllowedCharacter(character)) {
+                    setString(currentString.getString() + character);
                 }
             }
         }
@@ -81,10 +72,9 @@ extends Component {
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         super.mouseClicked(mouseX, mouseY, mouseButton);
-        boolean hovered = RenderUtil.mouseWithinBounds(mouseX, mouseY, this.getFinishedX() + 5.0f, this.getFinishedY() + 1.0f, this.getWidth() - 10.0f, this.getHeight() - 2.0f);
-        if (hovered && mouseButton == 0) {
-            this.toggle();
-        }
+        final boolean hovered = RenderUtil.mouseWithinBounds(mouseX, mouseY, getFinishedX() + 5, getFinishedY() + 1, getWidth() - 10, getHeight() - 2);
+        if (hovered && mouseButton == 0)
+            toggle();
     }
 
     @Override
@@ -93,39 +83,40 @@ extends Component {
     }
 
     public String getIdleSign() {
-        if (this.idleTimer.passed(500L)) {
-            this.idling = !this.idling;
-            this.idleTimer.reset();
+        if (idleTimer.passed(500)) {
+            idling = !idling;
+            idleTimer.reset();
         }
-        if (this.idling) {
+
+        if (idling) {
             return "_";
         }
         return "";
     }
 
     private void enterString() {
-        if (this.currentString.getString().isEmpty()) {
-            this.getStringSetting().setValue(this.getStringSetting().getInitial());
+        if (currentString.getString().isEmpty()) {
+            getStringSetting().setValue(getStringSetting().getInitial());
         } else {
-            this.getStringSetting().setValue(this.currentString.getString());
+            getStringSetting().setValue(currentString.getString());
         }
-        this.setString("");
+        setString("");
     }
 
     public StringSetting getStringSetting() {
-        return this.stringSetting;
+        return stringSetting;
     }
 
     public void toggle() {
-        this.isListening = !this.isListening;
+        isListening = !isListening;
     }
 
     public boolean getState() {
-        return !this.isListening;
+        return !isListening;
     }
 
     public void setListening(boolean listening) {
-        this.isListening = listening;
+        isListening = listening;
     }
 
     public void setString(String newString) {
@@ -152,4 +143,3 @@ extends Component {
         }
     }
 }
-

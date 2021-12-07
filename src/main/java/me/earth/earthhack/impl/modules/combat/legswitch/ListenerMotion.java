@@ -1,62 +1,74 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.player.EntityPlayer
- *  net.minecraft.init.Items
- *  net.minecraft.item.Item
- *  net.minecraft.world.IBlockAccess
- */
 package me.earth.earthhack.impl.modules.combat.legswitch;
 
 import me.earth.earthhack.api.event.events.Stage;
 import me.earth.earthhack.impl.event.events.network.MotionUpdateEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
-import me.earth.earthhack.impl.modules.combat.legswitch.ConstellationFactory;
-import me.earth.earthhack.impl.modules.combat.legswitch.LegSwitch;
 import me.earth.earthhack.impl.modules.combat.legswitch.modes.LegAutoSwitch;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
-import net.minecraft.entity.player.EntityPlayer;
+import me.earth.earthhack.impl.util.text.ChatUtil;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.world.IBlockAccess;
 
-final class ListenerMotion
-extends ModuleListener<LegSwitch, MotionUpdateEvent> {
-    public ListenerMotion(LegSwitch module) {
+final class ListenerMotion extends ModuleListener<LegSwitch, MotionUpdateEvent>
+{
+    public ListenerMotion(LegSwitch module)
+    {
         super(module, MotionUpdateEvent.class);
     }
 
     @Override
-    public void invoke(MotionUpdateEvent event) {
-        if (!((LegSwitch)this.module).isStackValid(ListenerMotion.mc.player.getHeldItemOffhand()) && !((LegSwitch)this.module).isStackValid(ListenerMotion.mc.player.getHeldItemMainhand())) {
-            ((LegSwitch)this.module).active = false;
+    public void invoke(MotionUpdateEvent event)
+    {
+        if (!module.isStackValid(mc.player.getHeldItemOffhand())
+                && !module.isStackValid(mc.player.getHeldItemMainhand()))
+        {
+            module.active = false;
             return;
         }
-        if (!(InventoryUtil.isHolding(Items.END_CRYSTAL) || ((LegSwitch)this.module).autoSwitch.getValue() != LegAutoSwitch.None && InventoryUtil.findHotbarItem(Items.END_CRYSTAL, new Item[0]) != -1)) {
-            ((LegSwitch)this.module).active = false;
-            return;
-        }
-        if (event.getStage() == Stage.PRE) {
-            if (((LegSwitch)this.module).constellation == null || !((LegSwitch)this.module).constellation.isValid((LegSwitch)this.module, (EntityPlayer)ListenerMotion.mc.player, (IBlockAccess)ListenerMotion.mc.world)) {
-                ((LegSwitch)this.module).constellation = ConstellationFactory.create((LegSwitch)this.module, ListenerMotion.mc.world.playerEntities);
-                if (((LegSwitch)this.module).constellation != null && !((LegSwitch)this.module).obsidian.getValue().booleanValue() && (((LegSwitch)this.module).constellation.firstNeedsObby || ((LegSwitch)this.module).constellation.secondNeedsObby)) {
-                    ((LegSwitch)this.module).constellation = null;
-                }
-            }
-            if (((LegSwitch)this.module).constellation == null) {
-                ((LegSwitch)this.module).active = false;
+
+        if (!InventoryUtil.isHolding(Items.END_CRYSTAL))
+        {
+            if (module.autoSwitch.getValue() == LegAutoSwitch.None
+                    || InventoryUtil.findHotbarItem(Items.END_CRYSTAL) == -1)
+            {
+                module.active = false;
                 return;
             }
-            ((LegSwitch)this.module).active = true;
-            ((LegSwitch)this.module).prepare();
-            if (((LegSwitch)this.module).rotations != null) {
-                event.setYaw(((LegSwitch)this.module).rotations[0]);
-                event.setPitch(((LegSwitch)this.module).rotations[1]);
+        }
+
+        if (event.getStage() == Stage.PRE)
+        {
+            if (module.constellation == null
+                || !module.constellation.isValid(module, mc.player, mc.world))
+            {
+                module.constellation = ConstellationFactory.create(module,
+                                                       mc.world.playerEntities);
+                if (module.constellation != null
+                    && !module.obsidian.getValue()
+                    && (module.constellation.firstNeedsObby
+                        || module.constellation.secondNeedsObby))
+                {
+                    module.constellation = null;
+                }
             }
-        } else {
-            ((LegSwitch)this.module).execute();
+
+            if (module.constellation == null)
+            {
+                module.active = false;
+                return;
+            }
+
+            module.active = true;
+            module.prepare();
+            if (module.rotations != null)
+            {
+                event.setYaw(module.rotations[0]);
+                event.setPitch(module.rotations[1]);
+            }
+        }
+        else
+        {
+            module.execute();
         }
     }
-}
 
+}

@@ -1,26 +1,22 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.player.EntityPlayer$EnumChatVisibility
- */
 package me.earth.earthhack.impl.modules.misc.settingspoof;
 
 import net.minecraft.entity.player.EntityPlayer;
 
-public enum ChatVisibilityTranslator {
+public enum ChatVisibilityTranslator
+{
     Full(EntityPlayer.EnumChatVisibility.FULL),
     System(EntityPlayer.EnumChatVisibility.SYSTEM),
     Hidden(EntityPlayer.EnumChatVisibility.HIDDEN);
 
     private final EntityPlayer.EnumChatVisibility visibility;
 
-    private ChatVisibilityTranslator(EntityPlayer.EnumChatVisibility visibility) {
+    ChatVisibilityTranslator(EntityPlayer.EnumChatVisibility visibility)
+    {
         this.visibility = visibility;
     }
 
-    public EntityPlayer.EnumChatVisibility getVisibility() {
-        return this.visibility;
+    public EntityPlayer.EnumChatVisibility getVisibility()
+    {
+        return visibility;
     }
 }
-

@@ -1,31 +1,30 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.util.text.event.ClickEvent
- */
 package me.earth.earthhack.impl.core.ducks.util;
 
-import java.util.function.Supplier;
 import net.minecraft.util.text.event.ClickEvent;
 
-public interface IStyle {
-    public void setRightClickEvent(ClickEvent var1);
+import java.util.function.Supplier;
 
-    public void setMiddleClickEvent(ClickEvent var1);
+/**
+ * Duck interface for {@link net.minecraft.util.text.Style}.
+ */
+public interface IStyle
+{
+    void setRightClickEvent(ClickEvent event);
 
-    public ClickEvent getRightClickEvent();
+    void setMiddleClickEvent(ClickEvent event);
 
-    public ClickEvent getMiddleClickEvent();
+    ClickEvent getRightClickEvent();
 
-    public void setSuppliedInsertion(Supplier<String> var1);
+    ClickEvent getMiddleClickEvent();
 
-    public void setRightInsertion(Supplier<String> var1);
+    void setSuppliedInsertion(Supplier<String> insertion);
 
-    public void setMiddleInsertion(Supplier<String> var1);
+    void setRightInsertion(Supplier<String> rightInsertion);
 
-    public String getRightInsertion();
+    void setMiddleInsertion(Supplier<String> middleInsertion);
 
-    public String getMiddleInsertion();
+    String getRightInsertion();
+
+    String getMiddleInsertion();
+
 }
-

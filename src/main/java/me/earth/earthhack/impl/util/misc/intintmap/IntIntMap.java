@@ -1,15 +1,16 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.util.misc.intintmap;
 
-public interface IntIntMap {
-    public int get(int var1);
+/**
+ * {@see http://java-performance.info/implementing-world-fastest-java-int-to-int-hash-map/}
+ * {@author Mikhail Vorontsov}
+ */
+public interface IntIntMap
+{
+    int get(final int key);
 
-    public int put(int var1, int var2);
+    int put(final int key, final int value);
 
-    public int remove(int var1);
+    int remove(final int key);
 
-    public int size();
+    int size();
 }
-

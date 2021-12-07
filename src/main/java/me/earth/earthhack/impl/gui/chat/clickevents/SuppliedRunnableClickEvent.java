@@ -1,33 +1,28 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.util.text.event.ClickEvent
- *  net.minecraft.util.text.event.ClickEvent$Action
- */
 package me.earth.earthhack.impl.gui.chat.clickevents;
 
-import java.util.function.Supplier;
 import me.earth.earthhack.impl.core.ducks.util.IClickEvent;
 import net.minecraft.util.text.event.ClickEvent;
 
-public class SuppliedRunnableClickEvent
-extends ClickEvent
-implements IClickEvent {
+import java.util.function.Supplier;
+
+public class SuppliedRunnableClickEvent extends ClickEvent
+        implements IClickEvent
+{
     private final Supplier<Runnable> supplier;
 
-    public SuppliedRunnableClickEvent(Supplier<Runnable> supplier) {
-        super(ClickEvent.Action.RUN_COMMAND, "$runnable-supplied$");
+    public SuppliedRunnableClickEvent(Supplier<Runnable> supplier)
+    {
+        super(Action.RUN_COMMAND, "$runnable-supplied$");
         this.supplier = supplier;
     }
 
     @Override
-    public void setRunnable(Runnable runnable) {
-    }
+    public void setRunnable(Runnable runnable) { }
 
     @Override
-    public Runnable getRunnable() {
-        return this.supplier.get();
+    public Runnable getRunnable()
+    {
+        return supplier.get();
     }
-}
 
+}

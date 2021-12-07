@@ -1,10 +1,5 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.client.server.client;
 
-import java.io.DataInputStream;
-import java.io.IOException;
 import me.earth.earthhack.impl.modules.client.server.api.AbstractConnection;
 import me.earth.earthhack.impl.modules.client.server.api.IClient;
 import me.earth.earthhack.impl.modules.client.server.api.IPacket;
@@ -13,38 +8,47 @@ import me.earth.earthhack.impl.modules.client.server.api.IServerList;
 import me.earth.earthhack.impl.modules.client.server.protocol.ProtocolUtil;
 import me.earth.earthhack.impl.util.thread.SafeRunnable;
 
-public final class Client
-extends AbstractConnection
-implements SafeRunnable,
-IClient {
+import java.io.DataInputStream;
+import java.io.IOException;
+
+public final class Client extends AbstractConnection
+        implements SafeRunnable, IClient
+{
     private final IPacketManager manager;
     private final IServerList serverList;
 
-    public Client(IPacketManager manager, IServerList serverList, String ip, int port) throws IOException {
+    public Client(IPacketManager manager, IServerList serverList, String ip, int port)
+            throws IOException
+    {
         super(ip, port);
         this.manager = manager;
         this.serverList = serverList;
     }
 
     @Override
-    public void runSafely() throws Throwable {
-        try (DataInputStream in = new DataInputStream(this.getInputStream());){
-            while (this.isOpen()) {
+    public void runSafely() throws Throwable
+    {
+        try (DataInputStream in = new DataInputStream(getInputStream()))
+        {
+            while (isOpen())
+            {
                 IPacket packet = ProtocolUtil.readPacket(in);
-                this.manager.handle(this, packet.getId(), packet.getBuffer());
+                manager.handle(this, packet.getId(), packet.getBuffer());
             }
         }
     }
 
     @Override
-    public void handle(Throwable t) {
+    public void handle(Throwable t)
+    {
         t.printStackTrace();
-        this.close();
+        close();
     }
 
     @Override
-    public IServerList getServerList() {
-        return this.serverList;
+    public IServerList getServerList()
+    {
+        return serverList;
     }
-}
 
+}

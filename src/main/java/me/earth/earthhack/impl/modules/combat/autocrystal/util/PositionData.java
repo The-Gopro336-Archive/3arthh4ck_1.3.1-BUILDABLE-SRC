@@ -1,24 +1,5 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.block.Block
- *  net.minecraft.block.material.Material
- *  net.minecraft.block.state.IBlockState
- *  net.minecraft.entity.Entity
- *  net.minecraft.entity.item.EntityEnderCrystal
- *  net.minecraft.entity.item.EntityItem
- *  net.minecraft.entity.player.EntityPlayer
- *  net.minecraft.init.Blocks
- *  net.minecraft.util.math.AxisAlignedBB
- *  net.minecraft.util.math.BlockPos
- */
 package me.earth.earthhack.impl.modules.combat.autocrystal.util;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import me.earth.earthhack.api.util.interfaces.Globals;
 import me.earth.earthhack.impl.core.ducks.entity.IEntity;
 import me.earth.earthhack.impl.managers.Managers;
@@ -37,11 +18,15 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
-public class PositionData
-extends BasePath
-implements Globals,
-Comparable<PositionData> {
-    private final List<EntityPlayer> forced = new ArrayList<EntityPlayer>();
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+public class PositionData extends BasePath
+        implements Globals, Comparable<PositionData>
+{
+    private final List<EntityPlayer> forced = new ArrayList<>();
     private final Set<EntityPlayer> antiTotems;
     private EntityPlayer target;
     private EntityPlayer facePlace;
@@ -55,186 +40,306 @@ Comparable<PositionData> {
     private boolean liquid;
     private float minDiff;
 
-    public PositionData(BlockPos pos, int blocks) {
-        this(pos, blocks, new HashSet<EntityPlayer>());
+    /**
+     * Use the factory method.
+     */
+    public PositionData(BlockPos pos, int blocks)
+    {
+        this(pos, blocks, new HashSet<>());
     }
 
-    public PositionData(BlockPos pos, int blocks, Set<EntityPlayer> antiTotems) {
-        super((Entity)RotationUtil.getRotationPlayer(), pos, blocks);
+    public PositionData(BlockPos pos, int blocks, Set<EntityPlayer> antiTotems)
+    {
+        super(RotationUtil.getRotationPlayer(), pos, blocks);
         this.antiTotems = antiTotems;
         this.minDiff = Float.MAX_VALUE;
     }
 
-    public boolean usesObby() {
-        return this.obby;
+    /** @return <tt>true</tt> if this Position will need Obsidian. */
+    public boolean usesObby()
+    {
+        return obby;
     }
 
-    public boolean isObbyValid() {
-        return this.obbyValid;
+    public boolean isObbyValid()
+    {
+        return obbyValid;
     }
 
-    public float getMaxDamage() {
-        return this.damage;
+    public float getMaxDamage()
+    {
+        return damage;
     }
 
-    public void setDamage(float damage) {
+    public void setDamage(float damage)
+    {
         this.damage = damage;
     }
 
-    public float getSelfDamage() {
-        return this.selfDamage;
+    public float getSelfDamage()
+    {
+        return selfDamage;
     }
 
-    public void setSelfDamage(float selfDamage) {
+    public void setSelfDamage(float selfDamage)
+    {
         this.selfDamage = selfDamage;
     }
 
-    public EntityPlayer getTarget() {
-        return this.target;
+    public EntityPlayer getTarget()
+    {
+        return target;
     }
 
-    public void setTarget(EntityPlayer target) {
+    public void setTarget(EntityPlayer target)
+    {
         this.target = target;
     }
 
-    public EntityPlayer getFacePlacer() {
-        return this.facePlace;
+    public EntityPlayer getFacePlacer()
+    {
+        return facePlace;
     }
 
-    public void setFacePlacer(EntityPlayer facePlace) {
+    public void setFacePlacer(EntityPlayer facePlace)
+    {
         this.facePlace = facePlace;
     }
 
-    public Set<EntityPlayer> getAntiTotems() {
-        return this.antiTotems;
+    public Set<EntityPlayer> getAntiTotems()
+    {
+        return antiTotems;
     }
 
-    public void addAntiTotem(EntityPlayer player) {
+    public void addAntiTotem(EntityPlayer player)
+    {
         this.antiTotems.add(player);
     }
 
-    public boolean isBlocked() {
-        return this.blocked;
+    public boolean isBlocked()
+    {
+        return blocked;
     }
 
-    public float getMinDiff() {
-        return this.minDiff;
+    public float getMinDiff()
+    {
+        return minDiff;
     }
 
-    public void setMinDiff(float minDiff) {
+    public void setMinDiff(float minDiff)
+    {
         this.minDiff = minDiff;
     }
 
-    public boolean isForce() {
-        return !this.forced.isEmpty();
+    public boolean isForce()
+    {
+        return !forced.isEmpty();
     }
 
-    public void addForcePlayer(EntityPlayer player) {
+    public void addForcePlayer(EntityPlayer player)
+    {
         this.forced.add(player);
     }
 
-    public List<EntityPlayer> getForced() {
-        return this.forced;
+    public List<EntityPlayer> getForced()
+    {
+        return forced;
     }
 
-    public boolean isLiquidValid() {
-        return this.liquidValid;
+    public boolean isLiquidValid()
+    {
+        return liquidValid;
     }
 
-    public boolean isLiquid() {
-        return this.liquid;
+    public boolean isLiquid()
+    {
+        return liquid;
     }
 
     @Override
-    public int compareTo(PositionData o) {
-        if (Math.abs(o.damage - this.damage) < 1.0f) {
-            if (this.usesObby() && o.usesObby()) {
-                return Integer.compare(this.getPath().length, o.getPath().length) + Float.compare(this.selfDamage, o.selfDamage);
+    public int compareTo(PositionData o)
+    {
+        if (Math.abs(o.damage - this.damage) < 1.0f)
+        {
+            if (this.usesObby() && o.usesObby())
+            {
+                // Find a good comparison here
+                return Integer.compare(this.getPath().length, o.getPath().length)
+                        + Float.compare(this.selfDamage, o.selfDamage);
             }
+
             return Float.compare(this.selfDamage, o.getSelfDamage());
         }
+
         return Float.compare(o.damage, this.damage);
     }
 
-    public boolean equals(Object o) {
-        if (o instanceof PositionData) {
-            return ((PositionData)o).getPos().equals((Object)this.getPos());
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o instanceof PositionData)
+        {
+            return ((PositionData) o).getPos().equals(this.getPos());
         }
+
         return false;
     }
 
-    public int hashCode() {
+    @Override
+    public int hashCode()
+    {
         return this.getPos().hashCode();
     }
 
-    public static PositionData create(BlockPos pos, boolean obby, int helpingBlocks, boolean newVer, boolean newVerEntities, int deathTime, List<Entity> entities, boolean lava, boolean water, boolean lavaItems) {
-        boolean checkLavaItems;
-        IBlockState upUpState;
-        BlockPos up;
-        IBlockState upState;
+    public static PositionData create(BlockPos pos,
+                                      boolean obby,
+                                      int helpingBlocks,
+                                      boolean newVer,
+                                      boolean newVerEntities,
+                                      int deathTime,
+                                      List<Entity> entities,
+                                      boolean lava,
+                                      boolean water,
+                                      boolean lavaItems)
+    {
         PositionData data = new PositionData(pos, helpingBlocks);
-        data.state = PositionData.mc.world.getBlockState(pos);
-        if (data.state.getBlock() != Blocks.BEDROCK && data.state.getBlock() != Blocks.OBSIDIAN) {
-            if (!obby || !data.state.getMaterial().isReplaceable() || PositionData.checkEntities(data, pos, entities, 0, true, true, false)) {
+        data.state = mc.world.getBlockState(pos);
+        if (data.state.getBlock() != Blocks.BEDROCK
+                && data.state.getBlock() != Blocks.OBSIDIAN)
+        {
+            if (!obby
+                || !data.state.getMaterial().isReplaceable()
+                || checkEntities(data, pos, entities, 0, true, true, false))
+            {
                 return data;
             }
+
             data.obby = true;
         }
-        if ((upState = PositionData.mc.world.getBlockState(up = pos.up())).getBlock() != Blocks.AIR) {
-            if (PositionData.checkLiquid(upState.getBlock(), water, lava)) {
+
+        BlockPos up = pos.up();
+        IBlockState upState = mc.world.getBlockState(up);
+        if (upState.getBlock() != Blocks.AIR)
+        {
+            if (checkLiquid(upState.getBlock(), water, lava))
+            {
                 data.liquid = true;
-            } else {
+            }
+            else
+            {
                 return data;
             }
         }
-        if (!newVer && (upUpState = PositionData.mc.world.getBlockState(up.up())).getBlock() != Blocks.AIR) {
-            if (PositionData.checkLiquid(upUpState.getBlock(), water, lava)) {
+
+        IBlockState upUpState;
+        if (!newVer
+                && (upUpState = mc.world.getBlockState(up.up()))
+                                        .getBlock() != Blocks.AIR)
+        {
+            if (checkLiquid(upUpState.getBlock(), water, lava))
+            {
                 data.liquid = true;
-            } else {
+            }
+            else
+            {
                 return data;
             }
         }
-        boolean bl = checkLavaItems = lavaItems && upState.getMaterial() == Material.LAVA;
-        if (PositionData.checkEntities(data, up, entities, deathTime, false, false, checkLavaItems) || !newVerEntities && PositionData.checkEntities(data, up.up(), entities, deathTime, false, false, checkLavaItems)) {
+
+        boolean checkLavaItems = lavaItems
+                && upState.getMaterial() == Material.LAVA;
+        if (checkEntities(
+                data, up, entities, deathTime, false, false, checkLavaItems)
+            || !newVerEntities && checkEntities(data, up.up(),
+                            entities, deathTime, false, false, checkLavaItems))
+        {
             return data;
         }
-        if (data.obby) {
-            if (data.liquid) {
+
+        if (data.obby)
+        {
+            if (data.liquid)
+            {
                 data.liquidValid = true;
             }
+
             data.obbyValid = true;
             return data;
         }
-        if (data.liquid) {
+
+        if (data.liquid)
+        {
             data.liquidValid = true;
             return data;
         }
+
         data.setValid(true);
         return data;
     }
 
-    private static boolean checkEntities(PositionData data, BlockPos pos, List<Entity> entities, int deathTime, boolean dead, boolean spawning, boolean lavaItems) {
+    private static boolean checkEntities(PositionData data,
+                                         BlockPos pos,
+                                         List<Entity> entities,
+                                         int deathTime,
+                                         boolean dead,
+                                         boolean spawning,
+                                         boolean lavaItems)
+    {
         AxisAlignedBB bb = new AxisAlignedBB(pos);
-        for (Entity entity : entities) {
-            if (entity == null || spawning && !entity.preventEntitySpawning || dead && EntityUtil.isDead(entity) || !entity.getEntityBoundingBox().intersects(bb) || lavaItems && entity instanceof EntityItem) continue;
-            if (entity instanceof EntityEnderCrystal) {
-                if (!dead) {
-                    if (EntityUtil.isDead(entity)) {
-                        if (Managers.SET_DEAD.passedDeathTime(entity, (long)deathTime) || ((IEntity)entity).getPseudoTime().passed(deathTime)) continue;
-                        return true;
+        for (Entity entity : entities)
+        {
+            if (entity == null
+                || spawning && !entity.preventEntitySpawning
+                || dead && EntityUtil.isDead(entity)
+                || !entity.getEntityBoundingBox().intersects(bb))
+            {
+                continue;
+            }
+
+            if (lavaItems && entity instanceof EntityItem)
+            {
+                continue;
+            }
+            else if (entity instanceof EntityEnderCrystal)
+            {
+                if (!dead)
+                {
+                    if (EntityUtil.isDead(entity))
+                    {
+                        if (Managers.SET_DEAD.passedDeathTime(entity, deathTime)
+                            || ((IEntity) entity).getPseudoTime().passed(deathTime))
+                        {
+                            continue; // Entity is like very dead now
+                        }
+                        else
+                        {
+                            // No need to Fallback since it will die soon
+                            //  but we can't place yet
+                            return true;
+                        }
                     }
-                    data.blocked = true;
+                    else
+                    {
+                        data.blocked = true; // Fallback required
+                    }
                 }
+
                 data.getBlockingEntities().add(new BlockingEntity(entity, pos));
                 continue;
             }
+
             return true;
         }
+
         return false;
     }
 
-    private static boolean checkLiquid(Block block, boolean water, boolean lava) {
-        return water && (block == Blocks.WATER || block == Blocks.FLOWING_WATER) || lava && (block == Blocks.LAVA || block == Blocks.FLOWING_LAVA);
+    private static boolean checkLiquid(Block block, boolean water, boolean lava)
+    {
+        return water && (block == Blocks.WATER
+                            || block == Blocks.FLOWING_WATER)
+                || lava && (block == Blocks.LAVA
+                            || block == Blocks.FLOWING_LAVA);
     }
-}
 
+}

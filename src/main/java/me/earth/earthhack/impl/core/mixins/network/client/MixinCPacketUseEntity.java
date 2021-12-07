@@ -1,13 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.Entity
- *  net.minecraft.network.play.client.CPacketUseEntity
- *  net.minecraft.network.play.client.CPacketUseEntity$Action
- *  net.minecraft.util.EnumHand
- *  net.minecraft.util.math.Vec3d
- */
 package me.earth.earthhack.impl.core.mixins.network.client;
 
 import me.earth.earthhack.impl.core.ducks.network.ICPacketUseEntity;
@@ -21,51 +11,55 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value={CPacketUseEntity.class})
-public abstract class MixinCPacketUseEntity
-implements ICPacketUseEntity {
+@Mixin(CPacketUseEntity.class)
+public abstract class MixinCPacketUseEntity implements ICPacketUseEntity
+{
     private Entity entity;
 
     @Override
-    @Accessor(value="entityId")
-    public abstract void setEntityId(int var1);
+    @Accessor(value = "entityId")
+    public abstract void setEntityId(int entityId);
 
     @Override
-    @Accessor(value="action")
-    public abstract void setAction(CPacketUseEntity.Action var1);
+    @Accessor(value = "action")
+    public abstract void setAction(CPacketUseEntity.Action action);
 
     @Override
-    @Accessor(value="hitVec")
-    public abstract void setVec(Vec3d var1);
+    @Accessor(value = "hitVec")
+    public abstract void setVec(Vec3d vec3d);
 
     @Override
-    @Accessor(value="hand")
-    public abstract void setHand(EnumHand var1);
+    @Accessor(value = "hand")
+    public abstract void setHand(EnumHand hand);
 
     @Override
-    @Accessor(value="entityId")
+    @Accessor(value = "entityId")
     public abstract int getEntityID();
 
     @Override
-    @Accessor(value="action")
+    @Accessor(value = "action")
     public abstract CPacketUseEntity.Action getAction();
 
     @Override
-    @Accessor(value="hitVec")
+    @Accessor(value = "hitVec")
     public abstract Vec3d getHitVec();
 
     @Override
-    @Accessor(value="hand")
+    @Accessor(value = "hand")
     public abstract EnumHand getHand();
 
     @Override
-    public Entity getAttackedEntity() {
-        return this.entity;
+    public Entity getAttackedEntity()
+    {
+        return entity;
     }
 
-    @Inject(method={"<init>(Lnet/minecraft/entity/Entity;)V"}, at={@At(value="RETURN")})
-    public void initHook(Entity entity, CallbackInfo info) {
+    @Inject(
+        method = "<init>(Lnet/minecraft/entity/Entity;)V",
+        at = @At("RETURN"))
+    public void initHook(Entity entity, CallbackInfo info)
+    {
         this.entity = entity;
     }
-}
 
+}

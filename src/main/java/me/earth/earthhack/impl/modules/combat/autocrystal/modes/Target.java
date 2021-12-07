@@ -1,87 +1,129 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.Entity
- *  net.minecraft.entity.player.EntityPlayer
- */
 package me.earth.earthhack.impl.modules.combat.autocrystal.modes;
 
-import java.util.List;
 import me.earth.earthhack.api.util.interfaces.Globals;
 import me.earth.earthhack.impl.util.math.rotation.RotationUtil;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+
+import java.util.List;
 
 public enum Target implements Globals
 {
-    Closest{
-
+    Closest
+    {
         @Override
-        public EntityPlayer getTarget(List<EntityPlayer> players, List<EntityPlayer> enemies, double maxRange) {
-            return EntityUtil.getClosestEnemy(1.mc.player.posX, 1.mc.player.posY, 1.mc.player.posZ, maxRange, enemies, players);
+        public EntityPlayer getTarget(List<EntityPlayer> players,
+                                      List<EntityPlayer> enemies,
+                                      double maxRange)
+        {
+            return EntityUtil.getClosestEnemy(mc.player.posX,
+                                              mc.player.posY,
+                                              mc.player.posZ,
+                                              maxRange,
+                                              enemies,
+                                              players);
         }
-    }
-    ,
-    FOV{
-
+    },
+    FOV
+    {
         @Override
-        public EntityPlayer getTarget(List<EntityPlayer> players, List<EntityPlayer> enemies, double maxRange) {
-            EntityPlayer enemy = 2.getByFov(enemies, maxRange);
-            if (enemy == null) {
-                return 2.getByFov(players, maxRange);
+        public EntityPlayer getTarget(List<EntityPlayer> players,
+                                      List<EntityPlayer> enemies,
+                                      double maxRange)
+        {
+           EntityPlayer enemy = getByFov(enemies, maxRange);
+           if (enemy == null)
+           {
+               return getByFov(players, maxRange);
+           }
+
+           return enemy;
+        }
+    },
+    Angle
+    {
+        @Override
+        public EntityPlayer getTarget(List<EntityPlayer> players,
+                                      List<EntityPlayer> enemies,
+                                      double maxRange)
+        {
+            EntityPlayer enemy = getByAngle(enemies, maxRange);
+            if (enemy == null)
+            {
+                return getByAngle(players, maxRange);
             }
+
             return enemy;
         }
-    }
-    ,
-    Angle{
-
+    },
+    Damage
+    {
         @Override
-        public EntityPlayer getTarget(List<EntityPlayer> players, List<EntityPlayer> enemies, double maxRange) {
-            EntityPlayer enemy = 3.getByAngle(enemies, maxRange);
-            if (enemy == null) {
-                return 3.getByAngle(players, maxRange);
-            }
-            return enemy;
-        }
-    }
-    ,
-    Damage{
-
-        @Override
-        public EntityPlayer getTarget(List<EntityPlayer> players, List<EntityPlayer> enemies, double maxRange) {
+        public EntityPlayer getTarget(List<EntityPlayer> players,
+                                      List<EntityPlayer> enemies,
+                                      double maxRange)
+        {
             return null;
         }
     };
 
-    public static final String DESCRIPTION = "-Closest, will target the closest Enemy.\n-FOV, will target the player you are looking at (by Angle).\n-Angle, similar to FOV but will also target players outside your FOV.\n-Damage, Calculates Damages for all Players in Range and takes the best one (intensive).";
+    public abstract EntityPlayer getTarget(List<EntityPlayer> players,
+                                           List<EntityPlayer> enemies,
+                                           double maxRange);
 
-    public abstract EntityPlayer getTarget(List<EntityPlayer> var1, List<EntityPlayer> var2, double var3);
-
-    public static EntityPlayer getByFov(List<EntityPlayer> players, double maxRange) {
+    public static EntityPlayer getByFov(List<EntityPlayer> players,
+                                        double maxRange)
+    {
         EntityPlayer closest = null;
-        double closestAngle = 360.0;
-        for (EntityPlayer player : players) {
-            double angle;
-            if (!EntityUtil.isValid((Entity)player, maxRange) || !((angle = RotationUtil.getAngle((Entity)player, 1.4)) < closestAngle) || !(angle < (double)(Target.mc.gameSettings.fovSetting / 2.0f))) continue;
-            closest = player;
-            closestAngle = angle;
+        double closestAngle  = 360.0;
+        for (EntityPlayer player : players)
+        {
+            if (!EntityUtil.isValid(player, maxRange))
+            {
+                continue;
+            }
+
+            double angle = RotationUtil.getAngle(player, 1.4);
+            if (angle < closestAngle
+                    && angle < mc.gameSettings.fovSetting / 2)
+            {
+                closest = player;
+                closestAngle = angle;
+            }
         }
+
         return closest;
     }
 
-    public static EntityPlayer getByAngle(List<EntityPlayer> players, double maxRange) {
+    public static EntityPlayer getByAngle(List<EntityPlayer> players,
+                                          double maxRange)
+    {
         EntityPlayer closest = null;
-        double closestAngle = 360.0;
-        for (EntityPlayer player : players) {
-            double angle;
-            if (!EntityUtil.isValid((Entity)player, maxRange) || !((angle = RotationUtil.getAngle((Entity)player, 1.4)) < closestAngle) || !(angle < (double)(Target.mc.gameSettings.fovSetting / 2.0f))) continue;
-            closest = player;
-            closestAngle = angle;
+        double closestAngle  = 360.0;
+        for (EntityPlayer player : players)
+        {
+            if (!EntityUtil.isValid(player, maxRange))
+            {
+                continue;
+            }
+
+            double angle = RotationUtil.getAngle(player, 1.4);
+            if (angle < closestAngle
+                    && angle < mc.gameSettings.fovSetting / 2)
+            {
+                closest = player;
+                closestAngle = angle;
+            }
         }
+
         return closest;
     }
+
+    public static final String DESCRIPTION =
+        "-Closest, will target the closest Enemy.\n" +
+        "-FOV, will target the player you are looking at (by Angle).\n" +
+        "-Angle, similar to FOV but will also target players outside" +
+        " your FOV.\n-Damage, Calculates Damages for all Players in" +
+        " Range and takes the best one (intensive).";
+
 }
-

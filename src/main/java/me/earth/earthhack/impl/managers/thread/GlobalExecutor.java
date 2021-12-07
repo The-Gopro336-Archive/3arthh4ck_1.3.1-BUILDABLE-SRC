@@ -1,13 +1,17 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.managers.thread;
 
-import java.util.concurrent.ExecutorService;
 import me.earth.earthhack.impl.util.thread.ThreadUtil;
 
-public interface GlobalExecutor {
-    public static final ExecutorService EXECUTOR = ThreadUtil.newDaemonCachedThreadPool();
-    public static final ExecutorService FIXED_EXECUTOR = ThreadUtil.newFixedThreadPool((int)((double)Runtime.getRuntime().availableProcessors() / 1.5));
-}
+import java.util.concurrent.ExecutorService;
 
+/**
+ * This class represents the {@link ExecutorService} 3arthh4ck uses.
+ */
+public interface GlobalExecutor
+{
+    /** The {@link ExecutorService} 3arthh4ck uses. */
+    ExecutorService EXECUTOR = ThreadUtil.newDaemonCachedThreadPool();
+    /** For tasks that can go out of Hand quickly. */
+    ExecutorService FIXED_EXECUTOR = ThreadUtil.newFixedThreadPool(
+            (int)(Runtime.getRuntime().availableProcessors() / 1.5));
+}

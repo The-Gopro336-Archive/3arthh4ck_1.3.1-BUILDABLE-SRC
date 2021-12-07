@@ -1,12 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.block.Block
- *  net.minecraft.entity.Entity
- *  net.minecraft.util.math.AxisAlignedBB
- *  net.minecraft.util.math.BlockPos
- */
 package me.earth.earthhack.impl.event.events.misc;
 
 import me.earth.earthhack.api.event.events.Event;
@@ -15,42 +6,61 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
-public class CollisionEvent
-extends Event {
+/**
+ * Note that {@link net.minecraft.client.Minecraft#player} could
+ * be null when this event is fired.
+ *
+ * This Event will no longer be fired on the Bus because it
+ * was called quite often (Particles?).
+ * TODO: Profile again, with the new ParticleThing this should be fine!
+ */
+public class CollisionEvent extends Event
+{
     private final Entity entity;
     private final BlockPos pos;
     private final Block block;
+
     private AxisAlignedBB bb;
 
-    public CollisionEvent(BlockPos pos, AxisAlignedBB bb, Entity entity, Block block) {
+    public CollisionEvent(BlockPos pos,
+                          AxisAlignedBB bb,
+                          Entity entity,
+                          Block block)
+    {
         this.pos = pos;
         this.bb = bb;
         this.entity = entity;
         this.block = block;
     }
 
-    public AxisAlignedBB getBB() {
-        return this.bb;
+    public AxisAlignedBB getBB()
+    {
+        return bb;
     }
 
-    public void setBB(AxisAlignedBB bb) {
+    public void setBB(AxisAlignedBB bb)
+    {
         this.bb = bb;
     }
 
-    public Entity getEntity() {
-        return this.entity;
+    public Entity getEntity()
+    {
+        return entity;
     }
 
-    public BlockPos getPos() {
-        return this.pos;
+    public BlockPos getPos()
+    {
+        return pos;
     }
 
-    public Block getBlock() {
-        return this.block;
+    public Block getBlock()
+    {
+        return block;
     }
 
-    public static interface Listener {
-        public void onCollision(CollisionEvent var1);
+    public interface Listener
+    {
+        void onCollision(CollisionEvent event);
     }
+
 }
-

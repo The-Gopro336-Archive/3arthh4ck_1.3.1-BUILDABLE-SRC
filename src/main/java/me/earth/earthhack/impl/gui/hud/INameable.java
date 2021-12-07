@@ -1,15 +1,10 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.gui.hud;
 
 public interface INameable {
-    public String getName();
 
-    public String getDisplayName();
+    String getName();
+    String getDisplayName();
+    void setName(String name);
+    void setDisplayName(String displayName);
 
-    public void setName(String var1);
-
-    public void setDisplayName(String var1);
 }
-

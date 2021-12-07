@@ -1,8 +1,11 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.event.events.misc;
 
-public class GameLoopEvent {
-}
+/**
+ * An Event called during the runGameLoop
+ * method in Minecraft, after all the
+ * scheduled executables have been run.
+ */
+public class GameLoopEvent
+{
 
+}

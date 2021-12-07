@@ -1,28 +1,6 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  com.mojang.authlib.GameProfile
- *  net.minecraft.block.Block
- *  net.minecraft.block.BlockAir
- *  net.minecraft.client.entity.EntityOtherPlayerMP
- *  net.minecraft.entity.Entity
- *  net.minecraft.entity.player.EntityPlayer
- *  net.minecraft.init.Blocks
- *  net.minecraft.potion.PotionEffect
- *  net.minecraft.util.EnumFacing
- *  net.minecraft.util.math.BlockPos
- *  net.minecraft.util.math.Vec3d
- *  net.minecraft.util.math.Vec3i
- *  net.minecraft.world.World
- */
 package me.earth.earthhack.impl.util.minecraft;
 
 import com.mojang.authlib.GameProfile;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.BiFunction;
 import me.earth.earthhack.api.util.interfaces.Globals;
 import me.earth.earthhack.impl.util.math.position.PositionUtil;
 import me.earth.earthhack.impl.util.minecraft.blocks.BlockUtil;
@@ -36,50 +14,71 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
-public class PlayerUtil
-implements Globals {
-    private static final Map<Integer, EntityOtherPlayerMP> FAKE_PLAYERS = new HashMap<Integer, EntityOtherPlayerMP>();
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.BiFunction;
+
+// TODO: THIS IS CHINESE
+public class PlayerUtil implements Globals {
+    private static final Map<Integer, EntityOtherPlayerMP> FAKE_PLAYERS =
+            new HashMap<>();
 
     public static EntityOtherPlayerMP createFakePlayerAndAddToWorld(GameProfile profile) {
-        return PlayerUtil.createFakePlayerAndAddToWorld(profile, EntityOtherPlayerMP::new);
+        return createFakePlayerAndAddToWorld(profile, EntityOtherPlayerMP::new);
     }
 
     public static EntityOtherPlayerMP createFakePlayerAndAddToWorld(GameProfile profile, BiFunction<World, GameProfile, EntityOtherPlayerMP> create) {
-        EntityOtherPlayerMP fakePlayer = PlayerUtil.createFakePlayer(profile, create);
+        EntityOtherPlayerMP fakePlayer = createFakePlayer(profile, create);
         int randomID = -1000;
-        while (FAKE_PLAYERS.containsKey(randomID) || PlayerUtil.mc.world.getEntityByID(randomID) != null) {
+        while (FAKE_PLAYERS.containsKey(randomID)
+                || mc.world.getEntityByID(randomID) != null) {
             randomID = ThreadLocalRandom.current().nextInt(-100000, -100);
         }
+
         FAKE_PLAYERS.put(randomID, fakePlayer);
-        PlayerUtil.mc.world.addEntityToWorld(randomID, (Entity)fakePlayer);
+        mc.world.addEntityToWorld(randomID, fakePlayer);
         return fakePlayer;
     }
 
-    public static EntityOtherPlayerMP createFakePlayer(GameProfile profile, BiFunction<World, GameProfile, EntityOtherPlayerMP> create) {
-        EntityOtherPlayerMP fakePlayer = create.apply((World)PlayerUtil.mc.world, profile);
-        fakePlayer.inventory = PlayerUtil.mc.player.inventory;
-        fakePlayer.inventoryContainer = PlayerUtil.mc.player.inventoryContainer;
-        fakePlayer.setPositionAndRotation(PlayerUtil.mc.player.posX, PlayerUtil.mc.player.getEntityBoundingBox().minY, PlayerUtil.mc.player.posZ, PlayerUtil.mc.player.rotationYaw, PlayerUtil.mc.player.rotationPitch);
-        fakePlayer.rotationYawHead = PlayerUtil.mc.player.rotationYawHead;
-        fakePlayer.onGround = PlayerUtil.mc.player.onGround;
-        fakePlayer.setSneaking(PlayerUtil.mc.player.isSneaking());
-        fakePlayer.setHealth(PlayerUtil.mc.player.getHealth());
-        fakePlayer.setAbsorptionAmount(PlayerUtil.mc.player.getAbsorptionAmount());
-        for (PotionEffect effect : PlayerUtil.mc.player.getActivePotionEffects()) {
+    public static EntityOtherPlayerMP createFakePlayer(GameProfile profile, BiFunction<World, GameProfile, EntityOtherPlayerMP> create)
+    {
+        EntityOtherPlayerMP fakePlayer = create.apply(mc.world, profile);
+
+        fakePlayer.inventory = mc.player.inventory;
+        fakePlayer.inventoryContainer = mc.player.inventoryContainer;
+        fakePlayer.setPositionAndRotation(mc.player.posX, mc.player.getEntityBoundingBox().minY, mc.player.posZ, mc.player.rotationYaw, mc.player.rotationPitch);
+        fakePlayer.rotationYawHead = mc.player.rotationYawHead;
+        fakePlayer.onGround = mc.player.onGround;
+        fakePlayer.setSneaking(mc.player.isSneaking());
+        fakePlayer.setHealth(mc.player.getHealth());
+        fakePlayer.setAbsorptionAmount(mc.player.getAbsorptionAmount());
+
+        for (PotionEffect effect : mc.player.getActivePotionEffects())
+        {
             fakePlayer.addPotionEffect(effect);
         }
+
         return fakePlayer;
     }
 
+    /**
+     * Removes the given fakeplayer.
+     *
+     * @param fakePlayer the fakeplayer to remove.
+     */
     public static void removeFakePlayer(EntityOtherPlayerMP fakePlayer) {
-        if (fakePlayer != null && FAKE_PLAYERS.containsKey(fakePlayer.getEntityId())) {
+        if (fakePlayer != null
+                && FAKE_PLAYERS.containsKey(fakePlayer.getEntityId()))
+        {
             FAKE_PLAYERS.remove(fakePlayer.getEntityId());
-            mc.addScheduledTask(() -> {
-                if (PlayerUtil.mc.world != null) {
-                    PlayerUtil.mc.world.removeEntity((Entity)fakePlayer);
+            mc.addScheduledTask(() ->
+            {
+                if (mc.world != null)
+                {
+                    mc.world.removeEntity(fakePlayer);
                 }
             });
         }
@@ -94,22 +93,24 @@ implements Globals {
     }
 
     public static boolean isCreative(EntityPlayer player) {
-        return player != null && (player.isCreative() || player.capabilities.isCreativeMode);
+        return player != null
+                && (player.isCreative()
+                    || player.capabilities.isCreativeMode);
     }
 
     public static BlockPos getBestPlace(BlockPos pos, EntityPlayer player) {
-        EnumFacing facing = PlayerUtil.getSide(player, pos);
+        final EnumFacing facing = getSide(player, pos);
         if (facing == EnumFacing.UP) {
-            Block block = PlayerUtil.mc.world.getBlockState(pos).getBlock();
-            Block block2 = PlayerUtil.mc.world.getBlockState(pos.offset(EnumFacing.UP)).getBlock();
+            final Block block = mc.world.getBlockState(pos).getBlock();
+            final Block block2 = mc.world.getBlockState(pos.offset(EnumFacing.UP)).getBlock();
             if (block2 instanceof BlockAir && (block == Blocks.OBSIDIAN || block == Blocks.BEDROCK)) {
                 return pos;
             }
         } else {
             BlockPos blockPos = pos.offset(facing);
-            Block block = PlayerUtil.mc.world.getBlockState(blockPos).getBlock();
-            BlockPos blockPos2 = blockPos.down();
-            Block block2 = PlayerUtil.mc.world.getBlockState(blockPos2).getBlock();
+            final Block block = mc.world.getBlockState(blockPos).getBlock();
+            final BlockPos blockPos2 = blockPos.down();
+            final Block block2 = mc.world.getBlockState(blockPos2).getBlock();
             if (block instanceof BlockAir && (block2 == Blocks.OBSIDIAN || block2 == Blocks.BEDROCK)) {
                 return blockPos2;
             }
@@ -118,23 +119,25 @@ implements Globals {
     }
 
     public static EnumFacing getSide(EntityPlayer player, BlockPos blockPos) {
-        BlockPos playerPos = PositionUtil.getPosition((Entity)player);
+        BlockPos playerPos = PositionUtil.getPosition(player);
         for (EnumFacing facing : EnumFacing.HORIZONTALS) {
-            if (!playerPos.offset(facing).equals((Object)blockPos)) continue;
-            return facing;
+            if (playerPos.offset(facing).equals(blockPos)) {
+                return facing;
+            }
         }
-        if (playerPos.offset(EnumFacing.UP).offset(EnumFacing.UP).equals((Object)blockPos)) {
+        if (playerPos.offset(EnumFacing.UP).offset(EnumFacing.UP).equals(blockPos)) {
             return EnumFacing.UP;
         }
         return EnumFacing.DOWN;
     }
 
+
     public static boolean isInHole(EntityPlayer player) {
-        BlockPos position = PositionUtil.getPosition((Entity)player);
+        BlockPos position = PositionUtil.getPosition(player);
         int count = 0;
         for (EnumFacing face : EnumFacing.values()) {
-            if (face == EnumFacing.UP || face == EnumFacing.DOWN || BlockUtil.isReplaceable(position.offset(face))) continue;
-            ++count;
+            if (face == EnumFacing.UP || face == EnumFacing.DOWN) continue;
+            if (!BlockUtil.isReplaceable(position.offset(face))) count++;
         }
         return count >= 3;
     }
@@ -143,11 +146,11 @@ implements Globals {
         for (EnumFacing face : EnumFacing.HORIZONTALS) {
             BlockPos off = pos.offset(face);
             BlockPos off1 = pos.offset(face).offset(face);
-            BlockPos playerOff = PositionUtil.getPosition((Entity)player);
-            if (!new Vec3d((Vec3i)off).equals((Object)new Vec3d((Vec3i)playerOff)) && !new Vec3d((Vec3i)off1).equals((Object)new Vec3d((Vec3i)off1))) continue;
-            return face.getOpposite();
+            BlockPos playerOff = PositionUtil.getPosition(player);
+            if (new Vec3d(off).equals(new Vec3d(playerOff))
+                    || new Vec3d(off1).equals(new Vec3d(off1))) return face.getOpposite();
         }
         return null;
     }
-}
 
+}

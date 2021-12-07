@@ -1,13 +1,5 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.client.gui.GuiScreen
- */
 package me.earth.earthhack.impl.commands;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import me.earth.earthhack.api.command.PossibleInputs;
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.setting.Setting;
@@ -20,101 +12,193 @@ import me.earth.earthhack.impl.commands.util.CommandUtil;
 import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.managers.thread.scheduler.Scheduler;
 import me.earth.earthhack.impl.util.text.ChatUtil;
+import me.earth.earthhack.impl.util.text.TextColor;
 import net.minecraft.client.gui.GuiScreen;
 
-public class ResetCommand
-extends AbstractModuleCommand
-implements Globals {
-    public ResetCommand() {
-        super((String[][])new String[][]{{"reset"}, {"module"}, {"setting"}}, 1);
-        CommandDescriptions.register(this, "Resets all settings of the module to their default values.");
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+public class ResetCommand extends AbstractModuleCommand implements Globals
+{
+    public ResetCommand()
+    {
+        super(new String[][]{{"reset"}, {"module"}, {"setting"}}, 1);
+        CommandDescriptions.register(this,
+                "Resets all settings of the module to their default values.");
     }
 
     @Override
-    public void execute(String[] args) {
-        if (args.length < 2) {
-            ChatUtil.sendMessage("Use this command to reset Modules and Settings.");
+    public void execute(String[] args)
+    {
+        if (args.length < 2)
+        {
+            ChatUtil.sendMessage(
+                "Use this command to reset Modules and Settings.");
             return;
         }
-        Module module = (Module)Managers.MODULES.getObject(args[1]);
-        if (module == null) {
-            ChatUtil.sendMessage("\u00a7cModule \u00a7f" + args[1] + "\u00a7c" + " not found!");
+
+        Module module = Managers.MODULES.getObject(args[1]);
+        if (module == null)
+        {
+            ChatUtil.sendMessage(TextColor.RED + "Module " + TextColor.WHITE
+                    + args[1] + TextColor.RED + " not found!");
             return;
         }
-        if (args.length == 2) {
-            Scheduler.getInstance().schedule(() -> {
-                GuiScreen previous = ResetCommand.mc.currentScreen;
-                mc.displayGuiScreen((GuiScreen)new YesNoNonPausing((result, id) -> {
-                    mc.displayGuiScreen(previous);
-                    if (!result) {
-                        return;
-                    }
-                    for (Setting<?> setting : module.getSettings()) {
-                        setting.reset();
-                    }
-                    ChatUtil.sendMessage("\u00a7aModule \u00a7f" + module.getName() + "\u00a7a" + " has been reset.");
-                }, "Do you really want to reset the Module " + module.getName() + "?", "", 1337));
+
+        if (args.length == 2)
+        {
+            Scheduler.getInstance().schedule(() ->
+            {
+                GuiScreen previous = mc.currentScreen;
+                mc.displayGuiScreen(new YesNoNonPausing(
+                        (result, id) ->
+                        {
+                            mc.displayGuiScreen(previous);
+                            if (!result)
+                            {
+                                return;
+                            }
+
+                            for (Setting<?> setting : module.getSettings())
+                            {
+                                setting.reset();
+                            }
+
+                            ChatUtil.sendMessage(TextColor.GREEN + "Module "
+                                    + TextColor.WHITE + module.getName()
+                                    + TextColor.GREEN + " has been reset.");
+                        },
+                        "Do you really want to reset the Module "
+                                + module.getName()
+                                + "?",
+                        "",
+                        1337));
             });
-        } else {
-            ArrayList settings = new ArrayList(args.length - 2);
-            for (int i = 2; i < args.length; ++i) {
+        }
+        else
+        {
+            List<Setting<?>> settings = new ArrayList<>(args.length - 2);
+            for (int i = 2; i < args.length; i++)
+            {
                 Setting<?> setting = module.getSetting(args[i]);
-                if (setting != null) {
+                if (setting != null)
+                {
                     settings.add(setting);
-                    continue;
                 }
-                ChatUtil.sendMessage("\u00a7cCould not find Setting \u00a7f" + args[i] + "\u00a7c" + " in module " + "\u00a7f" + module.getName() + "\u00a7c" + ".");
+                else
+                {
+                    ChatUtil.sendMessage(TextColor.RED
+                            + "Could not find Setting "
+                            + TextColor.WHITE
+                            + args[i]
+                            + TextColor.RED
+                            + " in module "
+                            + TextColor.WHITE
+                            + module.getName()
+                            + TextColor.RED
+                            + ".");
+                }
             }
-            if (settings.isEmpty()) {
+
+            if (settings.isEmpty())
+            {
                 return;
             }
-            StringBuilder settingString = new StringBuilder("\u00a7c");
+
+            StringBuilder settingString = new StringBuilder(TextColor.RED);
             settingString.append("Do you really want to reset the Setting");
-            if (settings.size() > 1) {
+            if (settings.size() > 1)
+            {
                 settingString.append("s ");
-            } else {
+            }
+            else
+            {
                 settingString.append(" ");
             }
-            settingString.append("\u00a7f");
-            Iterator itr = settings.iterator();
-            while (itr.hasNext()) {
-                Setting s = (Setting)itr.next();
+
+            settingString.append(TextColor.WHITE);
+            Iterator<Setting<?>> itr = settings.iterator();
+            while (itr.hasNext())
+            {
+                Setting<?> s = itr.next();
                 settingString.append(s.getName());
-                if (!itr.hasNext()) continue;
-                settingString.append("\u00a7c").append(", ").append("\u00a7f");
+                if (itr.hasNext())
+                {
+                    settingString.append(TextColor.RED)
+                                 .append(", ")
+                                 .append(TextColor.WHITE);
+                }
             }
-            settingString.append("\u00a7c").append(" in the module ").append("\u00a7f").append(module.getName()).append("\u00a7c").append("?");
-            Scheduler.getInstance().schedule(() -> {
-                GuiScreen previous = ResetCommand.mc.currentScreen;
-                mc.displayGuiScreen((GuiScreen)new YesNoNonPausing((result, id) -> {
-                    mc.displayGuiScreen(previous);
-                    if (!result) {
-                        return;
-                    }
-                    for (Setting setting : settings) {
-                        setting.reset();
-                        ChatUtil.sendMessage("\u00a7cReset " + module.getName() + "\u00a7c" + " - " + "\u00a7f" + setting.getName() + "\u00a7c" + ".");
-                    }
-                }, settingString.toString(), "", 1337));
+
+            settingString.append(TextColor.RED)
+                         .append(" in the module ")
+                         .append(TextColor.WHITE)
+                         .append(module.getName())
+                         .append(TextColor.RED)
+                         .append("?");
+
+            Scheduler.getInstance().schedule(() ->
+            {
+                GuiScreen previous = mc.currentScreen;
+                mc.displayGuiScreen(new YesNoNonPausing(
+                    (result, id) ->
+                    {
+                        mc.displayGuiScreen(previous);
+                        if (!result)
+                        {
+                            return;
+                        }
+
+                        for (Setting<?> setting : settings)
+                        {
+                            setting.reset();
+                            ChatUtil.sendMessage(TextColor.RED
+                                    + "Reset "
+                                    + module.getName()
+                                    + TextColor.RED
+                                    + " - "
+                                    + TextColor.WHITE
+                                    + setting.getName()
+                                    + TextColor.RED
+                                    + ".");
+                        }
+                    },
+                    settingString.toString(),
+                    "",
+                    1337));
             });
         }
     }
 
     @Override
-    public PossibleInputs getPossibleInputs(String[] args) {
+    public PossibleInputs getPossibleInputs(String[] args)
+    {
         PossibleInputs inputs = super.getPossibleInputs(args);
-        if (args.length > 2) {
-            Module module = (Module)Managers.MODULES.getObject(args[1]);
-            if (module == null) {
-                return inputs.setCompletion("").setRest("\u00a7c not found.");
+        if (args.length > 2)
+        {
+            Module module = Managers.MODULES.getObject(args[1]);
+            if (module == null)
+            {
+                return inputs.setCompletion("")
+                             .setRest(TextColor.RED + " not found.");
             }
-            Setting<?> s = CommandUtil.getNameableStartingWith(args[args.length - 1], module.getSettings());
-            if (s == null) {
-                return inputs.setCompletion("").setRest("\u00a7c not found.");
+
+            Setting<?> s = CommandUtil.getNameableStartingWith(
+                                args[args.length - 1], module.getSettings());
+            if (s == null)
+            {
+                return inputs.setCompletion("")
+                             .setRest(TextColor.RED + " not found.");
             }
-            return inputs.setCompletion(TextUtil.substring(s.getName(), args[args.length - 1].length()));
+            else
+            {
+                return inputs.setCompletion(TextUtil.substring(s.getName(),
+                                            args[args.length - 1].length()));
+            }
         }
+
         return inputs;
     }
-}
 
+}

@@ -1,22 +1,17 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.launchwrapper.Launch
- *  org.objectweb.asm.ClassReader
- *  org.objectweb.asm.ClassVisitor
- *  org.objectweb.asm.tree.ClassNode
- */
 package me.earth.earthhack.vanilla;
 
-import java.io.IOException;
 import me.earth.earthhack.impl.core.util.AsmUtil;
+import me.earth.earthhack.tweaker.EarthhackTweaker;
 import net.minecraft.launchwrapper.Launch;
 import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.tree.ClassNode;
 
-public enum Environment {
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
+public enum Environment
+{
     VANILLA,
     SEARGE,
     MCP;
@@ -24,45 +19,61 @@ public enum Environment {
     private static Environment environment;
     private static boolean forge;
 
-    public static Environment getEnvironment() {
+    public static Environment getEnvironment()
+    {
         return environment;
     }
 
-    public static boolean hasForge() {
+    public static boolean hasForge()
+    {
         return forge;
     }
 
-    public static void loadEnvironment() {
+    /**
+     * {@link EarthhackTweaker#acceptOptions(List, File, File, String)}
+     */
+    @SuppressWarnings("unused")
+    public static void loadEnvironment()
+    {
         Environment env = SEARGE;
-        try {
+
+        try
+        {
             String fml = "net.minecraftforge.common.ForgeHooks";
             byte[] forgeBytes = Launch.classLoader.getClassBytes(fml);
-            if (forgeBytes != null) {
+            if (forgeBytes != null)
+            {
                 forge = true;
-            } else {
+            }
+            else
+            {
                 env = VANILLA;
             }
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             env = VANILLA;
         }
+
         String world = "net.minecraft.world.World";
         byte[] bs = null;
-        try {
+        try
+        {
             bs = Launch.classLoader.getClassBytes(world);
         }
-        catch (IOException iOException) {
-            // empty catch block
-        }
-        if (bs != null) {
+        catch (IOException ignored) { }
+        if (bs != null)
+        {
             ClassNode node = new ClassNode();
             ClassReader reader = new ClassReader(bs);
-            reader.accept((ClassVisitor)node, 0);
-            if (AsmUtil.findField(node, "loadedEntityList") != null) {
+            reader.accept(node, 0);
+            if (AsmUtil.findField(node, "loadedEntityList") != null)
+            {
                 env = MCP;
             }
         }
+
         environment = env;
     }
-}
 
+}

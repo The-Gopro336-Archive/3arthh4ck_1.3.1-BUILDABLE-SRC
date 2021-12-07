@@ -1,13 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  com.google.gson.Gson
- *  com.google.gson.GsonBuilder
- *  com.google.gson.JsonElement
- *  com.google.gson.JsonParser
- *  com.google.gson.stream.JsonReader
- */
 package me.earth.earthhack.api.config;
 
 import com.google.gson.Gson;
@@ -15,32 +5,53 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
+
 import java.io.IOException;
-import java.io.Reader;
 import java.io.StringReader;
 
-public interface Jsonable {
-    public static final JsonParser PARSER = new JsonParser();
-    public static final Gson GSON = new GsonBuilder().setLenient().setPrettyPrinting().create();
+/**
+ * Interface for Objects that can be serialized using Json.
+ */
+public interface Jsonable
+{
+    /** A {@link JsonParser}. */
+    JsonParser PARSER = new JsonParser();
+    Gson GSON = new GsonBuilder().setLenient().setPrettyPrinting().create();
 
-    public void fromJson(JsonElement var1);
+    /**
+     * Sets values of this object from the
+     * given JsonElement.
+     *
+     * @param element the element.
+     */
+    void fromJson(JsonElement element);
 
-    public String toJson();
+    /**
+     * @return the value of this object as a parsable String.
+     */
+    String toJson();
 
-    public static JsonElement parse(String string) {
-        return Jsonable.parse(string, true);
+    static JsonElement parse(String string)
+    {
+        return parse(string, true);
     }
 
-    public static JsonElement parse(String string, boolean addQuotation) {
+    static JsonElement parse(String string, boolean addQuotation)
+    {
         JsonElement element = null;
-        try (JsonReader reader = new JsonReader((Reader)new StringReader(addQuotation ? "\"" + string + "\"" : string));){
+
+        try(JsonReader reader = new JsonReader(
+                new StringReader(addQuotation ? "\"" + string + "\"" : string)))
+        {
             reader.setLenient(true);
             element = PARSER.parse(reader);
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
+
         return element;
     }
-}
 
+}

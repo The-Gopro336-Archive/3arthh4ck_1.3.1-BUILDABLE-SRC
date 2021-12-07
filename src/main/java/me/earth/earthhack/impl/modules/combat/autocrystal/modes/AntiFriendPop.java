@@ -1,42 +1,40 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.combat.autocrystal.modes;
 
-public enum AntiFriendPop {
-    None{
-
+public enum AntiFriendPop
+{
+    None()
+    {
         @Override
-        public boolean shouldCalc(AntiFriendPop type) {
+        public boolean shouldCalc(AntiFriendPop type)
+        {
             return false;
         }
-    }
-    ,
-    Place{
-
+    },
+    Place
+    {
         @Override
-        public boolean shouldCalc(AntiFriendPop type) {
+        public boolean shouldCalc(AntiFriendPop type)
+        {
             return type == Place;
         }
-    }
-    ,
-    Break{
-
+    },
+    Break
+    {
         @Override
-        public boolean shouldCalc(AntiFriendPop type) {
+        public boolean shouldCalc(AntiFriendPop type)
+        {
             return type == Break;
         }
-    }
-    ,
-    All{
-
+    },
+    All
+    {
         @Override
-        public boolean shouldCalc(AntiFriendPop type) {
+        public boolean shouldCalc(AntiFriendPop type)
+        {
             return true;
         }
     };
 
+    public abstract boolean shouldCalc(AntiFriendPop type);
 
-    public abstract boolean shouldCalc(AntiFriendPop var1);
 }
-

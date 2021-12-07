@@ -1,11 +1,15 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.client.server.api;
 
-public interface ICloseable {
-    public void close();
+/**
+ * {@link java.io.Closeable} without Exceptions.
+ */
+public interface ICloseable
+{
+    /**
+     * Closes this without throwing an exception.
+     */
+    void close();
 
-    public boolean isOpen();
+    boolean isOpen();
+
 }
-

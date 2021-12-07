@@ -1,10 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.Entity
- *  net.minecraft.init.MobEffects
- */
 package me.earth.earthhack.impl.modules.movement.flight;
 
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -14,17 +7,19 @@ import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.impl.event.events.network.MotionUpdateEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import me.earth.earthhack.impl.modules.Caches;
-import me.earth.earthhack.impl.modules.movement.flight.Flight;
 import me.earth.earthhack.impl.modules.movement.flight.mode.FlightMode;
 import me.earth.earthhack.impl.modules.movement.noslowdown.NoSlowDown;
 import me.earth.earthhack.impl.util.minecraft.MovementUtil;
-import net.minecraft.entity.Entity;
+import me.earth.earthhack.impl.util.network.NetworkUtil;
+import me.earth.earthhack.impl.util.network.PacketUtil;
 import net.minecraft.init.MobEffects;
+import net.minecraft.network.play.client.CPacketEntityAction;
 
-final class ListenerMotion
-extends ModuleListener<Flight, MotionUpdateEvent> {
-    private static final ModuleCache<NoSlowDown> NO_SLOW_DOWN = Caches.getModule(NoSlowDown.class);
-    private static final SettingCache<Boolean, BooleanSetting, NoSlowDown> GUI = Caches.getSetting(NoSlowDown.class, BooleanSetting.class, "GuiMove", true);
+final class ListenerMotion extends ModuleListener<Flight, MotionUpdateEvent> {
+    private static final ModuleCache<NoSlowDown> NO_SLOW_DOWN =
+            Caches.getModule(NoSlowDown.class);
+    private static final SettingCache<Boolean, BooleanSetting, NoSlowDown> GUI =
+            Caches.getSetting(NoSlowDown.class, BooleanSetting.class, "GuiMove", true);
 
     public ListenerMotion(Flight module) {
         super(module, MotionUpdateEvent.class);
@@ -32,117 +27,153 @@ extends ModuleListener<Flight, MotionUpdateEvent> {
 
     @Override
     public void invoke(MotionUpdateEvent event) {
-        switch (((Flight)this.module).mode.getValue()) {
-            case ConstantiamNew: {
+        switch (module.mode.getValue()) {
+            case ConstantiamNew:
                 if (event.getStage() == Stage.PRE) {
-                    if (((Flight)this.module).constNewStage > 2) {
-                        ListenerMotion.mc.player.motionY = 0.0;
-                        ListenerMotion.mc.player.setPosition(ListenerMotion.mc.player.posX, ListenerMotion.mc.player.posY - 0.032, ListenerMotion.mc.player.posZ);
-                        ++((Flight)this.module).constNewTicks;
-                        switch (((Flight)this.module).constNewTicks) {
-                            case 1: {
-                                ((Flight)this.module).constY *= (double)-0.95f;
+                    // NetworkUtil.send(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_FALL_FLYING));
+                    if (module.constNewStage > 2) {
+                        mc.player.motionY = 0;
+                        mc.player.setPosition(mc.player.posX, mc.player.posY - 0.032, mc.player.posZ);
+                        ++module.constNewTicks;
+                        switch (module.constNewTicks) {
+                            case 1:
+                                module.constY *= -0.949999988079071D;
                                 break;
-                            }
-                            case 2: 
-                            case 3: 
-                            case 4: {
-                                ((Flight)this.module).constY += 3.25E-4;
+                            case 2:
+                            case 3:
+                            case 4:
+                                module.constY += 3.25E-4D;
                                 break;
+                            case 5:
+                                module.constY += 5.0E-4D;
+                                module.constNewTicks = 0;
+                        }
+                        event.setY(mc.player.posY + module.constY);
+                    }
+                } else if (module.constNewStage > 2) {
+                    mc.player.setPosition(mc.player.posX, mc.player.posY + 0.032, mc.player.posZ);
+                }
+                if (!mc.player.onGround
+                        && !mc.player.collidedVertically
+                        && mc.player.ticksExisted % 30 == 0) {
+                    event.setY(event.getY() - 0.032);
+                    // mc.player.setPosition(mc.player.posX, mc.player.posY - 0.032, mc.player.posZ);
+                }
+                break;
+            case ConstoHare:
+            case ConstoHareFast:
+                if (event.getStage() == Stage.PRE) {
+                    ++module.oHareCounter;
+                    if (mc.player.moveForward == 0
+                            && mc.player.moveStrafing == 0) {
+                        mc.player.setPosition(mc.player.posX + 1.0D,
+                                mc.player.posY + 1.0D,
+                                mc.player.posZ + 1.0D);
+                        mc.player.setPosition(mc.player.prevPosX,
+                                mc.player.prevPosY, mc.player.prevPosZ);
+                        mc.player.motionX = 0.0D;
+                        mc.player.motionZ = 0.0D;
+                    }
+                    mc.player.motionY = 0.0D;
+                    if (mc.gameSettings.keyBindJump.isKeyDown())
+                        mc.player.motionY += 0.5f;
+                    if (mc.gameSettings.keyBindSneak.isKeyDown())
+                        mc.player.motionY -= 0.5f;
+                    if (module.oHareCounter == 2) {
+                        mc.player.setPosition(mc.player.posX,
+                                mc.player.posY + 1.0E-10D,
+                                mc.player.posZ);
+                        module.oHareCounter = 0;
+                    }
+                } else {
+                    double xDist = mc.player.posX - mc.player.prevPosX;
+                    double zDist = mc.player.posZ - mc.player.prevPosZ;
+                    module.oHareLastDist = Math.sqrt(xDist * xDist + zDist * zDist);
+                }
+                break;
+            case Constantiam:
+            case Normal:
+                mc.player.motionX = 0.0;
+                mc.player.motionY = 0.0;
+                mc.player.motionZ = 0.0;
+
+                if (module.glide.getValue()) {
+                    mc.player.motionY -= module.glideSpeed.getValue();
+                }
+
+                if (!mc.inGameHasFocus
+                        && (!NO_SLOW_DOWN.isEnabled() || !GUI.getValue())) {
+                    break;
+                }
+
+                if (mc.player.movementInput.jump) {
+                    mc.player.motionY += 0.4000000059604645;
+                }
+
+                if (mc.player.movementInput.sneak) {
+                    mc.player.motionY -= 0.4000000059604645;
+                }
+
+                if (module.mode.getValue() == FlightMode.Constantiam
+                        && !mc.player.onGround
+                        && !mc.player.collidedVertically
+                        && mc.player.ticksExisted % 20 == 0
+                        && module.antiKick.getValue()) {
+                    mc.player.setPosition(mc.player.posX, mc.player.posY - 0.032, mc.player.posZ);
+                    // module.clipped = true;
+                }
+
+                break;
+            case Jump:
+                if (event.getStage() == Stage.PRE) {
+                    if (!mc.player.onGround) {
+                        if (!mc.player.movementInput.jump) {
+                            if ((!MovementUtil.noMovementKeys())
+                                    && !mc.player.movementInput.sneak) {
+                                module.counter++;
+                                if (module.counter >= 11) {
+                                    mc.player.jumpMovementFactor = 0.7F;
+                                    mc.player.jump();
+                                    module.counter = 0;
+                                }
                             }
-                            case 5: {
-                                ((Flight)this.module).constY += 5.0E-4;
-                                ((Flight)this.module).constNewTicks = 0;
+                        } else if (!mc.player.movementInput.sneak) {
+                            module.counter++;
+                            if (module.counter >= 4) {
+                                mc.player.jumpMovementFactor = 0.01f;
+                                mc.player.jump();
+                                module.counter = 0;
                             }
                         }
-                        event.setY(ListenerMotion.mc.player.posY + ((Flight)this.module).constY);
                     }
-                } else if (((Flight)this.module).constNewStage > 2) {
-                    ListenerMotion.mc.player.setPosition(ListenerMotion.mc.player.posX, ListenerMotion.mc.player.posY + 0.032, ListenerMotion.mc.player.posZ);
                 }
-                if (ListenerMotion.mc.player.onGround || ListenerMotion.mc.player.collidedVertically || ListenerMotion.mc.player.ticksExisted % 30 != 0) break;
-                event.setY(event.getY() - 0.032);
-                break;
-            }
-            case ConstoHare: 
-            case ConstoHareFast: {
-                if (event.getStage() == Stage.PRE) {
-                    ++((Flight)this.module).oHareCounter;
-                    if (ListenerMotion.mc.player.moveForward == 0.0f && ListenerMotion.mc.player.moveStrafing == 0.0f) {
-                        ListenerMotion.mc.player.setPosition(ListenerMotion.mc.player.posX + 1.0, ListenerMotion.mc.player.posY + 1.0, ListenerMotion.mc.player.posZ + 1.0);
-                        ListenerMotion.mc.player.setPosition(ListenerMotion.mc.player.prevPosX, ListenerMotion.mc.player.prevPosY, ListenerMotion.mc.player.prevPosZ);
-                        ListenerMotion.mc.player.motionX = 0.0;
-                        ListenerMotion.mc.player.motionZ = 0.0;
-                    }
-                    ListenerMotion.mc.player.motionY = 0.0;
-                    if (ListenerMotion.mc.gameSettings.keyBindJump.isKeyDown()) {
-                        ListenerMotion.mc.player.motionY += 0.5;
-                    }
-                    if (ListenerMotion.mc.gameSettings.keyBindSneak.isKeyDown()) {
-                        ListenerMotion.mc.player.motionY -= 0.5;
-                    }
-                    if (((Flight)this.module).oHareCounter != 2) break;
-                    ListenerMotion.mc.player.setPosition(ListenerMotion.mc.player.posX, ListenerMotion.mc.player.posY + 1.0E-10, ListenerMotion.mc.player.posZ);
-                    ((Flight)this.module).oHareCounter = 0;
-                    break;
-                }
-                double xDist = ListenerMotion.mc.player.posX - ListenerMotion.mc.player.prevPosX;
-                double zDist = ListenerMotion.mc.player.posZ - ListenerMotion.mc.player.prevPosZ;
-                ((Flight)this.module).oHareLastDist = Math.sqrt(xDist * xDist + zDist * zDist);
-                break;
-            }
-            case Constantiam: 
-            case Normal: {
-                ListenerMotion.mc.player.motionX = 0.0;
-                ListenerMotion.mc.player.motionY = 0.0;
-                ListenerMotion.mc.player.motionZ = 0.0;
-                if (((Flight)this.module).glide.getValue().booleanValue()) {
-                    ListenerMotion.mc.player.motionY -= ((Flight)this.module).glideSpeed.getValue().doubleValue();
-                }
-                if (!ListenerMotion.mc.inGameHasFocus && (!NO_SLOW_DOWN.isEnabled() || !GUI.getValue().booleanValue())) break;
-                if (ListenerMotion.mc.player.movementInput.jump) {
-                    ListenerMotion.mc.player.motionY += (double)0.4f;
-                }
-                if (ListenerMotion.mc.player.movementInput.sneak) {
-                    ListenerMotion.mc.player.motionY -= (double)0.4f;
-                }
-                if (((Flight)this.module).mode.getValue() != FlightMode.Constantiam || ListenerMotion.mc.player.onGround || ListenerMotion.mc.player.collidedVertically || ListenerMotion.mc.player.ticksExisted % 20 != 0 || !((Flight)this.module).antiKick.getValue().booleanValue()) break;
-                ListenerMotion.mc.player.setPosition(ListenerMotion.mc.player.posX, ListenerMotion.mc.player.posY - 0.032, ListenerMotion.mc.player.posZ);
-                break;
-            }
-            case Jump: {
-                if (event.getStage() != Stage.PRE || ListenerMotion.mc.player.onGround) break;
-                if (!ListenerMotion.mc.player.movementInput.jump) {
-                    if (MovementUtil.noMovementKeys() || ListenerMotion.mc.player.movementInput.sneak) break;
-                    ++((Flight)this.module).counter;
-                    if (((Flight)this.module).counter < 11) break;
-                    ListenerMotion.mc.player.jumpMovementFactor = 0.7f;
-                    ListenerMotion.mc.player.jump();
-                    ((Flight)this.module).counter = 0;
-                    break;
-                }
-                if (ListenerMotion.mc.player.movementInput.sneak) break;
-                ++((Flight)this.module).counter;
-                if (((Flight)this.module).counter < 4) break;
-                ListenerMotion.mc.player.jumpMovementFactor = 0.01f;
-                ListenerMotion.mc.player.jump();
-                ((Flight)this.module).counter = 0;
-            }
         }
+
         if (event.getStage() == Stage.PRE) {
-            ((Flight)this.module).constNewOffset = ListenerMotion.mc.player.posX - ListenerMotion.mc.player.prevPosX;
-            double zDif = ListenerMotion.mc.player.posZ - ListenerMotion.mc.player.prevPosZ;
-            ((Flight)this.module).lastDist = Math.sqrt(((Flight)this.module).constNewOffset * ((Flight)this.module).constNewOffset + zDif * zDif);
+            module.constNewOffset = mc.player.posX - mc.player.prevPosX;
+            double zDif = mc.player.posZ - mc.player.prevPosZ;
+            module.lastDist = Math.sqrt(module.constNewOffset * module.constNewOffset + zDif * zDif);
         }
-        if (((Flight)this.module).antiKick.getValue().booleanValue() && ((Flight)this.module).mode.getValue() != FlightMode.Constantiam) {
-            ++((Flight)this.module).antiCounter;
-            if (((Flight)this.module).antiCounter >= 12 && !ListenerMotion.mc.player.isPotionActive(MobEffects.LEVITATION) && !ListenerMotion.mc.player.isElytraFlying() && ListenerMotion.mc.world.getCollisionBoxes((Entity)ListenerMotion.mc.player, ListenerMotion.mc.player.getEntityBoundingBox().grow(0.0625).expand(0.0, -0.55, 0.0)).isEmpty()) {
+
+        if (module.antiKick.getValue()
+                && !(module.mode.getValue() == FlightMode.Constantiam)) {
+            module.antiCounter++;
+            if (module.antiCounter >= 12
+                    && !mc.player.isPotionActive(MobEffects.LEVITATION)
+                    && !mc.player.isElytraFlying()
+                    && mc.world.getCollisionBoxes(mc.player,
+                            mc.player
+                                    .getEntityBoundingBox()
+                                    .grow(0.0625)
+                                    .expand(0.0, -0.55, 0.0))
+                    .isEmpty()) {
                 event.setY(event.getY() - 0.03126);
-                if (((Flight)this.module).antiCounter >= 22) {
-                    ((Flight)this.module).antiCounter = 0;
+                // event.setOnGround(true);
+                if (module.antiCounter >= 22) {
+                    module.antiCounter = 0;
                 }
             }
         }
     }
-}
 
+}

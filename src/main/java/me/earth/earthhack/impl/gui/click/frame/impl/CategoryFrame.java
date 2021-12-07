@@ -1,31 +1,10 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.client.Minecraft
- *  net.minecraft.client.gui.Gui
- *  net.minecraft.client.gui.ScaledResolution
- *  net.minecraft.client.renderer.GlStateManager
- *  net.minecraft.util.ResourceLocation
- *  org.lwjgl.input.Mouse
- *  org.lwjgl.opengl.GL11
- */
 package me.earth.earthhack.impl.gui.click.frame.impl;
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Comparator;
 import me.earth.earthhack.api.cache.ModuleCache;
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.impl.gui.click.component.Component;
-import me.earth.earthhack.impl.gui.click.component.impl.BooleanComponent;
-import me.earth.earthhack.impl.gui.click.component.impl.ColorComponent;
-import me.earth.earthhack.impl.gui.click.component.impl.EnumComponent;
-import me.earth.earthhack.impl.gui.click.component.impl.KeybindComponent;
-import me.earth.earthhack.impl.gui.click.component.impl.ModuleComponent;
-import me.earth.earthhack.impl.gui.click.component.impl.NumberComponent;
-import me.earth.earthhack.impl.gui.click.component.impl.StringComponent;
+import me.earth.earthhack.impl.gui.click.component.impl.*;
 import me.earth.earthhack.impl.gui.click.frame.Frame;
 import me.earth.earthhack.impl.gui.visibility.Visibilities;
 import me.earth.earthhack.impl.managers.Managers;
@@ -41,8 +20,11 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-public class CategoryFrame
-extends Frame {
+import java.awt.*;
+import java.util.Comparator;
+import java.util.List;
+
+public class CategoryFrame extends Frame {
     private final Category moduleCategory;
     private static final ModuleCache<ClickGui> CLICK_GUI = Caches.getModule(ClickGui.class);
     private static final ResourceLocation LEFT_EAR = new ResourceLocation("earthhack:textures/gui/left_ear.png");
@@ -56,13 +38,13 @@ extends Frame {
 
     @Override
     public void init() {
-        this.getComponents().clear();
-        float offsetY = this.getHeight() + 1.0f;
-        ArrayList<Module> moduleList = Managers.MODULES.getModulesFromCategory(this.getModuleCategory());
+        getComponents().clear();
+        float offsetY = getHeight() + 1;
+        List<Module> moduleList = Managers.MODULES.getModulesFromCategory(getModuleCategory());
         moduleList.sort(Comparator.comparing(Module::getName));
         for (Module module : moduleList) {
-            this.getComponents().add(new ModuleComponent(module, this.getPosX(), this.getPosY(), 0.0f, offsetY, this.getWidth(), 14.0f));
-            offsetY += 14.0f;
+            getComponents().add(new ModuleComponent(module, getPosX(), getPosY(), 0, offsetY, getWidth(), 14));
+            offsetY += 14;
         }
         super.init();
     }
@@ -75,53 +57,50 @@ extends Frame {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
-        float scrollMaxHeight = new ScaledResolution(Minecraft.getMinecraft()).getScaledHeight();
-        Color clr = ((ClickGui)CategoryFrame.CLICK_GUI.get()).color.getValue();
-        if (((ClickGui)CategoryFrame.CLICK_GUI.get()).catEars.getValue().booleanValue()) {
+        final float scrollMaxHeight = new ScaledResolution(Minecraft.getMinecraft()).getScaledHeight();
+        final Color clr = CLICK_GUI.get().color.getValue();
+        if (CLICK_GUI.get().catEars.getValue()) {
             Minecraft.getMinecraft().getTextureManager().bindTexture(LEFT_EAR);
-            GlStateManager.color((float)((float)clr.getRed() / 255.0f), (float)((float)clr.getGreen() / 255.0f), (float)((float)clr.getBlue() / 255.0f), (float)1.0f);
-            Gui.drawScaledCustomSizeModalRect((int)((int)this.getPosX() - 8), (int)((int)this.getPosY() - 8), (float)0.0f, (float)0.0f, (int)20, (int)20, (int)20, (int)20, (float)20.0f, (float)20.0f);
+            GlStateManager.color(clr.getRed() / 255.f, clr.getGreen() / 255.f, clr.getBlue() / 255.f, 1.0F);
+            Gui.drawScaledCustomSizeModalRect((int) getPosX() - 8, (int) getPosY() - 8, 0, 0, 20, 20, 20, 20, 20, 20);
             Minecraft.getMinecraft().getTextureManager().bindTexture(RIGH_EAR);
-            GlStateManager.color((float)((float)clr.getRed() / 255.0f), (float)((float)clr.getGreen() / 255.0f), (float)((float)clr.getBlue() / 255.0f), (float)1.0f);
-            Gui.drawScaledCustomSizeModalRect((int)((int)(this.getPosX() + this.getWidth()) - 12), (int)((int)this.getPosY() - 8), (float)0.0f, (float)0.0f, (int)20, (int)20, (int)20, (int)20, (float)20.0f, (float)20.0f);
-            GlStateManager.color((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
+            GlStateManager.color(clr.getRed() / 255.f, clr.getGreen() / 255.f, clr.getBlue() / 255.f, 1.0F);
+            Gui.drawScaledCustomSizeModalRect((int) (getPosX() + getWidth()) - 12, (int) getPosY() - 8, 0, 0, 20, 20, 20, 20, 20, 20);
+            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         }
-        Render2DUtil.drawRect(this.getPosX(), this.getPosY(), this.getPosX() + this.getWidth(), this.getPosY() + this.getHeight(), ((ClickGui)CategoryFrame.CLICK_GUI.get()).color.getValue().getRGB());
-        Render2DUtil.drawBorderedRect(this.getPosX(), this.getPosY(), this.getPosX() + this.getWidth(), this.getPosY() + this.getHeight(), 0.5f, 0, -16777216);
-        Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(this.getLabel(), this.getPosX() + 3.0f, this.getPosY() + this.getHeight() / 2.0f - (float)(Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT >> 1), -1);
-        if (this.isExtended()) {
-            if (RenderUtil.mouseWithinBounds(mouseX, mouseY, this.getPosX(), this.getPosY() + this.getHeight(), this.getWidth(), Math.min(this.getScrollCurrentHeight(), scrollMaxHeight) + 1.0f) && this.getScrollCurrentHeight() > scrollMaxHeight) {
-                float scrollSpeed = Math.min(this.getScrollCurrentHeight(), scrollMaxHeight) / (float)(Minecraft.getDebugFPS() >> 3);
+        Render2DUtil.drawRect(getPosX(), getPosY(), getPosX() + getWidth(), getPosY() + getHeight(), CLICK_GUI.get().color.getValue().getRGB());
+        Render2DUtil.drawBorderedRect(getPosX(), getPosY(), getPosX() + getWidth(), getPosY() + getHeight(), 0.5f, 0, 0xff000000);
+        Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(getLabel(), getPosX() + 3, getPosY() + getHeight() / 2 - (Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT >> 1), 0xFFFFFFFF);
+        if (CLICK_GUI.get().size.getValue()) {
+            String disString = "[" + getComponents().size() + "]";
+            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(disString, (getPosX() + getWidth() - 3 - Minecraft.getMinecraft().fontRenderer.getStringWidth(disString)), (getPosY() + getHeight() / 2 - (Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT >> 1)), 0xFFFFFFFF);
+        }
+        if (isExtended()) {
+            if (RenderUtil.mouseWithinBounds(mouseX, mouseY, getPosX(), getPosY() + getHeight(), getWidth(), (Math.min(getScrollCurrentHeight(), scrollMaxHeight)) + 1) && getScrollCurrentHeight() > scrollMaxHeight) {
+                final float scrollSpeed = Math.min(getScrollCurrentHeight(), scrollMaxHeight) / (Minecraft.getDebugFPS() >> 3);
                 int wheel = Mouse.getDWheel();
                 if (wheel < 0) {
-                    if ((float)this.getScrollY() - scrollSpeed < -(this.getScrollCurrentHeight() - Math.min(this.getScrollCurrentHeight(), scrollMaxHeight))) {
-                        this.setScrollY((int)(-(this.getScrollCurrentHeight() - Math.min(this.getScrollCurrentHeight(), scrollMaxHeight))));
-                    } else {
-                        this.setScrollY((int)((float)this.getScrollY() - scrollSpeed));
-                    }
+                    if (getScrollY() - scrollSpeed < -(getScrollCurrentHeight() - Math.min(getScrollCurrentHeight(), scrollMaxHeight)))
+                        setScrollY((int) -(getScrollCurrentHeight() - Math.min(getScrollCurrentHeight(), scrollMaxHeight)));
+                    else setScrollY((int) (getScrollY() - scrollSpeed));
                 } else if (wheel > 0) {
-                    this.setScrollY((int)((float)this.getScrollY() + scrollSpeed));
+                    setScrollY((int) (getScrollY() + scrollSpeed));
                 }
             }
-            if (this.getScrollY() > 0) {
-                this.setScrollY(0);
-            }
-            if (this.getScrollCurrentHeight() > scrollMaxHeight) {
-                if ((float)(this.getScrollY() - 6) < -(this.getScrollCurrentHeight() - scrollMaxHeight)) {
-                    this.setScrollY((int)(-(this.getScrollCurrentHeight() - scrollMaxHeight)));
-                }
-            } else if (this.getScrollY() < 0) {
-                this.setScrollY(0);
-            }
-            Render2DUtil.drawRect(this.getPosX(), this.getPosY() + this.getHeight(), this.getPosX() + this.getWidth(), this.getPosY() + this.getHeight() + 1.0f + this.getCurrentHeight(), -1845493760);
+            if (getScrollY() > 0) setScrollY(0);
+            if (getScrollCurrentHeight() > scrollMaxHeight) {
+                if (getScrollY() - 6 < -(getScrollCurrentHeight() - scrollMaxHeight))
+                    setScrollY((int) -(getScrollCurrentHeight() - scrollMaxHeight));
+            } else if (getScrollY() < 0) setScrollY(0);
+            Render2DUtil.drawRect(getPosX(), getPosY() + getHeight(), getPosX() + getWidth(), getPosY() + getHeight() + 1 + (getCurrentHeight()), 0x92000000);
             GL11.glPushMatrix();
-            GL11.glEnable((int)3089);
-            RenderUtil.scissor(this.getPosX(), this.getPosY() + this.getHeight() + 1.0f, this.getPosX() + this.getWidth(), this.getPosY() + this.getHeight() + scrollMaxHeight + 1.0f);
-            this.getComponents().forEach(component -> component.drawScreen(mouseX, mouseY, partialTicks));
-            GL11.glDisable((int)3089);
+            GL11.glEnable(GL11.GL_SCISSOR_TEST);
+            RenderUtil.scissor(getPosX(), getPosY() + getHeight() + 1, getPosX() + getWidth(), getPosY() + getHeight() + scrollMaxHeight + 1);
+            getComponents().forEach(component -> component.drawScreen(mouseX, mouseY, partialTicks));
+            GL11.glDisable(GL11.GL_SCISSOR_TEST);
             GL11.glPopMatrix();
         }
-        this.updatePositions();
+        updatePositions();
     }
 
     @Override
@@ -132,10 +111,9 @@ extends Frame {
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         super.mouseClicked(mouseX, mouseY, mouseButton);
-        float scrollMaxHeight = (float)new ScaledResolution(Minecraft.getMinecraft()).getScaledHeight() - this.getHeight();
-        if (this.isExtended() && RenderUtil.mouseWithinBounds(mouseX, mouseY, this.getPosX(), this.getPosY() + this.getHeight(), this.getWidth(), Math.min(this.getScrollCurrentHeight(), scrollMaxHeight) + 1.0f)) {
-            this.getComponents().forEach(component -> component.mouseClicked(mouseX, mouseY, mouseButton));
-        }
+        final float scrollMaxHeight = new ScaledResolution(Minecraft.getMinecraft()).getScaledHeight() - getHeight();
+        if (isExtended() && RenderUtil.mouseWithinBounds(mouseX, mouseY, getPosX(), getPosY() + getHeight(), getWidth(), (Math.min(getScrollCurrentHeight(), scrollMaxHeight)) + 1))
+            getComponents().forEach(component -> component.mouseClicked(mouseX, mouseY, mouseButton));
     }
 
     @Override
@@ -144,72 +122,118 @@ extends Frame {
     }
 
     private void updatePositions() {
-        float offsetY = this.getHeight() + 1.0f;
-        for (Component component : this.getComponents()) {
+        float offsetY = getHeight() + 1;
+        for (Component component : getComponents()) {
             component.setOffsetY(offsetY);
-            component.moved(this.getPosX(), this.getPosY() + (float)this.getScrollY());
-            if (component instanceof ModuleComponent && component.isExtended()) {
-                for (Component component1 : ((ModuleComponent)component).getComponents()) {
-                    if (component1 instanceof BooleanComponent && Visibilities.VISIBILITY_MANAGER.isVisible(((BooleanComponent)component1).getBooleanSetting())) {
-                        offsetY += component1.getHeight();
+            component.moved(getPosX(), getPosY() + getScrollY());
+            if (component instanceof ModuleComponent) {
+                if (component.isExtended()) {
+                    for (Component component1 : ((ModuleComponent) component).getComponents()) {
+                        if (component1 instanceof BooleanComponent) {
+                            if (Visibilities.VISIBILITY_MANAGER.isVisible(((BooleanComponent) component1).getBooleanSetting())) {
+                                offsetY += component1.getHeight();
+                            }
+                        }
+                        if (component1 instanceof KeybindComponent) {
+                            if (Visibilities.VISIBILITY_MANAGER.isVisible(((KeybindComponent) component1).getBindSetting())) {
+                                offsetY += component1.getHeight();
+
+                            }
+                        }
+                        if (component1 instanceof NumberComponent) {
+                            if (Visibilities.VISIBILITY_MANAGER.isVisible(((NumberComponent) component1).getNumberSetting())) {
+                                offsetY += component1.getHeight();
+
+                            }
+                        }
+                        if (component1 instanceof EnumComponent) {
+                            if (Visibilities.VISIBILITY_MANAGER.isVisible(((EnumComponent) component1).getEnumSetting())) {
+                                offsetY += component1.getHeight();
+
+                            }
+                        }
+                        if (component1 instanceof ColorComponent) {
+                            if (Visibilities.VISIBILITY_MANAGER.isVisible(((ColorComponent) component1).getColorSetting())) {
+                                offsetY += component1.getHeight();
+                            }
+                        }
+                        if (component1 instanceof StringComponent) {
+                            if (Visibilities.VISIBILITY_MANAGER.isVisible(((StringComponent) component1).getStringSetting())) {
+                                offsetY += component1.getHeight();
+                            }
+                        }
+                        if (component1 instanceof ListComponent) {
+                            if (Visibilities.VISIBILITY_MANAGER.isVisible(((ListComponent) component1).getListSetting())) {
+                                offsetY += component1.getHeight();
+                            }
+                        }
                     }
-                    if (component1 instanceof KeybindComponent && Visibilities.VISIBILITY_MANAGER.isVisible(((KeybindComponent)component1).getBindSetting())) {
-                        offsetY += component1.getHeight();
-                    }
-                    if (component1 instanceof NumberComponent && Visibilities.VISIBILITY_MANAGER.isVisible(((NumberComponent)component1).getNumberSetting())) {
-                        offsetY += component1.getHeight();
-                    }
-                    if (component1 instanceof EnumComponent && Visibilities.VISIBILITY_MANAGER.isVisible(((EnumComponent)component1).getEnumSetting())) {
-                        offsetY += component1.getHeight();
-                    }
-                    if (component1 instanceof ColorComponent && Visibilities.VISIBILITY_MANAGER.isVisible(((ColorComponent)component1).getColorSetting())) {
-                        offsetY += component1.getHeight();
-                    }
-                    if (!(component1 instanceof StringComponent) || !Visibilities.VISIBILITY_MANAGER.isVisible(((StringComponent)component1).getStringSetting())) continue;
-                    offsetY += component1.getHeight();
+                    offsetY += 3.f;
                 }
-                offsetY += 3.0f;
             }
             offsetY += component.getHeight();
         }
     }
 
     private float getScrollCurrentHeight() {
-        return this.getCurrentHeight() + this.getHeight() + 3.0f;
+        return getCurrentHeight() + getHeight() + 3.f;
     }
 
     private float getCurrentHeight() {
-        float cHeight = 1.0f;
-        for (Component component : this.getComponents()) {
-            if (component instanceof ModuleComponent && component.isExtended()) {
-                for (Component component1 : ((ModuleComponent)component).getComponents()) {
-                    if (component1 instanceof BooleanComponent && Visibilities.VISIBILITY_MANAGER.isVisible(((BooleanComponent)component1).getBooleanSetting())) {
-                        cHeight += component1.getHeight();
+        float cHeight = 1;
+        for (Component component : getComponents()) {
+            if (component instanceof ModuleComponent) {
+                if (component.isExtended()) {
+                    for (Component component1 : ((ModuleComponent) component).getComponents()) {
+                        if (component1 instanceof BooleanComponent) {
+                            if (Visibilities.VISIBILITY_MANAGER.isVisible(((BooleanComponent) component1).getBooleanSetting())) {
+                                cHeight += component1.getHeight();
+                            }
+                        }
+                        if (component1 instanceof KeybindComponent) {
+                            if (Visibilities.VISIBILITY_MANAGER.isVisible(((KeybindComponent) component1).getBindSetting())) {
+                                cHeight += component1.getHeight();
+
+                            }
+                        }
+                        if (component1 instanceof NumberComponent) {
+                            if (Visibilities.VISIBILITY_MANAGER.isVisible(((NumberComponent) component1).getNumberSetting())) {
+                                cHeight += component1.getHeight();
+
+                            }
+                        }
+                        if (component1 instanceof EnumComponent) {
+                            if (Visibilities.VISIBILITY_MANAGER.isVisible(((EnumComponent) component1).getEnumSetting())) {
+                                cHeight += component1.getHeight();
+
+                            }
+                        }
+                        if (component1 instanceof ColorComponent) {
+                            if (Visibilities.VISIBILITY_MANAGER.isVisible(((ColorComponent) component1).getColorSetting())) {
+                                cHeight += component1.getHeight();
+                            }
+                        }
+                        if (component1 instanceof StringComponent) {
+                            if (Visibilities.VISIBILITY_MANAGER.isVisible(((StringComponent) component1).getStringSetting())) {
+                                cHeight += component1.getHeight();
+                            }
+                        }
+                        if (component1 instanceof ListComponent) {
+                            if (Visibilities.VISIBILITY_MANAGER.isVisible(((ListComponent) component1).getListSetting())) {
+                                cHeight += component1.getHeight();
+                            }
+                        }
                     }
-                    if (component1 instanceof KeybindComponent && Visibilities.VISIBILITY_MANAGER.isVisible(((KeybindComponent)component1).getBindSetting())) {
-                        cHeight += component1.getHeight();
-                    }
-                    if (component1 instanceof NumberComponent && Visibilities.VISIBILITY_MANAGER.isVisible(((NumberComponent)component1).getNumberSetting())) {
-                        cHeight += component1.getHeight();
-                    }
-                    if (component1 instanceof EnumComponent && Visibilities.VISIBILITY_MANAGER.isVisible(((EnumComponent)component1).getEnumSetting())) {
-                        cHeight += component1.getHeight();
-                    }
-                    if (component1 instanceof ColorComponent && Visibilities.VISIBILITY_MANAGER.isVisible(((ColorComponent)component1).getColorSetting())) {
-                        cHeight += component1.getHeight();
-                    }
-                    if (!(component1 instanceof StringComponent) || !Visibilities.VISIBILITY_MANAGER.isVisible(((StringComponent)component1).getStringSetting())) continue;
-                    cHeight += component1.getHeight();
+                    cHeight += 3.f;
                 }
-                cHeight += 3.0f;
             }
             cHeight += component.getHeight();
         }
         return cHeight;
     }
 
+
     public Category getModuleCategory() {
-        return this.moduleCategory;
+        return moduleCategory;
     }
 }
-

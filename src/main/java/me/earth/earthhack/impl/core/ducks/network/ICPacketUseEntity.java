@@ -1,12 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.Entity
- *  net.minecraft.network.play.client.CPacketUseEntity$Action
- *  net.minecraft.util.EnumHand
- *  net.minecraft.util.math.Vec3d
- */
 package me.earth.earthhack.impl.core.ducks.network;
 
 import net.minecraft.entity.Entity;
@@ -14,23 +5,27 @@ import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.Vec3d;
 
-public interface ICPacketUseEntity {
-    public void setEntityId(int var1);
+/**
+ * Duck Interface for {@link CPacketUseEntity}.
+ */
+public interface ICPacketUseEntity
+{
+    void setEntityId(int entityId);
 
-    public void setAction(CPacketUseEntity.Action var1);
+    void setAction(CPacketUseEntity.Action action);
 
-    public void setVec(Vec3d var1);
+    void setVec(Vec3d vec3d);
 
-    public void setHand(EnumHand var1);
+    void setHand(EnumHand hand);
 
-    public int getEntityID();
+    int getEntityID();
 
-    public CPacketUseEntity.Action getAction();
+    CPacketUseEntity.Action getAction();
 
-    public Vec3d getHitVec();
+    Vec3d getHitVec();
 
-    public EnumHand getHand();
+    EnumHand getHand();
 
-    public Entity getAttackedEntity();
+    Entity getAttackedEntity();
+
 }
-

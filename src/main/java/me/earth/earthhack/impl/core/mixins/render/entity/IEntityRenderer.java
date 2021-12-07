@@ -1,36 +1,38 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.client.renderer.EntityRenderer
- */
 package me.earth.earthhack.impl.core.mixins.render.entity;
 
 import net.minecraft.client.renderer.EntityRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
+import org.spongepowered.asm.mixin.gen.Invoker;
 
-@Mixin(value={EntityRenderer.class})
+@Mixin(EntityRenderer.class)
 public interface IEntityRenderer {
-    @Accessor(value="rendererUpdateCount")
-    public int getRendererUpdateCount();
 
-    @Accessor(value="rainXCoords")
-    public float[] getRainXCoords();
+    @Accessor("rendererUpdateCount")
+    int getRendererUpdateCount();
 
-    @Accessor(value="rainYCoords")
-    public float[] getRainYCoords();
+    @Accessor("rainXCoords")
+    float[] getRainXCoords();
 
-    @Accessor(value="farPlaneDistance")
-    public float getFarPlaneDistance();
+    @Accessor("rainYCoords")
+    float[] getRainYCoords();
 
-    @Accessor(value="fovModifierHandPrev")
-    public float getFovModifierHandPrev();
+    @Accessor("farPlaneDistance")
+    float getFarPlaneDistance();
 
-    @Accessor(value="fovModifierHand")
-    public float getFovModifierHand();
+    @Accessor("fovModifierHandPrev")
+    float getFovModifierHandPrev();
 
-    @Accessor(value="debugView")
-    public boolean isDebugView();
+    @Accessor("fovModifierHand")
+    float getFovModifierHand();
+
+    @Accessor("debugView")
+    boolean isDebugView();
+
+    /*@Invoker("getFOVModifier")
+    float getFOVModifier(float partialTicks, boolean useFOVSetting);*/
+
+    /*@Invoker("setupCameraTransform")
+    void setupCameraTransform(float partialTicks, int pass);*/
+
 }
-

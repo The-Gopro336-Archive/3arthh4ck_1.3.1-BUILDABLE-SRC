@@ -1,21 +1,17 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.MoverType
- */
 package me.earth.earthhack.impl.event.events.movement;
 
 import net.minecraft.entity.MoverType;
 
-public class MoveEvent {
+public class MoveEvent
+{
     private final MoverType type;
     private double x;
     private double y;
     private double z;
     private boolean sneaking;
 
-    public MoveEvent(MoverType type, double x, double y, double z, boolean sneaking) {
+    public MoveEvent(MoverType type, double x, double y, double z, boolean sneaking)
+    {
         this.type = type;
         this.x = x;
         this.y = y;
@@ -23,40 +19,49 @@ public class MoveEvent {
         this.sneaking = sneaking;
     }
 
-    public double getX() {
-        return this.x;
+    public double getX()
+    {
+        return x;
     }
 
-    public void setX(double x) {
+    public void setX(double x)
+    {
         this.x = x;
     }
 
-    public double getY() {
-        return this.y;
+    public double getY()
+    {
+        return y;
     }
 
-    public void setY(double y) {
+    public void setY(double y)
+    {
         this.y = y;
     }
 
-    public double getZ() {
-        return this.z;
+    public double getZ()
+    {
+        return z;
     }
 
-    public void setZ(double z) {
+    public void setZ(double z)
+    {
         this.z = z;
     }
 
-    public MoverType getType() {
-        return this.type;
+    public MoverType getType()
+    {
+        return type;
     }
 
-    public boolean isSneaking() {
-        return this.sneaking;
+    public boolean isSneaking()
+    {
+        return sneaking;
     }
 
-    public void setSneaking(boolean sneaking) {
+    public void setSneaking(boolean sneaking)
+    {
         this.sneaking = sneaking;
     }
-}
 
+}

@@ -1,15 +1,15 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.util.math.MathHelper
- */
 package me.earth.earthhack.impl.util.animation;
 
-import me.earth.earthhack.impl.util.animation.AnimationMode;
 import net.minecraft.util.math.MathHelper;
 
+/**
+ * A class representing an animation that takes x ms
+ * all values must be positive or else it won't work (will fix later)
+ * @author megyn
+ */
 public class TimeAnimation {
+
+    // length in ms
     private final long length;
     private double start;
     private double end;
@@ -23,38 +23,34 @@ public class TimeAnimation {
     private double per;
     private long dif;
     private boolean flag;
+
     private AnimationMode mode;
 
     public TimeAnimation(long length, double start, double end, boolean backwards, AnimationMode mode) {
         this.length = length;
         this.start = start;
-        this.current = start;
+        current = start;
         this.end = end;
         this.mode = mode;
         this.backwards = backwards;
-        this.startTime = System.currentTimeMillis();
-        this.playing = true;
-        this.dif = System.currentTimeMillis() - this.startTime;
+        startTime = System.currentTimeMillis();
+        playing = true;
+        dif = (System.currentTimeMillis() - startTime);
         switch (mode) {
-            case LINEAR: {
-                this.per = (end - start) / (double)length;
+            case LINEAR:
+                per = (end - start) / length;
                 break;
-            }
-            case EXPONENTIAL: {
+            case EXPONENTIAL:
                 double dif = end - start;
-                boolean bl = this.flag = dif < 0.0;
-                if (this.flag) {
-                    dif *= -1.0;
-                }
-                int i = 0;
-                while ((long)i < length) {
+                flag = dif < 0;
+                if (flag) dif *= -1;
+                for (int i = 0; i < length; i++) {
                     dif = Math.sqrt(dif);
-                    ++i;
                 }
-                this.per = dif;
-            }
+                per = dif;
+                break;
         }
-        this.lastTime = System.currentTimeMillis();
+        lastTime = System.currentTimeMillis();
     }
 
     public TimeAnimation(long length, double start, double end, boolean backwards, boolean reverseOnEnd, AnimationMode mode) {
@@ -63,40 +59,48 @@ public class TimeAnimation {
     }
 
     public void add(float partialTicks) {
-        if (this.playing) {
-            if (this.mode == AnimationMode.LINEAR) {
-                this.current = this.start + this.progress;
-                this.progress += this.per * (double)(System.currentTimeMillis() - this.lastTime);
-            } else if (this.mode == AnimationMode.EXPONENTIAL) {
-                // empty if block
+        if (playing) {
+            if (mode == AnimationMode.LINEAR) {
+                current = start + progress;
+                // current = start + (per * ((System.currentTimeMillis() - startTime)));
+                progress += per * (System.currentTimeMillis() - lastTime);
+                // lastTime = System.currentTimeMillis();
+                // progress = (backwards ? -1 : 1) * (per * ((System.currentTimeMillis() - startTime)));
+            } else if (mode == AnimationMode.EXPONENTIAL) {
+                /*current = start + per;
+                if (lastDif != dif) {
+                    Earthhack.getLogger().info("per " + per);
+                    per *= 1.0d + per;
+                    if (flag && per > 0) per *= -1;
+                }*/
             }
-            this.current = MathHelper.clamp((double)this.current, (double)this.start, (double)this.end);
-            if (this.current >= this.end || this.backwards && this.current <= this.start) {
-                if (this.reverseOnEnd) {
-                    this.reverse();
-                    this.reverseOnEnd = false;
+            current = MathHelper.clamp(current, start, end);
+            if (current >= end || (backwards && current <= start)) {
+                if (reverseOnEnd) {
+                    reverse();
+                    reverseOnEnd = false;
                 } else {
-                    this.playing = false;
+                    playing = false;
                 }
             }
         }
-        this.lastTime = System.currentTimeMillis();
+        lastTime = System.currentTimeMillis();
     }
 
     public long getLength() {
-        return this.length;
+        return length;
     }
 
     public double getStart() {
-        return this.start;
+        return start;
     }
 
     public double getEnd() {
-        return this.end;
+        return end;
     }
 
     public double getCurrent() {
-        return this.current;
+        return current;
     }
 
     public void setCurrent(double current) {
@@ -104,7 +108,7 @@ public class TimeAnimation {
     }
 
     public AnimationMode getMode() {
-        return this.mode;
+        return mode;
     }
 
     public void setMode(AnimationMode mode) {
@@ -112,24 +116,28 @@ public class TimeAnimation {
     }
 
     public boolean isPlaying() {
-        return this.playing;
+        return playing;
     }
 
     public void play() {
-        this.playing = true;
+        playing = true;
     }
 
     public void stop() {
-        this.playing = false;
+        playing = false;
     }
 
     public boolean isBackwards() {
-        return this.backwards;
+        return backwards;
     }
+
+    /*public void setBackwards(boolean backwards) {
+        this.backwards = backwards;
+    }*/
 
     public void reverse() {
-        this.backwards = !this.backwards;
-        this.per *= -1.0;
+        backwards = !backwards;
+        per *= -1;
     }
-}
 
+}

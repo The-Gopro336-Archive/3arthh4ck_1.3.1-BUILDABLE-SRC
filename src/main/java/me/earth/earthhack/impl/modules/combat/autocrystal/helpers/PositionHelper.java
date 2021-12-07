@@ -1,16 +1,5 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.Entity
- *  net.minecraft.entity.player.EntityPlayer
- *  net.minecraft.network.play.server.SPacketSpawnPlayer
- *  net.minecraft.world.World
- */
 package me.earth.earthhack.impl.modules.combat.autocrystal.helpers;
 
-import java.util.HashMap;
-import java.util.Map;
 import me.earth.earthhack.api.event.bus.EventListener;
 import me.earth.earthhack.api.event.bus.SubscriberImpl;
 import me.earth.earthhack.api.util.interfaces.Globals;
@@ -23,48 +12,60 @@ import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.server.SPacketSpawnPlayer;
-import net.minecraft.world.World;
 
-public class PositionHelper
-extends SubscriberImpl
-implements Globals {
+import java.util.HashMap;
+import java.util.Map;
+
+public class PositionHelper extends SubscriberImpl implements Globals
+{
     private final AutoCrystal module;
     private final Map<Entity, MotionTracker> motionTrackerMap;
 
-    public PositionHelper(AutoCrystal module) {
+    public PositionHelper(AutoCrystal module)
+    {
         this.module = module;
-        this.motionTrackerMap = new HashMap<Entity, MotionTracker>();
-        this.listeners.add(new EventListener<WorldClientEvent>(WorldClientEvent.class){
-
+        motionTrackerMap = new HashMap<>();
+        this.listeners.add(new EventListener<WorldClientEvent>(WorldClientEvent.class)
+        {
             @Override
-            public void invoke(WorldClientEvent event) {
-                PositionHelper.this.motionTrackerMap.clear();
+            public void invoke(WorldClientEvent event)
+            {
+                motionTrackerMap.clear();
             }
         });
-        this.listeners.add(new ReceiveListener<SPacketSpawnPlayer>(SPacketSpawnPlayer.class, event -> event.addPostEvent(() -> {
-            if (PositionHelper.mc.world.getEntityByID(((SPacketSpawnPlayer)event.getPacket()).getEntityID()) instanceof EntityPlayer) {
-                EntityPlayer player = (EntityPlayer)PositionHelper.mc.world.getEntityByID(((SPacketSpawnPlayer)event.getPacket()).getEntityID());
-                this.motionTrackerMap.put((Entity)player, new MotionTracker((World)PositionHelper.mc.world, player));
-            }
-        })));
-        this.listeners.add(new EventListener<UpdateEntitiesEvent>(UpdateEntitiesEvent.class){
-
+        this.listeners.add(new ReceiveListener<>(SPacketSpawnPlayer.class, event ->
+        {
+            event.addPostEvent(() ->
+            {
+                if (mc.world.getEntityByID(event.getPacket().getEntityID()) instanceof EntityPlayer)
+                {
+                    EntityPlayer player = (EntityPlayer) mc.world.getEntityByID(event.getPacket().getEntityID());
+                    motionTrackerMap.put(player, new MotionTracker(mc.world, player));
+                }
+            });
+        }));
+        this.listeners.add(new EventListener<UpdateEntitiesEvent>(UpdateEntitiesEvent.class)
+        {
             @Override
-            public void invoke(UpdateEntitiesEvent event) {
-                HashMap tempMap = new HashMap(PositionHelper.this.motionTrackerMap);
-                for (Map.Entry entry : tempMap.entrySet()) {
-                    if (EntityUtil.isDead((Entity)entry.getValue())) {
-                        PositionHelper.this.motionTrackerMap.remove(entry.getValue());
+            public void invoke(UpdateEntitiesEvent event)
+            {
+                Map<Entity, MotionTracker> tempMap = new HashMap<>(motionTrackerMap);
+                for (Map.Entry<Entity, MotionTracker> entry : tempMap.entrySet())
+                {
+                    if (EntityUtil.isDead(entry.getValue()))
+                    {
+                        motionTrackerMap.remove(entry.getValue());
                         continue;
                     }
-                    ((MotionTracker)entry.getValue()).updateFromTrackedEntity();
+                    entry.getValue().updateFromTrackedEntity();
                 }
             }
         });
     }
 
-    public MotionTracker getTrackerFromEntity(Entity player) {
-        return this.motionTrackerMap.get((Object)player);
+    public MotionTracker getTrackerFromEntity(Entity player)
+    {
+        return motionTrackerMap.get(player);
     }
-}
 
+}

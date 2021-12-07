@@ -1,34 +1,35 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.util.client;
 
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.data.DefaultData;
 
-public class SimpleData
-extends DefaultData<Module> {
+public class SimpleData extends DefaultData<Module>
+{
     private final int color;
     private final String description;
 
-    public SimpleData(Module module, String description) {
-        this(module, description, -1);
+    public SimpleData(Module module, String description)
+    {
+        this(module, description, 0xffffffff);
     }
 
-    public SimpleData(Module module, String description, int color) {
+    public SimpleData(Module module, String description, int color)
+    {
         super(module);
         this.color = color;
         this.description = description;
     }
 
     @Override
-    public int getColor() {
-        return this.color;
+    public int getColor()
+    {
+        return color;
     }
 
     @Override
-    public String getDescription() {
-        return this.description;
+    public String getDescription()
+    {
+        return description;
     }
-}
 
+}

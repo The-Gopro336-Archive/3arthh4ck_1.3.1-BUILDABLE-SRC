@@ -1,27 +1,27 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.misc.antiaim;
 
 import me.earth.earthhack.api.module.data.DefaultData;
-import me.earth.earthhack.impl.modules.misc.antiaim.AntiAim;
 
-final class AntiAimData
-extends DefaultData<AntiAim> {
-    public AntiAimData(AntiAim module) {
+final class AntiAimData extends DefaultData<AntiAim>
+{
+    public AntiAimData(AntiAim module)
+    {
         super(module);
-        this.register(module.strict, "Doesn't rotate when you place/attack.");
-        this.register(module.skip, "Skips every Nth tick, off if value is 1.");
+        register(module.strict, "Doesn't rotate when you place/attack.");
+        register(module.skip, "Skips every Nth tick, off if value is 1.");
     }
 
     @Override
-    public int getColor() {
-        return -1;
+    public int getColor()
+    {
+        return 0xffffffff;
     }
 
     @Override
-    public String getDescription() {
+    public String getDescription()
+    {
         return "";
     }
+
 }
 

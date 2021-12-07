@@ -1,11 +1,14 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.api.util.interfaces;
 
-public interface Displayable {
-    public String getDisplayName();
+/**
+ * A interface for Objects that can be named.
+ */
+public interface Displayable
+{
+    /** @return the display name for this Object. */
+    String getDisplayName();
 
-    public void setDisplayName(String var1);
+    /** Sets the DisplayName for this Object. */
+    void setDisplayName(String name);
+
 }
-

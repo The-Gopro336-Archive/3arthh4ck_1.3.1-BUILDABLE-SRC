@@ -1,100 +1,127 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.client.renderer.texture.DynamicTexture
- *  org.lwjgl.Sys
- */
 package me.earth.earthhack.impl.util.render.image;
 
+import me.earth.earthhack.api.util.interfaces.Globals;
+import me.earth.earthhack.api.util.interfaces.Nameable;
+import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.util.ResourceLocation;
+import org.lwjgl.Sys;
+import org.newdawn.slick.Animation;
+
+import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.LinkedList;
 import java.util.List;
-import me.earth.earthhack.api.util.interfaces.Globals;
-import me.earth.earthhack.impl.util.render.image.ImageUtil;
-import net.minecraft.client.renderer.texture.DynamicTexture;
-import org.lwjgl.Sys;
+import java.util.UUID;
 
-public class GifImage
-implements Globals {
-    private List<BufferedImage> frames = new LinkedList<BufferedImage>();
-    private List<DynamicTexture> textures = new LinkedList<DynamicTexture>();
+public class GifImage implements Globals, Nameable
+{
+
+    private String name;
+    private List<BufferedImage> frames = new LinkedList<>();
+    private List<EfficientTexture> textures = new LinkedList<>();
     private int offset;
     private int delay;
     private boolean firstUpdate;
     private long lastUpdate;
     private long timeLeft;
 
-    public GifImage(List<BufferedImage> images, int delay) {
-        this.frames.clear();
-        for (BufferedImage image : images) {
+    public GifImage(List<BufferedImage> images, int delay, String name)
+    {
+        this.name = name;
+        for (BufferedImage image : images)
+        {
             this.frames.add(ImageUtil.createFlipped(image));
         }
         this.offset = 0;
         this.delay = delay;
-        this.firstUpdate = true;
-        for (BufferedImage image : this.frames) {
-            try {
-                this.textures.add(ImageUtil.cacheBufferedImage(image, "gif"));
+        firstUpdate = true;
+        for (BufferedImage image : this.frames)
+        {
+            try
+            {
+                String generatedString = UUID.randomUUID().toString().split("-")[0];
+                textures.add(ImageUtil.cacheBufferedImage(image, "gif", generatedString));
             }
-            catch (IOException | NoSuchAlgorithmException e) {
+            catch (NoSuchAlgorithmException | IOException e)
+            {
                 e.printStackTrace();
             }
         }
-        this.reset();
+        reset();
     }
 
-    public GifImage(BufferedImage sheet, int width, int height) {
+    // TODO: clip down sheet
+    public GifImage(String name, int delay, List<EfficientTexture> textures)
+    {
+        this.name = name;
+        this.delay = delay;
+        this.offset = 0;
+        this.textures = textures;
+        this.firstUpdate = true;
+        reset();
     }
 
     public void reset() {
-        this.firstUpdate = true;
-        this.timeLeft = this.delay;
-        this.offset = 0;
+        firstUpdate = true;
+        timeLeft = delay;
+        offset = 0;
     }
 
-    public BufferedImage getBufferedImage() {
-        long now = this.getTime();
-        long delta = now - this.lastUpdate;
-        if (this.firstUpdate) {
-            delta = 0L;
-            this.firstUpdate = false;
+    public BufferedImage getBufferedImage()
+    {
+        if (frames.size() == 0) return null;
+        long now = getTime();
+        long delta = now - lastUpdate;
+        if (firstUpdate) {
+            delta = 0;
+            firstUpdate = false;
         }
-        this.lastUpdate = now;
-        this.timeLeft -= delta;
-        if (this.timeLeft <= 0L) {
-            ++this.offset;
-            this.timeLeft = this.delay;
+        lastUpdate = now;
+        timeLeft -= delta;
+        if (timeLeft <= 0)
+        {
+            offset++;
+            timeLeft = delay;
         }
-        if (this.offset >= this.frames.size()) {
-            this.offset = 0;
-        }
-        return this.frames.get(this.offset);
+        if (offset >= frames.size()) offset = 0;
+        return frames.get(offset);
     }
 
-    public DynamicTexture getDynamicTexture() {
-        long now = this.getTime();
-        long delta = now - this.lastUpdate;
-        if (this.firstUpdate) {
-            delta = 0L;
-            this.firstUpdate = false;
+    public EfficientTexture getDynamicTexture()
+    {
+        if (frames.size() == 0) return null;
+        long now = getTime();
+        long delta = now - lastUpdate;
+        if (firstUpdate) {
+            delta = 0;
+            firstUpdate = false;
         }
-        this.lastUpdate = now;
-        this.timeLeft -= delta;
-        if (this.timeLeft <= 0L) {
-            ++this.offset;
-            this.timeLeft = this.delay;
+        lastUpdate = now;
+        timeLeft -= delta;
+        if (timeLeft <= 0)
+        {
+            offset++;
+            timeLeft = delay;
         }
-        if (this.offset >= this.frames.size()) {
-            this.offset = 0;
-        }
-        return this.textures.get(this.offset);
+        if (offset >= frames.size()) offset = 0;
+        return textures.get(offset);
     }
 
     private long getTime() {
-        return Sys.getTime() * 1000L / Sys.getTimerResolution();
+        return (Sys.getTime() * 1000) / Sys.getTimerResolution();
     }
-}
 
+    @Override
+    public String getName()
+    {
+        return name;
+    }
+
+    public int getTextureSize() {
+        return textures.size();
+    }
+
+}

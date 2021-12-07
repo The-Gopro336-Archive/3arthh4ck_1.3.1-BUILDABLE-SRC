@@ -1,16 +1,15 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.managers.client.resource;
 
-public class ResourceException
-extends Exception {
-    public ResourceException(String message) {
+public class ResourceException extends Exception
+{
+    public ResourceException(String message)
+    {
         super(message);
     }
 
-    public ResourceException(Throwable cause) {
+    public ResourceException(Throwable cause)
+    {
         super(cause);
     }
-}
 
+}

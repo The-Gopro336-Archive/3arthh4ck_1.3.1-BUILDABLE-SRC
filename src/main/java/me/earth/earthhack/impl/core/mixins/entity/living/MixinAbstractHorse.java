@@ -1,13 +1,6 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.passive.AbstractHorse
- */
 package me.earth.earthhack.impl.core.mixins.entity.living;
 
 import me.earth.earthhack.api.event.bus.instance.Bus;
-import me.earth.earthhack.impl.core.mixins.entity.living.MixinEntityLivingBase;
 import me.earth.earthhack.impl.event.events.movement.ControlEvent;
 import me.earth.earthhack.impl.event.events.movement.HorseEvent;
 import net.minecraft.entity.passive.AbstractHorse;
@@ -16,34 +9,52 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(value={AbstractHorse.class})
-public abstract class MixinAbstractHorse
-extends MixinEntityLivingBase {
-    @Inject(method={"getHorseJumpStrength"}, at={@At(value="HEAD")}, cancellable=true)
-    private void getHorseJumpStrengthHook(CallbackInfoReturnable<Double> info) {
+@Mixin(AbstractHorse.class)
+public abstract class MixinAbstractHorse extends MixinEntityLivingBase
+{
+    @Inject(
+        method = "getHorseJumpStrength",
+        at = @At("HEAD"),
+        cancellable = true)
+    private void getHorseJumpStrengthHook(CallbackInfoReturnable<Double> info)
+    {
         HorseEvent event = new HorseEvent();
         Bus.EVENT_BUS.post(event);
-        if (event.getJumpHeight() != 0.0) {
+
+        if (event.getJumpHeight() != 0.0D)
+        {
             info.setReturnValue(event.getJumpHeight());
         }
     }
 
-    @Inject(method={"canBeSteered"}, at={@At(value="HEAD")}, cancellable=true)
-    private void canBeSteeredHook(CallbackInfoReturnable<Boolean> info) {
+    @Inject(
+        method = "canBeSteered",
+        at = @At("HEAD"),
+        cancellable = true)
+    private void canBeSteeredHook(CallbackInfoReturnable<Boolean> info)
+    {
         ControlEvent event = new ControlEvent();
         Bus.EVENT_BUS.post(event);
-        if (event.isCancelled()) {
+
+        if (event.isCancelled())
+        {
             info.setReturnValue(true);
         }
     }
 
-    @Inject(method={"isHorseSaddled"}, at={@At(value="HEAD")}, cancellable=true)
-    private void isHorseSaddledHook(CallbackInfoReturnable<Boolean> info) {
+    @Inject(
+        method = "isHorseSaddled",
+        at = @At("HEAD"),
+        cancellable = true)
+    private void isHorseSaddledHook(CallbackInfoReturnable<Boolean> info)
+    {
         ControlEvent event = new ControlEvent();
         Bus.EVENT_BUS.post(event);
-        if (event.isCancelled()) {
+
+        if (event.isCancelled())
+        {
             info.setReturnValue(true);
         }
     }
+
 }
-

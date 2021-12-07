@@ -1,46 +1,91 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.api.util;
 
+/**
+ * Utility for {@link Enum}s.
+ */
 public class EnumHelper {
+    /**
+     * @param entry the Enum value to get the next one from.
+     * @return the next enum value in the enum,
+     * or the first one if the given
+     * one is the last value in the enum.
+     */
     public static Enum<?> next(Enum<?> entry) {
-        Enum[] array = (Enum[])entry.getDeclaringClass().getEnumConstants();
-        return array.length - 1 == entry.ordinal() ? array[0] : array[entry.ordinal() + 1];
+        Enum<?>[] array = entry.getDeclaringClass().getEnumConstants();
+        return array.length - 1 == entry.ordinal()
+                ? array[0]
+                : array[entry.ordinal() + 1];
     }
 
+    /**
+     * @param entry the Enum value to get the previous one from.
+     * @return the previous enum value in the enum,
+     * or the last one if the given
+     * one is the first value in the enum.
+     */
     public static Enum<?> previous(Enum<?> entry) {
-        Enum[] array = (Enum[])entry.getDeclaringClass().getEnumConstants();
+        Enum<?>[] array = entry.getDeclaringClass().getEnumConstants();
         return entry.ordinal() - 1 < 0 ? array[array.length - 1] : array[entry.ordinal() - 1];
     }
 
-    public static Enum<?> fromString(Enum<?> initial, String name) {
-        Object e = EnumHelper.fromString(initial.getDeclaringClass(), name);
-        if (e != null) {
+
+    /**
+     * Parses the EnumValue for the Enum from String.
+     *
+     * @param initial the initial enum value.
+     * @param name    the name to parse (ignoreCase).
+     * @return initial if not able to parse or the enum value for the string.
+     */
+    public static Enum<?> fromString(Enum<?> initial, String name)
+    {
+        Enum<?> e = fromString(initial.getDeclaringClass(), name);
+        if (e != null)
+        {
             return e;
         }
+
         return initial;
     }
 
-    public static <T extends Enum<?>> T fromString(Class<T> type, String name) {
-        for (Enum constant : (Enum[])type.getEnumConstants()) {
-            if (!constant.name().equalsIgnoreCase(name)) continue;
-            return (T)constant;
+    /**
+     * Parses the EnumValue for the Enum from String.
+     *
+     * @param type the type of the enum
+     * @param name the name to parse (ignoreCase).
+     * @return initial if not able to parse or the enum value for the string.
+     */
+    public static <T extends Enum<?>> T fromString(Class<T> type, String name)
+    {
+        for (T constant : type.getEnumConstants())
+        {
+            if (constant.name().equalsIgnoreCase(name))
+            {
+                return constant;
+            }
         }
+
         return null;
     }
 
-    public static Enum<?> getEnumStartingWith(String prefix, Class<? extends Enum<?>> type) {
-        Enum<?>[] array;
-        if (prefix == null) {
+    public static Enum<?> getEnumStartingWith(String prefix,
+                                              Class<? extends Enum<?>> type)
+    {
+        if (prefix == null)
+        {
             return null;
         }
+
         prefix = prefix.toLowerCase();
-        for (Enum<?> entry : array = type.getEnumConstants()) {
-            if (!entry.name().toLowerCase().startsWith(prefix)) continue;
-            return entry;
+        Enum<?>[] array = type.getEnumConstants();
+        for (Enum<?> entry : array)
+        {
+            if (entry.name().toLowerCase().startsWith(prefix))
+            {
+                return entry;
+            }
         }
+
         return null;
     }
-}
 
+}

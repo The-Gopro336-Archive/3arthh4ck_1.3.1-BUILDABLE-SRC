@@ -1,17 +1,17 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.event.events.render;
 
-public class Render3DEvent {
+public class Render3DEvent
+{
     private final float partialTicks;
 
-    public Render3DEvent(float partialTicks) {
+    public Render3DEvent(float partialTicks)
+    {
         this.partialTicks = partialTicks;
     }
 
-    public float getPartialTicks() {
-        return this.partialTicks;
+    public float getPartialTicks()
+    {
+        return partialTicks;
     }
-}
 
+}

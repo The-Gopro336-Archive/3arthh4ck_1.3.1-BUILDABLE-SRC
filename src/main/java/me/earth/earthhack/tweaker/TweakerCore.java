@@ -1,11 +1,9 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.tweaker;
 
-public interface TweakerCore {
-    public void init(ClassLoader var1);
+public interface TweakerCore
+{
+    void init(ClassLoader pluginClassLoader);
 
-    public String[] getTransformers();
+    String[] getTransformers();
+
 }
-

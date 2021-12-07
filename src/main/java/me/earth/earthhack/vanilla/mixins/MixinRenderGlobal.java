@@ -1,11 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.client.renderer.RenderGlobal
- *  net.minecraft.client.renderer.culling.ICamera
- *  net.minecraft.entity.Entity
- */
 package me.earth.earthhack.vanilla.mixins;
 
 import me.earth.earthhack.api.event.bus.instance.Bus;
@@ -18,11 +10,21 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value={RenderGlobal.class})
-public abstract class MixinRenderGlobal {
-    @Inject(method={"renderEntities"}, at={@At(value="INVOKE", target="Lnet/minecraft/util/math/BlockPos$PooledMutableBlockPos;release()V", shift=At.Shift.BEFORE)})
-    private void renderEntitiesHook(Entity renderViewEntity, ICamera camera, float partialTicks, CallbackInfo ci) {
+@Mixin(RenderGlobal.class)
+public abstract class MixinRenderGlobal
+{
+    @Inject(
+        method = "renderEntities",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/util/math/BlockPos$PooledMutableBlockPos;release()V",
+            shift = At.Shift.BEFORE))
+    private void renderEntitiesHook(Entity renderViewEntity,
+                                    ICamera camera,
+                                    float partialTicks,
+                                    CallbackInfo ci)
+    {
         Bus.EVENT_BUS.post(new PostRenderEntitiesEvent(partialTicks, 0));
     }
-}
 
+}

@@ -1,28 +1,23 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.network.Packet
- */
 package me.earth.earthhack.impl.modules.player.blink;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
-import me.earth.earthhack.impl.modules.player.blink.Blink;
-import net.minecraft.network.Packet;
 
-final class ListenerPacket
-extends ModuleListener<Blink, PacketEvent.Send<?>> {
-    public ListenerPacket(Blink module) {
+final class ListenerPacket extends ModuleListener<Blink, PacketEvent.Send<?>>
+{
+    public ListenerPacket(Blink module)
+    {
         super(module, PacketEvent.Send.class);
     }
 
     @Override
-    public void invoke(PacketEvent.Send<?> event) {
-        if (((Blink)this.module).packetMode.getValue().shouldCancel((Packet<?>)event.getPacket())) {
-            mc.addScheduledTask(() -> ((Blink)this.module).packets.add((Packet<?>)event.getPacket()));
+    public void invoke(PacketEvent.Send<?> event)
+    {
+        if (module.packetMode.getValue().shouldCancel(event.getPacket()))
+        {
+            mc.addScheduledTask(() -> module.packets.add(event.getPacket()));
             event.setCancelled(true);
         }
     }
-}
 
+}

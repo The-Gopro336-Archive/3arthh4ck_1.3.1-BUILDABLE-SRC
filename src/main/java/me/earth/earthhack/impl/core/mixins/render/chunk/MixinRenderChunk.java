@@ -1,9 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.client.renderer.chunk.RenderChunk
- */
 package me.earth.earthhack.impl.core.mixins.render.chunk;
 
 import me.earth.earthhack.api.cache.SettingCache;
@@ -16,15 +10,22 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(value={RenderChunk.class})
-public abstract class MixinRenderChunk {
-    private static final SettingCache<Boolean, BooleanSetting, Debug> SLOW = Caches.getSetting(Debug.class, BooleanSetting.class, "SlowUpdates", false);
+@Mixin(RenderChunk.class)
+public abstract class MixinRenderChunk
+{
+    private static final SettingCache<Boolean, BooleanSetting, Debug> SLOW =
+     Caches.getSetting(Debug.class, BooleanSetting.class, "SlowUpdates", false);
 
-    @Inject(method={"needsImmediateUpdate"}, at={@At(value="HEAD")}, cancellable=true)
-    private void needsImmediateUpdateHook(CallbackInfoReturnable<Boolean> cir) {
-        if (SLOW.getValue().booleanValue()) {
+    @Inject(
+        method = "needsImmediateUpdate",
+        at = @At(value = "HEAD"),
+        cancellable = true)
+    private void needsImmediateUpdateHook(CallbackInfoReturnable<Boolean> cir)
+    {
+        if (SLOW.getValue())
+        {
             cir.setReturnValue(false);
         }
     }
-}
 
+}

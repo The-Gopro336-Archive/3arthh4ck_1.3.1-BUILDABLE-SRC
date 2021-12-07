@@ -1,12 +1,5 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.client.gui.GuiScreen
- */
 package me.earth.earthhack.impl.modules.client.clickgui;
 
-import java.awt.Color;
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
@@ -15,46 +8,68 @@ import me.earth.earthhack.api.setting.settings.ColorSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.api.setting.settings.StringSetting;
 import me.earth.earthhack.impl.gui.click.Click;
-import me.earth.earthhack.impl.modules.client.clickgui.ListenerScreen;
 import me.earth.earthhack.impl.util.client.SimpleData;
 import net.minecraft.client.gui.GuiScreen;
 
-public class ClickGui
-extends Module {
-    public final Setting<Color> color = this.register(new ColorSetting("Color", new Color(0, 80, 255)));
-    public final Setting<Boolean> catEars = this.register(new BooleanSetting("CatEars", false));
-    public final Setting<Boolean> blur = this.register(new BooleanSetting("Blur", false));
-    public final Setting<Integer> blurAmount = this.register(new NumberSetting<Integer>("Blur-Amount", 8, 1, 20));
-    public final Setting<Integer> blurSize = this.register(new NumberSetting<Integer>("Blur-Size", 3, 1, 20));
-    public final Setting<String> open = this.register(new StringSetting("Open", "+"));
-    public final Setting<String> close = this.register(new StringSetting("Close", "-"));
-    public final Setting<Boolean> white = this.register(new BooleanSetting("White-Settings", true));
-    public final Setting<Boolean> description = this.register(new BooleanSetting("Description", true));
-    public final Setting<Integer> descriptionWidth = this.register(new NumberSetting<Integer>("Description-Width", 240, 100, 1000));
+import java.awt.*;
+
+public class ClickGui extends Module
+{
+    public final Setting<Color> color =
+            register(new ColorSetting("Color", new Color(0, 80, 255)));
+    public final Setting<Boolean> catEars =
+            register(new BooleanSetting("CatEars", false));
+    public final Setting<Boolean> blur =
+            register(new BooleanSetting("Blur", false));
+    public final Setting<Integer> blurAmount =
+            register(new NumberSetting<>("Blur-Amount", 8, 1, 20));
+    public final Setting<Integer> blurSize =
+            register(new NumberSetting<>("Blur-Size", 3, 1, 20));
+    public final Setting<String> open =
+            register(new StringSetting("Open", "+"));
+    public final Setting<String> close =
+            register(new StringSetting("Close", "-"));
+    public final Setting<Boolean> white =
+            register(new BooleanSetting("White-Settings", true));
+    public final Setting<Boolean> description =
+        register(new BooleanSetting("Description", true));
+    public final Setting<Boolean> showBind =
+            register(new BooleanSetting("Show-Bind", true));
+    public final Setting<Boolean> size =
+            register(new BooleanSetting("Category-Size", true));
+    public final Setting<Integer> descriptionWidth =
+        register(new NumberSetting<>("Description-Width", 240, 100, 1000));
+
     protected boolean fromEvent;
     protected GuiScreen screen;
 
-    public ClickGui() {
+    public ClickGui()
+    {
         super("ClickGui", Category.Client);
         this.listeners.add(new ListenerScreen(this));
-        this.setData(new SimpleData(this, "Beautiful ClickGui by OHare"));
+        this.setData(new SimpleData(this, "Beautiful ClickGui by oHare"));
     }
 
     @Override
-    protected void onEnable() {
-        this.screen = ClickGui.mc.currentScreen;
+    protected void onEnable()
+    {
+        screen = mc.currentScreen;
+        // dont save it since some modules add/del settings
         Click gui = new Click();
         gui.init();
         gui.onGuiOpened();
-        mc.displayGuiScreen((GuiScreen)gui);
+        mc.displayGuiScreen(gui);
     }
 
     @Override
-    protected void onDisable() {
-        if (!this.fromEvent) {
-            mc.displayGuiScreen(this.screen);
+    protected void onDisable()
+    {
+        if (!fromEvent)
+        {
+            mc.displayGuiScreen(screen);
         }
-        this.fromEvent = false;
-    }
-}
 
+        fromEvent = false;
+    }
+
+}

@@ -1,120 +1,139 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.entity.player.EntityPlayer
- */
 package me.earth.earthhack.impl.modules.combat.autocrystal.util;
 
-import java.util.Set;
-import me.earth.earthhack.impl.modules.combat.autocrystal.util.PositionData;
 import net.minecraft.entity.player.EntityPlayer;
 
-public class ForcePosition
-extends PositionData {
+import java.util.Set;
+
+public class ForcePosition extends PositionData
+{
     private final PositionData data;
 
-    public ForcePosition(PositionData data) {
+    public ForcePosition(PositionData data)
+    {
         super(data.getPos(), data.getMaxLength());
         this.data = data;
     }
 
-    public PositionData getData() {
-        return this.data;
+    public PositionData getData()
+    {
+        return data;
     }
 
     @Override
-    public boolean usesObby() {
-        return this.data.usesObby();
+    public boolean usesObby()
+    {
+        return data.usesObby();
     }
 
     @Override
-    public float getMaxDamage() {
-        return this.data.getMaxDamage();
+    public float getMaxDamage()
+    {
+        return data.getMaxDamage();
     }
 
     @Override
-    public void setDamage(float damage) {
-        this.data.setDamage(damage);
+    public void setDamage(float damage)
+    {
+        data.setDamage(damage);
     }
 
     @Override
-    public float getSelfDamage() {
-        return this.data.getSelfDamage();
+    public float getSelfDamage()
+    {
+        return data.getSelfDamage();
     }
 
     @Override
-    public void setSelfDamage(float selfDamage) {
-        this.data.setSelfDamage(selfDamage);
+    public void setSelfDamage(float selfDamage)
+    {
+        data.setSelfDamage(selfDamage);
     }
 
     @Override
-    public EntityPlayer getTarget() {
-        return this.data.getTarget();
+    public EntityPlayer getTarget()
+    {
+        return data.getTarget();
     }
 
     @Override
-    public void setTarget(EntityPlayer target) {
-        this.data.setTarget(target);
+    public void setTarget(EntityPlayer target)
+    {
+        data.setTarget(target);
     }
 
     @Override
-    public EntityPlayer getFacePlacer() {
-        return this.data.getFacePlacer();
+    public EntityPlayer getFacePlacer()
+    {
+        return data.getFacePlacer();
     }
 
     @Override
-    public void setFacePlacer(EntityPlayer facePlace) {
-        this.data.setFacePlacer(facePlace);
+    public void setFacePlacer(EntityPlayer facePlace)
+    {
+        data.setFacePlacer(facePlace);
     }
 
     @Override
-    public Set<EntityPlayer> getAntiTotems() {
-        return this.data.getAntiTotems();
+    public Set<EntityPlayer> getAntiTotems()
+    {
+        return data.getAntiTotems();
     }
 
     @Override
-    public void addAntiTotem(EntityPlayer player) {
-        this.data.addAntiTotem(player);
+    public void addAntiTotem(EntityPlayer player)
+    {
+        data.addAntiTotem(player);
     }
 
     @Override
-    public boolean isBlocked() {
-        return this.data.isBlocked();
+    public boolean isBlocked()
+    {
+        return data.isBlocked();
     }
 
     @Override
-    public float getMinDiff() {
-        return this.data.getMinDiff();
+    public float getMinDiff()
+    {
+        return data.getMinDiff();
     }
 
     @Override
-    public void setMinDiff(float minDiff) {
-        this.data.setMinDiff(minDiff);
+    public void setMinDiff(float minDiff)
+    {
+        data.setMinDiff(minDiff);
     }
 
     @Override
-    public boolean isForce() {
+    public boolean isForce()
+    {
         return true;
     }
 
     @Override
-    public void addForcePlayer(EntityPlayer player) {
-        this.data.addForcePlayer(player);
+    public void addForcePlayer(EntityPlayer player)
+    {
+        data.addForcePlayer(player);
     }
 
     @Override
-    public boolean isLiquid() {
-        return this.data.isLiquid();
+    public boolean isLiquid()
+    {
+        return data.isLiquid();
     }
 
     @Override
-    public int compareTo(PositionData o) {
-        int c;
-        if (o instanceof ForcePosition && (c = Float.compare(this.getMinDiff(), o.getMinDiff())) != 0) {
-            return c;
+    public int compareTo(PositionData o)
+    {
+        if (o instanceof ForcePosition)
+        {
+            int c = Float.compare(this.getMinDiff(), o.getMinDiff());
+            if (c != 0)
+            {
+                return c;
+            }
         }
+
         return super.compareTo(o);
     }
-}
 
+}

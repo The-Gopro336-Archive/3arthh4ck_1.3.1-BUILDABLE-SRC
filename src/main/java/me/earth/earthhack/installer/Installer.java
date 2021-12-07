@@ -1,17 +1,42 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.installer;
 
 import me.earth.earthhack.installer.version.Version;
 
-public interface Installer {
-    public boolean refreshVersions();
+// TODO: option to add new Version!
+/**
+ * Interface representing the actions an Installer can perform.
+ */
+public interface Installer
+{
+    /**
+     * Refreshes all Versions.
+     *
+     * @return <tt>true</tt> if an exception has been thrown.
+     */
+    @SuppressWarnings("UnusedReturnValue")
+    boolean refreshVersions();
 
-    public boolean install(Version var1);
+    /**
+     * Installs the given version.
+     * Also calls {@link Installer#update(boolean)}
+     *
+     * @return <tt>true</tt> if an exception has been thrown.
+     */
+    boolean install(Version version);
 
-    public boolean uninstall(Version var1);
+    /**
+     * Uninstalls the given version.
+     *
+     * @return <tt>true</tt> if an exception has been thrown.
+     */
+    boolean uninstall(Version version);
 
-    public boolean update(boolean var1);
+    /**
+     * Puts this jar into the folder and remaps it if needed.
+     *
+     * @param forge if we don't need to remap.
+     * @return <tt>true</tt> if an exception has been thrown.
+     */
+    boolean update(boolean forge);
+
 }
-

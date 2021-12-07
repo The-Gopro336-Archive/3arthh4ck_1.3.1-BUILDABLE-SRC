@@ -1,20 +1,15 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.util.math.Vec3i
- */
 package me.earth.earthhack.impl.util.math.geocache;
 
 import net.minecraft.util.math.Vec3i;
 
-public interface GeoCache {
-    public void cache();
+public interface GeoCache
+{
+    void cache();
 
-    public int getRadius(double var1);
+    int getRadius(double radius);
 
-    public Vec3i get(int var1);
+    Vec3i get(int index);
 
-    public Vec3i[] array();
+    Vec3i[] array();
+
 }
-

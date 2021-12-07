@@ -1,43 +1,35 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.gui.hud;
 
 import me.earth.earthhack.api.hud.HudElement;
-import me.earth.earthhack.impl.gui.hud.Orientation;
-import me.earth.earthhack.impl.gui.hud.SnapPoint;
 import me.earth.earthhack.impl.managers.Managers;
 
-public class ElementSnapPoint
-extends SnapPoint {
+public class ElementSnapPoint extends SnapPoint {
+
     private final HudElement element;
 
     public ElementSnapPoint(HudElement element, Orientation orientation) {
         super(element.getX(), element.getY(), element.getWidth(), orientation);
         switch (orientation) {
-            case TOP: {
-                this.x = element.getX();
-                this.y = element.getY();
-                this.length = element.getWidth();
+            case TOP:
+                x = element.getX();
+                y = element.getY();
+                length = element.getWidth();
                 break;
-            }
-            case BOTTOM: {
-                this.x = element.getX();
-                this.y = element.getY() + element.getHeight();
-                this.length = element.getWidth();
+            case BOTTOM:
+                x = element.getX();
+                y = element.getY() + element.getHeight();
+                length = element.getWidth();
                 break;
-            }
-            case LEFT: {
-                this.x = element.getX();
-                this.y = element.getY();
-                this.length = element.getHeight();
+            case LEFT:
+                x = element.getX();
+                y = element.getY();
+                length = element.getHeight();
                 break;
-            }
-            case RIGHT: {
-                this.x = element.getX() + element.getWidth();
-                this.y = element.getY();
-                this.length = element.getHeight();
-            }
+            case RIGHT:
+                x = element.getX() + element.getWidth();
+                y = element.getY();
+                length = element.getHeight();
+                break;
         }
         this.element = element;
     }
@@ -45,33 +37,33 @@ extends SnapPoint {
     @Override
     public void update(int mouseX, int mouseY, float partialTicks) {
         for (HudElement hudElement : Managers.ELEMENTS.getRegistered()) {
-            if (hudElement == this.element) continue;
-            if (this.orientation == Orientation.LEFT && hudElement.getX() <= this.x + 4.0f && hudElement.getX() >= this.x - 4.0f) {
-                if (hudElement.isDragging() || this.x == hudElement.getX()) continue;
-                hudElement.setX(this.x);
-                continue;
+            if (hudElement == element) continue;
+            if (orientation == Orientation.LEFT && (hudElement.getX() <= x + 4 && hudElement.getX() >= x - 4)) {
+                if (!hudElement.isDragging() && x != hudElement.getX()) {
+                    hudElement.setX(x);
+                }
+            } else if (orientation == Orientation.RIGHT && (hudElement.getX() + hudElement.getWidth() <= x + 4 && hudElement.getX() + hudElement.getWidth() >= x - 4)) {
+                if (!hudElement.isDragging() && x != hudElement.getX() + hudElement.getWidth()) {
+                    hudElement.setX(x - hudElement.getWidth());
+                }
+            } else if (orientation == Orientation.TOP && (hudElement.getY() <= y + 4 && hudElement.getY() >= y - 4)) {
+                if (!hudElement.isDragging() && y != hudElement.getY()) {
+                    hudElement.setY(y);
+                }
+            } else if (orientation == Orientation.BOTTOM && (hudElement.getY() + hudElement.getHeight() <= y + 4 && hudElement.getY() + hudElement.getHeight() >= y - 4)) {
+                if (!hudElement.isDragging() && y != hudElement.getY() + hudElement.getHeight()) {
+                    hudElement.setY(y - hudElement.getHeight());
+                }
             }
-            if (this.orientation == Orientation.RIGHT && hudElement.getX() + hudElement.getWidth() <= this.x + 4.0f && hudElement.getX() + hudElement.getWidth() >= this.x - 4.0f) {
-                if (hudElement.isDragging() || this.x == hudElement.getX() + hudElement.getWidth()) continue;
-                hudElement.setX(this.x - hudElement.getWidth());
-                continue;
-            }
-            if (this.orientation == Orientation.TOP && hudElement.getY() <= this.y + 4.0f && hudElement.getY() >= this.y - 4.0f) {
-                if (hudElement.isDragging() || this.y == hudElement.getY()) continue;
-                hudElement.setY(this.y);
-                continue;
-            }
-            if (this.orientation != Orientation.BOTTOM || !(hudElement.getY() + hudElement.getHeight() <= this.y + 4.0f) || !(hudElement.getY() + hudElement.getHeight() >= this.y - 4.0f) || hudElement.isDragging() || this.y == hudElement.getY() + hudElement.getHeight()) continue;
-            hudElement.setY(this.y - hudElement.getHeight());
         }
     }
 
+    // dont draw dat shit
     @Override
-    public void draw(int mouseX, int mouseY, float partialTicks) {
-    }
+    public void draw(int mouseX, int mouseY, float partialTicks) { }
 
     public HudElement getElement() {
-        return this.element;
+        return element;
     }
-}
 
+}

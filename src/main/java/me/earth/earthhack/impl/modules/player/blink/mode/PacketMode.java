@@ -1,15 +1,3 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.network.Packet
- *  net.minecraft.network.play.client.CPacketChatMessage
- *  net.minecraft.network.play.client.CPacketClientStatus
- *  net.minecraft.network.play.client.CPacketConfirmTeleport
- *  net.minecraft.network.play.client.CPacketKeepAlive
- *  net.minecraft.network.play.client.CPacketPlayer
- *  net.minecraft.network.play.client.CPacketTabComplete
- */
 package me.earth.earthhack.impl.modules.player.blink.mode;
 
 import net.minecraft.network.Packet;
@@ -20,32 +8,36 @@ import net.minecraft.network.play.client.CPacketKeepAlive;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketTabComplete;
 
-public enum PacketMode {
-    All{
-
+public enum PacketMode
+{
+    All()
+    {
         @Override
-        public boolean shouldCancel(Packet<?> packet) {
+        public boolean shouldCancel(Packet<?> packet)
+        {
             return true;
         }
-    }
-    ,
-    CPacketPlayer{
-
+    },
+    CPacketPlayer()
+    {
         @Override
-        public boolean shouldCancel(Packet<?> packet) {
+        public boolean shouldCancel(Packet<?> packet)
+        {
             return packet instanceof CPacketPlayer;
         }
-    }
-    ,
-    Filtered{
-
+    },
+    Filtered()
+    {
         @Override
-        public boolean shouldCancel(Packet<?> packet) {
-            return !(packet instanceof CPacketChatMessage) && !(packet instanceof CPacketConfirmTeleport) && !(packet instanceof CPacketKeepAlive) && !(packet instanceof CPacketTabComplete) && !(packet instanceof CPacketClientStatus);
+        public boolean shouldCancel(Packet<?> packet)
+        {
+            return !(packet instanceof CPacketChatMessage
+                        || packet instanceof CPacketConfirmTeleport
+                        || packet instanceof CPacketKeepAlive
+                        || packet instanceof CPacketTabComplete
+                        || packet instanceof CPacketClientStatus);
         }
     };
 
-
-    public abstract boolean shouldCancel(Packet<?> var1);
+    public abstract boolean shouldCancel(Packet<?> packet);
 }
-

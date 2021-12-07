@@ -1,27 +1,30 @@
-/*
- * Decompiled with CFR 0.150.
- */
 package me.earth.earthhack.impl.modules.misc.chat;
 
 import me.earth.earthhack.impl.core.ducks.gui.IGuiNewChat;
 import me.earth.earthhack.impl.event.events.render.ChatEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
-import me.earth.earthhack.impl.modules.misc.chat.Chat;
 
-final class ListenerChat
-extends ModuleListener<Chat, ChatEvent.Send> {
-    public ListenerChat(Chat module) {
+// TODO: Way too complicated for what we want to do...
+final class ListenerChat extends ModuleListener<Chat, ChatEvent.Send>
+{
+    public ListenerChat(Chat module)
+    {
         super(module, ChatEvent.Send.class);
     }
 
     @Override
-    public void invoke(ChatEvent.Send event) {
-        IGuiNewChat chat;
-        if (((Chat)this.module).noScroll.getValue().booleanValue() && ListenerChat.mc.ingameGUI != null && (chat = (IGuiNewChat)ListenerChat.mc.ingameGUI.getChatGUI()).getScrollPos() != 0) {
-            ((Chat)this.module).events.add(event);
-            ((Chat)this.module).cleared = false;
-            event.setCancelled(true);
+    public void invoke(ChatEvent.Send event)
+    {
+        if (module.noScroll.getValue() && mc.ingameGUI != null)
+        {
+            IGuiNewChat chat = (IGuiNewChat) mc.ingameGUI.getChatGUI();
+            if (chat.getScrollPos() != 0)
+            {
+                module.events.add(event);
+                module.cleared = false;
+                event.setCancelled(true);
+            }
         }
     }
-}
 
+}

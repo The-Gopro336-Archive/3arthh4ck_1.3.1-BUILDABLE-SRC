@@ -1,19 +1,14 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.util.math.BlockPos
- */
 package me.earth.earthhack.impl.util.helpers.blocks.noattack;
 
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.impl.util.helpers.blocks.ObbyListenerModule;
-import me.earth.earthhack.impl.util.helpers.blocks.noattack.NoAttackObbyListener;
 import net.minecraft.util.math.BlockPos;
 
 public abstract class NoAttackObbyListenerModule<T extends NoAttackObbyListener<?>>
-extends ObbyListenerModule<T> {
-    protected NoAttackObbyListenerModule(String name, Category category) {
+        extends ObbyListenerModule<T>
+{
+    protected NoAttackObbyListenerModule(String name, Category category)
+    {
         super(name, category);
         this.unregister(this.attack);
         this.unregister(this.pop);
@@ -23,14 +18,16 @@ extends ObbyListenerModule<T> {
     }
 
     @Override
-    public boolean execute() {
-        this.attacking = null;
+    public boolean execute()
+    {
+        attacking = null;
         return super.execute();
     }
 
     @Override
-    public boolean entityCheck(BlockPos pos) {
-        return this.entityCheckSimple(pos);
+    public boolean entityCheck(BlockPos pos)
+    {
+        return entityCheckSimple(pos);
     }
-}
 
+}

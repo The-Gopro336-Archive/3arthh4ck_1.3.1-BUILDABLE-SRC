@@ -1,80 +1,100 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.client.gui.inventory.GuiContainer
- *  net.minecraft.client.gui.inventory.GuiCrafting
- *  net.minecraft.entity.player.EntityPlayer
- *  net.minecraft.init.Blocks
- *  net.minecraft.inventory.ClickType
- */
 package me.earth.earthhack.impl.modules.misc.autocraft;
 
 import me.earth.earthhack.impl.event.events.misc.TickEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
-import me.earth.earthhack.impl.modules.misc.autocraft.AutoCraft;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiCrafting;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.ClickType;
+import net.minecraft.item.ItemBlock;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 final class ListenerTick
-extends ModuleListener<AutoCraft, TickEvent> {
-    public ListenerTick(AutoCraft module) {
+        extends ModuleListener<AutoCraft, TickEvent>
+{
+    public ListenerTick(AutoCraft module)
+    {
         super(module, TickEvent.class);
     }
 
     @Override
-    public void invoke(TickEvent event) {
-        if (((AutoCraft)this.module).currentTask != null) {
-            System.out.println("current task:" + (Object)((AutoCraft)this.module).currentTask.getRecipe().getRecipeOutput().getItem().getRegistryName());
+    public void invoke(TickEvent event)
+    {
+        if (module.currentTask != null) {
+            System.out.println("current task:" + module.currentTask.getRecipe().getRecipeOutput().getItem().getRegistryName());
         }
-        if (((AutoCraft)this.module).lastTask != null) {
-            System.out.println("last task:" + (Object)((AutoCraft)this.module).lastTask.getRecipe().getRecipeOutput().getItem().getRegistryName());
+        if (module.lastTask != null) {
+            System.out.println("last task:" + module.lastTask.getRecipe().getRecipeOutput().getItem().getRegistryName());
         }
-        if (((AutoCraft)this.module).delayTimer.passed(((AutoCraft)this.module).delay.getValue().intValue()) && ((AutoCraft)this.module).currentTask == null) {
-            ((AutoCraft)this.module).currentTask = ((AutoCraft)this.module).dequeue();
+        if (module.delayTimer
+                .passed(module.delay.getValue())
+                && module.currentTask == null)
+        {
+            module.currentTask = module.dequeue();
         }
-        if (((AutoCraft)this.module).currentTask != null && ((AutoCraft)this.module).currentTask.isInTable() && !(ListenerTick.mc.currentScreen instanceof GuiCrafting)) {
-            if (((AutoCraft)this.module).getCraftingTable() == null && InventoryUtil.findBlock(Blocks.CRAFTING_TABLE, false) == -1 && ((AutoCraft)this.module).craftTable.getValue().booleanValue()) {
-                ((AutoCraft)this.module).lastTask = ((AutoCraft)this.module).currentTask;
-                ((AutoCraft)this.module).currentTask = new AutoCraft.CraftTask("crafting_table", 1);
+
+        if (module.currentTask != null
+                && module.currentTask.isInTable()
+                && !(mc.currentScreen instanceof GuiCrafting))
+        {
+            if (module.getCraftingTable() == null
+                    && InventoryUtil.findBlock(Blocks.CRAFTING_TABLE, false) == -1
+                    && module.craftTable.getValue())
+            {
+                module.lastTask = module.currentTask;
+                module.currentTask = new AutoCraft.CraftTask("crafting_table", 1);
             }
-            ((AutoCraft)this.module).shouldTable = true;
+            module.shouldTable = true;
             return;
         }
-        if (((AutoCraft)this.module).lastTask != null && InventoryUtil.findBlock(Blocks.CRAFTING_TABLE, false) != -1) {
-            ((AutoCraft)this.module).currentTask = ((AutoCraft)this.module).lastTask;
-            ((AutoCraft)this.module).lastTask = null;
+
+        if (module.lastTask != null
+                && InventoryUtil.findBlock(Blocks.CRAFTING_TABLE, false) != -1)
+        {
+            module.currentTask = module.lastTask;
+            module.lastTask = null;
         }
-        if (((AutoCraft)this.module).clickDelay.getValue() != 0 && ((AutoCraft)this.module).clickDelayTimer.passed(((AutoCraft)this.module).clickDelay.getValue().intValue()) && ((AutoCraft)this.module).currentTask != null && (!((AutoCraft)this.module).currentTask.isInTable() || ListenerTick.mc.currentScreen instanceof GuiCrafting)) {
-            ((AutoCraft)this.module).currentTask.updateSlots();
-            int windowId = 0;
-            if (((AutoCraft)this.module).currentTask.isInTable()) {
-                assert (ListenerTick.mc.currentScreen != null);
-                windowId = ((GuiContainer)ListenerTick.mc.currentScreen).inventorySlots.windowId;
-            }
-            if (((AutoCraft)this.module).currentTask.step < ((AutoCraft)this.module).currentTask.getSlotToSlotMap().size()) {
-                AutoCraft.SlotEntry entry = ((AutoCraft)this.module).currentTask.getSlotToSlotMap().get(((AutoCraft)this.module).currentTask.getStep());
-                System.out.println("inventory slot:" + entry.getInventorySlot());
-                System.out.println("gui slot:" + entry.getGuiSlot());
-                ListenerTick.mc.playerController.windowClick(windowId, entry.getInventorySlot(), 0, ClickType.PICKUP, (EntityPlayer)ListenerTick.mc.player);
-                for (int i = 0; i < ((AutoCraft)this.module).currentTask.runs; ++i) {
-                    ListenerTick.mc.playerController.windowClick(windowId, entry.getGuiSlot(), 1, ClickType.PICKUP, (EntityPlayer)ListenerTick.mc.player);
+
+        if (module.clickDelay.getValue() != 0)
+        {
+            if (module.clickDelayTimer
+                    .passed(module.clickDelay.getValue())
+                    && module.currentTask != null
+                    && (!module.currentTask.isInTable() || mc.currentScreen instanceof GuiCrafting))
+            {
+                module.currentTask.updateSlots();
+                int windowId = 0;
+                if (module.currentTask.isInTable()) {
+                    assert mc.currentScreen != null;
+                    windowId = ((GuiContainer) mc.currentScreen).inventorySlots.windowId;
                 }
-                ListenerTick.mc.playerController.windowClick(windowId, entry.getInventorySlot(), 0, ClickType.PICKUP, (EntityPlayer)ListenerTick.mc.player);
-                ++((AutoCraft)this.module).currentTask.step;
-            } else if (((AutoCraft)this.module).currentTask.step == ((AutoCraft)this.module).currentTask.getSlotToSlotMap().size()) {
-                ListenerTick.mc.playerController.windowClick(windowId, 0, 0, ClickType.QUICK_MOVE, (EntityPlayer)ListenerTick.mc.player);
-                ((AutoCraft)this.module).currentTask = null;
-                ((AutoCraft)this.module).delayTimer.reset();
-                if (ListenerTick.mc.currentScreen instanceof GuiCrafting) {
-                    mc.displayGuiScreen(null);
+                if (module.currentTask.step < module.currentTask.getSlotToSlotMap().size())
+                {
+                    AutoCraft.SlotEntry entry = module.currentTask.getSlotToSlotMap().get(module.currentTask.getStep());
+                    System.out.println("inventory slot:" + entry.getInventorySlot());
+                    System.out.println("gui slot:" + entry.getGuiSlot());
+                    mc.playerController.windowClick(windowId, entry.getInventorySlot(), 0, ClickType.PICKUP, mc.player);
+                    for (int i = 0; i < module.currentTask.runs; i++) {
+                        mc.playerController.windowClick(windowId, entry.getGuiSlot(), 1, ClickType.PICKUP, mc.player);
+                    }
+                    mc.playerController.windowClick(windowId, entry.getInventorySlot(), 0, ClickType.PICKUP, mc.player);
+                    module.currentTask.step++;
+                }
+                else if (module.currentTask.step == module.currentTask.getSlotToSlotMap().size())
+                {
+                    mc.playerController.windowClick(windowId, 0, 0, ClickType.QUICK_MOVE, mc.player);
+                    module.currentTask = null;
+                    module.delayTimer.reset();
+                    if (mc.currentScreen instanceof GuiCrafting) mc.displayGuiScreen(null);
                 }
             }
+        }
+        else
+        {
+
         }
     }
 }
-

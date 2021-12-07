@@ -1,90 +1,93 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.client.Minecraft
- *  net.minecraft.client.renderer.OpenGlHelper
- *  net.minecraft.client.shader.Framebuffer
- *  org.lwjgl.opengl.EXTFramebufferObject
- *  org.lwjgl.opengl.GL11
- */
 package me.earth.earthhack.impl.util.render;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.shader.Framebuffer;
 import org.lwjgl.opengl.EXTFramebufferObject;
+import org.lwjgl.opengl.EXTPackedDepthStencil;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
+
 public class OutlineUtil {
-    public static void renderOne() {
-        OutlineUtil.checkSetupFBO();
-        GL11.glPushAttrib((int)1048575);
-        GL11.glDisable((int)3008);
-        GL11.glDisable((int)3553);
-        GL11.glDisable((int)2896);
-        GL11.glEnable((int)3042);
-        GL11.glBlendFunc((int)770, (int)771);
-        GL11.glLineWidth((float)3.0f);
-        GL11.glEnable((int)2848);
-        GL11.glEnable((int)2960);
-        GL11.glClear((int)1024);
-        GL11.glClearStencil((int)15);
-        GL11.glStencilFunc((int)512, (int)1, (int)15);
-        GL11.glStencilOp((int)7681, (int)7681, (int)7681);
-        GL11.glPolygonMode((int)1032, (int)6913);
+
+
+    public static void renderOne()
+    {
+        checkSetupFBO();
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glLineWidth(3);
+        GL11.glEnable(GL11.GL_LINE_SMOOTH);
+        GL11.glEnable(GL11.GL_STENCIL_TEST);
+        GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
+        GL11.glClearStencil(0xF);
+        GL11.glStencilFunc(GL11.GL_NEVER, 1, 0xF);
+        GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
+        GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
     }
 
-    public static void renderTwo() {
-        GL11.glStencilFunc((int)512, (int)0, (int)15);
-        GL11.glStencilOp((int)7681, (int)7681, (int)7681);
-        GL11.glPolygonMode((int)1032, (int)6914);
+    public static void renderTwo()
+    {
+        GL11.glStencilFunc(GL11.GL_NEVER, 0, 0xF);
+        GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
+        GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
     }
 
-    public static void renderThree() {
-        GL11.glStencilFunc((int)514, (int)1, (int)15);
-        GL11.glStencilOp((int)7680, (int)7680, (int)7680);
-        GL11.glPolygonMode((int)1032, (int)6913);
+    public static void renderThree()
+    {
+        GL11.glStencilFunc(GL11.GL_EQUAL, 1, 0xF);
+        GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+        GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
     }
 
-    public static void renderFour() {
-        GL11.glDepthMask((boolean)false);
-        GL11.glDisable((int)2929);
-        GL11.glEnable((int)10754);
-        GL11.glPolygonOffset((float)1.0f, (float)-2000000.0f);
-        OpenGlHelper.setLightmapTextureCoords((int)OpenGlHelper.lightmapTexUnit, (float)240.0f, (float)240.0f);
+    public static void renderFour()
+    {
+        GL11.glDepthMask(false);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glEnable(GL11.GL_POLYGON_OFFSET_LINE);
+        GL11.glPolygonOffset(1.0F, -2000000F);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
     }
 
-    public static void renderFive() {
-        GL11.glPolygonOffset((float)1.0f, (float)2000000.0f);
-        GL11.glDisable((int)10754);
-        GL11.glEnable((int)2929);
-        GL11.glDepthMask((boolean)true);
-        GL11.glDisable((int)2960);
-        GL11.glDisable((int)2848);
-        GL11.glHint((int)3154, (int)4352);
-        GL11.glEnable((int)3042);
-        GL11.glEnable((int)2896);
-        GL11.glEnable((int)3553);
-        GL11.glEnable((int)3008);
+    public static void renderFive()
+    {
+        GL11.glPolygonOffset(1.0F, 2000000F);
+        GL11.glDisable(GL11.GL_POLYGON_OFFSET_LINE);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glDepthMask(true);
+        GL11.glDisable(GL11.GL_STENCIL_TEST);
+        GL11.glDisable(GL11.GL_LINE_SMOOTH);
+        GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_DONT_CARE);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glPopAttrib();
     }
 
-    public static void checkSetupFBO() {
+    public static void checkSetupFBO()
+    {
         Framebuffer fbo = Minecraft.getMinecraft().getFramebuffer();
-        if (fbo != null && fbo.depthBuffer > -1) {
-            OutlineUtil.setupFBO(fbo);
+
+        if (fbo.depthBuffer > -1)
+        {
+            setupFBO(fbo);
             fbo.depthBuffer = -1;
         }
     }
 
-    public static void setupFBO(Framebuffer fbo) {
-        EXTFramebufferObject.glDeleteRenderbuffersEXT((int)fbo.depthBuffer);
+    public static void setupFBO(Framebuffer fbo)
+    {
+        EXTFramebufferObject.glDeleteRenderbuffersEXT(fbo.depthBuffer);
         int stencil_depth_buffer_ID = EXTFramebufferObject.glGenRenderbuffersEXT();
-        EXTFramebufferObject.glBindRenderbufferEXT((int)36161, (int)stencil_depth_buffer_ID);
-        EXTFramebufferObject.glRenderbufferStorageEXT((int)36161, (int)34041, (int)Minecraft.getMinecraft().displayWidth, (int)Minecraft.getMinecraft().displayHeight);
-        EXTFramebufferObject.glFramebufferRenderbufferEXT((int)36160, (int)36128, (int)36161, (int)stencil_depth_buffer_ID);
-        EXTFramebufferObject.glFramebufferRenderbufferEXT((int)36160, (int)36096, (int)36161, (int)stencil_depth_buffer_ID);
+        EXTFramebufferObject.glBindRenderbufferEXT(EXTFramebufferObject.GL_RENDERBUFFER_EXT, stencil_depth_buffer_ID);
+        EXTFramebufferObject.glRenderbufferStorageEXT(EXTFramebufferObject.GL_RENDERBUFFER_EXT, EXTPackedDepthStencil.GL_DEPTH_STENCIL_EXT, Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+        EXTFramebufferObject.glFramebufferRenderbufferEXT(EXTFramebufferObject.GL_FRAMEBUFFER_EXT, EXTFramebufferObject.GL_STENCIL_ATTACHMENT_EXT, EXTFramebufferObject.GL_RENDERBUFFER_EXT, stencil_depth_buffer_ID);
+        EXTFramebufferObject.glFramebufferRenderbufferEXT(EXTFramebufferObject.GL_FRAMEBUFFER_EXT, EXTFramebufferObject.GL_DEPTH_ATTACHMENT_EXT, EXTFramebufferObject.GL_RENDERBUFFER_EXT, stencil_depth_buffer_ID);
     }
 }
-

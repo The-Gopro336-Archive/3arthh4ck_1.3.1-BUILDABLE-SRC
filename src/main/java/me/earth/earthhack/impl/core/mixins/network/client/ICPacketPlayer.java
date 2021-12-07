@@ -1,39 +1,34 @@
-/*
- * Decompiled with CFR 0.150.
- * 
- * Could not load the following classes:
- *  net.minecraft.network.play.client.CPacketPlayer
- */
 package me.earth.earthhack.impl.core.mixins.network.client;
 
 import net.minecraft.network.play.client.CPacketPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(value={CPacketPlayer.class})
-public interface ICPacketPlayer {
-    @Accessor(value="x")
-    public void setX(double var1);
+@Mixin(CPacketPlayer.class)
+public interface ICPacketPlayer
+{
+    @Accessor(value = "x")
+    void setX(double x);
 
-    @Accessor(value="y")
-    public void setY(double var1);
+    @Accessor(value = "y")
+    void setY(double y);
 
-    @Accessor(value="z")
-    public void setZ(double var1);
+    @Accessor(value = "z")
+    void setZ(double z);
 
-    @Accessor(value="yaw")
-    public void setYaw(float var1);
+    @Accessor(value = "yaw")
+    void setYaw(float yaw);
 
-    @Accessor(value="pitch")
-    public void setPitch(float var1);
+    @Accessor(value = "pitch")
+    void setPitch(float pitch);
 
-    @Accessor(value="onGround")
-    public void setOnGround(boolean var1);
+    @Accessor(value = "onGround")
+    void setOnGround(boolean onGround);
 
-    @Accessor(value="moving")
-    public boolean isMoving();
+    @Accessor(value = "moving")
+    boolean isMoving();
 
-    @Accessor(value="rotating")
-    public boolean isRotating();
+    @Accessor(value = "rotating")
+    boolean isRotating();
+
 }
-
