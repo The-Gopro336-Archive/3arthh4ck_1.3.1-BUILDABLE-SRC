@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+TweakOrder: -999
+FMLCorePluginContainsFMLMod: true
+TweakClass: me.earth.earthhack.tweaker.EarthhackTweaker
+ForceLoadAsMod: true
+Main-Class: me.earth.earthhack.installer.main.Main
+

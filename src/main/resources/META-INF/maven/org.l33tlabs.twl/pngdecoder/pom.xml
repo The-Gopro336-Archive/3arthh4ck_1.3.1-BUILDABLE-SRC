@@ -1,0 +1,36 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.l33tlabs.twl</groupId>
+    <artifactId>pngdecoder</artifactId>
+    <version>1.0</version>
+    <packaging>jar</packaging>
+    <name>pngdecoder</name>
+    <url>http://maven.apache.org</url>
+    <description>TWL's fast PNGDecoder. This is a subset of the TWL.jar and contains the same classes in the same package.</description>
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    <licenses>
+        <license>
+            <name>Modified BSD license</name>
+            <url>http://hg.l33tlabs.org/twl/file/tip/src/de/matthiasmann/twl/license.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <url>https://github.com/iamtakingiteasy/org.l33tlabs.twl.pngdecoder.git</url>
+        <connection>scm:git:git@github.com:iamtakingiteasy/org.l33tlabs.twl.pngdecoder.git</connection>
+        <developerConnection>scm:git:git@github.com:iamtakingiteasy/org.l33tlabs.twl.pngdecoder.git</developerConnection>
+    </scm>
+    <developers>
+        <developer>
+            <id>matthias_mann</id>
+            <name>Matthias Mann</name>
+        </developer>
+    </developers>
+</project>

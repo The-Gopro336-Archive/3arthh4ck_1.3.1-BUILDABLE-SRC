@@ -1,0 +1,87 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.slick2d</groupId>
+		<artifactId>slick2d-parent</artifactId>
+		<version>1.0.2</version>
+	</parent>
+
+	<artifactId>slick2d-core</artifactId>
+	<packaging>jar</packaging>
+
+	<name>Slick2D game development library</name>
+	<description>Core library</description>
+	<url>https://github.com/nguillaumin/slick2d-maven/</url>
+	<licenses>
+		<license>
+			<name>The BSD 3-Clause License</name>
+			<url>http://www.slick2d.org/documentation/license-bsd/</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<id>nguillaumin</id>
+			<name>Nicolas Guillaumin</name>
+			<url>https://github.com/nguillaumin/</url>
+			<roles>
+				<role>Maven packager</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>slick2d-developers</id>
+			<name>Slick 2D developers</name>
+			<url>https://bitbucket.org/kevglass/slick/</url>
+		</developer>
+	</developers>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>org.lwjgl.lwjgl</groupId>
+			<artifactId>lwjgl</artifactId>
+			<version>2.9.3</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.jnlp</groupId>
+			<artifactId>jnlp-api</artifactId>
+			<version>5.0</version>
+			<scope>system</scope>
+			<systemPath>${java.home}/lib/javaws.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>org.jcraft</groupId>
+			<artifactId>jorbis</artifactId>
+			<version>0.0.17</version>
+		</dependency>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>6.8.8</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+
+
+	<build>
+		<resources>
+			<resource>
+				<!-- Needed there are some resources mixed with the sources under data/ -->
+				<directory>${project.build.sourceDirectory}</directory>
+				<includes>
+					<include>**/*</include>
+				</includes>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>com.googlecode.mavennatives</groupId>
+				<artifactId>maven-nativedependencies-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+</project>
