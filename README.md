@@ -1,22 +1,24 @@
-# Phobos/3arthh4ck 1.3.1 BUILDABLE-SRC
+# Where is the src?
+Download here: [colorblindness/3arthh4ck](https://github.com/colorblindness/3arthh4ck)
 
-Not a reconstructed src this time, rather the real one.d
-Released by ohare, but contained errors. I have fixed these errors and this src is now fully buildable (make issue if you have errors)
+I have decided to remove the source code to earthhack from this repo. It was created and uploaded by ohare, and he should get the credit for it. It sucks to have some unaffiliated person take most of the credit for something you created and released so thats why I have removed it. At the time, ohares repo was not fully buildable, but I see that has been fixed now.
 
-IMPORTANT: this time, downloading the zip from the green code button WILL NOT WORK you must git clone the repo. (cloning into intelij is an easy way to do this) the reason this is different is because we need the .git folder for the githash watermark feature
+I can personally comfirm that ohares repo, and every other earthhack 1.3.1 version realeased by phobos devs, and users, to be 100% clean.
+
+# Building Earthh4ack
+this time, when you downlod the repo, you CANNOT download the zip, as github strips the .git folder, which is needed for it to compile properly
+
+![Pic](pic)
+
+You instead have to clone the repo. This can be done using git, the github desktop app, or cloneing into an IDE such as intelij.
+
+The easiest method to build earthhack is to clone into an Intelij project, and build
+
+![Pic](pic2)
+
+Once in intelij wait for it to index, and then open up the gradle tab on the side. Click setupDecompWorkspace first, and then click build
 
 
-Windows: setupdecompworkspace, gradlew build
+Build progress will show in the build tab at the bottom of the screen. Once you have run setupDecompWorkspace once, you do not have to run it again. When the build has completed, navagate to the new build folder that has been created. build/libs is where you will find 2 jar files. ONLY use the jar with the RELEASE label at the end of its name.
 
-Macos/Linux: ./setupdecompworkspace, ./gradlew build
-
-I can confirm this SRC and release are clean
-
-
-# Plugins
-
-3arthh4ck has a built-in plugin system:
-
-[3arthh4ck-Plugin-Example](https://github.com/Gopro336/3arthh4ck-Plugin)
-
-[ShaderESP-Plugin](https://github.com/Gopro336/3arthh4ck-ShaderESP-Plugin)
+Hope this helps!!
