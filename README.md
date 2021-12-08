@@ -10,8 +10,7 @@ Macos/Linux: ./setupdecompworkspace, ./gradlew build
 I can confirm this SRC and release are clean
 
 
-
-
+# Plugins
 
 3arthh4ck has a built-in plugin system:
 
