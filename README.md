@@ -9,6 +9,8 @@ Macos/Linux: ./setupdecompworkspace, ./gradlew build
 
 I can confirm this SRC and release are clean
 
+3arthh4ck has a built-in plugin system
+
 [3arthh4ck-Plugin-Example](https://github.com/Gopro336/3arthh4ck-Plugin)
 
 [ShaderESP-Plugin](https://github.com/Gopro336/3arthh4ck-ShaderESP-Plugin)
