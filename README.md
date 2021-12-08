@@ -3,6 +3,9 @@
 Not a reconstructed src this time, rather the real one.
 Released by ohare, but contained errors. I have fixed these errors and this src is now fully buildable (make issue if you have errors)
 
+IMPORTANT: this time, downloading the zip from the green code button WILL NOT WORK you must git clone the repo. (cloning into intelij is an easy way to do this) the reason this is differend is because of the githash watermark feature
+
+
 Windows: setupdecompworkspace, gradlew build
 
 Macos/Linux: ./setupdecompworkspace, ./gradlew build
