@@ -14,9 +14,11 @@ You instead have to clone the repo. This can be done using git, the github deskt
 
 The easiest method to build earthhack is to clone into an Intelij project, and build
 
-![Pic](pic2)
+![Pic](https://github.com/Gopro336/3arthh4ck_1.3.1-BUILDABLE-SRC/blob/info/intelij.png)
 
 Once in intelij wait for it to index, and then open up the gradle tab on the side. Click setupDecompWorkspace first, and then click build
+
+![Pic](https://github.com/Gopro336/3arthh4ck_1.3.1-BUILDABLE-SRC/blob/info/intelijBuild.png)
 
 
 Build progress will show in the build tab at the bottom of the screen. Once you have run setupDecompWorkspace once, you do not have to run it again. When the build has completed, navagate to the new build folder that has been created. build/libs is where you will find 2 jar files. ONLY use the jar with the RELEASE label at the end of its name.
