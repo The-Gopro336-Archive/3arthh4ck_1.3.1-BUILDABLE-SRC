@@ -1,7 +1,7 @@
 # Where is the src?
 Download here: [colorblindness/3arthh4ck](https://github.com/colorblindness/3arthh4ck)
 
-I have decided to remove the source code to earthhack from this repo. It was created and uploaded by ohare, and he should get the credit for it. It sucks to have some unaffiliated person take most of the credit for something you created and released so thats why I have removed it. At the time, ohares repo was not fully buildable, but I see that has been fixed now.
+I was going to create another reconstructed, buildable SRC here, but then the real one was released by the devs. I had that one posted here earlier, but I have decided to remove it from this repo. It was created and uploaded by ohare, and he should get the credit for it. It sucks to have some unaffiliated person take most of the credit for something you created and released so thats why I have removed it. At the time, ohares repo was not fully buildable, but I see that has been fixed now.
 
 I can personally comfirm that ohares repo, and every other earthhack 1.3.1 version realeased by phobos devs, and users, to be 100% clean.
 
