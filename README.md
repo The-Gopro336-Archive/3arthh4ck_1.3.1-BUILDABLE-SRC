@@ -5,7 +5,7 @@ I was going to create another reconstructed, buildable SRC here, but then the re
 
 I can personally comfirm that ohares repo, and every other earthhack 1.3.1 version realeased by phobos devs, and users, to be 100% clean.
 
-some people believe a byte array in kitcommand is malicuous, but I assure you it is not. It is ust [nbt data](https://github.com/Gopro336/3arthh4ck_1.3.1-BUILDABLE-SRC/issues/25)
+some people believe a byte array in kitcommand is malicuous, but I assure you it is not. It is just [nbt data](https://github.com/Gopro336/3arthh4ck_1.3.1-BUILDABLE-SRC/issues/25)
 
 # Building Earthh4ack
 this time, when you downlod the repo, you CANNOT download the zip, as github strips the .git folder, which is needed for it to compile properly
