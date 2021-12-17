@@ -10,6 +10,8 @@ some people believe a byte array in kitcommand is malicuous, but I assure you it
 # Building Earthh4ack
 this time, when you downlod the repo, you CANNOT download the zip, as github strips the .git folder, which is needed for it to compile properly
 
+Alternitvely, you can use [my fork](https://github.com/Gopro336/3arthh4ck), that has these issues resolved
+
 ![Pic](https://github.com/Gopro336/3arthh4ck_1.3.1-BUILDABLE-SRC/blob/info/dontDownloadZip.png)
 
 You instead have to clone the repo. This can be done using git, the github desktop app, or cloneing into an IDE such as intelij.
